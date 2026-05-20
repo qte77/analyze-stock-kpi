@@ -64,13 +64,16 @@ state, and the persistence policy.
 - **Persistence:** outputs may land on the public `data` branch if
   the source's ToS permits redistribution; otherwise runtime-only.
 - **In scope (designed, deferred):**
-  - **NAAIM Exposure Index** — via Nasdaq Data Link
-    (<https://data.nasdaq.com/data/NAAIM/NAAIM_EXPIDX>). Requires
+  - **NAAIM Exposure Index** — published by NAAIM
+    (<https://www.naaim.org/programs/naaim-exposure-index/>),
+    typically consumed via Nasdaq Data Link
+    (<https://data.nasdaq.com/>). Requires
     `NASDAQ_DATA_LINK_API_KEY`. Implementation deferred until there
     is a concrete consumer (chart, composite, alert) requesting the
     series.
-  - **AAII Sentiment Survey** — via Nasdaq Data Link
-    (<https://data.nasdaq.com/data/AAII/AAII_SENTIMENT>). Same key.
+  - **AAII Sentiment Survey** — published by AAII
+    (<https://www.aaii.com/sentimentsurvey>), available via Nasdaq
+    Data Link. Same key.
   - **sam.gov Entity Management API** — as future enrichment for the
     federal-contractors universe (a separate ADR will define the
     universe build itself). Requires `SAM_API_KEY` and a one-time
@@ -137,10 +140,10 @@ identification, and no credential is exchanged).
   `https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX`
 - Nasdaq Data Link API docs:
   <https://docs.data.nasdaq.com/docs/getting-started>
-- NAAIM dataset:
-  <https://data.nasdaq.com/data/NAAIM/NAAIM_EXPIDX>
-- AAII dataset:
-  <https://data.nasdaq.com/data/AAII/AAII_SENTIMENT>
+- NAAIM Exposure Index (publisher page):
+  <https://www.naaim.org/programs/naaim-exposure-index/>
+- AAII Sentiment Survey (publisher page):
+  <https://www.aaii.com/sentimentsurvey>
 - Bloomberg API library:
   <https://www.bloomberg.com/professional/support/api-library/>
 - GS Marquee (`gs-quant`):
