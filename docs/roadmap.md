@@ -57,8 +57,9 @@ The original v0.6.0 RS hedging scope was deferred per [ADR-0003](decisions/0003-
 ## Open research (no milestone)
 
 - [ ] TradingView screener evaluation — issue [#21](https://github.com/qte77/analyze-stock-kpi/issues/21)
-- [ ] Alternative risk-sentiment sources (UBS, AAII, NAAIM, etc.) — issue [#22](https://github.com/qte77/analyze-stock-kpi/issues/22)
-- [ ] pandas alternatives (Polars, Dask, Modin, etc.) — issue [#23](https://github.com/qte77/analyze-stock-kpi/issues/23)
+- [x] Alternative risk-sentiment sources (UBS, AAII, NAAIM, etc.) — issue [#22](https://github.com/qte77/analyze-stock-kpi/issues/22), resolved by [ADR-0005](decisions/0005-sentiment-risk-sources.md) (three-tier source framework)
+- [ ] pandas alternatives (Polars, DuckDB, Dask, Modin, etc.) — issue [#23](https://github.com/qte77/analyze-stock-kpi/issues/23)
+- [ ] Volatility-indices chart (Tier 0 application of ADR-0005) — issue [#100](https://github.com/qte77/analyze-stock-kpi/issues/100)
 
 ## Out of scope
 

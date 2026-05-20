@@ -16,6 +16,10 @@ Types of changes:
 
 ## [Unreleased]
 
+### Added
+
+- **ADR-0005 — three-tier sentiment + risk source framework.** Documents the auth-tier classification (Tier 0 keyless / Tier 1 free-key opt-in / Tier 2 paid opt-in) that gates default-on behavior, env-var requirements, and `data`-branch persistence eligibility for every current and future sentiment / risk source. Tier 0 (CNN F&G, Yahoo-Finance-proxied volatility) stays default-on; Tier 1 (Nasdaq Data Link — NAAIM, AAII; sam.gov future enrichment for the federal-contractors universe) requires env-var opt-in; Tier 2 (Bloomberg `blpapi`, GS `gs-quant`, State Street institutional) is runtime-only and never persisted publicly. Closes #22.
+
 ### Changed
 
 - **CodeQL config inlined.** The `paths-ignore` rule (excluding vendored `docs/demo/vendor/**`) now lives in the `Initialize CodeQL` step's `config:` input in `.github/workflows/codeql.yaml`, co-located with the action invocation. The standalone `.github/codeql/codeql-config.yml` is removed. No behavioural change to CodeQL analysis — same paths excluded, same SHA-pinned action versions.
