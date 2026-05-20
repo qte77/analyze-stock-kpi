@@ -35,4 +35,6 @@ exclude = [
     "^https://www\\.bloomberg\\.com",
     # Goldman Sachs developer portal — flaky HTTP/2 to bots
     "^https://developer\\.gs\\.com",
+    # AAII (American Association of Individual Investors) — 403 to bots
+    "^https://www\\.aaii\\.com",
 ]
