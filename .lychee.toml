@@ -37,4 +37,8 @@ exclude = [
     "^https://developer\\.gs\\.com",
     # AAII (American Association of Individual Investors) — 403 to bots
     "^https://www\\.aaii\\.com",
+    # SEC.gov — 403 to bots without a User-Agent; data.sec.gov + the
+    # automated EDGAR API endpoints work because the project sets the
+    # required UA header, but lychee can't override its UA.
+    "^https://www\\.sec\\.gov",
 ]

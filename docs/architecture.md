@@ -73,3 +73,9 @@ v0.5.0 attaches a `CompositeScores` object to every `FundamentalsSnapshot` after
 - Traderfox provider, Playwright, DOM scraping (removed; see [`decisions/0000-remove-traderfox.md`](decisions/0000-remove-traderfox.md))
 - Long/short hedging strategy (Mansfield RS, regime split, ranking) — deferred per roadmap §0.5+
 - Paid-data integrations (CDS, Bloomberg, FMP) — explicitly out of scope per [`UserStory.md`](UserStory.md)
+
+## Planned modules (scoped, not yet implemented)
+
+- `src/sec/cik_map.py` — CIK ↔ ticker resolver via EDGAR `company_tickers_exchange.json`; foundation layer used by every other SEC integration. Per [ADR-0006](decisions/0006-federal-contractors-universe.md).
+- `src/sec/submissions.py` — extracts the last-filed-by-form (10-K / 10-Q / 8-K) date per ticker via EDGAR submissions API; surfaces as new optional fields on `FundamentalsSnapshot`. Per [ADR-0006](decisions/0006-federal-contractors-universe.md).
+- `scripts/build_federal_contractors.py` + `.github/workflows/federal-contractors-refresh.yaml` — monthly refresh of `src/assets/universes/federal-contractors.txt` from usaspending.gov top-100, gated through EDGAR + yfinance verification. Per [ADR-0006](decisions/0006-federal-contractors-universe.md).

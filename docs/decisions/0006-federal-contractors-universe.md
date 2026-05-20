@@ -1,0 +1,178 @@
+# ADR-0006 — Federal-contractors universe via usaspending.gov + EDGAR
+
+**Status:** Accepted (2026-05-20)
+
+**Relates to:**
+[ADR-0005](0005-sentiment-risk-sources.md) (three-tier source framework
+— this ADR is a concrete Tier-0 application);
+[ADR-0000](0000-remove-traderfox.md) (no HTML scraping — both sources
+expose documented JSON endpoints).
+
+## Context
+
+The repo's existing universes (`src/assets/universes/*.txt`) cover
+broad equity baskets (e.g., `qte77-watchlist`) and asset-class baskets
+(FX, futures, crypto). There is no curated way to construct a universe
+of **publicly-traded US federal contractors** ranked by trailing
+fiscal-year contract dollars — a natural screening axis for
+contract-exposed equities (defense, federal IT services, healthcare
+contractors).
+
+Three constraints from earlier ADRs gate any such construction:
+
+- [ADR-0000](0000-remove-traderfox.md) — no HTML scraping; sources must
+  expose documented JSON / CSV endpoints.
+- [ADR-0005](0005-sentiment-risk-sources.md) — default-on flows must be
+  Tier 0 (keyless); any source that requires auth defaults to OFF.
+- AGENTS.md — outputs persisted to the public `data` branch must come
+  from sources whose ToS permits redistribution.
+
+A sam.gov-driven build was the original direction but was rejected on
+cost-benefit: sam.gov requires an API key (Tier 1), a ~10-business-day
+entity-registration wait to unlock 1000 req/day, and 90-day key
+rotation — for fields a ticker preset doesn't need (DBA names,
+business-type designations, parent-UEI hierarchy).
+
+## Decision
+
+Adopt a three-step **Tier-0 (keyless)** pipeline:
+
+### 1. Rank contractors via usaspending.gov
+
+Source of truth for federal-contract obligations is
+<https://api.usaspending.gov/>. The DATA Act
+(`31 U.S.C. § 6101`) mandates redistribution-permitted public data;
+the API has no key requirement and no published rate limit.
+
+Endpoint:
+
+```text
+POST https://api.usaspending.gov/api/v2/search/spending_by_category/recipient/
+```
+
+Request body filters:
+
+| Field | Value | Purpose |
+|---|---|---|
+| `filters.award_type_codes` | `["A","B","C","D"]` | Contracts only (excludes grants, loans, direct payments) |
+| `filters.time_period` | `[{"start_date": "<FY-start>", "end_date": "<FY-end>"}]` | One US fiscal year (Oct 1 → Sep 30) |
+| `limit` | `100` | Top-100 in one page |
+| `page` | `1` | Single page |
+
+Response per recipient: `{name, code (= UEI), amount}` where `amount`
+is total obligated dollars in the window. The endpoint is
+pre-aggregated and ranked by `amount` descending.
+
+### 2. Bridge legal name → ticker via SEC EDGAR
+
+Source: <https://www.sec.gov/files/company_tickers_exchange.json> —
+keyless, fully public, refreshed continuously. Maps
+`{cik, ticker, title, exchange}` for every SEC-registered equity.
+
+Bridging strategy (per `name-to-ticker` research thread):
+
+- **Seed list always included.** The DoD's annual Top-25 Publicly
+  Traded Contractors list is the bootstrap — a curated reference of
+  ~25 verified `{legal_name → ticker}` pairs (LMT, RTX, NOC, GD, BA,
+  LHX, HII, LDOS, BAH, SAIC, CACI, KBR, TXT, OSK, GE, HON, FLR, J,
+  DELL, ACN, PLTR, MSFT, AMZN, BAESY, MMS, ICFI). Every member of
+  this seed is in the output regardless of usaspending fixture
+  presence.
+- **Auto-match for new entries.** For each usaspending recipient not
+  in the seed, propose a ticker via fuzzy match
+  (`difflib.SequenceMatcher`, threshold ~0.85) of the legal name
+  against EDGAR `title`. Avoid `rapidfuzz` as a new dep (stdlib
+  suffices for ~100 records).
+- **Subsidiary rollup happens at the ticker layer**, not the
+  recipient layer. Both `LOCKHEED MARTIN CORPORATION` and
+  `LOCKHEED MARTIN AERONAUTICS CO` resolve to `LMT` via EDGAR and
+  collapse during ticker-level dedupe. No per-recipient parent-UEI
+  lookups (would add ~100 extra HTTP calls for marginal value).
+- **Confidence flag in the audit JSON.** Each candidate ticker is
+  tagged with the SequenceMatcher score so low-confidence matches
+  can be reviewed manually.
+
+### 3. Verify each ticker resolves on Yahoo Finance
+
+The CLI's runtime data source is yfinance. Every candidate ticker
+must pass `yf.Ticker(t).fast_info` non-empty before being committed
+to the preset. Failures (delisted, foreign-only listing without ADR,
+recent symbol churn) drop from the preset and are flagged in the
+audit JSON.
+
+### Operational mechanics
+
+- **Preset file:** `src/assets/universes/federal-contractors.txt` —
+  bare ticker list, one per line, sorted ASCII-ascending for
+  deterministic diffs. Overwrite-on-rebuild.
+- **Audit JSON:** `results/federal-contractors/<YYYY-MM-DD>.json` on
+  the `data` branch — full trail of (recipient name, UEI, obligated
+  $, candidate ticker, confidence score, smoke-test status). Useful
+  for retrospective review of why a ticker entered or left the
+  preset.
+- **Refresh workflow:** `.github/workflows/federal-contractors-refresh.yaml`
+  — monthly cron (`0 8 1 * *`), `workflow_dispatch` for ad-hoc.
+  Audit JSON commits to the `data` branch via the verified REST
+  Git Data API pattern (Blob → Tree → Commit → Ref via
+  `actions/github-script`). The preset file change targets `main`
+  via a bot-opened PR titled
+  `chore(universe): refresh federal-contractors preset <YYYY-MM>` —
+  the bot **never** direct-pushes to `main` (blocked by
+  `required_signatures` + `pull_request` rules).
+
+## Consequences
+
+- **No new runtime dependencies.** Both endpoints are stdlib-fetchable
+  (`urllib`); `difflib.SequenceMatcher` is stdlib; pydantic and
+  yfinance are already pinned in `pyproject.toml`.
+- **New modules and files** introduced incrementally across separate
+  PRs under strict TDD per the v0.6.0+ plan: a `src/sec/` package
+  containing `cik_map.py` (CIK ↔ ticker resolver — UC3 in the plan's
+  EDGAR use-case ranking) and `submissions.py` (last-filed flags),
+  plus `scripts/build_federal_contractors.py` (the builder), the new
+  refresh workflow YAML, and the seeded preset file.
+- **Expected universe size.** Top-100 usaspending recipients →
+  ~25-40 Yahoo-resolvable tickers after EDGAR + yfinance filtering
+  (the DoD list confirms roughly 30-35 % of top-100 federal
+  contractors are publicly traded; balance is private LLCs, large
+  defense subsidiaries without independent listing, foreign primes
+  without US ADRs, healthcare distributors, etc.).
+- **Refresh churn is expected low.** At top-100 scale the ranking is
+  stable month-over-month; the monthly cron should usually produce
+  empty preset diffs. The audit JSON still grows monotonically as a
+  historical trail.
+- **sam.gov is documented as a future Tier-1 enrichment** in
+  ADR-0005 but is not in this pipeline's critical path. If a future
+  consumer needs DBA / business-type / parent-UEI fields, sam.gov
+  enrichment can be bolted on under a separate workflow keyed by
+  `SAM_API_KEY`.
+
+## Out of scope
+
+- **sam.gov enrichment.** Documented as Tier-1 future work; not
+  built here.
+- **Sector-narrowed preset variants** (`defense-only`,
+  `federal-it-only`). Possible follow-ups — same pipeline with
+  `filters.naics_codes` (e.g., `["33"]` for manufacturing /
+  defense). Not in the first cut.
+- **Sub-award data.** usaspending exposes sub-awards via a
+  separate endpoint with different ranking dynamics. Out of scope
+  unless a concrete consumer asks for it.
+- **Trailing-12-month vs fiscal-year ranking.** The first cut uses
+  the last completed FY (Oct 1 → Sep 30). Trailing-12-month is
+  trivially supported via `filters.time_period` but adds no value
+  for a monthly-refreshed preset.
+
+## References
+
+- usaspending.gov API: <https://api.usaspending.gov/>
+- usaspending spending_by_category contract:
+  <https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/search/spending_by_category.md>
+- DATA Act (31 U.S.C. § 6101) — federal-data redistribution mandate.
+- SEC EDGAR Developer Resources:
+  <https://www.sec.gov/about/developer-resources>
+- SEC EDGAR `company_tickers_exchange.json`:
+  <https://www.sec.gov/files/company_tickers_exchange.json>
+- DoD Top-25 Publicly Traded Contractors — annual SOCO publication.
+- yfinance v1.3.0 `Lookup` / `Search` (used at bootstrap time only):
+  <https://ranaroussi.github.io/yfinance/reference/yfinance.search.html>

@@ -60,6 +60,8 @@ The original v0.6.0 RS hedging scope was deferred per [ADR-0003](decisions/0003-
 - [x] Alternative risk-sentiment sources (UBS, AAII, NAAIM, etc.) — issue [#22](https://github.com/qte77/analyze-stock-kpi/issues/22), resolved by [ADR-0005](decisions/0005-sentiment-risk-sources.md) (three-tier source framework)
 - [ ] pandas alternatives (Polars, DuckDB, Dask, Modin, etc.) — issue [#23](https://github.com/qte77/analyze-stock-kpi/issues/23)
 - [ ] Volatility-indices chart (Tier 0 application of ADR-0005) — issue [#100](https://github.com/qte77/analyze-stock-kpi/issues/100)
+- [ ] Federal-contractors universe (Tier 0 pipeline: usaspending.gov + EDGAR + yfinance) — scoped in [ADR-0006](decisions/0006-federal-contractors-universe.md); implementation tracked under follow-up PRs (CIK resolver, last-filed flags, builder)
+- [ ] Deferred EDGAR product use cases — XBRL cross-validation [#101](https://github.com/qte77/analyze-stock-kpi/issues/101), Form 4 insider momentum [#102](https://github.com/qte77/analyze-stock-kpi/issues/102), 8-K material events [#103](https://github.com/qte77/analyze-stock-kpi/issues/103)
 
 ## Out of scope
 
