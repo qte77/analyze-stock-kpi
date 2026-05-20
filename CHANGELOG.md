@@ -16,6 +16,10 @@ Types of changes:
 
 ## [Unreleased]
 
+### Added
+
+- **ADR-0005 — three-tier sentiment + risk source framework.** Documents the auth-tier classification (Tier 0 keyless / Tier 1 free-key opt-in / Tier 2 paid opt-in) that gates default-on behavior, env-var requirements, and `data`-branch persistence eligibility for every current and future sentiment / risk source. Tier 0 (CNN F&G, Yahoo-Finance-proxied volatility) stays default-on; Tier 1 (Nasdaq Data Link — NAAIM, AAII; sam.gov future enrichment for the federal-contractors universe) requires env-var opt-in; Tier 2 (Bloomberg `blpapi`, GS `gs-quant`, State Street institutional) is runtime-only and never persisted publicly. Closes #22.
+
 ## [1.0.0] - 2026-05-17
 
 ### Removed
