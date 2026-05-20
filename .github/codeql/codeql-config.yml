@@ -1,8 +1,0 @@
----
-name: "qte77/analyze-stock-kpi CodeQL config"
-
-# Vendored Chart.js + Fuse.js are minified third-party bundles — exclude
-# them from CodeQL's javascript-typescript analysis so we don't analyze
-# code we don't own and can't fix.
-paths-ignore:
-  - "docs/demo/vendor/**"

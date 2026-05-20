@@ -16,6 +16,10 @@ Types of changes:
 
 ## [Unreleased]
 
+### Changed
+
+- **CodeQL config inlined.** The `paths-ignore` rule (excluding vendored `docs/demo/vendor/**`) now lives in the `Initialize CodeQL` step's `config:` input in `.github/workflows/codeql.yaml`, co-located with the action invocation. The standalone `.github/codeql/codeql-config.yml` is removed. No behavioural change to CodeQL analysis — same paths excluded, same SHA-pinned action versions.
+
 ## [1.0.0] - 2026-05-17
 
 ### Removed

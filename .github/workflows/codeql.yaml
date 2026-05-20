@@ -1,7 +1,7 @@
 ---
 # CodeQL static security analysis. Scans Python (`src/`) and JavaScript
 # (`docs/demo/app.js`). Vendored minified libs under `docs/demo/vendor/`
-# are excluded via `.github/codeql/codeql-config.yml`.
+# are excluded via the inline `config:` block on the init step below.
 # https://docs.github.com/en/code-security/code-scanning
 name: CodeQL
 
@@ -34,7 +34,11 @@ jobs:
         uses: github/codeql-action/init@9e0d7b8d25671d64c341c19c0152d693099fb5ba  # v4
         with:
           languages: ${{ matrix.language }}
-          config-file: ./.github/codeql/codeql-config.yml
+          # Vendored Chart.js + Fuse.js are minified third-party bundles
+          # — exclude them so we don't analyze code we don't own.
+          config: |
+            paths-ignore:
+              - "docs/demo/vendor/**"
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@9e0d7b8d25671d64c341c19c0152d693099fb5ba  # v4
