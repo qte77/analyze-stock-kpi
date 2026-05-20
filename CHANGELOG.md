@@ -19,6 +19,7 @@ Types of changes:
 ### Added
 
 - **ADR-0005 — three-tier sentiment + risk source framework.** Documents the auth-tier classification (Tier 0 keyless / Tier 1 free-key opt-in / Tier 2 paid opt-in) that gates default-on behavior, env-var requirements, and `data`-branch persistence eligibility for every current and future sentiment / risk source. Tier 0 (CNN F&G, Yahoo-Finance-proxied volatility) stays default-on; Tier 1 (Nasdaq Data Link — NAAIM, AAII; sam.gov future enrichment for the federal-contractors universe) requires env-var opt-in; Tier 2 (Bloomberg `blpapi`, GS `gs-quant`, State Street institutional) is runtime-only and never persisted publicly. Closes #22.
+- **ADR-0006 — federal-contractors universe via usaspending.gov + EDGAR.** Scopes a Tier-0 (keyless) pipeline that ranks the top-100 US federal contractors by trailing-fiscal-year contract obligations (`usaspending.gov spending_by_category/recipient`), bridges legal names to Yahoo-resolvable tickers via SEC EDGAR `company_tickers_exchange.json`, and gates final entries through `yfinance.Ticker(...).fast_info`. Subsidiaries roll up to the parent ticker; a curated DoD Top-25 publicly-traded seed list is always included. Output preset `src/assets/universes/federal-contractors.txt` is refreshed monthly via a new workflow that commits an audit JSON to the `data` branch and opens a PR with the preset diff. sam.gov is documented as future Tier-1 enrichment; not in the critical path.
 
 ### Changed
 
