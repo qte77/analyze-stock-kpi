@@ -157,6 +157,32 @@ def test_fetch_json_sets_cache_mtime_from_last_modified_header(
     assert cik_map._CACHE_PATH.stat().st_mtime == expected_ts
 
 
+def test_fetch_json_returns_cached_body_on_304(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """When ``urlopen`` raises ``HTTPError(304)``, return parsed cached JSON."""
+    import urllib.error
+    import urllib.request
+
+    cached_body = b'{"fields": ["cached"], "data": [["from disk"]]}'
+    cik_map._CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    cik_map._CACHE_PATH.write_bytes(cached_body)
+
+    def fake_urlopen(_req: object, *_a: object, **_k: object) -> None:
+        raise urllib.error.HTTPError(
+            url=cik_map.settings.edgar_tickers_url,
+            code=304,
+            msg="Not Modified",
+            hdrs=None,  # type: ignore[arg-type]
+            fp=None,
+        )
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    result = cik_map._fetch_json()
+
+    assert result == {"fields": ["cached"], "data": [["from disk"]]}
+
+
 @pytest.mark.network
 def test_resolve_cik_live_aapl_returns_apple_cik() -> None:
     """End-to-end against real EDGAR — AAPL must resolve to 0000320193."""
