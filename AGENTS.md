@@ -83,24 +83,16 @@ more context or ask the user.
 - Use `make` commands; document any deviation
 - For new feature code: **topic-grouped commits with tests + implementation
   co-committed**. Strict TDD (Red → Green → Refactor with one commit per
-  phase) was reserved for the relative-strength hedging epic, now
-  deferred — see [`docs/decisions/0003-defer-rs-hedging-epic.md`](docs/decisions/0003-defer-rs-hedging-epic.md).
+  phase) is opt-in per feature
 - Tag network-dependent tests with `@pytest.mark.network` (excluded from
   default `make test` via `-m 'not network'`; opt in with `pytest -m network`)
-- **GHA workflows**: pin every `uses:` to a full-length commit SHA per
-  the repo's "Require actions to be pinned to a full-length commit SHA"
-  rule. Resolve via `gh api /repos/<owner>/<repo>/git/ref/tags/<tag>`
-  and dereference annotated tags via `gh api .../git/tags/<sha>`.
-- **Bot commits to `main` are blocked** by the `required_signatures` +
-  `pull_request` rules. Workflows that need to commit data must target
-  the `data` branch via the verified-commit pattern
-  (`actions/github-script` calling REST Git Data API: Blob → Tree →
-  Commit → Ref). See `demo-snapshot.yaml` and `fear-greed.yaml` for the
-  template.
+- **GHA workflows**: pin every `uses:` to a full-length commit SHA
+- **Bot commits to `main` are blocked** by the branch ruleset; workflows
+  that need to write data target the `data` branch via verified commits.
+  See [`docs/architecture.md`](docs/architecture.md) for the pattern
 
 **Post-task:**
 
 - Run `make validate` — must pass (lint + types + complexity + lint_md + tests)
-- `make lint_links` — opt-in locally; mandatory in CI via `links-fail-fast.yml`
 - Update `CHANGELOG.md` `[Unreleased]` section for non-trivial changes
 - Bump `src/__version__.py` only at the end of a feature branch (semver)
