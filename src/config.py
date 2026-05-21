@@ -1,0 +1,47 @@
+"""Centralised runtime config: URLs, paths, HTTP shape, timeouts.
+
+Single `AppSettings(BaseSettings)` carries every value that previously
+lived as a module-level constant in `src/sec/`, `src/sentiment.py`,
+and `src/__main__.py`. Env-var override via the ``SSK_`` prefix
+(e.g. ``SSK_REQUEST_TIMEOUT_SEC=30``). Defaults reproduce the pre-
+refactor literals.
+
+Domain / algorithm constants (`_PROFIT_MIN`, `_TRADING_DAYS`,
+`_STALE_10Q_DAYS`, etc.) intentionally stay co-located with the
+algorithm — they are not user-overridable runtime config.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class AppSettings(BaseSettings):
+    """Runtime config for every I/O boundary in the package."""
+
+    model_config = SettingsConfigDict(env_prefix="SSK_", frozen=True)
+
+    edgar_tickers_url: str = (
+        "https://www.sec.gov/files/company_tickers_exchange.json"
+    )
+    edgar_submissions_url_template: str = (
+        "https://data.sec.gov/submissions/CIK{cik}.json"
+    )
+    edgar_cache_dir: Path = Path("results/edgar")
+    cnn_fg_url: str = (
+        "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
+    )
+    cnn_fg_referer: str = "https://edition.cnn.com/"
+    cnn_fg_user_agent: str = (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+    )
+    cnn_fg_cache_dir: Path = Path("results/cnn_fg")
+    http_accept: str = "application/json, text/plain, */*"
+    request_timeout_sec: int = 10
+    results_dir: Path = Path("results")
+
+
+settings = AppSettings()
