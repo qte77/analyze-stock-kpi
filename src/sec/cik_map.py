@@ -28,6 +28,7 @@ autouse fixture in :mod:`tests.sec.conftest`.
 from __future__ import annotations
 
 import json
+import logging
 import os
 import urllib.error
 import urllib.request
@@ -37,6 +38,8 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
 from src.http_ua import pick_user_agent
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -100,6 +103,14 @@ def _fetch_json() -> dict:
             last_modified = getattr(response, "headers", {}).get("Last-Modified")
     except urllib.error.HTTPError as exc:
         if exc.code == 304 and _CACHE_PATH.is_file():
+            return json.loads(_CACHE_PATH.read_bytes())
+        raise
+    except urllib.error.URLError as exc:
+        if _CACHE_PATH.is_file():
+            logger.warning(
+                "EDGAR fetch failed (%s); reusing stale cache at %s",
+                exc, _CACHE_PATH,
+            )
             return json.loads(_CACHE_PATH.read_bytes())
         raise
     _CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
