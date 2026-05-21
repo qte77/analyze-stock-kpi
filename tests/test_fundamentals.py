@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import date
 from types import SimpleNamespace
+from typing import ClassVar
 from unittest.mock import patch
 
 import pytest
@@ -25,7 +26,8 @@ def test_snapshot_parses_full_info_dict() -> None:
     assert snap.long_name == "Apple Inc."
     assert snap.sector == "Technology"
     assert snap.quote_type == "EQUITY"
-    assert snap.market_cap is not None and snap.market_cap > 0
+    assert snap.market_cap is not None
+    assert snap.market_cap > 0
     assert snap.trailing_pe == 32.5
     assert snap.return_on_equity == 1.45
     assert snap.dividend_yield == 0.0048
@@ -75,7 +77,7 @@ def test_fetch_fundamentals_normalizes_live_yield() -> None:
     from unittest.mock import patch
 
     class _FakeTicker:
-        info = {
+        info: ClassVar[dict[str, object]] = {
             "symbol": "AAPL",
             "shortName": "Apple Inc.",
             "dividendYield": 0.37,  # current yfinance: percentage-shaped
@@ -156,7 +158,7 @@ def test_fetch_fundamentals_attaches_roi() -> None:
     inputs reaches the snapshot's ``roi`` field via ``model_copy``."""
 
     class _FakeTicker:
-        info = {
+        info: ClassVar[dict[str, object]] = {
             "symbol": "AAPL",
             "shortName": "Apple Inc.",
             "netIncomeToCommon": 24.0,
@@ -259,7 +261,7 @@ def test_fetch_fundamentals_attaches_rd_to_revenue() -> None:
     )
 
     class _FakeTicker:
-        info = {
+        info: ClassVar[dict[str, object]] = {
             "symbol": "AAPL",
             "shortName": "Apple Inc.",
             "quoteType": "EQUITY",
@@ -465,7 +467,11 @@ def test_fetch_universe_fundamentals_batch_failure_gives_none_sortino() -> None:
     """``yf.download`` raising -> all snapshots get ``sortino_ratio=None``."""
 
     class _FakeTicker:
-        info = {"symbol": "AAPL", "shortName": "Apple", "quoteType": "EQUITY"}
+        info: ClassVar[dict[str, object]] = {
+            "symbol": "AAPL",
+            "shortName": "Apple",
+            "quoteType": "EQUITY",
+        }
 
     with (
         patch("src.fundamentals.yf.Ticker", return_value=_FakeTicker()),
@@ -484,7 +490,8 @@ def test_fetch_universe_fundamentals_batch_failure_gives_none_sortino() -> None:
 def test_live_fetch_aapl() -> None:
     snap = fetch_fundamentals("AAPL")
     assert snap.symbol == "AAPL"
-    assert snap.market_cap is not None and snap.market_cap > 0
+    assert snap.market_cap is not None
+    assert snap.market_cap > 0
     assert snap.sector is not None
 
 

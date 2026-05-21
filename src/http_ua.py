@@ -18,7 +18,7 @@ for EDGAR).
 
 from __future__ import annotations
 
-import random  # noqa: S311  # UA shuffling, not crypto
+import random  # UA shuffling, not crypto
 from typing import Protocol
 
 # Current desktop User-Agents per useragents.me — refresh quarterly.
