@@ -41,21 +41,17 @@ def _build_body(
     fy_start: date,
     fy_end: date,
     limit: int,
-    naics_codes: list[str] | None,
     award_type_codes: tuple[str, ...],
 ) -> dict:
     """Construct the POST body per the recipient.md contract."""
-    filters: dict = {
-        "award_type_codes": list(award_type_codes),
-        "time_period": [
-            {"start_date": fy_start.isoformat(), "end_date": fy_end.isoformat()},
-        ],
-    }
-    if naics_codes is not None:
-        filters["naics_codes"] = {"require": list(naics_codes)}
     return {
         "category": "recipient",
-        "filters": filters,
+        "filters": {
+            "award_type_codes": list(award_type_codes),
+            "time_period": [
+                {"start_date": fy_start.isoformat(), "end_date": fy_end.isoformat()},
+            ],
+        },
         "limit": limit,
         "page": 1,
     }
@@ -77,11 +73,10 @@ def fetch_top_contractors(
     fy_end: date,
     *,
     limit: int = 100,
-    naics_codes: list[str] | None = None,
     award_type_codes: tuple[str, ...] = ("A", "B", "C", "D"),
 ) -> list[RecipientRecord]:
     """Fetch top contractors by trailing-FY obligated dollars."""
-    body = _build_body(fy_start, fy_end, limit, naics_codes, award_type_codes)
+    body = _build_body(fy_start, fy_end, limit, award_type_codes)
     req = urllib.request.Request(  # noqa: S310
         settings.usaspending_url,
         data=json.dumps(body).encode("utf-8"),
