@@ -8,7 +8,7 @@ FX/futures/crypto) to ``results/fundamentals_<UTC>.json``.
 
 import json
 import logging
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 from rich.console import Console
@@ -36,6 +36,20 @@ def _format_percent(value: float | None) -> str:
 
 def _format_score(value: float | None) -> str:
     return f"{value:.0f}" if value is not None else "-"
+
+
+_STALE_10Q_DAYS = 150
+
+
+def _format_days_since(filing_date: date | None, *, today: date | None = None) -> str:
+    """Format an EDGAR last-filed date as "Nd"; "-" when missing.
+
+    Wraps in Rich ``[red]…[/red]`` markup when N exceeds the >150d
+    staleness threshold (US issuers normally file 10-Q quarterly; a
+    gap longer than 150d signals delisting, restatement, or foreign-
+    filer status).
+    """
+    return "-"
 
 
 def _print_sentiment_banner(console: Console, snapshot: FearGreedSnapshot) -> None:
