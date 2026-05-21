@@ -262,6 +262,22 @@ def test_resolve_cik_live_aapl_returns_apple_cik() -> None:
 
 
 @pytest.mark.network
+def test_fetch_json_live_conditional_get_roundtrip(tmp_path: Path) -> None:
+    """Real EDGAR — first call lands the cache; second call hits 304."""
+    cik_map._CACHE_PATH = tmp_path / "edgar.json"  # noqa: SLF001  # autouse-fixture override
+
+    cik_map._fetch_json()
+    assert cik_map._CACHE_PATH.is_file()
+    first_size = cik_map._CACHE_PATH.stat().st_size
+    first_mtime = cik_map._CACHE_PATH.stat().st_mtime
+    assert first_size > 100_000  # the file is ~13 MB
+
+    cik_map._fetch_json()  # should hit 304, leave file untouched
+    assert cik_map._CACHE_PATH.stat().st_size == first_size
+    assert cik_map._CACHE_PATH.stat().st_mtime == first_mtime
+
+
+@pytest.mark.network
 def test_resolve_cik_live_returns_none_for_non_equity() -> None:
     """End-to-end: ``BTC-USD`` is not in EDGAR; resolver returns None."""
     from src.sec.cik_map import resolve_cik
