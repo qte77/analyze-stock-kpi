@@ -44,4 +44,6 @@ exclude = [
     # ederfinancial.org — slow PDF host (DoD Top-25 mirror); times out
     # under lychee's default 30s budget.
     "^https://ederfinancial\\.org",
+    # NAAIM — recently started returning 403 to lychee's UA.
+    "^https://www\\.naaim\\.org",
 ]
