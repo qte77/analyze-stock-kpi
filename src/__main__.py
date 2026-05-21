@@ -15,13 +15,13 @@ from rich.console import Console
 from rich.table import Table
 
 from .composite_scores import CompositeScores, compute_scores
+from .config import settings
 from .fundamentals import FundamentalsSnapshot, fetch_universe_fundamentals
 from .sec.submissions import enrich_snapshot_sec
 from .sentiment import FearGreedSnapshot, fetch_fear_greed
 from .universe import resolve_universe
 from .utils.parse_args import CliArgs
 
-RESULTS_DIR = Path("results")
 _TABLE_QUOTE_TYPES = {"EQUITY", "ETF"}
 
 logger = logging.getLogger(__name__)
@@ -138,9 +138,9 @@ def _print_summary_table(
 
 
 def _persist_snapshots(snapshots: list[FundamentalsSnapshot]) -> Path:
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    settings.results_dir.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(UTC).strftime("%Y-%m-%dT%H-%M-%SZ")
-    out_path = RESULTS_DIR / f"fundamentals_{stamp}.json"
+    out_path = settings.results_dir / f"fundamentals_{stamp}.json"
     payload = [s.model_dump(by_alias=False) for s in snapshots]
     out_path.write_text(json.dumps(payload, indent=2))
     return out_path
