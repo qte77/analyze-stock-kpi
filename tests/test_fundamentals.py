@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import date
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -492,3 +493,43 @@ def test_live_fetch_history_returns_dataframe() -> None:
     df = fetch_price_history("AAPL", period="1mo")
     assert not df.empty
     assert "Close" in df.columns
+
+
+def test_snapshot_accepts_sec_last_filed_fields() -> None:
+    """`sec_last_10k_date / 10q / 8k` are optional date fields on the model."""
+    snap = FundamentalsSnapshot(
+        symbol="AAPL",
+        sec_last_10k_date=date(2024, 11, 1),
+        sec_last_10q_date=date(2024, 8, 2),
+        sec_last_8k_date=date(2024, 10, 31),
+    )
+
+    assert snap.sec_last_10k_date == date(2024, 11, 1)
+    assert snap.sec_last_10q_date == date(2024, 8, 2)
+    assert snap.sec_last_8k_date == date(2024, 10, 31)
+
+
+def test_snapshot_attaches_sec_fields_via_model_copy() -> None:
+    """SEC enrichment fields round-trip via `model_copy(update=...)`."""
+    snap = FundamentalsSnapshot(symbol="AAPL")
+
+    enriched = snap.model_copy(
+        update={
+            "sec_last_10k_date": date(2024, 11, 1),
+            "sec_last_10q_date": date(2024, 8, 2),
+            "sec_last_8k_date": date(2024, 10, 31),
+        }
+    )
+
+    assert enriched.sec_last_10k_date == date(2024, 11, 1)
+    assert enriched.sec_last_10q_date == date(2024, 8, 2)
+    assert enriched.sec_last_8k_date == date(2024, 10, 31)
+
+
+def test_snapshot_sec_fields_default_none() -> None:
+    """Without enrichment, the three SEC date fields default to None."""
+    snap = FundamentalsSnapshot(symbol="AAPL")
+
+    assert snap.sec_last_10k_date is None
+    assert snap.sec_last_10q_date is None
+    assert snap.sec_last_8k_date is None
