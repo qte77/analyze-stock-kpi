@@ -68,7 +68,7 @@ repo's MIT licence:
 | yfinance raw payloads | **CAUTION** | Yahoo's ToS §2.4(i)/§2.8 prohibits automated collection AND redistribution of "the Services" | **Never commit raw `fast_info` / `info` JSON.** Persist only the *resolution boolean* (`yfinance_resolves: bool`) and the public ticker symbol itself |
 | yfinance-derived ticker list | **CLEAR** | A list of ticker symbols + a "this resolves" boolean is your pipeline's state, not Yahoo's copyrightable expression (Feist v. Rural Telephone) | Same as above — keep the audit row schema lean |
 | `fedspendingtransparency/usaspending-api` API contract files | **CLEAR** | Repo is CC0 1.0; LOCKHEED MARTIN / MULTIPLE RECIPIENTS example JSON is in the public domain | Verbatim copy into test fixtures is permitted; no attribution required, but mention provenance in commit messages |
-| CNN Fear & Greed numeric values | **CAUTION** | CNN ToS prohibits automated scraping (contract claim, not copyright — the numeric index is a fact, not original expression). Endpoint returns HTTP 418 to known scrapers as a passive block | Already in place: cache numeric-only history to `data` branch; never store raw HTML; daily cron only; graceful degradation on 418 |
+| CNN Fear & Greed numeric values | **LOW RISK** | (a) Copyright: facts are uncopyrightable per *Feist Publications v. Rural Telephone*, 499 U.S. 340 (1991). The integer 1-100 and label are computed facts, not original expression. (b) CFAA: User-Agent / Referer spoofing is not "gate circumvention" on a publicly-accessible endpoint per *Van Buren v. United States*, 594 U.S. 374 (2021) and *hiQ Labs v. LinkedIn*, 938 F.3d 985 (9th Cir. 2022). (c) ToS: a browsewrap contract claim is theoretically possible but unenforced — zero DMCA / C&D against ≥10 public CNN F&G redistributors on PyPI / Kaggle / GitHub. (d) No US sui-generis database right | Already in place: cache numeric-only history to `data` branch; never store raw HTML; daily cron only; graceful degradation on 418 |
 
 ### Standing rules these verdicts impose
 
@@ -89,6 +89,10 @@ References for the audit:
 - [Yahoo Terms of Service (`legal.yahoo.com`)](https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html)
 - [17 USC § 105 (federal-work public-domain rule)](https://www.govinfo.gov/content/pkg/USCODE-2022-title17/html/USCODE-2022-title17-chap1-sec105.htm)
 - [DATA Act / 31 USC § 6101](https://www.law.cornell.edu/uscode/text/31/6101)
+- [*Feist Publications v. Rural Telephone Service*, 499 U.S. 340 (1991)](https://www.law.cornell.edu/supremecourt/text/499/340) — facts not copyrightable
+- [*Van Buren v. United States*, 594 U.S. 374 (2021)](https://www.supremecourt.gov/opinions/20pdf/19-783_k53l.pdf) — CFAA "gates-up-or-down" test
+- [*hiQ Labs v. LinkedIn*, 938 F.3d 985 (9th Cir. 2022)](https://cdn.ca9.uscourts.gov/datastore/opinions/2022/04/18/17-16783.pdf) — publicly-accessible data is not CFAA-protected by header checks
+- [GitHub DMCA archive search](https://github.com/github/dmca) — zero CNN F&G takedowns on record (2026-05-21 audit)
 
 ---
 
