@@ -4,9 +4,12 @@ from __future__ import annotations
 
 import json
 from datetime import UTC, datetime, timedelta
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
+
+if TYPE_CHECKING:
+    import urllib.request
+    from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
@@ -99,7 +102,7 @@ def test_fetch_fear_greed_sends_browser_headers() -> None:
     payload = load_fear_greed_fixture("current")
     captured: dict[str, Any] = {}
 
-    def fake_urlopen(request: Any, **_: Any) -> _FakeResponse:
+    def fake_urlopen(request: urllib.request.Request, **_: object) -> _FakeResponse:
         captured["request"] = request
         return _FakeResponse(payload)
 

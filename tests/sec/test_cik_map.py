@@ -13,7 +13,8 @@ def _stub_edgar(monkeypatch: pytest.MonkeyPatch, edgar_tickers_fixture: dict) ->
     monkeypatch.setattr(cik_map, "_fetch_json", lambda: edgar_tickers_fixture)
 
 
-def test_lookup_record_returns_full_record_for_aapl(_stub_edgar: None) -> None:
+@pytest.mark.usefixtures("_stub_edgar")
+def test_lookup_record_returns_full_record_for_aapl() -> None:
     """``lookup_record('AAPL')`` resolves Apple's complete EDGAR entry."""
     record = lookup_record("AAPL")
 
@@ -24,7 +25,8 @@ def test_lookup_record_returns_full_record_for_aapl(_stub_edgar: None) -> None:
     assert record.exchange == "Nasdaq"
 
 
-def test_resolve_cik_returns_ten_digit_zero_padded_string(_stub_edgar: None) -> None:
+@pytest.mark.usefixtures("_stub_edgar")
+def test_resolve_cik_returns_ten_digit_zero_padded_string() -> None:
     """EDGAR ships CIKs as un-padded ints; resolver must left-zero-pad to 10."""
     from src.sec.cik_map import resolve_cik
 
@@ -35,15 +37,17 @@ def test_resolve_cik_returns_ten_digit_zero_padded_string(_stub_edgar: None) -> 
     assert len(cik) == 10
 
 
+@pytest.mark.usefixtures("_stub_edgar")
 @pytest.mark.parametrize("symbol", ["BTC-USD", "EURUSD=X", "^VIX", "GC=F"])
-def test_resolve_cik_returns_none_for_non_equity_symbols(_stub_edgar: None, symbol: str) -> None:
+def test_resolve_cik_returns_none_for_non_equity_symbols(symbol: str) -> None:
     """Non-SEC-registered Yahoo symbols resolve to None, not raise."""
     from src.sec.cik_map import resolve_cik
 
     assert resolve_cik(symbol) is None
 
 
-def test_lookup_is_case_insensitive(_stub_edgar: None) -> None:
+@pytest.mark.usefixtures("_stub_edgar")
+def test_lookup_is_case_insensitive() -> None:
     """Ticker case doesn't matter — ``aapl`` and ``AAPL`` resolve identically."""
     from src.sec.cik_map import resolve_cik
 

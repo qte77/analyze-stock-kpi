@@ -13,9 +13,13 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 from src.sec import cik_map
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 _FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
@@ -28,7 +32,7 @@ def edgar_tickers_fixture() -> dict:
 
 
 @pytest.fixture(autouse=True)
-def _reset_cik_map_cache():
+def _reset_cik_map_cache() -> Iterator[None]:
     """Reset the cik_map module-level cache around every test."""
     cik_map._records_cache = None
     yield
