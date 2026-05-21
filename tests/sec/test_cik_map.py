@@ -23,3 +23,14 @@ def test_lookup_record_returns_full_record_for_aapl(_stub_edgar: None) -> None:
     assert record.ticker == "AAPL"
     assert record.title == "Apple Inc."
     assert record.exchange == "Nasdaq"
+
+
+def test_resolve_cik_returns_ten_digit_zero_padded_string(_stub_edgar: None) -> None:
+    """EDGAR ships CIKs as un-padded ints; resolver must left-zero-pad to 10."""
+    from src.sec.cik_map import resolve_cik
+
+    cik = resolve_cik("AAPL")
+
+    assert cik == "0000320193"
+    assert cik is not None
+    assert len(cik) == 10
