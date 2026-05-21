@@ -29,10 +29,23 @@ from __future__ import annotations
 
 import json
 import urllib.request
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
 from src.http_ua import pick_user_agent
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+_CACHE_PATH: Path = settings.edgar_cache_dir / "company_tickers_exchange.json"
+"""Persistent disk cache for the EDGAR ticker registry.
+
+mtime is set to the server's ``Last-Modified`` header (not "when we
+wrote it") so we can echo it back as ``If-Modified-Since`` on the
+next call. Tests monkeypatch this via the ``_isolate_edgar_cache``
+autouse fixture in :mod:`tests.sec.conftest`.
+"""
 
 
 class CikRecord(BaseModel):
@@ -70,7 +83,10 @@ def _fetch_json() -> dict:
     with urllib.request.urlopen(  # noqa: S310  # nosec B310
         request, timeout=settings.request_timeout_sec
     ) as response:
-        return json.loads(response.read())
+        body = response.read()
+    _CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    _CACHE_PATH.write_bytes(body)
+    return json.loads(body)
 
 
 _records_cache: dict[str, CikRecord] | None = None
