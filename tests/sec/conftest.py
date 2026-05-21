@@ -1,0 +1,36 @@
+"""Shared fixtures for SEC integration tests.
+
+Provides:
+
+- ``edgar_tickers_fixture``: loads the committed
+  ``company_tickers_exchange.json`` subset used by ``cik_map`` tests.
+- ``_reset_cik_map_cache`` (autouse): clears the module-level cache in
+  :mod:`src.sec.cik_map` before and after every test in this package
+  so tests don't bleed state into each other.
+"""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import pytest
+
+from src.sec import cik_map
+
+_FIXTURES_DIR = Path(__file__).parent / "fixtures"
+
+
+@pytest.fixture
+def edgar_tickers_fixture() -> dict:
+    """Return the committed EDGAR ``company_tickers_exchange.json`` subset."""
+    path = _FIXTURES_DIR / "company_tickers_exchange.json"
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+@pytest.fixture(autouse=True)
+def _reset_cik_map_cache():
+    """Reset the cik_map module-level cache around every test."""
+    cik_map._records_cache = None
+    yield
+    cik_map._records_cache = None
