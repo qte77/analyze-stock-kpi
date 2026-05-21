@@ -26,6 +26,7 @@ Types of changes:
 
 ### Changed
 
+- **ruff lint rule set widened.** `[tool.ruff.lint].select` adds `B` (flake8-bugbear), `SIM` (flake8-simplify), `RUF` (ruff-specific), `PT` (pytest-style), `ANN` (flake8-annotations), `TCH` / `TC` (flake8-type-checking), `PGH` (pygrep-hooks), `D` (pydocstyle, `convention = "google"`) on top of the existing `E`, `F`, `I`, `N`, `W`, `UP`, `C90`, `S` baseline. Each entry carries an inline comment describing the rule family. Per-file ignores extended: `tests/**` adds `D` (no docstring requirement on tests; `S101` already there), `scripts/**` adds `D` + `ANN` (one-off scripts; over-annotating is noise). Two `# noqa: TC001` / `# noqa: TC003` markers stay in `src/fundamentals.py` because pydantic needs runtime access to `CompositeScores` / `date` for model field resolution. Existing code touched only to satisfy the new rules; behaviour unchanged.
 - **CodeQL config inlined.** The `paths-ignore` rule (excluding vendored `docs/demo/vendor/**`) now lives in the `Initialize CodeQL` step's `config:` input in `.github/workflows/codeql.yaml`, co-located with the action invocation. The standalone `.github/codeql/codeql-config.yml` is removed. No behavioural change to CodeQL analysis — same paths excluded, same SHA-pinned action versions.
 
 ## [1.0.0] - 2026-05-17
