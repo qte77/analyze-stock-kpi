@@ -82,13 +82,18 @@ def fetch_top_contractors(
 ) -> list[RecipientRecord]:
     """Fetch top contractors by trailing-FY obligated dollars."""
     body = _build_body(fy_start, fy_end, limit, naics_codes, award_type_codes)
-    req = urllib.request.Request(  # noqa: S310
+    # S310 / B310: settings.usaspending_url is an HTTPS string; the explicit
+    # scheme check below is the defense-in-depth boundary if a future refactor
+    # ever lets external input flow into it.
+    req = urllib.request.Request(  # noqa: S310  # nosec B310
         settings.usaspending_url,
         data=json.dumps(body).encode("utf-8"),
         method="POST",
     )
+    if not req.full_url.startswith("https://"):
+        raise ValueError(f"Refusing non-HTTPS URL: {req.full_url!r}")
     req.add_header("Content-Type", "application/json")
-    with urllib.request.urlopen(  # noqa: S310
+    with urllib.request.urlopen(  # noqa: S310  # nosec B310
         req, timeout=settings.usaspending_timeout_sec,
     ) as resp:
         payload = json.loads(resp.read())

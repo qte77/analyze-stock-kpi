@@ -58,10 +58,10 @@ def test_app_settings_item3_field_env_overrides(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """``SSK_<FIELD>`` env vars override Item 3 fields at construction time."""
-    monkeypatch.setenv("SSK_FEDERAL_CONTRACTORS_DIR", "/tmp/fc-override")  # noqa: S108
+    monkeypatch.setenv("SSK_FEDERAL_CONTRACTORS_DIR", "/tmp/fc-override")  # noqa: S108  # nosec B108
     monkeypatch.setenv("SSK_USASPENDING_TIMEOUT_SEC", "60")
 
     s = AppSettings()
 
-    assert s.federal_contractors_dir == Path("/tmp/fc-override")  # noqa: S108
+    assert s.federal_contractors_dir == Path("/tmp/fc-override")  # noqa: S108  # nosec B108
     assert s.usaspending_timeout_sec == 60
