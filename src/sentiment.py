@@ -154,8 +154,11 @@ def _index_subindicator_data_by_date(
 def _build_today_subindicators(
     payload: dict[str, Any],
 ) -> dict[str, SubindicatorReading]:
-    """Build today's subindicator bundle: precise score + rating from the
-    top-level subindicator block; ``raw_value`` from the latest data point."""
+    """Build today's subindicator bundle.
+
+    Precise score + rating come from the top-level subindicator block;
+    ``raw_value`` from the latest data point.
+    """
     out: dict[str, SubindicatorReading] = {}
     for key in SUBINDICATOR_KEYS:
         sub = payload.get(key)
@@ -307,6 +310,7 @@ def merge_payload_into_years(
 
 
 def main() -> None:
+    """Cron entrypoint: fetch CNN F&G, merge into per-year files."""
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     by_year = merge_payload_into_years(_fetch_payload())
     for year, by_date in by_year.items():

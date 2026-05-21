@@ -20,14 +20,14 @@ history rather than ``Ticker.info``; see ADR-0004 for the rationale.
 from __future__ import annotations
 
 import logging
-from datetime import date
+from datetime import date  # noqa: TC003  # pydantic needs runtime access for model fields
 from typing import TYPE_CHECKING, Any
 
 import yfinance as yf
 from pydantic import BaseModel, ConfigDict, Field
 from tqdm import tqdm
 
-from .composite_scores import CompositeScores
+from .composite_scores import CompositeScores  # noqa: TC001  # pydantic runtime requirement
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -211,7 +211,7 @@ def _compute_sortino(
     return mean_annual / downside_dev_annual
 
 
-def _read_rd_revenue(income_stmt: Any) -> tuple[float | None, float | None]:
+def _read_rd_revenue(income_stmt: pd.DataFrame | None) -> tuple[float | None, float | None]:
     """Extract latest R&D + Total Revenue from an income_stmt DataFrame.
 
     Returns ``(None, None)`` on any structural issue (empty DataFrame,
@@ -231,7 +231,7 @@ def _read_rd_revenue(income_stmt: Any) -> tuple[float | None, float | None]:
 
 
 def _fetch_rd_to_revenue(
-    yf_ticker: Any, info: dict[str, Any]
+    yf_ticker: yf.Ticker, info: dict[str, Any]
 ) -> float | None:
     """R&D-as-share-of-revenue from ``Ticker.income_stmt`` latest column.
 
