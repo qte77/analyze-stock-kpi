@@ -163,6 +163,45 @@ audit JSON.
   trivially supported via `filters.time_period` but adds no value
   for a monthly-refreshed preset.
 
+## Amendment (2026-05-21) — Library-first architecture
+
+Original ADR scoped the usaspending logic to
+`scripts/build_federal_contractors.py` (Scope 2 in
+[ADR-0007](0007-package-vs-infrastructure-boundary.md)'s
+terminology). After ADR-0007 formalized the package /
+repo-infrastructure / demo boundary, the work was reorganized so
+that the canonical implementation lives **inside the package**:
+
+- `src/usaspending.py` — `RecipientRecord(BaseModel)` and
+  `fetch_top_contractors(...)` library API.
+- `src/federal_contractors.py` — `AuditRow(BaseModel)`,
+  `CURATED_TICKERS` (DoD Top-25 seed), and the
+  `build_universe(...) -> tuple[list[str], list[AuditRow]]`
+  orchestrator.
+- `python -m src --refresh-universe federal-contractors` exposes
+  the orchestrator via the CLI; writes the preset + audit to the
+  XDG cache directory by default (`--output` / `--audit-output`
+  override).
+
+`scripts/build_federal_contractors.py` is retained as a **thin
+wrapper** that calls `build_universe(...)` and persists the
+outputs to repo-specific paths
+(`src/assets/universes/federal-contractors.txt` in editable mode,
+`results/federal-contractors/<date>.json` for the `data` branch).
+It exists so the refresh workflow has a stable invocation point;
+downstream consumers of the wheel call the library API directly.
+
+`src/universe.py` is extended to check
+`~/.cache/analyze-stock-kpi/universes/<name>.txt` before falling
+back to the bundled preset. Downstream users can refresh and have
+their cache override the wheel's bundled list without rewriting
+the package.
+
+The weekly refresh workflow (`federal-contractors-refresh.yaml`)
+opens a preset-update PR against `main` **only when the diff is
+non-empty** (top-100 federal-contractor ranking is stable
+week-over-week; empty diffs would spam the PR list).
+
 ## References
 
 - usaspending.gov API: <https://api.usaspending.gov/>

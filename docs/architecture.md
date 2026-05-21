@@ -74,8 +74,28 @@ v0.5.0 attaches a `CompositeScores` object to every `FundamentalsSnapshot` after
 - Long/short hedging strategy (Mansfield RS, regime split, ranking) — deferred per roadmap §0.5+
 - Paid-data integrations (CDS, Bloomberg, FMP) — explicitly out of scope per [`UserStory.md`](UserStory.md)
 
+## Distribution scope
+
+The repo tree splits into three concentric scopes per
+[ADR-0007](decisions/0007-package-vs-infrastructure-boundary.md):
+**package** (`src/` + `README.md`, ships in the wheel),
+**repo infrastructure** (`scripts/`, `.github/`, `Makefile`, lint
+configs — CI-only), and **demo + dev docs** (`docs/demo/`,
+`docs/*.md`, `tests/` — reference / showcase only). One-way
+direction rule: infrastructure and demo MAY import from package;
+package MUST NOT reference scripts or workflow artifacts, and the
+`data` branch is consumed only by the demo dashboard.
+
 ## Planned modules (scoped, not yet implemented)
 
-- `src/sec/cik_map.py` — CIK ↔ ticker resolver via EDGAR `company_tickers_exchange.json`; foundation layer used by every other SEC integration. Per [ADR-0006](decisions/0006-federal-contractors-universe.md).
+In-package (Scope 1):
+
+- `src/sec/cik_map.py` — CIK ↔ ticker resolver via EDGAR `company_tickers_exchange.json`; foundation layer used by every other SEC integration. **Shipped in PR #107.**
 - `src/sec/submissions.py` — extracts the last-filed-by-form (10-K / 10-Q / 8-K) date per ticker via EDGAR submissions API; surfaces as new optional fields on `FundamentalsSnapshot`. Per [ADR-0006](decisions/0006-federal-contractors-universe.md).
-- `scripts/build_federal_contractors.py` + `.github/workflows/federal-contractors-refresh.yaml` — monthly refresh of `src/assets/universes/federal-contractors.txt` from usaspending.gov top-100, gated through EDGAR + yfinance verification. Per [ADR-0006](decisions/0006-federal-contractors-universe.md).
+- `src/usaspending.py` — `RecipientRecord(BaseModel)` + `fetch_top_contractors(...)` library API for the top-N federal-contractor endpoint. Per [ADR-0006 amendment](decisions/0006-federal-contractors-universe.md).
+- `src/federal_contractors.py` — `AuditRow(BaseModel)` + `build_universe(...) -> tuple[list[str], list[AuditRow]]` orchestrator that chains `src.usaspending` + `src.sec.cik_map` + `yfinance`. Per [ADR-0006 amendment](decisions/0006-federal-contractors-universe.md).
+- `src/universe.py` extension — XDG-cache lookup before bundled-preset fallback. Per [ADR-0007](decisions/0007-package-vs-infrastructure-boundary.md)'s path-write rule.
+
+In repo infrastructure (Scope 2):
+
+- `scripts/build_federal_contractors.py` (thin wrapper calling `src.federal_contractors.build_universe`) + `.github/workflows/federal-contractors-refresh.yaml` — weekly refresh of `src/assets/universes/federal-contractors.txt` from usaspending.gov top-100, gated through EDGAR + yfinance verification. Per [ADR-0006](decisions/0006-federal-contractors-universe.md).
