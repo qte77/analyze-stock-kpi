@@ -228,6 +228,31 @@ def test_fetch_json_creates_cache_directory_when_missing(
     assert nested.is_file()
 
 
+def test_fetch_json_tolerates_missing_last_modified_header(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Server omitting ``Last-Modified`` doesn't crash — file is still written."""
+    import urllib.request
+    from io import BytesIO
+
+    class _NoLastModifiedResponse(BytesIO):
+        headers: ClassVar[dict[str, str]] = {}
+
+        def __enter__(self) -> _NoLastModifiedResponse:
+            return self
+
+        def __exit__(self, *_args: object) -> None:
+            return None
+
+    def fake_urlopen(_req: object, *_a: object, **_k: object) -> _NoLastModifiedResponse:
+        return _NoLastModifiedResponse(b'{"fields": [], "data": []}')
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    cik_map._fetch_json()  # must not raise
+
+    assert cik_map._CACHE_PATH.is_file()
+
+
 @pytest.mark.network
 def test_resolve_cik_live_aapl_returns_apple_cik() -> None:
     """End-to-end against real EDGAR — AAPL must resolve to 0000320193."""
