@@ -147,6 +147,7 @@ def _persist_snapshots(snapshots: list[FundamentalsSnapshot]) -> Path:
 
 
 def main() -> None:
+    """Entrypoint: resolve universe, fetch fundamentals, print + persist."""
     console = Console()
     args = CliArgs()
     try:
