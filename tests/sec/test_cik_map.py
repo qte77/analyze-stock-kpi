@@ -70,3 +70,32 @@ def test_records_cache_fetches_json_only_once(
     cik_map.resolve_cik("MSFT")
 
     assert call_count == 1
+
+
+def test_fetch_json_sends_browser_shape_headers(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``_fetch_json`` GETs the EDGAR URL with User-Agent + Accept headers."""
+    import urllib.request
+    from io import BytesIO
+
+    from src.http_ua import USER_AGENTS
+    from src.sec import cik_map
+
+    expected_accept = "application/json, text/plain, */*"
+    expected_url = "https://www.sec.gov/files/company_tickers_exchange.json"
+
+    captured: dict[str, urllib.request.Request] = {}
+
+    def fake_urlopen(req: urllib.request.Request, *args: object, **kwargs: object) -> BytesIO:
+        captured["req"] = req
+        return BytesIO(b'{"fields": [], "data": []}')
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+
+    cik_map._fetch_json()
+
+    req = captured["req"]
+    assert req.full_url == expected_url
+    assert req.get_header("User-agent") in USER_AGENTS
+    assert req.get_header("Accept") == expected_accept
