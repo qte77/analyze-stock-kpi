@@ -264,7 +264,7 @@ def test_resolve_cik_live_aapl_returns_apple_cik() -> None:
 @pytest.mark.network
 def test_fetch_json_live_conditional_get_roundtrip(tmp_path: Path) -> None:
     """Real EDGAR — first call lands the cache; second call hits 304."""
-    cik_map._CACHE_PATH = tmp_path / "edgar.json"  # noqa: SLF001  # autouse-fixture override
+    cik_map._CACHE_PATH = tmp_path / "edgar.json"
 
     cik_map._fetch_json()
     assert cik_map._CACHE_PATH.is_file()
