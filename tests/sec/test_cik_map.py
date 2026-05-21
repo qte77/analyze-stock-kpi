@@ -105,6 +105,27 @@ def test_fetch_json_sends_browser_shape_headers(
     assert req.get_header("Accept") == expected_accept
 
 
+def test_fetch_json_persists_response_to_disk_cache(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Cold cache: ``_fetch_json`` writes the response body to ``_CACHE_PATH``."""
+    import urllib.request
+    from io import BytesIO
+
+    body = b'{"fields": ["cik","name","ticker","exchange"], "data": []}'
+
+    def fake_urlopen(_req: object, *args: object, **kwargs: object) -> BytesIO:
+        return BytesIO(body)
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    assert not cik_map._CACHE_PATH.is_file()
+
+    cik_map._fetch_json()
+
+    assert cik_map._CACHE_PATH.is_file()
+    assert cik_map._CACHE_PATH.read_bytes() == body
+
+
 @pytest.mark.network
 def test_resolve_cik_live_aapl_returns_apple_cik() -> None:
     """End-to-end against real EDGAR — AAPL must resolve to 0000320193."""
