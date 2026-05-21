@@ -54,7 +54,14 @@ class LastFiledSnapshot(BaseModel):
 
 def _extract_last_filed(payload: dict) -> LastFiledSnapshot:
     """Parse submissions JSON into a :class:`LastFiledSnapshot`."""
-    return LastFiledSnapshot()
+    recent = payload["filings"]["recent"]
+    forms: list[str] = recent["form"]
+    dates: list[str] = recent["filingDate"]
+    last_10k = next(
+        (date.fromisoformat(d) for f, d in zip(forms, dates, strict=True) if f == "10-K"),
+        None,
+    )
+    return LastFiledSnapshot(last_10k_date=last_10k)
 
 
 def fetch_last_filed(cik: str) -> LastFiledSnapshot:
