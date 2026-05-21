@@ -28,7 +28,9 @@ autouse fixture in :mod:`tests.sec.conftest`.
 from __future__ import annotations
 
 import json
+import os
 import urllib.request
+from email.utils import parsedate_to_datetime
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
@@ -84,8 +86,12 @@ def _fetch_json() -> dict:
         request, timeout=settings.request_timeout_sec
     ) as response:
         body = response.read()
+        last_modified = getattr(response, "headers", {}).get("Last-Modified")
     _CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
     _CACHE_PATH.write_bytes(body)
+    if last_modified:
+        ts = parsedate_to_datetime(last_modified).timestamp()
+        os.utime(_CACHE_PATH, (ts, ts))
     return json.loads(body)
 
 
