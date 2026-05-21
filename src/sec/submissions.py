@@ -57,11 +57,18 @@ def _extract_last_filed(payload: dict) -> LastFiledSnapshot:
     recent = payload["filings"]["recent"]
     forms: list[str] = recent["form"]
     dates: list[str] = recent["filingDate"]
-    last_10k = next(
-        (date.fromisoformat(d) for f, d in zip(forms, dates, strict=True) if f == "10-K"),
-        None,
+
+    def first(form_name: str) -> date | None:
+        return next(
+            (date.fromisoformat(d) for f, d in zip(forms, dates, strict=True) if f == form_name),
+            None,
+        )
+
+    return LastFiledSnapshot(
+        last_10k_date=first("10-K"),
+        last_10q_date=first("10-Q"),
+        last_8k_date=first("8-K"),
     )
-    return LastFiledSnapshot(last_10k_date=last_10k)
 
 
 def fetch_last_filed(cik: str) -> LastFiledSnapshot:
