@@ -94,6 +94,45 @@ def test_enrich_snapshot_sec_resolves_dates_for_sec_registered_symbol(
     }
 
 
+@pytest.mark.parametrize(
+    "exc_factory",
+    [
+        pytest.param(
+            lambda: __import__("urllib.error", fromlist=["URLError"]).URLError("net"),
+            id="urlerror",
+        ),
+        pytest.param(
+            lambda: __import__("urllib.error", fromlist=["HTTPError"]).HTTPError(
+                url="https://data.sec.gov/",
+                code=503,
+                msg="Service Unavailable",
+                hdrs=None,
+                fp=None,
+            ),
+            id="httperror",
+        ),
+    ],
+)
+def test_enrich_snapshot_sec_returns_empty_on_network_failure(
+    monkeypatch: pytest.MonkeyPatch, exc_factory: object,
+) -> None:
+    """Network/HTTP error from ``fetch_last_filed`` → caller gets ``{}``.
+
+    Wrap-degrade policy: one ticker's SEC failure leaves enrichment
+    empty, snapshot survives.
+    """
+    from src.sec import submissions
+    from src.sec.submissions import LastFiledSnapshot
+
+    def raising_fetch(_cik: str) -> LastFiledSnapshot:
+        raise exc_factory()  # type: ignore[operator]
+
+    monkeypatch.setattr(submissions, "resolve_cik", lambda _ticker: "0000320193")
+    monkeypatch.setattr(submissions, "fetch_last_filed", raising_fetch)
+
+    assert submissions.enrich_snapshot_sec("AAPL") == {}
+
+
 def test_enrich_snapshot_sec_no_cik_returns_empty_no_fetch_call(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
