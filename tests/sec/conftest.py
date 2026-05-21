@@ -15,7 +15,6 @@ import json
 from pathlib import Path
 
 import pytest
-
 from src.sec import cik_map
 
 _FIXTURES_DIR = Path(__file__).parent / "fixtures"

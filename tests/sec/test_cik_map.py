@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import pytest
-
 from src.sec import cik_map
 from src.sec.cik_map import CikRecord, lookup_record
 
@@ -37,9 +36,7 @@ def test_resolve_cik_returns_ten_digit_zero_padded_string(_stub_edgar: None) -> 
 
 
 @pytest.mark.parametrize("symbol", ["BTC-USD", "EURUSD=X", "^VIX", "GC=F"])
-def test_resolve_cik_returns_none_for_non_equity_symbols(
-    _stub_edgar: None, symbol: str
-) -> None:
+def test_resolve_cik_returns_none_for_non_equity_symbols(_stub_edgar: None, symbol: str) -> None:
     """Non-SEC-registered Yahoo symbols resolve to None, not raise."""
     from src.sec.cik_map import resolve_cik
 
