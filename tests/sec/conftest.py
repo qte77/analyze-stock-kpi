@@ -37,3 +37,11 @@ def _reset_cik_map_cache() -> Iterator[None]:
     cik_map._records_cache = None
     yield
     cik_map._records_cache = None
+
+
+@pytest.fixture(autouse=True)
+def _isolate_edgar_cache(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Point ``cik_map._CACHE_PATH`` at ``tmp_path`` so tests never touch repo."""
+    monkeypatch.setattr(cik_map, "_CACHE_PATH", tmp_path / "edgar.json", raising=False)

@@ -28,11 +28,27 @@ autouse fixture in :mod:`tests.sec.conftest`.
 from __future__ import annotations
 
 import json
+import os
+import urllib.error
 import urllib.request
+from email.utils import formatdate, parsedate_to_datetime
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
 from src.http_ua import pick_user_agent
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+_CACHE_PATH: Path = settings.edgar_cache_dir / "company_tickers_exchange.json"
+"""Persistent disk cache for the EDGAR ticker registry.
+
+mtime is set to the server's ``Last-Modified`` header (not "when we
+wrote it") so we can echo it back as ``If-Modified-Since`` on the
+next call. Tests monkeypatch this via the ``_isolate_edgar_cache``
+autouse fixture in :mod:`tests.sec.conftest`.
+"""
 
 
 class CikRecord(BaseModel):
@@ -56,21 +72,42 @@ class CikRecord(BaseModel):
 def _fetch_json() -> dict:
     """Fetch company_tickers_exchange.json from EDGAR.
 
+    Conditional GET: when ``_CACHE_PATH`` exists, send
+    ``If-Modified-Since`` (cache mtime → HTTP-date) and treat ``304 Not
+    Modified`` as a hit by returning the cached body.
+
     Stubbed in tests via ``monkeypatch.setattr(cik_map, "_fetch_json", ...)``.
     """
+    headers = {"User-Agent": pick_user_agent(), "Accept": settings.http_accept}
+    if _CACHE_PATH.is_file():
+        headers["If-Modified-Since"] = formatdate(
+            _CACHE_PATH.stat().st_mtime, usegmt=True
+        )
     # S310 / B310: settings.edgar_tickers_url is an HTTPS string; the explicit
     # scheme check below is the defense-in-depth boundary if a future refactor
     # ever lets external input flow into it.
     request = urllib.request.Request(  # noqa: S310  # nosec B310
         settings.edgar_tickers_url,
-        headers={"User-Agent": pick_user_agent(), "Accept": settings.http_accept},
+        headers=headers,
     )
     if not request.full_url.startswith("https://"):
         raise ValueError(f"Refusing non-HTTPS URL: {request.full_url!r}")
-    with urllib.request.urlopen(  # noqa: S310  # nosec B310
-        request, timeout=settings.request_timeout_sec
-    ) as response:
-        return json.loads(response.read())
+    try:
+        with urllib.request.urlopen(  # noqa: S310  # nosec B310
+            request, timeout=settings.request_timeout_sec
+        ) as response:
+            body = response.read()
+            last_modified = getattr(response, "headers", {}).get("Last-Modified")
+    except urllib.error.HTTPError as exc:
+        if exc.code == 304 and _CACHE_PATH.is_file():
+            return json.loads(_CACHE_PATH.read_bytes())
+        raise
+    _CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    _CACHE_PATH.write_bytes(body)
+    if last_modified:
+        ts = parsedate_to_datetime(last_modified).timestamp()
+        os.utime(_CACHE_PATH, (ts, ts))
+    return json.loads(body)
 
 
 _records_cache: dict[str, CikRecord] | None = None
