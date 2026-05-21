@@ -27,3 +27,16 @@ def test_extract_last_filed_picks_zipped_date_for_10k(
 
     # Fixture's row 0 is form=10-K, filingDate=2024-11-01 → must zip there.
     assert snap.last_10k_date == date(2024, 11, 1)
+
+
+def test_extract_last_filed_extracts_all_three_us_forms(
+    aapl_submissions_fixture: dict,
+) -> None:
+    """All three US form fields populated from the same parallel arrays."""
+    snap = _extract_last_filed(aapl_submissions_fixture)
+
+    # Fixture row 0 = 10-K (2024-11-01), row 1 = 8-K (2024-10-31),
+    # row 2 = 10-Q (2024-08-02). Each is the first/most-recent of its form.
+    assert snap.last_10k_date == date(2024, 11, 1)
+    assert snap.last_10q_date == date(2024, 8, 2)
+    assert snap.last_8k_date == date(2024, 10, 31)
