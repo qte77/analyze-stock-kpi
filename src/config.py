@@ -42,6 +42,11 @@ class AppSettings(BaseSettings):
     http_accept: str = "application/json, text/plain, */*"
     request_timeout_sec: int = 10
     results_dir: Path = Path("results")
+    usaspending_url: str = (
+        "https://api.usaspending.gov/api/v2/search/spending_by_category/recipient/"
+    )
+    usaspending_timeout_sec: int = 30
+    federal_contractors_dir: Path = Path("results/federal_contractors")
 
 
 settings = AppSettings()

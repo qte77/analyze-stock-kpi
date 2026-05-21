@@ -54,6 +54,46 @@ last-filed dates (10-K / 10-Q / 8-K) land on every
 `FundamentalsSnapshot` via `src/sec/submissions.py` (planned). Same
 authentication, different endpoint.
 
+## Redistribution guardrails (verified 2026-05-21)
+
+Independent ToS / license audit run pre-Item 3 against the canonical
+sources (not relying on prior summaries). Verdict per source for
+committing **derived outputs** to the public `data` branch under this
+repo's MIT licence:
+
+| Source | Verdict | Why | Operational guardrail |
+|---|---|---|---|
+| usaspending.gov payloads | **CLEAR** | The reference implementation (`fedspendingtransparency/usaspending-api`) is CC0 1.0; DATA Act (31 USC § 6101) mandates public, machine-readable, bulk-downloadable access with no downstream restrictions | None beyond the existing rate-limit / backoff |
+| SEC EDGAR data | **CLEAR** | Federal works are public-domain by statute (17 USC § 105) | Browser-shape `User-Agent` header + 9 req/sec self-limit + exponential backoff on 429/503 (already in place) |
+| yfinance raw payloads | **CAUTION** | Yahoo's ToS §2.4(i)/§2.8 prohibits automated collection AND redistribution of "the Services" | **Never commit raw `fast_info` / `info` JSON.** Persist only the *resolution boolean* (`yfinance_resolves: bool`) and the public ticker symbol itself |
+| yfinance-derived ticker list | **CLEAR** | A list of ticker symbols + a "this resolves" boolean is your pipeline's state, not Yahoo's copyrightable expression (Feist v. Rural Telephone) | Same as above — keep the audit row schema lean |
+| `fedspendingtransparency/usaspending-api` API contract files | **CLEAR** | Repo is CC0 1.0; LOCKHEED MARTIN / MULTIPLE RECIPIENTS example JSON is in the public domain | Verbatim copy into test fixtures is permitted; no attribution required, but mention provenance in commit messages |
+| CNN Fear & Greed numeric values | **LOW RISK** | (a) Copyright: facts are uncopyrightable per *Feist Publications v. Rural Telephone*, 499 U.S. 340 (1991). The integer 1-100 and label are computed facts, not original expression. (b) CFAA: User-Agent / Referer spoofing is not "gate circumvention" on a publicly-accessible endpoint per *Van Buren v. United States*, 594 U.S. 374 (2021) and *hiQ Labs v. LinkedIn*, 938 F.3d 985 (9th Cir. 2022). (c) ToS: a browsewrap contract claim is theoretically possible but unenforced — zero DMCA / C&D against ≥10 public CNN F&G redistributors on PyPI / Kaggle / GitHub. (d) No US sui-generis database right | Already in place: cache numeric-only history to `data` branch; never store raw HTML; daily cron only; graceful degradation on 418 |
+
+### Standing rules these verdicts impose
+
+- The `AuditRow` schema in `src/federal_contractors.py` must NOT include
+  any fields sourced from `yfinance.Ticker(...).fast_info` or `info`
+  beyond a boolean "resolved" gate. Market cap, exchange, sector,
+  price — all NO. Ticker symbol + boolean = the only Yahoo-derived
+  fields that may persist publicly.
+- Test fixtures sourced from the CC0 usaspending-api contract docs
+  should reference the upstream commit / URL in the commit message or
+  fixture header so provenance is auditable.
+- If any future data source's ToS is ambiguous, default to **CAUTION**
+  — persist derived state only, not raw payloads.
+
+References for the audit:
+
+- [CC0 LICENSE on `fedspendingtransparency/usaspending-api`](https://github.com/fedspendingtransparency/usaspending-api/blob/master/LICENSE)
+- [Yahoo Terms of Service (`legal.yahoo.com`)](https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html)
+- [17 USC § 105 (federal-work public-domain rule)](https://www.govinfo.gov/content/pkg/USCODE-2022-title17/html/USCODE-2022-title17-chap1-sec105.htm)
+- [DATA Act / 31 USC § 6101](https://www.law.cornell.edu/uscode/text/31/6101)
+- [*Feist Publications v. Rural Telephone Service*, 499 U.S. 340 (1991)](https://www.law.cornell.edu/supremecourt/text/499/340) — facts not copyrightable
+- [*Van Buren v. United States*, 594 U.S. 374 (2021)](https://www.supremecourt.gov/opinions/20pdf/19-783_k53l.pdf) — CFAA "gates-up-or-down" test
+- [*hiQ Labs v. LinkedIn*, 938 F.3d 985 (9th Cir. 2022)](https://cdn.ca9.uscourts.gov/datastore/opinions/2022/04/18/17-16783.pdf) — publicly-accessible data is not CFAA-protected by header checks
+- [GitHub DMCA archive search](https://github.com/github/dmca) — zero CNN F&G takedowns on record (2026-05-21 audit)
+
 ---
 
 ## EDGAR (SEC)
@@ -187,43 +227,89 @@ total obligated dollars** in the filtered window.
 
 ### Representative response
 
+Verified against the
+[upstream API contract](https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/search/spending_by_category/recipient.md)
+on 2026-05-21:
+
 ```json
 {
   "category": "recipient",
+  "spending_level": "transactions",
   "limit": 100,
-  "page_metadata": {"page": 1, "next": 2, "hasNext": true},
+  "page_metadata": {
+    "page": 1, "hasNext": true, "hasPrevious": false,
+    "next": 2, "previous": null
+  },
   "results": [
     {
-      "amount": 48200000000.00,
+      "amount": 46069068318.25,
+      "recipient_id": null,
+      "name": "MULTIPLE RECIPIENTS",
+      "code": null,
+      "uei": null,
+      "total_outlays": null
+    },
+    {
+      "amount": 17388378311.33,
+      "recipient_id": "005a8812-bab5-2780-533b-b62c33271882-C",
       "name": "LOCKHEED MARTIN CORPORATION",
-      "code": "ABCDE12345FG",
-      "id": "d41a6b8a-9d6a-0d28-7e24-989e31731aad-P"
+      "code": "008016958",
+      "uei": null,
+      "total_outlays": null
     }
-  ]
+  ],
+  "messages": []
 }
 ```
 
-Key fields:
+Per-result fields:
 
 - `name` — recipient legal entity name (as registered with SAM).
-- `code` — **UEI** (12-char alphanumeric, SAM.gov-issued, current
-  standard since DUNS was deprecated April 2022).
-- `amount` — total obligated dollars in the FY window.
-- `id` — usaspending internal hash; `-P` suffix = parent recipient,
-  `-C` = child. Useful for the `/api/v2/recipient/<id>/` profile
-  endpoint if we ever need parent-UEI rollups, but the bridging
-  research thread settled on **ticker-level dedupe** instead
-  (cheaper).
+- `recipient_id` — usaspending internal hash with `-P` / `-C` / `-R`
+  suffix (parent / child / recipient). `null` for the `"MULTIPLE
+  RECIPIENTS"` aggregate row (see Gotchas). Useful as the key for
+  `/api/v2/recipient/<id>/` profile lookups, but the bridging thread
+  settled on **ticker-level dedupe** instead (cheaper).
+- `code` — **DUNS** (9-digit, D&B-legacy). Often present even though
+  DUNS was deprecated April 2022; usaspending exposes the historical
+  identifier for continuity. `null` for non-DUNS-registered entities
+  and aggregate rows.
+- `uei` — modern 12-char SAM identifier. `null` on aggregate rows and
+  on older records that pre-date the UEI migration; do NOT assume it
+  is populated.
+- `amount` — total obligated dollars in the filtered window.
+- `total_outlays` — outlays (cash actually disbursed) in the same
+  window. Frequently `null` — usaspending populates outlays only
+  under certain `spending_level` modes.
+
+**No `rank` field in the response** — rank is derived from
+`results[]` array position (the API pre-sorts descending by
+`amount`).
 
 ### Filtering knobs
 
-- `filters.naics_codes` — list of 2-digit sector prefixes
-  (`["33", "54", "51", "62"]`) or full 6-digit codes. Populated
-  **only on contract awards** — grants and loans return null NAICS.
+- `filters.naics_codes` — **dict, not list:**
+  `{"require": ["33", "5417"], "exclude": [...]}`. Both keys optional.
+  Values are 2-to-6-digit NAICS code prefixes (longer = narrower).
+  Populated **only on contract awards** — grants and loans return
+  null NAICS, so filtering by NAICS while also including grant
+  award-type codes makes sector composition meaningless.
 - `filters.awarding_agency_codes` / `filters.funding_agency_codes` —
   agency-specific universes.
 - `filters.recipient_id` (with `-P` suffix) — scope to a single
   parent entity's awards.
+
+### Why POST instead of GET
+
+The filter payload carries nested objects (`naics_codes` is a dict,
+`time_period` is an array of date-range objects, `agencies` is an
+array of `{type, tier, name}` triples). Cramming that into URL query
+strings would be fragile and hit URL-length limits. usaspending uses
+POST for everything under `/api/v2/search/*`
+(`spending_by_category/`, `spending_over_time/`,
+`spending_by_award/`); GET is reserved for resource-id lookups like
+`/api/v2/recipient/<id>/`. Convention is shared with Elasticsearch /
+OpenSearch search APIs.
 
 ### Stability and ToS
 
@@ -241,15 +327,26 @@ Key fields:
 
 ### Gotchas
 
-1. **10,000-record deep-pagination wall** applies to the raw
+1. **`"MULTIPLE RECIPIENTS"` aggregate row.** The first result is
+   frequently the synthetic bucket of awards that couldn't be tied
+   to a single recipient (cross-contract pools, masked-recipient
+   awards). All three identifiers (`recipient_id`, `code`, `uei`)
+   are `null` and `amount` is the sum across the bucket. **Filter
+   out** any row with `recipient_id is None` before ranking.
+2. **`uei` is unreliably populated.** Per the contract, `uei` may
+   be `null` on legitimate contractor rows too — usaspending only
+   populates the modern identifier where SAM registration carried
+   it. Use `recipient_id` as the dedupe key; treat `uei` and `code`
+   (DUNS) as opportunistic metadata.
+3. **10,000-record deep-pagination wall** applies to the raw
    `spending_by_award` endpoint (award-level rows), **not** to the
    pre-aggregated `spending_by_category` endpoint we use. Top-500
    recipients via 5 paged calls is well within bounds.
-2. **NAICS is contracts-only.** Filtering by `naics_codes` while
+4. **NAICS is contracts-only.** Filtering by `naics_codes` while
    also including grant award-type codes returns grants with null
    NAICS — sector composition becomes meaningless. Always restrict
    to `["A","B","C","D"]` if filtering on NAICS.
-3. **No ticker or stock-exchange field.** The recipient → ticker
+5. **No ticker or stock-exchange field.** The recipient → ticker
    bridge happens downstream via EDGAR (see "yfinance + name-to-
    ticker bridging" below). Subsidiaries appear as separate
    recipients (`LOCKHEED MARTIN AERONAUTICS CO` vs `LOCKHEED
