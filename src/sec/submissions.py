@@ -37,10 +37,16 @@ fields ``None`` — by design, not an error.
 
 from __future__ import annotations
 
+import json
+import urllib.request
 from datetime import date
 
 from pydantic import BaseModel, ConfigDict
+from src.http_ua import pick_user_agent
+from src.sec import ACCEPT
 from src.sec.cik_map import resolve_cik
+
+REQUEST_TIMEOUT_SEC = 10
 
 
 class LastFiledSnapshot(BaseModel):
@@ -74,7 +80,21 @@ def _extract_last_filed(payload: dict) -> LastFiledSnapshot:
 
 def fetch_last_filed(cik: str) -> LastFiledSnapshot:
     """Fetch submissions for ``cik`` and extract last-filed dates."""
-    raise NotImplementedError
+    url = f"https://data.sec.gov/submissions/CIK{cik.zfill(10)}.json"
+    # S310 / B310: URL is constructed from a hardcoded HTTPS host plus a
+    # zero-padded CIK string; the explicit scheme check below is defense-
+    # in-depth for any future refactor that might let external input flow in.
+    request = urllib.request.Request(  # noqa: S310  # nosec B310
+        url,
+        headers={"User-Agent": pick_user_agent(), "Accept": ACCEPT},
+    )
+    if not request.full_url.startswith("https://"):
+        raise ValueError(f"Refusing non-HTTPS URL: {request.full_url!r}")
+    with urllib.request.urlopen(  # noqa: S310  # nosec B310
+        request, timeout=REQUEST_TIMEOUT_SEC
+    ) as response:
+        payload = json.loads(response.read())
+    return _extract_last_filed(payload)
 
 
 def enrich_snapshot_sec(symbol: str) -> dict:

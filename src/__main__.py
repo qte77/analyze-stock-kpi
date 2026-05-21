@@ -16,6 +16,7 @@ from rich.table import Table
 
 from .composite_scores import CompositeScores, compute_scores
 from .fundamentals import FundamentalsSnapshot, fetch_universe_fundamentals
+from .sec.submissions import enrich_snapshot_sec
 from .sentiment import FearGreedSnapshot, fetch_fear_greed
 from .universe import resolve_universe
 from .utils.parse_args import CliArgs
@@ -159,7 +160,12 @@ def main() -> None:
     )
     raw_snapshots = fetch_universe_fundamentals(tickers)
     snapshots = [
-        snap.model_copy(update={"composite_scores": compute_scores(snap)})
+        snap.model_copy(
+            update={
+                "composite_scores": compute_scores(snap),
+                **enrich_snapshot_sec(snap.symbol),
+            }
+        )
         for snap in raw_snapshots
     ]
     _print_summary_table(console, snapshots, show_scores=args.show_scores)
