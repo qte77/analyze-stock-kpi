@@ -11,8 +11,6 @@ from __future__ import annotations
 
 from datetime import date
 
-import pytest
-
 from src.__main__ import _format_days_since, _summary_row
 from src.composite_scores import CompositeScores
 from src.fundamentals import FundamentalsSnapshot

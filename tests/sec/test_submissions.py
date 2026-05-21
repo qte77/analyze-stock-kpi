@@ -7,7 +7,6 @@ from datetime import date
 from pathlib import Path
 
 import pytest
-
 from src.sec.submissions import _extract_last_filed
 
 _FIXTURES_DIR = Path(__file__).parent / "fixtures"

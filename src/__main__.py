@@ -49,7 +49,11 @@ def _format_days_since(filing_date: date | None, *, today: date | None = None) -
     gap longer than 150d signals delisting, restatement, or foreign-
     filer status).
     """
-    return "-"
+    if filing_date is None:
+        return "-"
+    today = today or datetime.now(UTC).date()
+    n = (today - filing_date).days
+    return f"[red]{n}d[/red]" if n > _STALE_10Q_DAYS else f"{n}d"
 
 
 def _print_sentiment_banner(console: Console, snapshot: FearGreedSnapshot) -> None:
@@ -86,6 +90,7 @@ def _summary_row(snap: FundamentalsSnapshot, show_scores: bool) -> list[str]:
         _format_ratio(snap.current_ratio),
         _format_ratio(snap.sortino_ratio),
         _format_score(scores.screener_score),
+        _format_days_since(snap.sec_last_10q_date),
     ]
     if show_scores:
         row += _score_columns(snap)
@@ -118,6 +123,7 @@ def _print_summary_table(
     table.add_column("Current", justify="right")
     table.add_column("Sortino", justify="right")
     table.add_column("Score", justify="right")
+    table.add_column("Days 10-Q", justify="right")
     if show_scores:
         table.add_column("Quality", justify="right")
         table.add_column("Div", justify="right")
