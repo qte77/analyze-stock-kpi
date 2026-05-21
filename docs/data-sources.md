@@ -54,6 +54,42 @@ last-filed dates (10-K / 10-Q / 8-K) land on every
 `FundamentalsSnapshot` via `src/sec/submissions.py` (planned). Same
 authentication, different endpoint.
 
+## Redistribution guardrails (verified 2026-05-21)
+
+Independent ToS / license audit run pre-Item 3 against the canonical
+sources (not relying on prior summaries). Verdict per source for
+committing **derived outputs** to the public `data` branch under this
+repo's MIT licence:
+
+| Source | Verdict | Why | Operational guardrail |
+|---|---|---|---|
+| usaspending.gov payloads | **CLEAR** | The reference implementation (`fedspendingtransparency/usaspending-api`) is CC0 1.0; DATA Act (31 USC § 6101) mandates public, machine-readable, bulk-downloadable access with no downstream restrictions | None beyond the existing rate-limit / backoff |
+| SEC EDGAR data | **CLEAR** | Federal works are public-domain by statute (17 USC § 105) | Browser-shape `User-Agent` header + 9 req/sec self-limit + exponential backoff on 429/503 (already in place) |
+| yfinance raw payloads | **CAUTION** | Yahoo's ToS §2.4(i)/§2.8 prohibits automated collection AND redistribution of "the Services" | **Never commit raw `fast_info` / `info` JSON.** Persist only the *resolution boolean* (`yfinance_resolves: bool`) and the public ticker symbol itself |
+| yfinance-derived ticker list | **CLEAR** | A list of ticker symbols + a "this resolves" boolean is your pipeline's state, not Yahoo's copyrightable expression (Feist v. Rural Telephone) | Same as above — keep the audit row schema lean |
+| `fedspendingtransparency/usaspending-api` API contract files | **CLEAR** | Repo is CC0 1.0; LOCKHEED MARTIN / MULTIPLE RECIPIENTS example JSON is in the public domain | Verbatim copy into test fixtures is permitted; no attribution required, but mention provenance in commit messages |
+| CNN Fear & Greed numeric values | **CAUTION** | CNN ToS prohibits automated scraping (contract claim, not copyright — the numeric index is a fact, not original expression). Endpoint returns HTTP 418 to known scrapers as a passive block | Already in place: cache numeric-only history to `data` branch; never store raw HTML; daily cron only; graceful degradation on 418 |
+
+### Standing rules these verdicts impose
+
+- The `AuditRow` schema in `src/federal_contractors.py` must NOT include
+  any fields sourced from `yfinance.Ticker(...).fast_info` or `info`
+  beyond a boolean "resolved" gate. Market cap, exchange, sector,
+  price — all NO. Ticker symbol + boolean = the only Yahoo-derived
+  fields that may persist publicly.
+- Test fixtures sourced from the CC0 usaspending-api contract docs
+  should reference the upstream commit / URL in the commit message or
+  fixture header so provenance is auditable.
+- If any future data source's ToS is ambiguous, default to **CAUTION**
+  — persist derived state only, not raw payloads.
+
+References for the audit:
+
+- [CC0 LICENSE on `fedspendingtransparency/usaspending-api`](https://github.com/fedspendingtransparency/usaspending-api/blob/master/LICENSE)
+- [Yahoo Terms of Service (`legal.yahoo.com`)](https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html)
+- [17 USC § 105 (federal-work public-domain rule)](https://www.govinfo.gov/content/pkg/USCODE-2022-title17/html/USCODE-2022-title17-chap1-sec105.htm)
+- [DATA Act / 31 USC § 6101](https://www.law.cornell.edu/uscode/text/31/6101)
+
 ---
 
 ## EDGAR (SEC)

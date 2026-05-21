@@ -1,0 +1,95 @@
+{
+  "category": "recipient",
+  "spending_level": "transactions",
+  "limit": 10,
+  "page_metadata": {
+    "page": 1,
+    "hasNext": true,
+    "hasPrevious": false,
+    "next": 2,
+    "previous": null
+  },
+  "results": [
+    {
+      "amount": 46069068318.25,
+      "recipient_id": null,
+      "name": "MULTIPLE RECIPIENTS",
+      "code": null,
+      "uei": null,
+      "total_outlays": null
+    },
+    {
+      "amount": 17388378311.33,
+      "recipient_id": "005a8812-bab5-2780-533b-b62c33271882-C",
+      "name": "LOCKHEED MARTIN CORPORATION",
+      "code": "008016958",
+      "uei": null,
+      "total_outlays": null
+    },
+    {
+      "amount": 14920482771.04,
+      "recipient_id": "9c4f7e3a-5d8b-4e91-a0c2-7b3e88f51d22-C",
+      "name": "RTX CORPORATION",
+      "code": "001357036",
+      "uei": "U7XCNYDDGCM4",
+      "total_outlays": null
+    },
+    {
+      "amount": 11247853019.88,
+      "recipient_id": "7a8d2c44-3e91-4b75-8f01-e2a14b3c9061-C",
+      "name": "NORTHROP GRUMMAN CORPORATION",
+      "code": "076207611",
+      "uei": null,
+      "total_outlays": null
+    },
+    {
+      "amount": 9883201147.62,
+      "recipient_id": "b1e9f4a2-6c7d-4083-9214-d5e7c8f31a48-C",
+      "name": "GENERAL DYNAMICS CORPORATION",
+      "code": "006928857",
+      "uei": "TWR6N4MK45R3",
+      "total_outlays": null
+    },
+    {
+      "amount": 8541668902.15,
+      "recipient_id": "f3c5d2e1-8a4b-4f06-b193-a47e2c98d503-C",
+      "name": "THE BOEING COMPANY",
+      "code": "005308076",
+      "uei": null,
+      "total_outlays": null
+    },
+    {
+      "amount": 4762183549.07,
+      "recipient_id": "2e8b1c9a-7d3f-4e52-9081-c6a5b3d27f44-C",
+      "name": "L3HARRIS TECHNOLOGIES INC",
+      "code": "031472997",
+      "uei": "S9TDMUDLGAU3",
+      "total_outlays": null
+    },
+    {
+      "amount": 3914208673.91,
+      "recipient_id": "c7e4a8d2-9f01-4b65-83a7-d2e1c4b8f906-C",
+      "name": "HUNTINGTON INGALLS INDUSTRIES INC",
+      "code": "024805884",
+      "uei": null,
+      "total_outlays": null
+    },
+    {
+      "amount": 3127584990.45,
+      "recipient_id": "8a3f2d1c-4b7e-4906-91d8-c5e3a8b27f01-C",
+      "name": "LEIDOS INC",
+      "code": "143049923",
+      "uei": "RDX3DKJBPGE7",
+      "total_outlays": null
+    },
+    {
+      "amount": 2845376201.18,
+      "recipient_id": "5d9e2a8c-1f47-4b03-86c9-3e7a4d2b8f15-C",
+      "name": "BOOZ ALLEN HAMILTON INC",
+      "code": "006928899",
+      "uei": null,
+      "total_outlays": null
+    }
+  ],
+  "messages": []
+}
