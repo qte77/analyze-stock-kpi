@@ -41,4 +41,7 @@ exclude = [
     # automated EDGAR API endpoints work because the project sets the
     # required UA header, but lychee can't override its UA.
     "^https://www\\.sec\\.gov",
+    # ederfinancial.org — slow PDF host (DoD Top-25 mirror); times out
+    # under lychee's default 30s budget.
+    "^https://ederfinancial\\.org",
 ]
