@@ -3655,7 +3655,7 @@
     }
   },
   {
-    "score": 66.4,
+    "score": 67.28571428571429,
     "rating": "greed",
     "timestamp": "2026-05-07T00:00:00Z",
     "subindicators": {
@@ -3665,19 +3665,19 @@
       },
       "market_momentum_sp125": {
         "rating": "extreme greed",
-        "raw_value": 6855.98968
+        "raw_value": 6855.989680000001
       },
       "stock_price_strength": {
         "rating": "extreme fear",
-        "raw_value": 3.79318292972214
+        "raw_value": 3.793182929722137
       },
       "stock_price_breadth": {
         "rating": "extreme greed",
-        "raw_value": 1221.56725318686
+        "raw_value": 1221.5672531868595
       },
       "put_call_options": {
         "rating": "extreme fear",
-        "raw_value": 0.674471059581883
+        "raw_value": 0.6744710628361691
       },
       "market_volatility_vix": {
         "rating": "extreme fear",
@@ -3685,15 +3685,15 @@
       },
       "market_volatility_vix_50": {
         "rating": "extreme fear",
-        "raw_value": 21.9088
+        "raw_value": 21.908799999999996
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
-        "raw_value": 1.31608593731323
+        "raw_value": 1.3194831683571404
       },
       "safe_haven_demand": {
         "rating": "extreme fear",
-        "raw_value": 8.24103963846631
+        "raw_value": 8.255319420090611
       }
     }
   },
@@ -3754,7 +3754,7 @@
     }
   },
   {
-    "score": 65.4,
+    "score": 66.62857142857143,
     "rating": "greed",
     "timestamp": "2026-05-11T00:00:00Z",
     "subindicators": {
@@ -3768,15 +3768,15 @@
       },
       "stock_price_strength": {
         "rating": "extreme fear",
-        "raw_value": 3.8372953197661
+        "raw_value": 3.837295319766105
       },
       "stock_price_breadth": {
         "rating": "extreme greed",
-        "raw_value": 1177.0233282847
+        "raw_value": 1177.0233282847023
       },
       "put_call_options": {
         "rating": "extreme fear",
-        "raw_value": 0.655008603053207
+        "raw_value": 0.6550064561116561
       },
       "market_volatility_vix": {
         "rating": "extreme fear",
@@ -3788,11 +3788,11 @@
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
-        "raw_value": 1.31522073888067
+        "raw_value": 1.3204513087906398
       },
       "safe_haven_demand": {
         "rating": "extreme fear",
-        "raw_value": 7.62849289371403
+        "raw_value": 7.658998615314808
       }
     }
   },
@@ -4185,6 +4185,62 @@
         "score": 87.6,
         "rating": "extreme greed",
         "raw_value": 6.36279064844841
+      }
+    }
+  },
+  {
+    "score": 58.3142857142857,
+    "rating": "greed",
+    "timestamp": "2026-05-21T21:39:53Z",
+    "previous_close": 60.9142857142857,
+    "previous_1_week": 65.91428571428573,
+    "previous_1_month": 67.57142857142858,
+    "previous_1_year": 66.22857142857143,
+    "subindicators": {
+      "market_momentum_sp500": {
+        "score": 96.4,
+        "rating": "extreme greed",
+        "raw_value": 7445.72
+      },
+      "market_momentum_sp125": {
+        "score": 96.4,
+        "rating": "extreme greed",
+        "raw_value": 6909.31264
+      },
+      "stock_price_strength": {
+        "score": 41.2,
+        "rating": "fear",
+        "raw_value": 2.11604741994661
+      },
+      "stock_price_breadth": {
+        "score": 24.4,
+        "rating": "extreme fear",
+        "raw_value": 969.659388031309
+      },
+      "put_call_options": {
+        "score": 70.4,
+        "rating": "greed",
+        "raw_value": 0.679919742492301
+      },
+      "market_volatility_vix": {
+        "score": 50.0,
+        "rating": "neutral",
+        "raw_value": 16.76
+      },
+      "market_volatility_vix_50": {
+        "score": 50.0,
+        "rating": "neutral",
+        "raw_value": 20.9278
+      },
+      "junk_bond_demand": {
+        "score": 40.8,
+        "rating": "fear",
+        "raw_value": 1.28917682637641
+      },
+      "safe_haven_demand": {
+        "score": 85.0,
+        "rating": "extreme greed",
+        "raw_value": 5.85973152657914
       }
     }
   }
