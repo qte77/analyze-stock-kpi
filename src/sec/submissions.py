@@ -86,4 +86,12 @@ def enrich_snapshot_sec(symbol: str) -> dict:
     returns the three optional date fields ready for
     ``model_copy(update=...)``.
     """
-    return {}
+    cik = resolve_cik(symbol)
+    if not cik:
+        return {}
+    snap = fetch_last_filed(cik)
+    return {
+        "sec_last_10k_date": snap.last_10k_date,
+        "sec_last_10q_date": snap.last_10q_date,
+        "sec_last_8k_date": snap.last_8k_date,
+    }
