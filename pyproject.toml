@@ -43,13 +43,34 @@ line-length = 100
 src = ["src", "tests"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "N", "W", "UP", "C90", "S"]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes (unused imports, undefined names)
+    "I",    # isort (import order)
+    "N",    # PEP-8 naming
+    "W",    # pycodestyle warnings
+    "UP",   # pyupgrade (modernize syntax)
+    "B",    # flake8-bugbear (likely bugs)
+    "S",    # flake8-bandit (security)
+    "SIM",  # flake8-simplify
+    "RUF",  # ruff-specific
+    "PT",   # pytest style
+    "ANN",  # flake8-annotations (type hints)
+    "TCH",  # flake8-type-checking (move imports to TYPE_CHECKING)
+    "PGH",  # pygrep-hooks (no broad noqa, etc.)
+    "C90",  # mccabe cyclomatic complexity
+    "D",    # pydocstyle (docstring style)
+]
 
 [tool.ruff.lint.mccabe]
 max-complexity = 10
 
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101"]  # tests use `assert` (pytest convention)
+"tests/**" = ["S101", "D"]   # tests use `assert`; no docstring requirement
+"scripts/**" = ["D", "ANN"]  # one-off scripts; over-annotating is noise
 
 [tool.pyright]
 pythonVersion = "3.12"
