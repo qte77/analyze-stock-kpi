@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import TYPE_CHECKING, ClassVar
 
 import pytest
 from src.sec import cik_map
 from src.sec.cik_map import CikRecord, lookup_record
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @pytest.fixture
@@ -202,6 +205,27 @@ def test_fetch_json_overwrites_stale_cache_on_200(
     cik_map._fetch_json()
 
     assert cik_map._CACHE_PATH.read_bytes() == fresh_body
+
+
+def test_fetch_json_creates_cache_directory_when_missing(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+) -> None:
+    """Cache parent directory auto-creates if absent."""
+    import urllib.request
+    from io import BytesIO
+
+    nested = tmp_path / "deep" / "nested" / "edgar.json"
+    monkeypatch.setattr(cik_map, "_CACHE_PATH", nested)
+    assert not nested.parent.is_dir()
+
+    monkeypatch.setattr(
+        urllib.request,
+        "urlopen",
+        lambda *_a, **_k: BytesIO(b'{"fields": [], "data": []}'),
+    )
+    cik_map._fetch_json()
+
+    assert nested.is_file()
 
 
 @pytest.mark.network
