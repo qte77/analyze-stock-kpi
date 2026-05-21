@@ -60,6 +60,10 @@ select = [
     "PGH",  # pygrep-hooks (no broad noqa, etc.)
     "C90",  # mccabe cyclomatic complexity
     "D",    # pydocstyle (docstring style)
+    "TRY",  # tryceratops (try/except discipline)
+]
+ignore = [
+    "TRY003",  # long messages outside exception classes — fine for one-off defensive raises
 ]
 
 [tool.ruff.lint.mccabe]
