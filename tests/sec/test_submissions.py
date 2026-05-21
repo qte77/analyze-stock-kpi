@@ -69,3 +69,50 @@ def test_extract_last_filed_empty_recent_returns_all_none() -> None:
     assert snap.last_10k_date is None
     assert snap.last_10q_date is None
     assert snap.last_8k_date is None
+
+
+def test_enrich_snapshot_sec_resolves_dates_for_sec_registered_symbol(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """When ``resolve_cik`` returns a CIK, the three date fields are populated."""
+    from src.sec import submissions
+    from src.sec.submissions import LastFiledSnapshot
+
+    fake_snap = LastFiledSnapshot(
+        last_10k_date=date(2024, 11, 1),
+        last_10q_date=date(2024, 8, 2),
+        last_8k_date=date(2024, 10, 31),
+    )
+    monkeypatch.setattr(submissions, "resolve_cik", lambda _ticker: "0000320193")
+    monkeypatch.setattr(submissions, "fetch_last_filed", lambda _cik: fake_snap)
+
+    result = submissions.enrich_snapshot_sec("AAPL")
+
+    assert result == {
+        "sec_last_10k_date": date(2024, 11, 1),
+        "sec_last_10q_date": date(2024, 8, 2),
+        "sec_last_8k_date": date(2024, 10, 31),
+    }
+
+
+def test_enrich_snapshot_sec_no_cik_returns_empty_no_fetch_call(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Non-SEC-registered symbols return ``{}`` and skip the EDGAR fetch."""
+    from src.sec import submissions
+    from src.sec.submissions import LastFiledSnapshot
+
+    fetch_call_count = 0
+
+    def counting_fetch(_cik: str) -> LastFiledSnapshot:
+        nonlocal fetch_call_count
+        fetch_call_count += 1
+        return LastFiledSnapshot()
+
+    monkeypatch.setattr(submissions, "resolve_cik", lambda _ticker: None)
+    monkeypatch.setattr(submissions, "fetch_last_filed", counting_fetch)
+
+    result = submissions.enrich_snapshot_sec("BTC-USD")
+
+    assert result == {}
+    assert fetch_call_count == 0

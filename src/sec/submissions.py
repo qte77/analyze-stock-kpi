@@ -41,6 +41,8 @@ from datetime import date
 
 from pydantic import BaseModel, ConfigDict
 
+from src.sec.cik_map import resolve_cik
+
 
 class LastFiledSnapshot(BaseModel):
     """Most-recent filing dates per US form type from EDGAR submissions."""
@@ -74,3 +76,14 @@ def _extract_last_filed(payload: dict) -> LastFiledSnapshot:
 def fetch_last_filed(cik: str) -> LastFiledSnapshot:
     """Fetch submissions for ``cik`` and extract last-filed dates."""
     raise NotImplementedError
+
+
+def enrich_snapshot_sec(symbol: str) -> dict:
+    """Return ``FundamentalsSnapshot`` SEC enrichment fields for ``symbol``.
+
+    Resolves the Yahoo symbol to a CIK; if no CIK (FX, crypto, futures,
+    or non-SEC equity), returns ``{}`` and does NOT call EDGAR. Otherwise
+    returns the three optional date fields ready for
+    ``model_copy(update=...)``.
+    """
+    return {}
