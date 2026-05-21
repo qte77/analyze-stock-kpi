@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 import pytest
 from src.sec import cik_map
 from src.sec.cik_map import CikRecord, lookup_record
@@ -124,6 +126,35 @@ def test_fetch_json_persists_response_to_disk_cache(
 
     assert cik_map._CACHE_PATH.is_file()
     assert cik_map._CACHE_PATH.read_bytes() == body
+
+
+def test_fetch_json_sets_cache_mtime_from_last_modified_header(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Cache file mtime mirrors the server's ``Last-Modified`` HTTP-date."""
+    import urllib.request
+    from email.utils import parsedate_to_datetime
+    from io import BytesIO
+
+    last_modified = "Wed, 21 Oct 2026 07:28:00 GMT"
+
+    class _FakeResponse(BytesIO):
+        headers: ClassVar[dict[str, str]] = {"Last-Modified": last_modified}
+
+        def __enter__(self) -> _FakeResponse:
+            return self
+
+        def __exit__(self, *_args: object) -> None:
+            return None
+
+    def fake_urlopen(_req: object, *_a: object, **_k: object) -> _FakeResponse:
+        return _FakeResponse(b'{"fields": [], "data": []}')
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    cik_map._fetch_json()
+
+    expected_ts = parsedate_to_datetime(last_modified).timestamp()
+    assert cik_map._CACHE_PATH.stat().st_mtime == expected_ts
 
 
 @pytest.mark.network
