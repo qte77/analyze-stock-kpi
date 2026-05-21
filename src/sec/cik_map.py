@@ -31,11 +31,8 @@ import json
 import urllib.request
 
 from pydantic import BaseModel, ConfigDict
+from src.config import settings
 from src.http_ua import pick_user_agent
-from src.sec import ACCEPT
-
-ENDPOINT = "https://www.sec.gov/files/company_tickers_exchange.json"
-REQUEST_TIMEOUT_SEC = 10
 
 
 class CikRecord(BaseModel):
@@ -61,17 +58,17 @@ def _fetch_json() -> dict:
 
     Stubbed in tests via ``monkeypatch.setattr(cik_map, "_fetch_json", ...)``.
     """
-    # S310 / B310: ENDPOINT is a hardcoded HTTPS module constant; the explicit
+    # S310 / B310: settings.edgar_tickers_url is an HTTPS string; the explicit
     # scheme check below is the defense-in-depth boundary if a future refactor
-    # ever lets external input flow into ENDPOINT.
+    # ever lets external input flow into it.
     request = urllib.request.Request(  # noqa: S310  # nosec B310
-        ENDPOINT,
-        headers={"User-Agent": pick_user_agent(), "Accept": ACCEPT},
+        settings.edgar_tickers_url,
+        headers={"User-Agent": pick_user_agent(), "Accept": settings.http_accept},
     )
     if not request.full_url.startswith("https://"):
         raise ValueError(f"Refusing non-HTTPS URL: {request.full_url!r}")
     with urllib.request.urlopen(  # noqa: S310  # nosec B310
-        request, timeout=REQUEST_TIMEOUT_SEC
+        request, timeout=settings.request_timeout_sec
     ) as response:
         return json.loads(response.read())
 
