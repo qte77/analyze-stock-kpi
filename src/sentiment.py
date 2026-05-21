@@ -22,25 +22,20 @@ import json
 import logging
 import urllib.request
 from datetime import UTC, datetime
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, ConfigDict
+from src.config import settings
 
-ENDPOINT = "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
-# CNN's WAF rejects unidentified clients with HTTP 418. The headers below
-# mirror what edition.cnn.com itself sends when it XHRs the dataviz API:
-# a current desktop-browser UA, an XHR-shape Accept, and a CNN Referer.
-# All three are required when the egress IP is a datacenter range (e.g.
-# GitHub Actions runners); from residential IPs the UA alone usually suffices.
-USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
-)
-ACCEPT = "application/json, text/plain, */*"
-REFERER = "https://edition.cnn.com/"
-REQUEST_TIMEOUT_SEC = 10
-RESULTS_DIR = Path("results/cnn_fg")
+if TYPE_CHECKING:
+    from pathlib import Path
+
+# CNN's WAF rejects unidentified clients with HTTP 418. The headers in
+# ``settings`` (cnn_fg_user_agent / http_accept / cnn_fg_referer) mirror
+# what edition.cnn.com itself sends when it XHRs the dataviz API. All
+# three are required when the egress IP is a datacenter range (e.g.
+# GitHub Actions runners); from residential IPs the UA alone usually
+# suffices.
 
 # CNN's 10 subindicator blocks. Each ships {timestamp, score, rating, data}
 # where `data[]` is ~1y of {x: ms_epoch, y: raw_value, rating} per day.
@@ -99,18 +94,22 @@ class FearGreedSnapshot(BaseModel):
 
 
 def _fetch_payload() -> dict[str, Any]:
-    # S310 / B310: ENDPOINT is a hardcoded HTTPS module constant; the explicit
-    # scheme check below is the defense-in-depth boundary if a future refactor
-    # ever lets external input flow into ENDPOINT. ruff and Bandit (via
-    # CodeFactor) each need their own suppression syntax on the call sites.
+    # S310 / B310: settings.cnn_fg_url is an HTTPS string; the explicit
+    # scheme check below is the defense-in-depth boundary if a future
+    # refactor ever lets external input flow into it. ruff and Bandit
+    # (via CodeFactor) each need their own suppression syntax.
     request = urllib.request.Request(  # noqa: S310  # nosec B310
-        ENDPOINT,
-        headers={"User-Agent": USER_AGENT, "Accept": ACCEPT, "Referer": REFERER},
+        settings.cnn_fg_url,
+        headers={
+            "User-Agent": settings.cnn_fg_user_agent,
+            "Accept": settings.http_accept,
+            "Referer": settings.cnn_fg_referer,
+        },
     )
     if not request.full_url.startswith("https://"):
         raise ValueError(f"Refusing non-HTTPS URL: {request.full_url!r}")
     with urllib.request.urlopen(  # noqa: S310  # nosec B310
-        request, timeout=REQUEST_TIMEOUT_SEC
+        request, timeout=settings.request_timeout_sec
     ) as response:
         return json.loads(response.read())
 
@@ -220,11 +219,13 @@ def parse_historical(payload: dict[str, Any]) -> dict[str, FearGreedSnapshot]:
     return {date: snap for date, (_, snap) in by_date.items()}
 
 
-def _year_path(year: int, *, root: Path = RESULTS_DIR) -> Path:
+def _year_path(year: int, *, root: Path = settings.cnn_fg_cache_dir) -> Path:
     return root / f"{year}.json"
 
 
-def _load_year(year: int, *, root: Path = RESULTS_DIR) -> dict[str, FearGreedSnapshot]:
+def _load_year(
+    year: int, *, root: Path = settings.cnn_fg_cache_dir
+) -> dict[str, FearGreedSnapshot]:
     """Load the per-year file as a date-keyed dict, or empty if missing."""
     path = _year_path(year, root=root)
     if not path.exists():
@@ -234,7 +235,7 @@ def _load_year(year: int, *, root: Path = RESULTS_DIR) -> dict[str, FearGreedSna
 
 
 def _write_year(
-    year: int, by_date: dict[str, FearGreedSnapshot], *, root: Path = RESULTS_DIR
+    year: int, by_date: dict[str, FearGreedSnapshot], *, root: Path = settings.cnn_fg_cache_dir
 ) -> Path:
     """Write a year's snapshots as a date-sorted JSON array.
 
@@ -276,7 +277,7 @@ def _upsert(
 
 
 def merge_payload_into_years(
-    payload: dict[str, Any], *, root: Path = RESULTS_DIR
+    payload: dict[str, Any], *, root: Path = settings.cnn_fg_cache_dir
 ) -> dict[int, dict[str, FearGreedSnapshot]]:
     """Apply a CNN payload onto the on-disk per-year history, in memory only.
 
