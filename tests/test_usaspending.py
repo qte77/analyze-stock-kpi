@@ -7,14 +7,11 @@ import urllib.request
 from datetime import date
 from io import BytesIO
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
+import pytest
 from src.config import settings
 from src.usaspending import RecipientRecord, fetch_top_contractors
-
-if TYPE_CHECKING:
-    import pytest
-
 
 _FIXTURE_PATH = Path(__file__).parent / "fixtures" / "usaspending_top_recipients.json"
 
@@ -158,3 +155,20 @@ def test_naics_filter_default_none_omits_key(
 
     body = json.loads(captured["body"])
     assert "naics_codes" not in body["filters"]
+
+
+@pytest.mark.network
+def test_fetch_top_contractors_live_fy2025() -> None:
+    """Live POST against api.usaspending.gov for FY2025 (Oct 2024 - Sep 2025)."""
+    records = fetch_top_contractors(
+        fy_start=date(2024, 10, 1),
+        fy_end=date(2025, 9, 30),
+        limit=10,
+    )
+
+    assert len(records) >= 5
+    assert all(isinstance(r, RecipientRecord) for r in records)
+    assert all(r.recipient_id is not None for r in records)
+    assert all(r.amount > 0 for r in records)
+    assert records[0].rank == 1
+    assert all(records[i].rank == i + 1 for i in range(len(records)))
