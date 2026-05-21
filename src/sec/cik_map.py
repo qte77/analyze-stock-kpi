@@ -1,16 +1,24 @@
 """CIK <-> ticker resolution via EDGAR's ``company_tickers_exchange.json``.
 
-EDGAR publishes a single rolling JSON file that maps every SEC-registered
-equity to its 10-digit CIK plus exchange. The file is keyless but the SEC
-requires a ``User-Agent`` header identifying the caller; see
-https://www.sec.gov/os/accessing-edgar-data.
+**CIK** = Central Index Key, the 10-digit numeric identifier SEC
+assigns to every entity that files with EDGAR. CIKs are stable
+across name changes, mergers, and ticker swaps, which makes them the
+canonical join key for all other EDGAR endpoints
+(``data.sec.gov/submissions/CIK<10>.json``, XBRL company facts, etc.).
+
+EDGAR publishes a single rolling JSON file mapping every SEC-registered
+equity to its CIK plus listing exchange. The file is keyless. SEC asks
+clients to send a ``User-Agent`` header so they can rate-limit per
+caller (see https://www.sec.gov/os/accessing-edgar-data); we send a
+browser-shape UA from :mod:`src.http_ua`.
 
 Public API:
 
 - :class:`CikRecord` — frozen pydantic model for one EDGAR row.
 - :func:`lookup_record` — full record lookup by ticker (case-insensitive).
-- :func:`resolve_cik` — convenience wrapper that returns only the CIK
-  (or ``None`` for non-SEC-registered Yahoo symbols).
+- :func:`resolve_cik` — convenience wrapper that returns only the
+  10-digit zero-padded CIK string (or ``None`` for non-SEC-registered
+  Yahoo symbols like FX, crypto, futures).
 
 The fetched JSON is cached at module level for the lifetime of the
 process. Tests reset the cache via the ``_reset_cik_map_cache``
