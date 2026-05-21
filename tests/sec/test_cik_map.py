@@ -261,6 +261,44 @@ def test_resolve_cik_live_aapl_returns_apple_cik() -> None:
     assert resolve_cik("AAPL") == "0000320193"
 
 
+def test_fetch_json_falls_back_to_cache_on_url_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Network failure (``URLError``) with cache present → returns cached body."""
+    import urllib.error
+    import urllib.request
+
+    cached = b'{"fields": ["cached"], "data": [["from disk"]]}'
+    cik_map._CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    cik_map._CACHE_PATH.write_bytes(cached)
+
+    def fake_urlopen(_req: object, *_a: object, **_k: object) -> None:
+        raise urllib.error.URLError("simulated network down")
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    result = cik_map._fetch_json()
+
+    assert result == {"fields": ["cached"], "data": [["from disk"]]}
+
+
+def test_fetch_json_raises_url_error_when_no_cache_exists(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Cold start + network failure → URLError propagates (fail-loud)."""
+    import urllib.error
+    import urllib.request
+
+    assert not cik_map._CACHE_PATH.is_file()
+
+    def fake_urlopen(_req: object, *_a: object, **_k: object) -> None:
+        raise urllib.error.URLError("simulated network down")
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+
+    with pytest.raises(urllib.error.URLError):
+        cik_map._fetch_json()
+
+
 @pytest.mark.network
 def test_fetch_json_live_conditional_get_roundtrip(tmp_path: Path) -> None:
     """Real EDGAR — first call lands the cache; second call hits 304."""

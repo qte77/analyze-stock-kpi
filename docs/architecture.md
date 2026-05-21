@@ -9,6 +9,27 @@ High-level sketch of modules + data flow. See [`UserStory.md`](UserStory.md) for
 - **Boundary-validated**: every external payload (CLI args, HTTP responses, library returns) parsed into a pydantic model — invalid data fails loudly at the edge
 - **Complexity-budgeted**: ruff `C901` cyclomatic ≤ 10; complexipy cognitive ≤ 15; both gate `make validate`
 
+## Failure policy at I/O boundaries
+
+Every external boundary carries one of three failure policies. Logged via `logger.exception` / `logger.warning(..., exc_info=True)` for the wrap-* policies; never silent.
+
+- **fail-loud** — raise immediately; failure is a programmer / infrastructure / config problem that silent degradation would hide
+- **wrap-degrade** — catch a specific exception class, log a `WARNING`, return a degraded result (`None` / sparse snapshot / cached body); caller continues
+- **wrap-continue** — same as wrap-degrade but inside a loop; per-item failures don't abort the batch
+
+| Boundary | File / function | Policy | Notes |
+|---|---|---|---|
+| SEC ticker registry fetch | `sec.cik_map._fetch_json` | wrap-degrade if cache exists, else fail-loud | network blip + cache present → reuse cache; corrupt cache → invalidate + refetch |
+| SEC submissions per CIK | `sec.submissions.fetch_last_filed` | wrap-degrade — drop `sec_last_*` fields | called per-ticker by `enrich_snapshot_sec`; one ticker's SEC failure leaves enrichment as `{}`, snapshot survives |
+| CNN F&G fetch | `sentiment._fetch_payload` | wrap-degrade — banner skipped | caller `__main__.main` wraps; rest of run continues |
+| yfinance `Ticker.info` | `fundamentals.fetch_fundamentals` | wrap-continue — sparse snapshot | per-ticker `try/except` in `fetch_universe_fundamentals` |
+| yfinance batch `download` | `fundamentals._batch_close_prices` | wrap-degrade — `sortino_ratio=None` for all | network / shape error → returns `None`; per-ticker Sortino stays unset |
+| Filesystem write (snapshots) | `__main__._persist_snapshots` | fail-loud | disk full / permission denied → abort |
+| Filesystem write (CNN cache) | `sentiment._write_year` | fail-loud | same rationale |
+| Filesystem read (universe preset) | `universe._read_symbol_file` | fail-loud | config error — missing preset means the user passed a wrong name |
+| Filesystem read (EDGAR cache) | `sec.cik_map._fetch_json` (cached read) | fail-loud | corrupt JSON shouldn't happen on a CDN-served read; if it does, user removes `results/edgar/` to recover |
+| Pydantic `model_validate` | every call | fail-loud | upstream schema break or programmer error — never wrap |
+
 ## Modules
 
 ```text
