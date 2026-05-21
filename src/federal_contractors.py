@@ -10,6 +10,8 @@ the audit row carries only ticker symbol + resolution boolean.
 
 from __future__ import annotations
 
+from difflib import SequenceMatcher
+
 from src.sec.cik_map import _load_records
 
 
@@ -18,6 +20,14 @@ def _match_to_edgar(
     threshold: float = 0.85,
 ) -> tuple[str | None, float | None]:
     """Fuzzy-match a recipient name against EDGAR titles."""
-    _ = _load_records()  # cycle-5 RED scaffold: not wired yet
-    _ = recipient_name, threshold
+    target = recipient_name.upper().strip()
+    best_ticker: str | None = None
+    best_score = 0.0
+    for record in _load_records().values():
+        score = SequenceMatcher(None, target, record.title.upper().strip()).ratio()
+        if score > best_score:
+            best_score = score
+            best_ticker = record.ticker
+    if best_score >= threshold:
+        return (best_ticker, best_score)
     return (None, None)
