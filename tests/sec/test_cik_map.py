@@ -183,6 +183,27 @@ def test_fetch_json_returns_cached_body_on_304(
     assert result == {"fields": ["cached"], "data": [["from disk"]]}
 
 
+def test_fetch_json_overwrites_stale_cache_on_200(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """200 response with new body replaces the existing cache file."""
+    import urllib.request
+    from io import BytesIO
+
+    cik_map._CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    cik_map._CACHE_PATH.write_bytes(b'{"fields": [], "data": [["stale"]]}')
+
+    fresh_body = b'{"fields": [], "data": [["fresh"]]}'
+
+    def fake_urlopen(_req: object, *_a: object, **_k: object) -> BytesIO:
+        return BytesIO(fresh_body)
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    cik_map._fetch_json()
+
+    assert cik_map._CACHE_PATH.read_bytes() == fresh_body
+
+
 @pytest.mark.network
 def test_resolve_cik_live_aapl_returns_apple_cik() -> None:
     """End-to-end against real EDGAR — AAPL must resolve to 0000320193."""
