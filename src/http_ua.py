@@ -23,4 +23,4 @@ USER_AGENTS: tuple[str, ...] = ("placeholder",)
 
 def pick_user_agent(rng: object | None = None) -> str:
     """Return a random User-Agent from :data:`USER_AGENTS`."""
-    return ""
+    return USER_AGENTS[0]
