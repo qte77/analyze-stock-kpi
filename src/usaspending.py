@@ -13,7 +13,6 @@ import urllib.request
 from datetime import date  # noqa: TC003 — pydantic needs runtime access in callers
 
 from pydantic import BaseModel, ConfigDict
-
 from src.config import settings
 
 
@@ -62,6 +61,17 @@ def _build_body(
     }
 
 
+def _parse_results(raw_results: list[dict]) -> list[RecipientRecord]:
+    """Drop ``MULTIPLE RECIPIENTS`` aggregate rows; rank from list position."""
+    records: list[RecipientRecord] = []
+    for raw in raw_results:
+        if raw.get("recipient_id") is None:
+            continue
+        rank = len(records) + 1
+        records.append(RecipientRecord(**raw, rank=rank))
+    return records
+
+
 def fetch_top_contractors(
     fy_start: date,
     fy_end: date,
@@ -69,7 +79,7 @@ def fetch_top_contractors(
     limit: int = 100,
     naics_codes: list[str] | None = None,
     award_type_codes: tuple[str, ...] = ("A", "B", "C", "D"),
-) -> list[dict]:
+) -> list[RecipientRecord]:
     """Fetch top contractors by trailing-FY obligated dollars."""
     body = _build_body(fy_start, fy_end, limit, naics_codes, award_type_codes)
     req = urllib.request.Request(  # noqa: S310
@@ -80,5 +90,6 @@ def fetch_top_contractors(
     req.add_header("Content-Type", "application/json")
     with urllib.request.urlopen(  # noqa: S310
         req, timeout=settings.usaspending_timeout_sec,
-    ):
-        return []
+    ) as resp:
+        payload = json.loads(resp.read())
+    return _parse_results(payload.get("results", []))
