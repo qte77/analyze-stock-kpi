@@ -13,11 +13,9 @@ if TYPE_CHECKING:
 
 import pytest
 from pydantic import ValidationError
+from src.config import settings
 from src.sentiment import (
-    ACCEPT,
-    REFERER,
     SUBINDICATOR_KEYS,
-    USER_AGENT,
     FearGreedSnapshot,
     SubindicatorReading,
     _build_today_subindicators,
@@ -109,13 +107,13 @@ def test_fetch_fear_greed_sends_browser_headers() -> None:
     with patch("src.sentiment.urllib.request.urlopen", side_effect=fake_urlopen):
         fetch_fear_greed()
 
-    assert captured["request"].get_header("User-agent") == USER_AGENT
-    assert captured["request"].get_header("Accept") == ACCEPT
-    assert captured["request"].get_header("Referer") == REFERER
+    assert captured["request"].get_header("User-agent") == settings.cnn_fg_user_agent
+    assert captured["request"].get_header("Accept") == settings.http_accept
+    assert captured["request"].get_header("Referer") == settings.cnn_fg_referer
     # Guard against the regression that triggered the first hot-fix: CNN's
     # WAF rejects any UA containing the bot-style "(compatible;"
     # parenthetical.
-    assert "(compatible;" not in USER_AGENT
+    assert "(compatible;" not in settings.cnn_fg_user_agent
 
 
 def test_parse_historical_dedups_same_day_keeps_latest() -> None:
