@@ -97,6 +97,10 @@ results/demo/
 # branch only. Existing tracked files on `main` are legacy; new years won't be
 # accidentally committed from feature branches.
 results/cnn_fg/*.json
+# EDGAR ticker registry — disk cache for the conditional-GET shim in
+# src/sec/cik_map.py. Refreshed on If-Modified-Since hit; never committed
+# (the file is ~13 MB and changes daily).
+results/edgar/
 
 # Claude Code sandbox bwrap phantom files
 # https://github.com/anthropics/claude-code/issues/17727
