@@ -1,0 +1,108 @@
+"""CIK <-> ticker resolution via EDGAR's ``company_tickers_exchange.json``.
+
+**CIK** = Central Index Key, the 10-digit numeric identifier SEC
+assigns to every entity that files with EDGAR. CIKs are stable
+across name changes, mergers, and ticker swaps, which makes them the
+canonical join key for all other EDGAR endpoints
+(``data.sec.gov/submissions/CIK<10>.json``, XBRL company facts, etc.).
+
+EDGAR publishes a single rolling JSON file mapping every SEC-registered
+equity to its CIK plus listing exchange. The file is keyless. SEC asks
+clients to send a ``User-Agent`` header so they can rate-limit per
+caller (see https://www.sec.gov/os/accessing-edgar-data); we send a
+browser-shape UA from :mod:`src.http_ua`.
+
+Public API:
+
+- :class:`CikRecord` — frozen pydantic model for one EDGAR row.
+- :func:`lookup_record` — full record lookup by ticker (case-insensitive).
+- :func:`resolve_cik` — convenience wrapper that returns only the
+  10-digit zero-padded CIK string (or ``None`` for non-SEC-registered
+  Yahoo symbols like FX, crypto, futures).
+
+The fetched JSON is cached at module level for the lifetime of the
+process. Tests reset the cache via the ``_reset_cik_map_cache``
+autouse fixture in :mod:`tests.sec.conftest`.
+"""
+
+from __future__ import annotations
+
+import json
+import urllib.request
+
+from pydantic import BaseModel, ConfigDict
+from src.http_ua import pick_user_agent
+from src.sec import ACCEPT
+
+ENDPOINT = "https://www.sec.gov/files/company_tickers_exchange.json"
+REQUEST_TIMEOUT_SEC = 10
+
+
+class CikRecord(BaseModel):
+    """Single EDGAR ticker registry entry."""
+
+    model_config = ConfigDict(frozen=True, extra="ignore")
+
+    cik: str
+    """10-digit zero-padded CIK (e.g., ``"0000320193"`` for AAPL)."""
+
+    ticker: str
+    """Exchange ticker symbol (e.g., ``"AAPL"``)."""
+
+    title: str
+    """Issuer name as registered with EDGAR (e.g., ``"Apple Inc."``)."""
+
+    exchange: str | None = None
+    """Listing exchange (``"Nasdaq"`` / ``"NYSE"`` / ``"OTC"`` / etc.)."""
+
+
+def _fetch_json() -> dict:
+    """Fetch company_tickers_exchange.json from EDGAR.
+
+    Stubbed in tests via ``monkeypatch.setattr(cik_map, "_fetch_json", ...)``.
+    """
+    # S310 / B310: ENDPOINT is a hardcoded HTTPS module constant; the explicit
+    # scheme check below is the defense-in-depth boundary if a future refactor
+    # ever lets external input flow into ENDPOINT.
+    request = urllib.request.Request(  # noqa: S310  # nosec B310
+        ENDPOINT,
+        headers={"User-Agent": pick_user_agent(), "Accept": ACCEPT},
+    )
+    if not request.full_url.startswith("https://"):
+        raise ValueError(f"Refusing non-HTTPS URL: {request.full_url!r}")
+    with urllib.request.urlopen(  # noqa: S310  # nosec B310
+        request, timeout=REQUEST_TIMEOUT_SEC
+    ) as response:
+        return json.loads(response.read())
+
+
+_records_cache: dict[str, CikRecord] | None = None
+
+
+def _load_records() -> dict[str, CikRecord]:
+    """Parse the EDGAR JSON into a dict keyed by upper-case ticker."""
+    global _records_cache
+    if _records_cache is None:
+        data = _fetch_json()
+        records: dict[str, CikRecord] = {}
+        for row in data["data"]:
+            cik_int, name, ticker, exchange = row
+            records[ticker.upper()] = CikRecord(
+                cik=str(cik_int).zfill(10),
+                ticker=ticker,
+                title=name,
+                exchange=exchange,
+            )
+        _records_cache = records
+    return _records_cache
+
+
+def lookup_record(ticker: str) -> CikRecord | None:
+    """Resolve ``ticker`` to a full :class:`CikRecord`, or ``None``."""
+    return _load_records().get(ticker.upper())
+
+
+def resolve_cik(ticker: str) -> str | None:
+    """Resolve ``ticker`` to a 10-digit zero-padded CIK, or ``None``."""
+    record = lookup_record(ticker)
+    return record.cik if record else None

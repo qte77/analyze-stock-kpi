@@ -1,0 +1,15 @@
+{
+    "fields": ["cik", "name", "ticker", "exchange"],
+    "data": [
+        [320193, "Apple Inc.", "AAPL", "Nasdaq"],
+        [789019, "MICROSOFT CORP", "MSFT", "Nasdaq"],
+        [1652044, "Alphabet Inc.", "GOOGL", "Nasdaq"],
+        [936468, "LOCKHEED MARTIN CORP", "LMT", "NYSE"],
+        [1773383, "RTX Corp", "RTX", "NYSE"],
+        [40545, "GENERAL ELECTRIC CO", "GE", "NYSE"],
+        [1108524, "salesforce, inc.", "CRM", "NYSE"],
+        [320187, "NIKE, Inc.", "NKE", "NYSE"],
+        [1633917, "PAYPAL HOLDINGS, INC.", "PYPL", "Nasdaq"],
+        [1090872, "BAE Systems plc", "BAESY", "OTC"]
+    ]
+}

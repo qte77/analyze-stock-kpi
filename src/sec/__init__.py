@@ -1,0 +1,18 @@
+"""SEC EDGAR integration — keyless public-data access.
+
+**SEC** = US Securities and Exchange Commission, the federal agency
+that regulates public companies. **EDGAR** = Electronic Data Gathering,
+Analysis, and Retrieval — SEC's electronic filing system and its
+public API surface (``data.sec.gov`` / ``www.sec.gov/files/...``).
+
+All modules here send a browser-shape ``User-Agent`` header on every
+HTTP request (from :mod:`src.http_ua`, refresh quarterly from
+https://useragents.me/) plus the shared :data:`ACCEPT` header below.
+
+See [ADR-0006](../../docs/decisions/0006-federal-contractors-universe.md)
+for the integration design.
+"""
+
+ACCEPT = "application/json, text/plain, */*"
+"""``Accept`` header sent on every SEC request. JSON-leaning; identical
+string to ``src.sentiment.ACCEPT``."""
