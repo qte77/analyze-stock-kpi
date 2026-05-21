@@ -115,3 +115,89 @@ def test_enrich_snapshot_sec_no_cik_returns_empty_no_fetch_call(
 
     assert result == {}
     assert fetch_call_count == 0
+
+
+def test_fetch_last_filed_sends_browser_shape_headers_to_cik_url(
+    monkeypatch: pytest.MonkeyPatch,
+    aapl_submissions_fixture: dict,
+) -> None:
+    """GET https://data.sec.gov/submissions/CIK<10>.json with UA + Accept."""
+    import urllib.request
+    from io import BytesIO
+
+    from src.http_ua import USER_AGENTS
+    from src.sec.submissions import fetch_last_filed
+
+    expected_accept = "application/json, text/plain, */*"
+    expected_url = "https://data.sec.gov/submissions/CIK0000320193.json"
+
+    captured: dict[str, urllib.request.Request] = {}
+
+    def fake_urlopen(req: urllib.request.Request, *args: object, **kwargs: object) -> BytesIO:
+        captured["req"] = req
+        return BytesIO(json.dumps(aapl_submissions_fixture).encode())
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+
+    fetch_last_filed("0000320193")
+
+    req = captured["req"]
+    assert req.full_url == expected_url
+    assert req.get_header("User-agent") in USER_AGENTS
+    assert req.get_header("Accept") == expected_accept
+
+
+def test_fetch_last_filed_returns_parsed_snapshot(
+    monkeypatch: pytest.MonkeyPatch,
+    aapl_submissions_fixture: dict,
+) -> None:
+    """Stubbed ``urlopen`` → returned ``LastFiledSnapshot`` carries fixture dates."""
+    import urllib.request
+    from io import BytesIO
+
+    from src.sec.submissions import fetch_last_filed
+
+    def fake_urlopen(_req: object, *args: object, **kwargs: object) -> BytesIO:
+        return BytesIO(json.dumps(aapl_submissions_fixture).encode())
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+
+    snap = fetch_last_filed("0000320193")
+
+    assert snap.last_10k_date == date(2024, 11, 1)
+    assert snap.last_10q_date == date(2024, 8, 2)
+    assert snap.last_8k_date == date(2024, 10, 31)
+
+
+def test_fetch_last_filed_zero_pads_short_cik(
+    monkeypatch: pytest.MonkeyPatch,
+    aapl_submissions_fixture: dict,
+) -> None:
+    """A short CIK (``"320193"``) must be left-zero-padded to 10 digits in the URL."""
+    import urllib.request
+    from io import BytesIO
+
+    from src.sec.submissions import fetch_last_filed
+
+    captured: dict[str, str] = {}
+
+    def fake_urlopen(req: urllib.request.Request, *args: object, **kwargs: object) -> BytesIO:
+        captured["url"] = req.full_url
+        return BytesIO(json.dumps(aapl_submissions_fixture).encode())
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+
+    fetch_last_filed("320193")
+
+    assert captured["url"] == "https://data.sec.gov/submissions/CIK0000320193.json"
+
+
+@pytest.mark.network
+def test_fetch_last_filed_live_aapl_returns_recent_10q_date() -> None:
+    """End-to-end against real EDGAR — AAPL must yield a real 10-Q date."""
+    from src.sec.submissions import fetch_last_filed
+
+    snap = fetch_last_filed("0000320193")
+
+    assert snap.last_10q_date is not None
+    assert snap.last_10q_date.year >= 2024
