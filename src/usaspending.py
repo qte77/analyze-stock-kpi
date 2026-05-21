@@ -12,7 +12,30 @@ import json
 import urllib.request
 from datetime import date  # noqa: TC003 — pydantic needs runtime access in callers
 
+from pydantic import BaseModel, ConfigDict
+
 from src.config import settings
+
+
+class RecipientRecord(BaseModel):
+    """One result entry from usaspending ``spending_by_category/recipient``.
+
+    Per the upstream contract (verified 2026-05-21), ``code`` is the
+    legacy DUNS, ``uei`` is the modern SAM identifier, and both may be
+    ``None``. ``recipient_id`` is the only reliable dedupe key.
+    ``rank`` is derived from post-aggregate-filter list position
+    (1-based) — the API does not return a rank field.
+    """
+
+    model_config = ConfigDict(frozen=True, extra="ignore")
+
+    name: str
+    recipient_id: str | None = None
+    code: str | None = None
+    uei: str | None = None
+    amount: float
+    total_outlays: float | None = None
+    rank: int
 
 
 def _build_body(

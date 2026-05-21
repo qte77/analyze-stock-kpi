@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from src.config import settings
-from src.usaspending import fetch_top_contractors
+from src.usaspending import RecipientRecord, fetch_top_contractors
 
 if TYPE_CHECKING:
     import pytest
@@ -64,3 +64,42 @@ def test_post_body_matches_contract(monkeypatch: pytest.MonkeyPatch) -> None:
     assert body["filters"]["time_period"] == [
         {"start_date": "2024-10-01", "end_date": "2025-09-30"}
     ]
+
+
+def test_response_parses_to_recipient_records(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Parsed results drop the MULTIPLE RECIPIENTS aggregate and rank from 1."""
+    payload = _FIXTURE_PATH.read_bytes()
+    monkeypatch.setattr(
+        urllib.request,
+        "urlopen",
+        lambda *_a, **_k: _FakeResponse(payload),
+    )
+
+    records = fetch_top_contractors(
+        fy_start=date(2024, 10, 1),
+        fy_end=date(2025, 9, 30),
+        limit=10,
+    )
+
+    assert len(records) == 9
+
+    lmt = records[0]
+    assert isinstance(lmt, RecipientRecord)
+    assert lmt.rank == 1
+    assert lmt.name == "LOCKHEED MARTIN CORPORATION"
+    assert lmt.recipient_id == "005a8812-bab5-2780-533b-b62c33271882-C"
+    assert lmt.code == "008016958"
+    assert lmt.uei is None
+    assert lmt.amount == 17388378311.33
+    assert lmt.total_outlays is None
+
+    rtx = records[1]
+    assert rtx.rank == 2
+    assert rtx.name == "RTX CORPORATION"
+    assert rtx.uei == "U7XCNYDDGCM4"
+
+    last = records[-1]
+    assert last.rank == 9
+    assert last.name == "BOOZ ALLEN HAMILTON INC"
