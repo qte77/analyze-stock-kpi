@@ -68,7 +68,7 @@ def _load_records() -> dict[str, CikRecord]:
         for row in data["data"]:
             cik_int, name, ticker, exchange = row
             records[ticker.upper()] = CikRecord(
-                cik=str(cik_int),
+                cik=str(cik_int).zfill(10),
                 ticker=ticker,
                 title=name,
                 exchange=exchange,
