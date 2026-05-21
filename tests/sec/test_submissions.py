@@ -40,3 +40,32 @@ def test_extract_last_filed_extracts_all_three_us_forms(
     assert snap.last_10k_date == date(2024, 11, 1)
     assert snap.last_10q_date == date(2024, 8, 2)
     assert snap.last_8k_date == date(2024, 10, 31)
+
+
+def test_extract_last_filed_foreign_filer_returns_all_none() -> None:
+    """Form 20-F (foreign filer) — all three US-form fields stay None."""
+    payload = {
+        "filings": {
+            "recent": {
+                "form": ["20-F", "6-K", "6-K"],
+                "filingDate": ["2024-04-30", "2024-08-15", "2024-02-15"],
+            }
+        }
+    }
+
+    snap = _extract_last_filed(payload)
+
+    assert snap.last_10k_date is None
+    assert snap.last_10q_date is None
+    assert snap.last_8k_date is None
+
+
+def test_extract_last_filed_empty_recent_returns_all_none() -> None:
+    """Companies with no recent filings yield an all-None snapshot."""
+    payload = {"filings": {"recent": {"form": [], "filingDate": []}}}
+
+    snap = _extract_last_filed(payload)
+
+    assert snap.last_10k_date is None
+    assert snap.last_10q_date is None
+    assert snap.last_8k_date is None
