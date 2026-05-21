@@ -99,3 +99,19 @@ def test_fetch_json_sends_browser_shape_headers(
     assert req.full_url == expected_url
     assert req.get_header("User-agent") in USER_AGENTS
     assert req.get_header("Accept") == expected_accept
+
+
+@pytest.mark.network
+def test_resolve_cik_live_aapl_returns_apple_cik() -> None:
+    """End-to-end against real EDGAR — AAPL must resolve to 0000320193."""
+    from src.sec.cik_map import resolve_cik
+
+    assert resolve_cik("AAPL") == "0000320193"
+
+
+@pytest.mark.network
+def test_resolve_cik_live_returns_none_for_non_equity() -> None:
+    """End-to-end: ``BTC-USD`` is not in EDGAR; resolver returns None."""
+    from src.sec.cik_map import resolve_cik
+
+    assert resolve_cik("BTC-USD") is None
