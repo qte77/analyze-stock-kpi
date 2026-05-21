@@ -22,10 +22,10 @@ _FIXTURE_PATH = Path(__file__).parent / "fixtures" / "usaspending_top_recipients
 class _FakeResponse(BytesIO):
     """urllib-style response supporting the context-manager protocol."""
 
-    def __enter__(self) -> _FakeResponse:  # noqa: D105
+    def __enter__(self) -> _FakeResponse:
         return self
 
-    def __exit__(self, *_exc: object) -> None:  # noqa: D105
+    def __exit__(self, *_exc: object) -> None:
         return None
 
 
