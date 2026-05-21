@@ -42,3 +42,26 @@ def test_app_settings_env_override_via_ssk_prefix(
 
     assert s.request_timeout_sec == 30
     assert s.results_dir == Path("/tmp/results-override")  # noqa: S108
+
+
+def test_app_settings_item3_field_defaults() -> None:
+    """Federal-contractors universe fields default to in-repo `results/` paths."""
+    s = AppSettings()
+    assert s.federal_contractors_dir == Path("results/federal_contractors")
+    assert s.usaspending_url == (
+        "https://api.usaspending.gov/api/v2/search/spending_by_category/recipient/"
+    )
+    assert s.usaspending_timeout_sec == 30
+
+
+def test_app_settings_item3_field_env_overrides(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``SSK_<FIELD>`` env vars override Item 3 fields at construction time."""
+    monkeypatch.setenv("SSK_FEDERAL_CONTRACTORS_DIR", "/tmp/fc-override")  # noqa: S108
+    monkeypatch.setenv("SSK_USASPENDING_TIMEOUT_SEC", "60")
+
+    s = AppSettings()
+
+    assert s.federal_contractors_dir == Path("/tmp/fc-override")  # noqa: S108
+    assert s.usaspending_timeout_sec == 60
