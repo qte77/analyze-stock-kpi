@@ -38,6 +38,8 @@ fields ``None`` — by design, not an error.
 from __future__ import annotations
 
 import json
+import logging
+import urllib.error
 import urllib.request
 from datetime import date
 
@@ -45,6 +47,8 @@ from pydantic import BaseModel, ConfigDict
 from src.config import settings
 from src.http_ua import pick_user_agent
 from src.sec.cik_map import resolve_cik
+
+logger = logging.getLogger(__name__)
 
 
 class LastFiledSnapshot(BaseModel):
@@ -99,14 +103,20 @@ def enrich_snapshot_sec(symbol: str) -> dict:
     """Return ``FundamentalsSnapshot`` SEC enrichment fields for ``symbol``.
 
     Resolves the Yahoo symbol to a CIK; if no CIK (FX, crypto, futures,
-    or non-SEC equity), returns ``{}`` and does NOT call EDGAR. Otherwise
-    returns the three optional date fields ready for
-    ``model_copy(update=...)``.
+    or non-SEC equity), returns ``{}`` and does NOT call EDGAR.
+
+    Network / HTTP errors from the EDGAR fetch are logged as warnings
+    and degrade to ``{}`` so one ticker's failure doesn't kill the
+    whole universe run (wrap-degrade per ``docs/architecture.md``).
     """
     cik = resolve_cik(symbol)
     if not cik:
         return {}
-    snap = fetch_last_filed(cik)
+    try:
+        snap = fetch_last_filed(cik)
+    except urllib.error.URLError as exc:
+        logger.warning("SEC submissions fetch failed for %s (CIK %s): %s", symbol, cik, exc)
+        return {}
     return {
         "sec_last_10k_date": snap.last_10k_date,
         "sec_last_10q_date": snap.last_10q_date,
