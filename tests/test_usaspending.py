@@ -103,3 +103,58 @@ def test_response_parses_to_recipient_records(
     last = records[-1]
     assert last.rank == 9
     assert last.name == "BOOZ ALLEN HAMILTON INC"
+
+
+def test_naics_filter_passed_through_as_require_dict(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """naics_codes=[...] serialises to `filters.naics_codes = {"require": [...]}`."""
+    captured: dict[str, Any] = {}
+    payload = _FIXTURE_PATH.read_bytes()
+
+    def fake_urlopen(
+        req: urllib.request.Request,
+        *_args: object,
+        **_kwargs: object,
+    ) -> _FakeResponse:
+        captured["body"] = req.data
+        return _FakeResponse(payload)
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+
+    fetch_top_contractors(
+        fy_start=date(2024, 10, 1),
+        fy_end=date(2025, 9, 30),
+        limit=10,
+        naics_codes=["3364", "5417"],
+    )
+
+    body = json.loads(captured["body"])
+    assert body["filters"]["naics_codes"] == {"require": ["3364", "5417"]}
+
+
+def test_naics_filter_default_none_omits_key(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Default naics_codes=None omits `filters.naics_codes` entirely."""
+    captured: dict[str, Any] = {}
+    payload = _FIXTURE_PATH.read_bytes()
+
+    def fake_urlopen(
+        req: urllib.request.Request,
+        *_args: object,
+        **_kwargs: object,
+    ) -> _FakeResponse:
+        captured["body"] = req.data
+        return _FakeResponse(payload)
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+
+    fetch_top_contractors(
+        fy_start=date(2024, 10, 1),
+        fy_end=date(2025, 9, 30),
+        limit=10,
+    )
+
+    body = json.loads(captured["body"])
+    assert "naics_codes" not in body["filters"]
