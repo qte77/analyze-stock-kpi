@@ -53,7 +53,20 @@ _records_cache: dict[str, CikRecord] | None = None
 
 def _load_records() -> dict[str, CikRecord]:
     """Parse the EDGAR JSON into a dict keyed by upper-case ticker."""
-    return {}
+    global _records_cache
+    if _records_cache is None:
+        data = _fetch_json()
+        records: dict[str, CikRecord] = {}
+        for row in data["data"]:
+            cik_int, name, ticker, exchange = row
+            records[ticker.upper()] = CikRecord(
+                cik=str(cik_int),
+                ticker=ticker,
+                title=name,
+                exchange=exchange,
+            )
+        _records_cache = records
+    return _records_cache
 
 
 def lookup_record(ticker: str) -> CikRecord | None:
