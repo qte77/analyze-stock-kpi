@@ -33,6 +33,6 @@ def test_pick_user_agent_delegates_to_provided_rng() -> None:
 
 def test_pick_user_agent_seeded_rng_is_deterministic() -> None:
     """Same seed yields the same UA on independent runs."""
-    a = pick_user_agent(random.Random(42))
-    b = pick_user_agent(random.Random(42))
+    a = pick_user_agent(random.Random(42))  # noqa: S311  # determinism test, not crypto
+    b = pick_user_agent(random.Random(42))  # noqa: S311  # determinism test, not crypto
     assert a == b

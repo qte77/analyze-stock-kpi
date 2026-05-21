@@ -18,9 +18,46 @@ for EDGAR).
 
 from __future__ import annotations
 
-USER_AGENTS: tuple[str, ...] = ("placeholder",)
+import random  # noqa: S311  # UA shuffling, not crypto
+from typing import Protocol
+
+# Current desktop User-Agents per useragents.me — refresh quarterly.
+# Last refreshed: 2026-05-20.
+USER_AGENTS: tuple[str, ...] = (
+    # Chrome on Windows
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/134.0.0.0 Safari/537.36",
+    # Safari on macOS
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+    "Version/17.10 Safari/605.1.1",
+    # Firefox on Windows
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) "
+    "Gecko/20100101 Firefox/135.0",
+    # Chrome on macOS
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/134.0.0.0 Safari/537.36",
+    # Chrome on Linux
+    "Mozilla/5.0 (X11; Linux x86_64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/134.0.0.0 Safari/537.36",
+)
 
 
-def pick_user_agent(rng: object | None = None) -> str:
-    """Return a random User-Agent from :data:`USER_AGENTS`."""
-    return USER_AGENTS[0]
+class _RngLike(Protocol):
+    """Duck-type for any object with ``random.Random``-style ``choice``."""
+
+    def choice(self, seq: tuple[str, ...]) -> str: ...
+
+
+def pick_user_agent(rng: _RngLike | None = None) -> str:
+    """Return a randomly-chosen User-Agent from :data:`USER_AGENTS`.
+
+    Pass a seeded :class:`random.Random` (or any duck-typed object with
+    a compatible ``choice`` method) for deterministic tests; omit for
+    the module-level ``random`` instance.
+    """
+    chooser: _RngLike = rng if rng is not None else random
+    return chooser.choice(USER_AGENTS)
