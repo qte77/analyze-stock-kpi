@@ -8,7 +8,7 @@ FX/futures/crypto) to ``results/fundamentals_<UTC>.json``.
 
 import json
 import logging
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 from rich.console import Console
@@ -16,6 +16,7 @@ from rich.table import Table
 
 from .composite_scores import CompositeScores, compute_scores
 from .fundamentals import FundamentalsSnapshot, fetch_universe_fundamentals
+from .sec.submissions import enrich_snapshot_sec
 from .sentiment import FearGreedSnapshot, fetch_fear_greed
 from .universe import resolve_universe
 from .utils.parse_args import CliArgs
@@ -36,6 +37,24 @@ def _format_percent(value: float | None) -> str:
 
 def _format_score(value: float | None) -> str:
     return f"{value:.0f}" if value is not None else "-"
+
+
+_STALE_10Q_DAYS = 150
+
+
+def _format_days_since(filing_date: date | None, *, today: date | None = None) -> str:
+    """Format an EDGAR last-filed date as "Nd"; "-" when missing.
+
+    Wraps in Rich ``[red]…[/red]`` markup when N exceeds the >150d
+    staleness threshold (US issuers normally file 10-Q quarterly; a
+    gap longer than 150d signals delisting, restatement, or foreign-
+    filer status).
+    """
+    if filing_date is None:
+        return "-"
+    today = today or datetime.now(UTC).date()
+    n = (today - filing_date).days
+    return f"[red]{n}d[/red]" if n > _STALE_10Q_DAYS else f"{n}d"
 
 
 def _print_sentiment_banner(console: Console, snapshot: FearGreedSnapshot) -> None:
@@ -72,6 +91,7 @@ def _summary_row(snap: FundamentalsSnapshot, show_scores: bool) -> list[str]:
         _format_ratio(snap.current_ratio),
         _format_ratio(snap.sortino_ratio),
         _format_score(scores.screener_score),
+        _format_days_since(snap.sec_last_10q_date),
     ]
     if show_scores:
         row += _score_columns(snap)
@@ -104,6 +124,7 @@ def _print_summary_table(
     table.add_column("Current", justify="right")
     table.add_column("Sortino", justify="right")
     table.add_column("Score", justify="right")
+    table.add_column("Days 10-Q", justify="right")
     if show_scores:
         table.add_column("Quality", justify="right")
         table.add_column("Div", justify="right")
@@ -139,7 +160,12 @@ def main() -> None:
     )
     raw_snapshots = fetch_universe_fundamentals(tickers)
     snapshots = [
-        snap.model_copy(update={"composite_scores": compute_scores(snap)})
+        snap.model_copy(
+            update={
+                "composite_scores": compute_scores(snap),
+                **enrich_snapshot_sec(snap.symbol),
+            }
+        )
         for snap in raw_snapshots
     ]
     _print_summary_table(console, snapshots, show_scores=args.show_scores)

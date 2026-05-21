@@ -20,6 +20,7 @@ history rather than ``Ticker.info``; see ADR-0004 for the rationale.
 from __future__ import annotations
 
 import logging
+from datetime import date
 from typing import TYPE_CHECKING, Any
 
 import yfinance as yf
@@ -107,6 +108,9 @@ class FundamentalsSnapshot(BaseModel):
     roi: float | None = None
     rd_to_revenue: float | None = None
     sortino_ratio: float | None = None
+    sec_last_10k_date: date | None = None
+    sec_last_10q_date: date | None = None
+    sec_last_8k_date: date | None = None
 
 
 def _normalize_yfinance_info(info: dict[str, Any]) -> dict[str, Any]:

@@ -9,7 +9,9 @@ silently drift.
 
 from __future__ import annotations
 
-from src.__main__ import _summary_row
+from datetime import date
+
+from src.__main__ import _format_days_since, _summary_row
 from src.composite_scores import CompositeScores
 from src.fundamentals import FundamentalsSnapshot
 
@@ -52,6 +54,7 @@ def test_summary_row_matches_13_column_dashboard_order() -> None:
         "2.00",
         "1.50",
         "72",
+        "-",  # days-since-10-Q empty because sec_last_10q_date not set on snap
     ]
 
 
@@ -74,3 +77,36 @@ def test_summary_row_sparse_snapshot_renders_dashes() -> None:
     assert row[0] == "X"
     # Every numeric column should be "-" when its input is missing.
     assert all(cell == "-" for cell in row[1:])
+
+
+def test_format_days_since_returns_dash_when_none() -> None:
+    """Missing filing date renders as '-'."""
+    assert _format_days_since(None) == "-"
+
+
+def test_format_days_since_returns_plain_n_for_fresh_filing() -> None:
+    """Filing date within the 150d staleness window renders as 'Nd' (no markup)."""
+    assert _format_days_since(date(2025, 12, 1), today=date(2026, 1, 1)) == "31d"
+
+
+def test_format_days_since_wraps_red_when_stale() -> None:
+    """Filing date >150d ago renders in Rich [red]…[/red] markup."""
+    # 151 days from 2026-01-01 → 2025-08-03
+    assert _format_days_since(date(2025, 8, 3), today=date(2026, 1, 1)) == "[red]151d[/red]"
+
+
+def test_summary_row_appends_days_since_10q_column_when_populated() -> None:
+    """``_summary_row`` appends a 14th column for the days-since-10-Q value."""
+    snap = _snap(sec_last_10q_date=date(2024, 8, 2))
+    row = _summary_row(snap, show_scores=False)
+
+    assert len(row) == 14
+    assert row[13] != "-"
+
+
+def test_summary_row_days_since_10q_renders_dash_when_missing() -> None:
+    """Sparse snapshot (no `sec_last_10q_date`) renders the column as '-'."""
+    row = _summary_row(_snap(), show_scores=False)
+
+    assert len(row) == 14
+    assert row[13] == "-"
