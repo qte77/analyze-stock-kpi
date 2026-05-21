@@ -27,7 +27,15 @@ autouse fixture in :mod:`tests.sec.conftest`.
 
 from __future__ import annotations
 
+import json
+import urllib.request
+
 from pydantic import BaseModel, ConfigDict
+from src.http_ua import pick_user_agent
+from src.sec import ACCEPT
+
+ENDPOINT = "https://www.sec.gov/files/company_tickers_exchange.json"
+REQUEST_TIMEOUT_SEC = 10
 
 
 class CikRecord(BaseModel):
@@ -53,7 +61,19 @@ def _fetch_json() -> dict:
 
     Stubbed in tests via ``monkeypatch.setattr(cik_map, "_fetch_json", ...)``.
     """
-    raise NotImplementedError
+    # S310 / B310: ENDPOINT is a hardcoded HTTPS module constant; the explicit
+    # scheme check below is the defense-in-depth boundary if a future refactor
+    # ever lets external input flow into ENDPOINT.
+    request = urllib.request.Request(  # noqa: S310  # nosec B310
+        ENDPOINT,
+        headers={"User-Agent": pick_user_agent(), "Accept": ACCEPT},
+    )
+    if not request.full_url.startswith("https://"):
+        raise ValueError(f"Refusing non-HTTPS URL: {request.full_url!r}")
+    with urllib.request.urlopen(  # noqa: S310  # nosec B310
+        request, timeout=REQUEST_TIMEOUT_SEC
+    ) as response:
+        return json.loads(response.read())
 
 
 _records_cache: dict[str, CikRecord] | None = None
