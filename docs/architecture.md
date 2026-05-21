@@ -27,7 +27,7 @@ Every external boundary carries one of three failure policies. Logged via `logge
 | Filesystem write (snapshots) | `__main__._persist_snapshots` | fail-loud | disk full / permission denied → abort |
 | Filesystem write (CNN cache) | `sentiment._write_year` | fail-loud | same rationale |
 | Filesystem read (universe preset) | `universe._read_symbol_file` | fail-loud | config error — missing preset means the user passed a wrong name |
-| Filesystem read (EDGAR cache) | `sec.cik_map._fetch_json` (cached read) | invalidate cache + refetch | corrupt JSON should never happen, but recoverable |
+| Filesystem read (EDGAR cache) | `sec.cik_map._fetch_json` (cached read) | fail-loud | corrupt JSON shouldn't happen on a CDN-served read; if it does, user removes `results/edgar/` to recover |
 | Pydantic `model_validate` | every call | fail-loud | upstream schema break or programmer error — never wrap |
 
 ## Modules
