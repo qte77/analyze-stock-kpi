@@ -13,8 +13,8 @@
     "forward_pe": 12.023334,
     "price_to_book": 3.5309877,
     "price_to_sales_ttm": 1.5297476,
-    "enterprise_value": 109707485184.0,
-    "enterprise_to_ebitda": 8.614,
+    "enterprise_value": 110548582400.0,
+    "enterprise_to_ebitda": 8.68,
     "trailing_peg_ratio": 1.2507,
     "return_on_equity": 0.24763,
     "return_on_assets": 0.11163,
@@ -115,8 +115,8 @@
     "forward_pe": 52.37921,
     "price_to_book": 28.852589,
     "price_to_sales_ttm": 1.8729279,
-    "enterprise_value": 202561077248.0,
-    "enterprise_to_ebitda": -62.154,
+    "enterprise_value": 202095984640.0,
+    "enterprise_to_ebitda": -62.012,
     "trailing_peg_ratio": 23.7931,
     "return_on_equity": 1.69947,
     "return_on_assets": -0.02069,
@@ -166,8 +166,8 @@
     "forward_pe": 20.281109,
     "price_to_book": 5.072958,
     "price_to_sales_ttm": 2.7570257,
-    "enterprise_value": 320878051328.0,
-    "enterprise_to_ebitda": 89.431,
+    "enterprise_value": 324589977600.0,
+    "enterprise_to_ebitda": 90.465,
     "trailing_peg_ratio": 3.0823,
     "return_on_equity": 0.18141001,
     "return_on_assets": 0.045339998,
@@ -249,7 +249,7 @@
     },
     "roi": 0.19472803908125144,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.7670656198444703,
+    "sortino_ratio": -0.7670659560030997,
     "sec_last_10k_date": "2026-05-22",
     "sec_last_10q_date": "2026-01-23",
     "sec_last_8k_date": "2026-05-22"
@@ -268,8 +268,8 @@
     "forward_pe": 16.061369,
     "price_to_book": 2.5876265,
     "price_to_sales_ttm": 1.2087349,
-    "enterprise_value": 16282956800.0,
-    "enterprise_to_ebitda": 14.723,
+    "enterprise_value": 16532147200.0,
+    "enterprise_to_ebitda": 14.948,
     "trailing_peg_ratio": null,
     "return_on_equity": 0.13449,
     "return_on_assets": 0.05469,
@@ -351,7 +351,7 @@
     },
     "roi": 0.3249676148913954,
     "rd_to_revenue": 0.027673554228540224,
-    "sortino_ratio": 3.732971260949823,
+    "sortino_ratio": 3.732970833192972,
     "sec_last_10k_date": "2026-03-16",
     "sec_last_10q_date": "2025-12-09",
     "sec_last_8k_date": "2026-04-20"
@@ -370,8 +370,8 @@
     "forward_pe": 13.604844,
     "price_to_book": 2.211652,
     "price_to_sales_ttm": 0.41273627,
-    "enterprise_value": 3705880576.0,
-    "enterprise_to_ebitda": -10.498,
+    "enterprise_value": 3744988160.0,
+    "enterprise_to_ebitda": -10.609,
     "trailing_peg_ratio": 1.1043,
     "return_on_equity": 0.1015,
     "return_on_assets": -0.03205,
@@ -449,11 +449,11 @@
       "big_call": 50.32942652380952,
       "aaqs": 68.40410458333334,
       "hgi": 54.5,
-      "screener_score": 50.958980571404894
+      "screener_score": 50.95897333067947
     },
     "roi": 0.1344112088127542,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.0921359161876354,
+    "sortino_ratio": 2.0921350473005838,
     "sec_last_10k_date": "2026-01-30",
     "sec_last_10q_date": "2026-04-29",
     "sec_last_8k_date": "2026-05-11"
@@ -472,8 +472,8 @@
     "forward_pe": 34.901222,
     "price_to_book": 17.004885,
     "price_to_sales_ttm": 6.5492973,
-    "enterprise_value": 325817434112.0,
-    "enterprise_to_ebitda": 29.52,
+    "enterprise_value": 326944260096.0,
+    "enterprise_to_ebitda": 29.623,
     "trailing_peg_ratio": 7.2622,
     "return_on_equity": 0.45428002,
     "return_on_assets": 0.048520003,
@@ -500,11 +500,11 @@
       "big_call": 44.72612672380953,
       "aaqs": 46.37997983333334,
       "hgi": 54.92857142857144,
-      "screener_score": 31.81083597076136
+      "screener_score": 31.810835841240355
     },
     "roi": 0.291814883413699,
     "rd_to_revenue": 0.03445643877439756,
-    "sortino_ratio": 1.479794573944515,
+    "sortino_ratio": 1.479794558401995,
     "sec_last_10k_date": "2026-01-29",
     "sec_last_10q_date": "2026-04-21",
     "sec_last_8k_date": "2026-05-07"
@@ -523,8 +523,8 @@
     "forward_pe": 15.706309,
     "price_to_book": 2.4530253,
     "price_to_sales_ttm": 0.983276,
-    "enterprise_value": 15227749376.0,
-    "enterprise_to_ebitda": 13.428,
+    "enterprise_value": 15349113856.0,
+    "enterprise_to_ebitda": 13.535,
     "trailing_peg_ratio": 1.1605,
     "return_on_equity": 0.12198,
     "return_on_assets": 0.040999997,
@@ -551,11 +551,11 @@
       "big_call": 41.95112853809524,
       "aaqs": 62.99462495833333,
       "hgi": 38.14285714285715,
-      "screener_score": 51.38698046636526
+      "screener_score": 51.38698222204198
     },
     "roi": 0.07691895485316481,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.8792294735828783,
+    "sortino_ratio": 1.879229684264085,
     "sec_last_10k_date": "2026-02-05",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-05"
@@ -602,11 +602,11 @@
       "big_call": 36.18495148095238,
       "aaqs": 53.545833333333334,
       "hgi": 26.0,
-      "screener_score": 42.107655289787616
+      "screener_score": 42.107651219384884
     },
     "roi": 0.10187168472580191,
     "rd_to_revenue": 0.048394850702419744,
-    "sortino_ratio": 0.9168459732118691,
+    "sortino_ratio": 0.916845484763541,
     "sec_last_10k_date": "2026-02-17",
     "sec_last_10q_date": "2026-04-23",
     "sec_last_8k_date": "2026-04-23"
@@ -657,7 +657,7 @@
     },
     "roi": 0.052273745523010395,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.5446682376154992,
+    "sortino_ratio": -0.5446681852401076,
     "sec_last_10k_date": "2026-02-27",
     "sec_last_10q_date": "2026-05-07",
     "sec_last_8k_date": "2026-05-07"
@@ -676,8 +676,8 @@
     "forward_pe": 13.861863,
     "price_to_book": 4.116655,
     "price_to_sales_ttm": 1.0279418,
-    "enterprise_value": 16643747840.0,
-    "enterprise_to_ebitda": 16.237,
+    "enterprise_value": 16720499712.0,
+    "enterprise_to_ebitda": 16.312,
     "trailing_peg_ratio": 0.4054,
     "return_on_equity": 0.09380999,
     "return_on_assets": 0.04355,
@@ -708,7 +708,7 @@
     },
     "roi": 0.06328209728684912,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.1564906350348158,
+    "sortino_ratio": -0.15649040405357006,
     "sec_last_10k_date": "2025-11-20",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-05"
@@ -759,7 +759,7 @@
     },
     "roi": 0.10816922131710315,
     "rd_to_revenue": null,
-    "sortino_ratio": -1.5180598665924088,
+    "sortino_ratio": -1.518060252406558,
     "sec_last_10k_date": "2026-02-26",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-18"
@@ -810,7 +810,7 @@
     },
     "roi": 0.12286898380543959,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.6072835393626674,
+    "sortino_ratio": -0.6072830743445119,
     "sec_last_10k_date": "2026-02-17",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-06"
@@ -829,8 +829,8 @@
     "forward_pe": 22.884447,
     "price_to_book": 3.035386,
     "price_to_sales_ttm": 4.5208693,
-    "enterprise_value": 74795737088.0,
-    "enterprise_to_ebitda": 34.854,
+    "enterprise_value": 76044746752.0,
+    "enterprise_to_ebitda": 35.436,
     "trailing_peg_ratio": 1.7305,
     "return_on_equity": null,
     "return_on_assets": null,
@@ -857,11 +857,11 @@
       "big_call": 58.7006955047619,
       "aaqs": 60.13408366666667,
       "hgi": 59.92857142857143,
-      "screener_score": 49.30712177093636
+      "screener_score": 49.30711776117616
     },
     "roi": 0.051126505006132694,
     "rd_to_revenue": 0.02451406357191859,
-    "sortino_ratio": 1.9973754157229737,
+    "sortino_ratio": 1.9973749345517497,
     "sec_last_10k_date": "2026-02-12",
     "sec_last_10q_date": "2026-04-30",
     "sec_last_8k_date": "2026-05-12"
@@ -880,8 +880,8 @@
     "forward_pe": 16.62065,
     "price_to_book": 16.376646,
     "price_to_sales_ttm": 1.6369629,
-    "enterprise_value": 139339350016.0,
-    "enterprise_to_ebitda": 17.428,
+    "enterprise_value": 141748731904.0,
+    "enterprise_to_ebitda": 17.73,
     "trailing_peg_ratio": 1.1055,
     "return_on_equity": 0.6764,
     "return_on_assets": 0.07226,
@@ -908,11 +908,11 @@
       "big_call": 40.69990606190476,
       "aaqs": 70.60666641666667,
       "hgi": 30.571428571428573,
-      "screener_score": 52.51663331889831
+      "screener_score": 52.516633793033506
     },
     "roi": 0.18217142988826437,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.9779905420773202,
+    "sortino_ratio": 0.9779905989735437,
     "sec_last_10k_date": "2026-01-29",
     "sec_last_10q_date": "2026-04-23",
     "sec_last_8k_date": "2026-05-13"
@@ -959,11 +959,11 @@
       "big_call": 29.356666883333332,
       "aaqs": 51.28583341666667,
       "hgi": 59.42857142857143,
-      "screener_score": 35.62925540844833
+      "screener_score": 35.6292514095327
     },
     "roi": 1.8070003660740745,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.6194423868709428,
+    "sortino_ratio": 0.6194419070010663,
     "sec_last_10k_date": "2026-05-08",
     "sec_last_10q_date": "2026-02-04",
     "sec_last_8k_date": "2026-05-07"
@@ -1014,7 +1014,7 @@
     },
     "roi": 0.11852620207809142,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.40627767857693686,
+    "sortino_ratio": -0.40627820463907977,
     "sec_last_10k_date": "2025-11-20",
     "sec_last_10q_date": "2026-05-07",
     "sec_last_8k_date": "2026-05-07"
@@ -1065,7 +1065,7 @@
     },
     "roi": 0.27130053455927133,
     "rd_to_revenue": 0.11531853871164686,
-    "sortino_ratio": -0.20164597118360666,
+    "sortino_ratio": -0.2016460312368676,
     "sec_last_10k_date": "2025-07-30",
     "sec_last_10q_date": "2026-04-29",
     "sec_last_8k_date": "2026-05-14"
@@ -1112,11 +1112,11 @@
       "big_call": 55.73666123809524,
       "aaqs": 78.96779083333334,
       "hgi": 77.42857142857143,
-      "screener_score": 46.99188752199392
+      "screener_score": 46.991887564308485
     },
     "roi": 0.14037225827880967,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.2695094074011746,
+    "sortino_ratio": 1.2695094124789232,
     "sec_last_10k_date": "2026-01-27",
     "sec_last_10q_date": "2026-04-21",
     "sec_last_8k_date": "2026-05-21"
@@ -1163,11 +1163,11 @@
       "big_call": 33.16143598095238,
       "aaqs": 39.150187833333334,
       "hgi": 14.428571428571429,
-      "screener_score": 49.7747821610899
+      "screener_score": 49.774778864002535
     },
     "roi": 0.10798336619959797,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.4265245755212643,
+    "sortino_ratio": 1.42652417987078,
     "sec_last_10k_date": "2026-02-17",
     "sec_last_10q_date": "2026-05-08",
     "sec_last_8k_date": "2026-05-08"
@@ -1288,8 +1288,8 @@
     "forward_pe": 23.41018,
     "price_to_book": 3.6416566,
     "price_to_sales_ttm": 2.637695,
-    "enterprise_value": 270860353536.0,
-    "enterprise_to_ebitda": 17.746,
+    "enterprise_value": 272247439360.0,
+    "enterprise_to_ebitda": 17.837,
     "trailing_peg_ratio": 2.422,
     "return_on_equity": 0.11571,
     "return_on_assets": 0.040510003,
@@ -1316,11 +1316,11 @@
       "big_call": 53.54550291428572,
       "aaqs": 65.0877715,
       "hgi": 68.00000000000001,
-      "screener_score": 45.47737403482491
+      "screener_score": 45.47736454589
     },
     "roi": 0.07436313059465001,
     "rd_to_revenue": 0.03168064286762299,
-    "sortino_ratio": 2.224865147711118,
+    "sortino_ratio": 2.224864009038928,
     "sec_last_10k_date": "2026-02-06",
     "sec_last_10q_date": "2026-04-21",
     "sec_last_8k_date": "2026-05-04"
@@ -1339,8 +1339,8 @@
     "forward_pe": 9.260948,
     "price_to_book": 2.933619,
     "price_to_sales_ttm": 0.59359264,
-    "enterprise_value": 6699635200.0,
-    "enterprise_to_ebitda": 9.752,
+    "enterprise_value": 6866365440.0,
+    "enterprise_to_ebitda": 9.995,
     "trailing_peg_ratio": null,
     "return_on_equity": 0.23268999,
     "return_on_assets": 0.063439995,
@@ -1371,7 +1371,7 @@
     },
     "roi": 0.08964784491623336,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.23104321723067608,
+    "sortino_ratio": -0.23104349273040742,
     "sec_last_10k_date": "2026-03-16",
     "sec_last_10q_date": "2025-12-04",
     "sec_last_8k_date": "2026-04-09"
@@ -1418,11 +1418,11 @@
       "big_call": 31.18258571428571,
       "aaqs": 48.099124999999994,
       "hgi": 44.57142857142858,
-      "screener_score": 48.951921861281974
+      "screener_score": 48.95192025965726
     },
     "roi": 0.08739973843429164,
     "rd_to_revenue": 0.03520508142442057,
-    "sortino_ratio": 1.4799125822979737,
+    "sortino_ratio": 1.4799123901030085,
     "sec_last_10k_date": "2026-02-11",
     "sec_last_10q_date": "2026-04-30",
     "sec_last_8k_date": "2026-05-01"
@@ -1441,7 +1441,7 @@
     "forward_pe": null,
     "price_to_book": 5.452962,
     "price_to_sales_ttm": 15.046107,
-    "enterprise_value": 133999176.0,
+    "enterprise_value": 122904560.0,
     "enterprise_to_ebitda": null,
     "trailing_peg_ratio": null,
     "return_on_equity": -1.02726,
