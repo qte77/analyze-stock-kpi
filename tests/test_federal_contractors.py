@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from datetime import date
+from typing import TYPE_CHECKING
 
 from src.federal_contractors import (
     CURATED_TICKERS,

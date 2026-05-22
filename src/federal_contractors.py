@@ -70,9 +70,21 @@ CURATED_TICKERS: tuple[tuple[str, str], ...] = (
 
 
 def _last_completed_fy_window(today: date | None = None) -> tuple[date, date]:
-    """Cycle-11 RED scaffold — returns a placeholder window."""
-    _ = today
-    return (date(1900, 10, 1), date(1901, 9, 30))
+    """Return (start, end) of the most recently completed US federal FY.
+
+    US FY runs Oct 1 -> Sep 30 (named by the year it ends, so FY2025
+    = Oct 1 2024 -> Sep 30 2025). On any day in Q4 of the calendar
+    year (Oct-Dec), the current FY ends in the following calendar
+    year; in Q1-Q3 (Jan-Sep), the current FY ends in the current
+    calendar year. Last-completed = current minus one.
+    """
+    today = today or datetime.now(UTC).date()
+    current_fy_end_year = today.year + 1 if today.month >= 10 else today.year
+    completed_fy_end_year = current_fy_end_year - 1
+    return (
+        date(completed_fy_end_year - 1, 10, 1),
+        date(completed_fy_end_year, 9, 30),
+    )
 
 
 def _ensure_seed(tickers: list[str]) -> list[str]:
