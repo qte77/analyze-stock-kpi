@@ -11,9 +11,17 @@ from __future__ import annotations
 
 from datetime import date
 
-from src.__main__ import _format_days_since, _summary_row
+import json
+from pathlib import Path
+
+import pytest
+
+from src.__main__ import _format_days_since, _run_refresh_universe, _summary_row
+from src.config import settings
 from src.data_sources.fundamentals import FundamentalsSnapshot
 from src.domain.composite_scores import CompositeScores
+from src.orchestrators.federal_contractors import AuditRow
+from src.utils.parse_args import CliArgs
 
 
 def _snap(**kwargs: object) -> FundamentalsSnapshot:
@@ -110,3 +118,62 @@ def test_summary_row_days_since_10q_renders_dash_when_missing() -> None:
 
     assert len(row) == 14
     assert row[13] == "-"
+
+
+def _stub_build_universe(
+    tickers: list[str], audit: list[AuditRow]
+) -> object:
+    """Build a fake ``build_universe(...)`` returning the given tuple."""
+    def _stub(*_a: object, **_kw: object) -> tuple[list[str], list[AuditRow]]:
+        return (tickers, audit)
+    return _stub
+
+
+def test_run_refresh_universe_writes_to_explicit_overrides(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+) -> None:
+    """``--output`` / ``--audit-output`` paths are honoured when set."""
+    audit = [
+        AuditRow(rank=1, recipient_name="LOCKHEED MARTIN CORPORATION", obligated_usd=1.0),
+    ]
+    monkeypatch.setattr(
+        "src.__main__.build_universe",
+        _stub_build_universe(["LMT", "RTX"], audit),
+    )
+    args = CliArgs.model_construct(
+        refresh_universe="federal-contractors",
+        output=tmp_path / "preset.txt",
+        audit_output=tmp_path / "audit.json",
+    )
+
+    preset_path = _run_refresh_universe(args)
+
+    assert preset_path == tmp_path / "preset.txt"
+    assert preset_path.read_text() == "LMT\nRTX\n"
+    audit_data = json.loads((tmp_path / "audit.json").read_text())
+    assert audit_data[0]["recipient_name"] == "LOCKHEED MARTIN CORPORATION"
+
+
+def test_run_refresh_universe_defaults_to_settings_dir(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+) -> None:
+    """No overrides -> writes under ``settings.federal_contractors_dir``."""
+    monkeypatch.setattr(
+        "src.__main__.settings",
+        settings.model_copy(update={"federal_contractors_dir": tmp_path}),
+    )
+    monkeypatch.setattr(
+        "src.__main__.build_universe",
+        _stub_build_universe(["LMT"], []),
+    )
+    args = CliArgs.model_construct(refresh_universe="federal-contractors")
+
+    preset_path = _run_refresh_universe(args)
+
+    assert preset_path == tmp_path / "universe.txt"
+    assert preset_path.read_text() == "LMT\n"
+    # Audit JSON sits under an audit/ subdirectory with a UTC-date filename
+    audit_dir = tmp_path / "audit"
+    assert audit_dir.is_dir()
+    audit_files = list(audit_dir.glob("*.json"))
+    assert len(audit_files) == 1

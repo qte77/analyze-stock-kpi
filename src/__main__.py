@@ -23,6 +23,7 @@ from .data_sources.sec.submissions import enrich_snapshot_sec
 from .data_sources.sentiment import FearGreedSnapshot, fetch_fear_greed
 from .domain.composite_scores import CompositeScores, compute_scores
 from .domain.universe import resolve_universe
+from .orchestrators.federal_contractors import AuditRow, build_universe
 from .utils.parse_args import CliArgs
 
 _TABLE_QUOTE_TYPES = {"EQUITY", "ETF"}
@@ -138,6 +139,12 @@ def _print_summary_table(
             continue
         table.add_row(*_summary_row(snap, show_scores))
     console.print(table)
+
+
+def _run_refresh_universe(args: CliArgs) -> Path:
+    """Cycle-16 RED scaffold — raises NotImplementedError."""
+    _ = args
+    raise NotImplementedError
 
 
 def _persist_snapshots(snapshots: list[FundamentalsSnapshot]) -> Path:
