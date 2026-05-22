@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from datetime import date
-from typing import TYPE_CHECKING
 
+import pytest
 from src.federal_contractors import (
     CURATED_TICKERS,
     AuditRow,
@@ -17,9 +17,6 @@ from src.federal_contractors import (
 )
 from src.sec.cik_map import CikRecord
 from src.usaspending import RecipientRecord
-
-if TYPE_CHECKING:
-    import pytest
 
 
 def _records(*pairs: tuple[str, str, str]) -> dict[str, CikRecord]:
@@ -307,3 +304,27 @@ def test_build_universe_defaults_use_last_completed_fy(
     expected_start, expected_end = _last_completed_fy_window()
     assert captured["fy_start"] == expected_start
     assert captured["fy_end"] == expected_end
+
+
+@pytest.mark.network
+def test_build_universe_live_smoke() -> None:
+    """End-to-end against real usaspending + EDGAR + yfinance.
+
+    Light assertions accommodate upstream variance: top-100 should
+    yield enough ticker matches to satisfy the curated seed (26
+    entries) plus at least a handful of fresh matches. Audit trail
+    must record one row per non-aggregate usaspending recipient.
+    """
+    tickers, audit = build_universe(top_n=100)
+
+    assert len(audit) >= 50  # usaspending top-100 minus a few aggregates
+    assert all(isinstance(r, AuditRow) for r in audit)
+    assert all(r.rank >= 1 for r in audit)
+    assert all(r.recipient_name for r in audit)
+
+    # Curated seed must always appear in the final ticker list
+    seed_tickers = {t for _, t in CURATED_TICKERS}
+    assert seed_tickers.issubset(set(tickers))
+
+    # Sorted + deduped invariants
+    assert tickers == sorted(set(tickers))
