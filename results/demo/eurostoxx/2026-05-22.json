@@ -300,7 +300,7 @@
     },
     "roi": 0.6603809332989583,
     "rd_to_revenue": 0.14383802763007655,
-    "sortino_ratio": 3.193143227398885,
+    "sortino_ratio": 3.1931431957724192,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -398,11 +398,11 @@
       "big_call": 52.77807940063492,
       "aaqs": 50.81277782222223,
       "hgi": 77.57142857142857,
-      "screener_score": 57.09403140911769
+      "screener_score": 57.094035890306635
     },
     "roi": 0.06575815088735387,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.4098858640465037,
+    "sortino_ratio": 2.4098864017891772,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -551,11 +551,11 @@
       "big_call": 59.26284091428572,
       "aaqs": 56.519444,
       "hgi": 56.57142857142858,
-      "screener_score": 62.18526516296418
+      "screener_score": 62.18526551356379
     },
     "roi": 0.1694077629618395,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.1909983938414155,
+    "sortino_ratio": 2.1909984359133694,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -857,11 +857,11 @@
       "big_call": 33.53337857142858,
       "aaqs": 47.5649375,
       "hgi": 30.000000000000004,
-      "screener_score": 52.43438836493321
+      "screener_score": 52.43439285181906
     },
     "roi": 0.04275954326980258,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.9479447609348421,
+    "sortino_ratio": 1.9479452993611441,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -912,7 +912,7 @@
     },
     "roi": 0.04191756773294402,
     "rd_to_revenue": null,
-    "sortino_ratio": 4.510167419381736,
+    "sortino_ratio": 4.510167673639262,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -1163,11 +1163,11 @@
       "big_call": 56.93387436031746,
       "aaqs": 54.215556111111106,
       "hgi": 50.42857142857143,
-      "screener_score": 65.059734231334
+      "screener_score": 65.05974007326452
     },
     "roi": 0.048286948821588384,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.599313469664843,
+    "sortino_ratio": 2.5993141706965055,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -1186,7 +1186,7 @@
     "forward_pe": 8.989806,
     "price_to_book": 1.4237202,
     "price_to_sales_ttm": 3.8090255,
-    "enterprise_value": 207211741184.0,
+    "enterprise_value": 207594274816.0,
     "enterprise_to_ebitda": null,
     "trailing_peg_ratio": null,
     "return_on_equity": 0.14007,
@@ -1237,8 +1237,8 @@
     "forward_pe": 21.33766,
     "price_to_book": 7.7550397,
     "price_to_sales_ttm": 3.9676867,
-    "enterprise_value": 151895916544.0,
-    "enterprise_to_ebitda": 16.185,
+    "enterprise_value": 153141805056.0,
+    "enterprise_to_ebitda": 16.318,
     "trailing_peg_ratio": 3.0855,
     "return_on_equity": 0.31045,
     "return_on_assets": 0.14294,
@@ -1418,11 +1418,11 @@
       "big_call": 50.16237685714286,
       "aaqs": 60.1940425,
       "hgi": 34.214285714285715,
-      "screener_score": 39.85680124801124
+      "screener_score": 39.856803726275224
     },
     "roi": 0.12030996676053139,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.2389722640470623,
+    "sortino_ratio": 0.2389725614387412,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -1677,7 +1677,7 @@
     },
     "roi": 0.052871691991486634,
     "rd_to_revenue": null,
-    "sortino_ratio": -1.2692947006143276,
+    "sortino_ratio": -1.2692945661415205,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -2085,7 +2085,7 @@
     },
     "roi": 0.11142332361520572,
     "rd_to_revenue": null,
-    "sortino_ratio": 3.688591366046942,
+    "sortino_ratio": 3.688591447158621,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -2132,11 +2132,11 @@
       "big_call": 49.83170747619047,
       "aaqs": 51.62731291666667,
       "hgi": 47.14285714285715,
-      "screener_score": 30.92699211571056
+      "screener_score": 30.926998199623743
     },
     "roi": 0.09295895826834033,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.09421923483764774,
+    "sortino_ratio": 0.0942199649072296,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -2187,7 +2187,7 @@
     },
     "roi": 0.050105643631171294,
     "rd_to_revenue": 0.0006398275833038676,
-    "sortino_ratio": -0.7992124347576909,
+    "sortino_ratio": -0.799212773570199,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
