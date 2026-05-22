@@ -61,3 +61,8 @@ def pick_user_agent(rng: _RngLike | None = None) -> str:
     """
     chooser: _RngLike = rng if rng is not None else random
     return chooser.choice(USER_AGENTS)
+
+
+def require_https(url: str) -> None:
+    """RED scaffold — does nothing."""
+    _ = url
