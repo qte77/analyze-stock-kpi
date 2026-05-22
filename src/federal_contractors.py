@@ -11,8 +11,18 @@ the audit row carries only ticker symbol + resolution boolean.
 from __future__ import annotations
 
 from difflib import SequenceMatcher
+from typing import TYPE_CHECKING
 
 from src.sec.cik_map import _load_records
+
+if TYPE_CHECKING:
+    from src.usaspending import RecipientRecord
+
+
+def _resolve_candidates(recipients: list[RecipientRecord]) -> list[str]:
+    """Cycle-6 RED scaffold — returns empty list."""
+    _ = recipients
+    return []
 
 
 def _match_to_edgar(
