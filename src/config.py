@@ -30,6 +30,7 @@ class AppSettings(BaseSettings):
         "https://data.sec.gov/submissions/CIK{cik}.json"
     )
     edgar_cache_dir: Path = Path("results/edgar")
+    sec_referer: str = "https://www.sec.gov/"
     cnn_fg_url: str = (
         "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
     )

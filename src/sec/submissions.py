@@ -88,7 +88,11 @@ def fetch_last_filed(cik: str) -> LastFiledSnapshot:
     # depth for any future refactor that might let external input flow in.
     request = urllib.request.Request(  # noqa: S310  # nosec B310
         url,
-        headers={"User-Agent": pick_user_agent(), "Accept": settings.http_accept},
+        headers={
+            "User-Agent": pick_user_agent(),
+            "Accept": settings.http_accept,
+            "Referer": settings.sec_referer,
+        },
     )
     if not request.full_url.startswith("https://"):
         raise ValueError(f"Refusing non-HTTPS URL: {request.full_url!r}")
