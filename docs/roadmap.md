@@ -38,7 +38,7 @@ Patch release covering issues surfaced by the v0.5.0 composites work.
 
 - [x] Normalize `dividend_yield` at the fetch boundary so the table render, JSON output, and composite formulas all see one convention — issue [#43](https://github.com/qte77/analyze-stock-kpi/issues/43), PR #51
 
-## 0.6.0 — Demo dashboard on GitHub Pages
+## 0.6.0 — Demo dashboard on GitHub Pages [x]
 
 The original v0.6.0 RS hedging scope was deferred per [ADR-0003](decisions/0003-defer-rs-hedging-epic.md); the milestone was repurposed for a read-only static dashboard that visualizes the repo's two existing committed datasets (CNN F&G + weekly fundamentals snapshots).
 
@@ -46,13 +46,13 @@ The original v0.6.0 RS hedging scope was deferred per [ADR-0003](decisions/0003-
 
 - [x] Weekly fundamentals snapshot workflow (`demo-snapshot.yml`) committing to `results/demo/qte77-watchlist/YYYY-MM-DD.json` on a separate `data` branch via verified REST Git Data API commits — PR #60 + follow-up #61
 - [x] Rewrite `fear-greed.yaml` to the same verified-commit pattern, fixing the cron broken by the `required_signatures` ruleset — PR #60 + #61
-- [ ] GitHub Pages deploy (`gh-pages.yml`) using modern `actions/upload-pages-artifact` + `actions/deploy-pages` of `docs/demo/*` — issue [#59](https://github.com/qte77/analyze-stock-kpi/issues/59)
-- [ ] Static dashboard (`docs/demo/{index.html,app.js,style.css}`) — F&G 2-year chart + universe table with date selector, fetching cross-origin from `raw.githubusercontent.com/.../data/results/...`
+- [x] GitHub Pages deploy (`gh-pages.yaml`) using modern `actions/upload-pages-artifact` + `actions/deploy-pages` of `docs/demo/*` — issue [#59](https://github.com/qte77/analyze-stock-kpi/issues/59)
+- [x] Static dashboard (`docs/demo/{index.html,app.js,style.css}`) — F&G 2-year chart + universe table with date selector, fetching cross-origin from `raw.githubusercontent.com/.../data/results/...`
 - [x] **Dashboard KPI expansion** — 13-column main table (P/E (fwd) / PEG / Beta / R&D/Rev % / Op M % / ROE / ROA / Current / Sortino / Score), English tooltips, mobile-graceful CSS, off-by-one fix in composite-scores detail panel. New snapshot fields (`trailing_peg_ratio`, `roi`, `rd_to_revenue`, `sortino_ratio`) and 7th composite (`screener_score`) per [ADR-0004](decisions/0004-price-history-composite-input.md).
 
 ## Deferred
 
-- [ ] RS hedging epic — parent [#4](https://github.com/qte77/analyze-stock-kpi/issues/4); sub-issues [#8](https://github.com/qte77/analyze-stock-kpi/issues/8) (Mansfield RS), [#9](https://github.com/qte77/analyze-stock-kpi/issues/9) (regime-split returns), [#10](https://github.com/qte77/analyze-stock-kpi/issues/10) (long/short ranking + CLI). Deferred per [ADR-0003](decisions/0003-defer-rs-hedging-epic.md); behavioral price analytics fits a sibling repo (e.g. `qte77/regime-hedging`) consuming `results/fundamentals_<UTC>.json`.
+- [ ] RS hedging epic — parent [#4](https://github.com/qte77/analyze-stock-kpi/issues/4); sub-issues [#8](https://github.com/qte77/analyze-stock-kpi/issues/8) (Mansfield RS), [#9](https://github.com/qte77/analyze-stock-kpi/issues/9) (regime-split returns), [#10](https://github.com/qte77/analyze-stock-kpi/issues/10) (long/short ranking + CLI). Deferred per [ADR-0003](decisions/0003-defer-rs-hedging-epic.md); behavioral price analytics fits a sibling repo (e.g. `qte77/regime-hedging`) consuming `results/fundamentals/<UTC>.json`.
 
 ## Open research (no milestone)
 
@@ -60,7 +60,7 @@ The original v0.6.0 RS hedging scope was deferred per [ADR-0003](decisions/0003-
 - [x] Alternative risk-sentiment sources (UBS, AAII, NAAIM, etc.) — issue [#22](https://github.com/qte77/analyze-stock-kpi/issues/22), resolved by [ADR-0005](decisions/0005-sentiment-risk-sources.md) (three-tier source framework)
 - [ ] pandas alternatives (Polars, DuckDB, Dask, Modin, etc.) — issue [#23](https://github.com/qte77/analyze-stock-kpi/issues/23)
 - [ ] Volatility-indices chart (Tier 0 application of ADR-0005) — issue [#100](https://github.com/qte77/analyze-stock-kpi/issues/100)
-- [ ] Federal-contractors universe (Tier 0 pipeline: usaspending.gov + EDGAR + yfinance) — scoped in [ADR-0006](decisions/0006-federal-contractors-universe.md); implementation tracked under follow-up PRs (CIK resolver, last-filed flags, builder)
+- [x] Federal-contractors universe (Tier 0 pipeline: usaspending.gov + EDGAR + yfinance) — shipped via PRs #107 (CIK resolver), #110 (last-filed flags), #123 (Item 3a usaspending client), #125 (Item 3b orchestrator + CLI + workflow). Library-first reorg documented in [ADR-0006 amendment](decisions/0006-federal-contractors-universe.md).
 - [ ] Deferred EDGAR product use cases — XBRL cross-validation [#101](https://github.com/qte77/analyze-stock-kpi/issues/101), Form 4 insider momentum [#102](https://github.com/qte77/analyze-stock-kpi/issues/102), 8-K material events [#103](https://github.com/qte77/analyze-stock-kpi/issues/103)
 
 ## Out of scope

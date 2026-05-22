@@ -29,6 +29,7 @@ Types of changes:
 
 ### Changed
 
+- **Docs restructure (Item 6b)** — single-source-of-truth + concision. AGENTS.md "Active modules" list removed (docs/architecture.md owns it). README.md "Sample output" JSON dump trimmed (links to source). docs/architecture.md `Modules` tree refreshed for the three-tier layout; "Planned modules" section dropped (all shipped). roadmap.md marks federal-contractors + gh-pages + static dashboard as done. Stale `results/fundamentals_<UTC>.json` references repaired across 5 docs.
 - **`src/` restructured into three-tier sub-packages** — `src/domain/`, `src/data_sources/` (incl. `sec/`), `src/orchestrators/`. Pure rename + import-path updates; no behaviour change.
 - **CNN F&G UA centralised on `src.utils.http_ua.STABLE_USER_AGENT`** — `AppSettings.cnn_fg_user_agent` removed (it duplicated `USER_AGENTS[0]`). SEC keeps random rotation via `pick_user_agent()`; CNN pins to `STABLE_USER_AGENT` to avoid WAF profiling.
 - **`USER_AGENTS` pool moved into `AppSettings.user_agents`** — `src/utils/http_ua.py` now re-exports `USER_AGENTS` + `STABLE_USER_AGENT` from settings; single source of truth, env-overridable via `SSK_USER_AGENTS`.

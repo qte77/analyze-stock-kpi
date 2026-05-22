@@ -36,7 +36,7 @@ Solo investors building their own auditable, rule-based screening pipeline. Anyo
 
 ## v0.5.0 done means
 
-- `make run UNIVERSE=<preset>` (or `TICKERS=...`, `TICKERS_FILE=...`) writes a single `results/fundamentals_<UTC>.json` containing one `FundamentalsSnapshot` per resolved ticker, with a nested `composite_scores` object (seven 0-100 proxies). Sparse fields for non-equities are valid.
+- `make run UNIVERSE=<preset>` (or `TICKERS=...`, `TICKERS_FILE=...`) writes a single `results/fundamentals/<UTC>.json` containing one `FundamentalsSnapshot` per resolved ticker, with a nested `composite_scores` object (seven 0-100 proxies). Sparse fields for non-equities are valid.
 - Stdout shows a rich summary table for equities + ETFs; pass `SHOW_SCORES=1` to append Quality / Div / Growth columns.
 - CNN F&G snapshot lands daily in `results/cnn_fg/YYYY.json` via cron (v0.4.0 #17).
 - `make validate` passes lint + types + complexity + lint_md + tests. CI green on push and PR (validate + links-fail-fast workflows).
