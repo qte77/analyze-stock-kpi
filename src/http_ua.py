@@ -64,5 +64,12 @@ def pick_user_agent(rng: _RngLike | None = None) -> str:
 
 
 def require_https(url: str) -> None:
-    """RED scaffold — does nothing."""
-    _ = url
+    """Raise ``ValueError`` if ``url`` does not begin with ``https://``.
+
+    Defence-in-depth guard at every ``urllib.urlopen()`` call site:
+    the URLs come from :class:`src.config.AppSettings` strings that
+    ARE HTTPS today, but a future refactor could route external input
+    through them.
+    """
+    if not url.startswith("https://"):
+        raise ValueError(f"Refusing non-HTTPS URL: {url!r}")
