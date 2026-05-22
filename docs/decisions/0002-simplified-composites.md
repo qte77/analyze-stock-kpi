@@ -111,7 +111,7 @@ use case demands them, but no such follow-up is committed by this ADR.
 
 - [#18](https://github.com/qte77/analyze-stock-kpi/issues/18) — composite
   proxy scores
-- [`src/composite_scores.py`](../../src/composite_scores.py) — module
+- [`src/domain/composite_scores.py`](../../src/domain/composite_scores.py) — module
   docstring + per-function formulas
 - [ADR-0000](0000-remove-traderfox.md) — original library-stack
   decision; "out of scope: replicating Traderfox values"
