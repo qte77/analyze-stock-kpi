@@ -9,7 +9,7 @@ the input shape at the CliArgs boundary.
 from pathlib import Path
 
 import pytest
-from src.universe import UniverseError, resolve_universe
+from src.domain.universe import UniverseError, resolve_universe
 from src.utils.parse_args import CliArgs
 
 

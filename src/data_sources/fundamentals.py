@@ -25,9 +25,10 @@ from typing import TYPE_CHECKING, Any
 
 import yfinance as yf
 from pydantic import BaseModel, ConfigDict, Field
+from src.domain.composite_scores import (
+    CompositeScores,  # noqa: TC002  # pydantic runtime requirement
+)
 from tqdm import tqdm
-
-from .composite_scores import CompositeScores  # noqa: TC001  # pydantic runtime requirement
 
 if TYPE_CHECKING:
     import pandas as pd

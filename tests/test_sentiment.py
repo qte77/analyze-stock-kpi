@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 import pytest
 from pydantic import ValidationError
 from src.config import settings
-from src.sentiment import (
+from src.data_sources.sentiment import (
     SUBINDICATOR_KEYS,
     FearGreedSnapshot,
     SubindicatorReading,
@@ -89,7 +89,10 @@ def test_snapshot_is_frozen() -> None:
 def test_fetch_fear_greed_returns_snapshot_from_payload() -> None:
     payload = load_fear_greed_fixture("current")
 
-    with patch("src.sentiment.urllib.request.urlopen", return_value=_FakeResponse(payload)):
+    with patch(
+        "src.data_sources.sentiment.urllib.request.urlopen",
+        return_value=_FakeResponse(payload),
+    ):
         snap = fetch_fear_greed()
 
     assert snap.score == 56.42
@@ -104,16 +107,18 @@ def test_fetch_fear_greed_sends_browser_headers() -> None:
         captured["request"] = request
         return _FakeResponse(payload)
 
-    with patch("src.sentiment.urllib.request.urlopen", side_effect=fake_urlopen):
+    with patch("src.data_sources.sentiment.urllib.request.urlopen", side_effect=fake_urlopen):
         fetch_fear_greed()
 
-    assert captured["request"].get_header("User-agent") == settings.cnn_fg_user_agent
+    from src.utils.http_ua import STABLE_USER_AGENT
+
+    assert captured["request"].get_header("User-agent") == STABLE_USER_AGENT
     assert captured["request"].get_header("Accept") == settings.http_accept
     assert captured["request"].get_header("Referer") == settings.cnn_fg_referer
     # Guard against the regression that triggered the first hot-fix: CNN's
     # WAF rejects any UA containing the bot-style "(compatible;"
     # parenthetical.
-    assert "(compatible;" not in settings.cnn_fg_user_agent
+    assert "(compatible;" not in STABLE_USER_AGENT
 
 
 def test_parse_historical_dedups_same_day_keeps_latest() -> None:

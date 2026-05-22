@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict
 
 if TYPE_CHECKING:
-    from .fundamentals import FundamentalsSnapshot
+    from src.data_sources.fundamentals import FundamentalsSnapshot
 
 
 _ROE_LO, _ROE_HI = 0.0, 0.30

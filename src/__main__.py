@@ -14,12 +14,15 @@ from pathlib import Path
 from rich.console import Console
 from rich.table import Table
 
-from .composite_scores import CompositeScores, compute_scores
 from .config import settings
-from .fundamentals import FundamentalsSnapshot, fetch_universe_fundamentals
-from .sec.submissions import enrich_snapshot_sec
-from .sentiment import FearGreedSnapshot, fetch_fear_greed
-from .universe import resolve_universe
+from .data_sources.fundamentals import (
+    FundamentalsSnapshot,
+    fetch_universe_fundamentals,
+)
+from .data_sources.sec.submissions import enrich_snapshot_sec
+from .data_sources.sentiment import FearGreedSnapshot, fetch_fear_greed
+from .domain.composite_scores import CompositeScores, compute_scores
+from .domain.universe import resolve_universe
 from .utils.parse_args import CliArgs
 
 _TABLE_QUOTE_TYPES = {"EQUITY", "ETF"}

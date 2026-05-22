@@ -88,8 +88,8 @@ block. All numeric fields are `float | null` so sparse non-equities
 `dividend_yield` is stored as a fraction; the
 `_normalize_yfinance_info` helper divides yfinance's current
 percentage-shaped value (e.g. `0.37`) at the fetch boundary. Full
-field list in [`src/fundamentals.py`](src/fundamentals.py); composite
-formulas in [`src/composite_scores.py`](src/composite_scores.py).
+field list in [`src/data_sources/fundamentals.py`](src/data_sources/fundamentals.py); composite
+formulas in [`src/domain/composite_scores.py`](src/domain/composite_scores.py).
 
 ## Universe sources
 

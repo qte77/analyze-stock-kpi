@@ -15,8 +15,8 @@ from difflib import SequenceMatcher
 
 import yfinance as yf
 from pydantic import BaseModel, ConfigDict
-from src.sec.cik_map import _load_records
-from src.usaspending import RecipientRecord, fetch_top_contractors
+from src.data_sources.sec.cik_map import _load_records
+from src.data_sources.usaspending import RecipientRecord, fetch_top_contractors
 
 
 class AuditRow(BaseModel):

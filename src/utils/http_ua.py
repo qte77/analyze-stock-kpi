@@ -45,6 +45,15 @@ USER_AGENTS: tuple[str, ...] = (
     "Chrome/134.0.0.0 Safari/537.36",
 )
 
+STABLE_USER_AGENT: str = USER_AGENTS[0]
+"""Pinned User-Agent for endpoints that profile per-UA over time.
+
+CNN's WAF observed to flag clients whose UA changes between requests as
+likely bots. Callers hitting such endpoints import ``STABLE_USER_AGENT``
+directly; callers hitting SEC-style rate limiters that don't track per-UA
+behaviour use :func:`pick_user_agent` for rotation.
+"""
+
 
 class _RngLike(Protocol):
     """Duck-type for any object with ``random.Random``-style ``choice``."""

@@ -37,10 +37,15 @@ for the v0.6.0 repurposing rationale.
 Active modules:
 
 - `src/__main__.py` — entrypoint
-- `src/universe.py` — universe resolver (presets in `src/assets/universes/*.txt`)
-- `src/fundamentals.py` — `FundamentalsSnapshot(BaseModel)` + fetchers
-- `src/sentiment.py` — `FearGreedSnapshot(BaseModel)` + CNN F&G fetcher
-- `src/utils/parse_args.py` — `CliArgs(BaseSettings)`
+- `src/config.py` — `AppSettings(BaseSettings)` (central runtime config)
+- `src/domain/universe.py` — universe resolver (presets in `src/assets/universes/*.txt`)
+- `src/domain/composite_scores.py` — `CompositeScores(BaseModel)` + scoring
+- `src/data_sources/fundamentals.py` — `FundamentalsSnapshot(BaseModel)` + yfinance
+- `src/data_sources/sentiment.py` — `FearGreedSnapshot(BaseModel)` + CNN F&G
+- `src/data_sources/usaspending.py` — `RecipientRecord(BaseModel)` + top-contractors
+- `src/data_sources/sec/` — `cik_map`, `submissions` (CIK + filings)
+- `src/orchestrators/federal_contractors.py` — `build_universe(...) -> (tickers, audit)`
+- `src/utils/{http_ua,parse_args}.py` — UA pool / `require_https` / CLI args
 - `src/assets/universes/` — preset ticker lists
 - `scripts/build_demo_manifest.py` — stdlib-only manifest builder for
   `results/demo/<UNIVERSE>/index.json` (called by `demo-snapshot.yaml`)

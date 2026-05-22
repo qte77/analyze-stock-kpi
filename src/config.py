@@ -35,10 +35,6 @@ class AppSettings(BaseSettings):
         "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
     )
     cnn_fg_referer: str = "https://edition.cnn.com/"
-    cnn_fg_user_agent: str = (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
-    )
     cnn_fg_cache_dir: Path = Path("results/cnn_fg")
     http_accept: str = "application/json, text/plain, */*"
     request_timeout_sec: int = 10

@@ -45,7 +45,7 @@ from datetime import date
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
-from src.sec.cik_map import resolve_cik
+from src.data_sources.sec.cik_map import resolve_cik
 from src.utils.http_ua import pick_user_agent, require_https
 
 logger = logging.getLogger(__name__)

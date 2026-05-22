@@ -57,7 +57,7 @@ jobs:
         run: uv sync
 
       - name: Fetch Fear & Greed snapshot
-        run: uv run python -m src.sentiment
+        run: uv run python -m src.data_sources.sentiment
 
       - name: Detect changed history files
         id: changed

@@ -26,13 +26,13 @@ from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
-from src.utils.http_ua import require_https
+from src.utils.http_ua import STABLE_USER_AGENT, require_https
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-# CNN's WAF rejects unidentified clients with HTTP 418. The headers in
-# ``settings`` (cnn_fg_user_agent / http_accept / cnn_fg_referer) mirror
+# CNN's WAF rejects unidentified clients with HTTP 418. The headers
+# (STABLE_USER_AGENT / http_accept / cnn_fg_referer) mirror
 # what edition.cnn.com itself sends when it XHRs the dataviz API. All
 # three are required when the egress IP is a datacenter range (e.g.
 # GitHub Actions runners); from residential IPs the UA alone usually
@@ -102,7 +102,7 @@ def _fetch_payload() -> dict[str, Any]:
     request = urllib.request.Request(  # noqa: S310  # nosec B310
         settings.cnn_fg_url,
         headers={
-            "User-Agent": settings.cnn_fg_user_agent,
+            "User-Agent": STABLE_USER_AGENT,
             "Accept": settings.http_accept,
             "Referer": settings.cnn_fg_referer,
         },
