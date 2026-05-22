@@ -34,17 +34,26 @@ Every external boundary carries one of three failure policies. Logged via `logge
 
 ```text
 src/
-├── __main__.py            entrypoint: resolve universe -> per-ticker fetch -> rich table + results/fundamentals_<UTC>.json
-├── universe.py            resolve_universe(args) -> list[ticker]; presets in src/assets/universes/*.txt
-├── fundamentals.py        fetch_fundamentals(ticker) -> FundamentalsSnapshot
-│                          fetch_price_history(ticker, period) -> DataFrame
-│                          fetch_universe_fundamentals(tickers) -> list[FundamentalsSnapshot]
-├── sentiment.py           fetch_fear_greed() -> FearGreedSnapshot; `python -m src.sentiment` merges headline + ~1y history into per-year files results/cnn_fg/YYYY.json (sorted JSON arrays, upsert-by-date)
-├── composite_scores.py    quality/dividend/growth/big_call/aaqs/hgi/screener 0-100 proxies; `compute_scores(snap) -> CompositeScores`
+├── __main__.py                       entrypoint: resolve universe -> per-ticker fetch -> rich table + results/fundamentals/<UTC>.json; `--refresh-universe NAME` branches to an orchestrator
+├── __version__.py                    package version constant
+├── config.py                         AppSettings(BaseSettings) — every URL/path/timeout/HTTP-shape constant; env-overridable via SSK_*
+├── domain/
+│   ├── universe.py                   resolve_universe(args) -> list[ticker]; presets in src/assets/universes/*.txt
+│   └── composite_scores.py           quality/dividend/growth/big_call/aaqs/hgi/screener 0-100 proxies; `compute_scores(snap) -> CompositeScores`
+├── data_sources/
+│   ├── fundamentals.py               fetch_fundamentals / fetch_price_history / fetch_universe_fundamentals — yfinance
+│   ├── sentiment.py                  fetch_fear_greed() -> FearGreedSnapshot; `python -m src.data_sources.sentiment` merges into per-year files results/cnn_fg/YYYY.json
+│   ├── usaspending.py                fetch_top_contractors(...) -> list[RecipientRecord] — usaspending.gov POST client
+│   └── sec/
+│       ├── cik_map.py                resolve_cik / lookup_record — EDGAR company_tickers_exchange.json with HTTP conditional GET + disk cache
+│       └── submissions.py            fetch_last_filed / enrich_snapshot_sec — EDGAR submissions API
+├── orchestrators/
+│   └── federal_contractors.py        build_universe(*, fy=None, top_n=100) -> tuple[list[str], list[AuditRow]]; chains usaspending → EDGAR → yfinance
 ├── assets/
-│   └── universes/         preset *.txt ticker lists (one per universe name)
+│   └── universes/                    preset *.txt ticker lists (one per universe name)
 └── utils/
-    └── parse_args.py      CliArgs(BaseSettings) — pydantic-settings CLI + env (env_prefix="SSK_")
+    ├── http_ua.py                    USER_AGENTS pool (re-exported from settings), STABLE_USER_AGENT, pick_user_agent(), require_https()
+    └── parse_args.py                 CliArgs(BaseSettings) — pydantic-settings CLI + env (env_prefix="SSK_")
 ```
 
 ## Data flow (v0.5.0 current)
@@ -62,7 +71,7 @@ CLI args  ──► CliArgs(BaseSettings)
         fundamentals.fetch_universe_fundamentals()
                   │  list[FundamentalsSnapshot]   (sequential, tqdm, per-ticker errors logged + skipped)
                   ▼
-   rich table (equities + ETFs only)  +  json.dumps -> results/fundamentals_<UTC>.json
+   rich table (equities + ETFs only)  +  json.dumps -> results/fundamentals/<UTC>.json
 ```
 
 A separate daily GitHub Actions cron (`.github/workflows/fear-greed.yaml`) runs `python -m src.sentiment`, which loads each affected per-year history file (`results/cnn_fg/YYYY.json` — a date-sorted JSON array), upserts the live headline (force, since CNN updates intraday) plus any historical points CNN now exposes that are missing or stale on disk, and rewrites only the year files that changed. The workflow checks out the `data` branch (not `main`) so accumulated history is present before `sentiment.py` merges, then commits the changed year files via the REST Git Data API (Blob → Tree → Commit → Ref) invoked from `actions/github-script@v9`. Commits created via this API path with the workflow's `GITHUB_TOKEN` are signed by GitHub's web-flow PGP key and marked `verified: true` — required by the repo's `required_signatures` ruleset on `main`. The `data` branch lives outside the ruleset's `~DEFAULT_BRANCH` scope, so direct pushes to it succeed.
@@ -106,17 +115,3 @@ configs — CI-only), and **demo + dev docs** (`docs/demo/`,
 direction rule: infrastructure and demo MAY import from package;
 package MUST NOT reference scripts or workflow artifacts, and the
 `data` branch is consumed only by the demo dashboard.
-
-## Planned modules (scoped, not yet implemented)
-
-In-package (Scope 1):
-
-- `src/data_sources/sec/cik_map.py` — CIK ↔ ticker resolver via EDGAR `company_tickers_exchange.json`; foundation layer used by every other SEC integration. **Shipped in PR #107.**
-- `src/data_sources/sec/submissions.py` — extracts the last-filed-by-form (10-K / 10-Q / 8-K) date per ticker via EDGAR submissions API; surfaces as new optional fields on `FundamentalsSnapshot`. Per [ADR-0006](decisions/0006-federal-contractors-universe.md).
-- `src/data_sources/usaspending.py` — `RecipientRecord(BaseModel)` + `fetch_top_contractors(...)` library API for the top-N federal-contractor endpoint. Per [ADR-0006 amendment](decisions/0006-federal-contractors-universe.md).
-- `src/orchestrators/federal_contractors.py` — `AuditRow(BaseModel)` + `build_universe(...) -> tuple[list[str], list[AuditRow]]` orchestrator that chains `src.data_sources.usaspending` + `src.data_sources.sec.cik_map` + `yfinance`. Per [ADR-0006 amendment](decisions/0006-federal-contractors-universe.md).
-- `src/domain/universe.py` extension — XDG-cache lookup before bundled-preset fallback. Per [ADR-0007](decisions/0007-package-vs-infrastructure-boundary.md)'s path-write rule.
-
-In repo infrastructure (Scope 2):
-
-- `scripts/build_federal_contractors.py` (thin wrapper calling `src.federal_contractors.build_universe`) + `.github/workflows/federal-contractors-refresh.yaml` — weekly refresh of `src/assets/universes/federal-contractors.txt` from usaspending.gov top-100, gated through EDGAR + yfinance verification. Per [ADR-0006](decisions/0006-federal-contractors-universe.md).

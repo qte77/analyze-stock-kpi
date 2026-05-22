@@ -24,7 +24,7 @@ daily CNN Fear & Greed sentiment snapshot. No API keys, no scraping.
 
 ```bash
 make setup_dev                              # uv sync (default groups: dev + test)
-make run UNIVERSE=qte77-watchlist           # fetch fundamentals -> results/fundamentals_<UTC>.json
+make run UNIVERSE=qte77-watchlist           # fetch fundamentals -> results/fundamentals/<UTC>.json
 make run TICKERS=AAPL,MSFT                  # ad-hoc ticker list
 make run TICKERS=AAPL SHOW_SCORES=1         # also append composite-score columns
 make help                                   # list available recipes
@@ -36,7 +36,7 @@ CLI args double as env vars with the `SSK_` prefix
 
 ## What it produces
 
-* **Fundamentals** — `results/fundamentals_<UTC>.json`: one
+* **Fundamentals** — `results/fundamentals/<UTC>.json`: one
   `FundamentalsSnapshot` per resolved ticker (~34 yfinance fields,
   including the computed `roi`, `rd_to_revenue`, `sortino_ratio`
   enrichments) plus seven 0-100 composite proxy scores (Quality /
@@ -61,35 +61,12 @@ the screenshot near the top of this README.
 
 [demo]: https://qte77.github.io/analyze-stock-kpi/
 
-The persisted JSON `results/fundamentals_<UTC>.json` is one
+The persisted JSON `results/fundamentals/<UTC>.json` carries one
 `FundamentalsSnapshot` per ticker with a nested `composite_scores`
-block. All numeric fields are `float | null` so sparse non-equities
-(FX, futures, crypto) are valid:
-
-```json
-{
-  "symbol": "AAPL",
-  "long_name": "Apple Inc.",
-  "sector": "Technology",
-  "market_cap": ...,
-  "trailing_pe": ..., "forward_pe": ..., "price_to_book": ..., "trailing_peg_ratio": ...,
-  "return_on_equity": ..., "return_on_assets": ..., "operating_margins": ...,
-  "debt_to_equity": ..., "current_ratio": ..., "quick_ratio": ...,
-  "revenue_growth": ..., "earnings_growth": ...,
-  "dividend_yield": ..., "payout_ratio": ...,
-  "beta": ..., "roi": ..., "rd_to_revenue": ..., "sortino_ratio": ...,
-  "composite_scores": {
-    "quality": ..., "dividend": ..., "growth": ..., "big_call": ...,
-    "aaqs": ..., "hgi": ..., "screener_score": ...
-  }
-}
-```
-
-`dividend_yield` is stored as a fraction; the
-`_normalize_yfinance_info` helper divides yfinance's current
-percentage-shaped value (e.g. `0.37`) at the fetch boundary. Full
-field list in [`src/data_sources/fundamentals.py`](src/data_sources/fundamentals.py); composite
-formulas in [`src/domain/composite_scores.py`](src/domain/composite_scores.py).
+block. Field list lives in
+[`src/data_sources/fundamentals.py`](src/data_sources/fundamentals.py);
+composite formulas in
+[`src/domain/composite_scores.py`](src/domain/composite_scores.py).
 
 ## Universe sources
 

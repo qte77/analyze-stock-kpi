@@ -16,40 +16,11 @@ module map and data flow, see [docs/architecture.md](docs/architecture.md).
 - **Strict pydantic** — every structured payload is a `BaseModel`; CLI/env via
   `BaseSettings(cli_parse_args=True)`. No `TypedDict`, no `dataclass`.
 
-## Architecture Overview
+## Architecture
 
-Single-purpose CLI fetching fundamentals via yfinance for any Yahoo symbol
-(stocks, ETFs, FX, futures, crypto, indices). `src/__main__.py` prints a
-CNN Fear & Greed banner, resolves a universe → fetches per-ticker → prints
-a rich summary table → writes `results/fundamentals_<UTC>.json`. Two GHA
-crons feed a separate `data` branch (outside the default-branch ruleset
-scope) via verified REST Git Data API commits from `actions/github-script`:
-`fear-greed.yaml` (daily) merges the CNN F&G headline + ~1y of history
-into `results/cnn_fg/YYYY.json`; `demo-snapshot.yaml` (weekly) writes one
-`results/demo/<UNIVERSE>/YYYY-MM-DD.json` snapshot plus `index.json`
-manifest. A third workflow (`gh-pages.yaml`) deploys `docs/demo/*` to
-GitHub Pages — the page fetches data cross-origin from
-raw.githubusercontent.com on the `data` branch. See
-[docs/architecture.md](docs/architecture.md) for the module map and
-[`docs/decisions/0003-defer-rs-hedging-epic.md`](docs/decisions/0003-defer-rs-hedging-epic.md)
-for the v0.6.0 repurposing rationale.
-
-Active modules:
-
-- `src/__main__.py` — entrypoint
-- `src/config.py` — `AppSettings(BaseSettings)` (central runtime config)
-- `src/domain/universe.py` — universe resolver (presets in `src/assets/universes/*.txt`)
-- `src/domain/composite_scores.py` — `CompositeScores(BaseModel)` + scoring
-- `src/data_sources/fundamentals.py` — `FundamentalsSnapshot(BaseModel)` + yfinance
-- `src/data_sources/sentiment.py` — `FearGreedSnapshot(BaseModel)` + CNN F&G
-- `src/data_sources/usaspending.py` — `RecipientRecord(BaseModel)` + top-contractors
-- `src/data_sources/sec/` — `cik_map`, `submissions` (CIK + filings)
-- `src/orchestrators/federal_contractors.py` — `build_universe(...) -> (tickers, audit)`
-- `src/utils/{http_ua,parse_args}.py` — UA pool / `require_https` / CLI args
-- `src/assets/universes/` — preset ticker lists
-- `scripts/build_demo_manifest.py` — stdlib-only manifest builder for
-  `results/demo/<UNIVERSE>/index.json` (called by `demo-snapshot.yaml`)
-- `docs/demo/{index.html,app.js,style.css}` — static dashboard sources
+Module map, data flow, boundary-failure policy, and planned/shipped
+modules all live in [docs/architecture.md](docs/architecture.md) —
+single source of truth. AGENTS.md only carries behaviour rules.
 
 ## Decision Framework
 
