@@ -5,6 +5,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from src.federal_contractors import (
+    CURATED_TICKERS,
+    _ensure_seed,
     _match_to_edgar,
     _resolve_candidates,
     _smoke_test_yfinance,
@@ -143,3 +145,36 @@ def test_smoke_test_preserves_input_order(
     resolved = _smoke_test_yfinance(["MSFT", "LMT", "AAPL"])
 
     assert resolved == ["MSFT", "LMT", "AAPL"]
+
+
+def test_curated_seed_contains_dod_top_25_count() -> None:
+    """The curated seed has the documented 26 entries (DoD Top-25 + ICF)."""
+    assert len(CURATED_TICKERS) == 26
+    # All entries are (legal_name, ticker) tuples
+    assert all(isinstance(t, tuple) and len(t) == 2 for t in CURATED_TICKERS)
+    # Key primes must be present
+    tickers = {t for _, t in CURATED_TICKERS}
+    assert {"LMT", "RTX", "NOC", "GD", "BA"}.issubset(tickers)
+
+
+def test_ensure_seed_appends_missing_curated_tickers() -> None:
+    """_ensure_seed adds any CURATED tickers not already in the input list."""
+    result = _ensure_seed(["AAPL", "MSFT"])
+
+    # Input preserved at the front
+    assert result[:2] == ["AAPL", "MSFT"]
+    # All curated tickers present, no duplicates
+    for _, ticker in CURATED_TICKERS:
+        assert ticker in result
+    assert len(result) == len(set(result))
+
+
+def test_ensure_seed_does_not_duplicate_already_present_tickers() -> None:
+    """When a curated ticker is already in input, it stays at its input position."""
+    result = _ensure_seed(["LMT", "AAPL", "RTX"])
+
+    # Original ordering preserved at the front
+    assert result[:3] == ["LMT", "AAPL", "RTX"]
+    # No duplicates
+    assert result.count("LMT") == 1
+    assert result.count("RTX") == 1

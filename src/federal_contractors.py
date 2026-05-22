@@ -33,6 +33,46 @@ _SUFFIX_NORMALISATIONS: tuple[tuple[str, str], ...] = (
 )
 
 
+# DoD Top-25 Publicly-Traded Prime Contractors + ICF (verified
+# 2026-05-20 against docs/data-sources.md lines 440-478). Hand-curated
+# seed — always included in the federal-contractors universe so a
+# transient usaspending API gap (a missing contractor this week) does
+# not silently drop the obvious primes from the preset.
+CURATED_TICKERS: tuple[tuple[str, str], ...] = (
+    ("LOCKHEED MARTIN CORPORATION", "LMT"),
+    ("RTX CORPORATION", "RTX"),
+    ("NORTHROP GRUMMAN CORPORATION", "NOC"),
+    ("GENERAL DYNAMICS CORPORATION", "GD"),
+    ("THE BOEING COMPANY", "BA"),
+    ("L3HARRIS TECHNOLOGIES INC", "LHX"),
+    ("HUNTINGTON INGALLS INDUSTRIES INC", "HII"),
+    ("LEIDOS INC", "LDOS"),
+    ("BOOZ ALLEN HAMILTON INC", "BAH"),
+    ("SCIENCE APPLICATIONS INTERNATIONAL CORPORATION", "SAIC"),
+    ("CACI INTERNATIONAL INC", "CACI"),
+    ("KBR INC", "KBR"),
+    ("TEXTRON INC", "TXT"),
+    ("OSHKOSH DEFENSE LLC", "OSK"),
+    ("GENERAL ELECTRIC COMPANY", "GE"),
+    ("HONEYWELL INTERNATIONAL INC", "HON"),
+    ("FLUOR CORPORATION", "FLR"),
+    ("JACOBS SOLUTIONS INC", "J"),
+    ("DELL TECHNOLOGIES INC", "DELL"),
+    ("ACCENTURE FEDERAL SERVICES LLC", "ACN"),
+    ("PALANTIR TECHNOLOGIES INC", "PLTR"),
+    ("MICROSOFT CORPORATION", "MSFT"),
+    ("AMAZON WEB SERVICES INC", "AMZN"),
+    ("BAE SYSTEMS", "BAESY"),
+    ("MAXIMUS FEDERAL SERVICES INC", "MMS"),
+    ("ICF INCORPORATED LLC", "ICFI"),
+)
+
+
+def _ensure_seed(tickers: list[str]) -> list[str]:
+    """Cycle-8 RED scaffold — returns input unchanged (no seed added)."""
+    return list(tickers)
+
+
 def _normalise_name(name: str) -> str:
     """Upper-case + strip + collapse common legal-entity suffixes."""
     normalised = name.upper().strip()
