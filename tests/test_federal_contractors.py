@@ -7,11 +7,13 @@ from typing import TYPE_CHECKING
 
 from src.federal_contractors import (
     CURATED_TICKERS,
+    AuditRow,
     _ensure_seed,
     _last_completed_fy_window,
     _match_to_edgar,
     _resolve_candidates,
     _smoke_test_yfinance,
+    build_universe,
 )
 from src.sec.cik_map import CikRecord
 from src.usaspending import RecipientRecord
@@ -204,3 +206,100 @@ def test_last_completed_fy_window_last_day_of_fy() -> None:
         date(2023, 10, 1),
         date(2024, 9, 30),
     )
+
+
+def test_build_universe_orchestrator_e2e(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """End-to-end against stubbed deps — assembles ticker list + AuditRow trail."""
+    fake_recipients = [
+        _recipient(1, "LOCKHEED MARTIN CORPORATION"),
+        _recipient(2, "LOCKHEED MARTIN AERONAUTICS COMPANY"),  # dedup → LMT
+        _recipient(3, "RTX CORPORATION"),
+        _recipient(4, "WIDGET FOUNDRY INTERNATIONAL LLC"),  # no EDGAR match
+    ]
+    monkeypatch.setattr(
+        "src.federal_contractors.fetch_top_contractors",
+        lambda *_a, **_kw: fake_recipients,
+    )
+    monkeypatch.setattr(
+        "src.federal_contractors._load_records",
+        lambda: _records(
+            ("LMT", "Lockheed Martin Corp", "936468"),
+            ("RTX", "RTX Corp", "1011059"),
+        ),
+    )
+    monkeypatch.setattr("src.federal_contractors.yf.Ticker", _StubTicker)
+
+    tickers, audit = build_universe(fy=2025, top_n=10)
+
+    # Tickers: sorted ASCII-ascending + deduplicated + curated seed always included
+    assert tickers == sorted(set(tickers))
+    assert "LMT" in tickers
+    assert "RTX" in tickers
+    assert "NOC" in tickers  # curated seed entry (not in usaspending fixture)
+
+    # Audit: one row per usaspending recipient, in input order
+    assert len(audit) == len(fake_recipients)
+    assert all(isinstance(r, AuditRow) for r in audit)
+    audit_by_name = {r.recipient_name: r for r in audit}
+
+    lmt_row = audit_by_name["LOCKHEED MARTIN CORPORATION"]
+    assert lmt_row.candidate_ticker == "LMT"
+    assert lmt_row.final_ticker == "LMT"
+    assert lmt_row.yfinance_resolves is True
+
+    aero_row = audit_by_name["LOCKHEED MARTIN AERONAUTICS COMPANY"]
+    assert aero_row.candidate_ticker == "LMT"
+    assert aero_row.final_ticker is None  # deduped
+    assert aero_row.note is not None and "dedup" in aero_row.note
+
+    widget_row = audit_by_name["WIDGET FOUNDRY INTERNATIONAL LLC"]
+    assert widget_row.candidate_ticker is None
+    assert widget_row.final_ticker is None
+
+
+def test_audit_row_model_dump_validate_round_trip() -> None:
+    """AuditRow serialises + deserialises losslessly via pydantic model_dump."""
+    row = AuditRow(
+        rank=1,
+        recipient_name="LOCKHEED MARTIN CORPORATION",
+        uei="ZDG4N3MGLDR9",
+        obligated_usd=17_388_378_311.33,
+        candidate_ticker="LMT",
+        edgar_match_score=0.92,
+        yfinance_resolves=True,
+        final_ticker="LMT",
+        note=None,
+    )
+
+    assert AuditRow.model_validate(row.model_dump()) == row
+
+
+def test_build_universe_defaults_use_last_completed_fy(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """fy=None passes the FY window from _last_completed_fy_window to the fetcher."""
+    captured: dict[str, object] = {}
+
+    def fake_fetch(
+        fy_start: date,
+        fy_end: date,
+        **_kw: object,
+    ) -> list[RecipientRecord]:
+        captured["fy_start"] = fy_start
+        captured["fy_end"] = fy_end
+        return []
+
+    monkeypatch.setattr("src.federal_contractors.fetch_top_contractors", fake_fetch)
+    monkeypatch.setattr(
+        "src.federal_contractors._load_records",
+        lambda: _records(("AAPL", "Apple Inc.", "320193")),
+    )
+    monkeypatch.setattr("src.federal_contractors.yf.Ticker", _StubTicker)
+
+    build_universe(fy=None, top_n=10)
+
+    expected_start, expected_end = _last_completed_fy_window()
+    assert captured["fy_start"] == expected_start
+    assert captured["fy_end"] == expected_end

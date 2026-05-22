@@ -15,10 +15,28 @@ from difflib import SequenceMatcher
 from typing import TYPE_CHECKING
 
 import yfinance as yf
+from pydantic import BaseModel, ConfigDict
 from src.sec.cik_map import _load_records
+from src.usaspending import RecipientRecord, fetch_top_contractors
 
 if TYPE_CHECKING:
-    from src.usaspending import RecipientRecord
+    pass
+
+
+class AuditRow(BaseModel):
+    """Decision-trail entry per usaspending recipient processed in build_universe."""
+
+    model_config = ConfigDict(frozen=True, extra="ignore")
+
+    rank: int
+    recipient_name: str
+    uei: str | None = None
+    obligated_usd: float
+    candidate_ticker: str | None = None
+    edgar_match_score: float | None = None
+    yfinance_resolves: bool = False
+    final_ticker: str | None = None
+    note: str | None = None
 
 
 # SAM / usaspending names use long-form legal suffixes ("CORPORATION",
@@ -142,3 +160,13 @@ def _match_to_edgar(
     if best_score >= threshold:
         return (best_ticker, best_score)
     return (None, None)
+
+
+def build_universe(
+    *,
+    fy: int | None = None,
+    top_n: int = 100,
+) -> tuple[list[str], list[AuditRow]]:
+    """Cycle-12 RED scaffold — returns empty tuple."""
+    _ = fy, top_n
+    return ([], [])
