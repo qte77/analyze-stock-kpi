@@ -74,6 +74,21 @@ def test_app_settings_sec_user_agent_env_override(
     assert AppSettings().sec_user_agent == "Operator Name op@example.com"
 
 
+def test_app_settings_sec_user_agent_empty_env_falls_back_to_default(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Empty ``SSK_SEC_USER_AGENT`` (e.g., unset GHA `vars` expands to '') falls
+    back to the in-source default rather than overriding it with ``""``.
+
+    Reason: empty env (`env_ignore_empty=True`) must not produce an empty
+    ``User-Agent`` header — SEC rejects empty UA with 403.
+    """
+    monkeypatch.setenv("SSK_SEC_USER_AGENT", "")
+    assert AppSettings().sec_user_agent == (
+        "opensource-research-client contact@example.com"
+    )
+
+
 def test_app_settings_user_agents_pool_non_empty_browser_shape() -> None:
     """``user_agents`` is a non-empty pool of browser-shape UA strings."""
     s = AppSettings()

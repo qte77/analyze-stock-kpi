@@ -21,7 +21,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class AppSettings(BaseSettings):
     """Runtime config for every I/O boundary in the package."""
 
-    model_config = SettingsConfigDict(env_prefix="SSK_", frozen=True)
+    model_config = SettingsConfigDict(
+        env_prefix="SSK_", frozen=True, env_ignore_empty=True
+    )
 
     edgar_tickers_url: str = (
         "https://www.sec.gov/files/company_tickers_exchange.json"

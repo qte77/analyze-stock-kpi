@@ -264,6 +264,13 @@ operator override:
   plaintext to SEC) injected into `federal-contractors-refresh.yaml`
   env. Operators choose their override value (e.g.,
   `"<Name> <email@example.org>"`).
+- The variable is **optional**. When unset, `${{ vars.SEC_USER_AGENT }}`
+  expands to empty string; `AppSettings.model_config`'s
+  `env_ignore_empty=True` treats that as "use default", so the
+  identity-shape placeholder ships. Confirmed by run #26302537610
+  where the workflow injected an empty env value before
+  `env_ignore_empty` was added — pydantic-settings overrode the
+  default with `""` and SEC rejected the empty UA with 403.
 - `src/data_sources/sec/{cik_map._fetch_json, submissions.fetch_last_filed}`
   send `settings.sec_user_agent` directly — no fallback, no guard.
 - `Referer` and `Accept` headers retained at their current values;
