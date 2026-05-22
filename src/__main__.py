@@ -3,7 +3,7 @@
 Resolves the active asset universe, prints a CNN Fear & Greed sentiment
 banner, fetches fundamentals via yfinance, prints an equities/ETF summary
 table, and persists every snapshot (including sparse ones for
-FX/futures/crypto) to ``results/fundamentals_<UTC>.json``.
+FX/futures/crypto) to ``results/fundamentals/<UTC>.json``.
 """
 
 import json
@@ -141,9 +141,9 @@ def _print_summary_table(
 
 
 def _persist_snapshots(snapshots: list[FundamentalsSnapshot]) -> Path:
-    settings.results_dir.mkdir(parents=True, exist_ok=True)
+    settings.fundamentals_dir.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(UTC).strftime("%Y-%m-%dT%H-%M-%SZ")
-    out_path = settings.results_dir / f"fundamentals_{stamp}.json"
+    out_path = settings.fundamentals_dir / f"{stamp}.json"
     payload = [s.model_dump(by_alias=False) for s in snapshots]
     out_path.write_text(json.dumps(payload, indent=2))
     return out_path
