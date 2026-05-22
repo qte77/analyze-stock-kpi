@@ -45,7 +45,7 @@
     },
     "roi": 0.25340069609374866,
     "rd_to_revenue": null,
-    "sortino_ratio": -1.7800927636030324,
+    "sortino_ratio": -1.7800929355480903,
     "sec_last_10k_date": "2025-10-10",
     "sec_last_10q_date": "2026-03-19",
     "sec_last_8k_date": "2026-04-24"
@@ -249,7 +249,7 @@
     },
     "roi": 0.19472803908125144,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.7670656243009729,
+    "sortino_ratio": -0.7670656198444703,
     "sec_last_10k_date": "2026-05-22",
     "sec_last_10q_date": "2026-01-23",
     "sec_last_8k_date": "2026-05-22"
@@ -351,7 +351,7 @@
     },
     "roi": 0.3249676148913954,
     "rd_to_revenue": 0.027673554228540224,
-    "sortino_ratio": 3.7329703895459905,
+    "sortino_ratio": 3.732971260949823,
     "sec_last_10k_date": "2026-03-16",
     "sec_last_10q_date": "2025-12-09",
     "sec_last_8k_date": "2026-04-20"
@@ -449,11 +449,11 @@
       "big_call": 50.32942652380952,
       "aaqs": 68.40410458333334,
       "hgi": 54.5,
-      "screener_score": 50.95897504660793
+      "screener_score": 50.958980571404894
     },
     "roi": 0.1344112088127542,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.0921352532119997,
+    "sortino_ratio": 2.0921359161876354,
     "sec_last_10k_date": "2026-01-30",
     "sec_last_10q_date": "2026-04-29",
     "sec_last_8k_date": "2026-05-11"
@@ -500,11 +500,11 @@
       "big_call": 44.72612672380953,
       "aaqs": 46.37997983333334,
       "hgi": 54.92857142857144,
-      "screener_score": 31.81083639892631
+      "screener_score": 31.81083597076136
     },
     "roi": 0.291814883413699,
     "rd_to_revenue": 0.03445643877439756,
-    "sortino_ratio": 1.479794625324309,
+    "sortino_ratio": 1.479794573944515,
     "sec_last_10k_date": "2026-01-29",
     "sec_last_10q_date": "2026-04-21",
     "sec_last_8k_date": "2026-05-07"
@@ -551,11 +551,11 @@
       "big_call": 41.95112853809524,
       "aaqs": 62.99462495833333,
       "hgi": 38.14285714285715,
-      "screener_score": 51.38698300388252
+      "screener_score": 51.38698046636526
     },
     "roi": 0.07691895485316481,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.8792297780849498,
+    "sortino_ratio": 1.8792294735828783,
     "sec_last_10k_date": "2026-02-05",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-05"
@@ -602,11 +602,11 @@
       "big_call": 36.18495148095238,
       "aaqs": 53.545833333333334,
       "hgi": 26.0,
-      "screener_score": 42.10765512139711
+      "screener_score": 42.107655289787616
     },
     "roi": 0.10187168472580191,
     "rd_to_revenue": 0.048394850702419744,
-    "sortino_ratio": 0.9168459530050077,
+    "sortino_ratio": 0.9168459732118691,
     "sec_last_10k_date": "2026-02-17",
     "sec_last_10q_date": "2026-04-23",
     "sec_last_8k_date": "2026-04-23"
@@ -657,7 +657,7 @@
     },
     "roi": 0.052273745523010395,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.5446684529591568,
+    "sortino_ratio": -0.5446682376154992,
     "sec_last_10k_date": "2026-02-27",
     "sec_last_10q_date": "2026-05-07",
     "sec_last_8k_date": "2026-05-07"
@@ -708,7 +708,7 @@
     },
     "roi": 0.06328209728684912,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.1564907110439048,
+    "sortino_ratio": -0.1564906350348158,
     "sec_last_10k_date": "2025-11-20",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-05"
@@ -759,7 +759,7 @@
     },
     "roi": 0.10816922131710315,
     "rd_to_revenue": null,
-    "sortino_ratio": -1.5180598938825396,
+    "sortino_ratio": -1.5180598665924088,
     "sec_last_10k_date": "2026-02-26",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-18"
@@ -810,7 +810,7 @@
     },
     "roi": 0.12286898380543959,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.6072829984053552,
+    "sortino_ratio": -0.6072835393626674,
     "sec_last_10k_date": "2026-02-17",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-06"
@@ -857,11 +857,11 @@
       "big_call": 58.7006955047619,
       "aaqs": 60.13408366666667,
       "hgi": 59.92857142857143,
-      "screener_score": 49.30711730320671
+      "screener_score": 49.30712177093636
     },
     "roi": 0.051126505006132694,
     "rd_to_revenue": 0.02451406357191859,
-    "sortino_ratio": 1.997374879595416,
+    "sortino_ratio": 1.9973754157229737,
     "sec_last_10k_date": "2026-02-12",
     "sec_last_10q_date": "2026-04-30",
     "sec_last_8k_date": "2026-05-12"
@@ -908,11 +908,11 @@
       "big_call": 40.69990606190476,
       "aaqs": 70.60666641666667,
       "hgi": 30.571428571428573,
-      "screener_score": 52.516633394918045
+      "screener_score": 52.51663331889831
     },
     "roi": 0.18217142988826437,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.9779905511996894,
+    "sortino_ratio": 0.9779905420773202,
     "sec_last_10k_date": "2026-01-29",
     "sec_last_10q_date": "2026-04-23",
     "sec_last_8k_date": "2026-05-13"
@@ -931,8 +931,8 @@
     "forward_pe": 15.223074,
     "price_to_book": -42.324863,
     "price_to_sales_ttm": 0.22825748,
-    "enterprise_value": 98285404160.0,
-    "enterprise_to_ebitda": 14.277,
+    "enterprise_value": 98234916864.0,
+    "enterprise_to_ebitda": 14.27,
     "trailing_peg_ratio": 1.4984,
     "return_on_equity": null,
     "return_on_assets": 0.04992,
@@ -959,11 +959,11 @@
       "big_call": 29.356666883333332,
       "aaqs": 51.28583341666667,
       "hgi": 59.42857142857143,
-      "screener_score": 35.629259098133375
+      "screener_score": 35.62925540844833
     },
     "roi": 1.8070003660740745,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.619442829633148,
+    "sortino_ratio": 0.6194423868709428,
     "sec_last_10k_date": "2026-05-08",
     "sec_last_10q_date": "2026-02-04",
     "sec_last_8k_date": "2026-05-07"
@@ -1014,7 +1014,7 @@
     },
     "roi": 0.11852620207809142,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.4062775928092826,
+    "sortino_ratio": -0.40627767857693686,
     "sec_last_10k_date": "2025-11-20",
     "sec_last_10q_date": "2026-05-07",
     "sec_last_8k_date": "2026-05-07"
@@ -1065,7 +1065,7 @@
     },
     "roi": 0.27130053455927133,
     "rd_to_revenue": 0.11531853871164686,
-    "sortino_ratio": -0.20164651835786718,
+    "sortino_ratio": -0.20164597118360666,
     "sec_last_10k_date": "2025-07-30",
     "sec_last_10q_date": "2026-04-29",
     "sec_last_8k_date": "2026-05-14"
@@ -1112,11 +1112,11 @@
       "big_call": 55.73666123809524,
       "aaqs": 78.96779083333334,
       "hgi": 77.42857142857143,
-      "screener_score": 46.99188757279997
+      "screener_score": 46.99188752199392
     },
     "roi": 0.14037225827880967,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.269509413497901,
+    "sortino_ratio": 1.2695094074011746,
     "sec_last_10k_date": "2026-01-27",
     "sec_last_10q_date": "2026-04-21",
     "sec_last_8k_date": "2026-05-21"
@@ -1163,11 +1163,11 @@
       "big_call": 33.16143598095238,
       "aaqs": 39.150187833333334,
       "hgi": 14.428571428571429,
-      "screener_score": 49.77477906030339
+      "screener_score": 49.7747821610899
     },
     "roi": 0.10798336619959797,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.4265242034268821,
+    "sortino_ratio": 1.4265245755212643,
     "sec_last_10k_date": "2026-02-17",
     "sec_last_10q_date": "2026-05-08",
     "sec_last_8k_date": "2026-05-08"
@@ -1316,11 +1316,11 @@
       "big_call": 53.54550291428572,
       "aaqs": 65.0877715,
       "hgi": 68.00000000000001,
-      "screener_score": 45.477364748901174
+      "screener_score": 45.47737403482491
     },
     "roi": 0.07436313059465001,
     "rd_to_revenue": 0.03168064286762299,
-    "sortino_ratio": 2.2248640334002685,
+    "sortino_ratio": 2.224865147711118,
     "sec_last_10k_date": "2026-02-06",
     "sec_last_10q_date": "2026-04-21",
     "sec_last_8k_date": "2026-05-04"
@@ -1371,7 +1371,7 @@
     },
     "roi": 0.08964784491623336,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.2310434304440503,
+    "sortino_ratio": -0.23104321723067608,
     "sec_last_10k_date": "2026-03-16",
     "sec_last_10q_date": "2025-12-04",
     "sec_last_8k_date": "2026-04-09"
