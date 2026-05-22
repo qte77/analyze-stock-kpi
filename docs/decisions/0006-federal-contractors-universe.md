@@ -202,6 +202,25 @@ opens a preset-update PR against `main` **only when the diff is
 non-empty** (top-100 federal-contractor ranking is stable
 week-over-week; empty diffs would spam the PR list).
 
+## Amendment (2026-05-22) — Library-first architecture
+
+Original ADR scoped usaspending logic to
+`scripts/build_federal_contractors.py`. After ADR-0007 formalised the
+package-vs-infrastructure boundary, the work was reorganised so that
+downstream consumers of the wheel get a first-class library API:
+
+- `src.data_sources.usaspending.fetch_top_contractors(...)` —
+  POST API client (no orchestration).
+- `src.orchestrators.federal_contractors.build_universe(...) ->
+  tuple[list[str], list[AuditRow]]` — end-to-end orchestrator.
+- `src.utils.parse_args.CliArgs.refresh_universe` plus a branch in
+  `src.__main__.main()` expose the orchestrator as `python -m src
+  --refresh-universe federal-contractors`.
+
+`scripts/build_federal_contractors.py` becomes a thin wrapper that
+the GHA refresh workflow invokes; the heavy lifting lives in the
+package.
+
 ## References
 
 - usaspending.gov API: <https://api.usaspending.gov/>
