@@ -69,8 +69,14 @@ CURATED_TICKERS: tuple[tuple[str, str], ...] = (
 
 
 def _ensure_seed(tickers: list[str]) -> list[str]:
-    """Cycle-8 RED scaffold — returns input unchanged (no seed added)."""
-    return list(tickers)
+    """Append CURATED tickers not already in ``tickers``; preserve input order."""
+    seen = set(tickers)
+    result = list(tickers)
+    for _, ticker in CURATED_TICKERS:
+        if ticker not in seen:
+            result.append(ticker)
+            seen.add(ticker)
+    return result
 
 
 def _normalise_name(name: str) -> str:
