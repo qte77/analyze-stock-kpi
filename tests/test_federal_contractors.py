@@ -4,9 +4,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from datetime import date
+
 from src.federal_contractors import (
     CURATED_TICKERS,
     _ensure_seed,
+    _last_completed_fy_window,
     _match_to_edgar,
     _resolve_candidates,
     _smoke_test_yfinance,
@@ -178,3 +181,27 @@ def test_ensure_seed_does_not_duplicate_already_present_tickers() -> None:
     # No duplicates
     assert result.count("LMT") == 1
     assert result.count("RTX") == 1
+
+
+def test_last_completed_fy_window_mid_fy() -> None:
+    """Mid-FY (May) reads the previous Oct 1 -> last Sep 30."""
+    assert _last_completed_fy_window(today=date(2026, 5, 22)) == (
+        date(2024, 10, 1),
+        date(2025, 9, 30),
+    )
+
+
+def test_last_completed_fy_window_just_after_fy_close() -> None:
+    """Day after FY end (Oct 1 of a new FY) — last completed is the FY that just ended."""
+    assert _last_completed_fy_window(today=date(2025, 10, 1)) == (
+        date(2024, 10, 1),
+        date(2025, 9, 30),
+    )
+
+
+def test_last_completed_fy_window_last_day_of_fy() -> None:
+    """On Sep 30 the FY is just ending; last completed is one earlier."""
+    assert _last_completed_fy_window(today=date(2025, 9, 30)) == (
+        date(2023, 10, 1),
+        date(2024, 9, 30),
+    )

@@ -10,6 +10,7 @@ the audit row carries only ticker symbol + resolution boolean.
 
 from __future__ import annotations
 
+from datetime import UTC, date, datetime
 from difflib import SequenceMatcher
 from typing import TYPE_CHECKING
 
@@ -66,6 +67,12 @@ CURATED_TICKERS: tuple[tuple[str, str], ...] = (
     ("MAXIMUS FEDERAL SERVICES INC", "MMS"),
     ("ICF INCORPORATED LLC", "ICFI"),
 )
+
+
+def _last_completed_fy_window(today: date | None = None) -> tuple[date, date]:
+    """Cycle-11 RED scaffold — returns a placeholder window."""
+    _ = today
+    return (date(1900, 10, 1), date(1901, 9, 30))
 
 
 def _ensure_seed(tickers: list[str]) -> list[str]:
