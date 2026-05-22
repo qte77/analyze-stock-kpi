@@ -9,7 +9,7 @@ the input shape at the CliArgs boundary.
 from pathlib import Path
 
 import pytest
-from src.universe import UniverseError, resolve_universe
+from src.domain.universe import UniverseError, resolve_universe
 from src.utils.parse_args import CliArgs
 
 
@@ -109,3 +109,14 @@ def test_default_preset_resolves_to_nonempty_list() -> None:
     result = resolve_universe(args)
     assert len(result) > 0
     assert all(isinstance(s, str) and s for s in result)
+
+
+def test_federal_contractors_preset_resolves_to_curated_seed() -> None:
+    """The bundled `federal-contractors` preset includes the DoD Top-25 seed."""
+    from src.orchestrators.federal_contractors import CURATED_TICKERS
+
+    args = _args(universe="federal-contractors")
+    result = resolve_universe(args)
+
+    seed = {ticker for _, ticker in CURATED_TICKERS}
+    assert seed.issubset(set(result))

@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 import pytest
 from pydantic import ValidationError
-from src.fundamentals import (
+from src.data_sources.fundamentals import (
     FundamentalsSnapshot,
     fetch_fundamentals,
     fetch_price_history,
@@ -53,7 +53,7 @@ def test_normalize_yfinance_info_divides_dividend_yield() -> None:
     0.37 for AAPL's 0.37 %). `_normalize_yfinance_info` divides by 100 at
     the fetch boundary so the rest of the codebase sees a fraction.
     """
-    from src.fundamentals import _normalize_yfinance_info
+    from src.data_sources.fundamentals import _normalize_yfinance_info
 
     normalized = _normalize_yfinance_info({"dividendYield": 0.37, "trailingPE": 35.0})
     assert normalized["dividendYield"] == 0.0037
@@ -64,7 +64,7 @@ def test_normalize_yfinance_info_handles_missing_yield() -> None:
     """Sparse snapshots (FX, futures, crypto) have no `dividendYield` key.
     The normalizer leaves the input dict structurally unchanged.
     """
-    from src.fundamentals import _normalize_yfinance_info
+    from src.data_sources.fundamentals import _normalize_yfinance_info
 
     assert _normalize_yfinance_info({"symbol": "X"}) == {"symbol": "X"}
 
@@ -83,7 +83,7 @@ def test_fetch_fundamentals_normalizes_live_yield() -> None:
             "dividendYield": 0.37,  # current yfinance: percentage-shaped
         }
 
-    with patch("src.fundamentals.yf.Ticker", return_value=_FakeTicker()):
+    with patch("src.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()):
         snap = fetch_fundamentals("AAPL")
     assert snap.dividend_yield == 0.0037
 
@@ -96,7 +96,7 @@ def test_compute_roi_full_inputs() -> None:
     invested_capital = book_equity + totalDebt - totalCash = 100 + 50 - 30 = 120
     roi = netIncomeToCommon / invested_capital = 24 / 120 = 0.20
     """
-    from src.fundamentals import _compute_roi
+    from src.data_sources.fundamentals import _compute_roi
 
     info = {
         "netIncomeToCommon": 24.0,
@@ -110,7 +110,7 @@ def test_compute_roi_full_inputs() -> None:
 
 def test_compute_roi_missing_input_returns_none() -> None:
     """A single missing input collapses ROI to ``None``."""
-    from src.fundamentals import _compute_roi
+    from src.data_sources.fundamentals import _compute_roi
 
     info = {
         "netIncomeToCommon": 24.0,
@@ -124,7 +124,7 @@ def test_compute_roi_missing_input_returns_none() -> None:
 
 def test_compute_roi_zero_price_to_book_returns_none() -> None:
     """Avoid ``ZeroDivisionError`` when book equity cannot be derived."""
-    from src.fundamentals import _compute_roi
+    from src.data_sources.fundamentals import _compute_roi
 
     info = {
         "netIncomeToCommon": 24.0,
@@ -141,7 +141,7 @@ def test_compute_roi_zero_invested_capital_returns_none() -> None:
 
     Inputs: book_equity = 100, debt = 0, cash = 100 -> invested_capital = 0.
     """
-    from src.fundamentals import _compute_roi
+    from src.data_sources.fundamentals import _compute_roi
 
     info = {
         "netIncomeToCommon": 24.0,
@@ -168,7 +168,7 @@ def test_fetch_fundamentals_attaches_roi() -> None:
             "totalCash": 30.0,
         }
 
-    with patch("src.fundamentals.yf.Ticker", return_value=_FakeTicker()):
+    with patch("src.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()):
         snap = fetch_fundamentals("AAPL")
     assert snap.roi == 0.20
 
@@ -179,7 +179,7 @@ def test_fetch_rd_to_revenue_equity_happy_path() -> None:
     Chosen so the arithmetic is exact: 20 / 100 = 0.20.
     """
     import pandas as pd
-    from src.fundamentals import _fetch_rd_to_revenue
+    from src.data_sources.fundamentals import _fetch_rd_to_revenue
 
     income_stmt = pd.DataFrame(
         {"latest": [20.0, 100.0]},
@@ -191,7 +191,7 @@ def test_fetch_rd_to_revenue_equity_happy_path() -> None:
 
 def test_fetch_rd_to_revenue_non_equity_skips_fetch() -> None:
     """Non-EQUITY quote types must not touch ``.income_stmt``."""
-    from src.fundamentals import _fetch_rd_to_revenue
+    from src.data_sources.fundamentals import _fetch_rd_to_revenue
 
     class _Tripwire:
         @property
@@ -203,7 +203,7 @@ def test_fetch_rd_to_revenue_non_equity_skips_fetch() -> None:
 
 def test_fetch_rd_to_revenue_missing_quote_type_returns_none() -> None:
     """Missing ``quoteType`` is treated as non-EQUITY (defensive)."""
-    from src.fundamentals import _fetch_rd_to_revenue
+    from src.data_sources.fundamentals import _fetch_rd_to_revenue
 
     class _Tripwire:
         @property
@@ -216,7 +216,7 @@ def test_fetch_rd_to_revenue_missing_quote_type_returns_none() -> None:
 def test_fetch_rd_to_revenue_missing_row_returns_none() -> None:
     """``income_stmt`` without an ``Research And Development`` row -> ``None``."""
     import pandas as pd
-    from src.fundamentals import _fetch_rd_to_revenue
+    from src.data_sources.fundamentals import _fetch_rd_to_revenue
 
     income_stmt = pd.DataFrame(
         {"latest": [100.0, 50.0]},
@@ -229,7 +229,7 @@ def test_fetch_rd_to_revenue_missing_row_returns_none() -> None:
 def test_fetch_rd_to_revenue_zero_revenue_returns_none() -> None:
     """Avoid ``ZeroDivisionError`` when Total Revenue is zero."""
     import pandas as pd
-    from src.fundamentals import _fetch_rd_to_revenue
+    from src.data_sources.fundamentals import _fetch_rd_to_revenue
 
     income_stmt = pd.DataFrame(
         {"latest": [20.0, 0.0]},
@@ -241,7 +241,7 @@ def test_fetch_rd_to_revenue_zero_revenue_returns_none() -> None:
 
 def test_fetch_rd_to_revenue_exception_returns_none() -> None:
     """Network errors / IFRS schema drift swallowed; returns ``None``."""
-    from src.fundamentals import _fetch_rd_to_revenue
+    from src.data_sources.fundamentals import _fetch_rd_to_revenue
 
     class _Broken:
         @property
@@ -268,7 +268,7 @@ def test_fetch_fundamentals_attaches_rd_to_revenue() -> None:
         }
         income_stmt = income_stmt_df
 
-    with patch("src.fundamentals.yf.Ticker", return_value=_FakeTicker()):
+    with patch("src.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()):
         snap = fetch_fundamentals("AAPL")
     assert snap.rd_to_revenue == 0.20
 
@@ -282,7 +282,7 @@ def test_compute_sortino_positive_skew_series() -> None:
     annualized ≈ 0.1449. Sortino ≈ 5.51.
     """
     import pandas as pd
-    from src.fundamentals import _compute_sortino
+    from src.data_sources.fundamentals import _compute_sortino
 
     returns = [0.005] * 29 + [-0.05]
     prices = [100.0]
@@ -297,7 +297,7 @@ def test_compute_sortino_positive_skew_series() -> None:
 def test_compute_sortino_too_few_datapoints_returns_none() -> None:
     """Series shorter than 30 returns -> ``None`` (insufficient sample)."""
     import pandas as pd
-    from src.fundamentals import _compute_sortino
+    from src.data_sources.fundamentals import _compute_sortino
 
     close = pd.Series([100.0 + i for i in range(20)])
     assert _compute_sortino(close) is None
@@ -306,7 +306,7 @@ def test_compute_sortino_too_few_datapoints_returns_none() -> None:
 def test_compute_sortino_all_positive_returns_none() -> None:
     """No losing days -> downside_dev is zero -> ``None`` (undefined)."""
     import pandas as pd
-    from src.fundamentals import _compute_sortino
+    from src.data_sources.fundamentals import _compute_sortino
 
     close = pd.Series([100.0 * (1.001 ** i) for i in range(50)])
     assert _compute_sortino(close) is None
@@ -330,7 +330,7 @@ def test_compute_sortino_with_target_annual_shifts_result() -> None:
     than our prior T=0-only behaviour.
     """
     import pandas as pd
-    from src.fundamentals import _compute_sortino
+    from src.data_sources.fundamentals import _compute_sortino
 
     returns = [0.005] * 29 + [-0.05]
     prices = [100.0]
@@ -345,7 +345,7 @@ def test_compute_sortino_with_target_annual_shifts_result() -> None:
 def test_compute_sortino_empty_series_returns_none() -> None:
     """Empty close-series -> ``None``."""
     import pandas as pd
-    from src.fundamentals import _compute_sortino
+    from src.data_sources.fundamentals import _compute_sortino
 
     assert _compute_sortino(pd.Series([], dtype=float)) is None
 
@@ -394,10 +394,10 @@ def test_fetch_universe_continues_on_error(caplog: pytest.LogCaptureFixture) -> 
         return _FakeTicker(aapl_info if symbol == "AAPL" else gold_info)
 
     with (
-        caplog.at_level("WARNING", logger="src.fundamentals"),
-        patch("src.fundamentals.yf.Ticker", side_effect=fake_ticker),
+        caplog.at_level("WARNING", logger="src.data_sources.fundamentals"),
+        patch("src.data_sources.fundamentals.yf.Ticker", side_effect=fake_ticker),
         patch(
-            "src.fundamentals.yf.download",
+            "src.data_sources.fundamentals.yf.download",
             side_effect=RuntimeError("batch skipped in unit test"),
         ),
     ):
@@ -445,8 +445,8 @@ def test_fetch_universe_fundamentals_attaches_sortino_via_batch() -> None:
         return _FakeTicker(aapl_info if symbol == "AAPL" else msft_info)
 
     with (
-        patch("src.fundamentals.yf.Ticker", side_effect=fake_ticker),
-        patch("src.fundamentals.yf.download", return_value=close_df) as mock_dl,
+        patch("src.data_sources.fundamentals.yf.Ticker", side_effect=fake_ticker),
+        patch("src.data_sources.fundamentals.yf.download", return_value=close_df) as mock_dl,
     ):
         snapshots = fetch_universe_fundamentals(
             ["AAPL", "MSFT"], show_progress=False
@@ -474,9 +474,9 @@ def test_fetch_universe_fundamentals_batch_failure_gives_none_sortino() -> None:
         }
 
     with (
-        patch("src.fundamentals.yf.Ticker", return_value=_FakeTicker()),
+        patch("src.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()),
         patch(
-            "src.fundamentals.yf.download",
+            "src.data_sources.fundamentals.yf.download",
             side_effect=RuntimeError("simulated batch failure"),
         ),
     ):

@@ -55,3 +55,26 @@ class CliArgs(BaseSettings):
     Off by default to keep the table fitting on 80-column terminals.
     Composites are always computed and persisted regardless of this flag.
     """
+
+    refresh_universe: str | None = None
+    """Orchestrator name to rebuild (e.g. ``"federal-contractors"``).
+
+    When set, the CLI runs the named orchestrator (per
+    :mod:`src.orchestrators`) instead of the fundamentals fetch flow.
+    """
+
+    output: Path | None = None
+    """Override path for the orchestrator's preset output.
+
+    Defaults to ``settings.federal_contractors_dir / "universe.txt"``
+    when ``--refresh-universe federal-contractors`` is used and this is
+    ``None``.
+    """
+
+    audit_output: Path | None = None
+    """Override path for the orchestrator's per-run audit JSON.
+
+    Defaults to ``settings.federal_contractors_dir / "audit/<UTC>.json"``
+    when ``--refresh-universe federal-contractors`` is used and this is
+    ``None``.
+    """

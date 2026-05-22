@@ -84,7 +84,7 @@ v0.5.0 attaches a `CompositeScores` object to every `FundamentalsSnapshot` after
 
 ## External boundaries
 
-- **`yfinance`** — fundamentals (`Ticker.info`) + price history (`Ticker.history`); rate-limit risk; live tests tagged `@pytest.mark.network` (excluded from default `make test`, opt in via `pytest -m network`). `_normalize_yfinance_info` in `src/fundamentals.py` divides the current percentage-shaped `info["dividendYield"]` by 100 at the fetch boundary so the rest of the codebase sees fractional yields. `fetch_universe_fundamentals` adds a batched `yf.download(tickers, period="1y")` once per run for Sortino — see [ADR-0004](decisions/0004-price-history-composite-input.md). `_fetch_rd_to_revenue` reads `Ticker.income_stmt` per EQUITY ticker for the R&D / Revenue ratio.
+- **`yfinance`** — fundamentals (`Ticker.info`) + price history (`Ticker.history`); rate-limit risk; live tests tagged `@pytest.mark.network` (excluded from default `make test`, opt in via `pytest -m network`). `_normalize_yfinance_info` in `src/data_sources/fundamentals.py` divides the current percentage-shaped `info["dividendYield"]` by 100 at the fetch boundary so the rest of the codebase sees fractional yields. `fetch_universe_fundamentals` adds a batched `yf.download(tickers, period="1y")` once per run for Sortino — see [ADR-0004](decisions/0004-price-history-composite-input.md). `_fetch_rd_to_revenue` reads `Ticker.income_stmt` per EQUITY ticker for the R&D / Revenue ratio.
 - **CNN F&G JSON endpoint** — `production.dataviz.cnn.io/index/fearandgreed/graphdata`; requires browser-shape headers (UA + `Accept` + `Referer`; returns 418 otherwise); stdlib `urllib.request`, no extra deps. Observed schema in [`cnn-fg-api.md`](cnn-fg-api.md). Classified as Tier 0 (keyless, default-on, public-`data`-branch-persistable) per [ADR-0005](decisions/0005-sentiment-risk-sources.md)'s three-tier framework — additional sentiment / risk sources must declare their tier under the same rubric.
 - **GitHub Actions cron** — `.github/workflows/fear-greed.yaml` (daily 21:30 UTC) commits per-year history files `results/cnn_fg/YYYY.json`; `.github/workflows/demo-snapshot.yaml` (Sunday 06:15 UTC) commits per-week universe snapshots under `results/demo/<UNIVERSE>/`. Both target the `data` branch via verified REST Git Data API commits from `actions/github-script@v9`.
 - **`financetoolkit`** — *not used; v0.5.0 composites use simplified formulas with point-in-time `FundamentalsSnapshot` inputs only. See [`decisions/0001-defer-financetoolkit.md`](decisions/0001-defer-financetoolkit.md) and [`decisions/0002-simplified-composites.md`](decisions/0002-simplified-composites.md).*
@@ -111,11 +111,11 @@ package MUST NOT reference scripts or workflow artifacts, and the
 
 In-package (Scope 1):
 
-- `src/sec/cik_map.py` — CIK ↔ ticker resolver via EDGAR `company_tickers_exchange.json`; foundation layer used by every other SEC integration. **Shipped in PR #107.**
-- `src/sec/submissions.py` — extracts the last-filed-by-form (10-K / 10-Q / 8-K) date per ticker via EDGAR submissions API; surfaces as new optional fields on `FundamentalsSnapshot`. Per [ADR-0006](decisions/0006-federal-contractors-universe.md).
-- `src/usaspending.py` — `RecipientRecord(BaseModel)` + `fetch_top_contractors(...)` library API for the top-N federal-contractor endpoint. Per [ADR-0006 amendment](decisions/0006-federal-contractors-universe.md).
-- `src/federal_contractors.py` — `AuditRow(BaseModel)` + `build_universe(...) -> tuple[list[str], list[AuditRow]]` orchestrator that chains `src.usaspending` + `src.sec.cik_map` + `yfinance`. Per [ADR-0006 amendment](decisions/0006-federal-contractors-universe.md).
-- `src/universe.py` extension — XDG-cache lookup before bundled-preset fallback. Per [ADR-0007](decisions/0007-package-vs-infrastructure-boundary.md)'s path-write rule.
+- `src/data_sources/sec/cik_map.py` — CIK ↔ ticker resolver via EDGAR `company_tickers_exchange.json`; foundation layer used by every other SEC integration. **Shipped in PR #107.**
+- `src/data_sources/sec/submissions.py` — extracts the last-filed-by-form (10-K / 10-Q / 8-K) date per ticker via EDGAR submissions API; surfaces as new optional fields on `FundamentalsSnapshot`. Per [ADR-0006](decisions/0006-federal-contractors-universe.md).
+- `src/data_sources/usaspending.py` — `RecipientRecord(BaseModel)` + `fetch_top_contractors(...)` library API for the top-N federal-contractor endpoint. Per [ADR-0006 amendment](decisions/0006-federal-contractors-universe.md).
+- `src/orchestrators/federal_contractors.py` — `AuditRow(BaseModel)` + `build_universe(...) -> tuple[list[str], list[AuditRow]]` orchestrator that chains `src.data_sources.usaspending` + `src.data_sources.sec.cik_map` + `yfinance`. Per [ADR-0006 amendment](decisions/0006-federal-contractors-universe.md).
+- `src/domain/universe.py` extension — XDG-cache lookup before bundled-preset fallback. Per [ADR-0007](decisions/0007-package-vs-infrastructure-boundary.md)'s path-write rule.
 
 In repo infrastructure (Scope 2):
 

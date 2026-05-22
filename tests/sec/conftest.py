@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
-from src.sec import cik_map
+from src.data_sources.sec import cik_map
 
 if TYPE_CHECKING:
     from collections.abc import Iterator

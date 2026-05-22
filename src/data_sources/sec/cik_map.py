@@ -37,7 +37,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
-from src.http_ua import pick_user_agent
+from src.utils.http_ua import pick_user_agent, require_https
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +72,22 @@ class CikRecord(BaseModel):
     """Listing exchange (``"Nasdaq"`` / ``"NYSE"`` / ``"OTC"`` / etc.)."""
 
 
+def _http_error_cache_fallback(exc: urllib.error.HTTPError) -> dict | None:
+    """Return cached body when ``exc.code`` warrants stale-cache fallback."""
+    if not _CACHE_PATH.is_file():
+        return None
+    if exc.code == 304:
+        return json.loads(_CACHE_PATH.read_bytes())
+    if exc.code == 403:
+        logger.warning(
+            "EDGAR fetch returned 403 Forbidden (anti-bot likely); "
+            "reusing stale cache at %s",
+            _CACHE_PATH,
+        )
+        return json.loads(_CACHE_PATH.read_bytes())
+    return None
+
+
 def _fetch_json() -> dict:
     """Fetch company_tickers_exchange.json from EDGAR.
 
@@ -81,7 +97,11 @@ def _fetch_json() -> dict:
 
     Stubbed in tests via ``monkeypatch.setattr(cik_map, "_fetch_json", ...)``.
     """
-    headers = {"User-Agent": pick_user_agent(), "Accept": settings.http_accept}
+    headers = {
+        "User-Agent": pick_user_agent(),
+        "Accept": settings.http_accept,
+        "Referer": settings.sec_referer,
+    }
     if _CACHE_PATH.is_file():
         headers["If-Modified-Since"] = formatdate(
             _CACHE_PATH.stat().st_mtime, usegmt=True
@@ -93,8 +113,7 @@ def _fetch_json() -> dict:
         settings.edgar_tickers_url,
         headers=headers,
     )
-    if not request.full_url.startswith("https://"):
-        raise ValueError(f"Refusing non-HTTPS URL: {request.full_url!r}")
+    require_https(request.full_url)
     try:
         with urllib.request.urlopen(  # noqa: S310  # nosec B310
             request, timeout=settings.request_timeout_sec
@@ -102,8 +121,9 @@ def _fetch_json() -> dict:
             body = response.read()
             last_modified = getattr(response, "headers", {}).get("Last-Modified")
     except urllib.error.HTTPError as exc:
-        if exc.code == 304 and _CACHE_PATH.is_file():
-            return json.loads(_CACHE_PATH.read_bytes())
+        cached = _http_error_cache_fallback(exc)
+        if cached is not None:
+            return cached
         raise
     except urllib.error.URLError as exc:
         if _CACHE_PATH.is_file():

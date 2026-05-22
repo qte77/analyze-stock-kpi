@@ -3,7 +3,7 @@
 Resolves the active asset universe, prints a CNN Fear & Greed sentiment
 banner, fetches fundamentals via yfinance, prints an equities/ETF summary
 table, and persists every snapshot (including sparse ones for
-FX/futures/crypto) to ``results/fundamentals_<UTC>.json``.
+FX/futures/crypto) to ``results/fundamentals/<UTC>.json``.
 """
 
 import json
@@ -14,12 +14,16 @@ from pathlib import Path
 from rich.console import Console
 from rich.table import Table
 
-from .composite_scores import CompositeScores, compute_scores
 from .config import settings
-from .fundamentals import FundamentalsSnapshot, fetch_universe_fundamentals
-from .sec.submissions import enrich_snapshot_sec
-from .sentiment import FearGreedSnapshot, fetch_fear_greed
-from .universe import resolve_universe
+from .data_sources.fundamentals import (
+    FundamentalsSnapshot,
+    fetch_universe_fundamentals,
+)
+from .data_sources.sec.submissions import enrich_snapshot_sec
+from .data_sources.sentiment import FearGreedSnapshot, fetch_fear_greed
+from .domain.composite_scores import CompositeScores, compute_scores
+from .domain.universe import resolve_universe
+from .orchestrators.federal_contractors import build_universe
 from .utils.parse_args import CliArgs
 
 _TABLE_QUOTE_TYPES = {"EQUITY", "ETF"}
@@ -137,10 +141,27 @@ def _print_summary_table(
     console.print(table)
 
 
+def _run_refresh_universe(args: CliArgs) -> Path:
+    """Run an orchestrator and persist its outputs; return the preset path."""
+    tickers, audit_rows = build_universe()
+    base = settings.federal_contractors_dir
+    preset_path = args.output or base / "universe.txt"
+    audit_path = args.audit_output or (
+        base / "audit" / f"{datetime.now(UTC).strftime('%Y-%m-%d')}.json"
+    )
+    preset_path.parent.mkdir(parents=True, exist_ok=True)
+    audit_path.parent.mkdir(parents=True, exist_ok=True)
+    preset_path.write_text("\n".join(tickers) + "\n")
+    audit_path.write_text(
+        json.dumps([row.model_dump() for row in audit_rows], indent=2)
+    )
+    return preset_path
+
+
 def _persist_snapshots(snapshots: list[FundamentalsSnapshot]) -> Path:
-    settings.results_dir.mkdir(parents=True, exist_ok=True)
+    settings.fundamentals_dir.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(UTC).strftime("%Y-%m-%dT%H-%M-%SZ")
-    out_path = settings.results_dir / f"fundamentals_{stamp}.json"
+    out_path = settings.fundamentals_dir / f"{stamp}.json"
     payload = [s.model_dump(by_alias=False) for s in snapshots]
     out_path.write_text(json.dumps(payload, indent=2))
     return out_path
@@ -150,6 +171,10 @@ def main() -> None:
     """Entrypoint: resolve universe, fetch fundamentals, print + persist."""
     console = Console()
     args = CliArgs()
+    if args.refresh_universe:
+        out_path = _run_refresh_universe(args)
+        console.print(f"[green]Wrote universe preset[/green] {out_path}")
+        return
     try:
         _print_sentiment_banner(console, fetch_fear_greed())
     except Exception as exc:

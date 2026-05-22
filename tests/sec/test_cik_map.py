@@ -5,8 +5,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, ClassVar
 
 import pytest
-from src.sec import cik_map
-from src.sec.cik_map import CikRecord, lookup_record
+from src.data_sources.sec import cik_map
+from src.data_sources.sec.cik_map import CikRecord, lookup_record
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -33,7 +33,7 @@ def test_lookup_record_returns_full_record_for_aapl() -> None:
 @pytest.mark.usefixtures("_stub_edgar")
 def test_resolve_cik_returns_ten_digit_zero_padded_string() -> None:
     """EDGAR ships CIKs as un-padded ints; resolver must left-zero-pad to 10."""
-    from src.sec.cik_map import resolve_cik
+    from src.data_sources.sec.cik_map import resolve_cik
 
     cik = resolve_cik("AAPL")
 
@@ -46,7 +46,7 @@ def test_resolve_cik_returns_ten_digit_zero_padded_string() -> None:
 @pytest.mark.parametrize("symbol", ["BTC-USD", "EURUSD=X", "^VIX", "GC=F"])
 def test_resolve_cik_returns_none_for_non_equity_symbols(symbol: str) -> None:
     """Non-SEC-registered Yahoo symbols resolve to None, not raise."""
-    from src.sec.cik_map import resolve_cik
+    from src.data_sources.sec.cik_map import resolve_cik
 
     assert resolve_cik(symbol) is None
 
@@ -54,7 +54,7 @@ def test_resolve_cik_returns_none_for_non_equity_symbols(symbol: str) -> None:
 @pytest.mark.usefixtures("_stub_edgar")
 def test_lookup_is_case_insensitive() -> None:
     """Ticker case doesn't matter — ``aapl`` and ``AAPL`` resolve identically."""
-    from src.sec.cik_map import resolve_cik
+    from src.data_sources.sec.cik_map import resolve_cik
 
     assert resolve_cik("aapl") == resolve_cik("AAPL")
     assert resolve_cik("aapl") == "0000320193"
@@ -64,7 +64,7 @@ def test_records_cache_fetches_json_only_once(
     monkeypatch: pytest.MonkeyPatch, edgar_tickers_fixture: dict
 ) -> None:
     """Two ``resolve_cik`` calls trigger exactly one underlying ``_fetch_json``."""
-    from src.sec import cik_map
+    from src.data_sources.sec import cik_map
 
     call_count = 0
 
@@ -88,8 +88,8 @@ def test_fetch_json_sends_browser_shape_headers(
     import urllib.request
     from io import BytesIO
 
-    from src.http_ua import USER_AGENTS
-    from src.sec import cik_map
+    from src.data_sources.sec import cik_map
+    from src.utils.http_ua import USER_AGENTS
 
     expected_accept = "application/json, text/plain, */*"
     expected_url = "https://www.sec.gov/files/company_tickers_exchange.json"
@@ -108,6 +108,7 @@ def test_fetch_json_sends_browser_shape_headers(
     assert req.full_url == expected_url
     assert req.get_header("User-agent") in USER_AGENTS
     assert req.get_header("Accept") == expected_accept
+    assert req.get_header("Referer") == "https://www.sec.gov/"
 
 
 def test_fetch_json_persists_response_to_disk_cache(
@@ -256,7 +257,7 @@ def test_fetch_json_tolerates_missing_last_modified_header(
 @pytest.mark.network
 def test_resolve_cik_live_aapl_returns_apple_cik() -> None:
     """End-to-end against real EDGAR — AAPL must resolve to 0000320193."""
-    from src.sec.cik_map import resolve_cik
+    from src.data_sources.sec.cik_map import resolve_cik
 
     assert resolve_cik("AAPL") == "0000320193"
 
@@ -299,6 +300,56 @@ def test_fetch_json_raises_url_error_when_no_cache_exists(
         cik_map._fetch_json()
 
 
+def test_fetch_json_falls_back_to_cache_on_403_forbidden(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """SEC anti-bot 403 with cache present → serve cached body (wrap-degrade)."""
+    import urllib.error
+    import urllib.request
+
+    cached = b'{"fields": ["cached"], "data": [["from disk"]]}'
+    cik_map._CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    cik_map._CACHE_PATH.write_bytes(cached)
+
+    def fake_urlopen(_req: object, *_a: object, **_k: object) -> None:
+        raise urllib.error.HTTPError(
+            url=cik_map.settings.edgar_tickers_url,
+            code=403,
+            msg="Forbidden",
+            hdrs=None,  # type: ignore[arg-type]
+            fp=None,
+        )
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    result = cik_map._fetch_json()
+
+    assert result == {"fields": ["cached"], "data": [["from disk"]]}
+
+
+def test_fetch_json_raises_403_when_no_cache_exists(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Cold start + 403 → HTTPError propagates (fail-loud, no stale cache to serve)."""
+    import urllib.error
+    import urllib.request
+
+    assert not cik_map._CACHE_PATH.is_file()
+
+    def fake_urlopen(_req: object, *_a: object, **_k: object) -> None:
+        raise urllib.error.HTTPError(
+            url=cik_map.settings.edgar_tickers_url,
+            code=403,
+            msg="Forbidden",
+            hdrs=None,  # type: ignore[arg-type]
+            fp=None,
+        )
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+
+    with pytest.raises(urllib.error.HTTPError):
+        cik_map._fetch_json()
+
+
 @pytest.mark.network
 def test_fetch_json_live_conditional_get_roundtrip(tmp_path: Path) -> None:
     """Real EDGAR — first call lands the cache; second call hits 304."""
@@ -318,6 +369,6 @@ def test_fetch_json_live_conditional_get_roundtrip(tmp_path: Path) -> None:
 @pytest.mark.network
 def test_resolve_cik_live_returns_none_for_non_equity() -> None:
     """End-to-end: ``BTC-USD`` is not in EDGAR; resolver returns None."""
-    from src.sec.cik_map import resolve_cik
+    from src.data_sources.sec.cik_map import resolve_cik
 
     assert resolve_cik("BTC-USD") is None

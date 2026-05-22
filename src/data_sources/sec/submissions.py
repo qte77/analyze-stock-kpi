@@ -45,8 +45,8 @@ from datetime import date
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
-from src.http_ua import pick_user_agent
-from src.sec.cik_map import resolve_cik
+from src.data_sources.sec.cik_map import resolve_cik
+from src.utils.http_ua import pick_user_agent, require_https
 
 logger = logging.getLogger(__name__)
 
@@ -88,10 +88,13 @@ def fetch_last_filed(cik: str) -> LastFiledSnapshot:
     # depth for any future refactor that might let external input flow in.
     request = urllib.request.Request(  # noqa: S310  # nosec B310
         url,
-        headers={"User-Agent": pick_user_agent(), "Accept": settings.http_accept},
+        headers={
+            "User-Agent": pick_user_agent(),
+            "Accept": settings.http_accept,
+            "Referer": settings.sec_referer,
+        },
     )
-    if not request.full_url.startswith("https://"):
-        raise ValueError(f"Refusing non-HTTPS URL: {request.full_url!r}")
+    require_https(request.full_url)
     with urllib.request.urlopen(  # noqa: S310  # nosec B310
         request, timeout=settings.request_timeout_sec
     ) as response:

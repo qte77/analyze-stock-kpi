@@ -11,7 +11,7 @@ from typing import Any
 
 import pytest
 from src.config import settings
-from src.usaspending import RecipientRecord, fetch_top_contractors
+from src.data_sources.usaspending import RecipientRecord, fetch_top_contractors
 
 _FIXTURE_PATH = Path(__file__).parent / "fixtures" / "usaspending_top_recipients.json"
 

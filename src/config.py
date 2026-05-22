@@ -30,18 +30,32 @@ class AppSettings(BaseSettings):
         "https://data.sec.gov/submissions/CIK{cik}.json"
     )
     edgar_cache_dir: Path = Path("results/edgar")
+    sec_referer: str = "https://www.sec.gov/"
     cnn_fg_url: str = (
         "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
     )
     cnn_fg_referer: str = "https://edition.cnn.com/"
-    cnn_fg_user_agent: str = (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
-    )
     cnn_fg_cache_dir: Path = Path("results/cnn_fg")
+    user_agents: tuple[str, ...] = (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/134.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+        "Version/17.10 Safari/605.1.1",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) "
+        "Gecko/20100101 Firefox/135.0",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/134.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (X11; Linux x86_64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/134.0.0.0 Safari/537.36",
+    )
     http_accept: str = "application/json, text/plain, */*"
     request_timeout_sec: int = 10
     results_dir: Path = Path("results")
+    fundamentals_dir: Path = Path("results/fundamentals")
     usaspending_url: str = (
         "https://api.usaspending.gov/api/v2/search/spending_by_category/recipient/"
     )

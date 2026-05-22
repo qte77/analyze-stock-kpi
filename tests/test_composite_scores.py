@@ -7,7 +7,8 @@ midpoint. No ``pytest.approx`` — fixtures vendor exact values.
 
 from __future__ import annotations
 
-from src.composite_scores import (
+from src.data_sources.fundamentals import FundamentalsSnapshot
+from src.domain.composite_scores import (
     CompositeScores,
     aaqs,
     big_call,
@@ -18,7 +19,6 @@ from src.composite_scores import (
     quality,
     screener_score,
 )
-from src.fundamentals import FundamentalsSnapshot
 
 
 def _snap(**kwargs: object) -> FundamentalsSnapshot:

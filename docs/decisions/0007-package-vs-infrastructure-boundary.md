@@ -48,7 +48,7 @@ included as project metadata via `[project].readme`.
 
 Examples: `src/fundamentals.py`, `src/sentiment.py`,
 `src/composite_scores.py`, `src/universe.py`, `src/sec/cik_map.py`,
-`src/http_ua.py`, `src/assets/universes/*.txt`, future
+`src/utils/http_ua.py`, `src/assets/universes/*.txt`, future
 `src/usaspending.py` and `src/federal_contractors.py`.
 
 ### Scope 2 — Repo infrastructure (`scripts/`, `.github/`, `Makefile`, lint configs)

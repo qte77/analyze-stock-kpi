@@ -21,29 +21,20 @@ from __future__ import annotations
 import random  # UA shuffling, not crypto
 from typing import Protocol
 
-# Current desktop User-Agents per useragents.me — refresh quarterly.
-# Last refreshed: 2026-05-20.
-USER_AGENTS: tuple[str, ...] = (
-    # Chrome on Windows
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/134.0.0.0 Safari/537.36",
-    # Safari on macOS
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-    "AppleWebKit/605.1.15 (KHTML, like Gecko) "
-    "Version/17.10 Safari/605.1.1",
-    # Firefox on Windows
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) "
-    "Gecko/20100101 Firefox/135.0",
-    # Chrome on macOS
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/134.0.0.0 Safari/537.36",
-    # Chrome on Linux
-    "Mozilla/5.0 (X11; Linux x86_64) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/134.0.0.0 Safari/537.36",
-)
+from src.config import settings
+
+# Re-exports from settings (the canonical UA pool lives in AppSettings).
+# Refresh ``settings.user_agents`` quarterly from https://useragents.me/.
+USER_AGENTS: tuple[str, ...] = settings.user_agents
+
+STABLE_USER_AGENT: str = settings.user_agents[0]
+"""Pinned User-Agent for endpoints that profile per-UA over time.
+
+CNN's WAF observed to flag clients whose UA changes between requests as
+likely bots. Callers hitting such endpoints import ``STABLE_USER_AGENT``
+directly; callers hitting SEC-style rate limiters that don't track per-UA
+behaviour use :func:`pick_user_agent` for rotation.
+"""
 
 
 class _RngLike(Protocol):
@@ -61,3 +52,15 @@ def pick_user_agent(rng: _RngLike | None = None) -> str:
     """
     chooser: _RngLike = rng if rng is not None else random
     return chooser.choice(USER_AGENTS)
+
+
+def require_https(url: str) -> None:
+    """Raise ``ValueError`` if ``url`` does not begin with ``https://``.
+
+    Defence-in-depth guard at every ``urllib.urlopen()`` call site:
+    the URLs come from :class:`src.config.AppSettings` strings that
+    ARE HTTPS today, but a future refactor could route external input
+    through them.
+    """
+    if not url.startswith("https://"):
+        raise ValueError(f"Refusing non-HTTPS URL: {url!r}")

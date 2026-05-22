@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import random
 
-from src.http_ua import USER_AGENTS, pick_user_agent
+import pytest
+from src.utils.http_ua import USER_AGENTS, pick_user_agent, require_https
 
 
 def test_pick_user_agent_returns_value_from_pool() -> None:
@@ -36,3 +37,21 @@ def test_pick_user_agent_seeded_rng_is_deterministic() -> None:
     a = pick_user_agent(random.Random(42))  # noqa: S311  # determinism test, not crypto
     b = pick_user_agent(random.Random(42))  # noqa: S311  # determinism test, not crypto
     assert a == b
+
+
+def test_require_https_accepts_https_url() -> None:
+    """``require_https`` returns without raising for any ``https://...`` URL."""
+    require_https("https://www.sec.gov/")
+    require_https("https://api.usaspending.gov/api/v2/search/")
+
+
+def test_require_https_rejects_http_url() -> None:
+    """``require_https`` raises ``ValueError`` for plain-HTTP URLs."""
+    with pytest.raises(ValueError, match="Refusing non-HTTPS URL"):
+        require_https("http://www.sec.gov/")
+
+
+def test_require_https_rejects_file_scheme() -> None:
+    """``require_https`` raises for non-network schemes (file://, data:, etc.)."""
+    with pytest.raises(ValueError, match="Refusing non-HTTPS URL"):
+        require_https("file:///etc/passwd")

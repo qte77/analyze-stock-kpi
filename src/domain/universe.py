@@ -18,9 +18,9 @@ See :mod:`src.utils.parse_args` for the ``CliArgs`` shape and
 
 from pathlib import Path
 
-from .utils.parse_args import CliArgs
+from src.utils.parse_args import CliArgs
 
-PRESET_DIR = Path(__file__).parent / "assets" / "universes"
+PRESET_DIR = Path(__file__).parent.parent / "assets" / "universes"
 
 
 class UniverseError(ValueError):

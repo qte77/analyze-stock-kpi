@@ -54,6 +54,20 @@ def test_app_settings_item3_field_defaults() -> None:
     assert s.usaspending_timeout_sec == 30
 
 
+def test_app_settings_sec_referer_default() -> None:
+    """``sec_referer`` defaults to the SEC root for browser-shape blending."""
+    assert AppSettings().sec_referer == "https://www.sec.gov/"
+
+
+def test_app_settings_user_agents_pool_non_empty_browser_shape() -> None:
+    """``user_agents`` is a non-empty pool of browser-shape UA strings."""
+    s = AppSettings()
+    assert isinstance(s.user_agents, tuple)
+    assert len(s.user_agents) >= 3
+    # All entries must look like real browser UAs (start with Mozilla/...).
+    assert all(ua.startswith("Mozilla/") for ua in s.user_agents)
+
+
 def test_app_settings_item3_field_env_overrides(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

@@ -1,0 +1,31 @@
+# Federal contractors universe — DoD Top-25 publicly-traded primes + ICF.
+# Sourced from docs/data-sources.md:440-478 (verified 2026-05-20).
+# Refreshed weekly by .github/workflows/federal-contractors-refresh.yaml
+# via scripts/build_federal_contractors.py — the curated seed below is
+# always included regardless of usaspending API health that week.
+ACN
+AMZN
+BA
+BAESY
+BAH
+CACI
+DELL
+FLR
+GD
+GE
+HII
+HON
+ICFI
+J
+KBR
+LDOS
+LHX
+LMT
+MMS
+MSFT
+NOC
+OSK
+PLTR
+RTX
+SAIC
+TXT

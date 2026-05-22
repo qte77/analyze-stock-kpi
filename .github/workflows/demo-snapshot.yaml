@@ -89,7 +89,7 @@ jobs:
           DATE=$(date -u +%Y-%m-%d)
           DEST="results/demo/$UNIVERSE"
           mkdir -p "$DEST"
-          mv results/fundamentals_*.json "$DEST/$DATE.json"
+          mv results/fundamentals/*.json "$DEST/$DATE.json"
           uv run python scripts/build_demo_manifest.py "$DEST"
           echo "date=$DATE" >> "$GITHUB_OUTPUT"
           echo "snapshot=$DEST/$DATE.json" >> "$GITHUB_OUTPUT"
