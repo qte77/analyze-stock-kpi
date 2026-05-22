@@ -250,16 +250,22 @@ identifier, (ii) send neither browser UA nor a repo-identifying string,
 (iii) treat the UA as the operator's responsibility, never a library
 default.
 
-**Decision.** Adopt the same pattern in this repo:
+**Decision.** Ship an **identity-shape placeholder default** with
+operator override:
 
-- `AppSettings.sec_user_agent: str | None = None` — no default in
-  source (no PII, no repo fingerprint).
-- `SSK_SEC_USER_AGENT` env var supplies the operator's contact at
-  runtime; in CI via a repository secret (`SEC_USER_AGENT`) injected
-  into `federal-contractors-refresh.yaml` env.
+- `AppSettings.sec_user_agent: str = "opensource-research-client contact@example.com"`
+  — identity-shape per SEC's documented requirement; the
+  `example.com` portion is RFC 2606 reserved (documentation domain),
+  so the value is self-evidently a placeholder. No PII, no repo
+  fingerprint committed.
+- `SSK_SEC_USER_AGENT` env var overrides the default with the
+  operator's actual contact at runtime; in CI via a repository
+  **variable** (`vars.SEC_USER_AGENT`, not a secret — UA is sent in
+  plaintext to SEC) injected into `federal-contractors-refresh.yaml`
+  env. Operators choose their override value (e.g.,
+  `"<Name> <email@example.org>"`).
 - `src/data_sources/sec/{cik_map._fetch_json, submissions.fetch_last_filed}`
-  raise `RuntimeError` with a clear message if `sec_user_agent` is
-  unset — fail-loud, no silent browser-UA fallback.
+  send `settings.sec_user_agent` directly — no fallback, no guard.
 - `Referer` and `Accept` headers retained at their current values;
   empirical evidence (edgartools omits both) suggests they are not
   load-bearing, but removing them is YAGNI for this fix.

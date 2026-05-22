@@ -47,11 +47,14 @@ jobs:
 
       - name: Build federal-contractors preset + audit
         env:
-          # SEC EDGAR requires a caller-identifying User-Agent. Operator
-          # configures via repo secret SEC_USER_AGENT (e.g.,
-          # "Name email@example.com"). Empty / unset -> script fails loud.
+          # Optional caller-identifying SEC EDGAR User-Agent. Set repo
+          # variable SEC_USER_AGENT (e.g., "Name email@example.com") to
+          # avoid SEC's anti-bot rejecting the browser-UA fallback.
+          # Unset -> code falls back to settings.user_agents rotation
+          # (may 403 from SEC; cache fallback applies). Not a secret —
+          # the UA is sent in plaintext to SEC.
           # See ADR-0006 amendment 2026-05-22 (later) for rationale.
-          SSK_SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+          SSK_SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
         run: uv run python scripts/build_federal_contractors.py
 
       - name: Detect preset diff + audit path

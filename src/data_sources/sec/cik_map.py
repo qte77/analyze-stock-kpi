@@ -8,12 +8,11 @@ canonical join key for all other EDGAR endpoints
 
 EDGAR publishes a single rolling JSON file mapping every SEC-registered
 equity to its CIK plus listing exchange. The file is keyless. SEC's
-anti-bot rejects browser-shape UAs; clients must declare an
-operator-identifying ``User-Agent`` per
-https://www.sec.gov/os/accessing-edgar-data. The UA is supplied via
-``settings.sec_user_agent`` (env ``SSK_SEC_USER_AGENT``) — no default
-in source. :func:`_fetch_json` fails loud if unset. See ADR-0006
-amendment for the root-cause analysis.
+anti-bot prefers a caller-identifying ``User-Agent`` per
+https://www.sec.gov/os/accessing-edgar-data; we send
+``settings.sec_user_agent`` (env ``SSK_SEC_USER_AGENT``). The shipped
+default is an RFC 2606 placeholder; operators override via env (CI:
+``vars.SEC_USER_AGENT``). See ADR-0006 amendment for rationale.
 
 Public API:
 
@@ -100,12 +99,6 @@ def _fetch_json() -> dict:
 
     Stubbed in tests via ``monkeypatch.setattr(cik_map, "_fetch_json", ...)``.
     """
-    if not settings.sec_user_agent:
-        raise RuntimeError(
-            "SEC EDGAR requires a caller-identifying User-Agent. "
-            "Set SSK_SEC_USER_AGENT (e.g., 'Name email@example.com') "
-            "before invoking SEC fetches."
-        )
     headers = {
         "User-Agent": settings.sec_user_agent,
         "Accept": settings.http_accept,

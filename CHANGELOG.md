@@ -18,7 +18,7 @@ Types of changes:
 
 ### Fixed
 
-- **SEC EDGAR `User-Agent` now operator-supplied via `SSK_SEC_USER_AGENT`** — fixes federal-contractors-refresh 403 (browser UAs rejected). See [ADR-0006 amendment 2026-05-22 (later)](docs/decisions/0006-federal-contractors-universe.md#amendment-2026-05-22-later--sec-anti-bot-ua-shape).
+- **SEC EDGAR `User-Agent` now identity-shape** — default `"opensource-research-client contact@example.com"` (RFC 2606 placeholder, no PII / repo fingerprint); operator overrides via `SSK_SEC_USER_AGENT` env or CI repo variable `vars.SEC_USER_AGENT`. See [ADR-0006 amendment 2026-05-22 (later)](docs/decisions/0006-federal-contractors-universe.md#amendment-2026-05-22-later--sec-anti-bot-ua-shape).
 - **CodeFactor `B108` quiets in `tests/test_config.py`** — `# nosec B108` matching existing pattern on lines 75/80.
 
 ### Added

@@ -82,12 +82,6 @@ def _extract_last_filed(payload: dict) -> LastFiledSnapshot:
 
 def fetch_last_filed(cik: str) -> LastFiledSnapshot:
     """Fetch submissions for ``cik`` and extract last-filed dates."""
-    if not settings.sec_user_agent:
-        raise RuntimeError(
-            "SEC EDGAR requires a caller-identifying User-Agent. "
-            "Set SSK_SEC_USER_AGENT (e.g., 'Name email@example.com') "
-            "before invoking SEC fetches."
-        )
     url = settings.edgar_submissions_url_template.format(cik=cik.zfill(10))
     # S310 / B310: URL is constructed from an HTTPS template plus a zero-
     # padded CIK string; the explicit scheme check below is defense-in-

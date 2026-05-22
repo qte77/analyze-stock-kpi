@@ -59,15 +59,17 @@ def test_app_settings_sec_referer_default() -> None:
     assert AppSettings().sec_referer == "https://www.sec.gov/"
 
 
-def test_app_settings_sec_user_agent_default_is_none() -> None:
-    """``sec_user_agent`` has no in-source default; operator must supply it."""
-    assert AppSettings().sec_user_agent is None
+def test_app_settings_sec_user_agent_default_is_placeholder() -> None:
+    """``sec_user_agent`` defaults to an identity-shape RFC-doc placeholder."""
+    assert AppSettings().sec_user_agent == (
+        "opensource-research-client contact@example.com"
+    )
 
 
 def test_app_settings_sec_user_agent_env_override(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """``SSK_SEC_USER_AGENT`` supplies the SEC EDGAR caller identity."""
+    """``SSK_SEC_USER_AGENT`` overrides the default with the operator's contact."""
     monkeypatch.setenv("SSK_SEC_USER_AGENT", "Operator Name op@example.com")
     assert AppSettings().sec_user_agent == "Operator Name op@example.com"
 
