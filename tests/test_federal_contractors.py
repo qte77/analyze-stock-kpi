@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from src.federal_contractors import _match_to_edgar, _resolve_candidates
+from src.federal_contractors import (
+    _match_to_edgar,
+    _resolve_candidates,
+    _smoke_test_yfinance,
+)
 from src.sec.cik_map import CikRecord
 from src.usaspending import RecipientRecord
 
@@ -108,3 +112,34 @@ def test_resolve_candidates_drops_unmatched_recipients(
     ])
 
     assert candidates == ["AAPL"]
+
+
+class _StubTicker:
+    """Stand-in for ``yfinance.Ticker`` — controls ``fast_info`` truthiness."""
+
+    _UNRESOLVABLE: frozenset[str] = frozenset({"FAKE", "DELISTED"})
+
+    def __init__(self, symbol: str) -> None:
+        self.fast_info = {} if symbol in self._UNRESOLVABLE else {"lastPrice": 1.0}
+
+
+def test_smoke_test_drops_unresolvable_tickers(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Tickers whose yfinance fast_info is empty are filtered out."""
+    monkeypatch.setattr("src.federal_contractors.yf.Ticker", _StubTicker)
+
+    resolved = _smoke_test_yfinance(["AAPL", "FAKE", "MSFT", "DELISTED", "LMT"])
+
+    assert resolved == ["AAPL", "MSFT", "LMT"]
+
+
+def test_smoke_test_preserves_input_order(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Resolution is order-preserving — sorting is a separate concern (cycle 9)."""
+    monkeypatch.setattr("src.federal_contractors.yf.Ticker", _StubTicker)
+
+    resolved = _smoke_test_yfinance(["MSFT", "LMT", "AAPL"])
+
+    assert resolved == ["MSFT", "LMT", "AAPL"]

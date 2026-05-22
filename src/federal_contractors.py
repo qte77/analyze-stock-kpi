@@ -13,6 +13,7 @@ from __future__ import annotations
 from difflib import SequenceMatcher
 from typing import TYPE_CHECKING
 
+import yfinance as yf
 from src.sec.cik_map import _load_records
 
 if TYPE_CHECKING:
@@ -40,6 +41,12 @@ def _normalise_name(name: str) -> str:
             normalised = normalised[: -len(long)] + short
             break
     return normalised
+
+
+def _smoke_test_yfinance(tickers: list[str]) -> list[str]:
+    """Cycle-7 RED scaffold — returns empty list."""
+    _ = tickers
+    return []
 
 
 def _resolve_candidates(recipients: list[RecipientRecord]) -> list[str]:
