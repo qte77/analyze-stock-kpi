@@ -41,11 +41,11 @@
       "big_call": 42.027838095238096,
       "aaqs": 55.88158333333334,
       "hgi": 46.50000000000001,
-      "screener_score": 48.714752979048264
+      "screener_score": 48.71475403965175
     },
     "roi": 0.05556276017021011,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.0954576908191247,
+    "sortino_ratio": 1.0954578180915429,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -111,7 +111,7 @@
     "currency": "JPY",
     "exchange": "JPX",
     "market_cap": 38507628199936.0,
-    "trailing_pe": 7.74317,
+    "trailing_pe": 7.7459216,
     "forward_pe": 22.88259,
     "price_to_book": 2.2094471,
     "price_to_sales_ttm": 4.9377303,
@@ -130,7 +130,7 @@
     "earnings_growth": 2.607,
     "dividend_yield": 0.0016,
     "payout_ratio": 0.0126,
-    "trailing_eps": 872.64,
+    "trailing_eps": 872.33,
     "forward_eps": 295.29,
     "book_value": 3058.231,
     "fifty_two_week_high": 6923.75,
@@ -245,11 +245,11 @@
       "big_call": 56.43909074285715,
       "aaqs": 71.52779125,
       "hgi": 75.0,
-      "screener_score": 33.23495489821673
+      "screener_score": 33.234954883936226
     },
     "roi": 0.07574079505912251,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.8496112877860071,
+    "sortino_ratio": 0.8496112860723469,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -398,11 +398,11 @@
       "big_call": 59.311416666666666,
       "aaqs": 73.86927083333333,
       "hgi": 70.42857142857143,
-      "screener_score": 63.85384350962308
+      "screener_score": 63.85384274531662
     },
     "roi": 0.43584665413322266,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.9327445544881026,
+    "sortino_ratio": 2.932744462771327,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -449,11 +449,11 @@
       "big_call": 48.458047185714285,
       "aaqs": 54.71041687499999,
       "hgi": 35.0,
-      "screener_score": 60.72417359728584
+      "screener_score": 60.724175675251075
     },
     "roi": 0.15602850503116963,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.201986267388587,
+    "sortino_ratio": 2.2019865167444155,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -555,7 +555,7 @@
     },
     "roi": -0.05413741100727816,
     "rd_to_revenue": null,
-    "sortino_ratio": 3.1486737062506935,
+    "sortino_ratio": 3.148673967870651,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -621,7 +621,7 @@
     "currency": "JPY",
     "exchange": "JPX",
     "market_cap": 22526272995328.0,
-    "trailing_pe": 28.301458,
+    "trailing_pe": 28.328707,
     "forward_pe": 28.080614,
     "price_to_book": 3.456819,
     "price_to_sales_ttm": 2.1277735,
@@ -640,7 +640,7 @@
     "earnings_growth": -0.101,
     "dividend_yield": 0.011200000000000002,
     "payout_ratio": 0.2831,
-    "trailing_eps": 176.74,
+    "trailing_eps": 176.57,
     "forward_eps": 178.13,
     "book_value": 1446.995,
     "fifty_two_week_high": 6039.0,
@@ -653,11 +653,11 @@
       "big_call": 40.97328826190476,
       "aaqs": 64.13964604166667,
       "hgi": 39.42857142857143,
-      "screener_score": 41.35443646213139
+      "screener_score": 41.35443610622489
     },
     "roi": 0.13723368840742162,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.5404540349795763,
+    "sortino_ratio": 1.540453992270796,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -704,11 +704,11 @@
       "big_call": 40.70302857142857,
       "aaqs": 48.677,
       "hgi": 40.85714285714286,
-      "screener_score": 41.981549249115
+      "screener_score": 41.98154937557515
     },
     "roi": -0.02093528616129955,
     "rd_to_revenue": 0.050693614809915195,
-    "sortino_ratio": 0.4364819400709039,
+    "sortino_ratio": 0.43648195524612216,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -908,11 +908,11 @@
       "big_call": 58.03200542857142,
       "aaqs": 70.4330425,
       "hgi": 82.5,
-      "screener_score": 44.4581270031857
+      "screener_score": 44.45812700628312
     },
     "roi": 0.4783014509020979,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.9198816118108566,
+    "sortino_ratio": 0.9198816121825469,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -927,7 +927,7 @@
     "currency": "JPY",
     "exchange": "JPX",
     "market_cap": 8346481459200.0,
-    "trailing_pe": 19.866642,
+    "trailing_pe": 19.880825,
     "forward_pe": 21.27347,
     "price_to_book": 2.8254607,
     "price_to_sales_ttm": 3.6084297,
@@ -946,7 +946,7 @@
     "earnings_growth": 0.571,
     "dividend_yield": 0.0302,
     "payout_ratio": 0.60080004,
-    "trailing_eps": 364.43,
+    "trailing_eps": 364.17,
     "forward_eps": 340.33,
     "book_value": 2562.414,
     "fifty_two_week_high": 14795.0,
@@ -963,7 +963,7 @@
     },
     "roi": 0.5752494826895687,
     "rd_to_revenue": null,
-    "sortino_ratio": -1.3188651287927122,
+    "sortino_ratio": -1.3188649473786072,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -978,7 +978,7 @@
     "currency": "JPY",
     "exchange": "JPX",
     "market_cap": 19889259544576.0,
-    "trailing_pe": 25.773392,
+    "trailing_pe": 25.906143,
     "forward_pe": 25.61781,
     "price_to_book": 2.1067867,
     "price_to_sales_ttm": 1.0514519,
@@ -997,7 +997,7 @@
     "earnings_growth": 0.683,
     "dividend_yield": 0.023,
     "payout_ratio": 0.5244,
-    "trailing_eps": 210.76,
+    "trailing_eps": 209.68,
     "forward_eps": 212.04,
     "book_value": 2578.334,
     "fifty_two_week_high": 6012.0,
@@ -1014,7 +1014,7 @@
     },
     "roi": 0.056811766669032766,
     "rd_to_revenue": null,
-    "sortino_ratio": 3.670066281428769,
+    "sortino_ratio": 3.6700671261991804,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -1029,7 +1029,7 @@
     "currency": "JPY",
     "exchange": "JPX",
     "market_cap": 13626834419712.0,
-    "trailing_pe": 15.224522,
+    "trailing_pe": 15.220956,
     "forward_pe": 3.0118806,
     "price_to_book": 2.0678163,
     "price_to_sales_ttm": 0.91929805,
@@ -1048,7 +1048,7 @@
     "earnings_growth": -0.03,
     "dividend_yield": 0.0226,
     "payout_ratio": 0.32810003,
-    "trailing_eps": 128.05,
+    "trailing_eps": 128.08,
     "forward_eps": 647.27,
     "book_value": 942.782,
     "fifty_two_week_high": 2286.5,
@@ -1116,7 +1116,7 @@
     },
     "roi": 0.07216844020999447,
     "rd_to_revenue": null,
-    "sortino_ratio": 4.082259166065744,
+    "sortino_ratio": 4.082258592336662,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -1214,11 +1214,11 @@
       "big_call": 28.940290476190476,
       "aaqs": 60.234291666666664,
       "hgi": 34.142857142857146,
-      "screener_score": 51.216475168494604
+      "screener_score": 51.21647670944459
     },
     "roi": 0.015181105489656338,
     "rd_to_revenue": 0.1593842347274973,
-    "sortino_ratio": 2.191460282848381,
+    "sortino_ratio": 2.1914604677623797,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -1316,11 +1316,11 @@
       "big_call": 65.66937857142858,
       "aaqs": 81.7624375,
       "hgi": 54.07142857142857,
-      "screener_score": 66.8996347278
+      "screener_score": 66.89963381082093
     },
     "roi": 0.5211313808488218,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.410389024478858,
+    "sortino_ratio": 2.4103889144413686,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -1418,11 +1418,11 @@
       "big_call": 69.61682584126983,
       "aaqs": 82.50388944444444,
       "hgi": 60.142857142857146,
-      "screener_score": 53.52694716739619
+      "screener_score": 53.52694714492308
     },
     "roi": 0.42756031957679447,
     "rd_to_revenue": 0.14913100057951845,
-    "sortino_ratio": 0.6302205257714916,
+    "sortino_ratio": 0.6302205230747187,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -1539,7 +1539,7 @@
     "currency": "JPY",
     "exchange": "JPX",
     "market_cap": 4184225611776.0,
-    "trailing_pe": 25.077385,
+    "trailing_pe": 25.12559,
     "forward_pe": 20.185066,
     "price_to_book": 1.978274,
     "price_to_sales_ttm": 4.9661984,
@@ -1558,7 +1558,7 @@
     "earnings_growth": 0.282,
     "dividend_yield": 0.0151,
     "payout_ratio": 0.3788,
-    "trailing_eps": 2642.62,
+    "trailing_eps": 2637.55,
     "forward_eps": 3283.12,
     "book_value": 33498.9,
     "fifty_two_week_high": 86800.0,
@@ -1571,11 +1571,11 @@
       "big_call": 56.45328313333333,
       "aaqs": 58.099103916666664,
       "hgi": 69.71428571428572,
-      "screener_score": 54.10192980636941
+      "screener_score": 54.101929386734966
     },
     "roi": 0.11878203723912159,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.0534253491452823,
+    "sortino_ratio": 1.0534252987891481,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
