@@ -19,10 +19,40 @@ if TYPE_CHECKING:
     from src.usaspending import RecipientRecord
 
 
+# SAM / usaspending names use long-form legal suffixes ("CORPORATION",
+# "INCORPORATED"); EDGAR titles use the short forms ("Corp", "Inc").
+# Normalising both sides before fuzzy match lifts borderline pairs above
+# the 0.85 SequenceMatcher threshold without inviting noise matches.
+_SUFFIX_NORMALISATIONS: tuple[tuple[str, str], ...] = (
+    (" LIMITED LIABILITY COMPANY", " LLC"),
+    (" CORPORATION", " CORP"),
+    (" INCORPORATED", " INC"),
+    (" COMPANY", " CO"),
+    (" LIMITED", " LTD"),
+)
+
+
+def _normalise_name(name: str) -> str:
+    """Upper-case + strip + collapse common legal-entity suffixes."""
+    normalised = name.upper().strip()
+    for long, short in _SUFFIX_NORMALISATIONS:
+        if normalised.endswith(long):
+            normalised = normalised[: -len(long)] + short
+            break
+    return normalised
+
+
 def _resolve_candidates(recipients: list[RecipientRecord]) -> list[str]:
-    """Cycle-6 RED scaffold — returns empty list."""
-    _ = recipients
-    return []
+    """Map recipients to EDGAR tickers, dedupe to one entry per ticker."""
+    seen: set[str] = set()
+    tickers: list[str] = []
+    for recipient in recipients:
+        ticker, _score = _match_to_edgar(recipient.name)
+        if ticker is None or ticker in seen:
+            continue
+        seen.add(ticker)
+        tickers.append(ticker)
+    return tickers
 
 
 def _match_to_edgar(
@@ -30,11 +60,11 @@ def _match_to_edgar(
     threshold: float = 0.85,
 ) -> tuple[str | None, float | None]:
     """Fuzzy-match a recipient name against EDGAR titles."""
-    target = recipient_name.upper().strip()
+    target = _normalise_name(recipient_name)
     best_ticker: str | None = None
     best_score = 0.0
     for record in _load_records().values():
-        score = SequenceMatcher(None, target, record.title.upper().strip()).ratio()
+        score = SequenceMatcher(None, target, _normalise_name(record.title)).ratio()
         if score > best_score:
             best_score = score
             best_ticker = record.ticker
