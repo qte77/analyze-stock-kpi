@@ -88,8 +88,8 @@ def test_fetch_json_sends_browser_shape_headers(
     import urllib.request
     from io import BytesIO
 
-    from src.http_ua import USER_AGENTS
     from src.sec import cik_map
+    from src.utils.http_ua import USER_AGENTS
 
     expected_accept = "application/json, text/plain, */*"
     expected_url = "https://www.sec.gov/files/company_tickers_exchange.json"

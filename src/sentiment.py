@@ -26,7 +26,7 @@ from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
-from src.http_ua import require_https
+from src.utils.http_ua import require_https
 
 if TYPE_CHECKING:
     from pathlib import Path

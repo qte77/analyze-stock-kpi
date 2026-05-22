@@ -6,7 +6,7 @@ Analysis, and Retrieval — SEC's electronic filing system and its
 public API surface (``data.sec.gov`` / ``www.sec.gov/files/...``).
 
 All modules here send a browser-shape ``User-Agent`` header on every
-HTTP request (from :mod:`src.http_ua`, refresh quarterly from
+HTTP request (from :mod:`src.utils.http_ua`, refresh quarterly from
 https://useragents.me/) plus the shared ``Accept`` header from
 ``settings.http_accept``.
 

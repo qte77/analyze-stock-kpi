@@ -37,7 +37,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
-from src.http_ua import pick_user_agent, require_https
+from src.utils.http_ua import pick_user_agent, require_https
 
 logger = logging.getLogger(__name__)
 

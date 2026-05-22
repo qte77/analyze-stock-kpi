@@ -111,7 +111,7 @@ Without it the API returns HTTP 403. SEC documents a **10 req/sec**
 hard ceiling per IP; community practice is to self-limit to 9 req/sec.
 No OAuth, no registration, no redistribution restrictions.
 
-The project sends a browser-shape UA from `src/http_ua.py` (refreshed
+The project sends a browser-shape UA from `src/utils/http_ua.py` (refreshed
 quarterly from <https://useragents.me/>) rather than the
 identify-as-the-project format that SEC's docs suggest. Both are
 acceptable to SEC's rate-limiter; the browser-shape blends the egress

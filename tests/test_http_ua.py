@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 
 import pytest
-from src.http_ua import USER_AGENTS, pick_user_agent, require_https
+from src.utils.http_ua import USER_AGENTS, pick_user_agent, require_https
 
 
 def test_pick_user_agent_returns_value_from_pool() -> None:

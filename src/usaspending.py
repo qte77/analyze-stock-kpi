@@ -14,7 +14,7 @@ from datetime import date  # noqa: TC003 — pydantic needs runtime access in ca
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
-from src.http_ua import require_https
+from src.utils.http_ua import require_https
 
 
 class RecipientRecord(BaseModel):
