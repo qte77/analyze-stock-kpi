@@ -31,6 +31,18 @@ class AppSettings(BaseSettings):
     )
     edgar_cache_dir: Path = Path("results/edgar")
     sec_referer: str = "https://www.sec.gov/"
+    sec_user_agent: str | None = None
+    """Caller-identifying ``User-Agent`` for SEC EDGAR HTTPS requests.
+
+    SEC's anti-bot rejects browser-shape UAs (`Mozilla/...`); requests must
+    declare an operator identity per
+    https://www.sec.gov/os/accessing-edgar-data. No default in source —
+    operator must set ``SSK_SEC_USER_AGENT`` (e.g.,
+    ``"Name email@example.com"``). The SEC fetchers in
+    :mod:`src.data_sources.sec.cik_map` / :mod:`...submissions` raise
+    ``RuntimeError`` if this is unset. See ADR-0006 amendment for the
+    findings that drove this policy.
+    """
     cnn_fg_url: str = (
         "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
     )

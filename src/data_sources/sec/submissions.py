@@ -46,7 +46,7 @@ from datetime import date
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
 from src.data_sources.sec.cik_map import resolve_cik
-from src.utils.http_ua import pick_user_agent, require_https
+from src.utils.http_ua import require_https
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +82,12 @@ def _extract_last_filed(payload: dict) -> LastFiledSnapshot:
 
 def fetch_last_filed(cik: str) -> LastFiledSnapshot:
     """Fetch submissions for ``cik`` and extract last-filed dates."""
+    if not settings.sec_user_agent:
+        raise RuntimeError(
+            "SEC EDGAR requires a caller-identifying User-Agent. "
+            "Set SSK_SEC_USER_AGENT (e.g., 'Name email@example.com') "
+            "before invoking SEC fetches."
+        )
     url = settings.edgar_submissions_url_template.format(cik=cik.zfill(10))
     # S310 / B310: URL is constructed from an HTTPS template plus a zero-
     # padded CIK string; the explicit scheme check below is defense-in-
@@ -89,7 +95,7 @@ def fetch_last_filed(cik: str) -> LastFiledSnapshot:
     request = urllib.request.Request(  # noqa: S310  # nosec B310
         url,
         headers={
-            "User-Agent": pick_user_agent(),
+            "User-Agent": settings.sec_user_agent,
             "Accept": settings.http_accept,
             "Referer": settings.sec_referer,
         },

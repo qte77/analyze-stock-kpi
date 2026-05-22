@@ -36,12 +36,12 @@ def test_app_settings_env_override_via_ssk_prefix(
 ) -> None:
     """``SSK_<FIELD>`` env vars override the default at construction time."""
     monkeypatch.setenv("SSK_REQUEST_TIMEOUT_SEC", "30")
-    monkeypatch.setenv("SSK_RESULTS_DIR", "/tmp/results-override")  # noqa: S108
+    monkeypatch.setenv("SSK_RESULTS_DIR", "/tmp/results-override")  # noqa: S108  # nosec B108
 
     s = AppSettings()
 
     assert s.request_timeout_sec == 30
-    assert s.results_dir == Path("/tmp/results-override")  # noqa: S108
+    assert s.results_dir == Path("/tmp/results-override")  # noqa: S108  # nosec B108
 
 
 def test_app_settings_item3_field_defaults() -> None:
@@ -57,6 +57,19 @@ def test_app_settings_item3_field_defaults() -> None:
 def test_app_settings_sec_referer_default() -> None:
     """``sec_referer`` defaults to the SEC root for browser-shape blending."""
     assert AppSettings().sec_referer == "https://www.sec.gov/"
+
+
+def test_app_settings_sec_user_agent_default_is_none() -> None:
+    """``sec_user_agent`` has no in-source default; operator must supply it."""
+    assert AppSettings().sec_user_agent is None
+
+
+def test_app_settings_sec_user_agent_env_override(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``SSK_SEC_USER_AGENT`` supplies the SEC EDGAR caller identity."""
+    monkeypatch.setenv("SSK_SEC_USER_AGENT", "Operator Name op@example.com")
+    assert AppSettings().sec_user_agent == "Operator Name op@example.com"
 
 
 def test_app_settings_user_agents_pool_non_empty_browser_shape() -> None:

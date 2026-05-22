@@ -7,10 +7,13 @@ canonical join key for all other EDGAR endpoints
 (``data.sec.gov/submissions/CIK<10>.json``, XBRL company facts, etc.).
 
 EDGAR publishes a single rolling JSON file mapping every SEC-registered
-equity to its CIK plus listing exchange. The file is keyless. SEC asks
-clients to send a ``User-Agent`` header so they can rate-limit per
-caller (see https://www.sec.gov/os/accessing-edgar-data); we send a
-browser-shape UA from :mod:`src.http_ua`.
+equity to its CIK plus listing exchange. The file is keyless. SEC's
+anti-bot rejects browser-shape UAs; clients must declare an
+operator-identifying ``User-Agent`` per
+https://www.sec.gov/os/accessing-edgar-data. The UA is supplied via
+``settings.sec_user_agent`` (env ``SSK_SEC_USER_AGENT``) — no default
+in source. :func:`_fetch_json` fails loud if unset. See ADR-0006
+amendment for the root-cause analysis.
 
 Public API:
 
@@ -37,7 +40,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
-from src.utils.http_ua import pick_user_agent, require_https
+from src.utils.http_ua import require_https
 
 logger = logging.getLogger(__name__)
 
@@ -97,8 +100,14 @@ def _fetch_json() -> dict:
 
     Stubbed in tests via ``monkeypatch.setattr(cik_map, "_fetch_json", ...)``.
     """
+    if not settings.sec_user_agent:
+        raise RuntimeError(
+            "SEC EDGAR requires a caller-identifying User-Agent. "
+            "Set SSK_SEC_USER_AGENT (e.g., 'Name email@example.com') "
+            "before invoking SEC fetches."
+        )
     headers = {
-        "User-Agent": pick_user_agent(),
+        "User-Agent": settings.sec_user_agent,
         "Accept": settings.http_accept,
         "Referer": settings.sec_referer,
     }

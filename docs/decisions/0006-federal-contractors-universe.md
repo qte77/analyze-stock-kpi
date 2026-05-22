@@ -221,6 +221,57 @@ downstream consumers of the wheel get a first-class library API:
 the GHA refresh workflow invokes; the heavy lifting lives in the
 package.
 
+## Amendment (2026-05-22 later) — SEC anti-bot UA shape
+
+The first live run of `federal-contractors-refresh`
+([Actions run #26300253536](https://github.com/qte77/analyze-stock-kpi/actions/runs/26300253536))
+returned `HTTP 403 Forbidden` from
+`https://www.sec.gov/files/company_tickers_exchange.json`. The original
+implementation rotated browser-shape `User-Agent` strings via
+`src/utils/http_ua.pick_user_agent`; SEC's anti-bot now rejects that
+shape outright.
+
+**Findings from existing Python SEC clients** (consulted because SEC's
+own access-policy page also returns 403 to crawlers, blocking direct
+re-verification):
+
+- `sec-edgar/sec-edgar` (README): users supply
+  `user_agent="Your Name (your.name@example.com)"` when constructing a
+  filings object. The library has no default and no built-in browser
+  pool.
+- `dgunning/edgartools` (`edgar/httprequests.py`): sets only
+  `headers["User-Agent"] = identity` where `identity` is resolved from
+  one of (caller param, `identity_callable()`, `EDGAR_IDENTITY` env).
+  No `Referer`, no explicit `Accept` — only the identity-shape UA.
+  Requests without `identity` raise before any HTTP call.
+
+**Convergent pattern.** Both libraries (i) require an operator-supplied
+identifier, (ii) send neither browser UA nor a repo-identifying string,
+(iii) treat the UA as the operator's responsibility, never a library
+default.
+
+**Decision.** Adopt the same pattern in this repo:
+
+- `AppSettings.sec_user_agent: str | None = None` — no default in
+  source (no PII, no repo fingerprint).
+- `SSK_SEC_USER_AGENT` env var supplies the operator's contact at
+  runtime; in CI via a repository secret (`SEC_USER_AGENT`) injected
+  into `federal-contractors-refresh.yaml` env.
+- `src/data_sources/sec/{cik_map._fetch_json, submissions.fetch_last_filed}`
+  raise `RuntimeError` with a clear message if `sec_user_agent` is
+  unset — fail-loud, no silent browser-UA fallback.
+- `Referer` and `Accept` headers retained at their current values;
+  empirical evidence (edgartools omits both) suggests they are not
+  load-bearing, but removing them is YAGNI for this fix.
+
+**Verification limit.** SEC's published policy at
+`https://www.sec.gov/os/accessing-edgar-data` is itself 403-blocked to
+automated fetchers, so the exact current minimum accepted UA string
+cannot be confirmed against the source-of-truth document. The
+conclusion above is the convergent practice of the two most-maintained
+Python SEC clients as of 2026-05-22, plus the empirical observation
+that this workflow's first ever attempt with a browser UA was rejected.
+
 ## References
 
 - usaspending.gov API: <https://api.usaspending.gov/>
