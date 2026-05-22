@@ -162,7 +162,7 @@ def _persist_snapshots(snapshots: list[FundamentalsSnapshot]) -> Path:
     settings.fundamentals_dir.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(UTC).strftime("%Y-%m-%dT%H-%M-%SZ")
     out_path = settings.fundamentals_dir / f"{stamp}.json"
-    payload = [s.model_dump(by_alias=False) for s in snapshots]
+    payload = [s.model_dump(by_alias=False, mode="json") for s in snapshots]
     out_path.write_text(json.dumps(payload, indent=2))
     return out_path
 

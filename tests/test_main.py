@@ -13,7 +13,12 @@ import json
 from datetime import date
 from typing import TYPE_CHECKING
 
-from src.__main__ import _format_days_since, _run_refresh_universe, _summary_row
+from src.__main__ import (
+    _format_days_since,
+    _persist_snapshots,
+    _run_refresh_universe,
+    _summary_row,
+)
 from src.config import settings
 from src.data_sources.fundamentals import FundamentalsSnapshot
 from src.domain.composite_scores import CompositeScores
@@ -120,6 +125,33 @@ def test_summary_row_days_since_10q_renders_dash_when_missing() -> None:
 
     assert len(row) == 14
     assert row[13] == "-"
+
+
+def test_persist_snapshots_serializes_sec_date_fields(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+) -> None:
+    """Snapshot with populated SEC date fields serializes to valid JSON.
+
+    Regression for run #26303499996: SEC enrichment now succeeds (PR #127),
+    so ``sec_last_*_date`` are real ``date`` objects. Without ``mode="json"``,
+    ``json.dumps`` raises ``TypeError: Object of type date is not JSON serializable``.
+    """
+    monkeypatch.setattr(
+        "src.__main__.settings",
+        settings.model_copy(update={"fundamentals_dir": tmp_path}),
+    )
+    snap = _snap(
+        sec_last_10k_date=date(2024, 11, 1),
+        sec_last_10q_date=date(2024, 8, 2),
+        sec_last_8k_date=date(2024, 12, 15),
+    )
+
+    out_path = _persist_snapshots([snap])
+
+    payload = json.loads(out_path.read_text())
+    assert payload[0]["sec_last_10k_date"] == "2024-11-01"
+    assert payload[0]["sec_last_10q_date"] == "2024-08-02"
+    assert payload[0]["sec_last_8k_date"] == "2024-12-15"
 
 
 def _stub_build_universe(
