@@ -89,7 +89,6 @@ def test_fetch_json_sends_browser_shape_headers(
     from io import BytesIO
 
     from src.data_sources.sec import cik_map
-    from src.utils.http_ua import USER_AGENTS
 
     expected_accept = "application/json, text/plain, */*"
     expected_url = "https://www.sec.gov/files/company_tickers_exchange.json"
@@ -106,7 +105,7 @@ def test_fetch_json_sends_browser_shape_headers(
 
     req = captured["req"]
     assert req.full_url == expected_url
-    assert req.get_header("User-agent") in USER_AGENTS
+    assert req.get_header("User-agent") == cik_map.settings.sec_user_agent
     assert req.get_header("Accept") == expected_accept
     assert req.get_header("Referer") == "https://www.sec.gov/"
 

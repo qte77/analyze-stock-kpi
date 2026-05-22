@@ -221,6 +221,70 @@ downstream consumers of the wheel get a first-class library API:
 the GHA refresh workflow invokes; the heavy lifting lives in the
 package.
 
+## Amendment (2026-05-22 later) — SEC anti-bot UA shape
+
+The first live run of `federal-contractors-refresh`
+([Actions run #26300253536](https://github.com/qte77/analyze-stock-kpi/actions/runs/26300253536))
+returned `HTTP 403 Forbidden` from
+`https://www.sec.gov/files/company_tickers_exchange.json`. The original
+implementation rotated browser-shape `User-Agent` strings via
+`src/utils/http_ua.pick_user_agent`; SEC's anti-bot now rejects that
+shape outright.
+
+**Findings from existing Python SEC clients** (consulted because SEC's
+own access-policy page also returns 403 to crawlers, blocking direct
+re-verification):
+
+- `sec-edgar/sec-edgar` (README): users supply
+  `user_agent="Your Name (your.name@example.com)"` when constructing a
+  filings object. The library has no default and no built-in browser
+  pool.
+- `dgunning/edgartools` (`edgar/httprequests.py`): sets only
+  `headers["User-Agent"] = identity` where `identity` is resolved from
+  one of (caller param, `identity_callable()`, `EDGAR_IDENTITY` env).
+  No `Referer`, no explicit `Accept` — only the identity-shape UA.
+  Requests without `identity` raise before any HTTP call.
+
+**Convergent pattern.** Both libraries (i) require an operator-supplied
+identifier, (ii) send neither browser UA nor a repo-identifying string,
+(iii) treat the UA as the operator's responsibility, never a library
+default.
+
+**Decision.** Ship an **identity-shape placeholder default** with
+operator override:
+
+- `AppSettings.sec_user_agent: str = "opensource-research-client contact@example.com"`
+  — identity-shape per SEC's documented requirement; the
+  `example.com` portion is RFC 2606 reserved (documentation domain),
+  so the value is self-evidently a placeholder. No PII, no repo
+  fingerprint committed.
+- `SSK_SEC_USER_AGENT` env var overrides the default with the
+  operator's actual contact at runtime; in CI via a repository
+  **variable** (`vars.SEC_USER_AGENT`, not a secret — UA is sent in
+  plaintext to SEC) injected into `federal-contractors-refresh.yaml`
+  env. Operators choose their override value (e.g.,
+  `"<Name> <email@example.org>"`).
+- The variable is **optional**. When unset, `${{ vars.SEC_USER_AGENT }}`
+  expands to empty string; `AppSettings.model_config`'s
+  `env_ignore_empty=True` treats that as "use default", so the
+  identity-shape placeholder ships. Confirmed by run #26302537610
+  where the workflow injected an empty env value before
+  `env_ignore_empty` was added — pydantic-settings overrode the
+  default with `""` and SEC rejected the empty UA with 403.
+- `src/data_sources/sec/{cik_map._fetch_json, submissions.fetch_last_filed}`
+  send `settings.sec_user_agent` directly — no fallback, no guard.
+- `Referer` and `Accept` headers retained at their current values;
+  empirical evidence (edgartools omits both) suggests they are not
+  load-bearing, but removing them is YAGNI for this fix.
+
+**Verification limit.** SEC's published policy at
+`https://www.sec.gov/os/accessing-edgar-data` is itself 403-blocked to
+automated fetchers, so the exact current minimum accepted UA string
+cannot be confirmed against the source-of-truth document. The
+conclusion above is the convergent practice of the two most-maintained
+Python SEC clients as of 2026-05-22, plus the empirical observation
+that this workflow's first ever attempt with a browser UA was rejected.
+
 ## References
 
 - usaspending.gov API: <https://api.usaspending.gov/>

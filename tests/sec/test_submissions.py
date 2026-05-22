@@ -164,8 +164,8 @@ def test_fetch_last_filed_sends_browser_shape_headers_to_cik_url(
     import urllib.request
     from io import BytesIO
 
+    from src.data_sources.sec import submissions
     from src.data_sources.sec.submissions import fetch_last_filed
-    from src.utils.http_ua import USER_AGENTS
 
     expected_accept = "application/json, text/plain, */*"
     expected_url = "https://data.sec.gov/submissions/CIK0000320193.json"
@@ -182,7 +182,7 @@ def test_fetch_last_filed_sends_browser_shape_headers_to_cik_url(
 
     req = captured["req"]
     assert req.full_url == expected_url
-    assert req.get_header("User-agent") in USER_AGENTS
+    assert req.get_header("User-agent") == submissions.settings.sec_user_agent
     assert req.get_header("Accept") == expected_accept
     assert req.get_header("Referer") == "https://www.sec.gov/"
 

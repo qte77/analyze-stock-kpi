@@ -46,6 +46,15 @@ jobs:
         run: uv sync
 
       - name: Build federal-contractors preset + audit
+        env:
+          # Optional SEC EDGAR User-Agent override. Set repo variable
+          # SEC_USER_AGENT to the operator contact (e.g.,
+          # "Name email@example.com"); unset -> expands to '' which
+          # AppSettings ignores (env_ignore_empty=True) so the
+          # in-source identity-shape placeholder default ships.
+          # Not a secret — UA is sent in plaintext to SEC.
+          # See ADR-0006 amendment 2026-05-22 (later).
+          SSK_SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
         run: uv run python scripts/build_federal_contractors.py
 
       - name: Detect preset diff + audit path

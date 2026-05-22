@@ -36,12 +36,12 @@ def test_app_settings_env_override_via_ssk_prefix(
 ) -> None:
     """``SSK_<FIELD>`` env vars override the default at construction time."""
     monkeypatch.setenv("SSK_REQUEST_TIMEOUT_SEC", "30")
-    monkeypatch.setenv("SSK_RESULTS_DIR", "/tmp/results-override")  # noqa: S108
+    monkeypatch.setenv("SSK_RESULTS_DIR", "/tmp/results-override")  # noqa: S108  # nosec B108
 
     s = AppSettings()
 
     assert s.request_timeout_sec == 30
-    assert s.results_dir == Path("/tmp/results-override")  # noqa: S108
+    assert s.results_dir == Path("/tmp/results-override")  # noqa: S108  # nosec B108
 
 
 def test_app_settings_item3_field_defaults() -> None:
@@ -57,6 +57,36 @@ def test_app_settings_item3_field_defaults() -> None:
 def test_app_settings_sec_referer_default() -> None:
     """``sec_referer`` defaults to the SEC root for browser-shape blending."""
     assert AppSettings().sec_referer == "https://www.sec.gov/"
+
+
+def test_app_settings_sec_user_agent_default_is_placeholder() -> None:
+    """``sec_user_agent`` defaults to an identity-shape RFC-doc placeholder."""
+    assert AppSettings().sec_user_agent == (
+        "opensource-research-client contact@example.com"
+    )
+
+
+def test_app_settings_sec_user_agent_env_override(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``SSK_SEC_USER_AGENT`` overrides the default with the operator's contact."""
+    monkeypatch.setenv("SSK_SEC_USER_AGENT", "Operator Name op@example.com")
+    assert AppSettings().sec_user_agent == "Operator Name op@example.com"
+
+
+def test_app_settings_sec_user_agent_empty_env_falls_back_to_default(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Empty ``SSK_SEC_USER_AGENT`` (e.g., unset GHA `vars` expands to '') falls
+    back to the in-source default rather than overriding it with ``""``.
+
+    Reason: empty env (`env_ignore_empty=True`) must not produce an empty
+    ``User-Agent`` header — SEC rejects empty UA with 403.
+    """
+    monkeypatch.setenv("SSK_SEC_USER_AGENT", "")
+    assert AppSettings().sec_user_agent == (
+        "opensource-research-client contact@example.com"
+    )
 
 
 def test_app_settings_user_agents_pool_non_empty_browser_shape() -> None:

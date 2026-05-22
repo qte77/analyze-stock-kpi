@@ -7,10 +7,12 @@ canonical join key for all other EDGAR endpoints
 (``data.sec.gov/submissions/CIK<10>.json``, XBRL company facts, etc.).
 
 EDGAR publishes a single rolling JSON file mapping every SEC-registered
-equity to its CIK plus listing exchange. The file is keyless. SEC asks
-clients to send a ``User-Agent`` header so they can rate-limit per
-caller (see https://www.sec.gov/os/accessing-edgar-data); we send a
-browser-shape UA from :mod:`src.http_ua`.
+equity to its CIK plus listing exchange. The file is keyless. SEC's
+anti-bot prefers a caller-identifying ``User-Agent`` per
+https://www.sec.gov/os/accessing-edgar-data; we send
+``settings.sec_user_agent`` (env ``SSK_SEC_USER_AGENT``). The shipped
+default is an RFC 2606 placeholder; operators override via env (CI:
+``vars.SEC_USER_AGENT``). See ADR-0006 amendment for rationale.
 
 Public API:
 
@@ -37,7 +39,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
-from src.utils.http_ua import pick_user_agent, require_https
+from src.utils.http_ua import require_https
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +100,7 @@ def _fetch_json() -> dict:
     Stubbed in tests via ``monkeypatch.setattr(cik_map, "_fetch_json", ...)``.
     """
     headers = {
-        "User-Agent": pick_user_agent(),
+        "User-Agent": settings.sec_user_agent,
         "Accept": settings.http_accept,
         "Referer": settings.sec_referer,
     }

@@ -46,7 +46,7 @@ from datetime import date
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
 from src.data_sources.sec.cik_map import resolve_cik
-from src.utils.http_ua import pick_user_agent, require_https
+from src.utils.http_ua import require_https
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +89,7 @@ def fetch_last_filed(cik: str) -> LastFiledSnapshot:
     request = urllib.request.Request(  # noqa: S310  # nosec B310
         url,
         headers={
-            "User-Agent": pick_user_agent(),
+            "User-Agent": settings.sec_user_agent,
             "Accept": settings.http_accept,
             "Referer": settings.sec_referer,
         },
