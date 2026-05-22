@@ -37,7 +37,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
-from src.http_ua import pick_user_agent
+from src.http_ua import pick_user_agent, require_https
 
 logger = logging.getLogger(__name__)
 
@@ -113,8 +113,7 @@ def _fetch_json() -> dict:
         settings.edgar_tickers_url,
         headers=headers,
     )
-    if not request.full_url.startswith("https://"):
-        raise ValueError(f"Refusing non-HTTPS URL: {request.full_url!r}")
+    require_https(request.full_url)
     try:
         with urllib.request.urlopen(  # noqa: S310  # nosec B310
             request, timeout=settings.request_timeout_sec

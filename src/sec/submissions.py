@@ -45,7 +45,7 @@ from datetime import date
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
-from src.http_ua import pick_user_agent
+from src.http_ua import pick_user_agent, require_https
 from src.sec.cik_map import resolve_cik
 
 logger = logging.getLogger(__name__)
@@ -94,8 +94,7 @@ def fetch_last_filed(cik: str) -> LastFiledSnapshot:
             "Referer": settings.sec_referer,
         },
     )
-    if not request.full_url.startswith("https://"):
-        raise ValueError(f"Refusing non-HTTPS URL: {request.full_url!r}")
+    require_https(request.full_url)
     with urllib.request.urlopen(  # noqa: S310  # nosec B310
         request, timeout=settings.request_timeout_sec
     ) as response:

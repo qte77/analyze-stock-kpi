@@ -26,6 +26,7 @@ from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
+from src.http_ua import require_https
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -106,8 +107,7 @@ def _fetch_payload() -> dict[str, Any]:
             "Referer": settings.cnn_fg_referer,
         },
     )
-    if not request.full_url.startswith("https://"):
-        raise ValueError(f"Refusing non-HTTPS URL: {request.full_url!r}")
+    require_https(request.full_url)
     with urllib.request.urlopen(  # noqa: S310  # nosec B310
         request, timeout=settings.request_timeout_sec
     ) as response:

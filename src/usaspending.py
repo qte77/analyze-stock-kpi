@@ -14,6 +14,7 @@ from datetime import date  # noqa: TC003 — pydantic needs runtime access in ca
 
 from pydantic import BaseModel, ConfigDict
 from src.config import settings
+from src.http_ua import require_https
 
 
 class RecipientRecord(BaseModel):
@@ -90,8 +91,7 @@ def fetch_top_contractors(
         data=json.dumps(body).encode("utf-8"),
         method="POST",
     )
-    if not req.full_url.startswith("https://"):
-        raise ValueError(f"Refusing non-HTTPS URL: {req.full_url!r}")
+    require_https(req.full_url)
     req.add_header("Content-Type", "application/json")
     with urllib.request.urlopen(  # noqa: S310  # nosec B310
         req, timeout=settings.usaspending_timeout_sec,
