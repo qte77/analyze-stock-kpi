@@ -23,6 +23,22 @@ interface CompositeScores {
   screener_score?: number | null;
 }
 
+// Mirrors `src/orchestrators/federal_contractors.AuditRow`. All fields
+// optional because the dashboard treats missing fields as a degraded
+// reading rather than an error (the audit JSON may evolve faster than
+// this declaration). `final_ticker` is the join key onto `Row.symbol`.
+interface AuditRow {
+  rank?: number | null;
+  recipient_name?: string | null;
+  uei?: string | null;
+  obligated_usd?: number | null;
+  candidate_ticker?: string | null;
+  edgar_match_score?: number | null;
+  yfinance_resolves?: boolean | null;
+  final_ticker?: string | null;
+  note?: string | null;
+}
+
 interface Row {
   symbol?: string;
   long_name?: string | null;

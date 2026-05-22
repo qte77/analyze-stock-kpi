@@ -19,7 +19,19 @@ const DATA_BASE_URL = (
   new URLSearchParams(window.location.search).get("base") ??
   "https://raw.githubusercontent.com/qte77/analyze-stock-kpi/data"
 ).replace(/\/$/, "");
-const UNIVERSE = "qte77-watchlist";
+
+// Active universe id. Initialised from `?universe=<id>` query param at
+// boot (see init()); the `<select id="universe-picker">` change handler
+// mutates it + re-loads the dashboard. Falls back to the first entry of
+// universes.json when the query is unset or unknown.
+let activeUniverse = "qte77-watchlist";
+
+// Audit JSON keyed by `final_ticker` for the active universe + snapshot
+// date. Populated by loadAudit() opportunistically (silent 404). Used by
+// showDetail() to append a "Federal Contracts" section when the row's
+// symbol matches.
+/** @type {Map<string, AuditRow> | null} */
+let auditByTicker = null;
 
 const RATING_CLASSES = {
   "extreme fear": "rating-extreme-fear",
@@ -108,10 +120,50 @@ async function fetchJson(url) {
 }
 
 const loadManifest = () =>
-  fetchJson(`${DATA_BASE_URL}/results/demo/${UNIVERSE}/index.json`);
+  fetchJson(`${DATA_BASE_URL}/results/demo/${activeUniverse}/index.json`);
 
 const loadSnapshot = (date) =>
-  fetchJson(`${DATA_BASE_URL}/results/demo/${UNIVERSE}/${date}.json`);
+  fetchJson(`${DATA_BASE_URL}/results/demo/${activeUniverse}/${date}.json`);
+
+// Bundled manifest of universes — served same-origin alongside index.html
+// (NOT under DATA_BASE_URL). Hand-maintained in lockstep with
+// src/assets/universes/*.txt; one entry per bundled preset.
+/** @returns {Promise<{universes: {id: string, label: string}[]}>} */
+const loadUniverses = () => fetchJson("universes.json");
+
+// Opportunistic audit-JSON join — only meaningful for federal-contractors
+// today. Other universes have no audit path; we return null silently to
+// keep the dashboard a pure no-op for them. 404s on the federal-contractors
+// path itself (e.g., before the first refresh workflow run) also return
+// null silently, mirroring loadFearGreedYears' Promise.allSettled pattern.
+//
+// On success the response is a JSON array of AuditRow objects; we index
+// them by `final_ticker` (skipping rows where final_ticker is null — those
+// rows didn't resolve to a tradeable ticker and have no row in the
+// universe snapshot to attach to).
+/**
+ * @param {string} universe
+ * @param {string} date
+ * @returns {Promise<Map<string, AuditRow> | null>}
+ */
+async function loadAudit(universe, date) {
+  if (universe !== "federal-contractors") return null;
+  try {
+    const rows = /** @type {AuditRow[]} */ (
+      await fetchJson(
+        `${DATA_BASE_URL}/results/federal_contractors/audit/${date}.json`,
+      )
+    );
+    if (!Array.isArray(rows)) return null;
+    const map = new Map();
+    for (const row of rows) {
+      if (row?.final_ticker) map.set(row.final_ticker, row);
+    }
+    return map;
+  } catch {
+    return null;
+  }
+}
 
 async function loadFearGreedYears() {
   const thisYear = new Date().getUTCFullYear();
@@ -288,6 +340,7 @@ function showDetail(row) {
   const mcap = row.market_cap
     ? `$${(row.market_cap / 1e9).toFixed(2)} B`
     : "—";
+  const audit = row.symbol ? auditByTicker?.get(row.symbol) ?? null : null;
 
   const aside = document.getElementById("row-detail");
   if (!aside) return;
@@ -394,10 +447,52 @@ function showDetail(row) {
         false,
         KPI_GLOSSARY.screener_score,
       ],
+      ...auditDetailRows(audit),
     ]),
   );
   aside.append(list);
   aside.hidden = false;
+}
+
+/**
+ * Build the "Federal Contracts" detail rows for an audit entry, or an
+ * empty array when there's no match (so the spread in showDetail is a
+ * no-op for universes without an audit join).
+ *
+ * @param {AuditRow | null} audit
+ * @returns {Array<[string, string, boolean?, string?]>}
+ */
+function auditDetailRows(audit) {
+  if (!audit) return [];
+  return [
+    ["Federal Contracts", "", true],
+    ["Obligated $", formatObligated(audit.obligated_usd)],
+    ["UEI", audit.uei ?? "—"],
+    [
+      "EDGAR match",
+      audit.edgar_match_score == null
+        ? "—"
+        : `${(Number(audit.edgar_match_score) * 100).toFixed(0)} %`,
+      false,
+      "SequenceMatcher score of the audit's recipient name against EDGAR's issuer title. Higher = more confident.",
+    ],
+    ["Recipient name", audit.recipient_name ?? "—"],
+  ];
+}
+
+/**
+ * Format an obligated-USD amount with a unit suffix. `null`/missing → "—".
+ * Big numbers compress to $X.Yb / $X.YM for readability in the side panel.
+ * @param {number | null | undefined} usd
+ * @returns {string}
+ */
+function formatObligated(usd) {
+  if (usd == null) return "—";
+  const n = Number(usd);
+  if (Number.isNaN(n)) return "—";
+  if (n >= 1e9) return `$${(n / 1e9).toFixed(2)} b`;
+  if (n >= 1e6) return `$${(n / 1e6).toFixed(2)} M`;
+  return `$${n.toFixed(0)}`;
 }
 
 function findClosestScore(entries, latestMs, daysAgo) {
@@ -503,10 +598,72 @@ function bindTableSort() {
 }
 
 /**
- * Bootstrap: wire dismissal + sort, load the latest snapshot, wire the
- * date selector + filter input, and render the F&G banner + chart.
- * Returns early if the manifest fetch fails (typical for a fresh repo
- * before the first cron run).
+ * Sync the URL bar to the active universe via `history.replaceState`,
+ * so a refresh restores the picked universe and the URL can be shared.
+ * Keeps `?base=` and any other unrelated query params intact.
+ * @param {string} universe
+ * @returns {void}
+ */
+function persistUniverseInUrl(universe) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("universe", universe);
+  window.history.replaceState({}, "", url);
+}
+
+/**
+ * Load manifest + latest snapshot + audit JSON for `activeUniverse`,
+ * populate the date selector, and render the table. Called once at
+ * boot and again whenever the universe picker fires `change`.
+ *
+ * Returns early on manifest 404 (typical for a fresh universe before its
+ * first cron run) — the dashboard collapses to an empty-state line in
+ * the size span rather than crashing.
+ * @returns {Promise<void>}
+ */
+async function loadActiveUniverse() {
+  const dateSelector = /** @type {HTMLSelectElement | null} */ (
+    document.getElementById("date-selector")
+  );
+  const sizeEl = document.getElementById("universe-size");
+  if (!dateSelector || !sizeEl) return;
+
+  let manifest;
+  try {
+    manifest = await loadManifest();
+  } catch {
+    state.snapshot = [];
+    auditByTicker = null;
+    rebuildFuseIndex();
+    dateSelector.replaceChildren();
+    sizeEl.textContent = `no data yet for ${activeUniverse}`;
+    renderTable();
+    return;
+  }
+
+  dateSelector.replaceChildren();
+  for (const date of [...manifest.dates].reverse()) {
+    const opt = document.createElement("option");
+    opt.value = date;
+    opt.textContent = date;
+    dateSelector.appendChild(opt);
+  }
+  dateSelector.value = manifest.latest;
+
+  state.snapshot = await loadSnapshot(manifest.latest);
+  auditByTicker = await loadAudit(activeUniverse, manifest.latest);
+  rebuildFuseIndex();
+  sizeEl.textContent = `${state.snapshot.length} tickers`;
+  renderTable();
+  const updatedEl = document.getElementById("updated");
+  if (updatedEl) {
+    updatedEl.textContent = `updated ${manifest.updated_at}`;
+  }
+}
+
+/**
+ * Bootstrap: wire dismissal + sort + filter, populate the universe
+ * picker, load the latest snapshot for `activeUniverse`, and render
+ * the F&G banner + chart.
  * @returns {Promise<void>}
  */
 async function init() {
@@ -519,31 +676,44 @@ async function init() {
     initialSortTh.classList.add(state.sortDir > 0 ? "sort-asc" : "sort-desc");
   }
 
-  let manifest;
+  // Wire universe picker first so manifest/snapshot loads use the
+  // user-selected universe (from ?universe= or universes.json default).
+  const picker = /** @type {HTMLSelectElement | null} */ (
+    document.getElementById("universe-picker")
+  );
+  if (!picker) return;
+  /** @type {{universes: {id: string, label: string}[]}} */
+  let universesPayload;
   try {
-    manifest = await loadManifest();
+    universesPayload = await loadUniverses();
   } catch {
-    const universeName = document.getElementById("universe-name");
-    if (universeName) {
-      universeName.textContent =
-        "qte77-watchlist (no data yet — first cron run pending)";
-    }
-    return;
+    universesPayload = { universes: [{ id: "qte77-watchlist", label: "qte77 watchlist" }] };
   }
+  const universes = universesPayload.universes ?? [];
+  for (const u of universes) {
+    const opt = document.createElement("option");
+    opt.value = u.id;
+    opt.textContent = u.label;
+    picker.appendChild(opt);
+  }
+  const requested = new URLSearchParams(window.location.search).get("universe");
+  const knownIds = new Set(universes.map((u) => u.id));
+  activeUniverse = requested && knownIds.has(requested)
+    ? requested
+    : universes[0]?.id ?? "qte77-watchlist";
+  picker.value = activeUniverse;
+  picker.addEventListener("change", async () => {
+    activeUniverse = picker.value;
+    persistUniverseInUrl(activeUniverse);
+    await loadActiveUniverse();
+  });
 
-  const selector = /** @type {HTMLSelectElement | null} */ (
+  const dateSelector = /** @type {HTMLSelectElement | null} */ (
     document.getElementById("date-selector")
   );
-  if (!selector) return;
-  for (const date of [...manifest.dates].reverse()) {
-    const opt = document.createElement("option");
-    opt.value = date;
-    opt.textContent = date;
-    selector.appendChild(opt);
-  }
-  selector.value = manifest.latest;
-  selector.addEventListener("change", async () => {
-    state.snapshot = await loadSnapshot(selector.value);
+  dateSelector?.addEventListener("change", async () => {
+    state.snapshot = await loadSnapshot(dateSelector.value);
+    auditByTicker = await loadAudit(activeUniverse, dateSelector.value);
     rebuildFuseIndex();
     renderTable();
   });
@@ -557,17 +727,7 @@ async function init() {
     }
   });
 
-  state.snapshot = await loadSnapshot(manifest.latest);
-  rebuildFuseIndex();
-  const sizeEl = document.getElementById("universe-size");
-  if (sizeEl) {
-    sizeEl.textContent = `${state.snapshot.length} tickers`;
-  }
-  renderTable();
-  const updatedEl = document.getElementById("updated");
-  if (updatedEl) {
-    updatedEl.textContent = `updated ${manifest.updated_at}`;
-  }
+  await loadActiveUniverse();
 
   const fgEntries = await loadFearGreedYears();
   renderFearGreedHeader(fgEntries);

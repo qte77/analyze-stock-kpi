@@ -29,9 +29,12 @@ jobs:
     name: rebuild preset + commit audit + open preset PR
     runs-on: ubuntu-latest
     steps:
+      # Check out the dispatched ref. Cron + dispatch-without-input default
+      # to the workflow's home branch (main); explicit `gh workflow run
+      # --ref feat/foo` validates feat-branch helper changes pre-merge.
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
         with:
-          ref: main
+          ref: ${{ github.ref_name }}
           fetch-depth: 0
 
       - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
@@ -74,54 +77,23 @@ jobs:
         env:
           AUDIT_PATH: ${{ steps.preset.outputs.audit }}
         with:
+          # Routes through scripts/data-branch-commit.cjs so this workflow
+          # benefits from the same 422-retry as demo-snapshot's matrix —
+          # both workflows race on the `data` ref when they run on
+          # overlapping schedules.
           script: |
-            const fs = require('fs');
+            const fs = require("fs");
             const { AUDIT_PATH } = process.env;
-            const { owner, repo } = context.repo;
-            const branch = 'data';
-
             if (!fs.existsSync(AUDIT_PATH)) {
               core.info(`No audit JSON at ${AUDIT_PATH}; skipping`);
               return;
             }
-
-            const ref = await github.rest.git.getRef({
-              owner, repo, ref: `heads/${branch}`,
+            const { run } = require("./scripts/data-branch-commit.cjs");
+            return run({
+              github, context, core,
+              paths: [AUDIT_PATH],
+              message: "chore(universe): weekly federal-contractors audit",
             });
-            const parentSha = ref.data.object.sha;
-            const parentCommit = await github.rest.git.getCommit({
-              owner, repo, commit_sha: parentSha,
-            });
-
-            const blob = await github.rest.git.createBlob({
-              owner, repo,
-              content: fs.readFileSync(AUDIT_PATH).toString('base64'),
-              encoding: 'base64',
-            });
-
-            const newTree = await github.rest.git.createTree({
-              owner, repo,
-              base_tree: parentCommit.data.tree.sha,
-              tree: [{
-                path: AUDIT_PATH,
-                mode: '100644',
-                type: 'blob',
-                sha: blob.data.sha,
-              }],
-            });
-
-            const commit = await github.rest.git.createCommit({
-              owner, repo,
-              message: 'chore(universe): weekly federal-contractors audit',
-              tree: newTree.data.sha,
-              parents: [parentSha],
-            });
-
-            await github.rest.git.updateRef({
-              owner, repo, ref: `heads/${branch}`, sha: commit.data.sha,
-            });
-
-            core.info(`Audit committed as ${commit.data.sha.slice(0, 8)} on ${branch}`);
 
       - name: Open preset PR (when diff non-empty)
         if: steps.preset.outputs.changed == 'true'

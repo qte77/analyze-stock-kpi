@@ -1,0 +1,12 @@
+{
+  "universes": [
+    {"id": "qte77-watchlist", "label": "qte77 watchlist"},
+    {"id": "sp500", "label": "S&P 500 (top 100 by mcap)"},
+    {"id": "eurostoxx", "label": "EuroStoxx 50"},
+    {"id": "federal-contractors", "label": "Federal contractors (DoD Top-25)"},
+    {"id": "japan", "label": "Japan (Nikkei 225 top)"},
+    {"id": "south-america", "label": "South America (Latam large caps)"},
+    {"id": "south-korea", "label": "South Korea (KOSPI top)"},
+    {"id": "crypto-top10", "label": "Crypto top-10"}
+  ]
+}
