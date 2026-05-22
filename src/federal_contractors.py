@@ -12,15 +12,11 @@ from __future__ import annotations
 
 from datetime import UTC, date, datetime
 from difflib import SequenceMatcher
-from typing import TYPE_CHECKING
 
 import yfinance as yf
 from pydantic import BaseModel, ConfigDict
 from src.sec.cik_map import _load_records
 from src.usaspending import RecipientRecord, fetch_top_contractors
-
-if TYPE_CHECKING:
-    pass
 
 
 class AuditRow(BaseModel):
@@ -162,11 +158,89 @@ def _match_to_edgar(
     return (None, None)
 
 
+def _fy_window(fy: int | None) -> tuple[date, date]:
+    """Resolve fiscal-year arg to (start_date, end_date)."""
+    if fy is None:
+        return _last_completed_fy_window()
+    return (date(fy - 1, 10, 1), date(fy, 9, 30))
+
+
+def _build_audit_row(
+    recipient: RecipientRecord,
+    ticker: str | None,
+    score: float | None,
+    is_first_for_ticker: bool,
+    first_name_for_ticker: str | None,
+    resolved: set[str],
+) -> AuditRow:
+    """Construct one AuditRow from per-recipient match + smoke-test state."""
+    if ticker is None:
+        return AuditRow(
+            rank=recipient.rank,
+            recipient_name=recipient.name,
+            uei=recipient.uei,
+            obligated_usd=recipient.amount,
+        )
+    resolves = ticker in resolved
+    if is_first_for_ticker and resolves:
+        final, note = ticker, None
+    elif is_first_for_ticker:
+        final, note = None, "yfinance-unresolvable"
+    else:
+        final, note = None, f"dedup-of-{first_name_for_ticker}"
+    return AuditRow(
+        rank=recipient.rank,
+        recipient_name=recipient.name,
+        uei=recipient.uei,
+        obligated_usd=recipient.amount,
+        candidate_ticker=ticker,
+        edgar_match_score=score,
+        yfinance_resolves=resolves,
+        final_ticker=final,
+        note=note,
+    )
+
+
 def build_universe(
     *,
     fy: int | None = None,
     top_n: int = 100,
 ) -> tuple[list[str], list[AuditRow]]:
-    """Cycle-12 RED scaffold — returns empty tuple."""
-    _ = fy, top_n
-    return ([], [])
+    """Build the federal-contractors ticker preset + per-recipient audit trail.
+
+    Chains usaspending -> EDGAR fuzzy match -> yfinance smoke-test, applies
+    subsidiary dedupe, then unions with the curated DoD Top-25 seed. The
+    returned ticker list is sorted ASCII-ascending and deduplicated; the
+    audit list carries one :class:`AuditRow` per usaspending recipient,
+    preserving input order.
+    """
+    fy_start, fy_end = _fy_window(fy)
+    recipients = fetch_top_contractors(fy_start, fy_end, limit=top_n)
+
+    matches: list[tuple[RecipientRecord, str | None, float | None]] = []
+    first_rank_for: dict[str, int] = {}
+    first_name_for: dict[str, str] = {}
+    candidates: list[str] = []
+    for recipient in recipients:
+        ticker, score = _match_to_edgar(recipient.name)
+        matches.append((recipient, ticker, score))
+        if ticker is not None and ticker not in first_rank_for:
+            first_rank_for[ticker] = recipient.rank
+            first_name_for[ticker] = recipient.name
+            candidates.append(ticker)
+
+    resolved = set(_smoke_test_yfinance(candidates))
+
+    audit_rows = [
+        _build_audit_row(
+            recipient=r,
+            ticker=t,
+            score=s,
+            is_first_for_ticker=(t is not None and first_rank_for[t] == r.rank),
+            first_name_for_ticker=first_name_for.get(t) if t else None,
+            resolved=resolved,
+        )
+        for r, t, s in matches
+    ]
+    final_tickers = sorted(set(_ensure_seed(sorted(resolved))))
+    return (final_tickers, audit_rows)

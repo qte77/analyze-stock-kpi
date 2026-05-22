@@ -212,9 +212,12 @@ def test_build_universe_orchestrator_e2e(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """End-to-end against stubbed deps — assembles ticker list + AuditRow trail."""
+    # Two split-line-items for the same prime contractor — exercises dedup
+    # via identical legal names (the realistic case under plain
+    # SequenceMatcher; subsidiary-name matching is a future enhancement).
     fake_recipients = [
         _recipient(1, "LOCKHEED MARTIN CORPORATION"),
-        _recipient(2, "LOCKHEED MARTIN AERONAUTICS COMPANY"),  # dedup → LMT
+        _recipient(2, "LOCKHEED MARTIN CORPORATION"),
         _recipient(3, "RTX CORPORATION"),
         _recipient(4, "WIDGET FOUNDRY INTERNATIONAL LLC"),  # no EDGAR match
     ]
@@ -242,19 +245,20 @@ def test_build_universe_orchestrator_e2e(
     # Audit: one row per usaspending recipient, in input order
     assert len(audit) == len(fake_recipients)
     assert all(isinstance(r, AuditRow) for r in audit)
-    audit_by_name = {r.recipient_name: r for r in audit}
+    audit_by_rank = {r.rank: r for r in audit}
 
-    lmt_row = audit_by_name["LOCKHEED MARTIN CORPORATION"]
-    assert lmt_row.candidate_ticker == "LMT"
-    assert lmt_row.final_ticker == "LMT"
-    assert lmt_row.yfinance_resolves is True
+    first_lmt = audit_by_rank[1]
+    assert first_lmt.candidate_ticker == "LMT"
+    assert first_lmt.final_ticker == "LMT"
+    assert first_lmt.yfinance_resolves is True
 
-    aero_row = audit_by_name["LOCKHEED MARTIN AERONAUTICS COMPANY"]
-    assert aero_row.candidate_ticker == "LMT"
-    assert aero_row.final_ticker is None  # deduped
-    assert aero_row.note is not None and "dedup" in aero_row.note
+    dupe_lmt = audit_by_rank[2]
+    assert dupe_lmt.candidate_ticker == "LMT"
+    assert dupe_lmt.final_ticker is None  # deduped — same ticker already claimed
+    assert dupe_lmt.note is not None
+    assert "dedup" in dupe_lmt.note
 
-    widget_row = audit_by_name["WIDGET FOUNDRY INTERNATIONAL LLC"]
+    widget_row = audit_by_rank[4]
     assert widget_row.candidate_ticker is None
     assert widget_row.final_ticker is None
 
