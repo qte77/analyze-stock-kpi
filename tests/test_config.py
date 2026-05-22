@@ -54,6 +54,11 @@ def test_app_settings_item3_field_defaults() -> None:
     assert s.usaspending_timeout_sec == 30
 
 
+def test_app_settings_sec_referer_default() -> None:
+    """``sec_referer`` defaults to the SEC root for browser-shape blending."""
+    assert AppSettings().sec_referer == "https://www.sec.gov/"
+
+
 def test_app_settings_item3_field_env_overrides(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

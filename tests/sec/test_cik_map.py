@@ -108,6 +108,7 @@ def test_fetch_json_sends_browser_shape_headers(
     assert req.full_url == expected_url
     assert req.get_header("User-agent") in USER_AGENTS
     assert req.get_header("Accept") == expected_accept
+    assert req.get_header("Referer") == "https://www.sec.gov/"
 
 
 def test_fetch_json_persists_response_to_disk_cache(
@@ -296,6 +297,56 @@ def test_fetch_json_raises_url_error_when_no_cache_exists(
     monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
 
     with pytest.raises(urllib.error.URLError):
+        cik_map._fetch_json()
+
+
+def test_fetch_json_falls_back_to_cache_on_403_forbidden(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """SEC anti-bot 403 with cache present → serve cached body (wrap-degrade)."""
+    import urllib.error
+    import urllib.request
+
+    cached = b'{"fields": ["cached"], "data": [["from disk"]]}'
+    cik_map._CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    cik_map._CACHE_PATH.write_bytes(cached)
+
+    def fake_urlopen(_req: object, *_a: object, **_k: object) -> None:
+        raise urllib.error.HTTPError(
+            url=cik_map.settings.edgar_tickers_url,
+            code=403,
+            msg="Forbidden",
+            hdrs=None,  # type: ignore[arg-type]
+            fp=None,
+        )
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    result = cik_map._fetch_json()
+
+    assert result == {"fields": ["cached"], "data": [["from disk"]]}
+
+
+def test_fetch_json_raises_403_when_no_cache_exists(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Cold start + 403 → HTTPError propagates (fail-loud, no stale cache to serve)."""
+    import urllib.error
+    import urllib.request
+
+    assert not cik_map._CACHE_PATH.is_file()
+
+    def fake_urlopen(_req: object, *_a: object, **_k: object) -> None:
+        raise urllib.error.HTTPError(
+            url=cik_map.settings.edgar_tickers_url,
+            code=403,
+            msg="Forbidden",
+            hdrs=None,  # type: ignore[arg-type]
+            fp=None,
+        )
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+
+    with pytest.raises(urllib.error.HTTPError):
         cik_map._fetch_json()
 
 

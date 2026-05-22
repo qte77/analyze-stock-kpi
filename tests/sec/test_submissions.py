@@ -184,6 +184,7 @@ def test_fetch_last_filed_sends_browser_shape_headers_to_cik_url(
     assert req.full_url == expected_url
     assert req.get_header("User-agent") in USER_AGENTS
     assert req.get_header("Accept") == expected_accept
+    assert req.get_header("Referer") == "https://www.sec.gov/"
 
 
 def test_fetch_last_filed_returns_parsed_snapshot(
