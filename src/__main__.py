@@ -23,7 +23,7 @@ from .data_sources.sec.submissions import enrich_snapshot_sec
 from .data_sources.sentiment import FearGreedSnapshot, fetch_fear_greed
 from .domain.composite_scores import CompositeScores, compute_scores
 from .domain.universe import resolve_universe
-from .orchestrators.federal_contractors import AuditRow, build_universe
+from .orchestrators.federal_contractors import build_universe
 from .utils.parse_args import CliArgs
 
 _TABLE_QUOTE_TYPES = {"EQUITY", "ETF"}
@@ -142,9 +142,20 @@ def _print_summary_table(
 
 
 def _run_refresh_universe(args: CliArgs) -> Path:
-    """Cycle-16 RED scaffold — raises NotImplementedError."""
-    _ = args
-    raise NotImplementedError
+    """Run an orchestrator and persist its outputs; return the preset path."""
+    tickers, audit_rows = build_universe()
+    base = settings.federal_contractors_dir
+    preset_path = args.output or base / "universe.txt"
+    audit_path = args.audit_output or (
+        base / "audit" / f"{datetime.now(UTC).strftime('%Y-%m-%d')}.json"
+    )
+    preset_path.parent.mkdir(parents=True, exist_ok=True)
+    audit_path.parent.mkdir(parents=True, exist_ok=True)
+    preset_path.write_text("\n".join(tickers) + "\n")
+    audit_path.write_text(
+        json.dumps([row.model_dump() for row in audit_rows], indent=2)
+    )
+    return preset_path
 
 
 def _persist_snapshots(snapshots: list[FundamentalsSnapshot]) -> Path:
@@ -160,6 +171,10 @@ def main() -> None:
     """Entrypoint: resolve universe, fetch fundamentals, print + persist."""
     console = Console()
     args = CliArgs()
+    if args.refresh_universe:
+        out_path = _run_refresh_universe(args)
+        console.print(f"[green]Wrote universe preset[/green] {out_path}")
+        return
     try:
         _print_sentiment_banner(console, fetch_fear_greed())
     except Exception as exc:

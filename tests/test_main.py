@@ -9,12 +9,9 @@ silently drift.
 
 from __future__ import annotations
 
-from datetime import date
-
 import json
-from pathlib import Path
-
-import pytest
+from datetime import date
+from typing import TYPE_CHECKING
 
 from src.__main__ import _format_days_since, _run_refresh_universe, _summary_row
 from src.config import settings
@@ -22,6 +19,11 @@ from src.data_sources.fundamentals import FundamentalsSnapshot
 from src.domain.composite_scores import CompositeScores
 from src.orchestrators.federal_contractors import AuditRow
 from src.utils.parse_args import CliArgs
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    import pytest
 
 
 def _snap(**kwargs: object) -> FundamentalsSnapshot:
