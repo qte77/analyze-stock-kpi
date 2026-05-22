@@ -44,9 +44,8 @@ def _normalise_name(name: str) -> str:
 
 
 def _smoke_test_yfinance(tickers: list[str]) -> list[str]:
-    """Cycle-7 RED scaffold — returns empty list."""
-    _ = tickers
-    return []
+    """Drop tickers whose yfinance ``fast_info`` is empty/falsy."""
+    return [t for t in tickers if yf.Ticker(t).fast_info]
 
 
 def _resolve_candidates(recipients: list[RecipientRecord]) -> list[str]:
