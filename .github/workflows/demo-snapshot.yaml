@@ -1,11 +1,18 @@
 ---
-# Weekly fundamentals snapshot for the demo dashboard (#59).
+# Weekly fundamentals snapshot for the demo dashboard (#59, #130).
 #
-# Runs Sundays at 06:15 UTC (staggers from sbom 00:00 Sun). Fetches the
-# qte77-watchlist universe via `make run`, renames the timestamped output
-# to results/demo/<UNIVERSE>/<YYYY-MM-DD>.json, rebuilds the manifest,
+# Runs Sundays at 06:15 UTC (staggers from sbom 00:00 Sun). Fans out
+# across every bundled universe in src/assets/universes/*.txt as
+# independent matrix legs (fail-fast: false). Each leg fetches its
+# universe via `make run`, renames the timestamped output to
+# results/demo/<UNIVERSE>/<YYYY-MM-DD>.json, rebuilds the manifest,
 # and commits both files as a single verified commit via the REST Git
 # Data API (Blob -> Tree -> Commit -> Ref).
+#
+# `workflow_dispatch` still accepts a `universe` input; when set, the
+# matrix collapses to that single universe so ad-hoc dispatch stays
+# cheap. Unset (scheduled or dispatched without input) runs the full
+# 8-universe fan-out.
 #
 # Target branch is `data` (not `main`). The repo's default-branch
 # ruleset (id 16200383) has a `pull_request` rule that rejects direct
@@ -26,9 +33,20 @@ on:
   workflow_dispatch:
     inputs:
       universe:
-        description: "Universe preset (default qte77-watchlist)"
-        default: qte77-watchlist
+        description: "Single universe (omit for full 8-universe fan-out)"
         required: false
+        type: choice
+        default: ""
+        options:
+          - ""
+          - qte77-watchlist
+          - sp500
+          - eurostoxx
+          - federal-contractors
+          - japan
+          - south-america
+          - south-korea
+          - crypto-top10
 
 permissions:
   contents: write
@@ -38,9 +56,36 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  snapshot:
-    name: fetch + commit weekly fundamentals snapshot
+  # Compute the matrix of universes once. Cron + dispatch-without-input
+  # fan out across all 8 bundled presets; dispatch with `universe` set
+  # collapses to a single leg so ad-hoc debug runs stay cheap.
+  matrix:
+    name: build matrix
     runs-on: ubuntu-latest
+    outputs:
+      universes: ${{ steps.compute.outputs.universes }}
+    steps:
+      - id: compute
+        env:
+          INPUT_UNIVERSE: ${{ inputs.universe }}
+        run: |
+          set -euo pipefail
+          if [[ -n "$INPUT_UNIVERSE" ]]; then
+            # `type: choice` already constrains the value to a known
+            # preset name; quoting is safe.
+            echo "universes=[\"$INPUT_UNIVERSE\"]" >> "$GITHUB_OUTPUT"
+          else
+            echo 'universes=["qte77-watchlist","sp500","eurostoxx","federal-contractors","japan","south-america","south-korea","crypto-top10"]' >> "$GITHUB_OUTPUT"
+          fi
+
+  snapshot:
+    needs: matrix
+    name: snapshot ${{ matrix.universe }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        universe: ${{ fromJSON(needs.matrix.outputs.universes) }}
     steps:
       # Check out `main` for the latest source code (model schema, fetchers,
       # composite-score logic). The `data` branch holds only accumulated
@@ -57,7 +102,7 @@ jobs:
       # a fresh universe has nothing to pull).
       - name: Sparse-pull existing snapshots from data branch
         env:
-          UNIVERSE: ${{ inputs.universe || 'qte77-watchlist' }}
+          UNIVERSE: ${{ matrix.universe }}
         run: |
           set -euo pipefail
           git fetch origin data
@@ -77,13 +122,16 @@ jobs:
 
       - name: Run KPI snapshot
         env:
-          UNIVERSE: ${{ inputs.universe || 'qte77-watchlist' }}
+          UNIVERSE: ${{ matrix.universe }}
+          # Optional SEC EDGAR UA — same pattern as federal-contractors-refresh.
+          # `make run` invokes `python -m src` which calls enrich_snapshot_sec.
+          SSK_SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
         run: make run UNIVERSE="$UNIVERSE"
 
       - name: Move output + rebuild manifest
         id: prep
         env:
-          UNIVERSE: ${{ inputs.universe || 'qte77-watchlist' }}
+          UNIVERSE: ${{ matrix.universe }}
         run: |
           set -euo pipefail
           DATE=$(date -u +%Y-%m-%d)
@@ -98,7 +146,7 @@ jobs:
       - name: Commit snapshot + manifest as a single verified commit
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
         env:
-          UNIVERSE: ${{ inputs.universe || 'qte77-watchlist' }}
+          UNIVERSE: ${{ matrix.universe }}
           SNAPSHOT_PATH: ${{ steps.prep.outputs.snapshot }}
           MANIFEST_PATH: ${{ steps.prep.outputs.manifest }}
         with:
