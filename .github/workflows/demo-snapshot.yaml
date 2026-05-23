@@ -87,13 +87,15 @@ jobs:
       matrix:
         universe: ${{ fromJSON(needs.matrix.outputs.universes) }}
     steps:
-      # Check out `main` for the latest source code (model schema, fetchers,
-      # composite-score logic). The `data` branch holds only accumulated
-      # snapshot files and lags `main`'s code arbitrarily — running off
-      # `data` produces stale-schema snapshots.
+      # Check out the dispatched ref (cron + dispatch-without-input both
+      # default to the workflow's home branch, which is `main`). Lets a
+      # `gh workflow run --ref feat/foo` exercise feat-branch workflow +
+      # helper changes against real `data`-branch concurrency before merge.
+      # The `data` branch is reached only via explicit `git fetch origin
+      # data` further down; the initial checkout never points at `data`.
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
         with:
-          ref: main
+          ref: ${{ github.ref_name }}
           fetch-depth: 0
 
       # Bring the data branch's accumulated snapshot directory into the
