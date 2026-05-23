@@ -16,6 +16,10 @@ declare const Fuse: any;
 // Demo v2 (#134) view-mode toggle.
 type ViewMode = "simple" | "detailed";
 
+// Theme toggle: system follows `prefers-color-scheme`, light/dark force
+// the palette regardless of OS preference.
+type ThemeMode = "system" | "light" | "dark";
+
 // A1 conditional cell coloring threshold per KPI.
 interface KpiThreshold {
   lowerBetter: boolean;

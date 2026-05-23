@@ -9,13 +9,22 @@
   <script src="vendor/fuse.min.js" defer></script>
   <script src="app.js" type="module"></script>
 </head>
-<body class="view-simple">
+<body class="view-simple theme-system">
   <header>
     <h1>
       <a href="https://github.com/qte77/analyze-stock-kpi">analyze-stock-kpi</a>
       · KPI demo dashboard
     </h1>
     <div class="header-meta">
+      <div
+        id="theme-toggle"
+        role="group"
+        aria-label="Theme: system, light, or dark"
+      >
+        <button type="button" data-theme="system" aria-pressed="true" title="Follow system preference">⏿</button>
+        <button type="button" data-theme="light" aria-pressed="false" title="Force light theme">☀</button>
+        <button type="button" data-theme="dark" aria-pressed="false" title="Force dark theme">🌙</button>
+      </div>
       <button
         id="view-toggle"
         type="button"

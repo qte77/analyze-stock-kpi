@@ -10,6 +10,10 @@
   --rating-neutral: #95a5a6;
   --rating-greed: #27ae60;
   --rating-extreme-greed: #16a085;
+  /* KPI heatmap palette (light defaults) */
+  --kpi-good: hsl(120, 60%, 88%);
+  --kpi-neutral: hsl(60, 60%, 88%);
+  --kpi-bad: hsl(0, 60%, 88%);
 }
 
 * { box-sizing: border-box; }
@@ -390,10 +394,12 @@ body.view-simple .detail-only { display: none !important; }
 
 .detail-links a:hover { text-decoration: underline; }
 
-/* A1 — KPI cell heatmap. Pastel backgrounds keep dark text WCAG-readable. */
-tbody td.kpi-good { background-color: hsl(120, 60%, 88%); }
-tbody td.kpi-neutral { background-color: hsl(60, 60%, 88%); }
-tbody td.kpi-bad { background-color: hsl(0, 60%, 88%); }
+/* A1 — KPI cell heatmap. Pastel backgrounds keep dark text WCAG-readable.
+        Driven via custom properties so theme-* class overrides + system
+        media query both flow through the same selectors. */
+tbody td.kpi-good { background-color: var(--kpi-good); }
+tbody td.kpi-neutral { background-color: var(--kpi-neutral); }
+tbody td.kpi-bad { background-color: var(--kpi-bad); }
 
 tbody tr:hover td.kpi-good,
 tbody tr:hover td.kpi-neutral,
@@ -412,20 +418,62 @@ tbody td.empty-state {
 
 tbody tr:hover td.empty-state { background: var(--panel); }
 
-/* D2 — dark mode via OS preference. Remaps the CSS variables; everything
-        downstream picks up the new palette automatically. */
+/* Dark-palette overrides. Applied by `body.theme-dark` (forced) OR by
+   `body.theme-system` when the OS prefers dark (media query). Both
+   selectors set the same custom-property values so the downstream
+   rules don't need to know which path triggered. */
+body.theme-dark {
+  --bg: #1d1d1f;
+  --panel: #2c2c2e;
+  --text: #f5f5f7;
+  --muted: #98989d;
+  --border: #3a3a3c;
+  --accent: #5b9dff;
+  --kpi-good: hsl(120, 40%, 28%);
+  --kpi-neutral: hsl(60, 40%, 28%);
+  --kpi-bad: hsl(0, 50%, 32%);
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  body.theme-system {
     --bg: #1d1d1f;
     --panel: #2c2c2e;
     --text: #f5f5f7;
     --muted: #98989d;
     --border: #3a3a3c;
     --accent: #5b9dff;
+    --kpi-good: hsl(120, 40%, 28%);
+    --kpi-neutral: hsl(60, 40%, 28%);
+    --kpi-bad: hsl(0, 50%, 32%);
   }
-  tbody td.kpi-good { background-color: hsl(120, 40%, 28%); }
-  tbody td.kpi-neutral { background-color: hsl(60, 40%, 28%); }
-  tbody td.kpi-bad { background-color: hsl(0, 50%, 32%); }
+}
+
+/* Theme toggle UI — three small segmented buttons. */
+#theme-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+#theme-toggle button {
+  background: var(--panel);
+  border: 0;
+  padding: 0.3rem 0.55rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  color: var(--muted);
+  line-height: 1;
+}
+
+#theme-toggle button[aria-pressed="true"] {
+  background: var(--accent);
+  color: white;
+}
+
+#theme-toggle button:hover:not([aria-pressed="true"]) {
+  color: var(--accent);
 }
 
 /* D3 — mobile auto-simple. Below 768px the toggle is hidden because the
