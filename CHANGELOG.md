@@ -16,6 +16,10 @@ Types of changes:
 
 ## [Unreleased]
 
+### Fixed
+
+- **Row click in the demo opens the side detail panel in both view modes.** Previously the simple-mode click did a JS `window.open` of Yahoo Finance, which was jarring (users left the app silently). The Yahoo / SEC EDGAR / Wikipedia entry points remain inside the detail panel's `<a href>` external-link nav. Detail aside is no longer `class="detail-only"` so it can open in simple mode too.
+
 ### Security
 
 - **Bump `idna` 3.13 → 3.16 (CVE-2026-45409 ReDoS in `idna.encode()`).** `[tool.uv].exclude-newer` rolled forward 2026-05-09 → 2026-05-23 so the patched version is reachable; no other transitive bumps. Practical exposure was nil (we never pass external input through `idna.encode()`), but the patched version is trivial to ship.
