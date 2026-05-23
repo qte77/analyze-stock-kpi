@@ -16,6 +16,10 @@ Types of changes:
 
 ## [Unreleased]
 
+### Security
+
+- **Bump `idna` 3.13 → 3.16 (CVE-2026-45409 ReDoS in `idna.encode()`).** `[tool.uv].exclude-newer` rolled forward 2026-05-09 → 2026-05-23 so the patched version is reachable; no other transitive bumps. Practical exposure was nil (we never pass external input through `idna.encode()`), but the patched version is trivial to ship.
+
 ### Fixed
 
 - **`_persist_snapshots` JSON-serializes `date` enrichment fields** — `s.model_dump(mode="json")` so `sec_last_*_date` (now populated since PR #127 unblocked SEC) become ISO strings instead of crashing `json.dumps`. Regression for [run #26303499996](https://github.com/qte77/analyze-stock-kpi/actions/runs/26303499996).
