@@ -16,6 +16,10 @@ Types of changes:
 
 ## [Unreleased]
 
+### Changed
+
+- **Rename ruff rule code `TCH` → `TC` in `pyproject.toml`.** `TCH` is the deprecated alias; `TC` is the modern code for flake8-type-checking. Functionally identical under ruff 0.15; future-proof against ruff 1.0 dropping the alias. Aligns with the shared `py-harden-ruff.md` recipe doc.
+
 ### Security
 
 - **Bump `idna` 3.13 → 3.16 (CVE-2026-45409 ReDoS in `idna.encode()`).** `[tool.uv].exclude-newer` rolled forward 2026-05-09 → 2026-05-23 so the patched version is reachable; no other transitive bumps. Practical exposure was nil (we never pass external input through `idna.encode()`), but the patched version is trivial to ship.

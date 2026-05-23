@@ -61,7 +61,7 @@ select = [
     "RUF",  # ruff-specific
     "PT",   # pytest style
     "ANN",  # flake8-annotations (type hints)
-    "TCH",  # flake8-type-checking (move imports to TYPE_CHECKING)
+    "TC",   # flake8-type-checking (move imports to TYPE_CHECKING)
     "PGH",  # pygrep-hooks (no broad noqa, etc.)
     "C90",  # mccabe cyclomatic complexity
     "D",    # pydocstyle (docstring style)
