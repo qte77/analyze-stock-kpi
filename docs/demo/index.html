@@ -7,15 +7,22 @@
   <link rel="stylesheet" href="style.css" />
   <script src="vendor/chart.umd.min.js" defer></script>
   <script src="vendor/fuse.min.js" defer></script>
-  <script src="app.js" defer></script>
+  <script src="app.js" type="module"></script>
 </head>
-<body>
+<body class="view-simple">
   <header>
     <h1>
       <a href="https://github.com/qte77/analyze-stock-kpi">analyze-stock-kpi</a>
       · KPI demo dashboard
     </h1>
-    <span id="updated" class="updated"></span>
+    <div class="header-meta">
+      <button
+        id="view-toggle"
+        type="button"
+        aria-label="Toggle simple / detailed view"
+      >↗ Detailed</button>
+      <span id="updated" class="updated"></span>
+    </div>
   </header>
 
   <main>
@@ -53,9 +60,18 @@
         <input
           id="universe-filter"
           type="search"
-          placeholder="Filter ticker / name / sector…"
+          placeholder="Filter ticker / name / sector… (press / to focus)"
           aria-label="Filter universe by ticker, name, or sector"
         />
+        <button
+          id="export-csv"
+          class="detail-only"
+          type="button"
+          aria-label="Download the current filtered + sorted view as CSV"
+        >↓ CSV</button>
+      </div>
+      <div id="sector-donut-wrap">
+        <canvas id="sector-donut" aria-label="Sector composition donut"></canvas>
       </div>
       <div class="table-wrap">
         <table id="universe-table">
@@ -64,22 +80,22 @@
               <th data-key="symbol" title="Yahoo Finance symbol">Ticker</th>
               <th data-key="long_name" title="Long company or asset name">Name</th>
               <th data-key="sector" title="GICS sector (Technology, Healthcare, etc.)">Sector</th>
-              <th data-key="forward_pe" class="num" title="Forward P/E: price / next-12mo EPS estimate. Lower = cheaper relative to expected earnings.">P/E (fwd)</th>
-              <th data-key="trailing_peg_ratio" class="num" title="Trailing PEG ratio: P/E adjusted for historical earnings growth. Lower is better; <1 is the classic Peter Lynch &quot;undervalued&quot; threshold.">PEG</th>
-              <th data-key="beta" class="num" title="5y beta vs market. <1 = less volatile than market; lower = less systematic risk.">Beta</th>
-              <th data-key="rd_to_revenue" class="num" title="R&amp;D expense as share of revenue. EQUITY-only (null for ETFs / FX / futures / crypto).">R&amp;D/Rev %</th>
+              <th data-key="forward_pe" class="num detail-only" title="Forward P/E: price / next-12mo EPS estimate. Lower = cheaper relative to expected earnings.">P/E (fwd)</th>
+              <th data-key="trailing_peg_ratio" class="num detail-only" title="Trailing PEG ratio: P/E adjusted for historical earnings growth. Lower is better; <1 is the classic Peter Lynch &quot;undervalued&quot; threshold.">PEG</th>
+              <th data-key="beta" class="num detail-only" title="5y beta vs market. <1 = less volatile than market; lower = less systematic risk.">Beta</th>
+              <th data-key="rd_to_revenue" class="num detail-only" title="R&amp;D expense as share of revenue. EQUITY-only (null for ETFs / FX / futures / crypto).">R&amp;D/Rev %</th>
               <th data-key="operating_margins" class="num" title="Operating margin: operating income / revenue. Pre-tax and pre-interest — comparable across countries.">Op M %</th>
-              <th data-key="return_on_equity" class="num" title="Return on equity: net income / shareholder equity. Profitability per equity dollar (sensitive to leverage).">ROE %</th>
-              <th data-key="return_on_assets" class="num" title="Return on assets: net income / total assets. Leverage-neutral profitability per asset dollar.">ROA %</th>
-              <th data-key="current_ratio" class="num" title="Current ratio: current assets / current liabilities. Short-term liquidity (>1 means assets cover liabilities).">Current</th>
-              <th data-key="sortino_ratio" class="num" title="Annualized Sortino ratio over 1y (rf=0). Higher = better upside vs downside skew.">Sortino</th>
+              <th data-key="return_on_equity" class="num detail-only" title="Return on equity: net income / shareholder equity. Profitability per equity dollar (sensitive to leverage).">ROE %</th>
+              <th data-key="return_on_assets" class="num detail-only" title="Return on assets: net income / total assets. Leverage-neutral profitability per asset dollar.">ROA %</th>
+              <th data-key="current_ratio" class="num detail-only" title="Current ratio: current assets / current liabilities. Short-term liquidity (>1 means assets cover liabilities).">Current</th>
+              <th data-key="sortino_ratio" class="num detail-only" title="Annualized Sortino ratio over 1y (rf=0). Higher = better upside vs downside skew.">Sortino</th>
               <th data-key="composite_scores.screener_score" class="num" title="Mean of 4 thematic factor scores — Profitability (>= 2 of 4 inputs) / Valuation (>= 1 of 2) / Risk (>= 1 of 2) / Momentum (1 of 1). Factors below their minimum drop from the composite; remaining factors weigh equally. Requires >= 5 of 9 inputs total or returns —. Higher = better. Default descending.">Score</th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
-      <aside id="row-detail" hidden></aside>
+      <aside id="row-detail" class="detail-only" hidden></aside>
     </section>
   </main>
 

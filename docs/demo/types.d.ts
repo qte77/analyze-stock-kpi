@@ -13,6 +13,16 @@
 declare const Chart: any;
 declare const Fuse: any;
 
+// Demo v2 (#134) view-mode toggle.
+type ViewMode = "simple" | "detailed";
+
+// A1 conditional cell coloring threshold per KPI.
+interface KpiThreshold {
+  lowerBetter: boolean;
+  good: number;
+  bad: number;
+}
+
 interface CompositeScores {
   quality?: number | null;
   dividend?: number | null;
