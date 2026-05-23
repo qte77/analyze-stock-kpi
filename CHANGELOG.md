@@ -16,10 +16,6 @@ Types of changes:
 
 ## [Unreleased]
 
-### Changed
-
-- **Rename ruff rule code `TCH` → `TC` in `pyproject.toml`.** `TCH` is the deprecated alias; `TC` is the modern code for flake8-type-checking. Functionally identical under ruff 0.15; future-proof against ruff 1.0 dropping the alias. Aligns with the shared `py-harden-ruff.md` recipe doc.
-
 ### Security
 
 - **Bump `idna` 3.13 → 3.16 (CVE-2026-45409 ReDoS in `idna.encode()`).** `[tool.uv].exclude-newer` rolled forward 2026-05-09 → 2026-05-23 so the patched version is reachable; no other transitive bumps. Practical exposure was nil (we never pass external input through `idna.encode()`), but the patched version is trivial to ship.
@@ -48,6 +44,7 @@ Types of changes:
 
 ### Changed
 
+- **Rename ruff rule code `TCH` → `TC` in `pyproject.toml`.** `TCH` is the deprecated alias; `TC` is the modern code for flake8-type-checking. Functionally identical under ruff 0.15; future-proof against ruff 1.0 dropping the alias. Aligns with the shared `py-harden-ruff.md` recipe doc.
 - **Docs restructure (Item 6b)** — single-source-of-truth + concision. AGENTS.md "Active modules" list removed (docs/architecture.md owns it). README.md "Sample output" JSON dump trimmed (links to source). docs/architecture.md `Modules` tree refreshed for the three-tier layout; "Planned modules" section dropped (all shipped). roadmap.md marks federal-contractors + gh-pages + static dashboard as done. Stale `results/fundamentals_<UTC>.json` references repaired across 5 docs.
 - **`src/` restructured into three-tier sub-packages** — `src/domain/`, `src/data_sources/` (incl. `sec/`), `src/orchestrators/`. Pure rename + import-path updates; no behaviour change.
 - **CNN F&G UA centralised on `src.utils.http_ua.STABLE_USER_AGENT`** — `AppSettings.cnn_fg_user_agent` removed (it duplicated `USER_AGENTS[0]`). SEC keeps random rotation via `pick_user_agent()`; CNN pins to `STABLE_USER_AGENT` to avoid WAF profiling.
