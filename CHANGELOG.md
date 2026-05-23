@@ -16,16 +16,13 @@ Types of changes:
 
 ## [Unreleased]
 
-### Fixed
-
-- **Row click in the demo opens the side detail panel in both view modes.** Previously the simple-mode click did a JS `window.open` of Yahoo Finance, which was jarring (users left the app silently). The Yahoo / SEC EDGAR / Wikipedia entry points remain inside the detail panel's `<a href>` external-link nav. Detail aside is no longer `class="detail-only"` so it can open in simple mode too.
-
 ### Security
 
 - **Bump `idna` 3.13 → 3.16 (CVE-2026-45409 ReDoS in `idna.encode()`).** `[tool.uv].exclude-newer` rolled forward 2026-05-09 → 2026-05-23 so the patched version is reachable; no other transitive bumps. Practical exposure was nil (we never pass external input through `idna.encode()`), but the patched version is trivial to ship.
 
 ### Fixed
 
+- **Demo row click no longer silently opens Yahoo Finance via `window.open`.** Simple-mode rows are now non-actionable (detail panel stays `class="detail-only"` and hidden); detailed-mode rows open the side panel as before. External-link visits go through the panel's visible `<a href>` anchors only — no invisible JS click referrals.
 - **`_persist_snapshots` JSON-serializes `date` enrichment fields** — `s.model_dump(mode="json")` so `sec_last_*_date` (now populated since PR #127 unblocked SEC) become ISO strings instead of crashing `json.dumps`. Regression for [run #26303499996](https://github.com/qte77/analyze-stock-kpi/actions/runs/26303499996).
 - **SEC EDGAR `User-Agent` now identity-shape** — default `"opensource-research-client contact@example.com"` (RFC 2606 placeholder, no PII / repo fingerprint); operator overrides via `SSK_SEC_USER_AGENT` env or CI repo variable `vars.SEC_USER_AGENT` (optional — `AppSettings(env_ignore_empty=True)` ignores empty-string env so unset `vars` falls through to the in-source default). See [ADR-0006 amendment 2026-05-22 (later)](docs/decisions/0006-federal-contractors-universe.md#amendment-2026-05-22-later--sec-anti-bot-ua-shape).
 - **CodeFactor `B108` quiets in `tests/test_config.py`** — `# nosec B108` matching existing pattern on lines 75/80.
