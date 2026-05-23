@@ -180,10 +180,12 @@ function compareValues(
   return dir * (Number(a) - Number(b));
 }
 
-function td(
-  /** @type {string} */ text,
-  /** @type {string | undefined} */ cls,
-) {
+/**
+ * @param {string} text
+ * @param {string} [cls]
+ * @returns {HTMLTableCellElement}
+ */
+function td(text, cls) {
   const el = document.createElement("td");
   el.textContent = text;
   if (cls) el.className = cls;
@@ -855,7 +857,7 @@ async function init() {
 
   await loadActiveUniverse();
   if (parsed.date && dateSelector) {
-    const options = [...dateSelector.options].map((o) => o.value);
+    const options = Array.from(dateSelector.options).map((o) => o.value);
     if (options.includes(parsed.date)) {
       dateSelector.value = parsed.date;
       dateSelector.dispatchEvent(new Event("change"));

@@ -2,8 +2,9 @@
 // Federal-contractors audit JSON helpers extracted from docs/demo/app.js
 // so they can be unit-tested without a DOM. Tested by
 // tests/demo/audit.test.mjs.
-
-/** @typedef {import("../types.d.ts")} _Types */
+//
+// AuditRow is declared as an ambient interface in ../types.d.ts and
+// picked up automatically via the tsconfig `include` list.
 
 /**
  * Build a Map keyed by `final_ticker` from a list of AuditRow objects.

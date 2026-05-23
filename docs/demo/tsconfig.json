@@ -8,7 +8,7 @@
     "moduleResolution": "node",
     "strict": false,
     "skipLibCheck": true,
-    "lib": ["ES2020", "DOM"]
+    "lib": ["ES2021", "DOM", "DOM.Iterable"]
   },
   "include": ["app.js", "lib/**/*.js", "types.d.ts"],
   "exclude": ["vendor"]
