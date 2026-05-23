@@ -486,3 +486,89 @@ body.theme-dark {
   body.view-detailed .detail-only { display: none !important; }
   #sector-donut-wrap { height: 160px; }
 }
+
+/* ───────────────── PR D (#137) — multi-universe overlay chips +
+                     time-series tab in detail panel ─────────────── */
+
+#universe-chips {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.universe-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.5rem 0.15rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  font-size: 0.8125rem;
+  color: var(--text);
+}
+
+.universe-chip button {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0 0.25rem;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.universe-chip button:hover { color: var(--accent); }
+
+/* "Universe" column in the table is hidden by default; renderTable adds
+   the `overlay-active` body class when 2+ universes are merged so the
+   column appears. */
+th.universe-col,
+td.universe-col {
+  display: none;
+}
+
+body.overlay-active th.universe-col,
+body.overlay-active td.universe-col {
+  display: table-cell;
+}
+
+/* Tabs inside the detail aside (Overview ↔ Time series). */
+.detail-tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--border);
+  margin: 0.5rem 0 1rem;
+}
+
+.detail-tabs button {
+  background: none;
+  border: 0;
+  padding: 0.4rem 0.75rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.detail-tabs button[aria-selected="true"] {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+.timeseries-wrap {
+  position: relative;
+  height: 280px;
+  margin-bottom: 1rem;
+}
+
+.timeseries-hint {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-style: italic;
+  text-align: center;
+  padding: 0.5rem;
+}

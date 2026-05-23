@@ -10,6 +10,7 @@
 import { buildAuditMap, formatObligated, loadAudit } from "./lib/audit.js";
 import { cellClass } from "./lib/coloring.js";
 import { exportCsv } from "./lib/csv.js";
+import { mergeUniverseSnapshots } from "./lib/overlay.js";
 import { aggregateSectors } from "./lib/sector.js";
 import {
   parseState,
@@ -17,6 +18,7 @@ import {
   serializeState,
 } from "./lib/state.js";
 import { resolveTheme } from "./lib/theme.js";
+import { buildTimeSeries } from "./lib/timeseries.js";
 
 const DATA_BASE_URL = (
   new URLSearchParams(window.location.search).get("base") ??
@@ -41,6 +43,15 @@ const FALLBACK_UNIVERSE_IDS = [
 let knownUniverseIds = [...FALLBACK_UNIVERSE_IDS];
 
 let activeUniverse = "qte77-watchlist";
+
+/**
+ * Extra universes overlaid on top of `activeUniverse` (detailed mode
+ * only). When non-empty, the table merges all snapshots and shows a
+ * "Universe" column. Manipulated via the picker change handler (add)
+ * and chip × buttons (remove). Persists via `?universe=primary,extra1,…`.
+ * @type {string[]}
+ */
+let extraUniverses = [];
 
 /** @type {Map<string, AuditRow> | null} */
 let auditByTicker = null;
@@ -231,10 +242,13 @@ function applyTheme() {
 }
 
 function persistStateFromCurrent() {
+  const universes = activeUniverse
+    ? [activeUniverse, ...extraUniverses]
+    : [];
   const url = serializeState(
     {
       view: viewMode,
-      universes: activeUniverse ? [activeUniverse] : [],
+      universes,
       sortKey: state.sortKey,
       sortDir: state.sortDir,
       filter: filterQuery,
@@ -325,9 +339,14 @@ function renderTable() {
     if (score != null) {
       scoreCell.style.backgroundColor = `hsl(${Number(score) * 1.2}, 60%, 75%)`;
     }
+    const universeCell = td(
+      /** @type {any} */ (row)._universe ?? activeUniverse,
+    );
+    universeCell.classList.add("universe-col");
     /** @type {Array<[string, HTMLElement, boolean]>} */
     const cellSpecs = [
       ["symbol", td(row.symbol ?? "—"), true],
+      ["_universe", universeCell, true],
       ["long_name", td(row.long_name ?? "—"), true],
       ["sector", td(row.sector ?? "—"), true],
       ["forward_pe", td(fmtNum(row.forward_pe, 2), "num"), false],
@@ -535,12 +554,46 @@ function showDetail(/** @type {Row} */ row) {
   h3.textContent = `${row.symbol ?? "—"} · ${row.long_name ?? ""}`;
   aside.append(h3);
 
+  const tabs = document.createElement("div");
+  tabs.className = "detail-tabs";
+  const overviewTab = document.createElement("button");
+  overviewTab.type = "button";
+  overviewTab.textContent = "Overview";
+  overviewTab.setAttribute("aria-selected", "true");
+  const seriesTab = document.createElement("button");
+  seriesTab.type = "button";
+  seriesTab.textContent = "Time series";
+  seriesTab.setAttribute("aria-selected", "false");
+  tabs.append(overviewTab, seriesTab);
+  aside.append(tabs);
+
+  const overviewPane = document.createElement("div");
+  const seriesPane = document.createElement("div");
+  seriesPane.hidden = true;
+  aside.append(overviewPane, seriesPane);
+
+  overviewTab.addEventListener("click", () => {
+    overviewTab.setAttribute("aria-selected", "true");
+    seriesTab.setAttribute("aria-selected", "false");
+    overviewPane.hidden = false;
+    seriesPane.hidden = true;
+  });
+  seriesTab.addEventListener("click", () => {
+    overviewTab.setAttribute("aria-selected", "false");
+    seriesTab.setAttribute("aria-selected", "true");
+    overviewPane.hidden = true;
+    seriesPane.hidden = false;
+    if (seriesPane.childElementCount === 0) {
+      void renderTimeSeriesPane(seriesPane, row);
+    }
+  });
+
   const radarWrap = document.createElement("div");
   radarWrap.className = "radar-wrap";
   const radarCanvas = document.createElement("canvas");
   radarCanvas.className = "radar-canvas";
   radarWrap.append(radarCanvas);
-  aside.append(radarWrap);
+  overviewPane.append(radarWrap);
 
   const linkSection = document.createElement("nav");
   linkSection.className = "detail-links";
@@ -552,7 +605,7 @@ function showDetail(/** @type {Row} */ row) {
     a.rel = "noopener";
     linkSection.append(a);
   }
-  aside.append(linkSection);
+  overviewPane.append(linkSection);
 
   const trail = row.trailing_pe;
   const fwd = row.forward_pe;
@@ -596,9 +649,98 @@ function showDetail(/** @type {Row} */ row) {
       ...auditDetailRows(audit),
     ]),
   );
-  aside.append(list);
+  overviewPane.append(list);
   aside.hidden = false;
   renderRadar(radarCanvas, cs);
+}
+
+/** @type {any} */
+let timeSeriesChart = null;
+
+/** @type {{dates: string[], latest: string} | null} */
+let manifestCache = null;
+
+/**
+ * Lazy-load the time-series chart for one ticker. Pre-#136 backfill,
+ * the dashboard has at most ~5 historic dates per universe so the
+ * series is short; a hint chip is rendered when ≤3 points are available
+ * to set expectations. Post-#136 the same code consumes a 17-point grid
+ * with no migration.
+ *
+ * @param {HTMLElement} pane
+ * @param {Row} row
+ */
+async function renderTimeSeriesPane(pane, row) {
+  if (!row.symbol) {
+    pane.append(emptyHint("no ticker — nothing to plot"));
+    return;
+  }
+  if (!manifestCache) {
+    pane.append(emptyHint("loading manifest…"));
+    return;
+  }
+  const dates = [...manifestCache.dates].sort();
+  pane.append(emptyHint(`loading ${dates.length} snapshots…`));
+  const results = await Promise.allSettled(
+    dates.map((d) =>
+      fetchJson(`${DATA_BASE_URL}/results/demo/${activeUniverse}/${d}.json`),
+    ),
+  );
+  /** @type {Array<{date: string, rows: Row[] | null}>} */
+  const snapshotsByDate = dates.map((d, i) => ({
+    date: d,
+    rows:
+      results[i].status === "fulfilled"
+        ? /** @type {Row[]} */ (results[i].value)
+        : null,
+  }));
+  const series = buildTimeSeries(snapshotsByDate, row.symbol);
+  pane.replaceChildren();
+  if (series.dates.length < 3) {
+    pane.append(
+      emptyHint(
+        `only ${series.dates.length} historic point(s) — full history populates after backfill (#136)`,
+      ),
+    );
+  }
+  const wrap = document.createElement("div");
+  wrap.className = "timeseries-wrap";
+  const canvas = document.createElement("canvas");
+  wrap.append(canvas);
+  pane.append(wrap);
+  if (typeof Chart === "undefined") return;
+  if (timeSeriesChart) timeSeriesChart.destroy();
+  timeSeriesChart = new Chart(canvas, {
+    type: "line",
+    data: {
+      labels: series.dates,
+      datasets: [
+        { label: "Screener", data: series.score, borderColor: "#0066cc" },
+        { label: "Quality", data: series.quality, borderColor: "#27ae60" },
+        { label: "Growth", data: series.growth, borderColor: "#e67e22" },
+        { label: "Sortino", data: series.sortino, borderColor: "#c0392b", yAxisID: "y1" },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { min: 0, max: 100, ticks: { stepSize: 25 }, title: { display: true, text: "Composite (0–100)" } },
+        y1: { position: "right", grid: { drawOnChartArea: false }, title: { display: true, text: "Sortino" } },
+      },
+    },
+  });
+}
+
+/**
+ * @param {string} text
+ * @returns {HTMLDivElement}
+ */
+function emptyHint(text) {
+  const el = document.createElement("div");
+  el.className = "timeseries-hint";
+  el.textContent = text;
+  return el;
 }
 
 function findClosestScore(
@@ -748,6 +890,20 @@ function bindCsvExport() {
   });
 }
 
+/** Fetch one universe's snapshot at a given date; null on any failure. */
+async function fetchUniverseSnapshot(
+  /** @type {string} */ universe,
+  /** @type {string} */ date,
+) {
+  try {
+    return /** @type {Row[]} */ (
+      await fetchJson(`${DATA_BASE_URL}/results/demo/${universe}/${date}.json`)
+    );
+  } catch {
+    return null;
+  }
+}
+
 async function loadActiveUniverse() {
   const dateSelector = /** @type {HTMLSelectElement | null} */ (
     document.getElementById("date-selector")
@@ -765,6 +921,7 @@ async function loadActiveUniverse() {
     sizeEl.textContent = `no data yet for ${activeUniverse}`;
     renderTable();
     renderSectorDonut();
+    renderUniverseChips();
     return;
   }
   dateSelector.replaceChildren();
@@ -776,7 +933,28 @@ async function loadActiveUniverse() {
   }
   dateSelector.value = manifest.latest;
   currentDate = manifest.latest;
-  state.snapshot = await loadSnapshot(manifest.latest);
+  manifestCache = { dates: manifest.dates, latest: manifest.latest };
+
+  // Primary snapshot (await directly so a failure still surfaces in the
+  // "no data" branch above). Extras fan out in parallel via allSettled.
+  const primary = await loadSnapshot(manifest.latest);
+  /** @type {Record<string, Row[] | null>} */
+  const byUniverse = { [activeUniverse]: primary };
+  if (extraUniverses.length > 0) {
+    const results = await Promise.allSettled(
+      extraUniverses.map((u) => fetchUniverseSnapshot(u, manifest.latest)),
+    );
+    extraUniverses.forEach((u, i) => {
+      const r = results[i];
+      byUniverse[u] = r.status === "fulfilled" ? r.value : null;
+    });
+  }
+  state.snapshot =
+    extraUniverses.length === 0
+      ? primary
+      : mergeUniverseSnapshots(byUniverse);
+  document.body.classList.toggle("overlay-active", extraUniverses.length >= 1);
+
   const auditMap = await loadAudit(
     activeUniverse,
     manifest.latest,
@@ -785,11 +963,49 @@ async function loadActiveUniverse() {
   );
   auditByTicker = auditMap ?? buildAuditMap([]);
   rebuildFuseIndex();
-  sizeEl.textContent = `${state.snapshot.length} tickers`;
+  sizeEl.textContent =
+    extraUniverses.length === 0
+      ? `${state.snapshot.length} tickers`
+      : `${state.snapshot.length} tickers · ${1 + extraUniverses.length} universes`;
   renderTable();
   renderSectorDonut();
+  renderUniverseChips();
   const updatedEl = document.getElementById("updated");
   if (updatedEl) updatedEl.textContent = `updated ${manifest.updated_at}`;
+}
+
+function renderUniverseChips() {
+  const chipsEl = document.getElementById("universe-chips");
+  if (!chipsEl) return;
+  chipsEl.replaceChildren();
+  if (extraUniverses.length === 0) return;
+  // Primary chip — no remove button (it's the active picker selection).
+  chipsEl.append(makeChip(activeUniverse, false));
+  for (const u of extraUniverses) chipsEl.append(makeChip(u, true));
+}
+
+/**
+ * @param {string} universe
+ * @param {boolean} removable
+ * @returns {HTMLSpanElement}
+ */
+function makeChip(universe, removable) {
+  const chip = document.createElement("span");
+  chip.className = "universe-chip";
+  chip.append(document.createTextNode(universe));
+  if (removable) {
+    const x = document.createElement("button");
+    x.type = "button";
+    x.textContent = "×";
+    x.setAttribute("aria-label", `Remove ${universe} from overlay`);
+    x.addEventListener("click", async () => {
+      extraUniverses = extraUniverses.filter((u) => u !== universe);
+      persistStateFromCurrent();
+      await loadActiveUniverse();
+    });
+    chip.append(x);
+  }
+  return chip;
 }
 
 async function init() {
@@ -858,9 +1074,22 @@ async function init() {
     requested && knownUniverseIds.includes(requested)
       ? requested
       : universes[0]?.id ?? "qte77-watchlist";
+  // Extras are universes 2..N from the URL, filtered against the
+  // whitelist and de-duplicated against the primary.
+  extraUniverses = parsed.universes
+    .slice(1)
+    .filter((u) => u !== activeUniverse && knownUniverseIds.includes(u));
   picker.value = activeUniverse;
   picker.addEventListener("change", async () => {
-    activeUniverse = picker.value;
+    const next = picker.value;
+    if (viewMode === "detailed" && next !== activeUniverse) {
+      // Add to the overlay (no dupes, no self-overlay)
+      if (!extraUniverses.includes(next)) extraUniverses = [...extraUniverses, next];
+      picker.value = activeUniverse; // restore the dropdown to the primary
+    } else {
+      activeUniverse = next;
+      extraUniverses = [];
+    }
     persistStateFromCurrent();
     await loadActiveUniverse();
   });

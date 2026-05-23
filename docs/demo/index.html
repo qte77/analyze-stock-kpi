@@ -59,9 +59,14 @@
           Universe:
           <select
             id="universe-picker"
-            title="Switch between bundled universes. Selection persists via ?universe= in the URL."
+            title="Switch between bundled universes. In detailed mode, selecting an additional universe overlays it onto the table; the chips below let you remove individual overlay universes."
           ></select>
         </label>
+        <div
+          id="universe-chips"
+          class="detail-only"
+          aria-label="Active overlay universes; click × to remove"
+        ></div>
         <label>
           Snapshot:
           <select id="date-selector"></select>
@@ -87,6 +92,7 @@
           <thead>
             <tr>
               <th data-key="symbol" title="Yahoo Finance symbol">Ticker</th>
+              <th data-key="_universe" class="universe-col" title="Source universe (visible only when 2+ universes are overlaid)">Universe</th>
               <th data-key="long_name" title="Long company or asset name">Name</th>
               <th data-key="sector" title="GICS sector (Technology, Healthcare, etc.)">Sector</th>
               <th data-key="forward_pe" class="num detail-only" title="Forward P/E: price / next-12mo EPS estimate. Lower = cheaper relative to expected earnings.">P/E (fwd)</th>
