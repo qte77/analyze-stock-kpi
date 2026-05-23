@@ -16,6 +16,7 @@ import {
   resolveViewMode,
   serializeState,
 } from "./lib/state.js";
+import { resolveTheme } from "./lib/theme.js";
 
 const DATA_BASE_URL = (
   new URLSearchParams(window.location.search).get("base") ??
@@ -23,6 +24,7 @@ const DATA_BASE_URL = (
 ).replace(/\/$/, "");
 
 const VIEW_MODE_STORAGE_KEY = "demo-view-mode";
+const THEME_STORAGE_KEY = "demo-theme";
 
 const FALLBACK_UNIVERSE_IDS = [
   "qte77-watchlist",
@@ -201,6 +203,31 @@ function applyViewMode() {
   body.classList.toggle("view-detailed", viewMode === "detailed");
   const btn = document.getElementById("view-toggle");
   if (btn) btn.textContent = viewMode === "simple" ? "↗ Detailed" : "← Simple";
+}
+
+/** @type {"system" | "light" | "dark"} */
+let activeTheme = "system";
+
+/**
+ * Apply the active theme to `<body>` and sync the segmented toggle's
+ * aria-pressed state. The three theme-* classes are mutually exclusive
+ * (only one is set at any time); CSS picks the right palette via
+ * `body.theme-dark` (forced) or `body.theme-system` + media query.
+ */
+function applyTheme() {
+  const body = document.body;
+  body.classList.toggle("theme-system", activeTheme === "system");
+  body.classList.toggle("theme-light", activeTheme === "light");
+  body.classList.toggle("theme-dark", activeTheme === "dark");
+  const toggle = document.getElementById("theme-toggle");
+  if (!toggle) return;
+  for (const btn of toggle.querySelectorAll("button[data-theme]")) {
+    if (!(btn instanceof HTMLButtonElement)) continue;
+    btn.setAttribute(
+      "aria-pressed",
+      btn.dataset.theme === activeTheme ? "true" : "false",
+    );
+  }
 }
 
 function persistStateFromCurrent() {
@@ -776,6 +803,27 @@ async function init() {
   viewMode = resolveViewMode(parsed.view, lsView);
   applyViewMode();
   applyMobileGuard();
+
+  // Theme: URL `?theme=` beats localStorage beats the "system" default.
+  const themeUrl = new URLSearchParams(window.location.search).get("theme");
+  const lsTheme = window.localStorage?.getItem(THEME_STORAGE_KEY) ?? null;
+  activeTheme = resolveTheme(themeUrl, lsTheme);
+  applyTheme();
+
+  const themeToggle = document.getElementById("theme-toggle");
+  themeToggle?.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLButtonElement)) return;
+    const next = target.dataset.theme;
+    if (next !== "system" && next !== "light" && next !== "dark") return;
+    activeTheme = next;
+    applyTheme();
+    window.localStorage?.setItem(THEME_STORAGE_KEY, activeTheme);
+    const url = new URL(window.location.href);
+    if (activeTheme === "system") url.searchParams.delete("theme");
+    else url.searchParams.set("theme", activeTheme);
+    window.history.replaceState({}, "", url);
+  });
 
   const toggleBtn = document.getElementById("view-toggle");
   toggleBtn?.addEventListener("click", () => {
