@@ -39,6 +39,10 @@ eggs/
 .eggs/
 lib/
 lib64/
+# Re-include the JS testable-units directory the toggle dashboard
+# extracts out of docs/demo/app.js (#134).
+!docs/demo/lib/
+!docs/demo/lib/**
 parts/
 sdist/
 var/
