@@ -61,6 +61,7 @@ const state = {
   sortDir: -1,
 };
 
+/** @type {any} */
 let fuseIndex = null;
 let filterQuery = "";
 
@@ -262,10 +263,13 @@ function renderTable() {
   const sorted = [...visible].sort((a, b) =>
     compareValues(nested(a, state.sortKey), nested(b, state.sortKey), state.sortDir),
   );
-  const totalScore = visible.reduce((acc, row) => {
-    const s = nested(row, "composite_scores.screener_score");
-    return acc + (s == null ? 0 : Number(s));
-  }, 0);
+  const totalScore = visible.reduce(
+    (/** @type {number} */ acc, /** @type {Row} */ row) => {
+      const s = nested(row, "composite_scores.screener_score");
+      return acc + (s == null ? 0 : Number(s));
+    },
+    0,
+  );
   for (const row of sorted) {
     const tr = document.createElement("tr");
     const score = nested(row, "composite_scores.screener_score");
@@ -702,7 +706,7 @@ function bindCsvExport() {
     const rows = filteredSnapshot();
     const headers = [...ALL_COLUMNS];
     const csv = exportCsv(
-      rows.map((r) =>
+      rows.map((/** @type {Row} */ r) =>
         Object.fromEntries(headers.map((h) => [h, nested(r, h)])),
       ),
       headers,
