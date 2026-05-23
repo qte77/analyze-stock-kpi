@@ -150,67 +150,15 @@ jobs:
           SNAPSHOT_PATH: ${{ steps.prep.outputs.snapshot }}
           MANIFEST_PATH: ${{ steps.prep.outputs.manifest }}
         with:
-          # All N matrix legs target the same `data` ref concurrently. The
-          # updateRef call fails with 422 ("Reference cannot be updated")
-          # when another leg's commit landed between our getRef and our
-          # updateRef. We retry by re-fetching the parent and rebuilding
-          # the tree (blobs themselves are content-addressed, so they
-          # persist across retries). Backoff has a small jitter so 8
-          # concurrent legs spread their retries rather than colliding
-          # again on the same tick.
+          # Retry-aware verified-commit lives in scripts/data-branch-commit.cjs
+          # so it is reused by federal-contractors-refresh and survives the
+          # concurrent-matrix race on the `data` ref (422 Reference cannot
+          # be updated when N legs target the same parent SHA).
           script: |
-            const fs = require('fs');
             const { UNIVERSE, SNAPSHOT_PATH, MANIFEST_PATH } = process.env;
-            const { owner, repo } = context.repo;
-            const branch = 'data';
-            const MAX_ATTEMPTS = 8;
-
-            const mkBlob = async (path) => {
-              const content = fs.readFileSync(path).toString('base64');
-              const blob = await github.rest.git.createBlob({
-                owner, repo, content, encoding: 'base64',
-              });
-              return { path, mode: '100644', type: 'blob', sha: blob.data.sha };
-            };
-            const tree = [
-              await mkBlob(SNAPSHOT_PATH),
-              await mkBlob(MANIFEST_PATH),
-            ];
-
-            for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-              try {
-                const ref = await github.rest.git.getRef({
-                  owner, repo, ref: `heads/${branch}`,
-                });
-                const parentSha = ref.data.object.sha;
-                const parentCommit = await github.rest.git.getCommit({
-                  owner, repo, commit_sha: parentSha,
-                });
-                const newTree = await github.rest.git.createTree({
-                  owner, repo, base_tree: parentCommit.data.tree.sha, tree,
-                });
-                const commit = await github.rest.git.createCommit({
-                  owner, repo,
-                  message: `chore(demo): weekly snapshot ${UNIVERSE}`,
-                  tree: newTree.data.sha,
-                  parents: [parentSha],
-                });
-                await github.rest.git.updateRef({
-                  owner, repo, ref: `heads/${branch}`, sha: commit.data.sha,
-                });
-                core.info(
-                  `Created verified commit ${commit.data.sha.slice(0, 8)} ` +
-                  `on ${branch} (attempt ${attempt}/${MAX_ATTEMPTS})`,
-                );
-                return;
-              } catch (err) {
-                const racy = err.status === 422 && attempt < MAX_ATTEMPTS;
-                if (!racy) throw err;
-                const backoff = 500 * attempt + Math.floor(Math.random() * 500);
-                core.info(
-                  `Ref update lost race (attempt ${attempt}/${MAX_ATTEMPTS}); ` +
-                  `retrying in ${backoff}ms`,
-                );
-                await new Promise((r) => setTimeout(r, backoff));
-              }
-            }
+            const { run } = require("./scripts/data-branch-commit.cjs");
+            return run({
+              github, context, core,
+              paths: [SNAPSHOT_PATH, MANIFEST_PATH],
+              message: `chore(demo): weekly snapshot ${UNIVERSE}`,
+            });
