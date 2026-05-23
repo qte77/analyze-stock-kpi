@@ -3,7 +3,7 @@
 .PHONY: \
 	setup_uv setup_dev setup_lychee setup_npm_tools \
 	lint autofix check_types check_complexity lint_md lint_js lint_links \
-	test test_cov retest validate \
+	test test_cov test_js retest validate \
 	run preview preview_local \
 	clean help
 .DEFAULT_GOAL := help
@@ -80,10 +80,14 @@ test_cov:  ## pytest with coverage (--cov-fail-under=0; raise once tests exist)
 	echo "--- test_cov"
 	uv run pytest --cov=src --cov-fail-under=0 $(PYTEST_QUIET)
 
+test_js:  ## vitest run on tests/demo/ (closes #131; non-trivial units only)
+	echo "--- test_js"
+	npx --yes vitest run tests/demo --passWithNoTests
+
 retest:  ## rerun last failed tests only
 	uv run pytest --lf -x
 
-validate:  ## CI gate: lint + check_types + check_complexity + lint_md + lint_js + test_cov
+validate:  ## CI gate: lint + check_types + check_complexity + lint_md + lint_js + test_cov + test_js
 	set -e
 	$(MAKE) -s lint
 	$(MAKE) -s check_types
@@ -91,6 +95,7 @@ validate:  ## CI gate: lint + check_types + check_complexity + lint_md + lint_js
 	$(MAKE) -s lint_md
 	$(MAKE) -s lint_js
 	$(MAKE) -s test_cov
+	$(MAKE) -s test_js
 
 
 # MARK: RUN

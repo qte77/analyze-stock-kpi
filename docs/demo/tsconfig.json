@@ -10,6 +10,6 @@
     "skipLibCheck": true,
     "lib": ["ES2020", "DOM"]
   },
-  "include": ["app.js", "types.d.ts"],
+  "include": ["app.js", "lib/**/*.js", "types.d.ts"],
   "exclude": ["vendor"]
 }
