@@ -373,17 +373,10 @@ function renderTable() {
 }
 
 function onRowClick(/** @type {Row} */ row) {
-  if (viewMode === "simple") {
-    const symbol = row.symbol;
-    if (symbol) {
-      window.open(
-        `https://finance.yahoo.com/quote/${encodeURIComponent(symbol)}`,
-        "_blank",
-        "noopener",
-      );
-    }
-    return;
-  }
+  // Both view modes open the side detail panel; the previous
+  // "simple-mode opens Yahoo externally" behaviour was jarring (users
+  // didn't want to leave the app). Yahoo + SEC EDGAR + Wikipedia links
+  // remain accessible inside the panel's `.detail-links` nav.
   showDetail(row);
 }
 
