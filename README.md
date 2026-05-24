@@ -84,7 +84,7 @@ In priority order:
 * [`docs/UserStory.md`](docs/UserStory.md) — product intent + non-goals
 * [`docs/roadmap.md`](docs/roadmap.md) — milestones + tracked issues
 * [`docs/demo/`](docs/demo) — static dashboard sources (deployed to GitHub Pages); preview locally with `make preview` (serves on `:8000`, data fetched cross-origin from the `data` branch)
-* [`docs/decisions/`](docs/decisions) — ADRs (Traderfox removal,
+* [`docs/decisions/`](docs/decisions) — [MADR](https://adr.github.io/madr/) ADRs (Traderfox removal,
   `financetoolkit` deferral, simplified composites, RS hedging deferral)
 * [`docs/cnn-fg-api.md`](docs/cnn-fg-api.md) — CNN F&G endpoint schema
 * [`CHANGELOG.md`](CHANGELOG.md) — release history + known issues
