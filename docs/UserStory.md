@@ -22,11 +22,12 @@ Solo investors building their own auditable, rule-based screening pipeline. Anyo
 - Paid-data integrations (CDS spreads, Bloomberg, Refinitiv) — out of scope
 - Automated trade execution — analysis only
 
-## v0.6.0 done means (in progress)
+## v0.6.0 done means
 
-- A read-only static dashboard at `https://qte77.github.io/analyze-stock-kpi/` shows the current CNN Fear & Greed score with a 2-year history chart plus a sortable table of the latest `qte77-watchlist` fundamentals snapshot (74 tickers, weekly cadence).
-- A weekly GitHub Actions cron (`demo-snapshot.yml`) writes `results/demo/qte77-watchlist/YYYY-MM-DD.json` snapshots and a manifest to the `data` branch via verified REST Git Data API commits. The dashboard fetches them cross-origin from `raw.githubusercontent.com`.
+- A read-only static dashboard at `https://qte77.github.io/analyze-stock-kpi/` shows the current CNN Fear & Greed score with a 2-year history chart plus a sortable table of the latest `qte77-watchlist` fundamentals snapshot (74 tickers, weekly cadence). Dashboard UX polish: Score heatmap, Fuse.js filter, sticky table head, mobile layout.
+- A weekly GitHub Actions cron (`demo-snapshot.yaml`) writes `results/demo/qte77-watchlist/YYYY-MM-DD.json` snapshots and a manifest to the `data` branch via verified REST Git Data API commits. The dashboard fetches them cross-origin from `raw.githubusercontent.com`.
 - `fear-greed.yaml` rewritten to the same verified-commit pattern, fixing the cron blocked by the repo's `required_signatures` ruleset.
+- Chart.js vendored locally (drops jsdelivr.net CDN dependency).
 - Inherits everything from v0.5.1 below.
 
 ## v0.5.1 done means
@@ -41,12 +42,20 @@ Solo investors building their own auditable, rule-based screening pipeline. Anyo
 - CNN F&G snapshot lands daily in `results/cnn_fg/YYYY.json` via cron (v0.4.0 #17).
 - `make validate` passes lint + types + complexity + lint_md + tests. CI green on push and PR (validate + links-fail-fast workflows).
 
-## v1.0.0 vision (post v0.5.0)
+## v1.0.0 done means
 
-`make run UNIVERSE=<preset>` produces, per asset in `results/<DATE>_<universe>/<ticker>/`:
+- Factor-weighted `screener_score` (#84) — replaces the prior unweighted composite aggregate so the headline score reflects KPI weights from `composite_scores.py`.
+- Release engineering: `tag-release` workflow, README screenshot, copyright + composite_scores docstring polish (#90, pre-1.0 cleanup).
+- Auto-generated `llms.txt` via `qte77/gha-llms-txt-action` (#80).
+- Dashboard: detail-panel dismiss fix (#89), sticky-header fix, lint-gate tightening.
+- Inherits everything from v0.6.0 above.
+
+## Future: per-asset directory layout (not currently scheduled)
+
+A future schema change would shift `make run UNIVERSE=<preset>` from the current single-file output (`results/fundamentals/<UTC>.json`) to a per-asset directory at `results/<DATE>_<universe>/<ticker>/`:
 
 - `fundamentals.json` — Tier 1: extends `FundamentalsSnapshot` with PEG, dividend-aristocrat flag, and any richer trend/historical fields the simplified composites currently approximate
 - `composites.json` — Tier 3: quality / dividend / growth / big_call / aaqs / hgi proxy scores (v0.5.0 #18, simplified per [`decisions/0002-simplified-composites.md`](decisions/0002-simplified-composites.md))
 - `sentiment.json` — CNN F&G snapshot (v0.4.0 #17, runs independently on cron)
 
-The per-asset directory layout is a future schema change from v0.5.0's single-file output; not yet implemented.
+Not on the current roadmap — no consumer requires it. Re-open as a v2.0.0 candidate if downstream tooling needs the per-asset shape.
