@@ -11,7 +11,7 @@ import { buildAuditMap, formatObligated, loadAudit } from "./lib/audit.js";
 import { cellClass } from "./lib/coloring.js";
 import { exportCsv } from "./lib/csv.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
-import { aggregateSectors } from "./lib/sector.js";
+import { aggregateSectors, sectorColor } from "./lib/sector.js";
 import {
   parseState,
   resolveViewMode,
@@ -416,14 +416,19 @@ function renderSectorDonut() {
   const aggregated = aggregateSectors(state.snapshot);
   const labels = [...aggregated.keys()];
   const data = [...aggregated.values()];
+  const backgroundColor = labels.map(sectorColor);
+  // Seam color follows --panel so slice borders blend cleanly with the
+  // section background in both light and dark themes (was hardcoded
+  // rgba(255,255,255,0.65), which vanished against #2c2c2e).
+  const borderColor =
+    getComputedStyle(document.body).getPropertyValue("--panel").trim() ||
+    "#ffffff";
   if (sectorChart) sectorChart.destroy();
   sectorChart = new Chart(canvas, {
     type: "doughnut",
     data: {
       labels,
-      datasets: [
-        { data, borderColor: "rgba(255,255,255,0.65)", borderWidth: 1 },
-      ],
+      datasets: [{ data, backgroundColor, borderColor, borderWidth: 1 }],
     },
     options: {
       responsive: true,
