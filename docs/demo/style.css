@@ -140,7 +140,13 @@ h2 {
 }
 
 #universe-controls-row > #universe-header {
-  flex: 0 1 auto;
+  /* fit-content shrinks the header to its content's natural row width
+     so the parent's justify-content: center can actually offset it.
+     Without this the inner flex-wrap stretches the header to fill the
+     row and leaves nothing for justify-content to center. */
+  flex: 0 0 auto;
+  width: fit-content;
+  max-width: 100%;
 }
 
 #universe-controls-row > #sector-donut-wrap {
@@ -150,6 +156,7 @@ h2 {
 #universe-header {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 0.75rem;
 }
