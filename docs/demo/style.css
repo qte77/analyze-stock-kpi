@@ -126,14 +126,25 @@ h2 {
 }
 
 /* Two-column layout: left = picker/snapshot/filter/CSV/chips,
-   right = sector donut. Stacks to a single column on narrow viewports
-   (see the 767px breakpoint below). */
+   right = sector donut. Flex with justify-content: center clusters the
+   two halves in the middle of the section instead of edge-to-edge.
+   Wraps to a single stacked column on narrow viewports (see the 767px
+   breakpoint below). */
 #universe-controls-row {
-  display: grid;
-  grid-template-columns: 1fr 280px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
   gap: 1.25rem;
-  align-items: start;
   margin-bottom: 1rem;
+}
+
+#universe-controls-row > #universe-header {
+  flex: 0 1 auto;
+}
+
+#universe-controls-row > #sector-donut-wrap {
+  flex: 0 0 280px;
 }
 
 #universe-header {
@@ -521,8 +532,9 @@ body.theme-dark {
 @media (max-width: 767px) {
   #view-toggle { display: none; }
   body.view-detailed .detail-only { display: none !important; }
-  /* Collapse controls/donut to a single stacked column on phones. */
-  #universe-controls-row { grid-template-columns: 1fr; }
+  /* On narrow viewports let the donut occupy the full row width so the
+     legend isn't squeezed against a 280px box. */
+  #universe-controls-row > #sector-donut-wrap { flex-basis: 100%; }
   #sector-donut-wrap { height: 160px; }
 }
 
