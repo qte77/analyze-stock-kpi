@@ -148,12 +148,18 @@ h2 {
   font-size: 0.875rem;
 }
 
+/* Form controls in the universe header. Background uses --bg (the page
+   background) rather than --panel so the controls sit inset against the
+   section panel — in both themes that's a one-step contrast that keeps
+   the border visible without raising visual weight. */
+#universe-picker,
 #date-selector,
 #universe-filter {
   padding: 0.3rem 0.5rem;
   border: 1px solid var(--border);
   border-radius: 4px;
-  background: var(--panel);
+  background: var(--bg);
+  color: var(--text);
   font: inherit;
 }
 
@@ -359,7 +365,7 @@ footer a:hover { text-decoration: underline; }
 #view-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
 #export-csv {
-  background: var(--panel);
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 4px;
   padding: 0.3rem 0.65rem;
@@ -459,6 +465,9 @@ body.theme-dark {
   --kpi-good: hsl(120, 40%, 28%);
   --kpi-neutral: hsl(60, 40%, 28%);
   --kpi-bad: hsl(0, 50%, 32%);
+  /* Opt native widgets (select chevron, scrollbars, focus rings) into
+     their dark variant — no per-widget CSS needed. */
+  color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -472,6 +481,7 @@ body.theme-dark {
     --kpi-good: hsl(120, 40%, 28%);
     --kpi-neutral: hsl(60, 40%, 28%);
     --kpi-bad: hsl(0, 50%, 32%);
+    color-scheme: dark;
   }
 }
 
