@@ -125,16 +125,28 @@ h2 {
   height: 220px;
 }
 
-#universe-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Two-column layout: left = picker/snapshot/filter/CSV/chips,
+   right = sector donut. Stacks to a single column on narrow viewports
+   (see the 767px breakpoint below). */
+#universe-controls-row {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 1.25rem;
+  align-items: start;
   margin-bottom: 1rem;
-  flex-wrap: wrap;
-  gap: 1rem;
 }
 
-#universe-header h2 { margin: 0; }
+#universe-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+#universe-size {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
 
 #date-selector,
 #universe-filter {
@@ -362,11 +374,12 @@ footer a:hover { text-decoration: underline; }
 /* Simple-mode hides detail-only elements; detailed-mode shows them. */
 body.view-simple .detail-only { display: none !important; }
 
-/* Sector donut sits between universe-header and the table; both modes. */
+/* Sector donut lives in the right column of #universe-controls-row in
+   both view modes. Shrunk from 180 to 160px now that it shares the row
+   with the controls instead of spanning the full section width. */
 #sector-donut-wrap {
   position: relative;
-  height: 180px;
-  margin-bottom: 1rem;
+  height: 160px;
 }
 
 /* Radar canvas inside the detail aside. */
@@ -484,6 +497,8 @@ body.theme-dark {
 @media (max-width: 767px) {
   #view-toggle { display: none; }
   body.view-detailed .detail-only { display: none !important; }
+  /* Collapse controls/donut to a single stacked column on phones. */
+  #universe-controls-row { grid-template-columns: 1fr; }
   #sector-donut-wrap { height: 160px; }
 }
 

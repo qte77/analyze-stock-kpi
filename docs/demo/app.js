@@ -916,7 +916,7 @@ async function loadActiveUniverse() {
     auditByTicker = null;
     rebuildFuseIndex();
     dateSelector.replaceChildren();
-    sizeEl.textContent = `no data yet for ${activeUniverse}`;
+    sizeEl.textContent = `· no data yet for ${activeUniverse}`;
     renderTable();
     renderSectorDonut();
     renderUniverseChips();
@@ -963,8 +963,8 @@ async function loadActiveUniverse() {
   rebuildFuseIndex();
   sizeEl.textContent =
     extraUniverses.length === 0
-      ? `${state.snapshot.length} tickers`
-      : `${state.snapshot.length} tickers · ${1 + extraUniverses.length} universes`;
+      ? `· ${state.snapshot.length} tickers`
+      : `· ${state.snapshot.length} tickers · ${1 + extraUniverses.length} universes`;
   renderTable();
   renderSectorDonut();
   renderUniverseChips();
