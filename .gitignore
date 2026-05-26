@@ -92,12 +92,7 @@ importtime/
 # Agent-managed working memory (per qte77 convention)
 MEMORY.md
 
-# Local npm install artifacts (vitest + typescript). The repo follows a
-# zero-committed-JS-deps convention: vendor scripts live under
-# docs/demo/vendor/, and CI fetches dev tools on-demand via `npx --yes`
-# (see .github/workflows/validate.yaml). Lock file is intentionally not
-# committed — the dev-tool versions in package.json use caret ranges
-# and CI runs without `npm install`/`npm ci`.
+# Local npm install (CI uses `npx --yes`; lockfile intentionally untracked)
 node_modules/
 package-lock.json
 
