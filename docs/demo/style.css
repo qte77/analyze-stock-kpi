@@ -150,9 +150,10 @@ h2 {
 }
 
 /* Stacked layout when the side-by-side cluster wouldn't fit comfortably
-   (~600 header + 20 gap + 280 donut + section/main padding ≈ 990px).
-   Below that, donut sits beneath the controls; both centered. */
-@media (max-width: 991px) {
+   (~280 donut + 20 gap + ~280 controls column = ~580px content + main
+   padding ≈ 640px viewport). Below that, donut sits beneath the
+   controls; both centered. */
+@media (max-width: 639px) {
   #universe-controls-row {
     flex-direction: column;
     align-items: center;
@@ -160,12 +161,15 @@ h2 {
   }
 }
 
+/* Controls list: stacks vertically (picker, count, snapshot, filter,
+   CSV, chips, sector-chip — each on its own row). Keeps the controls
+   block narrow so it sits beside the donut at any reasonable viewport
+   instead of taking the full row width. */
 #universe-header {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
 
 #universe-size {
