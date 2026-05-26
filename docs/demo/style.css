@@ -273,6 +273,20 @@ tbody tr:hover td.score-cell {
   background-color: inherit;
 }
 
+/* The score-cell heatmap always renders on a pastel light hue (hsl(*,
+   60%, 75%) set inline by renderTable). In dark mode the default
+   --text is near-white and disappears against that background, so
+   force the score-cell text to a dark value in both modes — no-op in
+   light mode where --text is already dark.
+
+   Same reasoning applies to the kpi-good / kpi-neutral / kpi-bad
+   cells in light mode (their pastel backgrounds want dark text), but
+   those cells switch to darker pastels in dark mode where white text
+   already reads, so no override needed there. */
+tbody td.score-cell {
+  color: #1d1d1f;
+}
+
 #row-detail {
   position: fixed;
   top: 0;
