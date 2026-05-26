@@ -1116,26 +1116,13 @@ function makeChip(universe, removable) {
   return chip;
 }
 
-async function init() {
-  bindDetailDismiss();
-  bindTableSort();
-  bindKeyboardShortcuts();
-  bindCsvExport();
-
-  const parsed = parseState(window.location.search, knownUniverseIds);
-  const lsView = window.localStorage?.getItem(VIEW_MODE_STORAGE_KEY) ?? null;
-  viewMode = resolveViewMode(parsed.view, lsView);
-  applyViewMode();
-  applyMobileGuard();
-
+function setupTheme() {
   // Theme: URL `?theme=` beats localStorage beats the "system" default.
   const themeUrl = new URLSearchParams(window.location.search).get("theme");
   const lsTheme = window.localStorage?.getItem(THEME_STORAGE_KEY) ?? null;
   activeTheme = resolveTheme(themeUrl, lsTheme);
   applyTheme();
-
-  const themeToggle = document.getElementById("theme-toggle");
-  themeToggle?.addEventListener("click", (event) => {
+  document.getElementById("theme-toggle")?.addEventListener("click", (event) => {
     const target = event.target;
     if (!(target instanceof HTMLButtonElement)) return;
     const next = target.dataset.theme;
@@ -1148,28 +1135,34 @@ async function init() {
     else url.searchParams.set("theme", activeTheme);
     window.history.replaceState({}, "", url);
   });
+}
 
-  const toggleBtn = document.getElementById("view-toggle");
-  toggleBtn?.addEventListener("click", () => {
+function bindViewToggle() {
+  document.getElementById("view-toggle")?.addEventListener("click", () => {
     viewMode = viewMode === "simple" ? "detailed" : "simple";
     applyViewMode();
     window.localStorage?.setItem(VIEW_MODE_STORAGE_KEY, viewMode);
     persistStateFromCurrent();
     renderTable();
   });
+}
 
-  const picker = /** @type {HTMLSelectElement | null} */ (
-    document.getElementById("universe-picker")
-  );
-  if (!picker) return;
+/**
+ * Fetch the universes manifest and populate the picker. Falls back to
+ * FALLBACK_UNIVERSE_IDS if the manifest is unreachable.
+ *
+ * @param {HTMLSelectElement} picker
+ * @returns {Promise<{id: string, label: string}[]>}
+ */
+async function populateUniversePicker(picker) {
   /** @type {{universes: {id: string, label: string}[]}} */
-  let universesPayload;
+  let payload;
   try {
-    universesPayload = await loadUniverses();
+    payload = await loadUniverses();
   } catch {
-    universesPayload = { universes: FALLBACK_UNIVERSE_IDS.map((id) => ({ id, label: id })) };
+    payload = { universes: FALLBACK_UNIVERSE_IDS.map((id) => ({ id, label: id })) };
   }
-  const universes = universesPayload.universes ?? [];
+  const universes = payload.universes ?? [];
   knownUniverseIds = universes.map((u) => u.id);
   for (const u of universes) {
     const opt = document.createElement("option");
@@ -1177,17 +1170,11 @@ async function init() {
     opt.textContent = u.label;
     picker.appendChild(opt);
   }
-  const requested = parsed.universes[0];
-  activeUniverse =
-    requested && knownUniverseIds.includes(requested)
-      ? requested
-      : universes[0]?.id ?? "qte77-watchlist";
-  // Extras are universes 2..N from the URL, filtered against the
-  // whitelist and de-duplicated against the primary.
-  extraUniverses = parsed.universes
-    .slice(1)
-    .filter((u) => u !== activeUniverse && knownUniverseIds.includes(u));
-  picker.value = activeUniverse;
+  return universes;
+}
+
+/** @param {HTMLSelectElement} picker */
+function bindUniversePicker(picker) {
   picker.addEventListener("change", async () => {
     // Picker always replaces. Overlay (multi-universe merge) is still
     // available via `?universe=primary,extra1,…` deep-links and via
@@ -1197,7 +1184,10 @@ async function init() {
     persistStateFromCurrent();
     await loadActiveUniverse();
   });
+}
 
+/** @param {ReturnType<typeof parseState>} parsed */
+function hydrateUrlState(parsed) {
   if (parsed.sortKey) {
     state.sortKey = parsed.sortKey;
     state.sortDir = parsed.sortDir;
@@ -1210,11 +1200,11 @@ async function init() {
     if (filterInput) filterInput.value = parsed.filter;
   }
   if (parsed.sector) sectorFilter = parsed.sector;
+}
 
-  const dateSelector = /** @type {HTMLSelectElement | null} */ (
-    document.getElementById("date-selector")
-  );
-  dateSelector?.addEventListener("change", async () => {
+/** @param {HTMLSelectElement} dateSelector */
+function bindDateSelector(dateSelector) {
+  dateSelector.addEventListener("change", async () => {
     const newDate = dateSelector.value;
     state.snapshot = await loadSnapshot(newDate);
     const auditMap = await loadAudit(
@@ -1230,9 +1220,10 @@ async function init() {
     renderSectorDonut();
     persistStateFromCurrent();
   });
+}
 
-  const filterInput = document.getElementById("universe-filter");
-  filterInput?.addEventListener("input", (e) => {
+function bindFilterInput() {
+  document.getElementById("universe-filter")?.addEventListener("input", (e) => {
     const target = e.target;
     if (target instanceof HTMLInputElement) {
       filterQuery = target.value.trim();
@@ -1240,15 +1231,68 @@ async function init() {
       persistStateFromCurrent();
     }
   });
+}
+
+/**
+ * Apply ?date=… from the URL after the date selector has been populated
+ * by loadActiveUniverse(); silently no-ops if the requested date isn't
+ * among the available options.
+ *
+ * @param {string | null} requested
+ * @param {HTMLSelectElement | null} dateSelector
+ */
+function applyDateFromUrl(requested, dateSelector) {
+  if (!requested || !dateSelector) return;
+  const options = Array.from(dateSelector.options).map((o) => o.value);
+  if (options.includes(requested)) {
+    dateSelector.value = requested;
+    dateSelector.dispatchEvent(new Event("change"));
+  }
+}
+
+async function init() {
+  bindDetailDismiss();
+  bindTableSort();
+  bindKeyboardShortcuts();
+  bindCsvExport();
+
+  const parsed = parseState(window.location.search, knownUniverseIds);
+  const lsView = window.localStorage?.getItem(VIEW_MODE_STORAGE_KEY) ?? null;
+  viewMode = resolveViewMode(parsed.view, lsView);
+  applyViewMode();
+  applyMobileGuard();
+
+  setupTheme();
+  bindViewToggle();
+
+  const picker = /** @type {HTMLSelectElement | null} */ (
+    document.getElementById("universe-picker")
+  );
+  if (!picker) return;
+  const universes = await populateUniversePicker(picker);
+  const requested = parsed.universes[0];
+  activeUniverse =
+    requested && knownUniverseIds.includes(requested)
+      ? requested
+      : universes[0]?.id ?? "qte77-watchlist";
+  // Extras are universes 2..N from the URL, filtered against the
+  // whitelist and de-duplicated against the primary.
+  extraUniverses = parsed.universes
+    .slice(1)
+    .filter((u) => u !== activeUniverse && knownUniverseIds.includes(u));
+  picker.value = activeUniverse;
+  bindUniversePicker(picker);
+
+  hydrateUrlState(parsed);
+
+  const dateSelector = /** @type {HTMLSelectElement | null} */ (
+    document.getElementById("date-selector")
+  );
+  if (dateSelector) bindDateSelector(dateSelector);
+  bindFilterInput();
 
   await loadActiveUniverse();
-  if (parsed.date && dateSelector) {
-    const options = Array.from(dateSelector.options).map((o) => o.value);
-    if (options.includes(parsed.date)) {
-      dateSelector.value = parsed.date;
-      dateSelector.dispatchEvent(new Event("change"));
-    }
-  }
+  applyDateFromUrl(parsed.date, dateSelector);
 
   const fgEntries = await loadFearGreedYears();
   renderFearGreedHeader(fgEntries);
