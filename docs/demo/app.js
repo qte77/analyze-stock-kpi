@@ -78,6 +78,12 @@ const state = {
 let fuseIndex = null;
 let filterQuery = "";
 
+/** Optional sector filter set by clicking a donut slice or legend
+ *  entry. Combined with `filterQuery` in filteredSnapshot() — fuzzy
+ *  text search first, then sector post-filter. Persisted via ?sector=…
+ * @type {string | null} */
+let sectorFilter = null;
+
 /** @type {string | null} */
 let currentDate = null;
 
@@ -92,8 +98,14 @@ function rebuildFuseIndex() {
 }
 
 function filteredSnapshot() {
-  if (!filterQuery || fuseIndex == null) return state.snapshot;
-  return fuseIndex.search(filterQuery).map((/** @type {{item: Row}} */ r) => r.item);
+  let rows =
+    !filterQuery || fuseIndex == null
+      ? state.snapshot
+      : fuseIndex.search(filterQuery).map((/** @type {{item: Row}} */ r) => r.item);
+  if (sectorFilter) {
+    rows = rows.filter((/** @type {Row} */ r) => (r.sector ?? "—") === sectorFilter);
+  }
+  return rows;
 }
 
 const KPI_GLOSSARY = {
@@ -253,6 +265,7 @@ function persistStateFromCurrent() {
       sortDir: state.sortDir,
       filter: filterQuery,
       date: currentDate,
+      sector: sectorFilter,
     },
     window.location.href,
   );
@@ -416,6 +429,14 @@ function renderSectorDonut() {
   const aggregated = aggregateSectors(state.snapshot);
   const labels = [...aggregated.keys()];
   const data = [...aggregated.values()];
+  if (sectorChart) {
+    sectorChart.destroy();
+    sectorChart = null;
+  }
+  if (labels.length === 0) {
+    renderSectorFilterChip();
+    return;
+  }
   const backgroundColor = labels.map(sectorColor);
   // Seam color follows --panel so slice borders blend cleanly with the
   // section background in both light and dark themes (was hardcoded
@@ -423,19 +444,72 @@ function renderSectorDonut() {
   const borderColor =
     getComputedStyle(document.body).getPropertyValue("--panel").trim() ||
     "#ffffff";
-  if (sectorChart) sectorChart.destroy();
+  // Pull the active sector's slice outward so the user has visual
+  // confirmation of which slice the table is filtered by.
+  const offset = labels.map((l) => (l === sectorFilter ? 12 : 0));
   sectorChart = new Chart(canvas, {
     type: "doughnut",
     data: {
       labels,
-      datasets: [{ data, backgroundColor, borderColor, borderWidth: 1 }],
+      datasets: [{ data, backgroundColor, borderColor, borderWidth: 1, offset }],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { position: "right" } },
+      plugins: {
+        legend: {
+          position: "right",
+          // Override the default legend onClick (which hides datasets)
+          // so legend taps drive the same sector toggle as slice clicks.
+          onClick: (/** @type {any} */ _evt, /** @type {any} */ item) => {
+            toggleSectorFilter(item?.text ?? null);
+          },
+        },
+      },
+      onClick: (/** @type {any} */ _evt, /** @type {any[]} */ elements) => {
+        const el = elements?.[0];
+        if (!el) return;
+        const label = sectorChart?.data?.labels?.[el.index];
+        if (typeof label === "string") toggleSectorFilter(label);
+      },
     },
   });
+  renderSectorFilterChip();
+}
+
+/**
+ * Toggle the active sector filter. Clicking the same sector clears it;
+ * clicking a new sector replaces it. Re-renders donut + table + chip
+ * and persists the change in the URL.
+ *
+ * @param {string | null} label
+ */
+function toggleSectorFilter(label) {
+  if (!label) return;
+  sectorFilter = sectorFilter === label ? null : label;
+  renderSectorDonut();
+  renderTable();
+  persistStateFromCurrent();
+}
+
+function renderSectorFilterChip() {
+  const chipEl = document.getElementById("sector-filter-chip");
+  if (!chipEl) return;
+  chipEl.replaceChildren();
+  if (!sectorFilter) {
+    chipEl.hidden = true;
+    return;
+  }
+  chipEl.hidden = false;
+  chipEl.className = "universe-chip sector-chip";
+  const label = document.createElement("span");
+  label.textContent = `Sector: ${sectorFilter}`;
+  const x = document.createElement("button");
+  x.type = "button";
+  x.textContent = "×";
+  x.setAttribute("aria-label", `Clear sector filter (${sectorFilter})`);
+  x.addEventListener("click", () => toggleSectorFilter(sectorFilter));
+  chipEl.append(label, x);
 }
 
 function renderRadar(
@@ -1099,6 +1173,7 @@ async function init() {
     );
     if (filterInput) filterInput.value = parsed.filter;
   }
+  if (parsed.sector) sectorFilter = parsed.sector;
 
   const dateSelector = /** @type {HTMLSelectElement | null} */ (
     document.getElementById("date-selector")

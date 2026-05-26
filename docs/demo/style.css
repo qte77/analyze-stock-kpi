@@ -536,6 +536,14 @@ body.theme-dark {
 
 .universe-chip button:hover { color: var(--accent); }
 
+/* Sector filter chip — same shape as a universe overlay chip; the
+   accent border signals that it's an active filter rather than an
+   overlay membership marker. */
+.sector-chip {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 /* "Universe" column in the table is hidden by default; renderTable adds
    the `overlay-active` body class when 2+ universes are merged so the
    column appears. */

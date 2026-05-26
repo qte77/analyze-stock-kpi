@@ -11,6 +11,7 @@
  * @property {1 | -1} sortDir
  * @property {string} filter
  * @property {string | null} date  ISO yyyy-mm-dd
+ * @property {string | null} sector  GICS sector label or null when no filter
  */
 
 const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
@@ -50,7 +51,9 @@ export function parseState(search, knownUniverses) {
   const filter = params.get("filter") ?? "";
   const dateRaw = params.get("date");
   const date = dateRaw && isValidIsoDate(dateRaw) ? dateRaw : null;
-  return { view, universes, sortKey, sortDir, filter, date };
+  const sectorRaw = params.get("sector");
+  const sector = sectorRaw && sectorRaw.length > 0 ? sectorRaw : null;
+  return { view, universes, sortKey, sortDir, filter, date, sector };
 }
 
 /**
@@ -73,6 +76,7 @@ export function serializeState(state, baseUrl) {
   }
   if (state.filter) url.searchParams.set("filter", state.filter);
   if (state.date) url.searchParams.set("date", state.date);
+  if (state.sector) url.searchParams.set("sector", state.sector);
   return url.toString();
 }
 
