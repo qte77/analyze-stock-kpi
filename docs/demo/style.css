@@ -127,7 +127,8 @@ h2 {
 
 /* Two-column layout: left = picker/snapshot/filter/CSV/chips,
    right = sector donut. Flex with justify-content: center clusters the
-   two halves in the middle of the section instead of edge-to-edge.
+   two halves; max-width + margin: auto keeps them clustered in the
+   middle of the section on wide viewports instead of edge-to-edge.
    Wraps to a single stacked column on narrow viewports (see the 767px
    breakpoint below). */
 #universe-controls-row {
@@ -136,7 +137,8 @@ h2 {
   justify-content: center;
   align-items: flex-start;
   gap: 1.25rem;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem;
+  max-width: 960px;
 }
 
 #universe-controls-row > #universe-header {
