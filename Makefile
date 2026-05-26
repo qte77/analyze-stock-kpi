@@ -31,7 +31,7 @@ setup_dev: setup_uv  ## uv sync (default groups: dev + test)
 	uv sync
 
 setup_lychee:  ## Install lychee link checker (Rust binary; sudo)
-	curl -sL https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz | sudo tar xz -C /usr/local/bin lychee
+	@dl_tmp=$$(mktemp -d) && curl -sL https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz | sudo tar xz -C $$dl_tmp && sudo cp $$dl_tmp/lychee-x86_64-unknown-linux-gnu/lychee /usr/local/bin/lychee && sudo rm -rf $$dl_tmp
 	echo "lychee version: $$(lychee --version)"
 
 setup_npm_tools:  ## Install npm-based dev tools (markdownlint-cli, typescript)
