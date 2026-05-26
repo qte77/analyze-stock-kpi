@@ -1079,15 +1079,11 @@ async function init() {
     .filter((u) => u !== activeUniverse && knownUniverseIds.includes(u));
   picker.value = activeUniverse;
   picker.addEventListener("change", async () => {
-    const next = picker.value;
-    if (viewMode === "detailed" && next !== activeUniverse) {
-      // Add to the overlay (no dupes, no self-overlay)
-      if (!extraUniverses.includes(next)) extraUniverses = [...extraUniverses, next];
-      picker.value = activeUniverse; // restore the dropdown to the primary
-    } else {
-      activeUniverse = next;
-      extraUniverses = [];
-    }
+    // Picker always replaces. Overlay (multi-universe merge) is still
+    // available via `?universe=primary,extra1,…` deep-links and via
+    // the chip × removal — only the change handler no longer appends.
+    activeUniverse = picker.value;
+    extraUniverses = [];
     persistStateFromCurrent();
     await loadActiveUniverse();
   });
