@@ -126,37 +126,38 @@ h2 {
 }
 
 /* Two-column layout: left = picker/snapshot/filter/CSV/chips,
-   right = sector donut. Flex with justify-content: center clusters the
-   two halves; max-width + margin: auto keeps them clustered in the
-   middle of the section on wide viewports instead of edge-to-edge.
-   Wraps to a single stacked column on narrow viewports (see the 767px
-   breakpoint below). */
+   right = sector donut. width: fit-content + margin: auto makes the
+   row shrink-to-content and self-center in the section. nowrap keeps
+   the two halves side-by-side; below 991px the media query below
+   switches to flex-direction: column so they stack instead of
+   overflowing. */
 #universe-controls-row {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
   align-items: flex-start;
   gap: 1.25rem;
   margin: 0 auto 1rem;
-  /* Cap chosen so the controls block (~640) + gap + donut (280) fits
-     with clear slack on each side for visible centering, while still
-     letting the row use the full section width on narrow viewports
-     (the 767px breakpoint takes over below that). */
-  max-width: 1080px;
-}
-
-#universe-controls-row > #universe-header {
-  /* fit-content shrinks the header to its content's natural row width
-     so the parent's justify-content: center can actually offset it.
-     Without this the inner flex-wrap stretches the header to fill the
-     row and leaves nothing for justify-content to center. */
-  flex: 0 0 auto;
   width: fit-content;
   max-width: 100%;
 }
 
+#universe-controls-row > #universe-header {
+  flex: 0 0 auto;
+}
+
 #universe-controls-row > #sector-donut-wrap {
   flex: 0 0 280px;
+}
+
+/* Stacked layout when the side-by-side cluster wouldn't fit comfortably
+   (~600 header + 20 gap + 280 donut + section/main padding ≈ 990px).
+   Below that, donut sits beneath the controls; both centered. */
+@media (max-width: 991px) {
+  #universe-controls-row {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
 }
 
 #universe-header {
