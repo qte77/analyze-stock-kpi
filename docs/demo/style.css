@@ -138,7 +138,11 @@ h2 {
   align-items: flex-start;
   gap: 1.25rem;
   margin: 0 auto 1rem;
-  max-width: 960px;
+  /* Cap chosen so the controls block (~640) + gap + donut (280) fits
+     with clear slack on each side for visible centering, while still
+     letting the row use the full section width on narrow viewports
+     (the 767px breakpoint takes over below that). */
+  max-width: 1080px;
 }
 
 #universe-controls-row > #universe-header {
@@ -184,8 +188,8 @@ h2 {
 }
 
 #universe-filter {
-  min-width: 18rem;
-  max-width: 22rem;
+  min-width: 14rem;
+  max-width: 20rem;
 }
 
 .table-wrap {
