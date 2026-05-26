@@ -433,6 +433,7 @@ function renderSectorDonut() {
     sectorChart.destroy();
     sectorChart = null;
   }
+  renderDonutEmptyHint(labels.length === 0);
   if (labels.length === 0) {
     renderSectorFilterChip();
     return;
@@ -465,6 +466,19 @@ function renderSectorDonut() {
             toggleSectorFilter(item?.text ?? null);
           },
         },
+        tooltip: {
+          callbacks: {
+            label: (/** @type {any} */ ctx) => {
+              const total = ctx.dataset.data.reduce(
+                (/** @type {number} */ a, /** @type {number} */ b) => a + b,
+                0,
+              );
+              const pct =
+                total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : "0";
+              return `${ctx.label}: ${ctx.parsed} (${pct}%)`;
+            },
+          },
+        },
       },
       onClick: (/** @type {any} */ _evt, /** @type {any[]} */ elements) => {
         const el = elements?.[0];
@@ -490,6 +504,28 @@ function toggleSectorFilter(label) {
   renderSectorDonut();
   renderTable();
   persistStateFromCurrent();
+}
+
+/**
+ * Toggle a centered "no data" hint inside #sector-donut-wrap. Called
+ * whenever the donut is about to render an empty dataset (e.g. before
+ * the first snapshot loads or for a universe whose data branch is
+ * missing). Idempotent — safe to call repeatedly with the same flag.
+ *
+ * @param {boolean} show
+ */
+function renderDonutEmptyHint(show) {
+  const wrap = document.getElementById("sector-donut-wrap");
+  if (!wrap) return;
+  const existing = wrap.querySelector(".sector-donut-empty");
+  if (show && !existing) {
+    const hint = document.createElement("div");
+    hint.className = "sector-donut-empty";
+    hint.textContent = "no data";
+    wrap.append(hint);
+  } else if (!show && existing) {
+    existing.remove();
+  }
 }
 
 function renderSectorFilterChip() {

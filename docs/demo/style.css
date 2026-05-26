@@ -382,6 +382,20 @@ body.view-simple .detail-only { display: none !important; }
   height: 160px;
 }
 
+/* Centered hint shown when the donut has no data to render (e.g. the
+   first snapshot has not loaded yet, or the active universe lacks a
+   data-branch dump). */
+.sector-donut-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 0.875rem;
+}
+
 /* Radar canvas inside the detail aside. */
 .radar-wrap {
   position: relative;
