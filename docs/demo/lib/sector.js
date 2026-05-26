@@ -6,6 +6,47 @@
 
 const NULL_BUCKET = "—";
 
+/** Neutral grey for the null bucket and unknown sectors. Matches the
+ *  dark-theme --muted token so the slice blends gracefully in both
+ *  themes without looking like a real GICS sector. */
+const NEUTRAL = "#98989D";
+
+/**
+ * GICS sector palette tuned for both light (#ffffff) and dark (#2c2c2e)
+ * panels. Tableau-10-Muted-derived: ~55% saturation, ~55% lightness so
+ * the slices stay readable without feeling neon. yfinance returns the
+ * long-form GICS names below verbatim — keys match those strings.
+ *
+ * @type {Readonly<Record<string, string>>}
+ */
+export const SECTOR_COLORS = Object.freeze({
+  "Technology": "#4878D0",
+  "Healthcare": "#6ACC64",
+  "Financial Services": "#D5BB67",
+  "Consumer Cyclical": "#EE854A",
+  "Consumer Defensive": "#956CB4",
+  "Communication Services": "#82C6E2",
+  "Industrials": "#8C613C",
+  "Energy": "#D65F5F",
+  "Utilities": "#DC7EC0",
+  "Basic Materials": "#B47CC7",
+  "Real Estate": "#5FAB87",
+  [NULL_BUCKET]: NEUTRAL,
+});
+
+/**
+ * Look up the donut slice color for one sector label. Unknown sectors
+ * (anything outside the GICS 11 + null bucket) fall back to the neutral
+ * grey rather than throwing — the donut should never render a blank
+ * slice on an unexpected input.
+ *
+ * @param {string} name
+ * @returns {string}
+ */
+export function sectorColor(name) {
+  return SECTOR_COLORS[name] ?? NEUTRAL;
+}
+
 /**
  * @param {Array<{sector?: string | null}>} rows
  * @returns {Map<string, number>}
