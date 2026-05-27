@@ -78,12 +78,14 @@
             type="button"
             aria-label="Download the current filtered + sorted view as CSV"
           >↓ CSV</button>
-          <div
-            id="universe-chips"
-            class="detail-only"
-            aria-label="Active overlay universes; click × to remove"
-          ></div>
-          <div id="sector-filter-chip" hidden></div>
+          <div class="chips-row">
+            <div
+              id="universe-chips"
+              class="detail-only"
+              aria-label="Active overlay universes; click × to remove"
+            ></div>
+            <div id="sector-filter-chip" hidden></div>
+          </div>
         </div>
         <div id="sector-donut-wrap">
           <canvas id="sector-donut" aria-label="Sector composition donut"></canvas>
