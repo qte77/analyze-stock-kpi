@@ -134,7 +134,7 @@ h2 {
 #universe-controls-row {
   display: flex;
   flex-wrap: nowrap;
-  align-items: flex-start;
+  align-items: center;
   gap: 1.25rem;
   margin: 0 auto 1rem;
   width: fit-content;
