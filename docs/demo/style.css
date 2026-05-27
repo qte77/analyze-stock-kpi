@@ -181,6 +181,7 @@ h2 {
    so the count sits inline next to the picker (since the surrounding
    #universe-header is a vertical column). */
 .snapshot-row,
+.filter-row,
 .chips-row {
   display: flex;
   align-items: center;

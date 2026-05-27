@@ -66,18 +66,20 @@
             </label>
             <span id="universe-size" aria-live="polite">· — tickers</span>
           </div>
-          <input
-            id="universe-filter"
-            type="search"
-            placeholder="Filter ticker / name / sector… (press / to focus)"
-            aria-label="Filter universe by ticker, name, or sector"
-          />
-          <button
-            id="export-csv"
-            class="detail-only"
-            type="button"
-            aria-label="Download the current filtered + sorted view as CSV"
-          >↓ CSV</button>
+          <div class="filter-row">
+            <input
+              id="universe-filter"
+              type="search"
+              placeholder="Filter ticker / name / sector… (press / to focus)"
+              aria-label="Filter universe by ticker, name, or sector"
+            />
+            <button
+              id="export-csv"
+              class="detail-only"
+              type="button"
+              aria-label="Download the current filtered + sorted view as CSV"
+            >↓ CSV</button>
+          </div>
           <div class="chips-row">
             <div
               id="universe-chips"
