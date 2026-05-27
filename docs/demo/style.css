@@ -125,29 +125,93 @@ h2 {
   height: 220px;
 }
 
-#universe-header {
+/* Two-column layout: left = picker/snapshot/filter/CSV/chips,
+   right = sector donut. width: fit-content + margin: auto makes the
+   row shrink-to-content and self-center in the section. nowrap keeps
+   the two halves side-by-side; below 991px the media query below
+   switches to flex-direction: column so they stack instead of
+   overflowing. */
+#universe-controls-row {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: nowrap;
   align-items: center;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1.25rem;
+  margin: 0 auto 1rem;
+  width: fit-content;
+  max-width: 100%;
 }
 
-#universe-header h2 { margin: 0; }
+#universe-controls-row > #universe-header {
+  flex: 0 0 auto;
+}
 
+#universe-controls-row > #sector-donut-wrap {
+  /* Basis 320 keeps the donut visually modest beside the controls.
+     flex-shrink: 1 lets the wrap yield when the section is too
+     narrow; min-width keeps the donut itself usable. Legend is
+     disabled (see app.js), so the canvas renders the donut alone. */
+  flex: 0 1 320px;
+  min-width: 200px;
+}
+
+/* Stacked layout only on the narrowest viewports. Cluster width
+   (~280 controls column + 20 gap + 280 donut) ≈ 580px content; we
+   keep side-by-side down to 480px viewport (small phones in landscape)
+   and only stack on the narrowest portrait widths. */
+@media (max-width: 479px) {
+  #universe-controls-row {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+/* Controls list: stacks vertically (picker, count, snapshot, filter,
+   CSV, chips, sector-chip — each on its own row). Keeps the controls
+   block narrow so it sits beside the donut at any reasonable viewport
+   instead of taking the full row width. */
+#universe-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+#universe-size {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* Group the snapshot picker and the ticker count on one horizontal row
+   so the count sits inline next to the picker (since the surrounding
+   #universe-header is a vertical column). */
+.snapshot-row,
+.filter-row,
+.chips-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Form controls in the universe header. Background uses --bg (the page
+   background) rather than --panel so the controls sit inset against the
+   section panel — in both themes that's a one-step contrast that keeps
+   the border visible without raising visual weight. */
+#universe-picker,
 #date-selector,
 #universe-filter {
   padding: 0.3rem 0.5rem;
   border: 1px solid var(--border);
   border-radius: 4px;
-  background: var(--panel);
+  background: var(--bg);
+  color: var(--text);
   font: inherit;
 }
 
 #universe-filter {
-  min-width: 18rem;
-  max-width: 22rem;
+  min-width: 14rem;
+  max-width: 20rem;
 }
 
 .table-wrap {
@@ -229,6 +293,20 @@ tbody tr:hover { background: var(--bg); }
    leave the cell's own colour intact so the gradient stays visible. */
 tbody tr:hover td.score-cell {
   background-color: inherit;
+}
+
+/* The score-cell heatmap always renders on a pastel light hue (hsl(*,
+   60%, 75%) set inline by renderTable). In dark mode the default
+   --text is near-white and disappears against that background, so
+   force the score-cell text to a dark value in both modes — no-op in
+   light mode where --text is already dark.
+
+   Same reasoning applies to the kpi-good / kpi-neutral / kpi-bad
+   cells in light mode (their pastel backgrounds want dark text), but
+   those cells switch to darker pastels in dark mode where white text
+   already reads, so no override needed there. */
+tbody td.score-cell {
+  color: #1d1d1f;
 }
 
 #row-detail {
@@ -347,7 +425,7 @@ footer a:hover { text-decoration: underline; }
 #view-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
 #export-csv {
-  background: var(--panel);
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 4px;
   padding: 0.3rem 0.65rem;
@@ -362,11 +440,25 @@ footer a:hover { text-decoration: underline; }
 /* Simple-mode hides detail-only elements; detailed-mode shows them. */
 body.view-simple .detail-only { display: none !important; }
 
-/* Sector donut sits between universe-header and the table; both modes. */
+/* Sector donut lives in the right column of #universe-controls-row in
+   both view modes. Compact — no legend, just the donut. */
 #sector-donut-wrap {
   position: relative;
-  height: 180px;
-  margin-bottom: 1rem;
+  height: 200px;
+}
+
+/* Centered hint shown when the donut has no data to render (e.g. the
+   first snapshot has not loaded yet, or the active universe lacks a
+   data-branch dump). */
+.sector-donut-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 0.875rem;
 }
 
 /* Radar canvas inside the detail aside. */
@@ -381,6 +473,7 @@ body.view-simple .detail-only { display: none !important; }
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
+  justify-content: center;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--border);
@@ -432,6 +525,9 @@ body.theme-dark {
   --kpi-good: hsl(120, 40%, 28%);
   --kpi-neutral: hsl(60, 40%, 28%);
   --kpi-bad: hsl(0, 50%, 32%);
+  /* Opt native widgets (select chevron, scrollbars, focus rings) into
+     their dark variant — no per-widget CSS needed. */
+  color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -445,6 +541,7 @@ body.theme-dark {
     --kpi-good: hsl(120, 40%, 28%);
     --kpi-neutral: hsl(60, 40%, 28%);
     --kpi-bad: hsl(0, 50%, 32%);
+    color-scheme: dark;
   }
 }
 
@@ -484,6 +581,9 @@ body.theme-dark {
 @media (max-width: 767px) {
   #view-toggle { display: none; }
   body.view-detailed .detail-only { display: none !important; }
+  /* On narrow viewports let the donut occupy the full row width so the
+     legend isn't squeezed against a 280px box. */
+  #universe-controls-row > #sector-donut-wrap { flex-basis: 100%; }
   #sector-donut-wrap { height: 160px; }
 }
 
@@ -520,6 +620,14 @@ body.theme-dark {
 }
 
 .universe-chip button:hover { color: var(--accent); }
+
+/* Sector filter chip — same shape as a universe overlay chip; the
+   accent border signals that it's an active filter rather than an
+   overlay membership marker. */
+.sector-chip {
+  border-color: var(--accent);
+  color: var(--accent);
+}
 
 /* "Universe" column in the table is hidden by default; renderTable adds
    the `overlay-active` body class when 2+ universes are merged so the

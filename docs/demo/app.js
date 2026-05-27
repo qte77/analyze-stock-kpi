@@ -11,7 +11,7 @@ import { buildAuditMap, formatObligated, loadAudit } from "./lib/audit.js";
 import { cellClass } from "./lib/coloring.js";
 import { exportCsv } from "./lib/csv.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
-import { aggregateSectors } from "./lib/sector.js";
+import { aggregateSectors, sectorColor } from "./lib/sector.js";
 import {
   parseState,
   resolveViewMode,
@@ -78,6 +78,12 @@ const state = {
 let fuseIndex = null;
 let filterQuery = "";
 
+/** Optional sector filter set by clicking a donut slice or legend
+ *  entry. Combined with `filterQuery` in filteredSnapshot() — fuzzy
+ *  text search first, then sector post-filter. Persisted via ?sector=…
+ * @type {string | null} */
+let sectorFilter = null;
+
 /** @type {string | null} */
 let currentDate = null;
 
@@ -92,8 +98,14 @@ function rebuildFuseIndex() {
 }
 
 function filteredSnapshot() {
-  if (!filterQuery || fuseIndex == null) return state.snapshot;
-  return fuseIndex.search(filterQuery).map((/** @type {{item: Row}} */ r) => r.item);
+  let rows =
+    !filterQuery || fuseIndex == null
+      ? state.snapshot
+      : fuseIndex.search(filterQuery).map((/** @type {{item: Row}} */ r) => r.item);
+  if (sectorFilter) {
+    rows = rows.filter((/** @type {Row} */ r) => (r.sector ?? "—") === sectorFilter);
+  }
+  return rows;
 }
 
 const KPI_GLOSSARY = {
@@ -253,6 +265,7 @@ function persistStateFromCurrent() {
       sortDir: state.sortDir,
       filter: filterQuery,
       date: currentDate,
+      sector: sectorFilter,
     },
     window.location.href,
   );
@@ -408,6 +421,7 @@ let sectorChart = null;
 /** @type {any} */
 let radarChart = null;
 
+
 function renderSectorDonut() {
   const canvas = /** @type {HTMLCanvasElement | null} */ (
     document.getElementById("sector-donut")
@@ -416,21 +430,122 @@ function renderSectorDonut() {
   const aggregated = aggregateSectors(state.snapshot);
   const labels = [...aggregated.keys()];
   const data = [...aggregated.values()];
-  if (sectorChart) sectorChart.destroy();
+  if (sectorChart) {
+    sectorChart.destroy();
+    sectorChart = null;
+  }
+  renderDonutEmptyHint(labels.length === 0);
+  if (labels.length === 0) {
+    renderSectorFilterChip();
+    return;
+  }
+  const backgroundColor = labels.map(sectorColor);
+  // Seam color follows --panel so slice borders blend cleanly with the
+  // section background in both light and dark themes (was hardcoded
+  // rgba(255,255,255,0.65), which vanished against #2c2c2e).
+  const borderColor =
+    getComputedStyle(document.body).getPropertyValue("--panel").trim() ||
+    "#ffffff";
+  // Pull the active sector's slice outward so the user has visual
+  // confirmation of which slice the table is filtered by.
+  const offset = labels.map((l) => (l === sectorFilter ? 12 : 0));
   sectorChart = new Chart(canvas, {
     type: "doughnut",
     data: {
       labels,
-      datasets: [
-        { data, borderColor: "rgba(255,255,255,0.65)", borderWidth: 1 },
-      ],
+      datasets: [{ data, backgroundColor, borderColor, borderWidth: 1, offset }],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { position: "right" } },
+      plugins: {
+        // Legend permanently disabled — slice colors + hover tooltip
+        // (`Sector: count (pct%)`) are enough to identify segments.
+        // See https://github.com/qte77/analyze-stock-kpi/issues/152 —
+        // the attempted onResize auto-hide regressed on zoom-out and
+        // the right-side position required widening the wrap past the
+        // user's preferred donut size.
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (/** @type {any} */ ctx) => {
+              const total = ctx.dataset.data.reduce(
+                (/** @type {number} */ a, /** @type {number} */ b) => a + b,
+                0,
+              );
+              const pct =
+                total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : "0";
+              return `${ctx.label}: ${ctx.parsed} (${pct}%)`;
+            },
+          },
+        },
+      },
+      onClick: (/** @type {any} */ _evt, /** @type {any[]} */ elements) => {
+        const el = elements?.[0];
+        if (!el) return;
+        const label = sectorChart?.data?.labels?.[el.index];
+        if (typeof label === "string") toggleSectorFilter(label);
+      },
     },
   });
+  renderSectorFilterChip();
+}
+
+/**
+ * Toggle the active sector filter. Clicking the same sector clears it;
+ * clicking a new sector replaces it. Re-renders donut + table + chip
+ * and persists the change in the URL.
+ *
+ * @param {string | null} label
+ */
+function toggleSectorFilter(label) {
+  if (!label) return;
+  sectorFilter = sectorFilter === label ? null : label;
+  renderSectorDonut();
+  renderTable();
+  persistStateFromCurrent();
+}
+
+/**
+ * Toggle a centered "no data" hint inside #sector-donut-wrap. Called
+ * whenever the donut is about to render an empty dataset (e.g. before
+ * the first snapshot loads or for a universe whose data branch is
+ * missing). Idempotent — safe to call repeatedly with the same flag.
+ *
+ * @param {boolean} show
+ */
+function renderDonutEmptyHint(show) {
+  const wrap = document.getElementById("sector-donut-wrap");
+  if (!wrap) return;
+  const existing = wrap.querySelector(".sector-donut-empty");
+  if (show && !existing) {
+    const hint = document.createElement("div");
+    hint.className = "sector-donut-empty";
+    hint.textContent = "no data";
+    wrap.append(hint);
+  } else if (!show && existing) {
+    existing.remove();
+  }
+}
+
+function renderSectorFilterChip() {
+  const chipEl = document.getElementById("sector-filter-chip");
+  if (!chipEl) return;
+  chipEl.replaceChildren();
+  if (!sectorFilter) {
+    chipEl.hidden = true;
+    return;
+  }
+  chipEl.hidden = false;
+  chipEl.className = "universe-chip sector-chip";
+  const label = document.createElement("span");
+  label.textContent = `Sector: ${sectorFilter}`;
+  const x = document.createElement("button");
+  x.type = "button";
+  x.textContent = "×";
+  x.setAttribute("aria-label", `Clear sector filter (${sectorFilter})`);
+  x.addEventListener("click", () => toggleSectorFilter(sectorFilter));
+  chipEl.append(label, x);
 }
 
 function renderRadar(
@@ -911,7 +1026,7 @@ async function loadActiveUniverse() {
     auditByTicker = null;
     rebuildFuseIndex();
     dateSelector.replaceChildren();
-    sizeEl.textContent = `no data yet for ${activeUniverse}`;
+    sizeEl.textContent = `· no data yet for ${activeUniverse}`;
     renderTable();
     renderSectorDonut();
     renderUniverseChips();
@@ -958,8 +1073,8 @@ async function loadActiveUniverse() {
   rebuildFuseIndex();
   sizeEl.textContent =
     extraUniverses.length === 0
-      ? `${state.snapshot.length} tickers`
-      : `${state.snapshot.length} tickers · ${1 + extraUniverses.length} universes`;
+      ? `· ${state.snapshot.length} tickers`
+      : `· ${state.snapshot.length} tickers · ${1 + extraUniverses.length} universes`;
   renderTable();
   renderSectorDonut();
   renderUniverseChips();
@@ -1001,26 +1116,13 @@ function makeChip(universe, removable) {
   return chip;
 }
 
-async function init() {
-  bindDetailDismiss();
-  bindTableSort();
-  bindKeyboardShortcuts();
-  bindCsvExport();
-
-  const parsed = parseState(window.location.search, knownUniverseIds);
-  const lsView = window.localStorage?.getItem(VIEW_MODE_STORAGE_KEY) ?? null;
-  viewMode = resolveViewMode(parsed.view, lsView);
-  applyViewMode();
-  applyMobileGuard();
-
+function setupTheme() {
   // Theme: URL `?theme=` beats localStorage beats the "system" default.
   const themeUrl = new URLSearchParams(window.location.search).get("theme");
   const lsTheme = window.localStorage?.getItem(THEME_STORAGE_KEY) ?? null;
   activeTheme = resolveTheme(themeUrl, lsTheme);
   applyTheme();
-
-  const themeToggle = document.getElementById("theme-toggle");
-  themeToggle?.addEventListener("click", (event) => {
+  document.getElementById("theme-toggle")?.addEventListener("click", (event) => {
     const target = event.target;
     if (!(target instanceof HTMLButtonElement)) return;
     const next = target.dataset.theme;
@@ -1033,28 +1135,34 @@ async function init() {
     else url.searchParams.set("theme", activeTheme);
     window.history.replaceState({}, "", url);
   });
+}
 
-  const toggleBtn = document.getElementById("view-toggle");
-  toggleBtn?.addEventListener("click", () => {
+function bindViewToggle() {
+  document.getElementById("view-toggle")?.addEventListener("click", () => {
     viewMode = viewMode === "simple" ? "detailed" : "simple";
     applyViewMode();
     window.localStorage?.setItem(VIEW_MODE_STORAGE_KEY, viewMode);
     persistStateFromCurrent();
     renderTable();
   });
+}
 
-  const picker = /** @type {HTMLSelectElement | null} */ (
-    document.getElementById("universe-picker")
-  );
-  if (!picker) return;
+/**
+ * Fetch the universes manifest and populate the picker. Falls back to
+ * FALLBACK_UNIVERSE_IDS if the manifest is unreachable.
+ *
+ * @param {HTMLSelectElement} picker
+ * @returns {Promise<{id: string, label: string}[]>}
+ */
+async function populateUniversePicker(picker) {
   /** @type {{universes: {id: string, label: string}[]}} */
-  let universesPayload;
+  let payload;
   try {
-    universesPayload = await loadUniverses();
+    payload = await loadUniverses();
   } catch {
-    universesPayload = { universes: FALLBACK_UNIVERSE_IDS.map((id) => ({ id, label: id })) };
+    payload = { universes: FALLBACK_UNIVERSE_IDS.map((id) => ({ id, label: id })) };
   }
-  const universes = universesPayload.universes ?? [];
+  const universes = payload.universes ?? [];
   knownUniverseIds = universes.map((u) => u.id);
   for (const u of universes) {
     const opt = document.createElement("option");
@@ -1062,31 +1170,24 @@ async function init() {
     opt.textContent = u.label;
     picker.appendChild(opt);
   }
-  const requested = parsed.universes[0];
-  activeUniverse =
-    requested && knownUniverseIds.includes(requested)
-      ? requested
-      : universes[0]?.id ?? "qte77-watchlist";
-  // Extras are universes 2..N from the URL, filtered against the
-  // whitelist and de-duplicated against the primary.
-  extraUniverses = parsed.universes
-    .slice(1)
-    .filter((u) => u !== activeUniverse && knownUniverseIds.includes(u));
-  picker.value = activeUniverse;
+  return universes;
+}
+
+/** @param {HTMLSelectElement} picker */
+function bindUniversePicker(picker) {
   picker.addEventListener("change", async () => {
-    const next = picker.value;
-    if (viewMode === "detailed" && next !== activeUniverse) {
-      // Add to the overlay (no dupes, no self-overlay)
-      if (!extraUniverses.includes(next)) extraUniverses = [...extraUniverses, next];
-      picker.value = activeUniverse; // restore the dropdown to the primary
-    } else {
-      activeUniverse = next;
-      extraUniverses = [];
-    }
+    // Picker always replaces. Overlay (multi-universe merge) is still
+    // available via `?universe=primary,extra1,…` deep-links and via
+    // the chip × removal — only the change handler no longer appends.
+    activeUniverse = picker.value;
+    extraUniverses = [];
     persistStateFromCurrent();
     await loadActiveUniverse();
   });
+}
 
+/** @param {ReturnType<typeof parseState>} parsed */
+function hydrateUrlState(parsed) {
   if (parsed.sortKey) {
     state.sortKey = parsed.sortKey;
     state.sortDir = parsed.sortDir;
@@ -1098,11 +1199,12 @@ async function init() {
     );
     if (filterInput) filterInput.value = parsed.filter;
   }
+  if (parsed.sector) sectorFilter = parsed.sector;
+}
 
-  const dateSelector = /** @type {HTMLSelectElement | null} */ (
-    document.getElementById("date-selector")
-  );
-  dateSelector?.addEventListener("change", async () => {
+/** @param {HTMLSelectElement} dateSelector */
+function bindDateSelector(dateSelector) {
+  dateSelector.addEventListener("change", async () => {
     const newDate = dateSelector.value;
     state.snapshot = await loadSnapshot(newDate);
     const auditMap = await loadAudit(
@@ -1118,9 +1220,10 @@ async function init() {
     renderSectorDonut();
     persistStateFromCurrent();
   });
+}
 
-  const filterInput = document.getElementById("universe-filter");
-  filterInput?.addEventListener("input", (e) => {
+function bindFilterInput() {
+  document.getElementById("universe-filter")?.addEventListener("input", (e) => {
     const target = e.target;
     if (target instanceof HTMLInputElement) {
       filterQuery = target.value.trim();
@@ -1128,15 +1231,68 @@ async function init() {
       persistStateFromCurrent();
     }
   });
+}
+
+/**
+ * Apply ?date=… from the URL after the date selector has been populated
+ * by loadActiveUniverse(); silently no-ops if the requested date isn't
+ * among the available options.
+ *
+ * @param {string | null} requested
+ * @param {HTMLSelectElement | null} dateSelector
+ */
+function applyDateFromUrl(requested, dateSelector) {
+  if (!requested || !dateSelector) return;
+  const options = Array.from(dateSelector.options).map((o) => o.value);
+  if (options.includes(requested)) {
+    dateSelector.value = requested;
+    dateSelector.dispatchEvent(new Event("change"));
+  }
+}
+
+async function init() {
+  bindDetailDismiss();
+  bindTableSort();
+  bindKeyboardShortcuts();
+  bindCsvExport();
+
+  const parsed = parseState(window.location.search, knownUniverseIds);
+  const lsView = window.localStorage?.getItem(VIEW_MODE_STORAGE_KEY) ?? null;
+  viewMode = resolveViewMode(parsed.view, lsView);
+  applyViewMode();
+  applyMobileGuard();
+
+  setupTheme();
+  bindViewToggle();
+
+  const picker = /** @type {HTMLSelectElement | null} */ (
+    document.getElementById("universe-picker")
+  );
+  if (!picker) return;
+  const universes = await populateUniversePicker(picker);
+  const requested = parsed.universes[0];
+  activeUniverse =
+    requested && knownUniverseIds.includes(requested)
+      ? requested
+      : universes[0]?.id ?? "qte77-watchlist";
+  // Extras are universes 2..N from the URL, filtered against the
+  // whitelist and de-duplicated against the primary.
+  extraUniverses = parsed.universes
+    .slice(1)
+    .filter((u) => u !== activeUniverse && knownUniverseIds.includes(u));
+  picker.value = activeUniverse;
+  bindUniversePicker(picker);
+
+  hydrateUrlState(parsed);
+
+  const dateSelector = /** @type {HTMLSelectElement | null} */ (
+    document.getElementById("date-selector")
+  );
+  if (dateSelector) bindDateSelector(dateSelector);
+  bindFilterInput();
 
   await loadActiveUniverse();
-  if (parsed.date && dateSelector) {
-    const options = Array.from(dateSelector.options).map((o) => o.value);
-    if (options.includes(parsed.date)) {
-      dateSelector.value = parsed.date;
-      dateSelector.dispatchEvent(new Event("change"));
-    }
-  }
+  applyDateFromUrl(parsed.date, dateSelector);
 
   const fgEntries = await loadFearGreedYears();
   renderFearGreedHeader(fgEntries);

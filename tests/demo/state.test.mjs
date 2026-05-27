@@ -24,6 +24,12 @@ describe("parseState", () => {
     expect(s.sortDir).toBe(-1);
     expect(s.filter).toBe("");
     expect(s.date).toBeNull();
+    expect(s.sector).toBeNull();
+  });
+
+  it("parses ?sector=Technology and treats an empty value as null", () => {
+    expect(parseState("?sector=Technology", KNOWN).sector).toBe("Technology");
+    expect(parseState("?sector=", KNOWN).sector).toBeNull();
   });
 
   it("falls through to default when view= is not 'simple' or 'detailed'", () => {
@@ -71,6 +77,7 @@ describe("serializeState ↔ parseState round-trip", () => {
       sortDir: /** @type {1 | -1} */ (1),
       filter: "tech",
       date: "2024-05-15",
+      sector: "Technology",
     };
     const url = serializeState(original, "https://example.com/demo/");
     const reparsed = parseState(new URL(url).search, KNOWN);
@@ -85,6 +92,7 @@ describe("serializeState ↔ parseState round-trip", () => {
       sortDir: /** @type {1 | -1} */ (-1),
       filter: "",
       date: null,
+      sector: null,
     };
     const url = serializeState(minimal, "https://example.com/demo/");
     expect(new URL(url).search).toBe("");

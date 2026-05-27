@@ -92,6 +92,10 @@ importtime/
 # Agent-managed working memory (per qte77 convention)
 MEMORY.md
 
+# Local npm install (CI uses `npx --yes`; lockfile intentionally untracked)
+node_modules/
+package-lock.json
+
 # Runtime artifacts from `make run` (per-invocation per-asset KPI snapshots).
 results/fundamentals_*.json
 # Local-preview shuffles from `make preview_local` (the production cron writes

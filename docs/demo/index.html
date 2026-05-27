@@ -50,42 +50,47 @@
     </section>
 
     <section id="universe-section">
-      <div id="universe-header">
-        <h2>
-          Universe ·
-          <span id="universe-size">— tickers</span>
-        </h2>
-        <label>
-          Universe:
-          <select
-            id="universe-picker"
-            title="Switch between bundled universes. In detailed mode, selecting an additional universe overlays it onto the table; the chips below let you remove individual overlay universes."
-          ></select>
-        </label>
-        <div
-          id="universe-chips"
-          class="detail-only"
-          aria-label="Active overlay universes; click × to remove"
-        ></div>
-        <label>
-          Snapshot:
-          <select id="date-selector"></select>
-        </label>
-        <input
-          id="universe-filter"
-          type="search"
-          placeholder="Filter ticker / name / sector… (press / to focus)"
-          aria-label="Filter universe by ticker, name, or sector"
-        />
-        <button
-          id="export-csv"
-          class="detail-only"
-          type="button"
-          aria-label="Download the current filtered + sorted view as CSV"
-        >↓ CSV</button>
-      </div>
-      <div id="sector-donut-wrap">
-        <canvas id="sector-donut" aria-label="Sector composition donut"></canvas>
+      <div id="universe-controls-row">
+        <div id="universe-header">
+          <label>
+            Universe:
+            <select
+              id="universe-picker"
+              title="Switch between bundled universes. Chips below appear when the URL deep-links additional universes (?universe=a,b,c) for overlay comparison."
+            ></select>
+          </label>
+          <div class="snapshot-row">
+            <label>
+              Snapshot:
+              <select id="date-selector"></select>
+            </label>
+            <span id="universe-size" aria-live="polite">· — tickers</span>
+          </div>
+          <div class="filter-row">
+            <input
+              id="universe-filter"
+              type="search"
+              placeholder="Filter ticker / name / sector… (press / to focus)"
+              aria-label="Filter universe by ticker, name, or sector"
+            />
+            <button
+              id="export-csv"
+              type="button"
+              aria-label="Download the current filtered + sorted view as CSV"
+            >↓ CSV</button>
+          </div>
+          <div class="chips-row">
+            <div
+              id="universe-chips"
+              class="detail-only"
+              aria-label="Active overlay universes; click × to remove"
+            ></div>
+            <div id="sector-filter-chip" hidden></div>
+          </div>
+        </div>
+        <div id="sector-donut-wrap">
+          <canvas id="sector-donut" aria-label="Sector composition donut"></canvas>
+        </div>
       </div>
       <div class="table-wrap">
         <table id="universe-table">
