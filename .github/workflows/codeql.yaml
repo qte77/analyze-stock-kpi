@@ -6,10 +6,13 @@
 name: CodeQL
 
 on:
+  # No branch filter so feature-branch pushes are also scanned. The
+  # `pull_request` trigger is intentionally absent: under it, SARIFs
+  # upload against the volatile merge-ref SHA which races GitHub's
+  # merge-protection check ("Code scanning is still expecting 1 result
+  # from CodeQL for <merge-sha> or <head-sha>"). Push-only matches the
+  # qte77/Agents-eval + qte77/doc-pipeline-engine convention.
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   schedule:
     - cron: "27 11 * * 0"
   workflow_dispatch:
@@ -44,4 +47,17 @@ jobs:
         uses: github/codeql-action/autobuild@9e0d7b8d25671d64c341c19c0152d693099fb5ba  # v4
 
       - name: Perform CodeQL Analysis
+        id: analyze
         uses: github/codeql-action/analyze@9e0d7b8d25671d64c341c19c0152d693099fb5ba  # v4
+        with:
+          output: sarif-results
+
+      # Lets inline noqa-style comments (`// codeql[<rule>]: …`) dismiss
+      # alerts at scan time — matches qte77/Agents-eval + doc-pipeline-engine.
+      - name: Dismiss alerts with inline suppression comments
+        uses: advanced-security/dismiss-alerts@046d6b48d2e43cf563f96f67332c47c432eff83e  # v2.0.2
+        with:
+          sarif-id: ${{ steps.analyze.outputs.sarif-id }}
+          sarif-file: sarif-results
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
