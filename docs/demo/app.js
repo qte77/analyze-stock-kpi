@@ -423,8 +423,11 @@ let radarChart = null;
 
 /** Minimum canvas width (px) at which the donut legend renders without
  *  truncating sector names like "Communication Services". Below this
- *  the legend is auto-hidden via the chart's onResize callback. */
-const LEGEND_MIN_WIDTH = 360;
+ *  the legend is auto-hidden via the chart's onResize callback. The
+ *  threshold includes a small buffer above the bare-fit width so the
+ *  legend disappears just before labels would start clipping rather
+ *  than at the clip moment. */
+const LEGEND_MIN_WIDTH = 380;
 
 function renderSectorDonut() {
   const canvas = /** @type {HTMLCanvasElement | null} */ (
