@@ -149,11 +149,11 @@ h2 {
   flex: 0 0 280px;
 }
 
-/* Stacked layout when the side-by-side cluster wouldn't fit comfortably
-   (~280 donut + 20 gap + ~280 controls column = ~580px content + main
-   padding ≈ 640px viewport). Below that, donut sits beneath the
-   controls; both centered. */
-@media (max-width: 639px) {
+/* Stacked layout only on the narrowest viewports. Cluster width
+   (~280 controls column + 20 gap + 280 donut) ≈ 580px content; we
+   keep side-by-side down to 480px viewport (small phones in landscape)
+   and only stack on the narrowest portrait widths. */
+@media (max-width: 479px) {
   #universe-controls-row {
     flex-direction: column;
     align-items: center;
