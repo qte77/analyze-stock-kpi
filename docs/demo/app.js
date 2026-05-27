@@ -421,13 +421,11 @@ let sectorChart = null;
 /** @type {any} */
 let radarChart = null;
 
-/** Minimum canvas width (px) at which the donut legend renders without
- *  truncating sector names like "Communication Services". Below this
- *  the legend is auto-hidden via the chart's onResize callback. The
- *  threshold includes a small buffer above the bare-fit width so the
- *  legend disappears just before labels would start clipping rather
- *  than at the clip moment. */
-const LEGEND_MIN_WIDTH = 380;
+/** Minimum canvas width (px) at which the bottom-positioned donut
+ *  legend renders sensibly. Below this the labels start piling into
+ *  too many rows and the donut becomes a sliver — auto-hidden via
+ *  the chart's onResize callback. */
+const LEGEND_MIN_WIDTH = 240;
 
 function renderSectorDonut() {
   const canvas = /** @type {HTMLCanvasElement | null} */ (
@@ -481,7 +479,12 @@ function renderSectorDonut() {
           // Initial state set from the live wrap width; onResize keeps
           // it in sync when the viewport changes.
           display: (canvas.parentElement?.getBoundingClientRect().width ?? 0) >= LEGEND_MIN_WIDTH,
-          position: "right",
+          // Bottom so the legend lays out horizontally and wraps across
+          // multiple rows as needed — no truncation regardless of wrap
+          // width. Right-position required ~380px to fit "Communication
+          // Services" without clipping, which forced the wrap wider
+          // than the user wanted.
+          position: "bottom",
           labels: { boxWidth: 12, padding: 6 },
           // Override the default legend onClick (which hides datasets)
           // so legend taps drive the same sector toggle as slice clicks.

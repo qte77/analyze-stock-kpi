@@ -443,12 +443,12 @@ footer a:hover { text-decoration: underline; }
 body.view-simple .detail-only { display: none !important; }
 
 /* Sector donut lives in the right column of #universe-controls-row in
-   both view modes. Height is roughly 15% shorter than the previous
-   260px, matching the new 320px basis width so the donut keeps a
-   sensible aspect ratio. */
+   both view modes. Taller than the bare donut needs because the
+   bottom-positioned legend takes 2-3 rows of vertical space inside
+   the canvas. */
 #sector-donut-wrap {
   position: relative;
-  height: 220px;
+  height: 260px;
 }
 
 /* Centered hint shown when the donut has no data to render (e.g. the
