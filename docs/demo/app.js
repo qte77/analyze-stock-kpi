@@ -459,7 +459,12 @@ function renderSectorDonut() {
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          position: "right",
+          // Below the donut so labels have full width to render —
+          // legend.position: "right" inside the 280px wrap truncates
+          // sector names like "Consumer Defensive" / "Communication
+          // Services" and bleeds past the section edge.
+          position: "bottom",
+          labels: { boxWidth: 12, padding: 8 },
           // Override the default legend onClick (which hides datasets)
           // so legend taps drive the same sector toggle as slice clicks.
           onClick: (/** @type {any} */ _evt, /** @type {any} */ item) => {

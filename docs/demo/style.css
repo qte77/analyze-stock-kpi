@@ -436,11 +436,11 @@ footer a:hover { text-decoration: underline; }
 body.view-simple .detail-only { display: none !important; }
 
 /* Sector donut lives in the right column of #universe-controls-row in
-   both view modes. Shrunk from 180 to 160px now that it shares the row
-   with the controls instead of spanning the full section width. */
+   both view modes. Taller now that the legend sits below the donut
+   (was 160px when legend was on the right). */
 #sector-donut-wrap {
   position: relative;
-  height: 160px;
+  height: 240px;
 }
 
 /* Centered hint shown when the donut has no data to render (e.g. the
