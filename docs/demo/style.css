@@ -146,12 +146,10 @@ h2 {
 }
 
 #universe-controls-row > #sector-donut-wrap {
-  /* Basis 320 (was 380, shrunk ~15%) keeps the donut visually modest
-     beside the controls. flex-shrink: 1 lets the wrap yield when the
-     section is too narrow; min-width keeps the donut itself usable.
-     The chart's onResize handler hides the legend below
-     LEGEND_MIN_WIDTH in app.js — at the current basis the legend
-     stays hidden, which matches the user's preference. */
+  /* Basis 320 keeps the donut visually modest beside the controls.
+     flex-shrink: 1 lets the wrap yield when the section is too
+     narrow; min-width keeps the donut itself usable. Legend is
+     disabled (see app.js), so the canvas renders the donut alone. */
   flex: 0 1 320px;
   min-width: 200px;
 }
@@ -443,12 +441,10 @@ footer a:hover { text-decoration: underline; }
 body.view-simple .detail-only { display: none !important; }
 
 /* Sector donut lives in the right column of #universe-controls-row in
-   both view modes. Taller than the bare donut needs because the
-   bottom-positioned legend takes 2-3 rows of vertical space inside
-   the canvas. */
+   both view modes. Compact — no legend, just the donut. */
 #sector-donut-wrap {
   position: relative;
-  height: 260px;
+  height: 200px;
 }
 
 /* Centered hint shown when the donut has no data to render (e.g. the

@@ -421,11 +421,6 @@ let sectorChart = null;
 /** @type {any} */
 let radarChart = null;
 
-/** Minimum canvas width (px) at which the bottom-positioned donut
- *  legend renders sensibly. Below this the labels start piling into
- *  too many rows and the donut becomes a sliver — auto-hidden via
- *  the chart's onResize callback. */
-const LEGEND_MIN_WIDTH = 240;
 
 function renderSectorDonut() {
   const canvas = /** @type {HTMLCanvasElement | null} */ (
@@ -463,35 +458,14 @@ function renderSectorDonut() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      // Auto-hide the legend whenever the canvas isn't wide enough to
-      // render full sector labels without truncation. LEGEND_MIN_WIDTH
-      // is the empirically-measured threshold where labels like
-      // "Communication Services" stop fitting beside the donut.
-      onResize: (/** @type {any} */ chart, /** @type {{width: number}} */ size) => {
-        const wide = size.width >= LEGEND_MIN_WIDTH;
-        if (chart.options.plugins.legend.display !== wide) {
-          chart.options.plugins.legend.display = wide;
-          chart.update("none");
-        }
-      },
       plugins: {
-        legend: {
-          // Initial state set from the live wrap width; onResize keeps
-          // it in sync when the viewport changes.
-          display: (canvas.parentElement?.getBoundingClientRect().width ?? 0) >= LEGEND_MIN_WIDTH,
-          // Bottom so the legend lays out horizontally and wraps across
-          // multiple rows as needed — no truncation regardless of wrap
-          // width. Right-position required ~380px to fit "Communication
-          // Services" without clipping, which forced the wrap wider
-          // than the user wanted.
-          position: "bottom",
-          labels: { boxWidth: 12, padding: 6 },
-          // Override the default legend onClick (which hides datasets)
-          // so legend taps drive the same sector toggle as slice clicks.
-          onClick: (/** @type {any} */ _evt, /** @type {any} */ item) => {
-            toggleSectorFilter(item?.text ?? null);
-          },
-        },
+        // Legend permanently disabled — slice colors + hover tooltip
+        // (`Sector: count (pct%)`) are enough to identify segments.
+        // See https://github.com/qte77/analyze-stock-kpi/issues/152 —
+        // the attempted onResize auto-hide regressed on zoom-out and
+        // the right-side position required widening the wrap past the
+        // user's preferred donut size.
+        legend: { display: false },
         tooltip: {
           callbacks: {
             label: (/** @type {any} */ ctx) => {
