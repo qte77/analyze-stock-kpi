@@ -442,10 +442,11 @@ body.view-simple .detail-only { display: none !important; }
 
 /* Sector donut lives in the right column of #universe-controls-row in
    both view modes. Tall enough that the legend (rendered on the right
-   inside the canvas) gets all 12 sector rows without scroll. */
+   inside the canvas) gets all 12 GICS sector rows + null bucket
+   without Chart.js clipping the last items. */
 #sector-donut-wrap {
   position: relative;
-  height: 200px;
+  height: 260px;
 }
 
 /* Centered hint shown when the donut has no data to render (e.g. the
