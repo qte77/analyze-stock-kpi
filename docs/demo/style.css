@@ -146,14 +146,13 @@ h2 {
 }
 
 #universe-controls-row > #sector-donut-wrap {
-  /* Basis 380 fits donut + right-side legend at typical viewports.
-     flex-shrink: 1 (the `1` middle value) lets the wrap shrink when
-     the section can't fit the full cluster, instead of punching past
-     the section edge. min-width keeps the donut itself usable at the
-     narrow end. As the wrap shrinks, the chart's onResize handler
-     hides the legend (see LEGEND_MIN_WIDTH in app.js) before any
-     sector labels start clipping. */
-  flex: 0 1 380px;
+  /* Basis 320 (was 380, shrunk ~15%) keeps the donut visually modest
+     beside the controls. flex-shrink: 1 lets the wrap yield when the
+     section is too narrow; min-width keeps the donut itself usable.
+     The chart's onResize handler hides the legend below
+     LEGEND_MIN_WIDTH in app.js — at the current basis the legend
+     stays hidden, which matches the user's preference. */
+  flex: 0 1 320px;
   min-width: 200px;
 }
 
@@ -444,12 +443,12 @@ footer a:hover { text-decoration: underline; }
 body.view-simple .detail-only { display: none !important; }
 
 /* Sector donut lives in the right column of #universe-controls-row in
-   both view modes. Tall enough that the legend (rendered on the right
-   inside the canvas) gets all 12 GICS sector rows + null bucket
-   without Chart.js clipping the last items. */
+   both view modes. Height is roughly 15% shorter than the previous
+   260px, matching the new 320px basis width so the donut keeps a
+   sensible aspect ratio. */
 #sector-donut-wrap {
   position: relative;
-  height: 260px;
+  height: 220px;
 }
 
 /* Centered hint shown when the donut has no data to render (e.g. the
