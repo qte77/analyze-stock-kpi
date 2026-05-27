@@ -146,7 +146,12 @@ h2 {
 }
 
 #universe-controls-row > #sector-donut-wrap {
-  flex: 0 0 280px;
+  /* Wide enough so the donut + right-side legend fits with full
+     sector labels at typical viewports. The donut's onResize handler
+     hides the legend automatically once the canvas drops below
+     360px (e.g. very narrow viewports), so the donut keeps rendering
+     even when the wrap is squeezed. */
+  flex: 0 0 380px;
 }
 
 /* Stacked layout only on the narrowest viewports. Cluster width
@@ -436,11 +441,11 @@ footer a:hover { text-decoration: underline; }
 body.view-simple .detail-only { display: none !important; }
 
 /* Sector donut lives in the right column of #universe-controls-row in
-   both view modes. No legend (slice colors + hover tooltip are
-   sufficient), so the wrap stays compact at 160px. */
+   both view modes. Tall enough that the legend (rendered on the right
+   inside the canvas) gets all 12 sector rows without scroll. */
 #sector-donut-wrap {
   position: relative;
-  height: 160px;
+  height: 200px;
 }
 
 /* Centered hint shown when the donut has no data to render (e.g. the

@@ -421,6 +421,11 @@ let sectorChart = null;
 /** @type {any} */
 let radarChart = null;
 
+/** Minimum canvas width (px) at which the donut legend renders without
+ *  truncating sector names like "Communication Services". Below this
+ *  the legend is auto-hidden via the chart's onResize callback. */
+const LEGEND_MIN_WIDTH = 360;
+
 function renderSectorDonut() {
   const canvas = /** @type {HTMLCanvasElement | null} */ (
     document.getElementById("sector-donut")
@@ -457,13 +462,30 @@ function renderSectorDonut() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      // Auto-hide the legend whenever the canvas isn't wide enough to
+      // render full sector labels without truncation. LEGEND_MIN_WIDTH
+      // is the empirically-measured threshold where labels like
+      // "Communication Services" stop fitting beside the donut.
+      onResize: (/** @type {any} */ chart, /** @type {{width: number}} */ size) => {
+        const wide = size.width >= LEGEND_MIN_WIDTH;
+        if (chart.options.plugins.legend.display !== wide) {
+          chart.options.plugins.legend.display = wide;
+          chart.update("none");
+        }
+      },
       plugins: {
-        // No legend — slice colors + hover tooltip (showing sector name
-        // and percentage) are enough to identify segments without
-        // dedicating vertical space to a label list. Slice click still
-        // toggles the sector filter via the chart-level onClick handler
-        // below.
-        legend: { display: false },
+        legend: {
+          // Initial state set from the live wrap width; onResize keeps
+          // it in sync when the viewport changes.
+          display: (canvas.parentElement?.getBoundingClientRect().width ?? 0) >= LEGEND_MIN_WIDTH,
+          position: "right",
+          labels: { boxWidth: 12, padding: 6 },
+          // Override the default legend onClick (which hides datasets)
+          // so legend taps drive the same sector toggle as slice clicks.
+          onClick: (/** @type {any} */ _evt, /** @type {any} */ item) => {
+            toggleSectorFilter(item?.text ?? null);
+          },
+        },
         tooltip: {
           callbacks: {
             label: (/** @type {any} */ ctx) => {
