@@ -45,12 +45,3 @@ jobs:
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@9e0d7b8d25671d64c341c19c0152d693099fb5ba  # v4
-        with:
-          # Pin SARIF uploads to the PR head SHA (stable) rather than
-          # the merge-ref SHA (recomputed every push). The merge
-          # protection check is keyed against the head SHA or the
-          # then-current merge SHA; uploads against the moving merge
-          # ref were racing the check — once main moved, the required
-          # result wasn't found and the merge stalled with `Code
-          # scanning is still expecting 1 result from CodeQL`.
-          sha: ${{ github.event.pull_request.head.sha || github.sha }}
