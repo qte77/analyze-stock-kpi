@@ -458,19 +458,12 @@ function renderSectorDonut() {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: {
-          // Below the donut so labels have full width to render —
-          // legend.position: "right" inside the 280px wrap truncates
-          // sector names like "Consumer Defensive" / "Communication
-          // Services" and bleeds past the section edge.
-          position: "bottom",
-          labels: { boxWidth: 12, padding: 8 },
-          // Override the default legend onClick (which hides datasets)
-          // so legend taps drive the same sector toggle as slice clicks.
-          onClick: (/** @type {any} */ _evt, /** @type {any} */ item) => {
-            toggleSectorFilter(item?.text ?? null);
-          },
-        },
+        // No legend — slice colors + hover tooltip (showing sector name
+        // and percentage) are enough to identify segments without
+        // dedicating vertical space to a label list. Slice click still
+        // toggles the sector filter via the chart-level onClick handler
+        // below.
+        legend: { display: false },
         tooltip: {
           callbacks: {
             label: (/** @type {any} */ ctx) => {
