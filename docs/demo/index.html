@@ -59,11 +59,13 @@
               title="Switch between bundled universes. Chips below appear when the URL deep-links additional universes (?universe=a,b,c) for overlay comparison."
             ></select>
           </label>
-          <label>
-            Snapshot:
-            <select id="date-selector"></select>
-          </label>
-          <span id="universe-size" aria-live="polite">· — tickers</span>
+          <div class="snapshot-row">
+            <label>
+              Snapshot:
+              <select id="date-selector"></select>
+            </label>
+            <span id="universe-size" aria-live="polite">· — tickers</span>
+          </div>
           <input
             id="universe-filter"
             type="search"

@@ -177,6 +177,15 @@ h2 {
   font-size: 0.875rem;
 }
 
+/* Group the snapshot picker and the ticker count on one horizontal row
+   so the count sits inline next to the picker (since the surrounding
+   #universe-header is a vertical column). */
+.snapshot-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 /* Form controls in the universe header. Background uses --bg (the page
    background) rather than --panel so the controls sit inset against the
    section panel — in both themes that's a one-step contrast that keeps
