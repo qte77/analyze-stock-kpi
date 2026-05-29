@@ -194,11 +194,11 @@
       "big_call": 49.129552580952385,
       "aaqs": 73.26908358333333,
       "hgi": 49.57142857142858,
-      "screener_score": 34.65078892435195
+      "screener_score": 34.650788394219234
     },
     "roi": 0.09730943828502388,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.5893051985412816,
+    "sortino_ratio": 0.5893051349253554,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -249,7 +249,7 @@
     },
     "roi": 0.188049031420717,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.7049960135272212,
+    "sortino_ratio": -0.704996215565349,
     "sec_last_10k_date": "2026-05-22",
     "sec_last_10q_date": "2026-01-23",
     "sec_last_8k_date": "2026-05-22"
@@ -351,7 +351,7 @@
     },
     "roi": 0.3249676152461867,
     "rd_to_revenue": 0.027673554228540224,
-    "sortino_ratio": 5.089698444511174,
+    "sortino_ratio": 5.089698252671476,
     "sec_last_10k_date": "2026-03-16",
     "sec_last_10q_date": "2025-12-09",
     "sec_last_8k_date": "2026-05-28"
@@ -449,11 +449,11 @@
       "big_call": 50.22228366666667,
       "aaqs": 68.40410458333334,
       "hgi": 54.5,
-      "screener_score": 50.61201519511201
+      "screener_score": 50.61202465174185
     },
     "roi": 0.13441120643241095,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.095644328175346,
+    "sortino_ratio": 2.095645462970927,
     "sec_last_10k_date": "2026-01-30",
     "sec_last_10q_date": "2026-04-29",
     "sec_last_8k_date": "2026-05-11"
@@ -500,11 +500,11 @@
       "big_call": 44.66184100952381,
       "aaqs": 46.37997983333334,
       "hgi": 54.92857142857144,
-      "screener_score": 31.419014963042375
+      "screener_score": 31.419014559971934
     },
     "roi": 0.2918148797392883,
     "rd_to_revenue": 0.03445643877439756,
-    "sortino_ratio": 1.5361618387325229,
+    "sortino_ratio": 1.53616179036407,
     "sec_last_10k_date": "2026-01-29",
     "sec_last_10q_date": "2026-04-21",
     "sec_last_8k_date": "2026-05-07"
@@ -551,11 +551,11 @@
       "big_call": 41.9082713952381,
       "aaqs": 62.99462495833333,
       "hgi": 38.14285714285715,
-      "screener_score": 49.98805841615226
+      "screener_score": 49.98805856845634
     },
     "roi": 0.07691895265600394,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.6927440561287477,
+    "sortino_ratio": 1.6927440744052362,
     "sec_last_10k_date": "2026-02-05",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-05"
@@ -602,11 +602,11 @@
       "big_call": 35.99209433809524,
       "aaqs": 53.545833333333334,
       "hgi": 26.0,
-      "screener_score": 42.754845554171766
+      "screener_score": 42.7548453942416
     },
     "roi": 0.10187168712106687,
     "rd_to_revenue": 0.048394850702419744,
-    "sortino_ratio": 1.0736717906522517,
+    "sortino_ratio": 1.073671771460632,
     "sec_last_10k_date": "2026-02-17",
     "sec_last_10q_date": "2026-04-23",
     "sec_last_8k_date": "2026-05-27"
@@ -657,7 +657,7 @@
     },
     "roi": 0.052273747530577154,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.579527605547226,
+    "sortino_ratio": -0.5795276635212134,
     "sec_last_10k_date": "2026-02-27",
     "sec_last_10q_date": "2026-05-07",
     "sec_last_8k_date": "2026-05-07"
@@ -704,11 +704,11 @@
       "big_call": 43.50924668571429,
       "aaqs": 43.66441625,
       "hgi": 67.14285714285715,
-      "screener_score": 35.91095948920722
+      "screener_score": 35.910960462207015
     },
     "roi": 0.06328209201455513,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.029805938704866926,
+    "sortino_ratio": 0.029806055464841996,
     "sec_last_10k_date": "2025-11-20",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-05"
@@ -759,7 +759,7 @@
     },
     "roi": 0.10816922263581545,
     "rd_to_revenue": null,
-    "sortino_ratio": -1.4205308928154552,
+    "sortino_ratio": -1.420531116552546,
     "sec_last_10k_date": "2026-02-26",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-18"
@@ -857,11 +857,11 @@
       "big_call": 58.61498121904762,
       "aaqs": 60.13408366666667,
       "hgi": 59.92857142857143,
-      "screener_score": 48.04032126689188
+      "screener_score": 48.04031913202132
     },
     "roi": 0.05112650548355313,
     "rd_to_revenue": 0.02451406357191859,
-    "sortino_ratio": 1.8792690409519222,
+    "sortino_ratio": 1.879268784767454,
     "sec_last_10k_date": "2026-02-12",
     "sec_last_10q_date": "2026-04-30",
     "sec_last_8k_date": "2026-05-12"
@@ -931,8 +931,8 @@
     "forward_pe": 14.753314,
     "price_to_book": -41.018784,
     "price_to_sales_ttm": 0.22121382,
-    "enterprise_value": 97141063680.0,
-    "enterprise_to_ebitda": 14.111,
+    "enterprise_value": 95393292288.0,
+    "enterprise_to_ebitda": 13.857,
     "trailing_peg_ratio": 1.4798,
     "return_on_equity": null,
     "return_on_assets": 0.04992,
@@ -959,11 +959,11 @@
       "big_call": 29.356666883333332,
       "aaqs": 51.28583341666667,
       "hgi": 59.42857142857143,
-      "screener_score": 34.18966073423158
+      "screener_score": 34.189656914608584
     },
     "roi": 1.8070004115322087,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.41725845453636096,
+    "sortino_ratio": 0.41725799618160153,
     "sec_last_10k_date": "2026-05-08",
     "sec_last_10q_date": "2026-02-04",
     "sec_last_8k_date": "2026-05-07"
@@ -1014,7 +1014,7 @@
     },
     "roi": 0.11852620206719994,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.36595647185387564,
+    "sortino_ratio": -0.3659563672014175,
     "sec_last_10k_date": "2025-11-20",
     "sec_last_10q_date": "2026-05-07",
     "sec_last_8k_date": "2026-05-28"
@@ -1061,11 +1061,11 @@
       "big_call": 63.91002112857143,
       "aaqs": 70.6280625,
       "hgi": 68.35714285714286,
-      "screener_score": 43.42828970377369
+      "screener_score": 43.428292471490835
     },
     "roi": 0.2713005473247868,
     "rd_to_revenue": 0.11531853871164686,
-    "sortino_ratio": 0.08745652999845324,
+    "sortino_ratio": 0.08745686212450995,
     "sec_last_10k_date": "2025-07-30",
     "sec_last_10q_date": "2026-04-29",
     "sec_last_8k_date": "2026-05-14"
@@ -1112,11 +1112,11 @@
       "big_call": 55.69380409523809,
       "aaqs": 78.96779083333334,
       "hgi": 77.42857142857143,
-      "screener_score": 46.21451835515568
+      "screener_score": 46.21452101816491
     },
     "roi": 0.1403722560610405,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.1881800645234442,
+    "sortino_ratio": 1.188180384084551,
     "sec_last_10k_date": "2026-01-27",
     "sec_last_10q_date": "2026-04-21",
     "sec_last_8k_date": "2026-05-21"
@@ -1163,11 +1163,11 @@
       "big_call": 33.09715026666667,
       "aaqs": 39.150187833333334,
       "hgi": 14.428571428571429,
-      "screener_score": 49.74171123151831
+      "screener_score": 49.74171168667654
     },
     "roi": 0.1079833669282921,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.4316493211155301,
+    "sortino_ratio": 1.4316493757345177,
     "sec_last_10k_date": "2026-02-17",
     "sec_last_10q_date": "2026-05-08",
     "sec_last_8k_date": "2026-05-08"
@@ -1371,10 +1371,61 @@
     },
     "roi": 0.08964784497482564,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.041791923977599926,
+    "sortino_ratio": -0.04179209215179687,
     "sec_last_10k_date": "2026-03-16",
     "sec_last_10q_date": "2025-12-04",
     "sec_last_8k_date": "2026-05-29"
+  },
+  {
+    "symbol": "SPCX",
+    "long_name": "Space Exploration Technologies Corp.",
+    "short_name": "SPAC and New Issue ETF",
+    "quote_type": "EQUITY",
+    "sector": null,
+    "industry": null,
+    "currency": "USD",
+    "exchange": "NGM",
+    "market_cap": null,
+    "trailing_pe": null,
+    "forward_pe": null,
+    "price_to_book": null,
+    "price_to_sales_ttm": null,
+    "enterprise_value": null,
+    "enterprise_to_ebitda": null,
+    "trailing_peg_ratio": null,
+    "return_on_equity": null,
+    "return_on_assets": null,
+    "profit_margins": null,
+    "gross_margins": null,
+    "operating_margins": null,
+    "debt_to_equity": null,
+    "current_ratio": null,
+    "quick_ratio": null,
+    "revenue_growth": null,
+    "earnings_growth": null,
+    "dividend_yield": null,
+    "payout_ratio": null,
+    "trailing_eps": null,
+    "forward_eps": null,
+    "book_value": null,
+    "fifty_two_week_high": 26.61,
+    "fifty_two_week_low": 21.32,
+    "beta": null,
+    "composite_scores": {
+      "quality": null,
+      "dividend": null,
+      "growth": null,
+      "big_call": null,
+      "aaqs": null,
+      "hgi": null,
+      "screener_score": null
+    },
+    "roi": null,
+    "rd_to_revenue": null,
+    "sortino_ratio": null,
+    "sec_last_10k_date": null,
+    "sec_last_10q_date": null,
+    "sec_last_8k_date": null
   },
   {
     "symbol": "TXT",
@@ -1418,11 +1469,11 @@
       "big_call": 31.18258571428571,
       "aaqs": 48.099124999999994,
       "hgi": 44.57142857142858,
-      "screener_score": 48.11946241482667
+      "screener_score": 48.11946387154406
     },
     "roi": 0.08739973800666691,
     "rd_to_revenue": 0.03520508142442057,
-    "sortino_ratio": 1.3904063201519092,
+    "sortino_ratio": 1.3904064949579964,
     "sec_last_10k_date": "2026-02-11",
     "sec_last_10q_date": "2026-04-30",
     "sec_last_8k_date": "2026-05-01"
