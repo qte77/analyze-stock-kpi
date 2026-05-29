@@ -37,13 +37,26 @@ jobs:
     name: fetch + commit CNN F&G snapshot
     runs-on: ubuntu-latest
     steps:
-      # Check out the `data` branch so src/sentiment.py merges today's
-      # reading into the accumulated results/cnn_fg/YYYY.json files
-      # (older history would be lost if we checked out main, which has
-      # an older snapshot of cnn_fg/).
+      # Check out the workflow ref (main on cron + dispatch from main) for
+      # the current `src/` layout — `src.data_sources.sentiment` lives in
+      # the post-restructure tree on main only. The `data` branch still
+      # carries the pre-restructure flat layout (`src.sentiment`) because
+      # it's a data-only branch that never re-syncs source. Older code
+      # used `ref: data` here, which broke on `python -m
+      # src.data_sources.sentiment` with `ModuleNotFoundError`.
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-        with:
-          ref: data
+
+      # Pull the accumulated F&G history from the data branch into the
+      # local checkout so sentiment.py merges into it rather than starting
+      # from main's older snapshot. Path-scoped `git checkout` touches
+      # only results/cnn_fg/; nothing else from data leaks into the
+      # workspace (we don't want data's stale src/).
+      - name: Fetch existing F&G history from data branch
+        run: |
+          set -euo pipefail
+          git fetch origin data --depth=1
+          rm -rf results/cnn_fg
+          git checkout origin/data -- results/cnn_fg/
 
       - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
         with:
