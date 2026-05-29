@@ -10,6 +10,7 @@
 import { buildAuditMap, formatObligated, loadAudit } from "./lib/audit.js";
 import { cellClass } from "./lib/coloring.js";
 import { exportCsv } from "./lib/csv.js";
+import { aggregateMonthlyFG } from "./lib/monthly.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
 import {
@@ -817,16 +818,19 @@ async function renderTimeSeriesPane(pane, row) {
   wrap.append(canvas);
   pane.append(wrap);
   if (typeof Chart === "undefined") return;
-  if (timeSeriesChart) timeSeriesChart.destroy();
+  if (timeSeriesChart) {
+    liveCharts.delete(timeSeriesChart);
+    timeSeriesChart.destroy();
+  }
   timeSeriesChart = new Chart(canvas, {
     type: "line",
     data: {
       labels: series.dates,
       datasets: [
-        { label: "Screener", data: series.score, borderColor: "#0066cc" },
-        { label: "Quality", data: series.quality, borderColor: "#27ae60" },
-        { label: "Growth", data: series.growth, borderColor: "#e67e22" },
-        { label: "Sortino", data: series.sortino, borderColor: "#c0392b", yAxisID: "y1" },
+        { label: "Screener", data: series.score, borderColor: () => cssVar("--accent", "#0066cc") },
+        { label: "Quality", data: series.quality, borderColor: () => cssVar("--rating-greed", "#27ae60") },
+        { label: "Growth", data: series.growth, borderColor: () => cssVar("--rating-fear", "#e67e22") },
+        { label: "Sortino", data: series.sortino, borderColor: () => cssVar("--rating-extreme-fear", "#c0392b"), yAxisID: "y1" },
       ],
     },
     options: {
@@ -838,6 +842,7 @@ async function renderTimeSeriesPane(pane, row) {
       },
     },
   });
+  liveCharts.add(timeSeriesChart);
 }
 
 /**
@@ -873,16 +878,16 @@ function findClosestScore(
 function renderFearGreedHeader(
   /** @type {Array<{timestamp: string, score: number, rating?: string}>} */ entries,
 ) {
+  const header = document.getElementById("fg-header");
   const scoreEl = document.getElementById("fg-score");
   const chipEl = /** @type {HTMLElement | null} */ (document.getElementById("fg-rating"));
   const deltasEl = document.getElementById("fg-deltas");
-  if (!scoreEl || !chipEl || !deltasEl) return;
+  if (!header || !scoreEl || !chipEl || !deltasEl) return;
   if (!entries.length) {
-    chipEl.textContent = "no data";
-    chipEl.className = "chip";
-    deltasEl.textContent = "";
+    header.hidden = true;
     return;
   }
+  header.hidden = false;
   const last = entries[entries.length - 1];
   scoreEl.textContent = fmtNum(last.score, 0);
   const rating = (last.rating ?? "").toLowerCase();
@@ -905,21 +910,65 @@ function renderFearGreedHeader(
   deltasEl.textContent = `(${deltas})`;
 }
 
+/** @type {any} */
+let fearGreedChart = null;
+/** @type {any} */
+let monthlyFearGreedChart = null;
+
+/** @type {Set<any>} */
+const liveCharts = new Set();
+
+/**
+ * @param {string} token  CSS custom property name (with leading `--`).
+ * @param {string} fallback  Hex used if the token is unset.
+ * @returns {string}  Resolved hex/rgb string (no alpha).
+ */
+function cssVar(token, fallback) {
+  return (
+    getComputedStyle(document.body).getPropertyValue(token).trim() || fallback
+  );
+}
+
+function renderRollingEmptyHint(
+  /** @type {boolean} */ show,
+  /** @type {string} */ text = "no F&G data",
+) {
+  const wrap = document.getElementById("fg-chart-wrap");
+  if (!wrap) return;
+  let hint = wrap.querySelector(".fg-empty");
+  if (show) {
+    if (!hint) {
+      hint = document.createElement("div");
+      hint.className = "fg-empty";
+      wrap.append(hint);
+    }
+    hint.textContent = text;
+  } else if (hint) {
+    hint.remove();
+  }
+}
+
 function renderFearGreedChart(
   /** @type {Array<{timestamp: string, score: number}>} */ entries,
 ) {
-  if (!entries.length || typeof Chart === "undefined") return;
   const ctx = /** @type {HTMLCanvasElement | null} */ (document.getElementById("fg-chart"));
   if (!ctx) return;
-  new Chart(ctx, {
+  if (fearGreedChart) {
+    liveCharts.delete(fearGreedChart);
+    fearGreedChart.destroy();
+    fearGreedChart = null;
+  }
+  renderRollingEmptyHint(entries.length === 0);
+  if (!entries.length || typeof Chart === "undefined") return;
+  fearGreedChart = new Chart(ctx, {
     type: "line",
     data: {
       labels: entries.map((e) => e.timestamp.slice(0, 10)),
       datasets: [
         {
           data: entries.map((e) => e.score),
-          borderColor: "#1d1d1f",
-          backgroundColor: "rgba(29, 29, 31, 0.08)",
+          borderColor: () => cssVar("--text", "#1d1d1f"),
+          backgroundColor: () => `${cssVar("--text", "#1d1d1f")}14`,
           fill: true,
           pointRadius: 0,
           borderWidth: 1.5,
@@ -938,6 +987,125 @@ function renderFearGreedChart(
       },
     },
   });
+  liveCharts.add(fearGreedChart);
+}
+
+function renderLongTermEmptyHint(/** @type {boolean} */ show) {
+  const wrap = document.getElementById("lt-fg-chart-wrap");
+  if (!wrap) return;
+  const existing = wrap.querySelector(".lt-fg-empty");
+  if (show && !existing) {
+    const hint = document.createElement("div");
+    hint.className = "lt-fg-empty";
+    hint.textContent = "no F&G history yet";
+    wrap.append(hint);
+  } else if (!show && existing) {
+    existing.remove();
+  }
+}
+
+function renderMonthlyFearGreedChart(
+  /** @type {Array<{timestamp: string, score: number}>} */ entries,
+) {
+  const canvas = /** @type {HTMLCanvasElement | null} */ (
+    document.getElementById("lt-fg-chart")
+  );
+  if (!canvas) return;
+  const monthly = aggregateMonthlyFG(entries);
+  if (monthlyFearGreedChart) {
+    liveCharts.delete(monthlyFearGreedChart);
+    monthlyFearGreedChart.destroy();
+    monthlyFearGreedChart = null;
+  }
+  renderLongTermEmptyHint(monthly.months.length === 0);
+  if (monthly.months.length === 0 || typeof Chart === "undefined") return;
+  monthlyFearGreedChart = new Chart(canvas, {
+    type: "line",
+    data: {
+      labels: monthly.months,
+      datasets: [
+        {
+          label: "Median",
+          data: monthly.median,
+          borderColor: () => cssVar("--text", "#1d1d1f"),
+          backgroundColor: () => `${cssVar("--text", "#1d1d1f")}14`,
+          fill: false,
+          pointRadius: 2,
+          borderWidth: 1.5,
+          tension: 0.2,
+        },
+        {
+          label: "Average",
+          data: monthly.avg,
+          borderColor: () => cssVar("--accent", "#0066cc"),
+          backgroundColor: () => `${cssVar("--accent", "#0066cc")}14`,
+          fill: false,
+          pointRadius: 2,
+          borderWidth: 1.5,
+          tension: 0.2,
+          borderDash: [4, 3],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 250 },
+      plugins: { legend: { display: true, position: "bottom" } },
+      scales: {
+        y: { min: 0, max: 100, ticks: { stepSize: 25 } },
+        x: { ticks: { maxTicksLimit: 14 } },
+      },
+    },
+  });
+  liveCharts.add(monthlyFearGreedChart);
+}
+
+/**
+ * Wires the Rolling-history ↔ Long-term-context tab pair sharing the
+ * single F&G entries list. The monthly chart is lazily constructed on
+ * the first long-term tab click (matches the detail-panel time-series
+ * lazy pattern), so the initial paint stays cheap.
+ *
+ * @param {Array<{timestamp: string, score: number}>} entries
+ */
+function bindFearGreedTabs(entries) {
+  const rollingTab = document.getElementById("fg-tab-rolling");
+  const monthlyTab = document.getElementById("fg-tab-monthly");
+  const rollingPane = document.getElementById("fg-chart-wrap");
+  const monthlyPane = document.getElementById("lt-fg-chart-wrap");
+  if (!rollingTab || !monthlyTab || !rollingPane || !monthlyPane) return;
+  let monthlyRendered = false;
+  rollingTab.addEventListener("click", () => {
+    rollingTab.setAttribute("aria-selected", "true");
+    monthlyTab.setAttribute("aria-selected", "false");
+    rollingPane.hidden = false;
+    monthlyPane.hidden = true;
+  });
+  monthlyTab.addEventListener("click", () => {
+    rollingTab.setAttribute("aria-selected", "false");
+    monthlyTab.setAttribute("aria-selected", "true");
+    rollingPane.hidden = true;
+    monthlyPane.hidden = false;
+    if (!monthlyRendered) {
+      renderMonthlyFearGreedChart(entries);
+      monthlyRendered = true;
+    }
+  });
+}
+
+/**
+ * Watches body class flips (theme-system / theme-light / theme-dark) and
+ * pings every live Chart.js instance so its scriptable color closures
+ * re-resolve `--text` / `--accent` / etc. against the new palette. Without
+ * this, the F&G + monthly-F&G lines stay near-invisible after a dark-mode
+ * toggle until the next hover triggers a redraw.
+ */
+function bindThemeObserver() {
+  const obs = new MutationObserver(() => {
+    for (const chart of liveCharts) chart.update("none");
+  });
+  obs.observe(document.body, { attributes: true, attributeFilter: ["class"] });
 }
 
 function bindTableSort() {
@@ -1297,6 +1465,8 @@ async function init() {
   const fgEntries = await loadFearGreedYears();
   renderFearGreedHeader(fgEntries);
   renderFearGreedChart(fgEntries);
+  bindFearGreedTabs(fgEntries);
+  bindThemeObserver();
 }
 
 window.addEventListener("resize", applyMobileGuard);

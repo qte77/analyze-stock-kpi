@@ -77,7 +77,7 @@ h2 {
   letter-spacing: 0.06em;
 }
 
-#fg-header {
+#fg-header:not([hidden]) {
   display: flex;
   align-items: center;
   gap: 1.25rem;
@@ -123,6 +123,23 @@ h2 {
 #fg-chart-wrap {
   position: relative;
   height: 220px;
+}
+
+#lt-fg-chart-wrap {
+  position: relative;
+  height: 220px;
+}
+
+.fg-empty,
+.lt-fg-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 0.875rem;
 }
 
 /* Two-column layout: left = picker/snapshot/filter/CSV/chips,

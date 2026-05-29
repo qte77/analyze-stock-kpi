@@ -36,16 +36,49 @@
 
   <main>
     <section id="fear-greed-section">
-      <h2>CNN Fear &amp; Greed · Rolling History</h2>
-      <div id="fg-header">
-        <div id="fg-score">—</div>
+      <h2>CNN Fear &amp; Greed</h2>
+      <div id="fg-header" hidden>
+        <div id="fg-score"></div>
         <div id="fg-meta">
-          <span id="fg-rating" class="chip">loading…</span>
+          <span id="fg-rating" class="chip"></span>
           <span id="fg-deltas"></span>
         </div>
       </div>
-      <div id="fg-chart-wrap">
+      <div
+        id="fg-tabs"
+        class="detail-tabs"
+        role="tablist"
+        aria-label="Fear and Greed chart range"
+      >
+        <button
+          type="button"
+          id="fg-tab-rolling"
+          role="tab"
+          aria-selected="true"
+          aria-controls="fg-chart-wrap"
+        >Rolling history</button>
+        <button
+          type="button"
+          id="fg-tab-monthly"
+          role="tab"
+          aria-selected="false"
+          aria-controls="lt-fg-chart-wrap"
+        >Long-term context</button>
+      </div>
+      <div id="fg-chart-wrap" role="tabpanel" aria-labelledby="fg-tab-rolling">
+        <div class="fg-empty">loading…</div>
         <canvas id="fg-chart"></canvas>
+      </div>
+      <div
+        id="lt-fg-chart-wrap"
+        role="tabpanel"
+        aria-labelledby="fg-tab-monthly"
+        hidden
+      >
+        <canvas
+          id="lt-fg-chart"
+          aria-label="Monthly Fear and Greed median and average"
+        ></canvas>
       </div>
     </section>
 
