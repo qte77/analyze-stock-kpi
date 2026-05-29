@@ -118,6 +118,14 @@ daily points, so a missed day repopulates on the next run.
   array (a `previous_close` value is just the score on the previous trading
   day), so they're effectively backfillable too.
 
+**Derived monthly aggregation (client-side).** The dashboard's Long-Term
+Context section reduces the same per-year files to UTC `YYYY-MM` buckets via
+`docs/demo/lib/monthly.js::aggregateMonthlyFG`, surfacing per-month median +
+average + count without any new endpoint. UTC bucketing keeps month
+boundaries stable across viewer timezones; the chart resolves to two lines
+(median solid, average dashed) reading `--text` / `--accent` from CSS at
+draw time, so dark-mode toggles repaint without a hover.
+
 ### Captured-day-only (lost forever if missed)
 
 These exist only at the top level of each subindicator block, which is
