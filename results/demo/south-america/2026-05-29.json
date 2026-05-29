@@ -45,7 +45,7 @@
     },
     "roi": 0.056622586764616276,
     "rd_to_revenue": 0.018045465198031404,
-    "sortino_ratio": 4.19328639812979,
+    "sortino_ratio": 4.193286608005686,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -92,11 +92,11 @@
       "big_call": 63.63283511428572,
       "aaqs": 87.32193749999999,
       "hgi": 33.71428571428572,
-      "screener_score": 61.44767825462246
+      "screener_score": 61.44767963295074
     },
     "roi": 0.13514747865123442,
     "rd_to_revenue": 0.009686641627893941,
-    "sortino_ratio": 2.5358214844500933,
+    "sortino_ratio": 2.5358216498494865,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -143,11 +143,11 @@
       "big_call": 63.63283511428572,
       "aaqs": 87.32193749999999,
       "hgi": 33.71428571428572,
-      "screener_score": 60.26184055701668
+      "screener_score": 60.26184040430533
     },
     "roi": 0.14540571964212817,
     "rd_to_revenue": 0.009686641627893941,
-    "sortino_ratio": 2.3935209607373995,
+    "sortino_ratio": 2.3935209424120374,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -194,11 +194,11 @@
       "big_call": 45.44044444444445,
       "aaqs": 75.01055555555556,
       "hgi": 45.21428571428572,
-      "screener_score": 69.0016937333194
+      "screener_score": 69.00168578536338
     },
     "roi": 0.055299688734106074,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.5699467575221364,
+    "sortino_ratio": 1.5699458037674139,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -245,11 +245,11 @@
       "big_call": 40.62927138571428,
       "aaqs": 67.07944450000001,
       "hgi": 40.714285714285715,
-      "screener_score": 63.30172359126644
+      "screener_score": 63.30172383271448
     },
     "roi": 0.03441229974544975,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.5354860609519725,
+    "sortino_ratio": 1.535486089925737,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -351,7 +351,7 @@
     },
     "roi": 0.014421608867828515,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.24522718613906222,
+    "sortino_ratio": -0.2452268360158748,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -398,11 +398,11 @@
       "big_call": 70.0989604047619,
       "aaqs": 83.44191666666666,
       "hgi": 80.85714285714286,
-      "screener_score": 68.17230783293202
+      "screener_score": 68.1723071616808
     },
     "roi": 0.2629017919911825,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.165563635189938,
+    "sortino_ratio": 1.1655635546397924,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -411,7 +411,7 @@
     "symbol": "JBSS3.SA",
     "long_name": null,
     "short_name": null,
-    "quote_type": null,
+    "quote_type": "NONE",
     "sector": null,
     "industry": null,
     "currency": null,
@@ -500,11 +500,11 @@
       "big_call": 40.862707409523814,
       "aaqs": 91.08731283333333,
       "hgi": 30.071428571428577,
-      "screener_score": 53.26932111486751
+      "screener_score": 53.269317792586456
     },
     "roi": 0.42202707113147697,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.6814240785460052,
+    "sortino_ratio": 0.6814236798722789,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -555,7 +555,7 @@
     },
     "roi": 0.09559693129126831,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.5997280838700044,
+    "sortino_ratio": -0.5997269315157459,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -755,11 +755,11 @@
       "big_call": 45.39328822857143,
       "aaqs": 70.672146,
       "hgi": 38.92857142857143,
-      "screener_score": 53.55026353614525
+      "screener_score": 53.55026462853911
     },
     "roi": 0.10269826409851128,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.034708658623145,
+    "sortino_ratio": 1.0347087897104077,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -857,11 +857,11 @@
       "big_call": 47.52916904761905,
       "aaqs": 62.452354166666666,
       "hgi": 81.85714285714286,
-      "screener_score": 51.802358941149215
+      "screener_score": 51.80235323848224
     },
     "roi": 0.03735030104306074,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.6769833396045728,
+    "sortino_ratio": 0.6769826552845357,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -912,7 +912,7 @@
     },
     "roi": 0.13095181906323683,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.1914705871548928,
+    "sortino_ratio": -0.19147051662165318,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -959,11 +959,11 @@
       "big_call": 44.95719040952381,
       "aaqs": 54.56791658333333,
       "hgi": 31.142857142857146,
-      "screener_score": 43.39132489231227
+      "screener_score": 43.39131270421603
     },
     "roi": 0.005989032191353449,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.02545520326794877,
+    "sortino_ratio": 0.025453740696399173,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -1116,7 +1116,7 @@
     },
     "roi": 0.1734105504596578,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.8632407937611791,
+    "sortino_ratio": -0.8632409128754183,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -1163,11 +1163,11 @@
       "big_call": 81.98206540000001,
       "aaqs": 69.3788325,
       "hgi": 97.57142857142858,
-      "screener_score": 81.73854268470163
+      "screener_score": 81.7385339689817
     },
     "roi": 0.013626425198883286,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.8422684650213386,
+    "sortino_ratio": 2.8422674191349473,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
