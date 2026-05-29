@@ -878,16 +878,16 @@ function findClosestScore(
 function renderFearGreedHeader(
   /** @type {Array<{timestamp: string, score: number, rating?: string}>} */ entries,
 ) {
+  const header = document.getElementById("fg-header");
   const scoreEl = document.getElementById("fg-score");
   const chipEl = /** @type {HTMLElement | null} */ (document.getElementById("fg-rating"));
   const deltasEl = document.getElementById("fg-deltas");
-  if (!scoreEl || !chipEl || !deltasEl) return;
+  if (!header || !scoreEl || !chipEl || !deltasEl) return;
   if (!entries.length) {
-    chipEl.textContent = "no data";
-    chipEl.className = "chip";
-    deltasEl.textContent = "";
+    header.hidden = true;
     return;
   }
+  header.hidden = false;
   const last = entries[entries.length - 1];
   scoreEl.textContent = fmtNum(last.score, 0);
   const rating = (last.rating ?? "").toLowerCase();
@@ -929,16 +929,32 @@ function cssVar(token, fallback) {
   );
 }
 
+function renderRollingEmptyHint(/** @type {boolean} */ show) {
+  const wrap = document.getElementById("fg-chart-wrap");
+  if (!wrap) return;
+  const existing = wrap.querySelector(".fg-empty");
+  if (show && !existing) {
+    const hint = document.createElement("div");
+    hint.className = "fg-empty";
+    hint.textContent = "no F&G data";
+    wrap.append(hint);
+  } else if (!show && existing) {
+    existing.remove();
+  }
+}
+
 function renderFearGreedChart(
   /** @type {Array<{timestamp: string, score: number}>} */ entries,
 ) {
-  if (!entries.length || typeof Chart === "undefined") return;
   const ctx = /** @type {HTMLCanvasElement | null} */ (document.getElementById("fg-chart"));
   if (!ctx) return;
   if (fearGreedChart) {
     liveCharts.delete(fearGreedChart);
     fearGreedChart.destroy();
+    fearGreedChart = null;
   }
+  renderRollingEmptyHint(entries.length === 0);
+  if (!entries.length || typeof Chart === "undefined") return;
   fearGreedChart = new Chart(ctx, {
     type: "line",
     data: {

@@ -130,6 +130,7 @@ h2 {
   height: 220px;
 }
 
+.fg-empty,
 .lt-fg-empty {
   position: absolute;
   inset: 0;
