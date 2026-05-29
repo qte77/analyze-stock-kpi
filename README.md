@@ -11,7 +11,7 @@
 Library-based stock KPI CLI: per-ticker fundamentals via yfinance plus a
 daily CNN Fear & Greed sentiment snapshot. No API keys, no scraping.
 
-**Live demo**: [qte77.github.io/analyze-stock-kpi/](https://qte77.github.io/analyze-stock-kpi/) — weekly `qte77-watchlist` snapshot, rolling F&G history, and a Long-Term Context panel with monthly F&G median + average.
+**Live demo**: [qte77.github.io/analyze-stock-kpi/](https://qte77.github.io/analyze-stock-kpi/) — weekly `qte77-watchlist` snapshot plus a tabbed F&G panel (rolling history ↔ long-term monthly median + average).
 
 <details>
 <summary>Dashboard screenshot · click to expand</summary>

@@ -1041,6 +1041,39 @@ function renderMonthlyFearGreedChart(
 }
 
 /**
+ * Wires the Rolling-history ↔ Long-term-context tab pair sharing the
+ * single F&G entries list. The monthly chart is lazily constructed on
+ * the first long-term tab click (matches the detail-panel time-series
+ * lazy pattern), so the initial paint stays cheap.
+ *
+ * @param {Array<{timestamp: string, score: number}>} entries
+ */
+function bindFearGreedTabs(entries) {
+  const rollingTab = document.getElementById("fg-tab-rolling");
+  const monthlyTab = document.getElementById("fg-tab-monthly");
+  const rollingPane = document.getElementById("fg-chart-wrap");
+  const monthlyPane = document.getElementById("lt-fg-chart-wrap");
+  if (!rollingTab || !monthlyTab || !rollingPane || !monthlyPane) return;
+  let monthlyRendered = false;
+  rollingTab.addEventListener("click", () => {
+    rollingTab.setAttribute("aria-selected", "true");
+    monthlyTab.setAttribute("aria-selected", "false");
+    rollingPane.hidden = false;
+    monthlyPane.hidden = true;
+  });
+  monthlyTab.addEventListener("click", () => {
+    rollingTab.setAttribute("aria-selected", "false");
+    monthlyTab.setAttribute("aria-selected", "true");
+    rollingPane.hidden = true;
+    monthlyPane.hidden = false;
+    if (!monthlyRendered) {
+      renderMonthlyFearGreedChart(entries);
+      monthlyRendered = true;
+    }
+  });
+}
+
+/**
  * Watches body class flips (theme-system / theme-light / theme-dark) and
  * pings every live Chart.js instance so its scriptable color closures
  * re-resolve `--text` / `--accent` / etc. against the new palette. Without
@@ -1411,7 +1444,7 @@ async function init() {
   const fgEntries = await loadFearGreedYears();
   renderFearGreedHeader(fgEntries);
   renderFearGreedChart(fgEntries);
-  renderMonthlyFearGreedChart(fgEntries);
+  bindFearGreedTabs(fgEntries);
   bindThemeObserver();
 }
 
