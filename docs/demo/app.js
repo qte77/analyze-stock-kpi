@@ -10,6 +10,7 @@
 import { buildAuditMap, formatObligated, loadAudit } from "./lib/audit.js";
 import { cellClass } from "./lib/coloring.js";
 import { exportCsv } from "./lib/csv.js";
+import { aggregateMonthlyFG } from "./lib/monthly.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
 import {
@@ -905,13 +906,19 @@ function renderFearGreedHeader(
   deltasEl.textContent = `(${deltas})`;
 }
 
+/** @type {any} */
+let fearGreedChart = null;
+/** @type {any} */
+let monthlyFearGreedChart = null;
+
 function renderFearGreedChart(
   /** @type {Array<{timestamp: string, score: number}>} */ entries,
 ) {
   if (!entries.length || typeof Chart === "undefined") return;
   const ctx = /** @type {HTMLCanvasElement | null} */ (document.getElementById("fg-chart"));
   if (!ctx) return;
-  new Chart(ctx, {
+  if (fearGreedChart) fearGreedChart.destroy();
+  fearGreedChart = new Chart(ctx, {
     type: "line",
     data: {
       labels: entries.map((e) => e.timestamp.slice(0, 10)),
@@ -932,6 +939,81 @@ function renderFearGreedChart(
       maintainAspectRatio: false,
       animation: { duration: 250 },
       plugins: { legend: { display: false } },
+      scales: {
+        y: { min: 0, max: 100, ticks: { stepSize: 25 } },
+        x: { ticks: { maxTicksLimit: 14 } },
+      },
+    },
+  });
+}
+
+function renderLongTermEmptyHint(/** @type {boolean} */ show) {
+  const wrap = document.getElementById("lt-fg-chart-wrap");
+  if (!wrap) return;
+  const existing = wrap.querySelector(".lt-fg-empty");
+  if (show && !existing) {
+    const hint = document.createElement("div");
+    hint.className = "lt-fg-empty";
+    hint.textContent = "no F&G history yet";
+    wrap.append(hint);
+  } else if (!show && existing) {
+    existing.remove();
+  }
+}
+
+function renderMonthlyFearGreedChart(
+  /** @type {Array<{timestamp: string, score: number}>} */ entries,
+) {
+  const canvas = /** @type {HTMLCanvasElement | null} */ (
+    document.getElementById("lt-fg-chart")
+  );
+  if (!canvas) return;
+  const monthly = aggregateMonthlyFG(entries);
+  if (monthlyFearGreedChart) {
+    monthlyFearGreedChart.destroy();
+    monthlyFearGreedChart = null;
+  }
+  renderLongTermEmptyHint(monthly.months.length === 0);
+  if (monthly.months.length === 0 || typeof Chart === "undefined") return;
+  const text =
+    getComputedStyle(document.body).getPropertyValue("--text").trim() ||
+    "#1d1d1f";
+  const accent =
+    getComputedStyle(document.body).getPropertyValue("--accent").trim() ||
+    "#0066cc";
+  monthlyFearGreedChart = new Chart(canvas, {
+    type: "line",
+    data: {
+      labels: monthly.months,
+      datasets: [
+        {
+          label: "Median",
+          data: monthly.median,
+          borderColor: text,
+          backgroundColor: `${text}14`,
+          fill: false,
+          pointRadius: 2,
+          borderWidth: 1.5,
+          tension: 0.2,
+        },
+        {
+          label: "Average",
+          data: monthly.avg,
+          borderColor: accent,
+          backgroundColor: `${accent}14`,
+          fill: false,
+          pointRadius: 2,
+          borderWidth: 1.5,
+          tension: 0.2,
+          borderDash: [4, 3],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 250 },
+      plugins: { legend: { display: true, position: "bottom" } },
       scales: {
         y: { min: 0, max: 100, ticks: { stepSize: 25 } },
         x: { ticks: { maxTicksLimit: 14 } },
@@ -1297,6 +1379,7 @@ async function init() {
   const fgEntries = await loadFearGreedYears();
   renderFearGreedHeader(fgEntries);
   renderFearGreedChart(fgEntries);
+  renderMonthlyFearGreedChart(fgEntries);
 }
 
 window.addEventListener("resize", applyMobileGuard);
