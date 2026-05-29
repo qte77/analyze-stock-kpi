@@ -37,10 +37,10 @@
   <main>
     <section id="fear-greed-section">
       <h2>CNN Fear &amp; Greed</h2>
-      <div id="fg-header">
-        <div id="fg-score">—</div>
+      <div id="fg-header" hidden>
+        <div id="fg-score"></div>
         <div id="fg-meta">
-          <span id="fg-rating" class="chip">loading…</span>
+          <span id="fg-rating" class="chip"></span>
           <span id="fg-deltas"></span>
         </div>
       </div>
@@ -66,6 +66,7 @@
         >Long-term context</button>
       </div>
       <div id="fg-chart-wrap" role="tabpanel" aria-labelledby="fg-tab-rolling">
+        <div class="fg-empty">loading…</div>
         <canvas id="fg-chart"></canvas>
       </div>
       <div

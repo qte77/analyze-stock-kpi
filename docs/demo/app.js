@@ -929,17 +929,22 @@ function cssVar(token, fallback) {
   );
 }
 
-function renderRollingEmptyHint(/** @type {boolean} */ show) {
+function renderRollingEmptyHint(
+  /** @type {boolean} */ show,
+  /** @type {string} */ text = "no F&G data",
+) {
   const wrap = document.getElementById("fg-chart-wrap");
   if (!wrap) return;
-  const existing = wrap.querySelector(".fg-empty");
-  if (show && !existing) {
-    const hint = document.createElement("div");
-    hint.className = "fg-empty";
-    hint.textContent = "no F&G data";
-    wrap.append(hint);
-  } else if (!show && existing) {
-    existing.remove();
+  let hint = wrap.querySelector(".fg-empty");
+  if (show) {
+    if (!hint) {
+      hint = document.createElement("div");
+      hint.className = "fg-empty";
+      wrap.append(hint);
+    }
+    hint.textContent = text;
+  } else if (hint) {
+    hint.remove();
   }
 }
 
