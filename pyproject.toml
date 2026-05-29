@@ -18,7 +18,7 @@ dependencies = [
 dev = [
     "ruff>=0.15",
     "pyright>=1.1.400",
-    "complexipy>=5.0",
+    "complexipy>=5.5.0",
     "bump-my-version>=0.29",
 ]
 test = [
