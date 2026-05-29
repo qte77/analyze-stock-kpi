@@ -251,6 +251,45 @@ def test_fetch_rd_to_revenue_exception_returns_none() -> None:
     assert _fetch_rd_to_revenue(_Broken(), {"quoteType": "EQUITY"}) is None
 
 
+def test_fetch_rd_to_revenue_label_without_and() -> None:
+    """Older yfinance + many IFRS filers ship ``Research Development`` (no ``And``)."""
+    import pandas as pd
+    from src.data_sources.fundamentals import _fetch_rd_to_revenue
+
+    income_stmt = pd.DataFrame(
+        {"latest": [20.0, 100.0]},
+        index=["Research Development", "Total Revenue"],
+    )
+    fake = SimpleNamespace(income_stmt=income_stmt)
+    assert _fetch_rd_to_revenue(fake, {"quoteType": "EQUITY"}) == 0.20
+
+
+def test_fetch_rd_to_revenue_label_lowercase() -> None:
+    """Some upstream shapes lower-case the row labels."""
+    import pandas as pd
+    from src.data_sources.fundamentals import _fetch_rd_to_revenue
+
+    income_stmt = pd.DataFrame(
+        {"latest": [20.0, 100.0]},
+        index=["Research and development", "Total Revenue"],
+    )
+    fake = SimpleNamespace(income_stmt=income_stmt)
+    assert _fetch_rd_to_revenue(fake, {"quoteType": "EQUITY"}) == 0.20
+
+
+def test_fetch_rd_to_revenue_label_with_whitespace() -> None:
+    """Stray surrounding whitespace must not break the lookup."""
+    import pandas as pd
+    from src.data_sources.fundamentals import _fetch_rd_to_revenue
+
+    income_stmt = pd.DataFrame(
+        {"latest": [20.0, 100.0]},
+        index=["  Research And Development  ", "Total Revenue"],
+    )
+    fake = SimpleNamespace(income_stmt=income_stmt)
+    assert _fetch_rd_to_revenue(fake, {"quoteType": "EQUITY"}) == 0.20
+
+
 def test_fetch_fundamentals_attaches_rd_to_revenue() -> None:
     """End-to-end: rd_to_revenue lands on the snapshot for an EQUITY ticker."""
     import pandas as pd
