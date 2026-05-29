@@ -818,16 +818,19 @@ async function renderTimeSeriesPane(pane, row) {
   wrap.append(canvas);
   pane.append(wrap);
   if (typeof Chart === "undefined") return;
-  if (timeSeriesChart) timeSeriesChart.destroy();
+  if (timeSeriesChart) {
+    liveCharts.delete(timeSeriesChart);
+    timeSeriesChart.destroy();
+  }
   timeSeriesChart = new Chart(canvas, {
     type: "line",
     data: {
       labels: series.dates,
       datasets: [
-        { label: "Screener", data: series.score, borderColor: "#0066cc" },
-        { label: "Quality", data: series.quality, borderColor: "#27ae60" },
-        { label: "Growth", data: series.growth, borderColor: "#e67e22" },
-        { label: "Sortino", data: series.sortino, borderColor: "#c0392b", yAxisID: "y1" },
+        { label: "Screener", data: series.score, borderColor: () => cssVar("--accent", "#0066cc") },
+        { label: "Quality", data: series.quality, borderColor: () => cssVar("--rating-greed", "#27ae60") },
+        { label: "Growth", data: series.growth, borderColor: () => cssVar("--rating-fear", "#e67e22") },
+        { label: "Sortino", data: series.sortino, borderColor: () => cssVar("--rating-extreme-fear", "#c0392b"), yAxisID: "y1" },
       ],
     },
     options: {
@@ -839,6 +842,7 @@ async function renderTimeSeriesPane(pane, row) {
       },
     },
   });
+  liveCharts.add(timeSeriesChart);
 }
 
 /**
@@ -911,13 +915,30 @@ let fearGreedChart = null;
 /** @type {any} */
 let monthlyFearGreedChart = null;
 
+/** @type {Set<any>} */
+const liveCharts = new Set();
+
+/**
+ * @param {string} token  CSS custom property name (with leading `--`).
+ * @param {string} fallback  Hex used if the token is unset.
+ * @returns {string}  Resolved hex/rgb string (no alpha).
+ */
+function cssVar(token, fallback) {
+  return (
+    getComputedStyle(document.body).getPropertyValue(token).trim() || fallback
+  );
+}
+
 function renderFearGreedChart(
   /** @type {Array<{timestamp: string, score: number}>} */ entries,
 ) {
   if (!entries.length || typeof Chart === "undefined") return;
   const ctx = /** @type {HTMLCanvasElement | null} */ (document.getElementById("fg-chart"));
   if (!ctx) return;
-  if (fearGreedChart) fearGreedChart.destroy();
+  if (fearGreedChart) {
+    liveCharts.delete(fearGreedChart);
+    fearGreedChart.destroy();
+  }
   fearGreedChart = new Chart(ctx, {
     type: "line",
     data: {
@@ -925,8 +946,8 @@ function renderFearGreedChart(
       datasets: [
         {
           data: entries.map((e) => e.score),
-          borderColor: "#1d1d1f",
-          backgroundColor: "rgba(29, 29, 31, 0.08)",
+          borderColor: () => cssVar("--text", "#1d1d1f"),
+          backgroundColor: () => `${cssVar("--text", "#1d1d1f")}14`,
           fill: true,
           pointRadius: 0,
           borderWidth: 1.5,
@@ -945,6 +966,7 @@ function renderFearGreedChart(
       },
     },
   });
+  liveCharts.add(fearGreedChart);
 }
 
 function renderLongTermEmptyHint(/** @type {boolean} */ show) {
@@ -970,17 +992,12 @@ function renderMonthlyFearGreedChart(
   if (!canvas) return;
   const monthly = aggregateMonthlyFG(entries);
   if (monthlyFearGreedChart) {
+    liveCharts.delete(monthlyFearGreedChart);
     monthlyFearGreedChart.destroy();
     monthlyFearGreedChart = null;
   }
   renderLongTermEmptyHint(monthly.months.length === 0);
   if (monthly.months.length === 0 || typeof Chart === "undefined") return;
-  const text =
-    getComputedStyle(document.body).getPropertyValue("--text").trim() ||
-    "#1d1d1f";
-  const accent =
-    getComputedStyle(document.body).getPropertyValue("--accent").trim() ||
-    "#0066cc";
   monthlyFearGreedChart = new Chart(canvas, {
     type: "line",
     data: {
@@ -989,8 +1006,8 @@ function renderMonthlyFearGreedChart(
         {
           label: "Median",
           data: monthly.median,
-          borderColor: text,
-          backgroundColor: `${text}14`,
+          borderColor: () => cssVar("--text", "#1d1d1f"),
+          backgroundColor: () => `${cssVar("--text", "#1d1d1f")}14`,
           fill: false,
           pointRadius: 2,
           borderWidth: 1.5,
@@ -999,8 +1016,8 @@ function renderMonthlyFearGreedChart(
         {
           label: "Average",
           data: monthly.avg,
-          borderColor: accent,
-          backgroundColor: `${accent}14`,
+          borderColor: () => cssVar("--accent", "#0066cc"),
+          backgroundColor: () => `${cssVar("--accent", "#0066cc")}14`,
           fill: false,
           pointRadius: 2,
           borderWidth: 1.5,
@@ -1020,6 +1037,21 @@ function renderMonthlyFearGreedChart(
       },
     },
   });
+  liveCharts.add(monthlyFearGreedChart);
+}
+
+/**
+ * Watches body class flips (theme-system / theme-light / theme-dark) and
+ * pings every live Chart.js instance so its scriptable color closures
+ * re-resolve `--text` / `--accent` / etc. against the new palette. Without
+ * this, the F&G + monthly-F&G lines stay near-invisible after a dark-mode
+ * toggle until the next hover triggers a redraw.
+ */
+function bindThemeObserver() {
+  const obs = new MutationObserver(() => {
+    for (const chart of liveCharts) chart.update("none");
+  });
+  obs.observe(document.body, { attributes: true, attributeFilter: ["class"] });
 }
 
 function bindTableSort() {
@@ -1380,6 +1412,7 @@ async function init() {
   renderFearGreedHeader(fgEntries);
   renderFearGreedChart(fgEntries);
   renderMonthlyFearGreedChart(fgEntries);
+  bindThemeObserver();
 }
 
 window.addEventListener("resize", applyMobileGuard);
