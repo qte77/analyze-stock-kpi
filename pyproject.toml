@@ -147,5 +147,8 @@ replace = "version-{new_version}-blue"
 format = "md"
 fragment_directory = "changelog.d"
 categories = ["Security", "Added", "Fixed"]
-md_header_level = "3"
+# Matches the existing CHANGELOG.md convention: `## [X.Y.Z]` entry
+# titles, `### Added` category headers. scriv shifts fragment
+# headings by (md_header_level + 1) so fragments stay at h3.
+md_header_level = "2"
 entry_title_template = "[{{ version }}] - {{ date.strftime('%Y-%m-%d') }}"

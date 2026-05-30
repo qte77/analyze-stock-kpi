@@ -140,7 +140,7 @@ changelog_new:  ## create + stage a new changelog fragment under changelog.d/
 	uv run scriv create --add
 
 changelog_preview:  ## preview the assembled release entry without consuming fragments
-	uv run scriv collect --dry-run
+	uv run scriv print
 
 changelog_release:  ## collect fragments into CHANGELOG.md (VERSION=X.Y.Z required); run before bump-my-version
 	test -n "$(VERSION)" || (echo "VERSION required, e.g. make changelog_release VERSION=0.6.0"; exit 2)
