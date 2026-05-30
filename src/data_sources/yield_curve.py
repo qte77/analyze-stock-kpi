@@ -27,6 +27,7 @@ import logging
 from datetime import UTC, date, datetime
 from typing import TYPE_CHECKING
 
+import pandas as pd
 import yfinance as yf
 from pydantic import BaseModel, ConfigDict, computed_field
 from src.config import settings
@@ -104,6 +105,65 @@ def fetch_yield_curve_snapshot() -> YieldCurveSnapshot | None:
     )
 
 
+def _fetch_history_closes(symbol: str, period: str) -> dict[date, float]:
+    """Fetch a date-indexed map of close values for ``symbol`` over ``period``.
+
+    Wraps the yfinance call in the same wrap-degrade boundary as
+    ``_fetch_close`` — failure returns an empty dict so the caller can
+    still build snapshots from the leg that did respond.
+    """
+    try:
+        history = yf.Ticker(symbol).history(period=period)
+    except Exception as exc:
+        logger.warning("yfinance %s history(%s) failed: %s", symbol, period, exc)
+        return {}
+    if history.empty:
+        return {}
+    out: dict[date, float] = {}
+    for ts, row in history.iterrows():
+        # pandas typing stubs declare the index as Hashable; isinstance
+        # narrows to Timestamp so .date() is reachable. Skip rows whose
+        # index isn't a Timestamp at all (shouldn't happen for a Ticker
+        # history, but defensive).
+        if not isinstance(ts, pd.Timestamp):
+            continue
+        d = ts.date()
+        close = row.get("Close")
+        if close is None:
+            continue
+        try:
+            value = float(close)
+        except (TypeError, ValueError):
+            continue
+        # pandas turns None / NA into NaN in numeric columns — skip them
+        # so the snapshot's leg is None rather than carrying NaN through.
+        if value != value:
+            continue
+        out[d] = value
+    return out
+
+
+def fetch_yield_curve_history(period: str = "5y") -> list[YieldCurveSnapshot]:
+    """Fetch a list of :class:`YieldCurveSnapshot` over ``period``.
+
+    Used for the first-run / backfill case: a daily cron only needs
+    today's reading, but a brand-new repo wants multi-year history
+    so the chart paints something meaningful immediately. Default
+    ``period="5y"`` covers a typical curve-cycle (inversion + normalisation).
+    """
+    tnx_closes = _fetch_history_closes(_TICKER_TNX, period)
+    fvx_closes = _fetch_history_closes(_TICKER_FVX, period)
+    all_dates = set(tnx_closes) | set(fvx_closes)
+    return [
+        YieldCurveSnapshot(
+            date=d,
+            tnx_yield=tnx_closes.get(d),
+            fvx_yield=fvx_closes.get(d),
+        )
+        for d in sorted(all_dates)
+    ]
+
+
 def _year_path(year: int, *, root: Path) -> Path:
     return root / f"{year}.json"
 
@@ -158,13 +218,31 @@ def merge_payload_into_years(
 
 
 def main() -> None:
-    """Cron entrypoint: fetch the latest snapshot, merge, persist."""
+    """Cron entrypoint: fetch the latest snapshot (or first-run history) and persist.
+
+    First-run heuristic: if ``settings.yield_curve_cache_dir`` is empty
+    (no prior per-year files), fetch a multi-year history so the chart
+    paints something useful on first deploy. Subsequent runs only fetch
+    today's reading.
+    """
     logging.basicConfig(level=logging.INFO, format="%(message)s")
-    snap = fetch_yield_curve_snapshot()
-    if snap is None:
-        logger.warning("yield-curve fetch returned no snapshot; skipping write")
-        return
-    by_year = merge_payload_into_years([snap])
+    cache_dir = settings.yield_curve_cache_dir
+    is_first_run = not cache_dir.exists() or not any(cache_dir.glob("*.json"))
+
+    if is_first_run:
+        snaps = fetch_yield_curve_history(period="5y")
+        if not snaps:
+            logger.warning("yield-curve history fetch empty; nothing to write")
+            return
+        logger.info("First run: backfilling %d snapshots", len(snaps))
+    else:
+        snap = fetch_yield_curve_snapshot()
+        if snap is None:
+            logger.warning("yield-curve fetch returned no snapshot; skipping write")
+            return
+        snaps = [snap]
+
+    by_year = merge_payload_into_years(snaps)
     for year, by_date in by_year.items():
         path = _write_year(year, by_date, root=settings.yield_curve_cache_dir)
         logger.info("Wrote %s with %d entries", path, len(by_date))

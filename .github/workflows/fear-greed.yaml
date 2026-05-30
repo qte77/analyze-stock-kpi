@@ -76,7 +76,9 @@ jobs:
         id: changed
         run: |
           set -euo pipefail
-          FILES=$(git status --porcelain results/cnn_fg/ \
+          # -uall so files inside an untracked results/cnn_fg/ get
+          # enumerated (defensive — relevant on a fresh repo / first run).
+          FILES=$(git status --porcelain -uall results/cnn_fg/ \
             | awk '$2 ~ /^results\/cnn_fg\/[0-9]{4}\.json$/ {print $2}' \
             | paste -sd ',' -)
           echo "files=$FILES" >> "$GITHUB_OUTPUT"

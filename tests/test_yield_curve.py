@@ -18,6 +18,7 @@ import pytest
 from pydantic import ValidationError
 from src.data_sources.yield_curve import (
     YieldCurveSnapshot,
+    fetch_yield_curve_history,
     fetch_yield_curve_snapshot,
     merge_payload_into_years,
 )
@@ -168,6 +169,74 @@ def test_fetch_returns_sparse_snapshot_when_only_one_leg_responds() -> None:
     assert snap.tnx_yield == pytest.approx(4.453, abs=1e-9)
     assert snap.fvx_yield is None
     assert snap.slope_5s10s is None
+
+
+# ----- fetch_yield_curve_history — first-run / backfill path -----
+
+
+def _history_frame(rows: list[tuple[date_cls, float | None]]) -> pd.DataFrame:
+    """Build a yfinance-shape Ticker.history(...) frame from (date, close)."""
+    if not rows:
+        return pd.DataFrame()
+    dates = pd.to_datetime([d for d, _ in rows])
+    closes = [c for _, c in rows]
+    return pd.DataFrame({"Close": closes}, index=dates)
+
+
+def test_history_handles_one_leg_returning_empty() -> None:
+    """If ^FVX is delisted / 404s, snapshots still carry the ^TNX leg."""
+
+    def _ticker_side_effect(sym: str) -> SimpleNamespace:
+        frame = (
+            _history_frame([(date_cls(2024, 5, 1), 4.5)])
+            if sym == "^TNX"
+            else pd.DataFrame()
+        )
+        return SimpleNamespace(history=lambda period: frame)
+
+    with patch(
+        "src.data_sources.yield_curve.yf.Ticker", side_effect=_ticker_side_effect
+    ):
+        snaps = fetch_yield_curve_history(period="1y")
+
+    assert len(snaps) == 1
+    assert snaps[0].tnx_yield == pytest.approx(4.5, abs=1e-9)
+    assert snaps[0].fvx_yield is None
+    assert snaps[0].slope_5s10s is None
+
+
+def test_history_returns_empty_when_both_legs_fail() -> None:
+    """Network error on both legs → no snapshots, no exception."""
+    with patch(
+        "src.data_sources.yield_curve.yf.Ticker",
+        side_effect=ConnectionError("yahoo timed out"),
+    ):
+        snaps = fetch_yield_curve_history(period="5y")
+    assert snaps == []
+
+
+def test_history_drops_nan_close_rows_entirely() -> None:
+    """yfinance ships NaN Close on illiquid days (pandas converts None→NaN);
+    those dates are dropped from the per-date map rather than carried as
+    NaN through to the snapshot."""
+
+    def _ticker_side_effect(sym: str) -> SimpleNamespace:
+        frame = _history_frame(
+            [
+                (date_cls(2024, 1, 2), 4.0),
+                (date_cls(2024, 1, 3), None),
+                (date_cls(2024, 1, 4), 4.2),
+            ]
+        )
+        return SimpleNamespace(history=lambda period: frame)
+
+    with patch(
+        "src.data_sources.yield_curve.yf.Ticker", side_effect=_ticker_side_effect
+    ):
+        snaps = fetch_yield_curve_history(period="5d")
+
+    dates = [s.date for s in snaps]
+    assert dates == [date_cls(2024, 1, 2), date_cls(2024, 1, 4)]
 
 
 @pytest.mark.network
