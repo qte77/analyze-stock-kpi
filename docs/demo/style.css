@@ -517,6 +517,15 @@ tbody tr:hover td.kpi-bad {
   background-color: inherit;
 }
 
+/* #170 — per-cell empty tooltip. Dotted underline + help cursor signal
+   that the "—" carries a `title` explaining why the value is missing
+   (structural reason, not data lag). */
+tbody td[data-empty-reason] {
+  text-decoration: underline dotted var(--muted);
+  text-underline-offset: 4px;
+  cursor: help;
+}
+
 /* A5 — empty-state row spans the table width. */
 tbody td.empty-state {
   text-align: center;
