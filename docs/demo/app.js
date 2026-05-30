@@ -630,7 +630,7 @@ function renderDonutEmptyHint(show) {
   if (show && !existing) {
     const hint = document.createElement("div");
     hint.className = "sector-donut-empty";
-    hint.textContent = "no data";
+    hint.textContent = "no history yet";
     wrap.append(hint);
   } else if (!show && existing) {
     existing.remove();
