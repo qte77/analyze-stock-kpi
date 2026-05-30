@@ -453,8 +453,10 @@ footer a:hover { text-decoration: underline; }
    .header-meta down to .view-row inside #universe-header. Reads as
    "<destination-view label>: <what that view shows>" — semantic
    spans + a CSS-injected ": " separator so the HTML stays tidy.
-   Width comes from align-items: stretch on the parent (matches the
-   filter+CSV row); text-align: left so the label hugs the left edge. */
+   The ::before pseudo-sizer reserves the width of the *longer*
+   label so the button's intrinsic size doesn't jitter between
+   modes — without it the parent's align-items: stretch target
+   shifts on each toggle and every sibling row resizes too. */
 #view-toggle {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -464,6 +466,16 @@ footer a:hover { text-decoration: underline; }
   cursor: pointer;
   color: var(--text);
   text-align: left;
+}
+
+#view-toggle::before {
+  content: "Detailed view: Show all KPI columns";
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  white-space: nowrap;
+  font-weight: 500;
 }
 
 #view-toggle:hover { border-color: var(--accent); color: var(--accent); }
