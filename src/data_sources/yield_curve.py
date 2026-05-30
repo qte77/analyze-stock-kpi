@@ -128,6 +128,10 @@ def _fetch_history_closes(symbol: str, period: str) -> dict[date, float]:
             value = float(close)
         except (TypeError, ValueError):
             continue
+        # pandas turns None / NA into NaN in numeric columns — skip them
+        # so the snapshot's leg is None rather than carrying NaN through.
+        if value != value:
+            continue
         out[d] = value
     return out
 
