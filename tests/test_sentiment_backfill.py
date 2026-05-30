@@ -80,7 +80,7 @@ def test_parse_csv_skips_blanks_and_yields_valid_rows() -> None:
 # ----- merge_into_years -----
 
 
-def test_merge_into_years_groups_by_utc_year(tmp_path: "Path") -> None:
+def test_merge_into_years_groups_by_utc_year(tmp_path: Path) -> None:
     snaps = [
         FearGreedSnapshot(
             score=20.0, rating="fear", timestamp=datetime(2011, 1, 3, tzinfo=UTC)
@@ -95,7 +95,7 @@ def test_merge_into_years_groups_by_utc_year(tmp_path: "Path") -> None:
     assert "2026-05-29" in by_year[2026]
 
 
-def test_merge_into_years_does_not_overwrite_cnn_direct_entry(tmp_path: "Path") -> None:
+def test_merge_into_years_does_not_overwrite_cnn_direct_entry(tmp_path: Path) -> None:
     """Backfill must never clobber a higher-fidelity CNN-direct row.
 
     CNN-direct rows carry intraday timestamps + subindicators; whit3rabbit
@@ -127,7 +127,7 @@ def test_merge_into_years_does_not_overwrite_cnn_direct_entry(tmp_path: "Path") 
     assert kept.subindicators is not None
 
 
-def test_merge_into_years_fills_gap_when_no_existing_entry(tmp_path: "Path") -> None:
+def test_merge_into_years_fills_gap_when_no_existing_entry(tmp_path: Path) -> None:
     snap = FearGreedSnapshot(
         score=12.0, rating="extreme fear", timestamp=datetime(2015, 8, 24, tzinfo=UTC)
     )
