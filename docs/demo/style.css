@@ -694,14 +694,11 @@ body.theme-dark {
   color: var(--accent);
 }
 
-/* D3 — mobile auto-simple. Below 768px detail-only columns stay
-        hidden because the detailed view doesn't fit horizontally; the
-        JS guard in app.js also forces view-mode to "simple" on resize
-        so the user sees a sensible layout even after toggling on
-        desktop and then switching to a narrow viewport. The toggle
-        itself stays visible — it's just inert at narrow widths. */
+/* Narrow-viewport tweaks. The detailed view is allowed on mobile —
+   the .table-wrap has overflow: auto so the 13-column table scrolls
+   horizontally rather than hiding columns. Toggle remains functional
+   at every width. */
 @media (max-width: 767px) {
-  body.view-detailed .detail-only { display: none !important; }
   /* On narrow viewports let the donut occupy the full row width so the
      legend isn't squeezed against a 280px box. */
   #universe-controls-row > #sector-donut-wrap { flex-basis: 100%; }

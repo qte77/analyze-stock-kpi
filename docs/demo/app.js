@@ -308,12 +308,9 @@ function persistStateFromCurrent() {
   window.history.replaceState({}, "", url);
 }
 
-function applyMobileGuard() {
-  if (window.matchMedia("(max-width: 767px)").matches && viewMode === "detailed") {
-    viewMode = "simple";
-    applyViewMode();
-  }
-}
+// Mobile auto-simple guard removed — detailed view is now allowed on
+// narrow viewports. The table-wrap's overflow: auto handles horizontal
+// scroll for the 13-column detail layout rather than hiding it.
 
 // ───────────────────────── Rendering ───────────────────────────
 
@@ -1656,7 +1653,6 @@ async function init() {
   const lsView = window.localStorage?.getItem(VIEW_MODE_STORAGE_KEY) ?? null;
   viewMode = resolveViewMode(parsed.view, lsView);
   applyViewMode();
-  applyMobileGuard();
 
   setupTheme();
   bindViewToggle();
@@ -1701,5 +1697,4 @@ async function init() {
   bindThemeObserver();
 }
 
-window.addEventListener("resize", applyMobileGuard);
 document.addEventListener("DOMContentLoaded", init);
