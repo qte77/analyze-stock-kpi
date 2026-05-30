@@ -19,6 +19,7 @@ specific numbers as accurate-at-that-date and re-verify before relying.
 |---|---|---|---|---|---|
 | **EDGAR (SEC)** | 0 | none — `User-Agent` header only | ~10 req/sec self-limit | yes (public-domain federal data) | runtime: `src/sec/` |
 | **usaspending.gov** | 0 | none | unpublished, generous | yes (DATA Act § 6101) | build-time: `scripts/build_federal_contractors.py` |
+| **whit3rabbit/fear-greed-data** (mirror) | 0 | none | GitHub raw-content (generous) | accept-as-is (no LICENSE upstream; derivative of CNN public endpoint) | backfill: `scripts/backfill_fear_greed_whitrabbit.py` (pinned SHA) |
 | **sam.gov Entity Management** | 1 | free key, 90-day rotate | 10/day → 1000/day (entity-reg) | yes — public tier only | deferred — future enrichment, not in critical path |
 | **Yahoo Finance search/lookup** | n/a | none (cookie/crumb session) | ~360/hr unofficial | n/a — bridge only | build-time: bootstrap candidate resolution in the universe builder |
 
