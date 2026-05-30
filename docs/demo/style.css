@@ -201,9 +201,13 @@ h2 {
 
 /* Group the snapshot picker and the ticker count on one horizontal row
    so the count sits inline next to the picker (since the surrounding
-   #universe-header is a vertical column). */
+   #universe-header is a vertical column). The view-row sits between
+   filter-row and chips-row so the simple/detailed toggle lives near
+   the filter+CSV actions rather than the unrelated theme controls in
+   the header. */
 .snapshot-row,
 .filter-row,
+.view-row,
 .chips-row {
   display: flex;
   align-items: center;
@@ -440,6 +444,18 @@ footer a:hover { text-decoration: underline; }
 }
 
 #view-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+/* "Report" link next to the theme picker. Visual weight matches the
+   theme-picker text (muted) rather than the prominent action buttons —
+   it's a feedback hatch, not a primary action. */
+#report-issue {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.3rem 0.5rem;
+}
+
+#report-issue:hover { color: var(--accent); }
 
 #export-csv {
   background: var(--bg);

@@ -25,11 +25,14 @@
         <button type="button" data-theme="light" aria-pressed="false" title="Force light theme">☀</button>
         <button type="button" data-theme="dark" aria-pressed="false" title="Force dark theme">🌙</button>
       </div>
-      <button
-        id="view-toggle"
-        type="button"
-        aria-label="Toggle simple / detailed view"
-      >↗ Detailed</button>
+      <a
+        id="report-issue"
+        href="https://github.com/qte77/analyze-stock-kpi/issues/new"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Open a new issue or feature request on GitHub"
+        aria-label="Report an issue or suggestion on GitHub"
+      >↗ Report</a>
       <span id="updated" class="updated"></span>
     </div>
   </header>
@@ -111,6 +114,13 @@
               type="button"
               aria-label="Download the current filtered + sorted view as CSV"
             >↓ CSV</button>
+          </div>
+          <div class="view-row">
+            <button
+              id="view-toggle"
+              type="button"
+              aria-label="Toggle simple / detailed view"
+            >↗ Detailed</button>
           </div>
           <div class="chips-row">
             <div
