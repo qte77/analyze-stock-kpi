@@ -197,13 +197,15 @@ h2 {
 }
 
 /* Controls list: stacks vertically (picker, count, snapshot, filter,
-   CSV, chips, sector-chip — each on its own row). Keeps the controls
-   block narrow so it sits beside the donut at any reasonable viewport
-   instead of taking the full row width. */
+   CSV, chips, sector-chip — each on its own row). align-items: stretch
+   so every child row spans the same width — defined by the widest
+   natural row (filter + CSV) — keeping the picker, the view-toggle,
+   and the chips visually aligned. Keeps the controls block narrow
+   enough to sit beside the donut at any reasonable viewport. */
 #universe-header {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 0.5rem;
 }
 
@@ -451,9 +453,8 @@ footer a:hover { text-decoration: underline; }
    .header-meta down to .view-row inside #universe-header. Reads as
    "<destination-view label>: <what that view shows>" — semantic
    spans + a CSS-injected ": " separator so the HTML stays tidy.
-   min-width pins the button to roughly the longer of the two
-   labels ("Detailed view: Show all KPI columns") so toggling
-   doesn't jitter the row width. */
+   Width comes from align-items: stretch on the parent (matches the
+   filter+CSV row); text-align: left so the label hugs the left edge. */
 #view-toggle {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -462,7 +463,6 @@ footer a:hover { text-decoration: underline; }
   font: inherit;
   cursor: pointer;
   color: var(--text);
-  min-width: 36ch;
   text-align: left;
 }
 
