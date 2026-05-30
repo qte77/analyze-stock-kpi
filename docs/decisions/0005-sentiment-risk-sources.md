@@ -132,6 +132,50 @@ identification, and no credential is exchanged).
   - **African ex-JSE and LatAm ex-Brazil markets** — no public
     infrastructure for sentiment / volatility series.
 
+## Amendment (2026-05-30) — whit3rabbit/fear-greed-data Tier-0 mirror
+
+`src/sentiment.py` reads the live CNN endpoint, which only exposes
+~1 year of headline history. To cover the demo dashboard's Long-Term
+Context tab (#159) back to CNN's 2011-01-03 inception, this amendment
+classifies the community mirror
+[whit3rabbit/fear-greed-data](https://github.com/whit3rabbit/fear-greed-data)
+as a **Tier-0 backfill source**, pinned to commit SHA
+`aa4f600959a12f9266d5bff75a78a50987b7e760` (2026-05-29) for
+deterministic re-runs.
+
+The mirror satisfies the Tier-0 criteria:
+
+- **Auth:** none — public CSV at a deterministic raw-content URL
+  (`https://raw.githubusercontent.com/.../fear-greed.csv`).
+- **Default:** off (one-shot backfill, not a cron). The daily
+  `fear-greed.yaml` workflow remains the only Tier-0 source running
+  by default; whit3rabbit is invoked manually via
+  `scripts/backfill_fear_greed_whitrabbit.py`.
+- **Persistence:** outputs land on the `data` branch — same
+  `results/cnn_fg/YYYY.json` files the CNN-direct path writes,
+  merged via the existing `_upsert` semantics with `force=False`
+  so a higher-fidelity CNN-direct row always wins on shared dates.
+
+### License posture
+
+The upstream repo has **no `LICENSE` file** as of the pinned SHA
+(tracked at [`whit3rabbit/fear-greed-data#2`](https://github.com/whit3rabbit/fear-greed-data/issues/2)).
+The CSV is derivative of CNN's public Fear & Greed endpoint, which
+this project already consumes keyless under fair-use. We accept the
+mirror as-is on that derivative-public-data basis; if upstream lands
+an explicit license, this amendment will be revised to cite it.
+
+### Scope limits
+
+- **Subindicator backfill is out of scope.** Whit3rabbit only ships
+  the headline score + rating. The 10 subindicator blocks
+  (`market_momentum_*`, `stock_price_*`, `put_call_options`, etc.)
+  stay `None` for backfilled rows. The dashboard's monthly aggregate
+  reduces headline scores only, so this is visually equivalent;
+  detail-panel views may render "—" for pre-2025 subindicator cells.
+- **No continuous re-sync.** This is a one-shot backfill. The daily
+  CNN-direct cron remains authoritative for ongoing dates.
+
 ## References
 
 - CNN Fear & Greed JSON endpoint:

@@ -16,6 +16,10 @@ ifndef VERBOSE
   PYRIGHT_QUIET := > /dev/null
 endif
 
+# Override at the CLI to install a pinned lychee build, e.g.:
+#   make setup_lychee LYCHEE_URL=https://github.com/lycheeverse/lychee/releases/download/lychee-v0.18.0/lychee-x86_64-unknown-linux-gnu.tar.gz
+LYCHEE_URL ?= https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz
+
 
 # MARK: SETUP
 
@@ -31,8 +35,9 @@ setup_uv:  ## Install uv (if missing)
 setup_dev: setup_uv  ## uv sync (default groups: dev + test)
 	uv sync
 
-setup_lychee:  ## Install lychee link checker (Rust binary; sudo)
-	curl -sL https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz | sudo tar xz -C /usr/local/bin lychee
+setup_lychee:  ## Install lychee link checker (override LYCHEE_URL to pin a version; needs sudo)
+	curl -sL $(LYCHEE_URL) \
+	  | sudo tar xz -C /usr/local/bin lychee
 	echo "lychee version: $$(lychee --version)"
 
 setup_npm_tools:  ## Install npm-based dev tools (markdownlint-cli, typescript)

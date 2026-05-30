@@ -88,7 +88,8 @@ In priority order:
   `financetoolkit` deferral, simplified composites, RS hedging deferral)
 * [`docs/cnn-fg-api.md`](docs/cnn-fg-api.md) — CNN F&G endpoint schema
 * [`CHANGELOG.md`](CHANGELOG.md) — release history + known issues
-* [`AGENTS.md`](AGENTS.md) — agent collaboration rules
+* [`CONTRIBUTING.md`](CONTRIBUTING.md) — shared dev workflow (tests, commits, GHA, changelog fragments, release flow)
+* [`AGENTS.md`](AGENTS.md) — AI-agent-specific behavioural rules
 
 ## License
 
