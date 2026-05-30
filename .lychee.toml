@@ -6,6 +6,11 @@ timeout = 30
 max_retries = 4
 retry_wait_time = 2
 
+# scriv changelog fragments are partials with links resolved relative
+# to the eventual CHANGELOG.md (repo root), not their changelog.d/
+# location — exclude until they're collected at release.
+exclude_path = ["changelog.d"]
+
 # Exclude URLs that are auth-walled, rate-limit bots, or are
 # documented elsewhere as inaccessible to scrapers.
 exclude = [
