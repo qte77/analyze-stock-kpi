@@ -121,13 +121,47 @@ h2 {
 }
 
 /* All three long-term-context chart panels share dimensions —
-   group the rule so the height + relative-positioning stay in sync. */
+   group the rule so the height + relative-positioning stay in sync.
+   #why-wrap (the explainer tab) inherits the same min-height so the
+   section doesn't shrink when the explainer tab is active. */
+#fg-chart-wrap,
+#lt-fg-chart-wrap,
+#yc-chart-wrap,
+#why-wrap {
+  position: relative;
+  min-height: 220px;
+}
+
 #fg-chart-wrap,
 #lt-fg-chart-wrap,
 #yc-chart-wrap {
-  position: relative;
   height: 220px;
 }
+
+/* Explainer-tab content: a tight definition list of timeframe choices
+   per tab. dt's font-weight separates the label from the rationale
+   below; --muted on dd matches the other secondary text in the demo. */
+.why-list {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.why-list dt {
+  font-weight: 500;
+  margin-top: 0.75rem;
+}
+
+.why-list dt:first-of-type {
+  margin-top: 0;
+}
+
+.why-list dd {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+}
+
+.why-list a { color: var(--accent); }
+.why-list code { font-size: 0.8125rem; }
 
 #yc-header:not([hidden]) {
   display: flex;

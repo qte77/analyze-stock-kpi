@@ -1188,6 +1188,7 @@ function bindLongTermTabs(fgEntries, ycEntries) {
     ["fg-tab-rolling", "fg-chart-wrap"],
     ["fg-tab-monthly", "lt-fg-chart-wrap"],
     ["fg-tab-yield-curve", "yc-chart-wrap"],
+    ["fg-tab-why", "why-wrap"],
   ];
   /** @type {Array<[HTMLElement, HTMLElement]>} */
   const resolved = [];
