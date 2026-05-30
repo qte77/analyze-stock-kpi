@@ -232,14 +232,17 @@ h2 {
 
 /* Controls list: stacks vertically (picker, count, snapshot, filter,
    CSV, chips, sector-chip — each on its own row). align-items: stretch
-   so every child row spans the same width — defined by the widest
-   natural row (filter + CSV) — keeping the picker, the view-toggle,
-   and the chips visually aligned. Keeps the controls block narrow
-   enough to sit beside the donut at any reasonable viewport. */
+   so every child row spans the same width. Explicit width (rather
+   than "widest natural row") pins the column so a longer picker
+   option (e.g. switching from sp500 → federal-contractors) doesn't
+   reshape every row beside it. max-width: 100% keeps narrow viewports
+   from overflowing. */
 #universe-header {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  width: 24rem;
+  max-width: 100%;
   gap: 0.5rem;
 }
 

@@ -1422,7 +1422,7 @@ async function loadActiveUniverse() {
     auditByTicker = null;
     rebuildFuseIndex();
     dateSelector.replaceChildren();
-    sizeEl.textContent = `· no data yet for ${activeUniverse}`;
+    sizeEl.textContent = "· no history yet";
     renderTable();
     renderSectorDonut();
     renderUniverseChips();
