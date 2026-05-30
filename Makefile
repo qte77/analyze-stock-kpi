@@ -5,6 +5,7 @@
 	lint autofix check_types check_complexity lint_md lint_js lint_links \
 	test test_cov test_js retest validate \
 	run preview preview_local \
+	changelog_new changelog_preview changelog_release \
 	clean help
 .DEFAULT_GOAL := help
 
@@ -61,7 +62,8 @@ check_complexity:  ## complexipy cognitive complexity gate (max 10)
 lint_md:  ## markdownlint *.md (uses .markdownlint.json)
 	echo "--- lint_md"
 	markdownlint --config .markdownlint.json '**/*.md' \
-	  --ignore '.venv/**' --ignore 'results/**' --ignore 'node_modules/**'
+	  --ignore '.venv/**' --ignore 'results/**' --ignore 'node_modules/**' \
+	  --ignore 'changelog.d/**'
 
 lint_js:  ## node syntax check + tsc JSDoc type check on docs/demo/
 	echo "--- lint_js"
@@ -129,6 +131,20 @@ preview_local:  ## like preview but serves the latest `make run` output (UNIVERS
 	echo "  (the http.server URL printed below is the repo root — do NOT use it)"
 	echo ""
 	uv run python -m http.server $${PORT:-8000} --directory .
+
+
+# MARK: CHANGELOG
+
+
+changelog_new:  ## create + stage a new changelog fragment under changelog.d/
+	uv run scriv create --add
+
+changelog_preview:  ## preview the assembled release entry without consuming fragments
+	uv run scriv print
+
+changelog_release:  ## collect fragments into CHANGELOG.md (VERSION=X.Y.Z required); run before bump-my-version
+	test -n "$(VERSION)" || (echo "VERSION required, e.g. make changelog_release VERSION=0.6.0"; exit 2)
+	uv run scriv collect --version $(VERSION)
 
 
 # MARK: CLEAN

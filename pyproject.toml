@@ -20,6 +20,7 @@ dev = [
     "pyright>=1.1.400",
     "complexipy>=5.5.0",
     "bump-my-version>=0.29",
+    "scriv[toml]>=1.8",
 ]
 test = [
     "pytest>=9.0",
@@ -109,10 +110,10 @@ exclude_lines = [
 ]
 
 # Atomic version bumping. Single source of truth is [project].version;
-# bumpversion keeps the README static badge and CHANGELOG header in sync,
-# tags the release, and creates a conventional bump commit. Trigger
-# via `uv run bump-my-version bump [major|minor|patch]` or the
-# `bump-my-version.yaml` workflow_dispatch.
+# bumpversion keeps the README static badge in sync, tags the release,
+# and creates a conventional bump commit. CHANGELOG.md is owned by
+# scriv (see [tool.scriv] below) — `make changelog_release VERSION=X`
+# runs before bump-my-version at release time.
 [tool.bumpversion]
 current_version = "1.0.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
@@ -136,13 +137,18 @@ filename = "README.md"
 search = "version-{current_version}-blue"
 replace = "version-{new_version}-blue"
 
-[[tool.bumpversion.files]]
-filename = "CHANGELOG.md"
-search = """
-## [Unreleased]
-"""
-replace = """
-## [Unreleased]
-
-## [{new_version}] - {now:%Y-%m-%d}
-"""
+# Changelog fragments — each PR adds one file under changelog.d/ via
+# `make changelog_new`, preview the assembled release entry with
+# `make changelog_preview`, and `make changelog_release VERSION=X.Y.Z`
+# collects fragments into CHANGELOG.md (run before bump-my-version).
+# Categories follow Keep a Changelog; only the three currently used
+# (Security / Added / Fixed) are listed — extend additively if needed.
+[tool.scriv]
+format = "md"
+fragment_directory = "changelog.d"
+categories = ["Security", "Added", "Fixed"]
+# Matches the existing CHANGELOG.md convention: `## [X.Y.Z]` entry
+# titles, `### Added` category headers. scriv shifts fragment
+# headings by (md_header_level + 1) so fragments stay at h3.
+md_header_level = "2"
+entry_title_template = "[{{ version }}] - {{ date.strftime('%Y-%m-%d') }}"
