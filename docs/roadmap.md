@@ -69,6 +69,7 @@ Shipped on `main`; rolls into the next semver tag. See the `[Unreleased]` block 
 - [x] **F&G historical backfill** — `scripts/backfill_fear_greed_whitrabbit.py` + `src/data_sources/sentiment_backfill.py` extend the dashboard's long-term context from ~13 months to ~14 years via the [`whit3rabbit/fear-greed-data`](https://github.com/whit3rabbit/fear-greed-data) mirror; ADR-0005 amendment classifies as Tier-0 — issue [#164](https://github.com/qte77/analyze-stock-kpi/issues/164), PR #178
 - [x] **Per-cell empty-reason tooltips** — `docs/demo/lib/empty_reason.js` explains structural gaps (bank R&D, bank current-ratio, CAD-bank ROE/ROA) so "—" cells answer "why" — issue [#170](https://github.com/qte77/analyze-stock-kpi/issues/170), PR #173
 - [x] **Long-term context tab** + monthly F&G aggregation (median + average), click-to-filter sector donut, theme toggle, multi-universe overlay — issue [#159](https://github.com/qte77/analyze-stock-kpi/issues/159) and follow-ups
+- [x] **5s10s yield curve slope panel** — `src/data_sources/yield_curve.py` + `.github/workflows/yield-curve.yaml` (daily cron, 22:30 UTC, Tier-0 yfinance `^TNX` / `^FVX`) + new "5s10s slope" tab in the long-term-context panel. Issue [#165](https://github.com/qte77/analyze-stock-kpi/issues/165).
 - [x] **Changelog tooling** — `scriv` fragments replace direct `[Unreleased]` edits; eliminates the parallel-PR conflict pattern — PR #175
 - [x] **Doc architecture split** — `CONTRIBUTING.md` carries shared dev workflow (humans + AI); `AGENTS.md` shrinks to AI-agent-specific behavioural rules — PR #177
 
@@ -76,7 +77,7 @@ Shipped on `main`; rolls into the next semver tag. See the `[Unreleased]` block 
 
 - [ ] Shiller CAPE long-term backdrop — issue [#166](https://github.com/qte77/analyze-stock-kpi/issues/166); source survey pending (likely Tier-1, defer)
 - [ ] Canadian-bank ROE/ROA Yahoo coverage survey — issue [#169](https://github.com/qte77/analyze-stock-kpi/issues/169); informs whether to widen the `#170` rule from "CAD bank only" to "all non-US banks"
-- [ ] **5s10s yield curve slope panel** (Tier-0 yfinance `^TNX` / `^FVX`) — issue [#165](https://github.com/qte77/analyze-stock-kpi/issues/165); WIP
+- [ ] DRY refactor: consolidate `loadFearGreedYears` + `loadYieldCurveYears` into a shared loader — issue [#181](https://github.com/qte77/analyze-stock-kpi/issues/181); follow-up surfaced by #165
 
 ## Deferred
 
