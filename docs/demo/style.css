@@ -218,11 +218,11 @@ h2 {
   min-width: 200px;
 }
 
-/* Stacked layout only on the narrowest viewports. Cluster width
-   (~280 controls column + 20 gap + 280 donut) ≈ 580px content; we
-   keep side-by-side down to 480px viewport (small phones in landscape)
-   and only stack on the narrowest portrait widths. */
-@media (max-width: 479px) {
+/* Stacked layout below 768px — donut wraps to its own row one
+   breakpoint earlier than before (was 479px) so it stops crowding
+   the controls column on tablet-sized viewports where the 280px
+   donut + ~25rem controls cluster overflows. */
+@media (max-width: 767px) {
   #universe-controls-row {
     flex-direction: column;
     align-items: center;
@@ -232,17 +232,14 @@ h2 {
 
 /* Controls list: stacks vertically (picker, count, snapshot, filter,
    CSV, chips, sector-chip — each on its own row). align-items: stretch
-   so every child row spans the same width. Explicit width (rather
-   than "widest natural row") pins the column so a longer picker
-   option (e.g. switching from sp500 → federal-contractors) doesn't
-   reshape every row beside it. max-width: 100% keeps narrow viewports
-   from overflowing. */
+   so every child row spans the same width — the widest natural row
+   (filter+CSV at ~20rem input + button). Picker max-width is bounded
+   to match the filter input so a longer picker option doesn't drive
+   the parent wider than the filter-row content. */
 #universe-header {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  width: 24rem;
-  max-width: 100%;
   gap: 0.5rem;
 }
 
@@ -697,13 +694,13 @@ body.theme-dark {
   color: var(--accent);
 }
 
-/* D3 — mobile auto-simple. Below 768px the toggle is hidden because the
-        detailed view doesn't fit; the JS guard in app.js also forces
-        view-mode to "simple" on resize so the user sees a sensible
-        layout even after toggling on desktop and then switching to a
-        narrow viewport. */
+/* D3 — mobile auto-simple. Below 768px detail-only columns stay
+        hidden because the detailed view doesn't fit horizontally; the
+        JS guard in app.js also forces view-mode to "simple" on resize
+        so the user sees a sensible layout even after toggling on
+        desktop and then switching to a narrow viewport. The toggle
+        itself stays visible — it's just inert at narrow widths. */
 @media (max-width: 767px) {
-  #view-toggle { display: none; }
   body.view-detailed .detail-only { display: none !important; }
   /* On narrow viewports let the donut occupy the full row width so the
      legend isn't squeezed against a 280px box. */
