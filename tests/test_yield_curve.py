@@ -15,6 +15,7 @@ from unittest.mock import patch
 
 import pandas as pd
 import pytest
+from pydantic import ValidationError
 from src.data_sources.yield_curve import (
     YieldCurveSnapshot,
     fetch_yield_curve_snapshot,
@@ -61,7 +62,7 @@ def test_snapshot_is_frozen() -> None:
     snap = YieldCurveSnapshot(
         date=date_cls(2026, 5, 30), tnx_yield=4.453, fvx_yield=4.149
     )
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError, match="frozen"):
         snap.tnx_yield = 0.0  # type: ignore[misc]
 
 

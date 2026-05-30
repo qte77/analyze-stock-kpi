@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import json
 import logging
-from datetime import UTC, date, datetime  # noqa: TC003 — pydantic field annotation
+from datetime import UTC, date, datetime
 from typing import TYPE_CHECKING
 
 import yfinance as yf
@@ -60,7 +60,7 @@ class YieldCurveSnapshot(BaseModel):
     @computed_field
     @property
     def slope_5s10s(self) -> float | None:
-        """TNX − FVX in percentage points. ``None`` when a leg is missing."""
+        """TNX - FVX in percentage points. ``None`` when a leg is missing."""
         if self.tnx_yield is None or self.fvx_yield is None:
             return None
         return self.tnx_yield - self.fvx_yield
