@@ -45,7 +45,6 @@
 
   <main>
     <section id="fear-greed-section">
-      <h2>CNN Fear &amp; Greed</h2>
       <div id="fg-header" hidden>
         <div id="fg-score"></div>
         <div id="fg-meta">
@@ -57,7 +56,7 @@
         id="fg-tabs"
         class="detail-tabs"
         role="tablist"
-        aria-label="Fear and Greed chart range"
+        aria-label="Market sentiment + risk indicators"
       >
         <button
           type="button"
@@ -65,14 +64,21 @@
           role="tab"
           aria-selected="true"
           aria-controls="fg-chart-wrap"
-        >Rolling history</button>
+        >CNN F&amp;G rolling</button>
         <button
           type="button"
           id="fg-tab-monthly"
           role="tab"
           aria-selected="false"
           aria-controls="lt-fg-chart-wrap"
-        >Long-term context</button>
+        >CNN F&amp;G long-term</button>
+        <button
+          type="button"
+          id="fg-tab-yield-curve"
+          role="tab"
+          aria-selected="false"
+          aria-controls="yc-chart-wrap"
+        >5s10s slope</button>
       </div>
       <div id="fg-chart-wrap" role="tabpanel" aria-labelledby="fg-tab-rolling">
         <div class="fg-empty">loading…</div>
@@ -87,6 +93,22 @@
         <canvas
           id="lt-fg-chart"
           aria-label="Monthly Fear and Greed median and average"
+        ></canvas>
+      </div>
+      <div
+        id="yc-chart-wrap"
+        role="tabpanel"
+        aria-labelledby="fg-tab-yield-curve"
+        hidden
+      >
+        <div id="yc-header" hidden>
+          <span id="yc-current-slope"></span>
+          <span id="yc-current-legs" class="updated"></span>
+        </div>
+        <div class="yc-empty">loading…</div>
+        <canvas
+          id="yc-chart"
+          aria-label="US Treasury 5s10s slope (10y minus 5y yield, percentage points)"
         ></canvas>
       </div>
     </section>

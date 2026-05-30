@@ -181,6 +181,29 @@ async function loadFearGreedYears() {
   return merged.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
 }
 
+/**
+ * Fetch this-year + last-year yield-curve history files and concat.
+ * Mirrors `loadFearGreedYears` shape — silent-fail per leg so a
+ * brand-new repo (no `results/yield_curve/<thisYear>.json` yet on the
+ * data branch) still paints what's available.
+ *
+ * @returns {Promise<Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>>}
+ */
+async function loadYieldCurveYears() {
+  const thisYear = new Date().getUTCFullYear();
+  const results = await Promise.allSettled([
+    fetchJson(`${DATA_BASE_URL}/results/yield_curve/${thisYear - 1}.json`),
+    fetchJson(`${DATA_BASE_URL}/results/yield_curve/${thisYear}.json`),
+  ]);
+  const merged = [];
+  for (const r of results) {
+    if (r.status === "fulfilled" && Array.isArray(r.value)) {
+      merged.push(...r.value);
+    }
+  }
+  return merged.sort((a, b) => a.date.localeCompare(b.date));
+}
+
 function nested(/** @type {Row} */ obj, /** @type {string} */ key) {
   return key
     .split(".")
@@ -1147,36 +1170,147 @@ function renderMonthlyFearGreedChart(
 }
 
 /**
- * Wires the Rolling-history ↔ Long-term-context tab pair sharing the
- * single F&G entries list. The monthly chart is lazily constructed on
- * the first long-term tab click (matches the detail-panel time-series
- * lazy pattern), so the initial paint stays cheap.
+ * Wires the three-tab Long-term-context tab group:
+ *   - Rolling history (F&G live + ~1y)
+ *   - Long-term context (monthly F&G aggregate)
+ *   - Yield curve (5s10s slope)
  *
- * @param {Array<{timestamp: string, score: number}>} entries
+ * Both the monthly chart and the yield-curve chart are lazily
+ * constructed on first click — matches the detail-panel time-series
+ * lazy pattern so initial paint stays cheap.
+ *
+ * @param {Array<{timestamp: string, score: number}>} fgEntries
+ * @param {Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>} ycEntries
  */
-function bindFearGreedTabs(entries) {
-  const rollingTab = document.getElementById("fg-tab-rolling");
-  const monthlyTab = document.getElementById("fg-tab-monthly");
-  const rollingPane = document.getElementById("fg-chart-wrap");
-  const monthlyPane = document.getElementById("lt-fg-chart-wrap");
-  if (!rollingTab || !monthlyTab || !rollingPane || !monthlyPane) return;
+function bindLongTermTabs(fgEntries, ycEntries) {
+  /** @type {Array<[string, string]>} */
+  const tabs = [
+    ["fg-tab-rolling", "fg-chart-wrap"],
+    ["fg-tab-monthly", "lt-fg-chart-wrap"],
+    ["fg-tab-yield-curve", "yc-chart-wrap"],
+  ];
+  /** @type {Array<[HTMLElement, HTMLElement]>} */
+  const resolved = [];
+  for (const [tabId, paneId] of tabs) {
+    const t = document.getElementById(tabId);
+    const p = document.getElementById(paneId);
+    if (!t || !p) return;
+    resolved.push([t, p]);
+  }
   let monthlyRendered = false;
-  rollingTab.addEventListener("click", () => {
-    rollingTab.setAttribute("aria-selected", "true");
-    monthlyTab.setAttribute("aria-selected", "false");
-    rollingPane.hidden = false;
-    monthlyPane.hidden = true;
+  let yieldCurveRendered = false;
+  for (const [tab, pane] of resolved) {
+    tab.addEventListener("click", () => {
+      for (const [t, p] of resolved) {
+        const selected = t === tab;
+        t.setAttribute("aria-selected", selected ? "true" : "false");
+        p.hidden = !selected;
+      }
+      if (pane.id === "lt-fg-chart-wrap" && !monthlyRendered) {
+        renderMonthlyFearGreedChart(fgEntries);
+        monthlyRendered = true;
+      }
+      if (pane.id === "yc-chart-wrap" && !yieldCurveRendered) {
+        renderYieldCurveChart(ycEntries);
+        yieldCurveRendered = true;
+      }
+    });
+  }
+}
+
+/** @type {any} */
+let yieldCurveChart = null;
+
+/**
+ * Toggle a "no yield curve history yet" hint inside #yc-chart-wrap.
+ * @param {boolean} show
+ */
+function renderYieldCurveEmptyHint(show) {
+  const wrap = document.getElementById("yc-chart-wrap");
+  if (!wrap) return;
+  const existing = wrap.querySelector(".yc-empty");
+  if (show && !existing) {
+    const hint = document.createElement("div");
+    hint.className = "yc-empty";
+    hint.textContent = "no yield-curve history yet";
+    wrap.append(hint);
+  } else if (!show && existing) {
+    existing.remove();
+  }
+}
+
+/**
+ * Surface today's slope + raw legs above the chart so the chart's role
+ * stays "trajectory" while the header carries the current-day reading.
+ * @param {Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>} entries
+ */
+function renderYieldCurveHeader(entries) {
+  const header = document.getElementById("yc-header");
+  const slope = document.getElementById("yc-current-slope");
+  const legs = document.getElementById("yc-current-legs");
+  if (!header || !slope || !legs) return;
+  const latest = entries.length ? entries[entries.length - 1] : null;
+  if (!latest || latest.slope_5s10s == null) {
+    header.hidden = true;
+    return;
+  }
+  header.hidden = false;
+  const bps = (latest.slope_5s10s * 100).toFixed(0);
+  slope.textContent = `${latest.slope_5s10s >= 0 ? "+" : ""}${bps} bps`;
+  const tnx = latest.tnx_yield != null ? `${latest.tnx_yield.toFixed(2)} %` : "—";
+  const fvx = latest.fvx_yield != null ? `${latest.fvx_yield.toFixed(2)} %` : "—";
+  legs.textContent = `10y ${tnx} − 5y ${fvx} · ${latest.date}`;
+}
+
+/**
+ * Render the slope line over all loaded history. Theme-aware via the
+ * same scriptable cssVar() colour pattern as renderFearGreedChart.
+ *
+ * @param {Array<{date: string, slope_5s10s: number | null}>} entries
+ */
+function renderYieldCurveChart(entries) {
+  const canvas = /** @type {HTMLCanvasElement | null} */ (
+    document.getElementById("yc-chart")
+  );
+  if (!canvas) return;
+  if (yieldCurveChart) {
+    liveCharts.delete(yieldCurveChart);
+    yieldCurveChart.destroy();
+    yieldCurveChart = null;
+  }
+  const points = entries.filter((e) => e.slope_5s10s != null);
+  renderYieldCurveEmptyHint(points.length === 0);
+  if (points.length === 0 || typeof Chart === "undefined") return;
+  yieldCurveChart = new Chart(canvas, {
+    type: "line",
+    data: {
+      labels: points.map((p) => p.date),
+      datasets: [
+        {
+          label: "5s10s slope (10y − 5y, % pts)",
+          data: points.map((p) => p.slope_5s10s),
+          borderColor: () => cssVar("--accent", "#0066cc"),
+          backgroundColor: () => `${cssVar("--accent", "#0066cc")}14`,
+          fill: false,
+          pointRadius: 1,
+          borderWidth: 1.5,
+          tension: 0.2,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 250 },
+      plugins: { legend: { display: false } },
+      scales: {
+        // Highlight the zero line — inversions sit below.
+        y: { grid: { color: () => `${cssVar("--border", "#d2d2d7")}` } },
+        x: { ticks: { maxTicksLimit: 14 } },
+      },
+    },
   });
-  monthlyTab.addEventListener("click", () => {
-    rollingTab.setAttribute("aria-selected", "false");
-    monthlyTab.setAttribute("aria-selected", "true");
-    rollingPane.hidden = true;
-    monthlyPane.hidden = false;
-    if (!monthlyRendered) {
-      renderMonthlyFearGreedChart(entries);
-      monthlyRendered = true;
-    }
-  });
+  liveCharts.add(yieldCurveChart);
 }
 
 /**
@@ -1547,10 +1681,14 @@ async function init() {
   await loadActiveUniverse();
   applyDateFromUrl(parsed.date, dateSelector);
 
-  const fgEntries = await loadFearGreedYears();
+  const [fgEntries, ycEntries] = await Promise.all([
+    loadFearGreedYears(),
+    loadYieldCurveYears(),
+  ]);
   renderFearGreedHeader(fgEntries);
   renderFearGreedChart(fgEntries);
-  bindFearGreedTabs(fgEntries);
+  renderYieldCurveHeader(ycEntries);
+  bindLongTermTabs(fgEntries, ycEntries);
   bindThemeObserver();
 }
 

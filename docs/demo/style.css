@@ -120,18 +120,31 @@ h2 {
   font-size: 0.8125rem;
 }
 
-#fg-chart-wrap {
+/* All three long-term-context chart panels share dimensions —
+   group the rule so the height + relative-positioning stay in sync. */
+#fg-chart-wrap,
+#lt-fg-chart-wrap,
+#yc-chart-wrap {
   position: relative;
   height: 220px;
 }
 
-#lt-fg-chart-wrap {
-  position: relative;
-  height: 220px;
+#yc-header:not([hidden]) {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+#yc-current-slope {
+  font-size: 1.25rem;
+  font-weight: 500;
 }
 
 .fg-empty,
-.lt-fg-empty {
+.lt-fg-empty,
+.yc-empty {
   position: absolute;
   inset: 0;
   display: flex;
