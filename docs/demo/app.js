@@ -308,12 +308,9 @@ function persistStateFromCurrent() {
   window.history.replaceState({}, "", url);
 }
 
-function applyMobileGuard() {
-  if (window.matchMedia("(max-width: 767px)").matches && viewMode === "detailed") {
-    viewMode = "simple";
-    applyViewMode();
-  }
-}
+// Mobile auto-simple guard removed — detailed view is now allowed on
+// narrow viewports. The table-wrap's overflow: auto handles horizontal
+// scroll for the 13-column detail layout rather than hiding it.
 
 // ───────────────────────── Rendering ───────────────────────────
 
@@ -630,7 +627,7 @@ function renderDonutEmptyHint(show) {
   if (show && !existing) {
     const hint = document.createElement("div");
     hint.className = "sector-donut-empty";
-    hint.textContent = "no data";
+    hint.textContent = "no history yet";
     wrap.append(hint);
   } else if (!show && existing) {
     existing.remove();
@@ -1039,7 +1036,7 @@ function cssVar(token, fallback) {
 
 function renderRollingEmptyHint(
   /** @type {boolean} */ show,
-  /** @type {string} */ text = "no F&G data",
+  /** @type {string} */ text = "no history yet",
 ) {
   const wrap = document.getElementById("fg-chart-wrap");
   if (!wrap) return;
@@ -1105,7 +1102,7 @@ function renderLongTermEmptyHint(/** @type {boolean} */ show) {
   if (show && !existing) {
     const hint = document.createElement("div");
     hint.className = "lt-fg-empty";
-    hint.textContent = "no F&G history yet";
+    hint.textContent = "no history yet";
     wrap.append(hint);
   } else if (!show && existing) {
     existing.remove();
@@ -1223,19 +1220,27 @@ function bindLongTermTabs(fgEntries, ycEntries) {
 let yieldCurveChart = null;
 
 /**
- * Toggle a "no yield curve history yet" hint inside #yc-chart-wrap.
+ * Toggle a "no history yet" hint inside #yc-chart-wrap. When the
+ * static "loading…" placeholder is still in the DOM (lazy-render
+ * path: data fetched but tab not yet clicked → empty result on
+ * click), overwrite its text instead of double-appending.
+ *
  * @param {boolean} show
  */
 function renderYieldCurveEmptyHint(show) {
   const wrap = document.getElementById("yc-chart-wrap");
   if (!wrap) return;
   const existing = wrap.querySelector(".yc-empty");
-  if (show && !existing) {
-    const hint = document.createElement("div");
-    hint.className = "yc-empty";
-    hint.textContent = "no yield-curve history yet";
-    wrap.append(hint);
-  } else if (!show && existing) {
+  if (show) {
+    if (existing) {
+      existing.textContent = "no history yet";
+    } else {
+      const hint = document.createElement("div");
+      hint.className = "yc-empty";
+      hint.textContent = "no history yet";
+      wrap.append(hint);
+    }
+  } else if (existing) {
     existing.remove();
   }
 }
@@ -1414,7 +1419,7 @@ async function loadActiveUniverse() {
     auditByTicker = null;
     rebuildFuseIndex();
     dateSelector.replaceChildren();
-    sizeEl.textContent = `· no data yet for ${activeUniverse}`;
+    sizeEl.textContent = "· no history yet";
     renderTable();
     renderSectorDonut();
     renderUniverseChips();
@@ -1648,7 +1653,6 @@ async function init() {
   const lsView = window.localStorage?.getItem(VIEW_MODE_STORAGE_KEY) ?? null;
   viewMode = resolveViewMode(parsed.view, lsView);
   applyViewMode();
-  applyMobileGuard();
 
   setupTheme();
   bindViewToggle();
@@ -1693,5 +1697,4 @@ async function init() {
   bindThemeObserver();
 }
 
-window.addEventListener("resize", applyMobileGuard);
 document.addEventListener("DOMContentLoaded", init);

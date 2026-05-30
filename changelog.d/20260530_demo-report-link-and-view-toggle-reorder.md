@@ -1,7 +1,7 @@
 ### Added
 
-- **Demo: "File feature request or bug" link in the header.** Sits to the right of the theme picker, displays a GitHub-mark octicon (inline SVG, `currentColor` so it tracks the link colour across themes), opens the repo's `/issues/new` in a new tab. Closes the feedback loop for demo visitors who notice a data quirk or UX nit. Muted styling matches the theme-picker visual weight — feedback hatch, not a primary action.
+- **Demo: "File feature request or bug" link with GitHub-mark octicon next to the theme picker (#180).** Opens `/issues/new` in a new tab.
 
 ### Changed
 
-- **Demo: simple/detailed toggle moves below the filter + CSV row, adopts the form-control aesthetic, and gains a `Label: desc` shape.** It's a universe-level control, not a header-level one — pairing it with the filter and CSV actions reduces the cognitive load on the header and groups related controls together. Visual style now matches its sibling controls (4px radius + `--bg` background, same as `#export-csv`) instead of the prior pill-shaped header button. Button text reads as **`Detailed view: Show all KPI columns`** when in essentials view, and **`Simple view: Show essentials only`** when in all-columns view — semantic `.view-toggle-label` + `.view-toggle-desc` spans with a CSS-injected `": "` separator (`::after` content) so the HTML stays tidy and the label/desc can carry different styling (label `font-weight: 500`; desc muted). Mobile hide behaviour preserved (existing `@media (max-width: 767px)` rule keys off `#view-toggle` by id, not its container).
+- **Demo: simple/detailed toggle moves below the filter + CSV row** and reads `Detailed view: Show all KPI columns` / `Simple view: Show essentials only` (label + muted desc with a CSS-injected `": "` separator). Mobile hide preserved.
