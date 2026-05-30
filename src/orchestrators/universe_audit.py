@@ -19,14 +19,16 @@ entry with the exception message in ``note``, never raises.
 
 from __future__ import annotations
 
-from collections.abc import Iterable
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 import yfinance as yf
 from pydantic import BaseModel, ConfigDict
 from src.domain.universe import PRESET_DIR
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 Classification = Literal["OK", "SPARSE", "FAIL"]
 
@@ -61,7 +63,8 @@ def classify_ticker(symbol: str) -> AuditEntry:
     """Probe ``yfinance.Ticker(symbol).info`` once and classify."""
     try:
         info = yf.Ticker(symbol).info
-    except Exception as exc:  # noqa: BLE001 — wrap-degrade boundary
+    except Exception as exc:
+        # wrap-degrade boundary — see module docstring
         return AuditEntry(
             symbol=symbol, classification="FAIL", note=str(exc) or repr(exc)
         )

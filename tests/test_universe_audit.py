@@ -8,8 +8,8 @@ talks to Yahoo correctly (#168).
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from types import SimpleNamespace
+from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
@@ -19,6 +19,10 @@ from src.orchestrators.universe_audit import (
     audit_universes,
     classify_ticker,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+    from pathlib import Path
 
 _OK_THRESHOLD = 40
 
@@ -106,7 +110,7 @@ def test_classify_ticker_excludes_none_and_empty_string_from_count() -> None:
     assert entry.fields_populated == 3
 
 
-def test_audit_universes_aggregates_explicit_ids(tmp_path) -> None:
+def test_audit_universes_aggregates_explicit_ids(tmp_path: Path) -> None:
     """Two universes, one ticker each — report exposes per-universe entries
     and a UTC ``generated_at`` stamp."""
     universe_a = tmp_path / "a.txt"

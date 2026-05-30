@@ -24,6 +24,7 @@ Every external boundary carries one of three failure policies. Logged via `logge
 | CNN F&G fetch | `sentiment._fetch_payload` | wrap-degrade — banner skipped | caller `__main__.main` wraps; rest of run continues |
 | yfinance `Ticker.info` | `fundamentals.fetch_fundamentals` | wrap-continue — sparse snapshot | per-ticker `try/except` in `fetch_universe_fundamentals` |
 | yfinance batch `download` | `fundamentals._batch_close_prices` | wrap-degrade — `sortino_ratio=None` for all | network / shape error → returns `None`; per-ticker Sortino stays unset |
+| yfinance `Ticker.info` (audit) | `universe_audit.classify_ticker` | wrap-degrade — `FAIL` entry | exception → `AuditEntry(classification="FAIL", note=str(exc))`; one ticker can't abort the audit sweep |
 | Filesystem write (snapshots) | `__main__._persist_snapshots` | fail-loud | disk full / permission denied → abort |
 | Filesystem write (CNN cache) | `sentiment._write_year` | fail-loud | same rationale |
 | Filesystem read (universe preset) | `universe._read_symbol_file` | fail-loud | config error — missing preset means the user passed a wrong name |
@@ -48,7 +49,8 @@ src/
 │       ├── cik_map.py                resolve_cik / lookup_record — EDGAR company_tickers_exchange.json with HTTP conditional GET + disk cache
 │       └── submissions.py            fetch_last_filed / enrich_snapshot_sec — EDGAR submissions API
 ├── orchestrators/
-│   └── federal_contractors.py        build_universe(*, fy=None, top_n=100) -> tuple[list[str], list[AuditRow]]; chains usaspending → EDGAR → yfinance
+│   ├── federal_contractors.py        build_universe(*, fy=None, top_n=100) -> tuple[list[str], list[AuditRow]]; chains usaspending → EDGAR → yfinance
+│   └── universe_audit.py             classify_ticker / audit_universes -> UniverseAuditReport; operator triage for stale-US-ticker rot (#168)
 ├── assets/
 │   └── universes/                    preset *.txt ticker lists (one per universe name)
 └── utils/
