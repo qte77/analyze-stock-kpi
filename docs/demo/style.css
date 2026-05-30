@@ -435,7 +435,9 @@ footer a:hover { text-decoration: underline; }
 /* Form-control aesthetic to match the sibling filter-row controls
    (#universe-filter, #export-csv) — same 4px radius + --bg background.
    Used to be a pill-shaped header button before #180 moved it from
-   .header-meta down to .view-row inside #universe-header. */
+   .header-meta down to .view-row inside #universe-header. Reads as
+   "<destination-view label>: <what that view shows>" — semantic
+   spans + a CSS-injected ": " separator so the HTML stays tidy. */
 #view-toggle {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -447,6 +449,11 @@ footer a:hover { text-decoration: underline; }
 }
 
 #view-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+.view-toggle-label { font-weight: 500; }
+.view-toggle-label::after { content: ": "; }
+.view-toggle-desc { color: var(--muted); }
+#view-toggle:hover .view-toggle-desc { color: var(--accent); }
 
 /* GitHub mark + "File feature request or bug" link next to the theme
    picker. Visual weight matches the theme-picker text (muted) rather

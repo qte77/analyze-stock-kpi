@@ -228,9 +228,16 @@ function applyViewMode() {
   body.classList.toggle("view-detailed", viewMode === "detailed");
   const btn = document.getElementById("view-toggle");
   if (btn) {
-    btn.textContent = viewMode === "simple"
-      ? "Show all KPI columns ↗"
-      : "Show essentials only ←";
+    // Visible label is the destination view name; the muted desc
+    // below it spells out what that view shows. Clicking flips to it.
+    const label = btn.querySelector(".view-toggle-label");
+    const desc = btn.querySelector(".view-toggle-desc");
+    if (label && desc) {
+      label.textContent = viewMode === "simple" ? "Detailed view" : "Simple view";
+      desc.textContent = viewMode === "simple"
+        ? "Show all KPI columns"
+        : "Show essentials only";
+    }
   }
 }
 
