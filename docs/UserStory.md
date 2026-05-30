@@ -50,6 +50,16 @@ Solo investors building their own auditable, rule-based screening pipeline. Anyo
 - Dashboard: detail-panel dismiss fix (#89), sticky-header fix, lint-gate tightening.
 - Inherits everything from v0.6.0 above.
 
+## Post-1.0 (shipped on `main`, not yet tagged)
+
+A polish + observability batch widening the dashboard's signal density and the operator-side toolkit. Inherits everything from v1.0.0; new themes:
+
+- **Federal-contractors universe** — `usaspending.gov` POST client (#123), `src/orchestrators/federal_contractors.py` chains usaspending → EDGAR → yfinance, weekly refresh workflow opens PRs against `main` only when the top-100 ranking diffs. ADR-0006 ([decisions/0006-federal-contractors-universe.md](decisions/0006-federal-contractors-universe.md)).
+- **SEC EDGAR enrichment** — `src/data_sources/sec/cik_map.py` (CIK ↔ ticker resolver with conditional-GET cache) + `submissions.py` (per-ticker last 10-K / 10-Q / 8-K dates appended to every `FundamentalsSnapshot`).
+- **Dashboard expansion** — view-mode toggle (simple / detailed, #134), URL-state persistence, conditional cell coloring, CSV export, external links, theme toggle (system / light / dark), multi-universe overlay (#137), tabbed F&G panel with long-term monthly aggregate (#159), click-to-filter sector donut, per-cell empty-reason tooltips (#170).
+- **Operator tooling** — universe coverage audit (`scripts/audit_universes.py`, #168) classifies every bundled-preset ticker as OK / SPARSE / FAIL against current Yahoo data; one-shot historical F&G backfill via the `whit3rabbit/fear-greed-data` mirror (#164) extends the dashboard's long-term context from ~13 months to ~14 years.
+- **Doc + workflow architecture** — package vs repo-infrastructure boundary formalized in [ADR-0007](decisions/0007-package-vs-infrastructure-boundary.md); `CONTRIBUTING.md` carries the shared technical workflow (test conventions, commits, GHA SHA-pinning, scriv changelog fragments, release flow); `AGENTS.md` shrunk to AI-agent-specific rules only; `CHANGELOG.md` now owned by [scriv](https://github.com/nedbat/scriv) — each PR drops a fragment under `changelog.d/`, no parallel-PR conflicts on `[Unreleased]`.
+
 ## Future: per-asset directory layout (not currently scheduled)
 
 A future schema change would shift `make run UNIVERSE=<preset>` from the current single-file output (`results/fundamentals/<UTC>.json`) to a per-asset directory at `results/<DATE>_<universe>/<ticker>/`:
