@@ -27,6 +27,7 @@ import logging
 from datetime import UTC, date, datetime
 from typing import TYPE_CHECKING
 
+import pandas as pd
 import yfinance as yf
 from pydantic import BaseModel, ConfigDict, computed_field
 from src.config import settings
@@ -120,7 +121,13 @@ def _fetch_history_closes(symbol: str, period: str) -> dict[date, float]:
         return {}
     out: dict[date, float] = {}
     for ts, row in history.iterrows():
-        d = ts.date() if hasattr(ts, "date") else ts
+        # pandas typing stubs declare the index as Hashable; isinstance
+        # narrows to Timestamp so .date() is reachable. Skip rows whose
+        # index isn't a Timestamp at all (shouldn't happen for a Ticker
+        # history, but defensive).
+        if not isinstance(ts, pd.Timestamp):
+            continue
+        d = ts.date()
         close = row.get("Close")
         if close is None:
             continue
