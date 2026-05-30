@@ -70,5 +70,8 @@ more context or ask the user.
 **Post-task:**
 
 - Run `make validate` — must pass (lint + types + complexity + lint_md + tests)
-- Update `CHANGELOG.md` `[Unreleased]` section for non-trivial changes
+- For non-trivial changes, add a changelog fragment via `make changelog_new`
+  (edits `changelog.d/<topic>.md` — `### Added` / `### Fixed` / `### Security`
+  header + one bullet). Never hand-edit `CHANGELOG.md`; scriv owns it. Preview
+  the assembled release entry with `make changelog_preview`
 - Bump `src/__version__.py` only at the end of a feature branch (semver)
