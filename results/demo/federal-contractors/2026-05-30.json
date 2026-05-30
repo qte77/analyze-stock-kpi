@@ -249,7 +249,7 @@
     },
     "roi": 0.188049031420717,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.7049964530146957,
+    "sortino_ratio": -0.7049962249922124,
     "sec_last_10k_date": "2026-05-22",
     "sec_last_10q_date": "2026-01-23",
     "sec_last_8k_date": "2026-05-22"
@@ -351,7 +351,7 @@
     },
     "roi": 0.4911100504649191,
     "rd_to_revenue": 0.027673554228540224,
-    "sortino_ratio": 5.089697432228416,
+    "sortino_ratio": 5.089698252671476,
     "sec_last_10k_date": "2026-03-16",
     "sec_last_10q_date": "2025-12-09",
     "sec_last_8k_date": "2026-05-28"
@@ -449,11 +449,11 @@
       "big_call": 50.24371223809524,
       "aaqs": 68.40410458333334,
       "hgi": 54.5,
-      "screener_score": 50.6782681317591
+      "screener_score": 50.67827654400027
     },
     "roi": 0.13441120643241095,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.0956446805729967,
+    "sortino_ratio": 2.0956456900419376,
     "sec_last_10k_date": "2026-01-30",
     "sec_last_10q_date": "2026-04-29",
     "sec_last_8k_date": "2026-05-11"
@@ -500,11 +500,11 @@
       "big_call": 44.64041243809524,
       "aaqs": 46.37997983333334,
       "hgi": 54.92857142857144,
-      "screener_score": 31.419013875183047
+      "screener_score": 31.419014063247566
     },
     "roi": 0.2918148797392883,
     "rd_to_revenue": 0.03445643877439756,
-    "sortino_ratio": 1.5361617081894037,
+    "sortino_ratio": 1.5361617307571456,
     "sec_last_10k_date": "2026-01-29",
     "sec_last_10q_date": "2026-04-21",
     "sec_last_8k_date": "2026-05-07"
@@ -551,11 +551,11 @@
       "big_call": 42.058271395238094,
       "aaqs": 62.99462495833333,
       "hgi": 38.14285714285715,
-      "screener_score": 50.37043971419682
+      "screener_score": 50.370445468170104
     },
     "roi": 0.07691895265600394,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.715379811894095,
+    "sortino_ratio": 1.715380502370889,
     "sec_last_10k_date": "2026-02-05",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-05"
@@ -602,11 +602,11 @@
       "big_call": 35.90638005238095,
       "aaqs": 53.545833333333334,
       "hgi": 26.0,
-      "screener_score": 42.57109555417176
+      "screener_score": 42.57110027720818
     },
     "roi": 0.10187168712106687,
     "rd_to_revenue": 0.048394850702419744,
-    "sortino_ratio": 1.0736717906522517,
+    "sortino_ratio": 1.0736723574166225,
     "sec_last_10k_date": "2026-02-17",
     "sec_last_10q_date": "2026-04-23",
     "sec_last_8k_date": "2026-05-27"
@@ -657,7 +657,7 @@
     },
     "roi": 0.052273747530577154,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.5795275817035213,
+    "sortino_ratio": -0.5795276274843035,
     "sec_last_10k_date": "2026-02-27",
     "sec_last_10q_date": "2026-05-07",
     "sec_last_8k_date": "2026-05-07"
@@ -704,11 +704,11 @@
       "big_call": 43.487818114285716,
       "aaqs": 43.66441625,
       "hgi": 67.14285714285715,
-      "screener_score": 35.897626768963335
+      "screener_score": 35.89762680483407
     },
     "roi": 0.06328209201455513,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.029806012275600126,
+    "sortino_ratio": 0.029806016580087805,
     "sec_last_10k_date": "2025-11-20",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-05"
@@ -759,7 +759,7 @@
     },
     "roi": 0.10816922263581545,
     "rd_to_revenue": null,
-    "sortino_ratio": -1.4205310694647815,
+    "sortino_ratio": -1.420531628980311,
     "sec_last_10k_date": "2026-02-26",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-18"
@@ -810,7 +810,7 @@
     },
     "roi": 0.12286898449419009,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.4249299064537284,
+    "sortino_ratio": -0.4249303793402139,
     "sec_last_10k_date": "2026-02-17",
     "sec_last_10q_date": "2026-05-05",
     "sec_last_8k_date": "2026-05-06"
@@ -857,11 +857,11 @@
       "big_call": 58.61498121904762,
       "aaqs": 60.13408366666667,
       "hgi": 59.92857142857143,
-      "screener_score": 48.031153337653734
+      "screener_score": 48.03115883691156
     },
     "roi": 0.05112650548355313,
     "rd_to_revenue": 0.02451406357191859,
-    "sortino_ratio": 1.8792688894433445,
+    "sortino_ratio": 1.8792695493542835,
     "sec_last_10k_date": "2026-02-12",
     "sec_last_10q_date": "2026-04-30",
     "sec_last_8k_date": "2026-05-12"
@@ -959,11 +959,11 @@
       "big_call": 29.378095454761905,
       "aaqs": 51.28583341666667,
       "hgi": 59.42857142857143,
-      "screener_score": 34.307994277942775
+      "screener_score": 34.307994170934414
     },
     "roi": 1.8070004115322087,
     "rd_to_revenue": null,
-    "sortino_ratio": 0.4172584797817041,
+    "sortino_ratio": 0.41725846694070057,
     "sec_last_10k_date": "2026-05-08",
     "sec_last_10q_date": "2026-02-04",
     "sec_last_8k_date": "2026-05-07"
@@ -1014,7 +1014,7 @@
     },
     "roi": 0.11852620206719994,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.36595641042999133,
+    "sortino_ratio": -0.36595645438839713,
     "sec_last_10k_date": "2025-11-20",
     "sec_last_10q_date": "2026-05-07",
     "sec_last_8k_date": "2026-05-28"
@@ -1061,11 +1061,11 @@
       "big_call": 63.82430684285714,
       "aaqs": 70.6280625,
       "hgi": 68.35714285714286,
-      "screener_score": 43.129542471490836
+      "screener_score": 43.12953959956869
     },
     "roi": 0.2713005473247868,
     "rd_to_revenue": 0.11531853871164686,
-    "sortino_ratio": 0.08745686212450995,
+    "sortino_ratio": 0.08745651749385223,
     "sec_last_10k_date": "2025-07-30",
     "sec_last_10q_date": "2026-04-29",
     "sec_last_8k_date": "2026-05-14"
@@ -1112,11 +1112,11 @@
       "big_call": 55.67237552380952,
       "aaqs": 78.96779083333334,
       "hgi": 77.42857142857143,
-      "screener_score": 46.21451843336527
+      "screener_score": 46.214521838277314
     },
     "roi": 0.1403722560610405,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.1881800739085941,
+    "sortino_ratio": 1.1881804824980398,
     "sec_last_10k_date": "2026-01-27",
     "sec_last_10q_date": "2026-04-21",
     "sec_last_8k_date": "2026-05-21"
@@ -1163,11 +1163,11 @@
       "big_call": 33.075721695238094,
       "aaqs": 39.150187833333334,
       "hgi": 14.428571428571429,
-      "screener_score": 49.741715669619715
+      "screener_score": 49.74171875014857
     },
     "roi": 0.1079833669282921,
     "rd_to_revenue": null,
-    "sortino_ratio": 1.4316498536876991,
+    "sortino_ratio": 1.4316502233511617,
     "sec_last_10k_date": "2026-02-17",
     "sec_last_10q_date": "2026-05-08",
     "sec_last_8k_date": "2026-05-08"
@@ -1316,11 +1316,11 @@
       "big_call": 53.4812172,
       "aaqs": 65.0877715,
       "hgi": 68.00000000000001,
-      "screener_score": 44.44579793890933
+      "screener_score": 44.44580850110917
     },
     "roi": 0.07374229897881819,
     "rd_to_revenue": 0.03168064286762299,
-    "sortino_ratio": 2.1418072876298186,
+    "sortino_ratio": 2.1418085550938,
     "sec_last_10k_date": "2026-02-06",
     "sec_last_10q_date": "2026-04-21",
     "sec_last_8k_date": "2026-05-04"
@@ -1371,7 +1371,7 @@
     },
     "roi": 0.08964784497482564,
     "rd_to_revenue": null,
-    "sortino_ratio": -0.04179191126191267,
+    "sortino_ratio": -0.04179212476740806,
     "sec_last_10k_date": "2026-03-16",
     "sec_last_10q_date": "2025-12-04",
     "sec_last_8k_date": "2026-05-29"
@@ -1469,11 +1469,11 @@
       "big_call": 31.18258571428571,
       "aaqs": 48.099124999999994,
       "hgi": 44.57142857142858,
-      "screener_score": 48.12820770804308
+      "screener_score": 48.1282151605026
     },
     "roi": 0.08739973800666691,
     "rd_to_revenue": 0.03520508142442057,
-    "sortino_ratio": 1.3904057553378786,
+    "sortino_ratio": 1.3904066496330205,
     "sec_last_10k_date": "2026-02-11",
     "sec_last_10q_date": "2026-04-30",
     "sec_last_8k_date": "2026-05-01"
