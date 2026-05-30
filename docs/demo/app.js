@@ -10,6 +10,7 @@
 import { buildAuditMap, formatObligated, loadAudit } from "./lib/audit.js";
 import { cellClass } from "./lib/coloring.js";
 import { exportCsv } from "./lib/csv.js";
+import { explainEmpty } from "./lib/empty_reason.js";
 import { aggregateMonthlyFG } from "./lib/monthly.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
@@ -298,6 +299,141 @@ const ALL_COLUMNS = /** @type {const} */ ([
   "composite_scores.screener_score",
 ]);
 
+/**
+ * Annotate a `—`-rendering cell with the structural reason (#170) when
+ * one applies. Extracted from `renderTable()` to keep that function's
+ * cognitive complexity inside the CodeFactor gate.
+ *
+ * @param {HTMLElement} cell
+ * @param {Row} row
+ * @param {string} col
+ */
+function annotateEmpty(cell, row, col) {
+  const reason = explainEmpty(row, col);
+  if (!reason) return;
+  cell.title = reason;
+  cell.setAttribute("data-empty-reason", "1");
+}
+
+const COVERAGE_KEYS = /** @type {const} */ ([
+  "forward_pe",
+  "trailing_peg_ratio",
+  "beta",
+  "rd_to_revenue",
+  "operating_margins",
+  "return_on_equity",
+  "return_on_assets",
+  "current_ratio",
+  "sortino_ratio",
+]);
+
+/**
+ * Count how many of the 9 KPI inputs the row has populated.
+ * `forward_pe <= 0` is treated as missing (negative/zero P/E is a
+ * sentinel, not a real reading).
+ *
+ * `row` is typed `any` to match the existing renderTable pipeline,
+ * which propagates `any[]` from filteredSnapshot's `fuseIndex.search`
+ * branch — keeps the indexed lookup against COVERAGE_KEYS cheap.
+ *
+ * @param {any} row
+ * @returns {number}
+ */
+function coverageCount(row) {
+  let n = 0;
+  for (const k of COVERAGE_KEYS) {
+    const v = row[k];
+    if (v == null) continue;
+    if (k === "forward_pe" && v <= 0) continue;
+    n += 1;
+  }
+  return n;
+}
+
+/**
+ * Hover tooltip for a row: weight % within the visible universe,
+ * raw score, and input coverage. Weight + Score are omitted when
+ * the row has no composite score.
+ *
+ * @param {number | null} score
+ * @param {number} totalScore
+ * @param {number} coverage
+ * @returns {string}
+ */
+function buildRowTitle(score, totalScore, coverage) {
+  const parts = [];
+  if (score != null && totalScore > 0) {
+    const weightPct = ((100 * Number(score)) / totalScore).toFixed(1);
+    parts.push(`Weight ${weightPct} %`);
+    parts.push(`Score ${Number(score).toFixed(0)}`);
+  }
+  parts.push(`${coverage}/9 inputs`);
+  return parts.join(" · ");
+}
+
+/**
+ * Build the per-row `<tr>` — score cell heatmap, hover title, the 14
+ * cellSpecs entries, KPI coloring, and empty-reason annotation.
+ *
+ * @param {any} row
+ * @param {number} totalScore
+ * @returns {HTMLTableRowElement}
+ */
+function renderRow(row, totalScore) {
+  const tr = document.createElement("tr");
+  const score = nested(row, "composite_scores.screener_score");
+  tr.title = buildRowTitle(score, totalScore, coverageCount(row));
+  const scoreCell = td(fmtNum(score, 0), "num score-cell");
+  if (score != null) {
+    scoreCell.style.backgroundColor = `hsl(${Number(score) * 1.2}, 60%, 75%)`;
+  }
+  const universeCell = td(
+    /** @type {any} */ (row)._universe ?? activeUniverse,
+  );
+  universeCell.classList.add("universe-col");
+  /** @type {Array<[string, HTMLElement, boolean]>} */
+  const cellSpecs = [
+    ["symbol", td(row.symbol ?? "—"), true],
+    ["_universe", universeCell, true],
+    ["long_name", td(row.long_name ?? "—"), true],
+    ["sector", td(row.sector ?? "—"), true],
+    ["forward_pe", td(fmtNum(row.forward_pe, 2), "num"), false],
+    ["trailing_peg_ratio", td(fmtNum(row.trailing_peg_ratio, 2), "num"), false],
+    ["beta", td(fmtNum(row.beta, 2), "num"), false],
+    ["rd_to_revenue", td(fmtPct(row.rd_to_revenue), "num"), false],
+    ["operating_margins", td(fmtPct(row.operating_margins), "num"), true],
+    ["return_on_equity", td(fmtPct(row.return_on_equity), "num"), false],
+    ["return_on_assets", td(fmtPct(row.return_on_assets), "num"), false],
+    ["current_ratio", td(fmtNum(row.current_ratio, 2), "num"), false],
+    ["sortino_ratio", td(fmtNum(row.sortino_ratio, 2), "num"), false],
+    ["composite_scores.screener_score", scoreCell, true],
+  ];
+  for (const [col, cell, inSimple] of cellSpecs) {
+    const value = col === "composite_scores.screener_score" ? score : row[col];
+    const klass = cellClass(col, value);
+    if (klass) cell.classList.add(klass);
+    if (!inSimple) cell.classList.add("detail-only");
+    if (value == null) annotateEmpty(cell, row, col);
+    tr.appendChild(cell);
+  }
+  tr.addEventListener("click", () => onRowClick(row));
+  return tr;
+}
+
+/**
+ * Reduce all visible rows' composite scores to a single normalisation
+ * denominator for the `buildRowTitle` weight calculation.
+ *
+ * @param {any[]} rows
+ * @returns {number}
+ */
+function totalCompositeScore(rows) {
+  return rows.reduce((acc, row) => {
+    const s = nested(row, "composite_scores.screener_score");
+    return acc + (s == null ? 0 : Number(s));
+  }, 0);
+}
+
 function renderTable() {
   const tbody = document.querySelector("#universe-table tbody");
   if (!tbody) return;
@@ -318,71 +454,9 @@ function renderTable() {
   const sorted = [...visible].sort((a, b) =>
     compareValues(nested(a, state.sortKey), nested(b, state.sortKey), state.sortDir),
   );
-  const totalScore = visible.reduce(
-    (/** @type {number} */ acc, /** @type {Row} */ row) => {
-      const s = nested(row, "composite_scores.screener_score");
-      return acc + (s == null ? 0 : Number(s));
-    },
-    0,
-  );
+  const totalScore = totalCompositeScore(visible);
   for (const row of sorted) {
-    const tr = document.createElement("tr");
-    const score = nested(row, "composite_scores.screener_score");
-    const coverage = [
-      "forward_pe",
-      "trailing_peg_ratio",
-      "beta",
-      "rd_to_revenue",
-      "operating_margins",
-      "return_on_equity",
-      "return_on_assets",
-      "current_ratio",
-      "sortino_ratio",
-    ].filter(
-      (k) => row[k] != null && !(k === "forward_pe" && row[k] <= 0),
-    ).length;
-    const parts = [];
-    if (score != null && totalScore > 0) {
-      const weightPct = ((100 * Number(score)) / totalScore).toFixed(1);
-      parts.push(`Weight ${weightPct} %`);
-      parts.push(`Score ${Number(score).toFixed(0)}`);
-    }
-    parts.push(`${coverage}/9 inputs`);
-    tr.title = parts.join(" · ");
-    const scoreCell = td(fmtNum(score, 0), "num score-cell");
-    if (score != null) {
-      scoreCell.style.backgroundColor = `hsl(${Number(score) * 1.2}, 60%, 75%)`;
-    }
-    const universeCell = td(
-      /** @type {any} */ (row)._universe ?? activeUniverse,
-    );
-    universeCell.classList.add("universe-col");
-    /** @type {Array<[string, HTMLElement, boolean]>} */
-    const cellSpecs = [
-      ["symbol", td(row.symbol ?? "—"), true],
-      ["_universe", universeCell, true],
-      ["long_name", td(row.long_name ?? "—"), true],
-      ["sector", td(row.sector ?? "—"), true],
-      ["forward_pe", td(fmtNum(row.forward_pe, 2), "num"), false],
-      ["trailing_peg_ratio", td(fmtNum(row.trailing_peg_ratio, 2), "num"), false],
-      ["beta", td(fmtNum(row.beta, 2), "num"), false],
-      ["rd_to_revenue", td(fmtPct(row.rd_to_revenue), "num"), false],
-      ["operating_margins", td(fmtPct(row.operating_margins), "num"), true],
-      ["return_on_equity", td(fmtPct(row.return_on_equity), "num"), false],
-      ["return_on_assets", td(fmtPct(row.return_on_assets), "num"), false],
-      ["current_ratio", td(fmtNum(row.current_ratio, 2), "num"), false],
-      ["sortino_ratio", td(fmtNum(row.sortino_ratio, 2), "num"), false],
-      ["composite_scores.screener_score", scoreCell, true],
-    ];
-    for (const [col, cell, inSimple] of cellSpecs) {
-      const value = col === "composite_scores.screener_score" ? score : row[col];
-      const klass = cellClass(col, value);
-      if (klass) cell.classList.add(klass);
-      if (!inSimple) cell.classList.add("detail-only");
-      tr.appendChild(cell);
-    }
-    tr.addEventListener("click", () => onRowClick(row));
-    tbody.appendChild(tr);
+    tbody.appendChild(renderRow(row, totalScore));
   }
 }
 
