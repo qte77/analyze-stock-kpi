@@ -39,7 +39,7 @@ jobs:
         run: uv run complexipy src --max-complexity-allowed 15
 
       - name: Markdownlint
-        run: npx --yes markdownlint-cli --config .markdownlint.json '**/*.md' --ignore '.venv/**' --ignore 'results/**' --ignore 'node_modules/**'
+        run: npx --yes markdownlint-cli --config .markdownlint.json '**/*.md' --ignore '.venv/**' --ignore 'results/**' --ignore 'node_modules/**' --ignore 'changelog.d/**'
 
       - name: Lint JS (node --check + tsc JSDoc type check)
         run: |
