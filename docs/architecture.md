@@ -26,6 +26,7 @@ Every external boundary carries one of three failure policies. Logged via `logge
 | yfinance batch `download` | `fundamentals._batch_close_prices` | wrap-degrade — `sortino_ratio=None` for all | network / shape error → returns `None`; per-ticker Sortino stays unset |
 | yfinance `Ticker.info` (audit) | `universe_audit.classify_ticker` | wrap-degrade — `FAIL` entry | exception → `AuditEntry(classification="FAIL", note=str(exc))`; one ticker can't abort the audit sweep |
 | whit3rabbit CSV fetch (backfill) | `scripts/backfill_fear_greed_whitrabbit._fetch_csv` | fail-loud | operator-only one-shot; CSV unavailability is a configuration error (wrong SHA, network down), not a degradable state — abort + retry rather than write partial data |
+| yfinance `Ticker.history` (yield curve) | `yield_curve._fetch_close` | wrap-degrade — `None` per leg | per-leg `try/except`; both legs failing → `fetch_yield_curve_snapshot` returns `None` and the cron skips today's write rather than persisting an empty row |
 | Filesystem write (snapshots) | `__main__._persist_snapshots` | fail-loud | disk full / permission denied → abort |
 | Filesystem write (CNN cache) | `sentiment._write_year` | fail-loud | same rationale |
 | Filesystem read (universe preset) | `universe._read_symbol_file` | fail-loud | config error — missing preset means the user passed a wrong name |

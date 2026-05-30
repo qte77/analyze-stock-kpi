@@ -1,0 +1,124 @@
+---
+# Daily 5s10s yield-curve snapshot (#165).
+#
+# Runs at 22:30 UTC (~1h after the F&G cron at 21:30 — staggered so
+# the two crons don't race on the same `data` branch ref). Fetches the
+# latest yfinance ^TNX and ^FVX closes, computes the 10y−5y slope,
+# merges into per-year history files at results/yield_curve/YYYY.json,
+# and commits changed files as a single verified commit via the REST
+# Git Data API (Blob -> Tree -> Commit -> Ref).
+#
+# Same verified-commit pattern as fear-greed.yaml; same data-branch
+# rationale (the repo's default-branch ruleset rejects direct ref
+# updates on main even from verified API commits — `data` is
+# unrestricted).
+
+name: yield-curve-snapshot
+
+on:
+  schedule:
+    # 22:30 UTC daily — 1h after the F&G cron so they don't race the
+    # same data-branch ref
+    - cron: "30 22 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: yield-curve-snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    name: fetch + commit yield-curve snapshot
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the workflow ref (main on cron + dispatch from main)
+      # for the current src/ layout — `src.data_sources.yield_curve`
+      # lives on main only. The `data` branch carries data only.
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+
+      # Pull the accumulated yield-curve history from the data branch
+      # so yield_curve.py merges into it rather than starting fresh.
+      # Path-scoped checkout touches only results/yield_curve/.
+      - name: Fetch existing yield-curve history from data branch
+        run: |
+          set -euo pipefail
+          git fetch origin data --depth=1
+          rm -rf results/yield_curve
+          git checkout origin/data -- results/yield_curve/ || \
+            echo "no existing results/yield_curve/ on data — first run"
+
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install runtime dependencies
+        run: uv sync
+
+      - name: Fetch yield-curve snapshot
+        run: uv run python -m src.data_sources.yield_curve
+
+      - name: Detect changed history files
+        id: changed
+        run: |
+          set -euo pipefail
+          FILES=$(git status --porcelain results/yield_curve/ \
+            | awk '$2 ~ /^results\/yield_curve\/[0-9]{4}\.json$/ {print $2}' \
+            | paste -sd ',' -)
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+          if [ -z "$FILES" ]; then
+            echo "no yield-curve history changes; skipping commit"
+          else
+            echo "changed: $FILES"
+          fi
+
+      - name: Commit history file(s) as a single verified commit
+        if: steps.changed.outputs.files != ''
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
+        env:
+          FILES: ${{ steps.changed.outputs.files }}
+        with:
+          script: |
+            const fs = require('fs');
+            const { FILES } = process.env;
+            const paths = FILES.split(',').filter(Boolean);
+            const { owner, repo } = context.repo;
+            const branch = 'data';
+
+            const ref = await github.rest.git.getRef({ owner, repo, ref: `heads/${branch}` });
+            const parentSha = ref.data.object.sha;
+            const parentCommit = await github.rest.git.getCommit({
+              owner, repo, commit_sha: parentSha,
+            });
+
+            const mkBlob = async (path) => {
+              const content = fs.readFileSync(path).toString('base64');
+              const blob = await github.rest.git.createBlob({
+                owner, repo, content, encoding: 'base64',
+              });
+              return { path, mode: '100644', type: 'blob', sha: blob.data.sha };
+            };
+            const tree = await Promise.all(paths.map(mkBlob));
+
+            const newTree = await github.rest.git.createTree({
+              owner, repo, base_tree: parentCommit.data.tree.sha, tree,
+            });
+
+            const commit = await github.rest.git.createCommit({
+              owner, repo,
+              message: 'chore(yield-curve): daily 5s10s yield-curve snapshot',
+              tree: newTree.data.sha,
+              parents: [parentSha],
+            });
+
+            await github.rest.git.updateRef({
+              owner, repo, ref: `heads/${branch}`, sha: commit.data.sha,
+            });
+
+            core.info(`Created verified commit ${commit.data.sha.slice(0, 8)} on ${branch}`);

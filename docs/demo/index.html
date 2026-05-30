@@ -45,7 +45,6 @@
 
   <main>
     <section id="fear-greed-section">
-      <h2>CNN Fear &amp; Greed</h2>
       <div id="fg-header" hidden>
         <div id="fg-score"></div>
         <div id="fg-meta">
@@ -57,7 +56,7 @@
         id="fg-tabs"
         class="detail-tabs"
         role="tablist"
-        aria-label="Fear and Greed chart range"
+        aria-label="Market sentiment + risk indicators"
       >
         <button
           type="button"
@@ -65,14 +64,28 @@
           role="tab"
           aria-selected="true"
           aria-controls="fg-chart-wrap"
-        >Rolling history</button>
+        >CNN F&amp;G rolling</button>
         <button
           type="button"
           id="fg-tab-monthly"
           role="tab"
           aria-selected="false"
           aria-controls="lt-fg-chart-wrap"
-        >Long-term context</button>
+        >CNN F&amp;G long-term</button>
+        <button
+          type="button"
+          id="fg-tab-yield-curve"
+          role="tab"
+          aria-selected="false"
+          aria-controls="yc-chart-wrap"
+        >5s10s slope</button>
+        <button
+          type="button"
+          id="fg-tab-why"
+          role="tab"
+          aria-selected="false"
+          aria-controls="why-wrap"
+        >Why these charts?</button>
       </div>
       <div id="fg-chart-wrap" role="tabpanel" aria-labelledby="fg-tab-rolling">
         <div class="fg-empty">loading…</div>
@@ -89,18 +102,47 @@
           aria-label="Monthly Fear and Greed median and average"
         ></canvas>
       </div>
+      <div
+        id="yc-chart-wrap"
+        role="tabpanel"
+        aria-labelledby="fg-tab-yield-curve"
+        hidden
+      >
+        <div id="yc-header" hidden>
+          <span id="yc-current-slope"></span>
+          <span id="yc-current-legs" class="updated"></span>
+        </div>
+        <div class="yc-empty">loading…</div>
+        <canvas
+          id="yc-chart"
+          aria-label="US Treasury 5s10s slope (10y minus 5y yield, percentage points)"
+        ></canvas>
+      </div>
+      <div
+        id="why-wrap"
+        role="tabpanel"
+        aria-labelledby="fg-tab-why"
+        hidden
+      >
+        <dl class="why-list">
+          <dt><a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank" rel="noopener noreferrer">CNN F&amp;G</a> rolling (~1y)</dt>
+          <dd>CNN's headline endpoint only ships about a year of daily history. Displayed as-is.</dd>
+          <dt><a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank" rel="noopener noreferrer">CNN F&amp;G</a> long-term (monthly)</dt>
+          <dd>Monthly median + average aggregation of the headline scores reveals multi-year regime patterns that daily noise obscures. Pre-2025 history backfilled via the <a href="https://github.com/whit3rabbit/fear-greed-data" target="_blank" rel="noopener noreferrer">whit3rabbit/fear-greed-data</a> mirror.</dd>
+          <dt>5s10s slope (10y − 5y, % pts)</dt>
+          <dd>Curve-steepness measure that smooths the short-end Fed-policy noise the more-famous 2y/10y carries. yfinance ships <code>^TNX</code> (10y) and <code>^FVX</code> (5y) as keyless Tier-0 tickers; <code>^IRX</code> (3-month) drops in and out, so we stick to the pair that's always available.</dd>
+        </dl>
+      </div>
     </section>
 
     <section id="universe-section">
       <div id="universe-controls-row">
         <div id="universe-header">
-          <label>
-            Universe:
-            <select
-              id="universe-picker"
-              title="Switch between bundled universes. Chips below appear when the URL deep-links additional universes (?universe=a,b,c) for overlay comparison."
-            ></select>
-          </label>
+          <select
+            id="universe-picker"
+            aria-label="Universe"
+            title="Switch between bundled universes. Chips below appear when the URL deep-links additional universes (?universe=a,b,c) for overlay comparison."
+          ></select>
           <div class="snapshot-row">
             <label>
               Snapshot:
@@ -174,8 +216,7 @@
 
   <footer>
     Powered by
-    <a href="https://github.com/ranaroussi/yfinance">yfinance</a> +
-    <a href="https://edition.cnn.com/markets/fear-and-greed">CNN F&amp;G</a>
+    <a href="https://github.com/ranaroussi/yfinance">yfinance</a>
     · source:
     <a href="https://github.com/qte77/analyze-stock-kpi">qte77/analyze-stock-kpi</a>
   </footer>
