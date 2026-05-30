@@ -450,7 +450,10 @@ footer a:hover { text-decoration: underline; }
    Used to be a pill-shaped header button before #180 moved it from
    .header-meta down to .view-row inside #universe-header. Reads as
    "<destination-view label>: <what that view shows>" — semantic
-   spans + a CSS-injected ": " separator so the HTML stays tidy. */
+   spans + a CSS-injected ": " separator so the HTML stays tidy.
+   min-width pins the button to roughly the longer of the two
+   labels ("Detailed view: Show all KPI columns") so toggling
+   doesn't jitter the row width. */
 #view-toggle {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -459,6 +462,8 @@ footer a:hover { text-decoration: underline; }
   font: inherit;
   cursor: pointer;
   color: var(--text);
+  min-width: 36ch;
+  text-align: left;
 }
 
 #view-toggle:hover { border-color: var(--accent); color: var(--accent); }
