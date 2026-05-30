@@ -45,7 +45,7 @@
     },
     "roi": null,
     "rd_to_revenue": 0.11312865779985007,
-    "sortino_ratio": 6.358380181763355,
+    "sortino_ratio": 6.358378463817395,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -96,7 +96,7 @@
     },
     "roi": null,
     "rd_to_revenue": 0.0665554122156008,
-    "sortino_ratio": 7.061544892628009,
+    "sortino_ratio": 7.06154514819954,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -249,7 +249,7 @@
     },
     "roi": null,
     "rd_to_revenue": 0.01459191272465125,
-    "sortino_ratio": 4.698701762440987,
+    "sortino_ratio": 4.698701727277079,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -296,11 +296,11 @@
       "big_call": 38.0976452047619,
       "aaqs": 20.74152079166667,
       "hgi": 66.07142857142857,
-      "screener_score": 46.783843458240234
+      "screener_score": 46.78384469077142
     },
     "roi": null,
     "rd_to_revenue": 0.002830318400274556,
-    "sortino_ratio": 2.219497466344941,
+    "sortino_ratio": 2.2194976142486835,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -347,11 +347,11 @@
       "big_call": 48.60095241650794,
       "aaqs": 53.883333377777774,
       "hgi": 61.42857142857143,
-      "screener_score": 67.00736599441412
+      "screener_score": 67.00737058500624
     },
     "roi": null,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.062125208091599,
+    "sortino_ratio": 2.062125758962653,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -372,7 +372,7 @@
     "price_to_sales_ttm": 2.8007567,
     "enterprise_value": 33156797300736.0,
     "enterprise_to_ebitda": 11.023,
-    "trailing_peg_ratio": 28.1654,
+    "trailing_peg_ratio": 24.6748,
     "return_on_equity": 0.0572,
     "return_on_assets": 0.03331,
     "profit_margins": 0.14522,
@@ -704,11 +704,11 @@
       "big_call": 44.67403171047619,
       "aaqs": 53.73111106666667,
       "hgi": 53.28571428571429,
-      "screener_score": 73.53164420129666
+      "screener_score": 73.53165324095282
     },
     "roi": null,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.7936206258698846,
+    "sortino_ratio": 2.793621710628624,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -755,11 +755,11 @@
       "big_call": 44.5984283936508,
       "aaqs": 51.63499977777778,
       "hgi": 42.142857142857146,
-      "screener_score": 69.75041186539616
+      "screener_score": 69.75041093336671
     },
     "roi": null,
     "rd_to_revenue": null,
-    "sortino_ratio": 2.40552529432373,
+    "sortino_ratio": 2.405525182480195,
     "sec_last_10k_date": null,
     "sec_last_10q_date": null,
     "sec_last_8k_date": null
@@ -882,7 +882,7 @@
     "price_to_sales_ttm": 1.2580037,
     "enterprise_value": 30362606501888.0,
     "enterprise_to_ebitda": 7.244,
-    "trailing_peg_ratio": 0.7632,
+    "trailing_peg_ratio": 0.7351,
     "return_on_equity": 0.02609,
     "return_on_assets": 0.02175,
     "profit_margins": 0.0215,
@@ -908,7 +908,7 @@
       "big_call": 23.629733333333334,
       "aaqs": 48.88716666666667,
       "hgi": 29.28571428571429,
-      "screener_score": 56.75283953996447
+      "screener_score": 56.86992287329781
     },
     "roi": null,
     "rd_to_revenue": 0.01985512432648216,
