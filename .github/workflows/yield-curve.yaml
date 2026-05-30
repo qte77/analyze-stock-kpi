@@ -68,7 +68,11 @@ jobs:
         id: changed
         run: |
           set -euo pipefail
-          FILES=$(git status --porcelain results/yield_curve/ \
+          # -uall enumerates files inside untracked directories — without
+          # it the first run (no prior results/yield_curve/ on data
+          # branch) shows "?? results/yield_curve/" summarised and awk
+          # finds nothing, silently skipping the commit.
+          FILES=$(git status --porcelain -uall results/yield_curve/ \
             | awk '$2 ~ /^results\/yield_curve\/[0-9]{4}\.json$/ {print $2}' \
             | paste -sd ',' -)
           echo "files=$FILES" >> "$GITHUB_OUTPUT"
