@@ -227,7 +227,11 @@ function applyViewMode() {
   body.classList.toggle("view-simple", viewMode === "simple");
   body.classList.toggle("view-detailed", viewMode === "detailed");
   const btn = document.getElementById("view-toggle");
-  if (btn) btn.textContent = viewMode === "simple" ? "↗ Detailed" : "← Simple";
+  if (btn) {
+    btn.textContent = viewMode === "simple"
+      ? "Show all KPI columns ↗"
+      : "Show essentials only ←";
+  }
 }
 
 /** @type {"system" | "light" | "dark"} */
