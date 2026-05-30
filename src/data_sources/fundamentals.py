@@ -170,8 +170,6 @@ def _compute_roi(info: dict[str, Any]) -> float | None:
     return net_income / invested_capital
 
 
-_INCOME_STMT_RD_ROW = "Research And Development"
-_INCOME_STMT_REVENUE_ROW = "Total Revenue"
 _TRADING_DAYS = 252
 _MIN_SORTINO_DATAPOINTS = 30
 
@@ -212,18 +210,38 @@ def _compute_sortino(
     return mean_annual / downside_dev_annual
 
 
+def _find_row(latest: pd.Series, needle: str) -> float | None:
+    """Case-insensitive whitespace-tolerant row lookup.
+
+    Yahoo's income-statement labels drift across yfinance versions and
+    diverge for IFRS filers (``"Research Development"`` without the
+    ``"And"``, lower-case variants, stray whitespace). Substring-on-
+    normalized-label catches all observed shapes without enumerating
+    them one by one. ``needle`` must already be lower-cased. NaN cells
+    propagate as ``float('nan')`` so the caller's identity-equality NaN
+    check still fires.
+    """
+    for label in latest.index:
+        if needle in str(label).strip().lower():
+            value = latest.at[label]
+            return None if value is None else float(value)
+    return None
+
+
 def _read_rd_revenue(income_stmt: pd.DataFrame | None) -> tuple[float | None, float | None]:
     """Extract latest R&D + Total Revenue from an income_stmt DataFrame.
 
     Returns ``(None, None)`` on any structural issue (empty DataFrame,
     missing rows, NaN cells). Float coercion only happens once both
-    values are present and non-NaN.
+    values are present and non-NaN. Row matching is case-insensitive
+    and tolerates whitespace + the ``"And"``/``"and"``/no-conjunction
+    variance observed across yfinance versions and IFRS filers.
     """
     if income_stmt is None or income_stmt.empty:
         return None, None
     latest = income_stmt.iloc[:, 0]
-    rd = latest.get(_INCOME_STMT_RD_ROW)
-    revenue = latest.get(_INCOME_STMT_REVENUE_ROW)
+    rd = _find_row(latest, "research")
+    revenue = _find_row(latest, "total revenue")
     if rd is None or revenue is None:
         return None, None
     if rd != rd or revenue != revenue:
