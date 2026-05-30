@@ -50,6 +50,34 @@ The original v0.6.0 RS hedging scope was deferred per [ADR-0003](decisions/0003-
 - [x] Static dashboard (`docs/demo/{index.html,app.js,style.css}`) — F&G 2-year chart + universe table with date selector, fetching cross-origin from `raw.githubusercontent.com/.../data/results/...`
 - [x] **Dashboard KPI expansion** — 13-column main table (P/E (fwd) / PEG / Beta / R&D/Rev % / Op M % / ROE / ROA / Current / Sortino / Score), English tooltips, mobile-graceful CSS, off-by-one fix in composite-scores detail panel. New snapshot fields (`trailing_peg_ratio`, `roi`, `rd_to_revenue`, `sortino_ratio`) and 7th composite (`screener_score`) per [ADR-0004](decisions/0004-price-history-composite-input.md).
 
+## 1.0.0 — Release engineering + headline weighting [x]
+
+**Shipped:**
+
+- [x] Factor-weighted `screener_score` replaces the unweighted composite aggregate — issue [#84](https://github.com/qte77/analyze-stock-kpi/issues/84)
+- [x] `tag-release` workflow, README screenshot, copyright + docstring polish — issue [#90](https://github.com/qte77/analyze-stock-kpi/issues/90)
+- [x] Auto-generated `llms.txt` via `qte77/gha-llms-txt-action` — issue [#80](https://github.com/qte77/analyze-stock-kpi/issues/80)
+- [x] Dashboard polish — detail-panel dismiss (#89), sticky-header fix, lint-gate tightening
+
+## Post-1.0 polish [in progress on `main`]
+
+Shipped on `main`; rolls into the next semver tag. See the `[Unreleased]` block in [`CHANGELOG.md`](../CHANGELOG.md) + the `changelog.d/` fragments for the canonical inventory.
+
+**Shipped:**
+
+- [x] **Universe coverage audit** — `scripts/audit_universes.py` + `src/orchestrators/universe_audit.py` classify every bundled-preset ticker against current Yahoo data (OK / SPARSE / FAIL) — issue [#168](https://github.com/qte77/analyze-stock-kpi/issues/168), PR #174
+- [x] **F&G historical backfill** — `scripts/backfill_fear_greed_whitrabbit.py` + `src/data_sources/sentiment_backfill.py` extend the dashboard's long-term context from ~13 months to ~14 years via the [`whit3rabbit/fear-greed-data`](https://github.com/whit3rabbit/fear-greed-data) mirror; ADR-0005 amendment classifies as Tier-0 — issue [#164](https://github.com/qte77/analyze-stock-kpi/issues/164), PR #178
+- [x] **Per-cell empty-reason tooltips** — `docs/demo/lib/empty_reason.js` explains structural gaps (bank R&D, bank current-ratio, CAD-bank ROE/ROA) so "—" cells answer "why" — issue [#170](https://github.com/qte77/analyze-stock-kpi/issues/170), PR #173
+- [x] **Long-term context tab** + monthly F&G aggregation (median + average), click-to-filter sector donut, theme toggle, multi-universe overlay — issue [#159](https://github.com/qte77/analyze-stock-kpi/issues/159) and follow-ups
+- [x] **Changelog tooling** — `scriv` fragments replace direct `[Unreleased]` edits; eliminates the parallel-PR conflict pattern — PR #175
+- [x] **Doc architecture split** — `CONTRIBUTING.md` carries shared dev workflow (humans + AI); `AGENTS.md` shrinks to AI-agent-specific behavioural rules — PR #177
+
+**Open / queued (research + medium-effort):**
+
+- [ ] Shiller CAPE long-term backdrop — issue [#166](https://github.com/qte77/analyze-stock-kpi/issues/166); source survey pending (likely Tier-1, defer)
+- [ ] Canadian-bank ROE/ROA Yahoo coverage survey — issue [#169](https://github.com/qte77/analyze-stock-kpi/issues/169); informs whether to widen the `#170` rule from "CAD bank only" to "all non-US banks"
+- [ ] **5s10s yield curve slope panel** (Tier-0 yfinance `^TNX` / `^FVX`) — issue [#165](https://github.com/qte77/analyze-stock-kpi/issues/165); WIP
+
 ## Deferred
 
 - [ ] RS hedging epic — parent [#4](https://github.com/qte77/analyze-stock-kpi/issues/4); sub-issues [#8](https://github.com/qte77/analyze-stock-kpi/issues/8) (Mansfield RS), [#9](https://github.com/qte77/analyze-stock-kpi/issues/9) (regime-split returns), [#10](https://github.com/qte77/analyze-stock-kpi/issues/10) (long/short ranking + CLI). Deferred per [ADR-0003](decisions/0003-defer-rs-hedging-epic.md); behavioral price analytics fits a sibling repo (e.g. `qte77/regime-hedging`) consuming `results/fundamentals/<UTC>.json`.

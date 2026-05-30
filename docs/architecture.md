@@ -25,6 +25,7 @@ Every external boundary carries one of three failure policies. Logged via `logge
 | yfinance `Ticker.info` | `fundamentals.fetch_fundamentals` | wrap-continue — sparse snapshot | per-ticker `try/except` in `fetch_universe_fundamentals` |
 | yfinance batch `download` | `fundamentals._batch_close_prices` | wrap-degrade — `sortino_ratio=None` for all | network / shape error → returns `None`; per-ticker Sortino stays unset |
 | yfinance `Ticker.info` (audit) | `universe_audit.classify_ticker` | wrap-degrade — `FAIL` entry | exception → `AuditEntry(classification="FAIL", note=str(exc))`; one ticker can't abort the audit sweep |
+| whit3rabbit CSV fetch (backfill) | `scripts/backfill_fear_greed_whitrabbit._fetch_csv` | fail-loud | operator-only one-shot; CSV unavailability is a configuration error (wrong SHA, network down), not a degradable state — abort + retry rather than write partial data |
 | Filesystem write (snapshots) | `__main__._persist_snapshots` | fail-loud | disk full / permission denied → abort |
 | Filesystem write (CNN cache) | `sentiment._write_year` | fail-loud | same rationale |
 | Filesystem read (universe preset) | `universe._read_symbol_file` | fail-loud | config error — missing preset means the user passed a wrong name |
@@ -44,6 +45,7 @@ src/
 ├── data_sources/
 │   ├── fundamentals.py               fetch_fundamentals / fetch_price_history / fetch_universe_fundamentals — yfinance
 │   ├── sentiment.py                  fetch_fear_greed() -> FearGreedSnapshot; `python -m src.data_sources.sentiment` merges into per-year files results/cnn_fg/YYYY.json
+│   ├── sentiment_backfill.py         parse_csv / merge_into_years — whit3rabbit/fear-greed-data CSV → per-year F&G files; one-shot backfill (#164)
 │   ├── usaspending.py                fetch_top_contractors(...) -> list[RecipientRecord] — usaspending.gov POST client
 │   └── sec/
 │       ├── cik_map.py                resolve_cik / lookup_record — EDGAR company_tickers_exchange.json with HTTP conditional GET + disk cache
