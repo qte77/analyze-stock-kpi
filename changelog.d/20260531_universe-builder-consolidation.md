@@ -1,3 +1,0 @@
-### Changed
-
-- **CI: consolidated per-universe refresh workflows.** `federal-contractors-refresh.yaml` + `aggregated-scores-best-and-worst-refresh.yaml` collapse into one matrix-driven `universe-builder.yaml`; one Sunday `02:00 UTC` cron; `workflow_dispatch` with empty `universe` input runs all in parallel, with `universe` set collapses to a single leg. Adding a future universe (e.g. Phase 2 #192) takes one option line + one matrix entry + one `case` branch instead of a 130-line copy-paste. Fixes two duplication-bugs from the parallel-workflows era: invalid JS escape (#194) and preset-PR bundling 100k lines of staged index state (#195). Consumers running `gh workflow run <name>` directly: switch to `gh workflow run universe-builder.yaml -f universe=<id>`.
