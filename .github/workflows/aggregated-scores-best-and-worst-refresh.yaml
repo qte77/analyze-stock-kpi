@@ -93,7 +93,7 @@ jobs:
           script: |
             const fs = require("fs");
             const { AUDIT_PATH } = process.env;
-            if (\!fs.existsSync(AUDIT_PATH)) {
+            if (!fs.existsSync(AUDIT_PATH)) {
               core.info(`No audit JSON at ${AUDIT_PATH}; skipping`);
               return;
             }
