@@ -6,7 +6,6 @@
     {"id": "federal-contractors", "label": "Federal contractors (DoD Top-25)"},
     {"id": "japan", "label": "Japan (Nikkei 225 top)"},
     {"id": "south-america", "label": "South America (Latam large caps)"},
-    {"id": "south-korea", "label": "South Korea (KOSPI top)"},
-    {"id": "crypto-top10", "label": "Crypto top-10"}
+    {"id": "south-korea", "label": "South Korea (KOSPI top)"}
   ]
 }

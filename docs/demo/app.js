@@ -38,7 +38,6 @@ const FALLBACK_UNIVERSE_IDS = [
   "japan",
   "south-america",
   "south-korea",
-  "crypto-top10",
 ];
 
 /** @type {string[]} */

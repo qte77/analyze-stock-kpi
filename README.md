@@ -76,7 +76,7 @@ In priority order:
 |---|---|
 | Inline list | `TICKERS=AAPL,MSFT` |
 | File (one symbol per line) | `TICKERS_FILE=path/to/list.txt` |
-| Preset | `UNIVERSE=qte77-watchlist` (or `crypto-top10` — see [`src/assets/universes/`](src/assets/universes) for all available presets) |
+| Preset | `UNIVERSE=qte77-watchlist` (see [`src/assets/universes/`](src/assets/universes) for all available presets) |
 
 ## Documentation
 
