@@ -16,7 +16,6 @@ Types of changes:
 
 <!-- scriv-insert-here -->
 
-<a id='changelog-1.1.0'></a>
 ## [1.1.0] - 2026-05-31
 
 ### Security
