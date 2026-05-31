@@ -1,14 +1,22 @@
-"""Build the aggregated-scores-best-and-worst universe.
+"""Build the aggregated-scores best + worst universe pair.
 
 Reads the latest snapshot per bundled universe (from `results/demo/<u>/`
 on the data branch, pulled into the workspace by the CI workflow), runs
-the aggregator, then writes:
-  - `src/assets/universes/aggregated-scores-best-and-worst.txt` (preset)
+the aggregator's single ranking pass, then writes:
+  - `src/assets/universes/aggregated-scores-best.txt`  (top 25)
+  - `src/assets/universes/aggregated-scores-worst.txt` (bottom 25)
   - `results/aggregated_scores_best_and_worst/audit/<UTC-date>.json` (trail)
 
-Invoked by `.github/workflows/aggregated-scores-best-and-worst-refresh.yaml`
-on a Sunday cron; can also be run ad-hoc locally if you have `results/demo/`
-populated (typically by checking out the `data` branch).
+The two preset files are emitted together from one ranking pass; the
+universe-builder workflow runs this script per-leg (matrix dispatches
+`-best` and `-worst` separately) and each leg commits only its own
+preset via pathspec, leaving the other preset file harmless on disk.
+Audit JSON is shared (one ranking, one audit); the data-branch commit
+helper handles the matrix race on the audit-file ref.
+
+Invoked by `.github/workflows/universe-builder.yaml` on a Sunday cron;
+can also be run ad-hoc locally if you have `results/demo/` populated
+(typically by checking out the `data` branch).
 """
 
 from __future__ import annotations
@@ -70,25 +78,27 @@ def main() -> None:
         snapshots_by_universe[universe_id] = snapshots
         snapshot_dates_by_universe[universe_id] = date_str
 
-    tickers, audit_rows = build_universe(
+    best, worst, audit_rows = build_universe(
         snapshots_by_universe,
         snapshot_dates_by_universe,
     )
 
-    preset_path = Path("src/assets/universes/aggregated-scores-best-and-worst.txt")
     today = datetime.now(UTC).strftime("%Y-%m-%d")
+    best_path = Path("src/assets/universes/aggregated-scores-best.txt")
+    worst_path = Path("src/assets/universes/aggregated-scores-worst.txt")
     audit_path = Path(
         f"results/aggregated_scores_best_and_worst/audit/{today}.json",
     )
 
-    preset_path.parent.mkdir(parents=True, exist_ok=True)
+    best_path.parent.mkdir(parents=True, exist_ok=True)
     audit_path.parent.mkdir(parents=True, exist_ok=True)
-    preset_body = "\n".join(sorted(set(tickers))) + "\n" if tickers else ""
-    preset_path.write_text(preset_body)
+    best_path.write_text("\n".join(best) + "\n" if best else "")
+    worst_path.write_text("\n".join(worst) + "\n" if worst else "")
     audit_path.write_text(
         json.dumps([row.model_dump() for row in audit_rows], indent=2),
     )
-    print(f"Wrote {len(tickers)} tickers to {preset_path}")
+    print(f"Wrote {len(best)} tickers to {best_path}")
+    print(f"Wrote {len(worst)} tickers to {worst_path}")
     print(f"Wrote {len(audit_rows)} audit rows to {audit_path}")
 
 
