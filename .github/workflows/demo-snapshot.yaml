@@ -12,7 +12,7 @@
 # `workflow_dispatch` still accepts a `universe` input; when set, the
 # matrix collapses to that single universe so ad-hoc dispatch stays
 # cheap. Unset (scheduled or dispatched without input) runs the full
-# 7-universe fan-out.
+# 8-universe fan-out.
 #
 # Target branch is `data` (not `main`). The repo's default-branch
 # ruleset (id 16200383) has a `pull_request` rule that rejects direct
@@ -33,7 +33,7 @@ on:
   workflow_dispatch:
     inputs:
       universe:
-        description: "Single universe (omit for full 7-universe fan-out)"
+        description: "Single universe (omit for full 8-universe fan-out)"
         required: false
         type: choice
         default: ""
@@ -46,6 +46,7 @@ on:
           - japan
           - south-america
           - south-korea
+          - aggregated-scores-best-and-worst
 
 permissions:
   contents: write
@@ -56,7 +57,7 @@ concurrency:
 
 jobs:
   # Compute the matrix of universes once. Cron + dispatch-without-input
-  # fan out across all 7 bundled presets; dispatch with `universe` set
+  # fan out across all 8 bundled presets; dispatch with `universe` set
   # collapses to a single leg so ad-hoc debug runs stay cheap.
   matrix:
     name: build matrix
@@ -74,7 +75,7 @@ jobs:
             # preset name; quoting is safe.
             echo "universes=[\"$INPUT_UNIVERSE\"]" >> "$GITHUB_OUTPUT"
           else
-            echo 'universes=["qte77-watchlist","sp500","eurostoxx","federal-contractors","japan","south-america","south-korea"]' >> "$GITHUB_OUTPUT"
+            echo 'universes=["qte77-watchlist","sp500","eurostoxx","federal-contractors","japan","south-america","south-korea","aggregated-scores-best-and-worst"]' >> "$GITHUB_OUTPUT"
           fi
 
   snapshot:

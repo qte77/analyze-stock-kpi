@@ -1,0 +1,3 @@
+### Added
+
+- **Aggregated-scores-best-and-worst universe (#184).** New cross-universe meta preset that ranks every ticker across the 7 sector/region universes by mean of their 7 composite scores (`quality / dividend / growth / big_call / aaqs / hgi / screener_score`) and combines the top 25 + bottom 25. New `src/orchestrators/aggregated_scores_best_and_worst.py` (pure orchestrator, DI snapshots dict) + `scripts/build_aggregated_scores_best_and_worst.py` + Sunday `02:00 UTC` cron workflow + ADR-0005 amendment. **NOT a hedging primitive** — composite-mean blends growth/value/quality signals; the hedging-grade gate-based screener ships as Phase 2 (#192).
