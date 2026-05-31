@@ -152,3 +152,8 @@ categories = ["Security", "Added", "Fixed"]
 # headings by (md_header_level + 1) so fragments stay at h3.
 md_header_level = "2"
 entry_title_template = "[{{ version }}] - {{ date.strftime('%Y-%m-%d') }}"
+# Suppress scriv's default `<a id='changelog-X.Y.Z'></a>` anchor before each
+# version heading — trips markdownlint MD033 (no-inline-html) + MD022
+# (blank-lines-around-headings) and required a manual fix during v1.1.0
+# (see #210). GitHub auto-generates heading anchors from the title text.
+md_html_anchors = false
