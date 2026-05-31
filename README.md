@@ -1,6 +1,6 @@
 # analyze-stock-kpi
 
-[![version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/qte77/analyze-stock-kpi/blob/main/CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/qte77/analyze-stock-kpi/blob/main/CHANGELOG.md)
 [![validate](https://github.com/qte77/analyze-stock-kpi/actions/workflows/validate.yaml/badge.svg)](https://github.com/qte77/analyze-stock-kpi/actions/workflows/validate.yaml)
 [![Links (Fail Fast)](https://github.com/qte77/analyze-stock-kpi/actions/workflows/links-fail-fast.yaml/badge.svg)](https://github.com/qte77/analyze-stock-kpi/actions/workflows/links-fail-fast.yaml)
 [![CodeFactor](https://www.codefactor.io/repository/github/qte77/analyze-stock-kpi/badge)](https://www.codefactor.io/repository/github/qte77/analyze-stock-kpi)
