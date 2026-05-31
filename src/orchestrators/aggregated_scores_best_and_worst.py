@@ -86,6 +86,42 @@ def build_universe(
         preset (top 25 + bottom 25), and ``audit_rows`` is one entry
         per ticker encountered (including excluded ones).
     """
-    # Minimal C1 stub: empty input -> empty output. Subsequent
-    # behaviours (C2+) will introduce ranking, dedup, eligibility.
-    return [], []
+    if not snapshots_by_universe:
+        return [], []
+
+    audit: list[AuditRow] = []
+    tickers: list[str] = []
+    for universe_id, snapshots in snapshots_by_universe.items():
+        snap_date = snapshot_dates_by_universe.get(universe_id, "")
+        for snap in snapshots:
+            composites = _extract_composites(snap)
+            populated = sum(1 for v in composites.values() if v is not None)
+            mean = _mean_of_populated(composites)
+            audit.append(
+                AuditRow(
+                    ticker=snap.symbol,
+                    source_universes=[universe_id],
+                    snapshot_dates={universe_id: snap_date},
+                    populated_composites=populated,
+                    composite_breakdown=composites,
+                    mean_composite=mean,
+                    eligible=True,
+                    rank=1,
+                ),
+            )
+            tickers.append(snap.symbol)
+    return tickers, audit
+
+
+def _extract_composites(snap: FundamentalsSnapshot) -> dict[str, float | None]:
+    """Pull the 7 composite scores into a name->value dict."""
+    cs = snap.composite_scores
+    if cs is None:
+        return dict.fromkeys(_COMPOSITE_FIELDS)
+    return {f: getattr(cs, f) for f in _COMPOSITE_FIELDS}
+
+
+def _mean_of_populated(values: dict[str, float | None]) -> float | None:
+    """Mean of non-None values; None if all are None."""
+    populated = [v for v in values.values() if v is not None]
+    return sum(populated) / len(populated) if populated else None
