@@ -14,6 +14,8 @@ Types of changes:
 - `Fixed` for any bugfixes.
 - `Security` in case of vulnerabilities.
 
+<!-- scriv-insert-here -->
+
 ## [1.0.0] - 2026-05-17
 
 ### Removed
