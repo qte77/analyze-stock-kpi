@@ -52,7 +52,7 @@ src/
 │       ├── cik_map.py                resolve_cik / lookup_record — EDGAR company_tickers_exchange.json with HTTP conditional GET + disk cache
 │       └── submissions.py            fetch_last_filed / enrich_snapshot_sec — EDGAR submissions API
 ├── orchestrators/
-│   ├── aggregated_scores_best_and_worst.py  build_universe(snapshots_by_universe, snapshot_dates_by_universe, *, top_n=25, ...) -> tuple[list[str], list[AuditRow]]; cross-universe composite-mean ranking, top-25 + bottom-25 meta preset (#184; NOT a hedging primitive, see ADR-0005 amendment)
+│   ├── aggregated_scores_best_and_worst.py  build_universe(snapshots_by_universe, snapshot_dates_by_universe, *, top_n=25, ...) -> tuple[list[str], list[str], list[AuditRow]]; cross-universe composite-mean ranking, returns (best, worst, audit) — paired presets `aggregated-scores-best` + `aggregated-scores-worst` (#184; NOT a hedging primitive, see ADR-0005 amendment)
 │   ├── federal_contractors.py        build_universe(*, fy=None, top_n=100) -> tuple[list[str], list[AuditRow]]; chains usaspending → EDGAR → yfinance
 │   └── universe_audit.py             classify_ticker / audit_universes -> UniverseAuditReport; operator triage for stale-US-ticker rot (#168)
 ├── assets/

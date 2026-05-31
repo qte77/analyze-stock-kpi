@@ -3,6 +3,10 @@
 Non-trivial behaviours only (matches the `make test_js` convention).
 Trivial smoke cases (empty input, single ticker) are exercised
 implicitly by the integration test and the ranking-boundary parametrize.
+
+Orchestrator returns a 3-tuple ``(best, worst, audit)``; the script
+wrapper writes ``best`` and ``worst`` to separate preset files
+(``aggregated-scores-best.txt`` + ``aggregated-scores-worst.txt``).
 """
 
 from __future__ import annotations
@@ -31,13 +35,14 @@ def test_ineligible_lt_min_composites_excluded() -> None:
     """
     snap = _snap("BTC-USD", quality=50, dividend=10, growth=20, big_call=30)
 
-    tickers, audit = build_universe(
+    best, worst, audit = build_universe(
         {"crypto": [snap]},
         {"crypto": "2026-05-31"},
         as_of=date(2026, 5, 31),
     )
 
-    assert tickers == []
+    assert best == []
+    assert worst == []
     assert len(audit) == 1
     row = audit[0]
     assert row.eligible is False
@@ -57,13 +62,14 @@ def test_stale_snapshot_excluded() -> None:
         aaqs=75, hgi=65, screener_score=70,
     )
 
-    tickers, audit = build_universe(
+    best, worst, audit = build_universe(
         {"sp500": [snap]},
         {"sp500": "2026-05-11"},  # 20 days before as_of (default max=14)
         as_of=date(2026, 5, 31),
     )
 
-    assert tickers == []
+    assert best == []
+    assert worst == []
     assert audit[0].eligible is False
     assert audit[0].excluded_reason == "stale"
     assert audit[0].rank is None
@@ -84,13 +90,15 @@ def test_dedup_ticker_across_universes_first_seen_wins() -> None:
         aaqs=45, hgi=35, screener_score=40,
     )
 
-    tickers, audit = build_universe(
+    best, worst, audit = build_universe(
         {"sp500": [snap_sp500], "qte77-watchlist": [snap_watchlist]},
         {"sp500": "2026-05-31", "qte77-watchlist": "2026-05-31"},
         as_of=date(2026, 5, 31),
     )
 
-    assert tickers == ["AAPL"]
+    # Single eligible ticker -> goes to best (rank=1), worst is empty.
+    assert best == ["AAPL"]
+    assert worst == []
     assert len(audit) == 1
     row = audit[0]
     assert row.source_universes == ["sp500", "qte77-watchlist"]
@@ -103,25 +111,25 @@ def test_dedup_ticker_across_universes_first_seen_wins() -> None:
 
 
 @pytest.mark.parametrize(
-    ("n", "expected_top", "expected_bottom", "expected_unranked"),
+    ("n", "expected_best", "expected_worst", "expected_unranked"),
     [
-        (60, 25, 25, 10),  # > 2*top_n: top 25 + bottom 25, 10 middle excluded
+        (60, 25, 25, 10),  # > 2*top_n: best 25 + worst 25, 10 middle excluded
         (50, 25, 25, 0),   # exactly 2*top_n: all selected, no middle
-        (30, 25, 5, 0),    # < 2*top_n but > top_n: top fills first, partial bottom
-        (20, 20, 0, 0),    # < top_n: all top, no bottom (no room)
+        (30, 25, 5, 0),    # < 2*top_n but > top_n: best fills first, partial worst
+        (20, 20, 0, 0),    # < top_n: all best, no worst (no room)
     ],
 )
 def test_ranking_boundaries(
     n: int,
-    expected_top: int,
-    expected_bottom: int,
+    expected_best: int,
+    expected_worst: int,
     expected_unranked: int,
 ) -> None:
-    """Top/bottom selection handles the four count regimes around 2*top_n.
+    """Best/worst selection handles the four count regimes around 2*top_n.
 
     Distinct means (descending) so sort order is unambiguous. Boundary
     behaviour matters: an off-by-one here would silently drop tickers from
-    the universe preset or over-select past the intended count.
+    a preset or over-select past the intended count.
     """
     snapshots = [
         _snap(
@@ -137,21 +145,23 @@ def test_ranking_boundaries(
         for i in range(n)
     ]
 
-    tickers, audit = build_universe(
+    best, worst, audit = build_universe(
         {"sp500": snapshots},
         {"sp500": "2026-05-31"},
         as_of=date(2026, 5, 31),
         top_n=25,
     )
 
-    assert len(tickers) == expected_top + expected_bottom
+    assert len(best) == expected_best
+    assert len(worst) == expected_worst
+    assert set(best).isdisjoint(set(worst))
     top_ranked = [row for row in audit if row.rank is not None and row.rank > 0]
     bottom_ranked = [row for row in audit if row.rank is not None and row.rank < 0]
     unranked_eligible = [
         row for row in audit if row.eligible and row.rank is None
     ]
-    assert len(top_ranked) == expected_top
-    assert len(bottom_ranked) == expected_bottom
+    assert len(top_ranked) == expected_best
+    assert len(bottom_ranked) == expected_worst
     assert len(unranked_eligible) == expected_unranked
 
 
@@ -169,7 +179,7 @@ def test_ties_sort_ascii_ascending_by_ticker() -> None:
         for t in ["MSFT", "AAPL", "GOOG"]
     ]
 
-    tickers, audit = build_universe(
+    best, worst, audit = build_universe(
         {"sp500": snaps},
         {"sp500": "2026-05-31"},
         as_of=date(2026, 5, 31),
@@ -177,9 +187,9 @@ def test_ties_sort_ascii_ascending_by_ticker() -> None:
     )
 
     # All 3 tied. Ascending tiebreak: AAPL, GOOG, MSFT.
-    # top_n=2 -> top=2, bottom=min(2, 3-2)=1.
-    # Ranks: AAPL=1, GOOG=2, MSFT=-1. All 3 selected.
-    assert tickers == ["AAPL", "GOOG", "MSFT"]
+    # top_n=2 -> best=[AAPL,GOOG] (ranks 1,2); worst=[MSFT] (rank -1).
+    assert best == ["AAPL", "GOOG"]
+    assert worst == ["MSFT"]
     ranks = {row.ticker: row.rank for row in audit}
     assert ranks["AAPL"] == 1
     assert ranks["GOOG"] == 2
@@ -187,7 +197,7 @@ def test_ties_sort_ascii_ascending_by_ticker() -> None:
 
 
 def test_integration_multiple_universes_mixed_eligibility() -> None:
-    """3 universes, mixed eligible/ineligible -> correct preset + audit."""
+    """3 universes, mixed eligible/ineligible -> correct best+worst pair + audit."""
     sp500 = [
         _snap(
             "AAPL", quality=90, dividend=30, growth=80, big_call=70,
@@ -210,7 +220,7 @@ def test_integration_multiple_universes_mixed_eligibility() -> None:
     ]
     crypto = [_snap("BTC", quality=50, dividend=10)]  # 2/7 -> ineligible
 
-    tickers, audit = build_universe(
+    best, worst, audit = build_universe(
         {"sp500": sp500, "eurostoxx": eurostoxx, "crypto": crypto},
         {
             "sp500": "2026-05-31",
@@ -222,8 +232,10 @@ def test_integration_multiple_universes_mixed_eligibility() -> None:
     )
 
     # Means desc: AAPL ≈ 72.86, MSFT ≈ 67.86, ASML ≈ 64.86, XOM ≈ 34.29
-    # top_n=2: top = [AAPL(1), MSFT(2)]; bottom = [XOM(-1), ASML(-2)]
-    assert sorted(tickers) == ["AAPL", "ASML", "MSFT", "XOM"]
+    # top_n=2: best = [AAPL(1), MSFT(2)]; worst = [XOM(-1), ASML(-2)]
+    assert best == ["AAPL", "MSFT"]
+    assert worst == ["ASML", "XOM"]
+    assert set(best).isdisjoint(set(worst))
     ranks = {row.ticker: row.rank for row in audit}
     assert ranks["AAPL"] == 1
     assert ranks["MSFT"] == 2

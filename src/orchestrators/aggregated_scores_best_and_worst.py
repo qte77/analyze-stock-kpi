@@ -141,15 +141,16 @@ def build_universe(
     min_composites: int = 5,
     max_stale_days: int = 14,
     as_of: date | None = None,
-) -> tuple[list[str], list[AuditRow]]:
-    """Build the aggregated-scores-best-and-worst preset + per-ticker audit.
+) -> tuple[list[str], list[str], list[AuditRow]]:
+    """Build the aggregated-scores best + worst preset pair + per-ticker audit.
 
     Args:
         snapshots_by_universe: Mapping of universe id to its latest
             snapshot list. First-seen universe wins on per-ticker dedup.
         snapshot_dates_by_universe: Per-universe ISO ``YYYY-MM-DD``
             snapshot date used for freshness gating.
-        top_n: Each side of the ranking (default 25). Output is up to 2*top_n.
+        top_n: Each side of the ranking (default 25). Output is two
+            lists, each up to ``top_n``.
         min_composites: Minimum populated composites for eligibility
             (default 5/7, mirrors :func:`composite_scores.screener_score`
             L3 gate).
@@ -158,14 +159,17 @@ def build_universe(
             UTC; injected for deterministic tests.
 
     Returns:
-        ``(tickers, audit_rows)`` where ``tickers`` is the deduped
-        preset (sorted ASCII ascending), and ``audit_rows`` is one entry
-        per ticker encountered (including excluded ones).
+        ``(best_tickers, worst_tickers, audit_rows)``. ``best_tickers``
+        is the top-``top_n`` by composite-mean; ``worst_tickers`` is the
+        bottom-``top_n``. Both sorted ASCII ascending. Disjoint sets.
+        ``audit_rows`` has one entry per ticker encountered (including
+        excluded ones); rank is ``+1..+top_n`` for best, ``-top_n..-1``
+        for worst, ``None`` for excluded.
     """
     if as_of is None:
         as_of = datetime.now(UTC).date()
     if not snapshots_by_universe:
-        return [], []
+        return [], [], []
 
     per_ticker = _dedup_by_ticker(snapshots_by_universe, snapshot_dates_by_universe)
 
@@ -182,18 +186,19 @@ def build_universe(
     n = len(eligible_with_mean)
     top_count = min(top_n, n)
     bottom_count = min(top_n, n - top_count)
-    selected: list[str] = []
+    best_tickers: list[str] = []
+    worst_tickers: list[str] = []
     for i in range(top_count):
         ticker, _ = eligible_with_mean[i]
         rows_by_ticker[ticker] = rows_by_ticker[ticker].model_copy(
             update={"rank": i + 1},
         )
-        selected.append(ticker)
+        best_tickers.append(ticker)
     for j in range(bottom_count):
         ticker, _ = eligible_with_mean[n - 1 - j]
         rows_by_ticker[ticker] = rows_by_ticker[ticker].model_copy(
             update={"rank": -(j + 1)},
         )
-        selected.append(ticker)
+        worst_tickers.append(ticker)
 
-    return sorted(selected), list(rows_by_ticker.values())
+    return sorted(best_tickers), sorted(worst_tickers), list(rows_by_ticker.values())

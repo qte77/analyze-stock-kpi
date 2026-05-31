@@ -38,7 +38,8 @@ const FALLBACK_UNIVERSE_IDS = [
   "japan",
   "south-america",
   "south-korea",
-  "aggregated-scores-best-and-worst",
+  "aggregated-scores-best",
+  "aggregated-scores-worst",
 ];
 
 /** @type {string[]} */

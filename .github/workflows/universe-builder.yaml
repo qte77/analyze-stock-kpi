@@ -27,7 +27,8 @@ on:
         options:
           - ""
           - federal-contractors
-          - aggregated-scores-best-and-worst
+          - aggregated-scores-best
+          - aggregated-scores-worst
 
 permissions:
   contents: write
@@ -55,7 +56,7 @@ jobs:
           if [[ -n "$INPUT_UNIVERSE" ]]; then
             echo "universes=[\"$INPUT_UNIVERSE\"]" >> "$GITHUB_OUTPUT"
           else
-            echo 'universes=["federal-contractors","aggregated-scores-best-and-worst"]' >> "$GITHUB_OUTPUT"
+            echo 'universes=["federal-contractors","aggregated-scores-best","aggregated-scores-worst"]' >> "$GITHUB_OUTPUT"
           fi
 
   build:
@@ -88,9 +89,14 @@ jobs:
               echo "preset=src/assets/universes/federal-contractors.txt"     >> "$GITHUB_OUTPUT"
               echo "audit_dir=results/federal_contractors/audit"             >> "$GITHUB_OUTPUT"
               echo "needs_data_branch=false"                                  >> "$GITHUB_OUTPUT" ;;
-            aggregated-scores-best-and-worst)
+            aggregated-scores-best)
               echo "script=scripts/build_aggregated_scores_best_and_worst.py" >> "$GITHUB_OUTPUT"
-              echo "preset=src/assets/universes/aggregated-scores-best-and-worst.txt" >> "$GITHUB_OUTPUT"
+              echo "preset=src/assets/universes/aggregated-scores-best.txt" >> "$GITHUB_OUTPUT"
+              echo "audit_dir=results/aggregated_scores_best_and_worst/audit" >> "$GITHUB_OUTPUT"
+              echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
+            aggregated-scores-worst)
+              echo "script=scripts/build_aggregated_scores_best_and_worst.py" >> "$GITHUB_OUTPUT"
+              echo "preset=src/assets/universes/aggregated-scores-worst.txt" >> "$GITHUB_OUTPUT"
               echo "audit_dir=results/aggregated_scores_best_and_worst/audit" >> "$GITHUB_OUTPUT"
               echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
             *)
