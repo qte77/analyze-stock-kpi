@@ -86,4 +86,6 @@ def build_universe(
         preset (top 25 + bottom 25), and ``audit_rows`` is one entry
         per ticker encountered (including excluded ones).
     """
-    raise NotImplementedError("C1 in progress")
+    # Minimal C1 stub: empty input -> empty output. Subsequent
+    # behaviours (C2+) will introduce ranking, dedup, eligibility.
+    return [], []
