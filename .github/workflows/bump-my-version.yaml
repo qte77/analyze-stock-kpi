@@ -79,6 +79,20 @@ jobs:
           echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
           echo "bumped=true" >> "$GITHUB_OUTPUT"
 
+      - name: Collect changelog fragments
+        if: steps.bump.outputs.bumped == 'true'
+        env:
+          NEW_VERSION: ${{ steps.bump.outputs.new_version }}
+        run: |
+          set -euo pipefail
+          if ls changelog.d/*.md >/dev/null 2>&1; then
+            uv run scriv collect --version "$NEW_VERSION"
+            git add CHANGELOG.md changelog.d/
+            git commit -m "docs(changelog): collect fragments for $NEW_VERSION"
+          else
+            echo "no changelog fragments to collect"
+          fi
+
       - name: Push branch
         if: steps.bump.outputs.bumped == 'true'
         env:
