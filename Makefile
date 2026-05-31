@@ -19,6 +19,7 @@ endif
 # Override at the CLI to install a pinned lychee build, e.g.:
 #   make setup_lychee LYCHEE_URL=https://github.com/lycheeverse/lychee/releases/download/lychee-v0.18.0/lychee-x86_64-unknown-linux-gnu.tar.gz
 LYCHEE_URL ?= https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz
+LYCHEE_BIN ?= $(HOME)/.local/bin/lychee
 
 
 # MARK: SETUP
@@ -35,10 +36,13 @@ setup_uv:  ## Install uv (if missing)
 setup_dev: setup_uv  ## uv sync (default groups: dev + test)
 	uv sync
 
-setup_lychee:  ## Install lychee link checker (override LYCHEE_URL to pin a version; needs sudo)
-	curl -sL $(LYCHEE_URL) \
-	  | sudo tar xz -C /usr/local/bin lychee
-	echo "lychee version: $$(lychee --version)"
+setup_lychee:  ## Install lychee link checker (override LYCHEE_URL / LYCHEE_BIN to customize)
+	tmp=$$(mktemp -d)
+	curl -sSfL $(LYCHEE_URL) | tar xz -C "$$tmp"
+	mkdir -p $(dir $(LYCHEE_BIN))
+	install -m 755 "$$tmp"/lychee-*/lychee $(LYCHEE_BIN)
+	rm -rf "$$tmp"
+	echo "lychee version: $$($(LYCHEE_BIN) --version)"
 
 setup_npm_tools:  ## Install npm-based dev tools (markdownlint-cli, typescript)
 	npm install -gs markdownlint-cli typescript
