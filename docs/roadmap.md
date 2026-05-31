@@ -72,12 +72,14 @@ Shipped on `main`; rolls into the next semver tag. See the `[Unreleased]` block 
 - [x] **5s10s yield curve slope panel** — `src/data_sources/yield_curve.py` + `.github/workflows/yield-curve.yaml` (daily cron, 22:30 UTC, Tier-0 yfinance `^TNX` / `^FVX`) + new "5s10s slope" tab in the long-term-context panel. Issue [#165](https://github.com/qte77/analyze-stock-kpi/issues/165).
 - [x] **Changelog tooling** — `scriv` fragments replace direct `[Unreleased]` edits; eliminates the parallel-PR conflict pattern — PR #175
 - [x] **Doc architecture split** — `CONTRIBUTING.md` carries shared dev workflow (humans + AI); `AGENTS.md` shrinks to AI-agent-specific behavioural rules — PR #177
+- [x] **DRY refactor: shared per-year loader** — `loadFearGreedYears` + `loadYieldCurveYears` collapsed into `loadYearsFromBranch(pathPrefix, sortKey)` in `docs/demo/app.js`; future Tier-0 per-year sources plug in as one-line wrappers — issue [#181](https://github.com/qte77/analyze-stock-kpi/issues/181), PR #189
+- [x] **lychee install fix** — Makefile `setup_lychee` recipe extracts the binary from the lycheeverse wrapper-dir tarball; drops `sudo` per qte77 convention; factors install path into `LYCHEE_BIN` — issue [#149](https://github.com/qte77/analyze-stock-kpi/issues/149), PR #188 (co-authored by @onurege3467)
+- [x] **Universe pruning: drop crypto-top10** — preset removed from `src/assets/universes/`, `FALLBACK_UNIVERSE_IDS`, `universes.json`, demo-snapshot matrix; freed the cross-universe aggregator's source set from a non-equity preset that would have been ineligible anyway — issue [#190](https://github.com/qte77/analyze-stock-kpi/issues/190), PR #191
+- [x] **Aggregated-scores best-and-worst universe (Phase 1 of long/short screener)** — new `src/orchestrators/aggregated_scores_best_and_worst.py` + weekly cron + PR-on-diff workflow; cross-universe meta preset (25 best + 25 worst by composite-mean); explicit "NOT a hedging primitive" framing in ADR-0005 amendment — issue [#184](https://github.com/qte77/analyze-stock-kpi/issues/184)
 
 **Open / queued (research + medium-effort):**
 
-- [ ] Shiller CAPE long-term backdrop — issue [#166](https://github.com/qte77/analyze-stock-kpi/issues/166); source survey pending (likely Tier-1, defer)
-- [ ] Canadian-bank ROE/ROA Yahoo coverage survey — issue [#169](https://github.com/qte77/analyze-stock-kpi/issues/169); informs whether to widen the `#170` rule from "CAD bank only" to "all non-US banks"
-- [ ] DRY refactor: consolidate `loadFearGreedYears` + `loadYieldCurveYears` into a shared loader — issue [#181](https://github.com/qte77/analyze-stock-kpi/issues/181); follow-up surfaced by #165
+- [ ] **Enhanced KPI long/short screener (Phase 2)** — 16-criteria conjunctive multi-KPI gate set for hedging-grade long + short universes; needs new yfinance fetches (`fcf_margin`, `analyst_recommendation`); TradingView tech-rating omitted pending #21 — issue [#192](https://github.com/qte77/analyze-stock-kpi/issues/192)
 
 ## Deferred
 
@@ -88,7 +90,8 @@ Shipped on `main`; rolls into the next semver tag. See the `[Unreleased]` block 
 - [ ] TradingView screener evaluation — issue [#21](https://github.com/qte77/analyze-stock-kpi/issues/21)
 - [x] Alternative risk-sentiment sources (UBS, AAII, NAAIM, etc.) — issue [#22](https://github.com/qte77/analyze-stock-kpi/issues/22), resolved by [ADR-0005](decisions/0005-sentiment-risk-sources.md) (three-tier source framework)
 - [ ] pandas alternatives (Polars, DuckDB, Dask, Modin, etc.) — issue [#23](https://github.com/qte77/analyze-stock-kpi/issues/23)
-- [ ] Volatility-indices chart (Tier 0 application of ADR-0005) — issue [#100](https://github.com/qte77/analyze-stock-kpi/issues/100)
+- [ ] Volatility indices overlay (^VIX / ^VIX9D) — issue [#187](https://github.com/qte77/analyze-stock-kpi/issues/187), deferred pending Part 1 of #100 (F&G subindicator panels, also deferred per session re-evaluation)
+- [ ] F&G 9-subindicator panels (narrowed) — issue [#100](https://github.com/qte77/analyze-stock-kpi/issues/100), deferred (9-sparkline grid more visual load than action signal)
 - [x] Federal-contractors universe (Tier 0 pipeline: usaspending.gov + EDGAR + yfinance) — shipped via PRs #107 (CIK resolver), #110 (last-filed flags), #123 (Item 3a usaspending client), #125 (Item 3b orchestrator + CLI + workflow). Library-first reorg documented in [ADR-0006 amendment](decisions/0006-federal-contractors-universe.md).
 - [ ] Deferred EDGAR product use cases — XBRL cross-validation [#101](https://github.com/qte77/analyze-stock-kpi/issues/101), Form 4 insider momentum [#102](https://github.com/qte77/analyze-stock-kpi/issues/102), 8-K material events [#103](https://github.com/qte77/analyze-stock-kpi/issues/103)
 

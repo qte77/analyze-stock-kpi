@@ -200,3 +200,44 @@ an explicit license, this amendment will be revised to cite it.
   <https://www.cboe.com/us/indices/>
 - Related: [ADR-0000](0000-remove-traderfox.md) — no HTML scraping
   policy (informs Tier 0's "documented endpoint" requirement).
+
+## Amendment (2026-05-31) — aggregated-scores-best-and-worst Tier-0 aggregator
+
+[#184](https://github.com/qte77/analyze-stock-kpi/issues/184) ships a
+cross-universe meta preset (`aggregated-scores-best-and-worst`) that
+combines the top 25 + bottom 25 tickers across the 7 sector/region
+universes, ranked by mean of the 7 composite scores. This amendment
+classifies the aggregator as a **Tier-0 pure-aggregation source**.
+
+- **Auth:** none. The aggregator consumes Tier-0 demo snapshots already
+  on the `data` branch (`results/demo/<u>/<latest>.json`), via the same
+  `git checkout origin/data --` pattern `demo-snapshot.yaml` uses. No
+  new external boundary, no new HTTP, no new rate-limit surface.
+- **Default:** weekly cron on (`Sunday 02:00 UTC`, staggers before
+  federal-contractors at `04:00` and demo-snapshot at `06:15`).
+- **Persistence:** preset `.txt` lives in `src/assets/universes/` on
+  `main` (auto PR-on-diff); per-ticker audit JSON lives on the `data`
+  branch under `results/aggregated_scores_best_and_worst/audit/`.
+
+### NOT a hedging primitive
+
+Composite-mean ranking blends growth / value / quality signals. The
+top-25 by mean is a **meta-screening starting point** ("what should I
+look at first?"), not a long-candidate set. The hedging-grade
+counterpart — a 16-criteria conjunctive multi-KPI gate set — ships as
+[`enhanced-kpi-screener-longshort`](https://github.com/qte77/analyze-stock-kpi/issues/192)
+in Phase 2 and produces fundamentally-grounded long + short presets.
+
+Documenting the limitation here prevents downstream consumers from
+misusing the aggregator output for hedging-pair construction.
+
+### Sector bias caveat
+
+Composite scoring uses **absolute thresholds** per [ADR-0002](0002-simplified-composites.md)
+(e.g., ROE 0% -> 30% mapped to 0 -> 100). Cross-sector aggregation
+inherits this — banks structurally cluster lower than tech on
+quality / margin metrics. The bias attenuates in practice because our
+7 universes are sector-mixed, not sector-pure. If the first weekly
+cron's top-25 / bottom-25 output shows persistent sector skew, the
+trigger is an ADR-0002 amendment introducing percentile-rank-within-
+universe scoring; until then, ship absolute thresholds + observe.
