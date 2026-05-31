@@ -109,11 +109,11 @@ exclude_lines = [
     "if __name__ == .__main__.:",
 ]
 
-# Atomic version bumping. Single source of truth is [project].version;
-# bumpversion keeps the README static badge in sync, tags the release,
-# and creates a conventional bump commit. CHANGELOG.md is owned by
-# scriv (see [tool.scriv] below) — `make changelog_release VERSION=X`
-# runs before bump-my-version at release time.
+# Atomic version bumping. [project].version is the single source of
+# truth; bumpversion bumps + commits + syncs the README badge.
+# tag creation is deferred to tag-release.yaml so the tag lands on
+# the main merge commit. CHANGELOG.md is owned by scriv (below) and
+# collected inside the bump-my-version.yaml workflow.
 [tool.bumpversion]
 current_version = "1.1.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
@@ -137,23 +137,20 @@ filename = "README.md"
 search = "version-{current_version}-blue"
 replace = "version-{new_version}-blue"
 
-# Changelog fragments — each PR adds one file under changelog.d/ via
-# `make changelog_new`, preview the assembled release entry with
-# `make changelog_preview`, and `make changelog_release VERSION=X.Y.Z`
-# collects fragments into CHANGELOG.md (run before bump-my-version).
-# Categories follow Keep a Changelog; only the three currently used
-# (Security / Added / Fixed) are listed — extend additively if needed.
+# Changelog fragments — each PR adds one under changelog.d/ via
+# `make changelog_new`; `make changelog_preview` shows the assembled
+# entry. Fragments are collected at release time by the
+# bump-my-version.yaml workflow. Categories mirror CHANGELOG.md's
+# Keep-a-Changelog preamble.
 [tool.scriv]
 format = "md"
 fragment_directory = "changelog.d"
-categories = ["Security", "Added", "Fixed"]
-# Matches the existing CHANGELOG.md convention: `## [X.Y.Z]` entry
-# titles, `### Added` category headers. scriv shifts fragment
-# headings by (md_header_level + 1) so fragments stay at h3.
+categories = ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]
+# `## [X.Y.Z]` entry titles + `### Added` category headers. scriv
+# shifts fragment headings by (md_header_level + 1) → fragments at h3.
 md_header_level = "2"
 entry_title_template = "[{{ version }}] - {{ date.strftime('%Y-%m-%d') }}"
-# Suppress scriv's default `<a id='changelog-X.Y.Z'></a>` anchor before each
-# version heading — trips markdownlint MD033 (no-inline-html) + MD022
-# (blank-lines-around-headings) and required a manual fix during v1.1.0
-# (see #210). GitHub auto-generates heading anchors from the title text.
+# Suppress scriv's default `<a id='changelog-X.Y.Z'></a>` anchor — trips
+# markdownlint MD033 + MD022. GitHub generates heading anchors from
+# the title text.
 md_html_anchors = false
