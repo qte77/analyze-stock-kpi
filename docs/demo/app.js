@@ -166,43 +166,39 @@ const loadSnapshot = (/** @type {string} */ date) =>
 
 const loadUniverses = () => fetchJson("universes.json");
 
-async function loadFearGreedYears() {
+/**
+ * Fetch this-year + last-year per-year JSON files from the data branch
+ * and concat. Silent-fail per leg so a brand-new repo (no
+ * `results/<prefix>/<thisYear>.json` yet on the data branch) still
+ * paints what's available. Sorts ascending by the named string field.
+ *
+ * @param {string} pathPrefix  e.g. "results/cnn_fg" / "results/yield_curve"
+ * @param {string} sortKey     e.g. "timestamp" / "date"
+ * @returns {Promise<Array<any>>}
+ */
+async function loadYearsFromBranch(pathPrefix, sortKey) {
   const thisYear = new Date().getUTCFullYear();
   const results = await Promise.allSettled([
-    fetchJson(`${DATA_BASE_URL}/results/cnn_fg/${thisYear - 1}.json`),
-    fetchJson(`${DATA_BASE_URL}/results/cnn_fg/${thisYear}.json`),
+    fetchJson(`${DATA_BASE_URL}/${pathPrefix}/${thisYear - 1}.json`),
+    fetchJson(`${DATA_BASE_URL}/${pathPrefix}/${thisYear}.json`),
   ]);
+  /** @type {Array<any>} */
   const merged = [];
   for (const r of results) {
     if (r.status === "fulfilled" && Array.isArray(r.value)) {
       merged.push(...r.value);
     }
   }
-  return merged.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+  return merged.sort((a, b) => a[sortKey].localeCompare(b[sortKey]));
 }
 
-/**
- * Fetch this-year + last-year yield-curve history files and concat.
- * Mirrors `loadFearGreedYears` shape — silent-fail per leg so a
- * brand-new repo (no `results/yield_curve/<thisYear>.json` yet on the
- * data branch) still paints what's available.
- *
- * @returns {Promise<Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>>}
- */
-async function loadYieldCurveYears() {
-  const thisYear = new Date().getUTCFullYear();
-  const results = await Promise.allSettled([
-    fetchJson(`${DATA_BASE_URL}/results/yield_curve/${thisYear - 1}.json`),
-    fetchJson(`${DATA_BASE_URL}/results/yield_curve/${thisYear}.json`),
-  ]);
-  const merged = [];
-  for (const r of results) {
-    if (r.status === "fulfilled" && Array.isArray(r.value)) {
-      merged.push(...r.value);
-    }
-  }
-  return merged.sort((a, b) => a.date.localeCompare(b.date));
-}
+/** @type {() => Promise<Array<{timestamp: string, score: number, rating?: string}>>} */
+const loadFearGreedYears = () =>
+  loadYearsFromBranch("results/cnn_fg", "timestamp");
+
+/** @type {() => Promise<Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>>} */
+const loadYieldCurveYears = () =>
+  loadYearsFromBranch("results/yield_curve", "date");
 
 function nested(/** @type {Row} */ obj, /** @type {string} */ key) {
   return key
