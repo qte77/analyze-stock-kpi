@@ -5,7 +5,7 @@ ranks tickers by the mean of their 7 composite scores
 (``quality / dividend / growth / big_call / aaqs / hgi / screener_score``),
 and emits a 50-ticker preset combining the top 25 + bottom 25.
 
-The ranking primitive is composite-mean — explicit signal that this is
+The ranking primitive is composite-mean -- explicit signal that this is
 a meta-screening *starting point*, NOT a hedging primitive. Top-25 by
 composite-mean is not equivalent to "fundamentally strong long
 candidate"; the hedging-grade signal lives in
@@ -21,8 +21,8 @@ already-Tier-0 snapshots; no new external boundary).
 
 from __future__ import annotations
 
-from datetime import date  # noqa: TC003  # pydantic needs runtime access for model fields
-from typing import TYPE_CHECKING
+from datetime import UTC, date, datetime
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, ConfigDict
 
@@ -57,6 +57,82 @@ class AuditRow(BaseModel):
     rank: int | None = None
 
 
+def _extract_composites(snap: FundamentalsSnapshot) -> dict[str, float | None]:
+    """Pull the 7 composite scores into a name->value dict."""
+    cs = snap.composite_scores
+    if cs is None:
+        return dict.fromkeys(_COMPOSITE_FIELDS)
+    return {f: getattr(cs, f) for f in _COMPOSITE_FIELDS}
+
+
+def _mean_of_populated(values: dict[str, float | None]) -> float | None:
+    """Mean of non-None values; None if all are None."""
+    populated = [v for v in values.values() if v is not None]
+    return sum(populated) / len(populated) if populated else None
+
+
+def _is_stale(snapshot_date: str, as_of: date, max_stale_days: int) -> bool:
+    """True if ``snapshot_date`` (ISO YYYY-MM-DD) is older than the window."""
+    return (as_of - date.fromisoformat(snapshot_date)).days > max_stale_days
+
+
+def _dedup_by_ticker(
+    snapshots_by_universe: dict[str, list[FundamentalsSnapshot]],
+    snapshot_dates_by_universe: dict[str, str],
+) -> dict[str, dict[str, Any]]:
+    """First-seen universe wins for snapshot; all source universes recorded."""
+    per_ticker: dict[str, dict[str, Any]] = {}
+    for universe_id, snapshots in snapshots_by_universe.items():
+        snap_date = snapshot_dates_by_universe.get(universe_id, "")
+        for snap in snapshots:
+            ticker = snap.symbol
+            if ticker not in per_ticker:
+                per_ticker[ticker] = {
+                    "snapshot": snap,
+                    "source_universes": [universe_id],
+                    "snapshot_dates": {universe_id: snap_date},
+                }
+            else:
+                per_ticker[ticker]["source_universes"].append(universe_id)
+                per_ticker[ticker]["snapshot_dates"][universe_id] = snap_date
+    return per_ticker
+
+
+def _classify(
+    ticker: str,
+    info: dict[str, Any],
+    as_of: date,
+    max_stale_days: int,
+    min_composites: int,
+) -> tuple[AuditRow, float | None]:
+    """Build the AuditRow and return ``(row, mean_for_ranking)``.
+
+    ``mean_for_ranking`` is ``None`` for excluded tickers (won't be ranked).
+    """
+    snap = info["snapshot"]
+    source_universes = info["source_universes"]
+    snapshot_dates = info["snapshot_dates"]
+    composites = _extract_composites(snap)
+    populated = sum(1 for v in composites.values() if v is not None)
+    first_date = snapshot_dates[source_universes[0]]
+    base = {
+        "ticker": ticker,
+        "source_universes": source_universes,
+        "snapshot_dates": snapshot_dates,
+        "populated_composites": populated,
+        "composite_breakdown": composites,
+    }
+    if _is_stale(first_date, as_of, max_stale_days):
+        return AuditRow(**base, eligible=False, excluded_reason="stale"), None
+    if populated < min_composites:
+        return (
+            AuditRow(**base, eligible=False, excluded_reason="insufficient_composites"),
+            None,
+        )
+    mean = _mean_of_populated(composites)
+    return AuditRow(**base, mean_composite=mean, eligible=True), mean
+
+
 def build_universe(
     snapshots_by_universe: dict[str, list[FundamentalsSnapshot]],
     snapshot_dates_by_universe: dict[str, str],
@@ -73,7 +149,7 @@ def build_universe(
             snapshot list. First-seen universe wins on per-ticker dedup.
         snapshot_dates_by_universe: Per-universe ISO ``YYYY-MM-DD``
             snapshot date used for freshness gating.
-        top_n: Each side of the ranking (default 25). Output is 2*top_n.
+        top_n: Each side of the ranking (default 25). Output is up to 2*top_n.
         min_composites: Minimum populated composites for eligibility
             (default 5/7, mirrors :func:`composite_scores.screener_score`
             L3 gate).
@@ -83,57 +159,41 @@ def build_universe(
 
     Returns:
         ``(tickers, audit_rows)`` where ``tickers`` is the deduped
-        preset (top 25 + bottom 25), and ``audit_rows`` is one entry
+        preset (sorted ASCII ascending), and ``audit_rows`` is one entry
         per ticker encountered (including excluded ones).
     """
+    if as_of is None:
+        as_of = datetime.now(UTC).date()
     if not snapshots_by_universe:
         return [], []
 
-    audit: list[AuditRow] = []
-    tickers: list[str] = []
-    for universe_id, snapshots in snapshots_by_universe.items():
-        snap_date = snapshot_dates_by_universe.get(universe_id, "")
-        for snap in snapshots:
-            composites = _extract_composites(snap)
-            populated = sum(1 for v in composites.values() if v is not None)
-            if populated < min_composites:
-                audit.append(
-                    AuditRow(
-                        ticker=snap.symbol,
-                        source_universes=[universe_id],
-                        snapshot_dates={universe_id: snap_date},
-                        populated_composites=populated,
-                        composite_breakdown=composites,
-                        eligible=False,
-                        excluded_reason="insufficient_composites",
-                    ),
-                )
-                continue
-            audit.append(
-                AuditRow(
-                    ticker=snap.symbol,
-                    source_universes=[universe_id],
-                    snapshot_dates={universe_id: snap_date},
-                    populated_composites=populated,
-                    composite_breakdown=composites,
-                    mean_composite=_mean_of_populated(composites),
-                    eligible=True,
-                    rank=1,
-                ),
-            )
-            tickers.append(snap.symbol)
-    return tickers, audit
+    per_ticker = _dedup_by_ticker(snapshots_by_universe, snapshot_dates_by_universe)
 
+    rows_by_ticker: dict[str, AuditRow] = {}
+    eligible_with_mean: list[tuple[str, float]] = []
+    for ticker, info in per_ticker.items():
+        row, mean = _classify(ticker, info, as_of, max_stale_days, min_composites)
+        rows_by_ticker[ticker] = row
+        if mean is not None:
+            eligible_with_mean.append((ticker, mean))
 
-def _extract_composites(snap: FundamentalsSnapshot) -> dict[str, float | None]:
-    """Pull the 7 composite scores into a name->value dict."""
-    cs = snap.composite_scores
-    if cs is None:
-        return dict.fromkeys(_COMPOSITE_FIELDS)
-    return {f: getattr(cs, f) for f in _COMPOSITE_FIELDS}
+    eligible_with_mean.sort(key=lambda x: (-x[1], x[0]))
 
+    n = len(eligible_with_mean)
+    top_count = min(top_n, n)
+    bottom_count = min(top_n, n - top_count)
+    selected: list[str] = []
+    for i in range(top_count):
+        ticker, _ = eligible_with_mean[i]
+        rows_by_ticker[ticker] = rows_by_ticker[ticker].model_copy(
+            update={"rank": i + 1},
+        )
+        selected.append(ticker)
+    for j in range(bottom_count):
+        ticker, _ = eligible_with_mean[n - 1 - j]
+        rows_by_ticker[ticker] = rows_by_ticker[ticker].model_copy(
+            update={"rank": -(j + 1)},
+        )
+        selected.append(ticker)
 
-def _mean_of_populated(values: dict[str, float | None]) -> float | None:
-    """Mean of non-None values; None if all are None."""
-    populated = [v for v in values.values() if v is not None]
-    return sum(populated) / len(populated) if populated else None
+    return sorted(selected), list(rows_by_ticker.values())
