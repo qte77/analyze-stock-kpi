@@ -1,0 +1,197 @@
+---
+# Consolidated weekly universe-preset builder.
+#
+# One workflow handles all per-universe preset refresh + audit + PR-on-diff
+# work, replacing the two pre-existing per-universe workflows
+# (federal-contractors-refresh.yaml + aggregated-scores-best-and-worst-refresh.yaml).
+#
+# Sunday 02:00 UTC. workflow_dispatch with `universe` empty -> fan out to all
+# universes in parallel via matrix; with `universe` set -> single-leg run.
+#
+# Adding a new universe (e.g. #192 enhanced-kpi-screener-longshort) takes
+# three additions: one option line, one matrix-array entry, one case branch.
+# No new workflow file needed.
+
+name: universe-builder
+
+on:
+  schedule:
+    - cron: "0 2 * * 0"
+  workflow_dispatch:
+    inputs:
+      universe:
+        description: "Single universe (omit for all)"
+        required: false
+        type: choice
+        default: ""
+        options:
+          - ""
+          - federal-contractors
+          - aggregated-scores-best-and-worst
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: universe-builder
+  cancel-in-progress: false
+
+jobs:
+  # Compute the matrix once. Cron + dispatch-without-input fan out across
+  # both bundled universes; dispatch with `universe` set collapses to a
+  # single leg so ad-hoc debug runs stay cheap.
+  matrix:
+    name: build matrix
+    runs-on: ubuntu-latest
+    outputs:
+      universes: ${{ steps.compute.outputs.universes }}
+    steps:
+      - id: compute
+        env:
+          INPUT_UNIVERSE: ${{ inputs.universe }}
+        run: |
+          set -euo pipefail
+          if [[ -n "$INPUT_UNIVERSE" ]]; then
+            echo "universes=[\"$INPUT_UNIVERSE\"]" >> "$GITHUB_OUTPUT"
+          else
+            echo 'universes=["federal-contractors","aggregated-scores-best-and-worst"]' >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: matrix
+    name: build ${{ matrix.universe }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        universe: ${{ fromJSON(needs.matrix.outputs.universes) }}
+    steps:
+      # Check out the dispatched ref. Cron + dispatch-without-input default
+      # to the workflow's home branch (main); explicit
+      # `gh workflow run --ref feat/foo` lets feature-branch helper changes
+      # validate against real data pre-merge.
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - id: cfg
+        name: Resolve per-universe params
+        env:
+          U: ${{ matrix.universe }}
+        run: |
+          set -euo pipefail
+          case "$U" in
+            federal-contractors)
+              echo "script=scripts/build_federal_contractors.py"             >> "$GITHUB_OUTPUT"
+              echo "preset=src/assets/universes/federal-contractors.txt"     >> "$GITHUB_OUTPUT"
+              echo "audit_dir=results/federal_contractors/audit"             >> "$GITHUB_OUTPUT"
+              echo "needs_data_branch=false"                                  >> "$GITHUB_OUTPUT" ;;
+            aggregated-scores-best-and-worst)
+              echo "script=scripts/build_aggregated_scores_best_and_worst.py" >> "$GITHUB_OUTPUT"
+              echo "preset=src/assets/universes/aggregated-scores-best-and-worst.txt" >> "$GITHUB_OUTPUT"
+              echo "audit_dir=results/aggregated_scores_best_and_worst/audit" >> "$GITHUB_OUTPUT"
+              echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
+            *)
+              echo "Unknown universe: $U" >&2
+              exit 1 ;;
+          esac
+
+      # Aggregators that consume Tier-0 snapshots (per ADR-0005) need the
+      # demo branch pulled into the workspace so the build script can read
+      # results/demo/<u>/index.json + latest.json. Per-leg `git checkout
+      # origin/data -- ...` is non-fatal so a fresh repo (no snapshots yet)
+      # still progresses; the build script's per-universe load handles the
+      # missing-file case.
+      - if: steps.cfg.outputs.needs_data_branch == 'true'
+        name: Pull demo snapshots from data branch
+        run: |
+          set -euo pipefail
+          git fetch origin data
+          for u in qte77-watchlist sp500 eurostoxx federal-contractors japan south-america south-korea; do
+            git checkout origin/data -- "results/demo/$u/" 2>/dev/null \
+              || echo "No demo dir for $u on data branch; skipping leg."
+          done
+
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install runtime dependencies
+        run: uv sync
+
+      - name: Build preset + audit
+        env:
+          UNIVERSE: ${{ matrix.universe }}
+          # SEC EDGAR identity-shape User-Agent for federal-contractors.
+          # AppSettings.env_ignore_empty=True makes setting this on the
+          # aggregator leg harmless (the aggregator never calls SEC EDGAR).
+          # Repo variable SEC_USER_AGENT; see ADR-0006 amendment.
+          SSK_SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
+        run: uv run python ${{ steps.cfg.outputs.script }}
+
+      - id: diff
+        name: Detect preset diff
+        env:
+          PRESET: ${{ steps.cfg.outputs.preset }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- "$PRESET"; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true"  >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit audit JSON to data branch as verified commit
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
+        env:
+          AUDIT_DIR: ${{ steps.cfg.outputs.audit_dir }}
+          UNIVERSE:  ${{ matrix.universe }}
+        with:
+          # Reuses scripts/data-branch-commit.cjs for the 422-retry shared
+          # with demo-snapshot's matrix race on the `data` branch ref.
+          script: |
+            const fs = require("fs");
+            const { AUDIT_DIR, UNIVERSE } = process.env;
+            const today = new Date().toISOString().slice(0, 10);
+            const auditPath = `${AUDIT_DIR}/${today}.json`;
+            if (!fs.existsSync(auditPath)) {
+              core.info(`No audit JSON at ${auditPath}; skipping`);
+              return;
+            }
+            const { run } = require("./scripts/data-branch-commit.cjs");
+            return run({
+              github, context, core,
+              paths: [auditPath],
+              message: `chore(universe): weekly ${UNIVERSE} audit`,
+            });
+
+      - if: steps.diff.outputs.changed == 'true'
+        name: Open preset PR (when diff non-empty)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UNIVERSE: ${{ matrix.universe }}
+          PRESET:   ${{ steps.cfg.outputs.preset }}
+          AUDIT_DIR: ${{ steps.cfg.outputs.audit_dir }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          BRANCH="auto/universe-refresh-${UNIVERSE}-$(date -u +%Y%m%d-%H%M%S)"
+          git checkout -b "$BRANCH"
+          # Commit ONLY the preset file via explicit pathspec, ignoring any
+          # other index state from the data-branch checkout step earlier
+          # (fixes #195's bundling bug where ~100k lines of demo snapshots
+          # got committed alongside the preset).
+          git commit -m "chore(universe): refresh ${UNIVERSE} preset" -- "$PRESET"
+          git push -u origin "$BRANCH"
+          gh pr create --base main --head "$BRANCH" \
+            --title "chore(universe): refresh ${UNIVERSE} preset" \
+            --body "Auto-generated by .github/workflows/universe-builder.yaml.
+
+          Per-ticker audit JSON committed to the \`data\` branch under \`${AUDIT_DIR}/\`."
