@@ -96,7 +96,19 @@ def build_universe(
         for snap in snapshots:
             composites = _extract_composites(snap)
             populated = sum(1 for v in composites.values() if v is not None)
-            mean = _mean_of_populated(composites)
+            if populated < min_composites:
+                audit.append(
+                    AuditRow(
+                        ticker=snap.symbol,
+                        source_universes=[universe_id],
+                        snapshot_dates={universe_id: snap_date},
+                        populated_composites=populated,
+                        composite_breakdown=composites,
+                        eligible=False,
+                        excluded_reason="insufficient_composites",
+                    ),
+                )
+                continue
             audit.append(
                 AuditRow(
                     ticker=snap.symbol,
@@ -104,7 +116,7 @@ def build_universe(
                     snapshot_dates={universe_id: snap_date},
                     populated_composites=populated,
                     composite_breakdown=composites,
-                    mean_composite=mean,
+                    mean_composite=_mean_of_populated(composites),
                     eligible=True,
                     rank=1,
                 ),

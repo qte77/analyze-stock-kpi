@@ -52,3 +52,23 @@ def test_c2_single_eligible_ticker_ranked_first() -> None:
     assert row.populated_composites == 7
     assert row.rank == 1
     assert row.mean_composite == sum([80, 20, 70, 60, 75, 65, 70]) / 7
+
+
+def test_c3_ineligible_lt_min_composites_excluded() -> None:
+    """C3: < 5 populated composites -> excluded, reason 'insufficient_composites'."""
+    snap = _snap("BTC-USD", quality=50, dividend=10, growth=20, big_call=30)
+
+    tickers, audit = build_universe(
+        {"crypto": [snap]},
+        {"crypto": "2026-05-31"},
+        as_of=date(2026, 5, 31),
+    )
+
+    assert tickers == []
+    assert len(audit) == 1
+    row = audit[0]
+    assert row.eligible is False
+    assert row.excluded_reason == "insufficient_composites"
+    assert row.populated_composites == 4
+    assert row.rank is None
+    assert row.mean_composite is None
