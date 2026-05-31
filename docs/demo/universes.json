@@ -7,6 +7,7 @@
     {"id": "japan", "label": "Japan (Nikkei 225 top)"},
     {"id": "south-america", "label": "South America (Latam large caps)"},
     {"id": "south-korea", "label": "South Korea (KOSPI top)"},
-    {"id": "aggregated-scores-best-and-worst", "label": "Aggregated scores (best 25 + worst 25)"}
+    {"id": "aggregated-scores-best", "label": "Aggregated scores (best 25)"},
+    {"id": "aggregated-scores-worst", "label": "Aggregated scores (worst 25)"}
   ]
 }
