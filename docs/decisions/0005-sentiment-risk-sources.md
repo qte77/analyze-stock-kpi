@@ -201,13 +201,21 @@ an explicit license, this amendment will be revised to cite it.
 - Related: [ADR-0000](0000-remove-traderfox.md) — no HTML scraping
   policy (informs Tier 0's "documented endpoint" requirement).
 
-## Amendment (2026-05-31) — aggregated-scores-best-and-worst Tier-0 aggregator
+## Amendment (2026-05-31) — aggregated-scores best + worst Tier-0 aggregator
 
 [#184](https://github.com/qte77/analyze-stock-kpi/issues/184) ships a
-cross-universe meta preset (`aggregated-scores-best-and-worst`) that
-combines the top 25 + bottom 25 tickers across the 7 sector/region
-universes, ranked by mean of the 7 composite scores. This amendment
-classifies the aggregator as a **Tier-0 pure-aggregation source**.
+cross-universe meta preset, emitted as **two paired universes**
+(`aggregated-scores-best` and `aggregated-scores-worst`, 25 tickers
+each) from a single composite-mean ranking pass across the 7
+sector/region universes. This amendment classifies the aggregator as
+a **Tier-0 pure-aggregation source**.
+
+The paired-output shape (one orchestrator pass → two preset files →
+two picker entries) is the canonical pattern for **cross-universe
+long/short candidate sets** in this repo. Phase 2
+[`enhanced-kpi-screener-longshort`](https://github.com/qte77/analyze-stock-kpi/issues/192)
+reuses the pattern with gated criteria (`-longs` + `-shorts`) instead
+of composite-mean ranking.
 
 - **Auth:** none. The aggregator consumes Tier-0 demo snapshots already
   on the `data` branch (`results/demo/<u>/<latest>.json`), via the same
