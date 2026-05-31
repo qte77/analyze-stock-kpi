@@ -1,0 +1,58 @@
+---
+name: publish-release
+
+# Manually publishes a GitHub Release for an existing tag, with notes
+# extracted from the CHANGELOG.md ## [version] block. Decoupled from
+# tag-release.yaml so the default flow stays "tag only" — the operator
+# opts into a Release object via this dispatch when ready.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to release (defaults to the latest v* tag)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Resolve tag, extract notes, publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_INPUT: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          if [ -n "$TAG_INPUT" ]; then
+            TAG="$TAG_INPUT"
+          else
+            TAG=$(git tag --list 'v*' --sort=-v:refname | head -1)
+          fi
+          if [ -z "$TAG" ]; then
+            echo "no v* tag found"; exit 1
+          fi
+          if ! git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            echo "tag $TAG does not exist locally"; exit 1
+          fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "release $TAG already exists; aborting"; exit 1
+          fi
+          VERSION="${TAG#v}"
+          NOTES=$(awk -v v="$VERSION" '
+            $0 ~ "^## \\[" v "\\]" { in_block = 1; next }
+            in_block && /^## \[/ { exit }
+            in_block { print }
+          ' CHANGELOG.md)
+          if [ -z "${NOTES// }" ]; then
+            gh release create "$TAG" --title "$TAG" --generate-notes
+          else
+            gh release create "$TAG" --title "$TAG" --notes "$NOTES"
+          fi
