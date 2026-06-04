@@ -51,6 +51,8 @@ exclude = [
     "^https://ederfinancial\\.org",
     # NAAIM — recently started returning 403 to lychee's UA.
     "^https://www\\.naaim\\.org",
+    # SAM.gov — returns 403 to bots without a browser User-Agent.
+    "^https://sam\\.gov",
     # GitHub Actions workflow status badges — intermittent 502 from
     # github.com's CDN to the lychee crawler; the badges work in
     # browsers.
