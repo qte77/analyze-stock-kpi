@@ -11,8 +11,13 @@
 #
 # `workflow_dispatch` still accepts a `universe` input; when set, the
 # matrix collapses to that single universe so ad-hoc dispatch stays
-# cheap. Unset (scheduled or dispatched without input) runs the full
-# 11-universe fan-out.
+# cheap. Unset (scheduled or dispatched without input) reads
+# `docs/demo/universes.json` (the dashboard picker's source of truth)
+# and fans out across every universe the dashboard knows about —
+# regardless of whether the preset .txt exists or is empty. Adding a
+# new universe is a single edit to that JSON. The dispatch dropdown
+# still lists choices explicitly because `type: choice` requires
+# static options.
 #
 # Target branch is `data` (not `main`). The repo's default-branch
 # ruleset (id 16200383) has a `pull_request` rule that rejects direct
@@ -60,14 +65,20 @@ concurrency:
 
 jobs:
   # Compute the matrix of universes once. Cron + dispatch-without-input
-  # fan out across all 9 bundled presets; dispatch with `universe` set
-  # collapses to a single leg so ad-hoc debug runs stay cheap.
+  # discover every preset from src/assets/universes/*.txt so adding a
+  # new universe is a one-file change (drop the .txt — workflow inherits).
+  # Dispatch with `universe` set collapses to a single leg so ad-hoc
+  # debug runs stay cheap.
   matrix:
     name: build matrix
     runs-on: ubuntu-latest
     outputs:
       universes: ${{ steps.compute.outputs.universes }}
     steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+        with:
+          sparse-checkout: docs/demo/universes.json
+          sparse-checkout-cone-mode: false
       - id: compute
         env:
           INPUT_UNIVERSE: ${{ inputs.universe }}
@@ -78,7 +89,15 @@ jobs:
             # preset name; quoting is safe.
             echo "universes=[\"$INPUT_UNIVERSE\"]" >> "$GITHUB_OUTPUT"
           else
-            echo 'universes=["qte77-watchlist","sp500","eurostoxx","federal-contractors","japan","south-america","south-korea","aggregated-scores-best","aggregated-scores-worst","enhanced-kpi-screener-longs","enhanced-kpi-screener-shorts"]' >> "$GITHUB_OUTPUT"
+            # Source of truth: docs/demo/universes.json — every universe
+            # the dashboard picker can show. (Re-)build all of them
+            # regardless of whether the underlying preset .txt exists,
+            # is missing, or is empty; emitting a zero-row snapshot
+            # for an unpopulated universe is the right rebuild
+            # behaviour. The preset itself is the orchestrator's
+            # contract (universe-builder.yaml), not demo-snapshot's.
+            UNIVERSES=$(jq -c '[.universes[].id]' docs/demo/universes.json)
+            echo "universes=$UNIVERSES" >> "$GITHUB_OUTPUT"
           fi
 
   snapshot:
