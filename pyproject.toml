@@ -11,12 +11,12 @@ dependencies = [
     "pydantic-settings>=2.6",
     "rich>=15.0",
     "tqdm>=4.67",
-    "yfinance>=0.2.40",
+    "yfinance>=1.4.1",
 ]
 
 [dependency-groups]
 dev = [
-    "ruff>=0.15",
+    "ruff>=0.15.15",
     "pyright>=1.1.400",
     "complexipy>=5.5.0",
     "bump-my-version>=0.29",
