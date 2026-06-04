@@ -798,3 +798,30 @@ body.overlay-active td.universe-col {
   text-align: center;
   padding: 0.5rem;
 }
+
+/* Time-window chip row above lt-fg-chart + yc-chart (#206). Pill shape
+   reuses the universe-chip palette so the dashboard reads as one design
+   language. */
+.window-chips {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0 0 0.5rem;
+}
+
+.window-chips button {
+  padding: 0.15rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.window-chips button[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}

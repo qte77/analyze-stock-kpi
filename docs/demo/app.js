@@ -90,6 +90,42 @@ let sectorFilter = null;
 /** @type {string | null} */
 let currentDate = null;
 
+/** Active time-window for the long-term F&G + yield-curve charts. Persisted
+ *  via ?ltFgWindow= / ?ycWindow=; "all" is the default and is omitted from
+ *  the URL. Filter is applied client-side over already-loaded entries —
+ *  windows greater than the available data span gracefully render as "all".
+ *  @type {import("./lib/state.js").WindowKey} */
+let activeLtFgWindow = "all";
+/** @type {import("./lib/state.js").WindowKey} */
+let activeYcWindow = "all";
+
+/** @type {Record<import("./lib/state.js").WindowKey, number>} */
+const WINDOW_DAYS = { "1y": 365, "5y": 1826, "10y": 3653, "all": Infinity };
+
+/**
+ * Filter ascending-by-`isoField` entries to a trailing window measured
+ * from the latest entry. Returns the input unchanged for "all" or when the
+ * latest timestamp can't be parsed.
+ *
+ * @template {Record<string, unknown>} T
+ * @param {Array<T>} entries
+ * @param {import("./lib/state.js").WindowKey} windowKey
+ * @param {string} isoField  property on each entry carrying the ISO date
+ * @returns {Array<T>}
+ */
+function filterByWindow(entries, windowKey, isoField) {
+  if (entries.length === 0) return entries;
+  const days = WINDOW_DAYS[windowKey];
+  if (!Number.isFinite(days)) return entries;
+  const latestIso = /** @type {string} */ (entries[entries.length - 1][isoField]);
+  const latestMs = Date.parse(latestIso);
+  if (Number.isNaN(latestMs)) return entries;
+  const cutoff = latestMs - days * 86400000;
+  return entries.filter(
+    (e) => Date.parse(/** @type {string} */ (e[isoField])) >= cutoff,
+  );
+}
+
 function rebuildFuseIndex() {
   fuseIndex =
     typeof Fuse !== "undefined" && state.snapshot.length
@@ -299,6 +335,8 @@ function persistStateFromCurrent() {
       filter: filterQuery,
       date: currentDate,
       sector: sectorFilter,
+      ltFgWindow: activeLtFgWindow,
+      ycWindow: activeYcWindow,
     },
     window.location.href,
   );
@@ -1243,12 +1281,16 @@ function renderMonthlyFearGreedChart(
  *
  * Both the monthly chart and the yield-curve chart are lazily
  * constructed on first click — matches the detail-panel time-series
- * lazy pattern so initial paint stays cheap.
+ * lazy pattern so initial paint stays cheap. The raw entry arrays are
+ * captured at module level (`rawFgEntries` / `rawYcEntries`) so the
+ * window-chip handlers can re-filter and re-render without re-fetching.
  *
  * @param {Array<{timestamp: string, score: number}>} fgEntries
  * @param {Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>} ycEntries
  */
 function bindLongTermTabs(fgEntries, ycEntries) {
+  rawFgEntries = fgEntries;
+  rawYcEntries = ycEntries;
   /** @type {Array<[string, string]>} */
   const tabs = [
     ["fg-tab-rolling", "fg-chart-wrap"],
@@ -1264,8 +1306,6 @@ function bindLongTermTabs(fgEntries, ycEntries) {
     if (!t || !p) return;
     resolved.push([t, p]);
   }
-  let monthlyRendered = false;
-  let yieldCurveRendered = false;
   for (const [tab, pane] of resolved) {
     tab.addEventListener("click", () => {
       for (const [t, p] of resolved) {
@@ -1273,15 +1313,85 @@ function bindLongTermTabs(fgEntries, ycEntries) {
         t.setAttribute("aria-selected", selected ? "true" : "false");
         p.hidden = !selected;
       }
-      if (pane.id === "lt-fg-chart-wrap" && !monthlyRendered) {
-        renderMonthlyFearGreedChart(fgEntries);
-        monthlyRendered = true;
+      if (pane.id === "lt-fg-chart-wrap" && !ltFgRendered) {
+        renderActiveLtFg();
+        ltFgRendered = true;
       }
-      if (pane.id === "yc-chart-wrap" && !yieldCurveRendered) {
-        renderYieldCurveChart(ycEntries);
-        yieldCurveRendered = true;
+      if (pane.id === "yc-chart-wrap" && !ycRendered) {
+        renderActiveYc();
+        ycRendered = true;
       }
     });
+  }
+}
+
+/** Raw chart entries cached at module scope by `bindLongTermTabs` so chip
+ *  handlers can re-render with a different window without re-fetching.
+ *  @type {Array<{timestamp: string, score: number}>} */
+let rawFgEntries = [];
+/** @type {Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>} */
+let rawYcEntries = [];
+let ltFgRendered = false;
+let ycRendered = false;
+
+function renderActiveLtFg() {
+  renderMonthlyFearGreedChart(
+    filterByWindow(rawFgEntries, activeLtFgWindow, "timestamp"),
+  );
+}
+
+function renderActiveYc() {
+  renderYieldCurveChart(filterByWindow(rawYcEntries, activeYcWindow, "date"));
+}
+
+/**
+ * Wire the `.window-chips` chip rows above the long-term F&G + yield-curve
+ * charts. Click toggles `aria-pressed`, updates the active window var,
+ * re-renders the chart if its pane is currently visible (otherwise the
+ * next tab activation picks up the new window), and persists state via URL.
+ */
+function bindWindowChips() {
+  /** @type {Array<[string, "ltFg" | "yc"]>} */
+  const groups = [
+    ["lt-fg-chart-wrap", "ltFg"],
+    ["yc-chart-wrap", "yc"],
+  ];
+  for (const [wrapId, kind] of groups) {
+    const wrap = document.getElementById(wrapId);
+    const row = wrap?.querySelector(".window-chips");
+    if (!wrap || !row) continue;
+    syncChipAriaPressed(row, kind === "ltFg" ? activeLtFgWindow : activeYcWindow);
+    row.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLButtonElement)) return;
+      const next = /** @type {import("./lib/state.js").WindowKey} */ (
+        target.dataset.window
+      );
+      if (!next) return;
+      if (kind === "ltFg") {
+        activeLtFgWindow = next;
+        if (wrap.hidden) ltFgRendered = false;
+        else renderActiveLtFg();
+      } else {
+        activeYcWindow = next;
+        if (wrap.hidden) ycRendered = false;
+        else renderActiveYc();
+      }
+      syncChipAriaPressed(row, next);
+      persistStateFromCurrent();
+    });
+  }
+}
+
+function syncChipAriaPressed(
+  /** @type {Element} */ row,
+  /** @type {import("./lib/state.js").WindowKey} */ active,
+) {
+  for (const btn of row.querySelectorAll("button[data-window]")) {
+    btn.setAttribute(
+      "aria-pressed",
+      btn.getAttribute("data-window") === active ? "true" : "false",
+    );
   }
 }
 
@@ -1668,6 +1778,8 @@ function hydrateUrlState(parsed) {
     if (filterInput) filterInput.value = parsed.filter;
   }
   if (parsed.sector) sectorFilter = parsed.sector;
+  activeLtFgWindow = parsed.ltFgWindow;
+  activeYcWindow = parsed.ycWindow;
 }
 
 /** @param {HTMLSelectElement} dateSelector */
@@ -1769,6 +1881,7 @@ async function init() {
   renderFearGreedChart(fgEntries);
   renderYieldCurveHeader(ycEntries);
   bindLongTermTabs(fgEntries, ycEntries);
+  bindWindowChips();
   bindThemeObserver();
 }
 

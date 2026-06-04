@@ -97,6 +97,12 @@
         aria-labelledby="fg-tab-monthly"
         hidden
       >
+        <div class="window-chips" role="group" aria-label="Time window">
+          <button type="button" data-window="1y" aria-pressed="false">1y</button>
+          <button type="button" data-window="5y" aria-pressed="false">5y</button>
+          <button type="button" data-window="10y" aria-pressed="false">10y</button>
+          <button type="button" data-window="all" aria-pressed="true">all</button>
+        </div>
         <canvas
           id="lt-fg-chart"
           aria-label="Monthly Fear and Greed median and average"
@@ -111,6 +117,12 @@
         <div id="yc-header" hidden>
           <span id="yc-current-slope"></span>
           <span id="yc-current-legs" class="updated"></span>
+        </div>
+        <div class="window-chips" role="group" aria-label="Time window">
+          <button type="button" data-window="1y" aria-pressed="false">1y</button>
+          <button type="button" data-window="5y" aria-pressed="false">5y</button>
+          <button type="button" data-window="10y" aria-pressed="false">10y</button>
+          <button type="button" data-window="all" aria-pressed="true">all</button>
         </div>
         <div class="yc-empty">loading…</div>
         <canvas

@@ -4,6 +4,10 @@
 // tests/demo/state.test.mjs.
 
 /**
+ * @typedef {"1y" | "5y" | "10y" | "all"} WindowKey
+ */
+
+/**
  * @typedef {object} State
  * @property {"simple" | "detailed"} view
  * @property {string[]} universes
@@ -12,9 +16,19 @@
  * @property {string} filter
  * @property {string | null} date  ISO yyyy-mm-dd
  * @property {string | null} sector  GICS sector label or null when no filter
+ * @property {WindowKey} ltFgWindow  Long-term F&G chart time-window
+ * @property {WindowKey} ycWindow    Yield-curve chart time-window
  */
 
 const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
+const WINDOW_KEYS = /** @type {const} */ (["1y", "5y", "10y", "all"]);
+
+/** @returns {WindowKey} */
+function parseWindow(/** @type {string | null} */ raw) {
+  return WINDOW_KEYS.includes(/** @type {WindowKey} */ (raw))
+    ? /** @type {WindowKey} */ (raw)
+    : "all";
+}
 
 /**
  * @param {string} value
@@ -53,7 +67,19 @@ export function parseState(search, knownUniverses) {
   const date = dateRaw && isValidIsoDate(dateRaw) ? dateRaw : null;
   const sectorRaw = params.get("sector");
   const sector = sectorRaw && sectorRaw.length > 0 ? sectorRaw : null;
-  return { view, universes, sortKey, sortDir, filter, date, sector };
+  const ltFgWindow = parseWindow(params.get("ltFgWindow"));
+  const ycWindow = parseWindow(params.get("ycWindow"));
+  return {
+    view,
+    universes,
+    sortKey,
+    sortDir,
+    filter,
+    date,
+    sector,
+    ltFgWindow,
+    ycWindow,
+  };
 }
 
 /**
@@ -77,6 +103,10 @@ export function serializeState(state, baseUrl) {
   if (state.filter) url.searchParams.set("filter", state.filter);
   if (state.date) url.searchParams.set("date", state.date);
   if (state.sector) url.searchParams.set("sector", state.sector);
+  if (state.ltFgWindow !== "all") {
+    url.searchParams.set("ltFgWindow", state.ltFgWindow);
+  }
+  if (state.ycWindow !== "all") url.searchParams.set("ycWindow", state.ycWindow);
   return url.toString();
 }
 
