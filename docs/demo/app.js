@@ -546,6 +546,24 @@ function totalCompositeScore(rows) {
   }, 0);
 }
 
+/**
+ * Empty-state message for the table body. Orchestrator-driven universes
+ * (aggregator / longshort) can legitimately produce zero rows when the
+ * ranking / conjunctive-gate returns an empty set — distinguish that
+ * from a static universe whose cron hasn't run yet so the message reads
+ * as a design outcome rather than an infrastructure bug.
+ */
+function emptyTableMessage() {
+  if (filterQuery) return `no matches for "${filterQuery}"`;
+  if (activeUniverse.startsWith("enhanced-kpi-screener-")) {
+    return "0 candidates — the conjunctive 14-criteria gate matched no tickers in this snapshot.";
+  }
+  if (activeUniverse.startsWith("aggregated-scores-")) {
+    return "0 eligible tickers — the aggregator's freshness + min-composites gate excluded every candidate this run.";
+  }
+  return "no rows in this universe yet — first cron run pending";
+}
+
 function renderTable() {
   const tbody = document.querySelector("#universe-table tbody");
   if (!tbody) return;
@@ -556,9 +574,7 @@ function renderTable() {
     const cell = document.createElement("td");
     cell.colSpan = ALL_COLUMNS.length;
     cell.className = "empty-state";
-    cell.textContent = filterQuery
-      ? `no matches for "${filterQuery}"`
-      : "no rows in this universe yet — first cron run pending";
+    cell.textContent = emptyTableMessage();
     tr.appendChild(cell);
     tbody.appendChild(tr);
     return;

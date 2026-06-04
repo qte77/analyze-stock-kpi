@@ -825,3 +825,43 @@ body.overlay-active td.universe-col {
   border-color: var(--accent);
   color: var(--accent);
 }
+
+/* "Why these universes?" collapsible above the universe picker. Mirrors
+   the .why-list dl pattern used in the F&G "Why these charts?" tab. */
+#universe-help {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+}
+
+#universe-help summary {
+  cursor: pointer;
+  color: var(--muted);
+  padding: 0.15rem 0;
+}
+
+#universe-help summary:hover {
+  color: var(--accent);
+}
+
+#universe-help dl.why-list {
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0.75rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+#universe-help dl.why-list dt {
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+#universe-help dl.why-list dt:first-child {
+  margin-top: 0;
+}
+
+#universe-help dl.why-list dd {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
