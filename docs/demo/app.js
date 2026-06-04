@@ -534,6 +534,7 @@ function renderSectorDonut() {
   const labels = [...aggregated.keys()];
   const data = [...aggregated.values()];
   if (sectorChart) {
+    liveCharts.delete(sectorChart);
     sectorChart.destroy();
     sectorChart = null;
   }
@@ -544,11 +545,9 @@ function renderSectorDonut() {
   }
   const backgroundColor = labels.map(sectorColor);
   // Seam color follows --panel so slice borders blend cleanly with the
-  // section background in both light and dark themes (was hardcoded
-  // rgba(255,255,255,0.65), which vanished against #2c2c2e).
-  const borderColor =
-    getComputedStyle(document.body).getPropertyValue("--panel").trim() ||
-    "#ffffff";
+  // section background in both light and dark themes. Scriptable so it
+  // re-resolves on theme flip via bindThemeObserver → chart.update().
+  const borderColor = () => cssVar("--panel", "#ffffff");
   // Pull the active sector's slice outward so the user has visual
   // confirmation of which slice the table is filtered by.
   const offset = labels.map((l) => (l === sectorFilter ? 12 : 0));
@@ -591,6 +590,7 @@ function renderSectorDonut() {
       },
     },
   });
+  liveCharts.add(sectorChart);
   renderSectorFilterChip();
 }
 
@@ -663,7 +663,10 @@ function renderRadar(
 ) {
   if (typeof Chart === "undefined") return;
   const axes = ["quality", "dividend", "growth", "big_call", "aaqs", "hgi", "screener_score"];
-  if (radarChart) radarChart.destroy();
+  if (radarChart) {
+    liveCharts.delete(radarChart);
+    radarChart.destroy();
+  }
   radarChart = new Chart(canvas, {
     type: "radar",
     data: {
@@ -675,18 +678,32 @@ function renderRadar(
             (a) =>
               /** @type {Record<string, number | null | undefined>} */ (scores)[a] ?? 0,
           ),
-          borderColor: "#0066cc",
-          backgroundColor: "rgba(0, 102, 204, 0.15)",
+          borderColor: () => cssVar("--accent", "#0066cc"),
+          backgroundColor: () => `${cssVar("--accent", "#0066cc")}26`,
         },
       ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      scales: { r: { min: 0, max: 100, ticks: { stepSize: 25 } } },
+      scales: {
+        r: {
+          min: 0,
+          max: 100,
+          ticks: {
+            stepSize: 25,
+            color: () => cssVar("--text", "#1d1d1f"),
+            backdropColor: "transparent",
+          },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+          angleLines: { color: () => cssVar("--border", "#d2d2d7") },
+          pointLabels: { color: () => cssVar("--text", "#1d1d1f") },
+        },
+      },
       plugins: { legend: { display: false } },
     },
   });
+  liveCharts.add(radarChart);
 }
 
 function closeDetail() {
@@ -945,8 +962,19 @@ async function renderTimeSeriesPane(pane, row) {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        y: { min: 0, max: 100, ticks: { stepSize: 25 }, title: { display: true, text: "Composite (0–100)" } },
-        y1: { position: "right", grid: { drawOnChartArea: false }, title: { display: true, text: "Sortino" } },
+        y: {
+          min: 0,
+          max: 100,
+          ticks: { stepSize: 25, color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+          title: { display: true, text: "Composite (0–100)", color: () => cssVar("--text", "#1d1d1f") },
+        },
+        y1: {
+          position: "right",
+          grid: { drawOnChartArea: false },
+          ticks: { color: () => cssVar("--text", "#1d1d1f") },
+          title: { display: true, text: "Sortino", color: () => cssVar("--text", "#1d1d1f") },
+        },
       },
     },
   });
@@ -1090,8 +1118,16 @@ function renderFearGreedChart(
       animation: { duration: 250 },
       plugins: { legend: { display: false } },
       scales: {
-        y: { min: 0, max: 100, ticks: { stepSize: 25 } },
-        x: { ticks: { maxTicksLimit: 14 } },
+        y: {
+          min: 0,
+          max: 100,
+          ticks: { stepSize: 25, color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+        },
+        x: {
+          ticks: { maxTicksLimit: 14, color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+        },
       },
     },
   });
@@ -1161,8 +1197,16 @@ function renderMonthlyFearGreedChart(
       animation: { duration: 250 },
       plugins: { legend: { display: true, position: "bottom" } },
       scales: {
-        y: { min: 0, max: 100, ticks: { stepSize: 25 } },
-        x: { ticks: { maxTicksLimit: 14 } },
+        y: {
+          min: 0,
+          max: 100,
+          ticks: { stepSize: 25, color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+        },
+        x: {
+          ticks: { maxTicksLimit: 14, color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+        },
       },
     },
   });
@@ -1314,8 +1358,14 @@ function renderYieldCurveChart(entries) {
       plugins: { legend: { display: false } },
       scales: {
         // Highlight the zero line — inversions sit below.
-        y: { grid: { color: () => `${cssVar("--border", "#d2d2d7")}` } },
-        x: { ticks: { maxTicksLimit: 14 } },
+        y: {
+          grid: { color: () => `${cssVar("--border", "#d2d2d7")}` },
+          ticks: { color: () => cssVar("--text", "#1d1d1f") },
+        },
+        x: {
+          ticks: { maxTicksLimit: 14, color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+        },
       },
     },
   });
