@@ -104,6 +104,14 @@ class FundamentalsSnapshot(BaseModel):
     # -- volatility --
     beta: float | None = None
 
+    # -- analyst sentiment --
+    # yfinance ships this inside the existing `info` payload (no extra HTTP).
+    # Values are lowercase Yahoo Finance recommendation buckets:
+    # "strong_buy" / "buy" / "hold" / "sell" / "strong_sell" / None.
+    analyst_recommendation: str | None = Field(
+        default=None, alias="recommendationKey",
+    )
+
     # -- enrichment (attached post-fetch via ``model_copy``) --
     composite_scores: CompositeScores | None = None
     roi: float | None = None
