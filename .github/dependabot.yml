@@ -22,6 +22,9 @@ updates:
     labels:
       - "dependencies"
       - "python"
+    groups:
+      python-deps:
+        patterns: ["*"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -31,4 +34,7 @@ updates:
     labels:
       - "dependencies"
       - "github-actions"
+    groups:
+      github-actions:
+        patterns: ["*"]
 ...
