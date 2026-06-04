@@ -17,52 +17,52 @@ from src.data_sources.fundamentals import FundamentalsSnapshot
 from src.orchestrators.enhanced_kpi_screener_longshort import build_universe
 
 _LONG_FIXTURE: dict[str, float | str | None] = {
-    "market_cap":              5e9,
-    "forward_pe":              18.0,
-    "earnings_growth":         0.20,
-    "revenue_growth":          0.15,
-    "trailing_peg_ratio":      0.8,
-    "return_on_equity":        0.18,
-    "beta":                    1.2,
-    "return_on_assets":        0.12,
-    "roi":                     0.15,
-    "current_ratio":           1.5,
-    "quick_ratio":             1.2,
-    "profit_margins":          0.15,
-    "analyst_recommendation":  "buy",
-    "rd_to_revenue":           0.08,
+    "market_cap": 5e9,
+    "forward_pe": 18.0,
+    "earnings_growth": 0.20,
+    "revenue_growth": 0.15,
+    "trailing_peg_ratio": 0.8,
+    "return_on_equity": 0.18,
+    "beta": 1.2,
+    "return_on_assets": 0.12,
+    "roi": 0.15,
+    "current_ratio": 1.5,
+    "quick_ratio": 1.2,
+    "profit_margins": 0.15,
+    "analyst_recommendation": "buy",
+    "rd_to_revenue": 0.08,
 }
 
 _SHORT_FIXTURE: dict[str, float | str | None] = {
-    "market_cap":              5e9,
-    "forward_pe":              45.0,
-    "earnings_growth":         -0.10,
-    "revenue_growth":          -0.05,
-    "trailing_peg_ratio":      3.0,
-    "return_on_equity":        0.02,
-    "beta":                    1.5,
-    "return_on_assets":        0.01,
-    "roi":                     0.02,
-    "current_ratio":           0.6,
-    "quick_ratio":             0.4,
-    "profit_margins":          -0.05,
-    "analyst_recommendation":  "sell",
+    "market_cap": 5e9,
+    "forward_pe": 45.0,
+    "earnings_growth": -0.10,
+    "revenue_growth": -0.05,
+    "trailing_peg_ratio": 3.0,
+    "return_on_equity": 0.02,
+    "beta": 1.5,
+    "return_on_assets": 0.01,
+    "roi": 0.02,
+    "current_ratio": 0.6,
+    "quick_ratio": 0.4,
+    "profit_margins": -0.05,
+    "analyst_recommendation": "sell",
 }
 
 _NEUTRAL_FIXTURE: dict[str, float | str | None] = {
-    "market_cap":              5e9,
-    "forward_pe":              20.0,        # passes long, fails short
-    "earnings_growth":         0.05,        # fails both gates
-    "revenue_growth":          0.05,
-    "trailing_peg_ratio":      1.5,        # fails long (< 1), passes short (>= 1)
-    "return_on_equity":        0.07,        # fails both
-    "beta":                    1.2,
-    "return_on_assets":        0.05,
-    "roi":                     0.07,
-    "current_ratio":           1.0,        # passes neither (not > 1, not < 1)
-    "quick_ratio":             1.0,
-    "profit_margins":          0.05,
-    "analyst_recommendation":  "hold",
+    "market_cap": 5e9,
+    "forward_pe": 20.0,  # passes long, fails short
+    "earnings_growth": 0.05,  # fails both gates
+    "revenue_growth": 0.05,
+    "trailing_peg_ratio": 1.5,  # fails long (< 1), passes short (>= 1)
+    "return_on_equity": 0.07,  # fails both
+    "beta": 1.2,
+    "return_on_assets": 0.05,
+    "roi": 0.07,
+    "current_ratio": 1.0,  # passes neither (not > 1, not < 1)
+    "quick_ratio": 1.0,
+    "profit_margins": 0.05,
+    "analyst_recommendation": "hold",
 }
 
 
@@ -222,12 +222,12 @@ def test_longs_shorts_disjoint_at_scale() -> None:
 @pytest.mark.parametrize(
     ("rec_key", "long_pass", "short_pass"),
     [
-        ("buy",          True,  False),
-        ("strong_buy",   True,  False),
-        ("sell",         False, True),
-        ("strong_sell",  False, True),
-        ("hold",         False, False),
-        (None,           False, False),
+        ("buy", True, False),
+        ("strong_buy", True, False),
+        ("sell", False, True),
+        ("strong_sell", False, True),
+        ("hold", False, False),
+        (None, False, False),
     ],
 )
 def test_criterion_14_recommendation_key_mapping(

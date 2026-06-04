@@ -68,18 +68,18 @@ def _passes(value: float | None, predicate: _Predicate) -> bool:
 # (long-only; no short-side gate). Keeping the table flat lets `_evaluate`
 # stay a simple iteration.
 _NUMERIC_GATES: tuple[tuple[str, _Predicate, _Predicate], ...] = (
-    ("market_cap",          lambda v: v >= 2e9,  lambda v: v >= 2e9),
-    ("forward_pe",          lambda v: v <= 25,   lambda v: v > 25),
-    ("earnings_growth",     lambda v: v > 0.10,  lambda v: v < 0),
-    ("revenue_growth",      lambda v: v > 0.10,  lambda v: v < 0),
-    ("trailing_peg_ratio",  lambda v: v < 1,     lambda v: v >= 1),
-    ("return_on_equity",    lambda v: v > 0.10,  lambda v: v < 0.05),
-    ("beta",                lambda v: v > 1,     lambda v: v > 1),
-    ("return_on_assets",    lambda v: v > 0.10,  lambda v: v < 0.02),
-    ("roi",                 lambda v: v > 0.10,  lambda v: v < 0.05),
-    ("current_ratio",       lambda v: v > 1,     lambda v: v < 1),
-    ("quick_ratio",         lambda v: v > 1,     lambda v: v < 1),
-    ("profit_margins",      lambda v: v > 0.10,  lambda v: v < 0),
+    ("market_cap", lambda v: v >= 2e9, lambda v: v >= 2e9),
+    ("forward_pe", lambda v: v <= 25, lambda v: v > 25),
+    ("earnings_growth", lambda v: v > 0.10, lambda v: v < 0),
+    ("revenue_growth", lambda v: v > 0.10, lambda v: v < 0),
+    ("trailing_peg_ratio", lambda v: v < 1, lambda v: v >= 1),
+    ("return_on_equity", lambda v: v > 0.10, lambda v: v < 0.05),
+    ("beta", lambda v: v > 1, lambda v: v > 1),
+    ("return_on_assets", lambda v: v > 0.10, lambda v: v < 0.02),
+    ("roi", lambda v: v > 0.10, lambda v: v < 0.05),
+    ("current_ratio", lambda v: v > 1, lambda v: v < 1),
+    ("quick_ratio", lambda v: v > 1, lambda v: v < 1),
+    ("profit_margins", lambda v: v > 0.10, lambda v: v < 0),
 )
 
 
