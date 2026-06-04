@@ -1,0 +1,3 @@
+### Fixed
+
+- **CodeFactor E241: collapse multi-space alignment in `enhanced_kpi_screener_longshort` + its test.** Three fixture dicts and a parametrize tuple table in `tests/test_enhanced_kpi_screener_longshort.py` plus the `_NUMERIC_GATES` table in `src/orchestrators/enhanced_kpi_screener_longshort.py` used column-aligned spacing after `:` / `,`. CodeFactor's pycodestyle (which ignores the repo's ruff config) flagged ~57 E241 hits, tanking the two files to F / D grades. Collapsed to single-space; no semantic change. Preferred over a new `setup.cfg [pycodestyle]` override because no sibling qte77 repo uses one and `pyproject.toml` ruff stays the single lint source of truth. Inline-comment `,  # ...` sites (PEP 8 standard) untouched — CodeFactor isn't flagging those.
