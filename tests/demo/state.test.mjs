@@ -25,6 +25,15 @@ describe("parseState", () => {
     expect(s.filter).toBe("");
     expect(s.date).toBeNull();
     expect(s.sector).toBeNull();
+    expect(s.ltFgWindow).toBe("all");
+    expect(s.ycWindow).toBe("all");
+  });
+
+  it("parses chart time-window keys, defaulting unknown values to 'all'", () => {
+    expect(parseState("?ltFgWindow=1y&ycWindow=5y", KNOWN).ltFgWindow).toBe("1y");
+    expect(parseState("?ltFgWindow=1y&ycWindow=5y", KNOWN).ycWindow).toBe("5y");
+    expect(parseState("?ltFgWindow=BOGUS", KNOWN).ltFgWindow).toBe("all");
+    expect(parseState("?ycWindow=", KNOWN).ycWindow).toBe("all");
   });
 
   it("parses ?sector=Technology and treats an empty value as null", () => {
@@ -78,6 +87,8 @@ describe("serializeState ↔ parseState round-trip", () => {
       filter: "tech",
       date: "2024-05-15",
       sector: "Technology",
+      ltFgWindow: /** @type {import("../../docs/demo/lib/state.js").WindowKey} */ ("5y"),
+      ycWindow: /** @type {import("../../docs/demo/lib/state.js").WindowKey} */ ("1y"),
     };
     const url = serializeState(original, "https://example.com/demo/");
     const reparsed = parseState(new URL(url).search, KNOWN);
@@ -93,6 +104,8 @@ describe("serializeState ↔ parseState round-trip", () => {
       filter: "",
       date: null,
       sector: null,
+      ltFgWindow: /** @type {import("../../docs/demo/lib/state.js").WindowKey} */ ("all"),
+      ycWindow: /** @type {import("../../docs/demo/lib/state.js").WindowKey} */ ("all"),
     };
     const url = serializeState(minimal, "https://example.com/demo/");
     expect(new URL(url).search).toBe("");
