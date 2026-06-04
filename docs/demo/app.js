@@ -140,7 +140,7 @@ const KPI_GLOSSARY = {
   sortino_ratio:
     "Annualized Sortino over 1y (rf=0). Higher = better upside vs downside skew.",
   screener_score:
-    "Mean of 4 thematic factor scores: Profitability (>=2/4 inputs); Valuation (>=1/2); Risk (>=1/2); Momentum (1/1). Higher = better.",
+    "qte77 Score — factor-weighted mean of 4 thematic groups: Profitability (>=2/4 inputs); Valuation (>=1/2); Risk (>=1/2); Momentum (1/1). Higher = better.",
   quality:
     "Mean of normalized ROE, ROA, operating margin, and inverted D/E. Higher = stronger fundamentals.",
   dividend:
@@ -670,7 +670,7 @@ function renderRadar(
   radarChart = new Chart(canvas, {
     type: "radar",
     data: {
-      labels: axes.map((a) => a.replace("screener_score", "screener")),
+      labels: axes.map((a) => a.replace("screener_score", "qte77 Score")),
       datasets: [
         {
           label: "score",
@@ -879,7 +879,7 @@ function showDetail(/** @type {Row} */ row) {
       ["Big Call", fmtNum(cs.big_call, 0), false, KPI_GLOSSARY.big_call],
       ["AAQS", fmtNum(cs.aaqs, 0), false, KPI_GLOSSARY.aaqs],
       ["HGI", fmtNum(cs.hgi, 0), false, KPI_GLOSSARY.hgi],
-      ["Screener", fmtNum(cs.screener_score, 0), false, KPI_GLOSSARY.screener_score],
+      ["qte77 Score", fmtNum(cs.screener_score, 0), false, KPI_GLOSSARY.screener_score],
       ...auditDetailRows(audit),
     ]),
   );
@@ -952,7 +952,7 @@ async function renderTimeSeriesPane(pane, row) {
     data: {
       labels: series.dates,
       datasets: [
-        { label: "Screener", data: series.score, borderColor: () => cssVar("--accent", "#0066cc") },
+        { label: "qte77 Score", data: series.score, borderColor: () => cssVar("--accent", "#0066cc") },
         { label: "Quality", data: series.quality, borderColor: () => cssVar("--rating-greed", "#27ae60") },
         { label: "Growth", data: series.growth, borderColor: () => cssVar("--rating-fear", "#e67e22") },
         { label: "Sortino", data: series.sortino, borderColor: () => cssVar("--rating-extreme-fear", "#c0392b"), yAxisID: "y1" },
