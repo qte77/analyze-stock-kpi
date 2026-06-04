@@ -27,6 +27,28 @@ def _snap(
     return FundamentalsSnapshot(symbol=symbol, composite_scores=cs)
 
 
+def test_composite_breakdown_covers_every_composite_scores_field() -> None:
+    """``composite_breakdown`` keys must equal ``CompositeScores`` fields.
+
+    Regression guard for a previously hardcoded ``_COMPOSITE_FIELDS`` tuple
+    that could silently drift from ``CompositeScores`` — adding a new
+    composite to the model would have been omitted from cross-universe
+    ranking without a separate edit here.
+    """
+    snap = _snap(
+        "AAPL", quality=80, dividend=20, growth=70, big_call=60,
+        aaqs=75, hgi=65, screener_score=70,
+    )
+
+    _, _, audit = build_universe(
+        {"sp500": [snap]},
+        {"sp500": "2026-05-31"},
+        as_of=date(2026, 5, 31),
+    )
+
+    assert set(audit[0].composite_breakdown) == set(CompositeScores.model_fields)
+
+
 def test_ineligible_lt_min_composites_excluded() -> None:
     """< min_composites populated -> excluded, reason 'insufficient_composites'.
 
