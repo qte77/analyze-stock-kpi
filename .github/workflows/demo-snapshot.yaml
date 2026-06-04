@@ -12,7 +12,7 @@
 # `workflow_dispatch` still accepts a `universe` input; when set, the
 # matrix collapses to that single universe so ad-hoc dispatch stays
 # cheap. Unset (scheduled or dispatched without input) runs the full
-# 9-universe fan-out.
+# 11-universe fan-out.
 #
 # Target branch is `data` (not `main`). The repo's default-branch
 # ruleset (id 16200383) has a `pull_request` rule that rejects direct
@@ -33,7 +33,7 @@ on:
   workflow_dispatch:
     inputs:
       universe:
-        description: "Single universe (omit for full 9-universe fan-out)"
+        description: "Single universe (omit for full 11-universe fan-out)"
         required: false
         type: choice
         default: ""
@@ -48,6 +48,8 @@ on:
           - south-korea
           - aggregated-scores-best
           - aggregated-scores-worst
+          - enhanced-kpi-screener-longs
+          - enhanced-kpi-screener-shorts
 
 permissions:
   contents: write
@@ -76,7 +78,7 @@ jobs:
             # preset name; quoting is safe.
             echo "universes=[\"$INPUT_UNIVERSE\"]" >> "$GITHUB_OUTPUT"
           else
-            echo 'universes=["qte77-watchlist","sp500","eurostoxx","federal-contractors","japan","south-america","south-korea","aggregated-scores-best","aggregated-scores-worst"]' >> "$GITHUB_OUTPUT"
+            echo 'universes=["qte77-watchlist","sp500","eurostoxx","federal-contractors","japan","south-america","south-korea","aggregated-scores-best","aggregated-scores-worst","enhanced-kpi-screener-longs","enhanced-kpi-screener-shorts"]' >> "$GITHUB_OUTPUT"
           fi
 
   snapshot:
