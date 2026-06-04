@@ -1058,8 +1058,10 @@ function renderRollingEmptyHint(
 const FG_ROLLING_WINDOW_DAYS = 365;
 
 /**
- * @param {Array<{timestamp: string}>} entries  ascending by timestamp
+ * @template {{timestamp: string}} T
+ * @param {Array<T>} entries  ascending by timestamp
  * @param {number} days
+ * @returns {Array<T>}
  */
 function trimToRollingWindow(entries, days) {
   if (entries.length === 0) return entries;
