@@ -609,6 +609,12 @@ function toggleSectorFilter(label) {
   persistStateFromCurrent();
 }
 
+/** Shared by every chart-section empty hint (sector donut, F&G rolling,
+ *  long-term F&G, yield curve, universe-size badge). Per-section, context-
+ *  specific strings stay inline at their site (e.g. table-empty's "first
+ *  cron run pending"). */
+const EMPTY_HISTORY = "no history yet";
+
 /**
  * Toggle a centered "no data" hint inside #sector-donut-wrap. Called
  * whenever the donut is about to render an empty dataset (e.g. before
@@ -624,7 +630,7 @@ function renderDonutEmptyHint(show) {
   if (show && !existing) {
     const hint = document.createElement("div");
     hint.className = "sector-donut-empty";
-    hint.textContent = "no history yet";
+    hint.textContent = EMPTY_HISTORY;
     wrap.append(hint);
   } else if (!show && existing) {
     existing.remove();
@@ -1033,7 +1039,7 @@ function cssVar(token, fallback) {
 
 function renderRollingEmptyHint(
   /** @type {boolean} */ show,
-  /** @type {string} */ text = "no history yet",
+  /** @type {string} */ text = EMPTY_HISTORY,
 ) {
   const wrap = document.getElementById("fg-chart-wrap");
   if (!wrap) return;
@@ -1099,7 +1105,7 @@ function renderLongTermEmptyHint(/** @type {boolean} */ show) {
   if (show && !existing) {
     const hint = document.createElement("div");
     hint.className = "lt-fg-empty";
-    hint.textContent = "no history yet";
+    hint.textContent = EMPTY_HISTORY;
     wrap.append(hint);
   } else if (!show && existing) {
     existing.remove();
@@ -1230,11 +1236,11 @@ function renderYieldCurveEmptyHint(show) {
   const existing = wrap.querySelector(".yc-empty");
   if (show) {
     if (existing) {
-      existing.textContent = "no history yet";
+      existing.textContent = EMPTY_HISTORY;
     } else {
       const hint = document.createElement("div");
       hint.className = "yc-empty";
-      hint.textContent = "no history yet";
+      hint.textContent = EMPTY_HISTORY;
       wrap.append(hint);
     }
   } else if (existing) {
@@ -1416,7 +1422,7 @@ async function loadActiveUniverse() {
     auditByTicker = null;
     rebuildFuseIndex();
     dateSelector.replaceChildren();
-    sizeEl.textContent = "· no history yet";
+    sizeEl.textContent = `· ${EMPTY_HISTORY}`;
     renderTable();
     renderSectorDonut();
     renderUniverseChips();
