@@ -534,6 +534,7 @@ function renderSectorDonut() {
   const labels = [...aggregated.keys()];
   const data = [...aggregated.values()];
   if (sectorChart) {
+    liveCharts.delete(sectorChart);
     sectorChart.destroy();
     sectorChart = null;
   }
@@ -544,11 +545,9 @@ function renderSectorDonut() {
   }
   const backgroundColor = labels.map(sectorColor);
   // Seam color follows --panel so slice borders blend cleanly with the
-  // section background in both light and dark themes (was hardcoded
-  // rgba(255,255,255,0.65), which vanished against #2c2c2e).
-  const borderColor =
-    getComputedStyle(document.body).getPropertyValue("--panel").trim() ||
-    "#ffffff";
+  // section background in both light and dark themes. Scriptable so it
+  // re-resolves on theme flip via bindThemeObserver → chart.update().
+  const borderColor = () => cssVar("--panel", "#ffffff");
   // Pull the active sector's slice outward so the user has visual
   // confirmation of which slice the table is filtered by.
   const offset = labels.map((l) => (l === sectorFilter ? 12 : 0));
@@ -591,6 +590,7 @@ function renderSectorDonut() {
       },
     },
   });
+  liveCharts.add(sectorChart);
   renderSectorFilterChip();
 }
 
@@ -609,6 +609,12 @@ function toggleSectorFilter(label) {
   persistStateFromCurrent();
 }
 
+/** Shared by every chart-section empty hint (sector donut, F&G rolling,
+ *  long-term F&G, yield curve, universe-size badge). Per-section, context-
+ *  specific strings stay inline at their site (e.g. table-empty's "first
+ *  cron run pending"). */
+const EMPTY_HISTORY = "no history yet";
+
 /**
  * Toggle a centered "no data" hint inside #sector-donut-wrap. Called
  * whenever the donut is about to render an empty dataset (e.g. before
@@ -624,7 +630,7 @@ function renderDonutEmptyHint(show) {
   if (show && !existing) {
     const hint = document.createElement("div");
     hint.className = "sector-donut-empty";
-    hint.textContent = "no history yet";
+    hint.textContent = EMPTY_HISTORY;
     wrap.append(hint);
   } else if (!show && existing) {
     existing.remove();
@@ -657,7 +663,10 @@ function renderRadar(
 ) {
   if (typeof Chart === "undefined") return;
   const axes = ["quality", "dividend", "growth", "big_call", "aaqs", "hgi", "screener_score"];
-  if (radarChart) radarChart.destroy();
+  if (radarChart) {
+    liveCharts.delete(radarChart);
+    radarChart.destroy();
+  }
   radarChart = new Chart(canvas, {
     type: "radar",
     data: {
@@ -669,18 +678,32 @@ function renderRadar(
             (a) =>
               /** @type {Record<string, number | null | undefined>} */ (scores)[a] ?? 0,
           ),
-          borderColor: "#0066cc",
-          backgroundColor: "rgba(0, 102, 204, 0.15)",
+          borderColor: () => cssVar("--accent", "#0066cc"),
+          backgroundColor: () => `${cssVar("--accent", "#0066cc")}26`,
         },
       ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      scales: { r: { min: 0, max: 100, ticks: { stepSize: 25 } } },
+      scales: {
+        r: {
+          min: 0,
+          max: 100,
+          ticks: {
+            stepSize: 25,
+            color: () => cssVar("--text", "#1d1d1f"),
+            backdropColor: "transparent",
+          },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+          angleLines: { color: () => cssVar("--border", "#d2d2d7") },
+          pointLabels: { color: () => cssVar("--text", "#1d1d1f") },
+        },
+      },
       plugins: { legend: { display: false } },
     },
   });
+  liveCharts.add(radarChart);
 }
 
 function closeDetail() {
@@ -939,8 +962,19 @@ async function renderTimeSeriesPane(pane, row) {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        y: { min: 0, max: 100, ticks: { stepSize: 25 }, title: { display: true, text: "Composite (0–100)" } },
-        y1: { position: "right", grid: { drawOnChartArea: false }, title: { display: true, text: "Sortino" } },
+        y: {
+          min: 0,
+          max: 100,
+          ticks: { stepSize: 25, color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+          title: { display: true, text: "Composite (0–100)", color: () => cssVar("--text", "#1d1d1f") },
+        },
+        y1: {
+          position: "right",
+          grid: { drawOnChartArea: false },
+          ticks: { color: () => cssVar("--text", "#1d1d1f") },
+          title: { display: true, text: "Sortino", color: () => cssVar("--text", "#1d1d1f") },
+        },
       },
     },
   });
@@ -1033,7 +1067,7 @@ function cssVar(token, fallback) {
 
 function renderRollingEmptyHint(
   /** @type {boolean} */ show,
-  /** @type {string} */ text = "no history yet",
+  /** @type {string} */ text = EMPTY_HISTORY,
 ) {
   const wrap = document.getElementById("fg-chart-wrap");
   if (!wrap) return;
@@ -1050,6 +1084,27 @@ function renderRollingEmptyHint(
   }
 }
 
+/** Strict 12-month rolling window — the "rolling" tab label promises TTM,
+ *  but the loader concatenates this-year + last-year files, so the raw
+ *  span drifts between ~8 months (early January) and ~24 months (late
+ *  December). Trim from the latest entry's date so the rendered window is
+ *  always 12 months, regardless of when the user opens the dashboard. */
+const FG_ROLLING_WINDOW_DAYS = 365;
+
+/**
+ * @template {{timestamp: string}} T
+ * @param {Array<T>} entries  ascending by timestamp
+ * @param {number} days
+ * @returns {Array<T>}
+ */
+function trimToRollingWindow(entries, days) {
+  if (entries.length === 0) return entries;
+  const latestMs = Date.parse(entries[entries.length - 1].timestamp);
+  if (Number.isNaN(latestMs)) return entries;
+  const cutoffMs = latestMs - days * 86400000;
+  return entries.filter((e) => Date.parse(e.timestamp) >= cutoffMs);
+}
+
 function renderFearGreedChart(
   /** @type {Array<{timestamp: string, score: number}>} */ entries,
 ) {
@@ -1060,15 +1115,16 @@ function renderFearGreedChart(
     fearGreedChart.destroy();
     fearGreedChart = null;
   }
-  renderRollingEmptyHint(entries.length === 0);
-  if (!entries.length || typeof Chart === "undefined") return;
+  const windowed = trimToRollingWindow(entries, FG_ROLLING_WINDOW_DAYS);
+  renderRollingEmptyHint(windowed.length === 0);
+  if (!windowed.length || typeof Chart === "undefined") return;
   fearGreedChart = new Chart(ctx, {
     type: "line",
     data: {
-      labels: entries.map((e) => e.timestamp.slice(0, 10)),
+      labels: windowed.map((e) => e.timestamp.slice(0, 10)),
       datasets: [
         {
-          data: entries.map((e) => e.score),
+          data: windowed.map((e) => e.score),
           borderColor: () => cssVar("--text", "#1d1d1f"),
           backgroundColor: () => `${cssVar("--text", "#1d1d1f")}14`,
           fill: true,
@@ -1084,8 +1140,16 @@ function renderFearGreedChart(
       animation: { duration: 250 },
       plugins: { legend: { display: false } },
       scales: {
-        y: { min: 0, max: 100, ticks: { stepSize: 25 } },
-        x: { ticks: { maxTicksLimit: 14 } },
+        y: {
+          min: 0,
+          max: 100,
+          ticks: { stepSize: 25, color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+        },
+        x: {
+          ticks: { maxTicksLimit: 14, color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+        },
       },
     },
   });
@@ -1099,7 +1163,7 @@ function renderLongTermEmptyHint(/** @type {boolean} */ show) {
   if (show && !existing) {
     const hint = document.createElement("div");
     hint.className = "lt-fg-empty";
-    hint.textContent = "no history yet";
+    hint.textContent = EMPTY_HISTORY;
     wrap.append(hint);
   } else if (!show && existing) {
     existing.remove();
@@ -1155,8 +1219,16 @@ function renderMonthlyFearGreedChart(
       animation: { duration: 250 },
       plugins: { legend: { display: true, position: "bottom" } },
       scales: {
-        y: { min: 0, max: 100, ticks: { stepSize: 25 } },
-        x: { ticks: { maxTicksLimit: 14 } },
+        y: {
+          min: 0,
+          max: 100,
+          ticks: { stepSize: 25, color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+        },
+        x: {
+          ticks: { maxTicksLimit: 14, color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+        },
       },
     },
   });
@@ -1230,11 +1302,11 @@ function renderYieldCurveEmptyHint(show) {
   const existing = wrap.querySelector(".yc-empty");
   if (show) {
     if (existing) {
-      existing.textContent = "no history yet";
+      existing.textContent = EMPTY_HISTORY;
     } else {
       const hint = document.createElement("div");
       hint.className = "yc-empty";
-      hint.textContent = "no history yet";
+      hint.textContent = EMPTY_HISTORY;
       wrap.append(hint);
     }
   } else if (existing) {
@@ -1308,8 +1380,14 @@ function renderYieldCurveChart(entries) {
       plugins: { legend: { display: false } },
       scales: {
         // Highlight the zero line — inversions sit below.
-        y: { grid: { color: () => `${cssVar("--border", "#d2d2d7")}` } },
-        x: { ticks: { maxTicksLimit: 14 } },
+        y: {
+          grid: { color: () => `${cssVar("--border", "#d2d2d7")}` },
+          ticks: { color: () => cssVar("--text", "#1d1d1f") },
+        },
+        x: {
+          ticks: { maxTicksLimit: 14, color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#d2d2d7") },
+        },
       },
     },
   });
@@ -1416,7 +1494,7 @@ async function loadActiveUniverse() {
     auditByTicker = null;
     rebuildFuseIndex();
     dateSelector.replaceChildren();
-    sizeEl.textContent = "· no history yet";
+    sizeEl.textContent = `· ${EMPTY_HISTORY}`;
     renderTable();
     renderSectorDonut();
     renderUniverseChips();
