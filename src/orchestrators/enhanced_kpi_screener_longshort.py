@@ -42,6 +42,8 @@ from typing import TYPE_CHECKING, Any, Literal
 
 from pydantic import BaseModel, ConfigDict
 
+from ._shared import dedup_by_ticker, is_stale
+
 if TYPE_CHECKING:
     from src.data_sources.fundamentals import FundamentalsSnapshot
 
@@ -127,38 +129,6 @@ def _evaluate(
     return long_pass, short_pass, populated
 
 
-def _is_stale(snapshot_date: str, as_of: date, max_stale_days: int) -> bool:
-    """True if ``snapshot_date`` (ISO YYYY-MM-DD) is older than the window."""
-    return (as_of - date.fromisoformat(snapshot_date)).days > max_stale_days
-
-
-def _dedup_by_ticker(
-    snapshots_by_universe: dict[str, list[FundamentalsSnapshot]],
-    snapshot_dates_by_universe: dict[str, str],
-) -> dict[str, dict[str, Any]]:
-    """First-seen universe wins for snapshot; all source universes recorded.
-
-    Mirrors the aggregator's helper. Duplicated rather than extracted
-    because the helper is 12 lines and a single repetition doesn't yet
-    justify a shared dedup module (AHA).
-    """
-    per_ticker: dict[str, dict[str, Any]] = {}
-    for universe_id, snapshots in snapshots_by_universe.items():
-        snap_date = snapshot_dates_by_universe.get(universe_id, "")
-        for snap in snapshots:
-            ticker = snap.symbol
-            if ticker not in per_ticker:
-                per_ticker[ticker] = {
-                    "snapshot": snap,
-                    "source_universes": [universe_id],
-                    "snapshot_dates": {universe_id: snap_date},
-                }
-            else:
-                per_ticker[ticker]["source_universes"].append(universe_id)
-                per_ticker[ticker]["snapshot_dates"][universe_id] = snap_date
-    return per_ticker
-
-
 def _classify(
     ticker: str,
     info: dict[str, Any],
@@ -180,7 +150,7 @@ def _classify(
         "long_breakdown": long_pass,
         "short_breakdown": short_pass,
     }
-    if _is_stale(first_date, as_of, max_stale_days):
+    if is_stale(first_date, as_of, max_stale_days):
         return AuditRow(**base, eligible=False, excluded_reason="stale")
     if populated < min_criteria:
         return AuditRow(
@@ -230,7 +200,7 @@ def build_universe(
     if not snapshots_by_universe:
         return [], [], []
 
-    per_ticker = _dedup_by_ticker(
+    per_ticker = dedup_by_ticker(
         snapshots_by_universe, snapshot_dates_by_universe,
     )
 
