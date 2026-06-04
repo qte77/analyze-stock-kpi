@@ -150,6 +150,19 @@
     <section id="universe-section">
       <div id="universe-controls-row">
         <div id="universe-header">
+          <details id="universe-help">
+            <summary>Why these universes?</summary>
+            <dl class="why-list">
+              <dt>Static lists (sp500, eurostoxx, japan, south-america, south-korea, qte77-watchlist)</dt>
+              <dd>Hand-curated regional / sector ticker lists. The weekly snapshot fetches fundamentals for every member; "empty" means the cron hasn't run yet.</dd>
+              <dt>federal-contractors</dt>
+              <dd>Orchestrator-driven: chains <code>usaspending.gov</code> → SEC EDGAR → yfinance to assemble the DoD Top-25 + curated seed. Rebuilt weekly.</dd>
+              <dt>aggregated-scores-best / -worst</dt>
+              <dd>Cross-universe ranking by <strong>mean of 7 composite scores</strong> (quality / dividend / growth / big_call / aaqs / hgi / screener_score). Top 25 + bottom 25 of the merged ticker pool. Hover the Score cell to see the row's mean — that's what put it in best or worst.</dd>
+              <dt>enhanced-kpi-screener-longs / -shorts</dt>
+              <dd>Conjunctive 14-criteria gate (Phase 2a of #192). A ticker is in <code>longs</code> iff it passes <em>every</em> long-side gate (market cap ≥ 2B, P/E ≤ 25, growth &gt; 10%, beta &gt; 1, ROE / ROA / ROIC &gt; 10%, current / quick &gt; 1, profit margin &gt; 10%, buy rating, R&amp;D &gt; 5%) and in <code>shorts</code> iff it passes the inverted set. Counts vary — can legitimately be 0 each side when the source data is too benign or too sparse.</dd>
+            </dl>
+          </details>
           <select
             id="universe-picker"
             aria-label="Universe"
