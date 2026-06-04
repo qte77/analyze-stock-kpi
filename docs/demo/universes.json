@@ -8,6 +8,8 @@
     {"id": "south-america", "label": "South America (Latam large caps)"},
     {"id": "south-korea", "label": "South Korea (KOSPI top)"},
     {"id": "aggregated-scores-best", "label": "Aggregated scores (best 25)"},
-    {"id": "aggregated-scores-worst", "label": "Aggregated scores (worst 25)"}
+    {"id": "aggregated-scores-worst", "label": "Aggregated scores (worst 25)"},
+    {"id": "enhanced-kpi-screener-longs", "label": "Long candidates (14-criteria gate)"},
+    {"id": "enhanced-kpi-screener-shorts", "label": "Short candidates (inverted)"}
   ]
 }
