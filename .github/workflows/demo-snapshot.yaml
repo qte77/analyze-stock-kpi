@@ -94,7 +94,7 @@ jobs:
       # helper changes against real `data`-branch concurrency before merge.
       # The `data` branch is reached only via explicit `git fetch origin
       # data` further down; the initial checkout never points at `data`.
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
@@ -112,7 +112,7 @@ jobs:
           git checkout origin/data -- "results/demo/$UNIVERSE/" 2>/dev/null || \
             echo "No existing demo dir for $UNIVERSE on data branch — first run."
 
-      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+      - uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
