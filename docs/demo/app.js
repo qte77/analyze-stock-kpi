@@ -1084,6 +1084,27 @@ function renderRollingEmptyHint(
   }
 }
 
+/** Strict 12-month rolling window — the "rolling" tab label promises TTM,
+ *  but the loader concatenates this-year + last-year files, so the raw
+ *  span drifts between ~8 months (early January) and ~24 months (late
+ *  December). Trim from the latest entry's date so the rendered window is
+ *  always 12 months, regardless of when the user opens the dashboard. */
+const FG_ROLLING_WINDOW_DAYS = 365;
+
+/**
+ * @template {{timestamp: string}} T
+ * @param {Array<T>} entries  ascending by timestamp
+ * @param {number} days
+ * @returns {Array<T>}
+ */
+function trimToRollingWindow(entries, days) {
+  if (entries.length === 0) return entries;
+  const latestMs = Date.parse(entries[entries.length - 1].timestamp);
+  if (Number.isNaN(latestMs)) return entries;
+  const cutoffMs = latestMs - days * 86400000;
+  return entries.filter((e) => Date.parse(e.timestamp) >= cutoffMs);
+}
+
 function renderFearGreedChart(
   /** @type {Array<{timestamp: string, score: number}>} */ entries,
 ) {
@@ -1094,15 +1115,16 @@ function renderFearGreedChart(
     fearGreedChart.destroy();
     fearGreedChart = null;
   }
-  renderRollingEmptyHint(entries.length === 0);
-  if (!entries.length || typeof Chart === "undefined") return;
+  const windowed = trimToRollingWindow(entries, FG_ROLLING_WINDOW_DAYS);
+  renderRollingEmptyHint(windowed.length === 0);
+  if (!windowed.length || typeof Chart === "undefined") return;
   fearGreedChart = new Chart(ctx, {
     type: "line",
     data: {
-      labels: entries.map((e) => e.timestamp.slice(0, 10)),
+      labels: windowed.map((e) => e.timestamp.slice(0, 10)),
       datasets: [
         {
-          data: entries.map((e) => e.score),
+          data: windowed.map((e) => e.score),
           borderColor: () => cssVar("--text", "#1d1d1f"),
           backgroundColor: () => `${cssVar("--text", "#1d1d1f")}14`,
           fill: true,
