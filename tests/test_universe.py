@@ -100,6 +100,24 @@ def test_empty_symbol_file_raises_universe_error(tmp_path: Path) -> None:
         resolve_universe(args)
 
 
+def test_empty_preset_tolerated_returns_empty_list(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+) -> None:
+    """An existing-but-empty preset returns ``[]`` instead of raising.
+
+    Per the orchestrator-driven case (#192 Phase 2a): the longshort presets
+    start as 0-byte placeholders until the first cron populates them. The
+    demo-snapshot cron must be able to ``make run UNIVERSE=…`` over an
+    empty preset and produce an empty snapshot rather than abort.
+    """
+    preset_dir = tmp_path / "universes"
+    preset_dir.mkdir()
+    (preset_dir / "phase2a-longs.txt").write_text("")
+    monkeypatch.setattr("src.domain.universe.PRESET_DIR", preset_dir)
+    args = _args(universe="phase2a-longs")
+    assert resolve_universe(args) == []
+
+
 # preset shipping smoke check (catches accidental deletion of qte77-watchlist)
 
 

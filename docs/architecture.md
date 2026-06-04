@@ -29,7 +29,8 @@ Every external boundary carries one of three failure policies. Logged via `logge
 | yfinance `Ticker.history` (yield curve) | `yield_curve._fetch_close` | wrap-degrade — `None` per leg | per-leg `try/except`; both legs failing → `fetch_yield_curve_snapshot` returns `None` and the cron skips today's write rather than persisting an empty row |
 | Filesystem write (snapshots) | `__main__._persist_snapshots` | fail-loud | disk full / permission denied → abort |
 | Filesystem write (CNN cache) | `sentiment._write_year` | fail-loud | same rationale |
-| Filesystem read (universe preset) | `universe._read_symbol_file` | fail-loud | config error — missing preset means the user passed a wrong name |
+| Filesystem read (universe preset) | `universe.resolve_universe` (preset mode) | wrap-degrade — empty preset returns `[]` | orchestrator-driven case (#192 Phase 2a): the longshort presets start as 0-byte placeholders; the conjunctive gate can also yield zero candidates legitimately. Missing-file path still fail-loud — config error |
+| Filesystem read (inline `tickers` / `tickers_file`) | `universe.resolve_universe` | fail-loud — empty raises `UniverseError` | operator-typed input; an empty result is almost certainly a typo / wrong path, not a designed state |
 | Filesystem read (EDGAR cache) | `sec.cik_map._fetch_json` (cached read) | fail-loud | corrupt JSON shouldn't happen on a CDN-served read; if it does, user removes `results/edgar/` to recover |
 | Pydantic `model_validate` | every call | fail-loud | upstream schema break or programmer error — never wrap |
 

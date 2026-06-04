@@ -31,16 +31,29 @@ def resolve_universe(args: CliArgs) -> list[str]:
     """Resolve the active asset universe from ``args``.
 
     Precedence: ``tickers`` > ``tickers_file`` > ``universe`` (preset name).
-    Returns a non-empty list of stripped, deduplicated Yahoo symbols.
-    Raises :class:`UniverseError` if the resolved universe is empty or the
-    requested preset / file is missing.
+    Returns a list of stripped, deduplicated Yahoo symbols.
+
+    Raises :class:`UniverseError` when:
+
+    - the requested preset / file is missing (fail-loud — config error), or
+    - inline ``tickers`` / ``tickers_file`` modes resolve to an empty list
+      (fail-loud — operator typo / wrong file)
+
+    Preset mode tolerates an existing-but-empty file and returns ``[]``.
+    This is the orchestrator-driven case: ``enhanced-kpi-screener-longs``
+    starts as a 0-byte placeholder until the first cron populates it, and
+    later cron passes can also yield zero candidates conjunctively (per
+    issue #192's "counts vary; could be 0 each side"). An empty preset is
+    a valid state; ``make run UNIVERSE=…`` over it produces an empty
+    snapshot rather than aborting the demo-snapshot cron.
     """
     if args.tickers is not None:
         symbols = _split_csv_tickers(args.tickers)
     elif args.tickers_file is not None:
         symbols = _read_symbol_file(args.tickers_file)
     else:
-        symbols = _read_symbol_file(PRESET_DIR / f"{args.universe}.txt")
+        # Preset mode: tolerate empty (orchestrator-driven; see docstring).
+        return _read_symbol_file(PRESET_DIR / f"{args.universe}.txt")
 
     if not symbols:
         raise UniverseError("resolved universe is empty")
