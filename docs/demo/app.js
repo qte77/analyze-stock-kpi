@@ -467,7 +467,7 @@ function renderRow(row, totalScore) {
     ["trailing_peg_ratio", td(fmtNum(row.trailing_peg_ratio, 2), "num"), false],
     ["beta", td(fmtNum(row.beta, 2), "num"), false],
     ["rd_to_revenue", td(fmtPct(row.rd_to_revenue), "num"), false],
-    ["operating_margins", td(fmtPct(row.operating_margins), "num"), true],
+    ["operating_margins", td(fmtPct(row.operating_margins), "num"), false],
     ["return_on_equity", td(fmtPct(row.return_on_equity), "num"), false],
     ["return_on_assets", td(fmtPct(row.return_on_assets), "num"), false],
     ["current_ratio", td(fmtNum(row.current_ratio, 2), "num"), false],
