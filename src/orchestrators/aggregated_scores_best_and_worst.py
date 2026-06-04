@@ -25,6 +25,7 @@ from datetime import UTC, date, datetime
 from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, ConfigDict
+from src.domain.composite_scores import CompositeScores
 
 from ._shared import dedup_by_ticker, is_stale
 
@@ -32,15 +33,9 @@ if TYPE_CHECKING:
     from src.data_sources.fundamentals import FundamentalsSnapshot
 
 
-_COMPOSITE_FIELDS = (
-    "quality",
-    "dividend",
-    "growth",
-    "big_call",
-    "aaqs",
-    "hgi",
-    "screener_score",
-)
+# Derived from the model so adding a CompositeScores field flows through
+# to the cross-universe ranking without a separate edit here.
+_COMPOSITE_FIELDS = tuple(CompositeScores.model_fields)
 
 
 class AuditRow(BaseModel):
