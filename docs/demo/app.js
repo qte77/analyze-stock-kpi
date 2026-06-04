@@ -393,6 +393,44 @@ const COVERAGE_KEYS = /** @type {const} */ ([
   "sortino_ratio",
 ]);
 
+const COMPOSITE_FIELDS = /** @type {const} */ ([
+  "quality",
+  "dividend",
+  "growth",
+  "big_call",
+  "aaqs",
+  "hgi",
+  "screener_score",
+]);
+
+/**
+ * Mean of populated composite scores — the metric the aggregator preset
+ * (best-and-worst / longs / shorts) ranks on. Closes #218: the Score
+ * column shows screener_score, but on aggregator universes the ranking is
+ * mean-of-7. Surfacing the mean as a tooltip explains why e.g. PRSO sits
+ * in worst-25 with a visible screener_score of 64.
+ *
+ * @param {any} row
+ * @returns {number | null}
+ */
+function meanComposite(row) {
+  const cs = row?.composite_scores;
+  if (cs == null) return null;
+  let sum = 0;
+  let n = 0;
+  for (const f of COMPOSITE_FIELDS) {
+    const v = cs[f];
+    if (v == null) continue;
+    sum += Number(v);
+    n += 1;
+  }
+  return n === 0 ? null : sum / n;
+}
+
+function isAggregatorUniverse(/** @type {string} */ slug) {
+  return slug.startsWith("aggregated-scores-");
+}
+
 /**
  * Count how many of the 9 KPI inputs the row has populated.
  * `forward_pe <= 0` is treated as missing (negative/zero P/E is a
@@ -452,6 +490,14 @@ function renderRow(row, totalScore) {
   const scoreCell = td(fmtNum(score, 0), "num score-cell");
   if (score != null) {
     scoreCell.style.backgroundColor = `hsl(${Number(score) * 1.2}, 60%, 75%)`;
+  }
+  if (isAggregatorUniverse(activeUniverse)) {
+    const mean = meanComposite(row);
+    if (mean != null) {
+      scoreCell.title =
+        `Aggregator ranks on mean of 7 composites = ${mean.toFixed(1)}. ` +
+        `Score shown here is screener_score (one of the 7).`;
+    }
   }
   const universeCell = td(
     /** @type {any} */ (row)._universe ?? activeUniverse,
