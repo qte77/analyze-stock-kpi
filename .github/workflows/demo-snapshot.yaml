@@ -87,8 +87,14 @@ jobs:
             # preset name; quoting is safe.
             echo "universes=[\"$INPUT_UNIVERSE\"]" >> "$GITHUB_OUTPUT"
           else
+            # Skip empty preset files: a newly-added orchestrator-driven
+            # universe (e.g. enhanced-kpi-screener-longs at first deploy)
+            # has a 0-byte placeholder until universe-builder's first
+            # successful cron populates it. Fanning out for the empty
+            # leg would write a misleading empty snapshot and a "no
+            # history yet" entry on the dashboard.
             UNIVERSES=$(
-              find src/assets/universes -maxdepth 1 -name '*.txt' -printf '%f\n' \
+              find src/assets/universes -maxdepth 1 -name '*.txt' ! -empty -printf '%f\n' \
                 | sed 's/\.txt$//' \
                 | sort \
                 | jq -R . | jq -s -c .
