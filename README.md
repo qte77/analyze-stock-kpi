@@ -37,11 +37,13 @@ CLI args double as env vars with the `SSK_` prefix
 ## What it produces
 
 * **Fundamentals** — `results/fundamentals/<UTC>.json`: one
-  `FundamentalsSnapshot` per resolved ticker (~34 yfinance fields,
+  `FundamentalsSnapshot` per resolved ticker (~35 yfinance fields,
   including the computed `roi`, `rd_to_revenue`, `sortino_ratio`
-  enrichments) plus seven 0-100 composite proxy scores (Quality /
-  Dividend / Growth / Big Call / AAQS / HGI / Screener). Sparse
-  fields for non-equities (FX, futures, crypto) are valid by design.
+  enrichments plus the lightweight `analyst_recommendation` bucket)
+  plus seven 0-100 composite proxy scores (Quality / Dividend /
+  Growth / Big Call / AAQS / HGI / Screener — shown as **qte77
+  Score** in the dashboard). Sparse fields for non-equities (FX,
+  futures, crypto) are valid by design.
 * **Sentiment** — `results/cnn_fg/YYYY.json`: per-year date-sorted
   array of CNN Fear & Greed snapshots (headline + 9 subindicators).
   Updated daily by a GitHub Actions cron at 21:30 UTC.
@@ -76,7 +78,7 @@ In priority order:
 |---|---|
 | Inline list | `TICKERS=AAPL,MSFT` |
 | File (one symbol per line) | `TICKERS_FILE=path/to/list.txt` |
-| Preset | `UNIVERSE=qte77-watchlist` (see [`src/assets/universes/`](src/assets/universes) for all available presets) |
+| Preset | `UNIVERSE=qte77-watchlist` (see [`src/assets/universes/`](src/assets/universes) for all 11 available presets, including `aggregated-scores-best` / `-worst` and `enhanced-kpi-screener-longs` / `-shorts`) |
 
 ## Documentation
 

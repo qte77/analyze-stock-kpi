@@ -54,6 +54,7 @@ src/
 │       └── submissions.py            fetch_last_filed / enrich_snapshot_sec — EDGAR submissions API
 ├── orchestrators/
 │   ├── aggregated_scores_best_and_worst.py  build_universe(snapshots_by_universe, snapshot_dates_by_universe, *, top_n=25, ...) -> tuple[list[str], list[str], list[AuditRow]]; cross-universe composite-mean ranking, returns (best, worst, audit) — paired presets `aggregated-scores-best` + `aggregated-scores-worst` (#184; NOT a hedging primitive, see ADR-0005 amendment)
+│   ├── enhanced_kpi_screener_longshort.py   build_universe(snapshots_by_universe, snapshot_dates_by_universe, *, min_criteria=10, ...) -> tuple[list[str], list[str], list[AuditRow]]; 14 long-side + 13 short-side conjunctive gates (a ticker lands in `longs` iff it passes ALL long gates, in `shorts` iff it passes ALL inverted short gates, otherwise neither). Phase 2a of #192; paired presets `enhanced-kpi-screener-longs` + `enhanced-kpi-screener-shorts`. Long ∩ short empty by construction. Declarative `_NUMERIC_GATES` table keeps `_evaluate` cognitive complexity at 5
 │   ├── federal_contractors.py        build_universe(*, fy=None, top_n=100) -> tuple[list[str], list[AuditRow]]; chains usaspending → EDGAR → yfinance
 │   └── universe_audit.py             classify_ticker / audit_universes -> UniverseAuditReport; operator triage for stale-US-ticker rot (#168)
 ├── assets/
@@ -94,7 +95,7 @@ v0.5.0 attaches a `CompositeScores` object to every `FundamentalsSnapshot` after
 | Type | Module | Role |
 |---|---|---|
 | `CliArgs(BaseSettings)` | `utils/parse_args.py` | CLI + env input — `cli_parse_args=True`, `extra="forbid"` |
-| `FundamentalsSnapshot` | `fundamentals.py` | Per-ticker fundamentals — ~34 aliased fields including the post-fetch enrichments `roi`, `rd_to_revenue`, `sortino_ratio` (see [ADR-0004](decisions/0004-price-history-composite-input.md)); sparse for non-equities |
+| `FundamentalsSnapshot` | `fundamentals.py` | Per-ticker fundamentals — ~35 aliased fields including the post-fetch enrichments `roi`, `rd_to_revenue`, `sortino_ratio` (see [ADR-0004](decisions/0004-price-history-composite-input.md)) and the analyst-rating bucket `analyst_recommendation` (#192 Phase 2a; alias `recommendationKey`, already in the yfinance `info` payload — no extra HTTP); sparse for non-equities |
 | `FearGreedSnapshot` | `sentiment.py` | CNN F&G headline (score, rating, timestamp, prev close/1w/1m/1y) + optional `subindicators` map of 9 named `SubindicatorReading` entries (score, rating, raw_value); see [`cnn-fg-api.md`](cnn-fg-api.md) for what's backfillable vs daily-only |
 | `CompositeScores` | `composite_scores.py` | Quality/dividend/growth/big_call/aaqs/hgi/screener 0-100 proxies derived from `FundamentalsSnapshot`; simplified formulas per [`decisions/0002-simplified-composites.md`](decisions/0002-simplified-composites.md) amended by [`decisions/0004-price-history-composite-input.md`](decisions/0004-price-history-composite-input.md) |
 
