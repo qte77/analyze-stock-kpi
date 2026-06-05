@@ -38,14 +38,14 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from datetime import UTC, date, datetime
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Literal
 
-from pydantic import BaseModel, ConfigDict
-
-from ._shared import dedup_by_ticker, is_stale
+from ._shared import AuditRowBase, dedup_by_ticker, is_stale
 
 if TYPE_CHECKING:
     from src.data_sources.fundamentals import FundamentalsSnapshot
+
+    from ._shared import DedupedSnapshot
 
 
 Tier = Literal["long", "short", "neither"]
@@ -83,20 +83,17 @@ _NUMERIC_GATES: tuple[tuple[str, _Predicate, _Predicate], ...] = (
 )
 
 
-class AuditRow(BaseModel):
-    """Per-ticker decision trail for the long/short screener."""
+class AuditRow(AuditRowBase):
+    """Per-ticker decision trail for the long/short screener.
 
-    model_config = ConfigDict(frozen=True, extra="ignore")
+    Inherits ``ticker``, ``source_universes``, ``snapshot_dates``,
+    ``eligible``, ``excluded_reason`` from :class:`AuditRowBase`.
+    """
 
-    ticker: str
-    source_universes: list[str]
-    snapshot_dates: dict[str, str]
     populated_criteria: int
     long_breakdown: dict[str, bool]
     short_breakdown: dict[str, bool]
     tier: Tier = "neither"
-    eligible: bool = False
-    excluded_reason: str | None = None
 
 
 def _evaluate(
@@ -131,15 +128,15 @@ def _evaluate(
 
 def _classify(
     ticker: str,
-    info: dict[str, Any],
+    info: DedupedSnapshot,
     as_of: date,
     max_stale_days: int,
     min_criteria: int,
 ) -> AuditRow:
     """Build the AuditRow and assign the ticker to ``long`` / ``short`` / ``neither``."""
-    snap: FundamentalsSnapshot = info["snapshot"]
-    source_universes = info["source_universes"]
-    snapshot_dates = info["snapshot_dates"]
+    snap: FundamentalsSnapshot = info.snapshot
+    source_universes = info.source_universes
+    snapshot_dates = info.snapshot_dates
     long_pass, short_pass, populated = _evaluate(snap)
     first_date = snapshot_dates[source_universes[0]]
     base = {
