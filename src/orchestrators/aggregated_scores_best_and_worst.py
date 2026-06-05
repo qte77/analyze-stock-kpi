@@ -22,15 +22,16 @@ already-Tier-0 snapshots; no new external boundary).
 from __future__ import annotations
 
 from datetime import UTC, date, datetime
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, ConfigDict
 from src.domain.composite_scores import CompositeScores
 
-from ._shared import dedup_by_ticker, is_stale
+from ._shared import AuditRowBase, dedup_by_ticker, is_stale
 
 if TYPE_CHECKING:
     from src.data_sources.fundamentals import FundamentalsSnapshot
+
+    from ._shared import DedupedSnapshot
 
 
 # Derived from the model so adding a CompositeScores field flows through
@@ -38,19 +39,16 @@ if TYPE_CHECKING:
 _COMPOSITE_FIELDS = tuple(CompositeScores.model_fields)
 
 
-class AuditRow(BaseModel):
-    """Per-ticker decision trail for the aggregator."""
+class AuditRow(AuditRowBase):
+    """Per-ticker decision trail for the aggregator.
 
-    model_config = ConfigDict(frozen=True, extra="ignore")
+    Inherits ``ticker``, ``source_universes``, ``snapshot_dates``,
+    ``eligible``, ``excluded_reason`` from :class:`AuditRowBase`.
+    """
 
-    ticker: str
-    source_universes: list[str]
-    snapshot_dates: dict[str, str]
     populated_composites: int
     composite_breakdown: dict[str, float | None]
     mean_composite: float | None = None
-    eligible: bool = False
-    excluded_reason: str | None = None
     rank: int | None = None
 
 
@@ -70,7 +68,7 @@ def _mean_of_populated(values: dict[str, float | None]) -> float | None:
 
 def _classify(
     ticker: str,
-    info: dict[str, Any],
+    info: DedupedSnapshot,
     as_of: date,
     max_stale_days: int,
     min_composites: int,
@@ -79,9 +77,9 @@ def _classify(
 
     ``mean_for_ranking`` is ``None`` for excluded tickers (won't be ranked).
     """
-    snap = info["snapshot"]
-    source_universes = info["source_universes"]
-    snapshot_dates = info["snapshot_dates"]
+    snap = info.snapshot
+    source_universes = info.source_universes
+    snapshot_dates = info.snapshot_dates
     composites = _extract_composites(snap)
     populated = sum(1 for v in composites.values() if v is not None)
     first_date = snapshot_dates[source_universes[0]]
