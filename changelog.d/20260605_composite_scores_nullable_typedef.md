@@ -1,0 +1,3 @@
+### Fixed
+
+- **`docs/demo/types.d.ts`: declare `Row.composite_scores` as nullable.** `src/data_sources/fundamentals.py:FundamentalsSnapshot.composite_scores` is `CompositeScores | None`, which serializes to `null`. The TS declaration was `composite_scores?: CompositeScores;` — optional but not nullable; type narrowing on a literal `null` value would have failed. Now `composite_scores?: CompositeScores | null;`, matching the convention every other nullable field already uses (`?: T | null`). One-line drift fix surfaced by today's contracts audit; the remaining 11 `FundamentalsSnapshot` fields absent from `Row` are intentional per the file's "subset the dashboard reads" header policy and confirmed unused in `docs/demo/`.
