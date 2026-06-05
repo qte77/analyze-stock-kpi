@@ -1,0 +1,3 @@
+### Changed
+
+- **`fear-greed.yaml` + `yield-curve.yaml` now route through `scripts/data-branch-commit.cjs`.** Both daily crons carried byte-identical 36-line inline `github-script` blocks (getRef → getCommit → mkBlob → createTree → createCommit → updateRef) — the same verified-commit logic that `demo-snapshot.yaml` + `universe-builder.yaml` already delegate to the CJS helper. Migrating eliminates ~52 LOC of duplicated workflow YAML, ends the convention drift between the two stale crons and the two updated ones, and **adds 422-race retry** the inline blocks lacked (8 attempts with jittered backoff). Future verified-commit fixes propagate to all 4 workflows from a single file. Surfaced by today's scripts+workflows duplication sweep.
