@@ -4697,58 +4697,58 @@
     }
   },
   {
-    "score": 55.0,
-    "rating": "neutral",
-    "timestamp": "2026-06-05T11:39:31Z",
+    "score": 42.0571428571429,
+    "rating": "fear",
+    "timestamp": "2026-06-05T21:41:25Z",
     "previous_close": 54.6857142857143,
     "previous_1_week": 59.5142857142857,
     "previous_1_month": 67.25714285714287,
     "previous_1_year": 57.97142857142858,
     "subindicators": {
       "market_momentum_sp500": {
-        "score": 93.8,
-        "rating": "extreme greed",
-        "raw_value": 7584.31
+        "score": 58.4,
+        "rating": "greed",
+        "raw_value": 7383.74
       },
       "market_momentum_sp125": {
-        "score": 93.8,
-        "rating": "extreme greed",
-        "raw_value": 6968.87872
+        "score": 58.4,
+        "rating": "greed",
+        "raw_value": 6973.15088
       },
       "stock_price_strength": {
-        "score": 32.2,
+        "score": 31.2,
         "rating": "fear",
-        "raw_value": 1.34718092722156
+        "raw_value": 1.2228594757462998
       },
       "stock_price_breadth": {
-        "score": 34.4,
+        "score": 28.0,
         "rating": "fear",
-        "raw_value": 1062.13728108741
+        "raw_value": 1022.795950218
       },
       "put_call_options": {
-        "score": 96.6,
+        "score": 76.0,
         "rating": "extreme greed",
-        "raw_value": 0.586899708854191
+        "raw_value": 0.648552651606098
       },
       "market_volatility_vix": {
         "score": 50.0,
         "rating": "neutral",
-        "raw_value": 15.61
+        "raw_value": 21.51
       },
       "market_volatility_vix_50": {
         "score": 50.0,
         "rating": "neutral",
-        "raw_value": 19.0936
+        "raw_value": 19.2116
       },
       "junk_bond_demand": {
-        "score": 6.2,
+        "score": 5.8,
         "rating": "extreme fear",
-        "raw_value": 1.34916611902268
+        "raw_value": 1.35025760075157
       },
       "safe_haven_demand": {
-        "score": 71.8,
-        "rating": "greed",
-        "raw_value": 4.10885827626608
+        "score": 45.0,
+        "rating": "fear",
+        "raw_value": 1.3807448503913
       }
     }
   }
