@@ -83,7 +83,8 @@ Shipped on `main`; rolls into the next semver tag. See the `[Unreleased]` block 
 
 **Open / queued (research + medium-effort):**
 
-- [ ] **Enhanced KPI long/short screener — Phase 2b** — remaining criteria from #192: criterion 12 (FCF margin, needs a new `Ticker.cashflow` fetch + offline fixture + `@pytest.mark.network` live test), criterion 15 (tech rating, blocked on TradingView decision #21), ADR-0002 + ADR-0005 amendments, strict per-criterion red/green TDD pairs (issue's acceptance criterion), and gate-threshold tuning (Phase 2a's 13-gate conjunction returned 0 candidates each side on a 7-universe source set — thresholds are honest but operationally too strict).
+- [x] **Enhanced KPI long/short screener — Phase 2b (FCF margin)** — criterion 12 (`fcf_margin` enrichment via `Ticker.cashflow` / `Ticker.income_stmt`, EQUITY-gated, `_find_row` reuse) wired into `_NUMERIC_GATES`; screener now runs 15 of 16 criteria. ADR-0002 amended. Offline + `@pytest.mark.network` live tests added. PR [#248](https://github.com/qte77/analyze-stock-kpi/pull/248), closes [#192](https://github.com/qte77/analyze-stock-kpi/issues/192). Tech-rating (criterion 15) stays parked under "Open research" pending #21.
+- [ ] **Gate-threshold tuning for the long/short screener** — Phase 2a's conjunction returned 0 candidates each side on a 7-universe source set; the post-#248 longs preset is now META + NVDA + AVGO (3) on the same set. Thresholds remain honest-but-strict; worth revisiting once a broader source-universe spread lands.
 - [ ] **Surface "Why these universes?" dashboard tab** — analog of the F&G "Why these charts?" pane; explains best/worst (mean-of-7 ranking) vs longshort (conjunctive-gate filter) so the empty-state for unpopulated universes reads as a design outcome, not a bug.
 
 ## Deferred
