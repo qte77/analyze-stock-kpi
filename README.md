@@ -38,8 +38,9 @@ CLI args double as env vars with the `SSK_` prefix
 
 * **Fundamentals** — `results/fundamentals/<UTC>.json`: one
   `FundamentalsSnapshot` per resolved ticker (~35 yfinance fields,
-  including the computed `roi`, `rd_to_revenue`, `sortino_ratio`
-  enrichments plus the lightweight `analyst_recommendation` bucket)
+  including the computed `roi`, `rd_to_revenue`, `fcf_margin`,
+  `sortino_ratio` enrichments plus the lightweight
+  `analyst_recommendation` bucket)
   plus seven 0-100 composite proxy scores (Quality / Dividend /
   Growth / Big Call / AAQS / HGI / Screener — shown as **qte77
   Score** in the dashboard). Sparse fields for non-equities (FX,
