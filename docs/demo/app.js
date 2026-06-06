@@ -42,6 +42,13 @@ const FALLBACK_UNIVERSE_IDS = [
   "aggregated-scores-worst",
 ];
 
+/**
+ * Minimum canvas width (px) for the sector donut to show a legend.
+ * Below this threshold the legend is hidden to keep the chart compact.
+ * @see https://github.com/qte77/analyze-stock-kpi/issues/152
+ */
+const SECTOR_DONUT_LEGEND_MIN_WIDTH = 450;
+
 /** @type {string[]} */
 let knownUniverseIds = [...FALLBACK_UNIVERSE_IDS];
 
@@ -660,14 +667,19 @@ function renderSectorDonut() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      onResize: (/** @type {any} */ chart, /** @type {{ width: number }} */ size) => {
+        const shouldShow = size.width >= SECTOR_DONUT_LEGEND_MIN_WIDTH;
+        if (chart.options.plugins.legend.display !== shouldShow) {
+          chart.options.plugins.legend.display = shouldShow;
+          chart.update();
+        }
+      },
       plugins: {
-        // Legend permanently disabled — slice colors + hover tooltip
-        // (`Sector: count (pct%)`) are enough to identify segments.
-        // See https://github.com/qte77/analyze-stock-kpi/issues/152 —
-        // the attempted onResize auto-hide regressed on zoom-out and
-        // the right-side position required widening the wrap past the
-        // user's preferred donut size.
-        legend: { display: false },
+        legend: {
+          display: true,
+          position: "right",
+          labels: { boxWidth: 12, padding: 8 },
+        },
         tooltip: {
           callbacks: {
             label: (/** @type {any} */ ctx) => {
