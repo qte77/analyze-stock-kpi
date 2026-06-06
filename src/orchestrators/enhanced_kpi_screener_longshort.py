@@ -7,10 +7,9 @@ hedging-grade signal is a conjunctive-gate filter: a long candidate must
 pass *every* long-side criterion, a short candidate must pass *every*
 short-side criterion. Sets are disjoint by construction.
 
-Phase 2a ships 13 of the issue's 16 criteria — every gate that reads a
-field already on ``FundamentalsSnapshot`` (no new yfinance fetches).
-Deferred to Phase 2b: FCF margin (criterion 12; needs ``Ticker.cashflow``)
-and tech rating (criterion 15; blocked on TradingView decision #21).
+Phase 2b adds criterion 12 (FCF margin from ``Ticker.cashflow``) so 14
+of the issue's 16 numeric / categorical gates now run. Still deferred:
+tech rating (criterion 15; blocked on TradingView decision #21).
 
 | # | Field                       | Long gate         | Short gate (inverted) |
 |---|-----------------------------|-------------------|-----------------------|
@@ -25,6 +24,7 @@ and tech rating (criterion 15; blocked on TradingView decision #21).
 | 9 | roi (ADR-0004 proxy)        | > 0.10            | < 0.05                |
 | 10 | current_ratio              | > 1               | < 1                   |
 | 11 | quick_ratio                | > 1               | < 1                   |
+| 12 | fcf_margin                 | > 0.10            | < 0                   |
 | 13 | profit_margins             | > 0.10            | < 0                   |
 | 14 | analyst_recommendation     | buy / strong_buy  | sell / strong_sell    |
 | 16 | rd_to_revenue              | > 0.05            | (long-only)           |
@@ -79,6 +79,7 @@ _NUMERIC_GATES: tuple[tuple[str, _Predicate, _Predicate], ...] = (
     ("roi", lambda v: v > 0.10, lambda v: v < 0.05),
     ("current_ratio", lambda v: v > 1, lambda v: v < 1),
     ("quick_ratio", lambda v: v > 1, lambda v: v < 1),
+    ("fcf_margin", lambda v: v > 0.10, lambda v: v < 0),
     ("profit_margins", lambda v: v > 0.10, lambda v: v < 0),
 )
 
@@ -99,7 +100,7 @@ class AuditRow(AuditRowBase):
 def _evaluate(
     snap: FundamentalsSnapshot,
 ) -> tuple[dict[str, bool], dict[str, bool], int]:
-    """Apply 14 long + 13 short gates; return ``(long_pass, short_pass, populated)``.
+    """Apply 15 long + 14 short gates; return ``(long_pass, short_pass, populated)``.
 
     A criterion is "populated" when its underlying field is non-None; an
     unpopulated criterion implicitly fails both gates so a sparse snapshot
@@ -153,7 +154,7 @@ def _classify(
         return AuditRow(
             **base, eligible=False, excluded_reason="insufficient_criteria",
         )
-    # 14 long-side gates (incl. rd_to_revenue), 13 short-side (no R&D).
+    # 15 long-side gates (incl. rd_to_revenue), 14 short-side (no R&D).
     tier: Tier
     if all(long_pass.values()):
         tier = "long"
@@ -179,7 +180,7 @@ def build_universe(
             list. First-seen universe wins on per-ticker dedup.
         snapshot_dates_by_universe: Per-universe ISO ``YYYY-MM-DD``
             snapshot date used for the freshness gate.
-        min_criteria: Minimum populated criteria for eligibility (10 of 14
+        min_criteria: Minimum populated criteria for eligibility (10 of 15
             evaluable; matches the aggregator's 5-of-7 ratio).
         max_stale_days: Snapshots older than this are excluded.
         as_of: Reference date for the freshness gate. Defaults to today
