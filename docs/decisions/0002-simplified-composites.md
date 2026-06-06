@@ -1,6 +1,6 @@
 # ADR-0002 — Simplified composite proxy scores
 
-**Status:** Accepted (2026-05-10)
+**Status:** Accepted (2026-05-10) — amended 2026-06-06 (#192 Phase 2b: `fcf_margin` enrichment added to `FundamentalsSnapshot` to serve the long/short screener's criterion 12; the seven simplified composites themselves are unchanged)
 
 **Amends:** [ADR-0000](0000-remove-traderfox.md) §Decision (composite proxies);
 [ADR-0001](0001-defer-financetoolkit.md) §Accepted risks

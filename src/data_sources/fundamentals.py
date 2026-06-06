@@ -116,6 +116,7 @@ class FundamentalsSnapshot(BaseModel):
     composite_scores: CompositeScores | None = None
     roi: float | None = None
     rd_to_revenue: float | None = None
+    fcf_margin: float | None = None
     sortino_ratio: float | None = None
     sec_last_10k_date: date | None = None
     sec_last_10q_date: date | None = None
@@ -279,6 +280,53 @@ def _fetch_rd_to_revenue(
     return rd / revenue
 
 
+def _read_fcf_revenue(
+    cashflow: pd.DataFrame | None,
+    income_stmt: pd.DataFrame | None,
+) -> tuple[float | None, float | None]:
+    """Extract latest Free Cash Flow + Total Revenue from yfinance frames.
+
+    Returns ``(None, None)`` on any structural issue (empty frame,
+    missing row, NaN cell). Float coercion only happens once both
+    values are present and non-NaN. Row matching reuses ``_find_row``
+    so label-casing / whitespace drift handled centrally.
+    """
+    if cashflow is None or cashflow.empty:
+        return None, None
+    if income_stmt is None or income_stmt.empty:
+        return None, None
+    fcf = _find_row(cashflow.iloc[:, 0], "free cash flow")
+    revenue = _find_row(income_stmt.iloc[:, 0], "total revenue")
+    if fcf is None or revenue is None:
+        return None, None
+    if fcf != fcf or revenue != revenue:
+        return None, None
+    return float(fcf), float(revenue)
+
+
+def _fetch_fcf_margin(
+    yf_ticker: yf.Ticker, info: dict[str, Any]
+) -> float | None:
+    """Free-cash-flow margin from ``Ticker.cashflow`` / ``Ticker.income_stmt``.
+
+    Gated on ``info["quoteType"] == "EQUITY"`` so ETFs / FX / futures /
+    crypto skip the extra HTTP fetches entirely. Returns ``None`` on any
+    failure or missing data — empty frames, missing rows, NaN cells,
+    zero revenue, network error.
+    """
+    if info.get("quoteType") != "EQUITY":
+        return None
+    try:
+        fcf, revenue = _read_fcf_revenue(
+            yf_ticker.cashflow, yf_ticker.income_stmt,
+        )
+    except Exception:
+        return None
+    if fcf is None or revenue is None or revenue == 0:
+        return None
+    return fcf / revenue
+
+
 def fetch_fundamentals(ticker: str) -> FundamentalsSnapshot:
     """Fetch fundamentals for one ticker. Sparse for non-equities."""
     yf_ticker = yf.Ticker(ticker)
@@ -289,6 +337,7 @@ def fetch_fundamentals(ticker: str) -> FundamentalsSnapshot:
         update={
             "roi": _compute_roi(normalized),
             "rd_to_revenue": _fetch_rd_to_revenue(yf_ticker, info),
+            "fcf_margin": _fetch_fcf_margin(yf_ticker, info),
         }
     )
 

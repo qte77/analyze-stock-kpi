@@ -312,6 +312,77 @@ def test_fetch_fundamentals_attaches_rd_to_revenue() -> None:
     assert snap.rd_to_revenue == 0.20
 
 
+def test_fetch_fcf_margin_equity_happy_path() -> None:
+    """FCF / Total Revenue read from the latest cashflow + income_stmt columns.
+
+    Chosen so the arithmetic is exact: 15 / 100 = 0.15.
+    """
+    import pandas as pd
+    from src.data_sources.fundamentals import _fetch_fcf_margin
+
+    cashflow = pd.DataFrame(
+        {"latest": [15.0]}, index=["Free Cash Flow"],
+    )
+    income_stmt = pd.DataFrame(
+        {"latest": [100.0]}, index=["Total Revenue"],
+    )
+    fake = SimpleNamespace(cashflow=cashflow, income_stmt=income_stmt)
+    assert _fetch_fcf_margin(fake, {"quoteType": "EQUITY"}) == 0.15
+
+
+def test_fetch_fcf_margin_non_equity_skips_fetch() -> None:
+    """Non-EQUITY quote types must not touch ``.cashflow`` or ``.income_stmt``."""
+    from src.data_sources.fundamentals import _fetch_fcf_margin
+
+    class _Tripwire:
+        @property
+        def cashflow(self) -> None:
+            raise AssertionError("cashflow accessed for non-EQUITY ticker")
+
+        @property
+        def income_stmt(self) -> None:
+            raise AssertionError("income_stmt accessed for non-EQUITY ticker")
+
+    assert _fetch_fcf_margin(_Tripwire(), {"quoteType": "ETF"}) is None
+
+
+def test_fetch_fundamentals_attaches_fcf_margin() -> None:
+    """End-to-end: fcf_margin lands on the snapshot for an EQUITY ticker."""
+    import pandas as pd
+
+    cashflow_df = pd.DataFrame(
+        {"latest": [15.0]}, index=["Free Cash Flow"],
+    )
+    income_stmt_df = pd.DataFrame(
+        {"latest": [100.0]}, index=["Total Revenue"],
+    )
+
+    class _FakeTicker:
+        info: ClassVar[dict[str, object]] = {
+            "symbol": "AAPL",
+            "shortName": "Apple Inc.",
+            "quoteType": "EQUITY",
+        }
+        cashflow = cashflow_df
+        income_stmt = income_stmt_df
+
+    with patch("src.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()):
+        snap = fetch_fundamentals("AAPL")
+    assert snap.fcf_margin == 0.15
+
+
+@pytest.mark.network
+def test_fetch_fcf_margin_live_aapl() -> None:
+    """Live yfinance schema-drift guard: AAPL must yield a populated FCF margin."""
+    import yfinance as yf
+    from src.data_sources.fundamentals import _fetch_fcf_margin
+
+    ticker = yf.Ticker("AAPL")
+    margin = _fetch_fcf_margin(ticker, ticker.info)
+    assert margin is not None
+    assert 0.0 < margin < 1.0
+
+
 def test_compute_sortino_positive_skew_series() -> None:
     """Sortino > 0 for a mostly-up series with a single drawdown.
 
