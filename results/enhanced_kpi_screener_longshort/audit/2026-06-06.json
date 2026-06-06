@@ -6,12 +6,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -24,7 +24,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -55,13 +55,13 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05",
-      "federal-contractors": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06",
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -74,7 +74,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -104,12 +104,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -122,9 +122,9 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
-      "analyst_recommendation": false,
+      "analyst_recommendation": true,
       "rd_to_revenue": true
     },
     "short_breakdown": {
@@ -152,12 +152,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -170,7 +170,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -201,16 +201,16 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05",
-      "federal-contractors": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06",
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
-      "forward_pe": false,
+      "forward_pe": true,
       "earnings_growth": true,
       "revenue_growth": true,
       "trailing_peg_ratio": false,
@@ -227,7 +227,7 @@
     },
     "short_breakdown": {
       "market_cap": true,
-      "forward_pe": true,
+      "forward_pe": false,
       "earnings_growth": false,
       "revenue_growth": false,
       "trailing_peg_ratio": true,
@@ -249,11 +249,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -266,7 +266,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -295,11 +295,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -312,7 +312,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": true
@@ -341,11 +341,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -375,7 +375,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -388,12 +388,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -406,7 +406,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -435,11 +435,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -481,11 +481,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -498,7 +498,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -527,11 +527,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -544,7 +544,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -574,12 +574,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -592,7 +592,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -621,11 +621,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -667,11 +667,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -684,7 +684,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -714,12 +714,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -761,11 +761,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -778,7 +778,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -807,11 +807,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -853,11 +853,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -870,7 +870,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -900,12 +900,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -918,7 +918,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -947,7 +947,7 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -993,11 +993,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -1010,7 +1010,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -1039,11 +1039,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1085,11 +1085,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1102,7 +1102,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -1131,11 +1131,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1148,7 +1148,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -1177,11 +1177,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1194,7 +1194,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -1223,11 +1223,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -1240,7 +1240,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": true
@@ -1269,11 +1269,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1316,12 +1316,12 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "federal-contractors": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1364,12 +1364,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -1382,7 +1382,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -1412,12 +1412,12 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "federal-contractors": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1459,7 +1459,7 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -1505,11 +1505,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1552,12 +1552,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1570,7 +1570,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -1599,11 +1599,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1645,11 +1645,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -1662,7 +1662,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -1691,11 +1691,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1737,11 +1737,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1784,12 +1784,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -1802,7 +1802,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -1832,12 +1832,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1879,11 +1879,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -1896,7 +1896,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -1925,11 +1925,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -1942,9 +1942,9 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
-      "analyst_recommendation": true,
+      "analyst_recommendation": false,
       "rd_to_revenue": true
     },
     "short_breakdown": {
@@ -1971,11 +1971,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -1988,7 +1988,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -2017,24 +2017,24 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
       "earnings_growth": false,
       "revenue_growth": true,
-      "trailing_peg_ratio": false,
+      "trailing_peg_ratio": true,
       "return_on_equity": true,
       "beta": true,
       "return_on_assets": false,
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -2044,7 +2044,7 @@
       "forward_pe": true,
       "earnings_growth": true,
       "revenue_growth": false,
-      "trailing_peg_ratio": true,
+      "trailing_peg_ratio": false,
       "return_on_equity": false,
       "beta": true,
       "return_on_assets": false,
@@ -2063,11 +2063,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2082,7 +2082,7 @@
       "quick_ratio": false,
       "fcf_margin": false,
       "profit_margins": true,
-      "analyst_recommendation": false,
+      "analyst_recommendation": true,
       "rd_to_revenue": true
     },
     "short_breakdown": {
@@ -2110,12 +2110,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2128,7 +2128,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -2158,12 +2158,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2176,7 +2176,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -2205,11 +2205,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -2222,7 +2222,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -2253,13 +2253,13 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05",
-      "federal-contractors": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06",
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2272,7 +2272,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -2301,11 +2301,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2318,7 +2318,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -2348,12 +2348,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2366,7 +2366,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -2395,11 +2395,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -2412,7 +2412,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -2442,12 +2442,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2460,7 +2460,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -2481,7 +2481,7 @@
       "profit_margins": false,
       "analyst_recommendation": false
     },
-    "tier": "neither"
+    "tier": "long"
   },
   {
     "ticker": "NVO",
@@ -2489,11 +2489,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2535,11 +2535,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -2552,7 +2552,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -2581,11 +2581,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -2598,7 +2598,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -2627,11 +2627,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2674,12 +2674,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -2692,7 +2692,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -2722,12 +2722,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2740,7 +2740,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -2769,11 +2769,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2786,7 +2786,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -2815,11 +2815,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2832,7 +2832,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -2861,11 +2861,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": false,
       "forward_pe": true,
@@ -2878,7 +2878,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -2907,11 +2907,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2924,7 +2924,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -2953,11 +2953,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -2970,7 +2970,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -2999,11 +2999,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -3016,7 +3016,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -3045,11 +3045,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3091,11 +3091,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3137,11 +3137,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3154,7 +3154,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false,
       "rd_to_revenue": true
@@ -3184,12 +3184,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3202,7 +3202,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -3231,11 +3231,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3248,7 +3248,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -3278,12 +3278,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3296,7 +3296,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -3325,11 +3325,11 @@
       "qte77-watchlist"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05"
+      "qte77-watchlist": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3342,7 +3342,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -3372,12 +3372,12 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "qte77-watchlist": "2026-06-05",
-      "sp500": "2026-06-05"
+      "qte77-watchlist": "2026-06-06",
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3419,11 +3419,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -3436,7 +3436,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -3465,11 +3465,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3482,7 +3482,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -3511,11 +3511,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -3528,7 +3528,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -3557,11 +3557,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3574,7 +3574,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -3603,11 +3603,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -3620,7 +3620,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -3649,11 +3649,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -3666,7 +3666,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -3695,11 +3695,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3712,7 +3712,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -3741,11 +3741,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -3758,7 +3758,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -3787,7 +3787,53 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
+    },
+    "eligible": true,
+    "excluded_reason": null,
+    "populated_criteria": 15,
+    "long_breakdown": {
+      "market_cap": true,
+      "forward_pe": true,
+      "earnings_growth": true,
+      "revenue_growth": true,
+      "trailing_peg_ratio": true,
+      "return_on_equity": true,
+      "beta": true,
+      "return_on_assets": true,
+      "roi": true,
+      "current_ratio": true,
+      "quick_ratio": true,
+      "fcf_margin": true,
+      "profit_margins": true,
+      "analyst_recommendation": true,
+      "rd_to_revenue": true
+    },
+    "short_breakdown": {
+      "market_cap": true,
+      "forward_pe": false,
+      "earnings_growth": false,
+      "revenue_growth": false,
+      "trailing_peg_ratio": false,
+      "return_on_equity": false,
+      "beta": true,
+      "return_on_assets": false,
+      "roi": false,
+      "current_ratio": false,
+      "quick_ratio": false,
+      "fcf_margin": false,
+      "profit_margins": false,
+      "analyst_recommendation": false
+    },
+    "tier": "long"
+  },
+  {
+    "ticker": "AXP",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -3800,57 +3846,11 @@
       "trailing_peg_ratio": false,
       "return_on_equity": true,
       "beta": true,
-      "return_on_assets": true,
-      "roi": true,
-      "current_ratio": true,
-      "quick_ratio": true,
-      "fcf_margin": false,
-      "profit_margins": true,
-      "analyst_recommendation": true,
-      "rd_to_revenue": true
-    },
-    "short_breakdown": {
-      "market_cap": true,
-      "forward_pe": false,
-      "earnings_growth": false,
-      "revenue_growth": false,
-      "trailing_peg_ratio": true,
-      "return_on_equity": false,
-      "beta": true,
-      "return_on_assets": false,
-      "roi": false,
-      "current_ratio": false,
-      "quick_ratio": false,
-      "fcf_margin": false,
-      "profit_margins": false,
-      "analyst_recommendation": false
-    },
-    "tier": "neither"
-  },
-  {
-    "ticker": "AXP",
-    "source_universes": [
-      "sp500"
-    ],
-    "snapshot_dates": {
-      "sp500": "2026-06-05"
-    },
-    "eligible": true,
-    "excluded_reason": null,
-    "populated_criteria": 13,
-    "long_breakdown": {
-      "market_cap": true,
-      "forward_pe": true,
-      "earnings_growth": true,
-      "revenue_growth": true,
-      "trailing_peg_ratio": false,
-      "return_on_equity": true,
-      "beta": true,
       "return_on_assets": false,
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -3879,11 +3879,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3896,7 +3896,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -3925,11 +3925,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3942,7 +3942,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -3971,11 +3971,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -3988,7 +3988,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": true
@@ -4017,7 +4017,7 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": false,
     "excluded_reason": "insufficient_criteria",
@@ -4063,11 +4063,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4080,7 +4080,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -4109,11 +4109,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4126,7 +4126,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -4155,11 +4155,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4189,7 +4189,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -4201,11 +4201,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -4218,7 +4218,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -4247,11 +4247,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4264,7 +4264,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -4293,11 +4293,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4339,11 +4339,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4356,7 +4356,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -4385,11 +4385,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4402,7 +4402,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -4431,11 +4431,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4448,7 +4448,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -4477,11 +4477,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -4523,11 +4523,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4540,7 +4540,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -4569,11 +4569,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -4586,7 +4586,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -4615,11 +4615,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -4661,11 +4661,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4678,9 +4678,9 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
-      "analyst_recommendation": false,
+      "analyst_recommendation": true,
       "rd_to_revenue": false
     },
     "short_breakdown": {
@@ -4707,11 +4707,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4741,7 +4741,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -4753,11 +4753,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4799,11 +4799,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -4816,7 +4816,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -4845,11 +4845,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": false,
     "excluded_reason": "insufficient_criteria",
-    "populated_criteria": 4,
+    "populated_criteria": 5,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4862,7 +4862,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -4892,12 +4892,12 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05",
-      "federal-contractors": "2026-06-05"
+      "sp500": "2026-06-06",
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -4910,7 +4910,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -4939,11 +4939,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -4956,7 +4956,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -4985,11 +4985,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -5002,7 +5002,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -5031,11 +5031,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5065,7 +5065,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -5077,11 +5077,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5124,12 +5124,12 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05",
-      "federal-contractors": "2026-06-05"
+      "sp500": "2026-06-06",
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5142,7 +5142,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -5171,11 +5171,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5188,7 +5188,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -5217,11 +5217,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5234,7 +5234,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -5263,11 +5263,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5280,7 +5280,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -5309,11 +5309,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -5326,7 +5326,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -5355,11 +5355,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5389,7 +5389,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -5401,11 +5401,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5418,7 +5418,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -5447,11 +5447,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -5494,12 +5494,12 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05",
-      "federal-contractors": "2026-06-05"
+      "sp500": "2026-06-06",
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5541,11 +5541,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5558,7 +5558,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -5587,11 +5587,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5604,7 +5604,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -5633,11 +5633,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5679,11 +5679,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5696,7 +5696,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -5725,11 +5725,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5742,7 +5742,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -5763,7 +5763,7 @@
       "profit_margins": false,
       "analyst_recommendation": false
     },
-    "tier": "neither"
+    "tier": "long"
   },
   {
     "ticker": "MMC",
@@ -5771,7 +5771,7 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": false,
     "excluded_reason": "insufficient_criteria",
@@ -5817,11 +5817,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5851,7 +5851,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -5863,11 +5863,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5880,7 +5880,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -5909,11 +5909,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5955,11 +5955,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -5972,7 +5972,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -6001,11 +6001,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -6035,7 +6035,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -6047,11 +6047,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6093,11 +6093,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6110,7 +6110,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -6139,11 +6139,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6156,7 +6156,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -6185,11 +6185,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -6202,7 +6202,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -6231,11 +6231,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6248,7 +6248,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -6277,24 +6277,24 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
       "earnings_growth": true,
       "revenue_growth": false,
-      "trailing_peg_ratio": false,
+      "trailing_peg_ratio": true,
       "return_on_equity": true,
       "beta": true,
       "return_on_assets": true,
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": true
@@ -6304,7 +6304,7 @@
       "forward_pe": false,
       "earnings_growth": false,
       "revenue_growth": true,
-      "trailing_peg_ratio": true,
+      "trailing_peg_ratio": false,
       "return_on_equity": false,
       "beta": true,
       "return_on_assets": false,
@@ -6324,12 +6324,12 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05",
-      "federal-contractors": "2026-06-05"
+      "sp500": "2026-06-06",
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6371,11 +6371,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -6417,11 +6417,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6434,7 +6434,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -6463,11 +6463,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6497,7 +6497,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -6509,11 +6509,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6526,7 +6526,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -6555,11 +6555,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6572,7 +6572,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -6601,11 +6601,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6618,7 +6618,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -6647,11 +6647,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -6693,11 +6693,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -6739,11 +6739,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -6756,7 +6756,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -6785,11 +6785,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6802,7 +6802,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -6831,11 +6831,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6848,7 +6848,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -6877,11 +6877,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6894,7 +6894,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -6923,11 +6923,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -6940,7 +6940,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -6969,11 +6969,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7003,7 +7003,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -7015,11 +7015,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -7061,11 +7061,11 @@
       "sp500"
     ],
     "snapshot_dates": {
-      "sp500": "2026-06-05"
+      "sp500": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7107,11 +7107,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7124,7 +7124,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -7153,11 +7153,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7199,11 +7199,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7245,11 +7245,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7291,11 +7291,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7308,7 +7308,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -7337,11 +7337,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -7354,7 +7354,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -7383,11 +7383,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7400,7 +7400,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -7429,11 +7429,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7463,7 +7463,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -7475,11 +7475,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7521,11 +7521,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7567,11 +7567,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7584,7 +7584,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -7613,11 +7613,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7647,7 +7647,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -7659,11 +7659,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7676,7 +7676,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -7705,11 +7705,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7722,7 +7722,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -7751,11 +7751,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7797,11 +7797,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7814,7 +7814,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -7843,11 +7843,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7889,11 +7889,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7935,11 +7935,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7952,7 +7952,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -7981,11 +7981,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -7998,7 +7998,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -8027,11 +8027,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8073,11 +8073,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -8119,11 +8119,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8153,7 +8153,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -8165,11 +8165,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 10,
+    "populated_criteria": 11,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8182,7 +8182,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -8211,11 +8211,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8228,7 +8228,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -8257,11 +8257,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -8274,7 +8274,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -8303,11 +8303,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8349,11 +8349,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8366,7 +8366,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -8395,11 +8395,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8441,11 +8441,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -8458,7 +8458,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -8487,11 +8487,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8504,7 +8504,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -8533,11 +8533,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -8550,7 +8550,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -8579,11 +8579,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8596,7 +8596,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -8625,11 +8625,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -8642,7 +8642,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -8671,11 +8671,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8688,7 +8688,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -8717,11 +8717,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8734,7 +8734,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -8763,11 +8763,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8780,7 +8780,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -8809,11 +8809,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8826,7 +8826,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -8855,11 +8855,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8889,7 +8889,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false
     },
@@ -8901,11 +8901,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8918,7 +8918,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -8947,11 +8947,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -8993,11 +8993,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9010,7 +9010,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -9039,11 +9039,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9056,7 +9056,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -9085,11 +9085,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9119,7 +9119,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -9131,11 +9131,11 @@
       "eurostoxx"
     ],
     "snapshot_dates": {
-      "eurostoxx": "2026-06-05"
+      "eurostoxx": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9177,11 +9177,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -9211,7 +9211,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -9223,11 +9223,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9269,11 +9269,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9315,11 +9315,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9361,11 +9361,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9407,11 +9407,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9441,7 +9441,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -9453,11 +9453,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": false,
       "forward_pe": true,
@@ -9499,11 +9499,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9545,11 +9545,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9591,11 +9591,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9637,11 +9637,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 10,
+    "populated_criteria": 11,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9654,7 +9654,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -9683,11 +9683,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9729,11 +9729,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9775,11 +9775,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9821,11 +9821,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -9867,11 +9867,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -9884,7 +9884,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -9913,11 +9913,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": false,
       "forward_pe": true,
@@ -9947,7 +9947,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false
     },
@@ -9959,11 +9959,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -10005,23 +10005,23 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": false,
     "excluded_reason": "insufficient_criteria",
-    "populated_criteria": 0,
+    "populated_criteria": 5,
     "long_breakdown": {
       "market_cap": false,
       "forward_pe": false,
       "earnings_growth": false,
-      "revenue_growth": false,
+      "revenue_growth": true,
       "trailing_peg_ratio": false,
       "return_on_equity": false,
       "beta": false,
       "return_on_assets": false,
       "roi": false,
-      "current_ratio": false,
-      "quick_ratio": false,
+      "current_ratio": true,
+      "quick_ratio": true,
       "fcf_margin": false,
       "profit_margins": false,
       "analyst_recommendation": false,
@@ -10040,7 +10040,7 @@
       "current_ratio": false,
       "quick_ratio": false,
       "fcf_margin": false,
-      "profit_margins": false,
+      "profit_margins": true,
       "analyst_recommendation": false
     },
     "tier": "neither"
@@ -10051,11 +10051,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -10070,7 +10070,7 @@
       "quick_ratio": false,
       "fcf_margin": false,
       "profit_margins": false,
-      "analyst_recommendation": true,
+      "analyst_recommendation": false,
       "rd_to_revenue": false
     },
     "short_breakdown": {
@@ -10097,11 +10097,11 @@
       "federal-contractors"
     ],
     "snapshot_dates": {
-      "federal-contractors": "2026-06-05"
+      "federal-contractors": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 10,
+    "populated_criteria": 11,
     "long_breakdown": {
       "market_cap": false,
       "forward_pe": false,
@@ -10143,11 +10143,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -10189,11 +10189,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -10206,7 +10206,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -10235,11 +10235,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -10269,7 +10269,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -10281,7 +10281,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -10327,7 +10327,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -10373,7 +10373,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -10419,7 +10419,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -10465,11 +10465,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -10482,7 +10482,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -10511,7 +10511,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -10557,11 +10557,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
-    "eligible": false,
-    "excluded_reason": "insufficient_criteria",
-    "populated_criteria": 9,
+    "eligible": true,
+    "excluded_reason": null,
+    "populated_criteria": 10,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -10591,7 +10591,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -10603,11 +10603,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
-    "eligible": false,
-    "excluded_reason": "insufficient_criteria",
-    "populated_criteria": 9,
+    "eligible": true,
+    "excluded_reason": null,
+    "populated_criteria": 10,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -10637,7 +10637,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -10649,11 +10649,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -10683,7 +10683,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -10695,7 +10695,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -10741,11 +10741,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -10775,7 +10775,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false
     },
@@ -10787,11 +10787,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -10833,7 +10833,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -10879,11 +10879,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -10925,11 +10925,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -10942,7 +10942,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -10971,7 +10971,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -11017,7 +11017,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -11063,7 +11063,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -11109,11 +11109,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11155,7 +11155,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": false,
     "excluded_reason": "insufficient_criteria",
@@ -11201,11 +11201,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -11218,7 +11218,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -11247,11 +11247,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11293,7 +11293,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -11339,11 +11339,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11385,11 +11385,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -11402,7 +11402,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": true
@@ -11431,11 +11431,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11448,7 +11448,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -11477,11 +11477,11 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11511,7 +11511,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -11523,7 +11523,7 @@
       "japan"
     ],
     "snapshot_dates": {
-      "japan": "2026-06-05"
+      "japan": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
@@ -11569,11 +11569,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11615,11 +11615,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11632,7 +11632,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -11661,11 +11661,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 14,
+    "populated_criteria": 15,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11678,7 +11678,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -11707,11 +11707,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11724,7 +11724,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -11753,11 +11753,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11787,7 +11787,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -11799,11 +11799,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11816,7 +11816,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -11845,11 +11845,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 10,
+    "populated_criteria": 11,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11862,7 +11862,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -11891,11 +11891,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -11908,7 +11908,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -11937,7 +11937,7 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": false,
     "excluded_reason": "insufficient_criteria",
@@ -11983,11 +11983,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12029,11 +12029,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12046,7 +12046,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -12075,11 +12075,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12109,7 +12109,7 @@
       "roi": true,
       "current_ratio": false,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false
     },
@@ -12121,7 +12121,7 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": false,
     "excluded_reason": "insufficient_criteria",
@@ -12167,7 +12167,7 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": false,
     "excluded_reason": "insufficient_criteria",
@@ -12213,11 +12213,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12259,11 +12259,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 10,
+    "populated_criteria": 11,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12293,7 +12293,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -12305,11 +12305,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12351,11 +12351,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12368,7 +12368,7 @@
       "roi": true,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -12397,11 +12397,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12414,7 +12414,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -12443,11 +12443,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 10,
+    "populated_criteria": 11,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12460,7 +12460,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false,
       "rd_to_revenue": false
@@ -12489,11 +12489,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12506,7 +12506,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -12535,11 +12535,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12581,11 +12581,11 @@
       "south-america"
     ],
     "snapshot_dates": {
-      "south-america": "2026-06-05"
+      "south-america": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12598,7 +12598,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -12627,11 +12627,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12673,11 +12673,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12690,7 +12690,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false,
       "rd_to_revenue": true
@@ -12719,11 +12719,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -12753,7 +12753,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false
     },
@@ -12765,11 +12765,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -12782,7 +12782,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -12811,11 +12811,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12845,7 +12845,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -12857,11 +12857,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12891,7 +12891,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -12903,11 +12903,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
-    "eligible": false,
-    "excluded_reason": "insufficient_criteria",
-    "populated_criteria": 9,
+    "eligible": true,
+    "excluded_reason": null,
+    "populated_criteria": 10,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12920,9 +12920,9 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
-      "analyst_recommendation": true,
+      "analyst_recommendation": false,
       "rd_to_revenue": false
     },
     "short_breakdown": {
@@ -12949,11 +12949,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -12966,7 +12966,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -12995,11 +12995,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -13041,11 +13041,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 11,
+    "populated_criteria": 12,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -13075,7 +13075,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false
     },
@@ -13087,11 +13087,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -13133,11 +13133,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -13167,7 +13167,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": false
     },
@@ -13179,11 +13179,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -13225,11 +13225,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
-    "eligible": false,
-    "excluded_reason": "insufficient_criteria",
-    "populated_criteria": 9,
+    "eligible": true,
+    "excluded_reason": null,
+    "populated_criteria": 10,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -13242,9 +13242,9 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
-      "analyst_recommendation": true,
+      "analyst_recommendation": false,
       "rd_to_revenue": false
     },
     "short_breakdown": {
@@ -13271,11 +13271,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
-    "eligible": false,
-    "excluded_reason": "insufficient_criteria",
-    "populated_criteria": 9,
+    "eligible": true,
+    "excluded_reason": null,
+    "populated_criteria": 10,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -13290,7 +13290,7 @@
       "quick_ratio": false,
       "fcf_margin": false,
       "profit_margins": true,
-      "analyst_recommendation": true,
+      "analyst_recommendation": false,
       "rd_to_revenue": false
     },
     "short_breakdown": {
@@ -13305,7 +13305,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -13317,11 +13317,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -13351,7 +13351,7 @@
       "roi": false,
       "current_ratio": false,
       "quick_ratio": false,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": false,
       "analyst_recommendation": false
     },
@@ -13363,11 +13363,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 10,
+    "populated_criteria": 11,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -13380,7 +13380,7 @@
       "roi": false,
       "current_ratio": true,
       "quick_ratio": true,
-      "fcf_margin": false,
+      "fcf_margin": true,
       "profit_margins": true,
       "analyst_recommendation": true,
       "rd_to_revenue": false
@@ -13409,11 +13409,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 13,
+    "populated_criteria": 14,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
@@ -13455,11 +13455,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": false,
@@ -13501,11 +13501,11 @@
       "south-korea"
     ],
     "snapshot_dates": {
-      "south-korea": "2026-06-05"
+      "south-korea": "2026-06-06"
     },
     "eligible": true,
     "excluded_reason": null,
-    "populated_criteria": 12,
+    "populated_criteria": 13,
     "long_breakdown": {
       "market_cap": true,
       "forward_pe": true,
