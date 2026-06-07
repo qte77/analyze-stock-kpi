@@ -624,6 +624,17 @@ let sectorChart = null;
 /** @type {any} */
 let radarChart = null;
 
+/**
+ * Minimum inline width (px) for the sector-donut-wrap before the legend
+ * appears. Below this threshold the legend is hidden so sector labels
+ * like "Communication Services" don't truncate. See
+ * https://github.com/qte77/analyze-stock-kpi/issues/152
+ */
+const SECTOR_LEGEND_MIN_WIDTH = 380;
+
+/** @type {ResizeObserver | null} */
+let sectorLegendRo = null;
+
 
 function renderSectorDonut() {
   const canvas = /** @type {HTMLCanvasElement | null} */ (
@@ -661,13 +672,15 @@ function renderSectorDonut() {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        // Legend permanently disabled — slice colors + hover tooltip
-        // (`Sector: count (pct%)`) are enough to identify segments.
-        // See https://github.com/qte77/analyze-stock-kpi/issues/152 —
-        // the attempted onResize auto-hide regressed on zoom-out and
-        // the right-side position required widening the wrap past the
-        // user's preferred donut size.
-        legend: { display: false },
+        legend: {
+          display: false, // updated below after wrap width check
+          position: "bottom",
+          labels: {
+            boxWidth: 12,
+            padding: 12,
+            font: { size: 11 },
+          },
+        },
         tooltip: {
           callbacks: {
             label: (/** @type {any} */ ctx) => {
@@ -690,6 +703,37 @@ function renderSectorDonut() {
       },
     },
   });
+  // Determine initial legend display based on the wrap's current width.
+  const wrap = document.getElementById("sector-donut-wrap");
+  if (wrap && sectorChart) {
+    const wrapWidth = wrap.getBoundingClientRect().width;
+    sectorChart.options.plugins.legend.display = wrapWidth >= SECTOR_LEGEND_MIN_WIDTH;
+
+    // Disconnect previous observer before creating a new one (the chart
+    // was just destroyed + recreated at the top of this function).
+    if (sectorLegendRo) sectorLegendRo.disconnect();
+
+    // Watch for resize events on the wrap element. When the width
+    // crosses SECTOR_LEGEND_MIN_WIDTH, toggle legend visibility and
+    // call chart.update() so the layout recalculates — Chart.js's own
+    // onResize with "none" mode stalls the legend reflow (see #152).
+    sectorLegendRo = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const w =
+          entry.contentBoxSize?.[0]?.inlineSize ??
+          entry.contentRect.width;
+        const shouldShow = w >= SECTOR_LEGEND_MIN_WIDTH;
+        if (
+          sectorChart &&
+          sectorChart.options.plugins.legend.display !== shouldShow
+        ) {
+          sectorChart.options.plugins.legend.display = shouldShow;
+          sectorChart.update();
+        }
+      }
+    });
+    sectorLegendRo.observe(wrap);
+  }
   liveCharts.add(sectorChart);
   renderSectorFilterChip();
 }
