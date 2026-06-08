@@ -28,6 +28,7 @@ _LONG_FIXTURE: dict[str, float | str | None] = {
     "roi": 0.15,
     "current_ratio": 1.5,
     "quick_ratio": 1.2,
+    "fcf_margin": 0.18,
     "profit_margins": 0.15,
     "analyst_recommendation": "buy",
     "rd_to_revenue": 0.08,
@@ -45,6 +46,7 @@ _SHORT_FIXTURE: dict[str, float | str | None] = {
     "roi": 0.02,
     "current_ratio": 0.6,
     "quick_ratio": 0.4,
+    "fcf_margin": -0.08,
     "profit_margins": -0.05,
     "analyst_recommendation": "sell",
 }
@@ -61,6 +63,7 @@ _NEUTRAL_FIXTURE: dict[str, float | str | None] = {
     "roi": 0.07,
     "current_ratio": 1.0,  # passes neither (not > 1, not < 1)
     "quick_ratio": 1.0,
+    "fcf_margin": 0.05,  # fails both (not > 0.10, not < 0)
     "profit_margins": 0.05,
     "analyst_recommendation": "hold",
 }
@@ -76,7 +79,7 @@ def _snap(symbol: str, **overrides: float | str | None) -> FundamentalsSnapshot:
         (_LONG_FIXTURE, "long", "longs"),
         (_SHORT_FIXTURE, "short", "shorts"),
     ],
-    ids=["long-pass-all-14", "short-pass-all-13"],
+    ids=["long-pass-all-15", "short-pass-all-14"],
 )
 def test_pass_all_gates_lands_in_correct_list(
     fixture: dict[str, float | str | None],
@@ -238,7 +241,7 @@ def test_criterion_14_recommendation_key_mapping(
     """`recommendationKey` -> gate pass/fail per Yahoo's bucket vocabulary.
 
     Asserts on the audit's per-criterion breakdown rather than the final
-    tier so the test isolates the criterion-14 mapping from the other 13
+    tier so the test isolates the criterion-14 mapping from the other 14
     gates' values (different base fixtures would flip the whole tier).
     """
     fixture = dict(_LONG_FIXTURE)
