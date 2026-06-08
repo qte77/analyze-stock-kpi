@@ -212,8 +212,9 @@ h2 {
 #universe-controls-row > #sector-donut-wrap {
   /* Basis 320 keeps the donut visually modest beside the controls.
      flex-shrink: 1 lets the wrap yield when the section is too
-     narrow; min-width keeps the donut itself usable. Legend is
-     disabled (see app.js), so the canvas renders the donut alone. */
+     narrow; min-width keeps the donut itself usable. Legend appears
+     at wider viewports (≥ 380px inline width); at narrower sizes
+     the legend hides and the donut renders with hover tooltips only. */
   flex: 0 1 320px;
   min-width: 200px;
 }
