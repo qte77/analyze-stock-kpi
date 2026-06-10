@@ -31,6 +31,8 @@ from src.domain.composite_scores import (
 from tqdm import tqdm
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     import pandas as pd
 
 logger = logging.getLogger(__name__)
@@ -146,6 +148,18 @@ def _normalize_yfinance_info(info: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
+def _safe_ratio(num: float | None, den: float | None) -> float | None:
+    """Divide ``num / den`` with a None / zero-denominator guard.
+
+    Returns ``None`` when either operand is missing or the denominator
+    is zero; a zero *numerator* yields a valid ``0.0``. Centralises the
+    guard repeated by ``_compute_roi`` and the EQUITY-gated ratio fetchers.
+    """
+    if num is None or den is None or den == 0:
+        return None
+    return num / den
+
+
 def _compute_roi(info: dict[str, Any]) -> float | None:
     """Simplified ROIC = ``netIncomeToCommon / invested_capital``.
 
@@ -174,9 +188,7 @@ def _compute_roi(info: dict[str, Any]) -> float | None:
         return None
     book_equity = market_cap / price_to_book
     invested_capital = book_equity + total_debt - total_cash
-    if invested_capital == 0:
-        return None
-    return net_income / invested_capital
+    return _safe_ratio(net_income, invested_capital)
 
 
 _TRADING_DAYS = 252
@@ -237,25 +249,38 @@ def _find_row(latest: pd.Series, needle: str) -> float | None:
     return None
 
 
-def _read_rd_revenue(income_stmt: pd.DataFrame | None) -> tuple[float | None, float | None]:
-    """Extract latest R&D + Total Revenue from an income_stmt DataFrame.
+def _extract_two_rows(
+    pairs: Sequence[tuple[pd.DataFrame | None, str]],
+) -> tuple[float | None, float | None]:
+    """Read two latest-column rows from ``(frame, needle)`` pairs.
 
-    Returns ``(None, None)`` on any structural issue (empty DataFrame,
-    missing rows, NaN cells). Float coercion only happens once both
-    values are present and non-NaN. Row matching is case-insensitive
-    and tolerates whitespace + the ``"And"``/``"and"``/no-conjunction
-    variance observed across yfinance versions and IFRS filers.
+    All-or-nothing: returns ``(None, None)`` on any structural issue in
+    either pair — ``None`` / empty frame, missing row (case-insensitive
+    fuzzy match via ``_find_row``), or a NaN cell. Both values are
+    returned only when both are present and non-NaN. Callers may pass the
+    same frame twice (R&D + revenue from one income_stmt) or two distinct
+    frames (FCF from cashflow, revenue from income_stmt).
     """
-    if income_stmt is None or income_stmt.empty:
-        return None, None
-    latest = income_stmt.iloc[:, 0]
-    rd = _find_row(latest, "research")
-    revenue = _find_row(latest, "total revenue")
-    if rd is None or revenue is None:
-        return None, None
-    if rd != rd or revenue != revenue:
-        return None, None
-    return float(rd), float(revenue)
+    values: list[float] = []
+    for frame, needle in pairs:
+        if frame is None or frame.empty:
+            return None, None
+        value = _find_row(frame.iloc[:, 0], needle)
+        if value is None or value != value:  # NaN propagates via identity check
+            return None, None
+        values.append(value)
+    return values[0], values[1]
+
+
+def _read_rd_revenue(income_stmt: pd.DataFrame | None) -> tuple[float | None, float | None]:
+    """Extract latest R&D + Total Revenue from one income_stmt DataFrame.
+
+    Thin wrapper over ``_extract_two_rows`` — both rows come from the same
+    frame. Returns ``(None, None)`` on any structural issue.
+    """
+    return _extract_two_rows(
+        [(income_stmt, "research"), (income_stmt, "total revenue")]
+    )
 
 
 def _fetch_rd_to_revenue(
@@ -275,9 +300,7 @@ def _fetch_rd_to_revenue(
         rd, revenue = _read_rd_revenue(yf_ticker.income_stmt)
     except Exception:
         return None
-    if rd is None or revenue is None or revenue == 0:
-        return None
-    return rd / revenue
+    return _safe_ratio(rd, revenue)
 
 
 def _read_fcf_revenue(
@@ -286,22 +309,13 @@ def _read_fcf_revenue(
 ) -> tuple[float | None, float | None]:
     """Extract latest Free Cash Flow + Total Revenue from yfinance frames.
 
-    Returns ``(None, None)`` on any structural issue (empty frame,
-    missing row, NaN cell). Float coercion only happens once both
-    values are present and non-NaN. Row matching reuses ``_find_row``
-    so label-casing / whitespace drift handled centrally.
+    Thin wrapper over ``_extract_two_rows`` — FCF from ``cashflow``,
+    revenue from ``income_stmt``. Returns ``(None, None)`` on any
+    structural issue.
     """
-    if cashflow is None or cashflow.empty:
-        return None, None
-    if income_stmt is None or income_stmt.empty:
-        return None, None
-    fcf = _find_row(cashflow.iloc[:, 0], "free cash flow")
-    revenue = _find_row(income_stmt.iloc[:, 0], "total revenue")
-    if fcf is None or revenue is None:
-        return None, None
-    if fcf != fcf or revenue != revenue:
-        return None, None
-    return float(fcf), float(revenue)
+    return _extract_two_rows(
+        [(cashflow, "free cash flow"), (income_stmt, "total revenue")]
+    )
 
 
 def _fetch_fcf_margin(
@@ -322,9 +336,7 @@ def _fetch_fcf_margin(
         )
     except Exception:
         return None
-    if fcf is None or revenue is None or revenue == 0:
-        return None
-    return fcf / revenue
+    return _safe_ratio(fcf, revenue)
 
 
 def fetch_fundamentals(ticker: str) -> FundamentalsSnapshot:

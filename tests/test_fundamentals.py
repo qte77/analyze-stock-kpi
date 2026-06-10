@@ -173,6 +173,120 @@ def test_fetch_fundamentals_attaches_roi() -> None:
     assert snap.roi == 0.20
 
 
+def test_safe_ratio_none_numerator_returns_none() -> None:
+    """Missing numerator collapses the ratio to ``None``."""
+    from src.data_sources.fundamentals import _safe_ratio
+
+    assert _safe_ratio(None, 5.0) is None
+
+
+def test_safe_ratio_none_denominator_returns_none() -> None:
+    """Missing denominator collapses the ratio to ``None``."""
+    from src.data_sources.fundamentals import _safe_ratio
+
+    assert _safe_ratio(10.0, None) is None
+
+
+def test_safe_ratio_zero_denominator_returns_none() -> None:
+    """Zero denominator avoids ``ZeroDivisionError`` -> ``None``."""
+    from src.data_sources.fundamentals import _safe_ratio
+
+    assert _safe_ratio(10.0, 0.0) is None
+
+
+def test_safe_ratio_zero_numerator_is_valid() -> None:
+    """A zero numerator is a real ``0.0`` ratio, not a missing value."""
+    from src.data_sources.fundamentals import _safe_ratio
+
+    assert _safe_ratio(0.0, 5.0) == 0.0
+
+
+def test_safe_ratio_negative_values() -> None:
+    """Sign is preserved through the division."""
+    from src.data_sources.fundamentals import _safe_ratio
+
+    assert _safe_ratio(-3.0, 4.0) == -0.75
+
+
+def test_extract_two_rows_none_frame_returns_none_pair() -> None:
+    """A ``None`` frame in any pair short-circuits to ``(None, None)``."""
+    import pandas as pd
+    from src.data_sources.fundamentals import _extract_two_rows
+
+    income_stmt = pd.DataFrame({"latest": [100.0]}, index=["Total Revenue"])
+    assert _extract_two_rows(
+        [(None, "free cash flow"), (income_stmt, "total revenue")]
+    ) == (None, None)
+
+
+def test_extract_two_rows_empty_frame_returns_none_pair() -> None:
+    """An empty frame in any pair short-circuits to ``(None, None)``."""
+    import pandas as pd
+    from src.data_sources.fundamentals import _extract_two_rows
+
+    income_stmt = pd.DataFrame({"latest": [100.0]}, index=["Total Revenue"])
+    assert _extract_two_rows(
+        [(pd.DataFrame(), "free cash flow"), (income_stmt, "total revenue")]
+    ) == (None, None)
+
+
+def test_extract_two_rows_missing_row_returns_none_pair() -> None:
+    """A missing row label in any pair -> ``(None, None)`` (all-or-nothing).
+
+    First needle (``research``) matches; the second (``total revenue``)
+    is absent from the index, so neither value is returned.
+    """
+    import pandas as pd
+    from src.data_sources.fundamentals import _extract_two_rows
+
+    income_stmt = pd.DataFrame(
+        {"latest": [20.0]}, index=["Research And Development"]
+    )
+    assert _extract_two_rows(
+        [(income_stmt, "research"), (income_stmt, "total revenue")]
+    ) == (None, None)
+
+
+def test_extract_two_rows_nan_cell_returns_none_pair() -> None:
+    """A NaN cell propagates via the identity check -> ``(None, None)``."""
+    import pandas as pd
+    from src.data_sources.fundamentals import _extract_two_rows
+
+    income_stmt = pd.DataFrame(
+        {"latest": [float("nan"), 100.0]},
+        index=["Research And Development", "Total Revenue"],
+    )
+    assert _extract_two_rows(
+        [(income_stmt, "research"), (income_stmt, "total revenue")]
+    ) == (None, None)
+
+
+def test_extract_two_rows_two_frames_happy_path() -> None:
+    """Two distinct frames (cashflow + income_stmt) read independently."""
+    import pandas as pd
+    from src.data_sources.fundamentals import _extract_two_rows
+
+    cashflow = pd.DataFrame({"latest": [15.0]}, index=["Free Cash Flow"])
+    income_stmt = pd.DataFrame({"latest": [100.0]}, index=["Total Revenue"])
+    assert _extract_two_rows(
+        [(cashflow, "free cash flow"), (income_stmt, "total revenue")]
+    ) == (15.0, 100.0)
+
+
+def test_extract_two_rows_single_frame_happy_path() -> None:
+    """Both rows read from one frame (the R&D / revenue case)."""
+    import pandas as pd
+    from src.data_sources.fundamentals import _extract_two_rows
+
+    income_stmt = pd.DataFrame(
+        {"latest": [20.0, 100.0]},
+        index=["Research And Development", "Total Revenue"],
+    )
+    assert _extract_two_rows(
+        [(income_stmt, "research"), (income_stmt, "total revenue")]
+    ) == (20.0, 100.0)
+
+
 def test_fetch_rd_to_revenue_equity_happy_path() -> None:
     """R&D / Total Revenue read from the latest income_stmt column.
 
