@@ -1,0 +1,3 @@
+### Changed
+
+- **`docs/demo/lib/detail_rows.js`: extract the pure detail-panel data (`KPI_GLOSSARY`, `auditDetailRows`, `externalLinkRows`) out of `app.js`.** The KPI-glossary text and the row-tuple builders for the federal-contracts audit block + external links move to a tested lib module; `app.js` imports them. Adds `tests/demo/detail_rows.test.mjs` (7 cases for the two builders; the glossary is static data, no test). The DOM rendering (`showDetail` / `renderRadar` / `renderTimeSeriesPane`) intentionally stays in `app.js` — extracting it would require exporting the shared mutable `liveCharts` Set across modules or a god-object deps argument, both worse than co-location (AHA). Behaviour-preserving.
