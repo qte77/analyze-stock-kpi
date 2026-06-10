@@ -8,10 +8,8 @@
 // attach via the classic <script> tag.
 
 import { buildAuditMap, formatObligated, loadAudit } from "./lib/audit.js";
-import { cellClass } from "./lib/coloring.js";
 import { exportCsv } from "./lib/csv.js";
-import { explainEmpty } from "./lib/empty_reason.js";
-import { compareValues, fmtNum, fmtPct, nested } from "./lib/format.js";
+import { fmtNum, fmtPct, nested } from "./lib/format.js";
 import { aggregateMonthlyFG } from "./lib/monthly.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
@@ -23,6 +21,7 @@ import {
 import { resolveTheme } from "./lib/theme.js";
 import { buildTimeSeries } from "./lib/timeseries.js";
 import { filterByWindow, findClosestScore } from "./lib/window.js";
+import { ALL_COLUMNS, renderUniverseTable } from "./table.js";
 
 const DATA_BASE_URL = (
   new URLSearchParams(window.location.search).get("base") ??
@@ -212,18 +211,6 @@ const loadFearGreedYears = () =>
 const loadYieldCurveYears = () =>
   loadYearsFromBranch("results/yield_curve", "date");
 
-/**
- * @param {string} text
- * @param {string} [cls]
- * @returns {HTMLTableCellElement}
- */
-function td(text, cls) {
-  const el = document.createElement("td");
-  el.textContent = text;
-  if (cls) el.className = cls;
-  return el;
-}
-
 // ───────────────────────── View-mode + URL state ───────────────────────────
 
 function applyViewMode() {
@@ -297,243 +284,19 @@ function persistStateFromCurrent() {
 
 // ───────────────────────── Rendering ───────────────────────────
 
-const ALL_COLUMNS = /** @type {const} */ ([
-  "symbol",
-  "long_name",
-  "sector",
-  "forward_pe",
-  "trailing_peg_ratio",
-  "beta",
-  "rd_to_revenue",
-  "operating_margins",
-  "return_on_equity",
-  "return_on_assets",
-  "current_ratio",
-  "sortino_ratio",
-  "composite_scores.screener_score",
-]);
-
 /**
- * Annotate a `—`-rendering cell with the structural reason (#170) when
- * one applies. Extracted from `renderTable()` to keep that function's
- * cognitive complexity inside the CodeFactor gate.
- *
- * @param {HTMLElement} cell
- * @param {Row} row
- * @param {string} col
+ * Re-render the universe table from current module state. Thin adapter
+ * over `renderUniverseTable()` in table.js: pre-filters via
+ * `filteredSnapshot()` and passes the sort + universe + click context.
  */
-function annotateEmpty(cell, row, col) {
-  const reason = explainEmpty(row, col);
-  if (!reason) return;
-  cell.title = reason;
-  cell.setAttribute("data-empty-reason", "1");
-}
-
-const COVERAGE_KEYS = /** @type {const} */ ([
-  "forward_pe",
-  "trailing_peg_ratio",
-  "beta",
-  "rd_to_revenue",
-  "operating_margins",
-  "return_on_equity",
-  "return_on_assets",
-  "current_ratio",
-  "sortino_ratio",
-]);
-
-const COMPOSITE_FIELDS = /** @type {const} */ ([
-  "quality",
-  "dividend",
-  "growth",
-  "big_call",
-  "aaqs",
-  "hgi",
-  "screener_score",
-]);
-
-/**
- * Mean of populated composite scores — the metric the aggregator preset
- * (best-and-worst / longs / shorts) ranks on. Closes #218: the Score
- * column shows screener_score, but on aggregator universes the ranking is
- * mean-of-7. Surfacing the mean as a tooltip explains why e.g. PRSO sits
- * in worst-25 with a visible screener_score of 64.
- *
- * @param {any} row
- * @returns {number | null}
- */
-function meanComposite(row) {
-  const cs = row?.composite_scores;
-  if (cs == null) return null;
-  let sum = 0;
-  let n = 0;
-  for (const f of COMPOSITE_FIELDS) {
-    const v = cs[f];
-    if (v == null) continue;
-    sum += Number(v);
-    n += 1;
-  }
-  return n === 0 ? null : sum / n;
-}
-
-function isAggregatorUniverse(/** @type {string} */ slug) {
-  return slug.startsWith("aggregated-scores-");
-}
-
-/**
- * Count how many of the 9 KPI inputs the row has populated.
- * `forward_pe <= 0` is treated as missing (negative/zero P/E is a
- * sentinel, not a real reading).
- *
- * `row` is typed `any` to match the existing renderTable pipeline,
- * which propagates `any[]` from filteredSnapshot's `fuseIndex.search`
- * branch — keeps the indexed lookup against COVERAGE_KEYS cheap.
- *
- * @param {any} row
- * @returns {number}
- */
-function coverageCount(row) {
-  let n = 0;
-  for (const k of COVERAGE_KEYS) {
-    const v = row[k];
-    if (v == null) continue;
-    if (k === "forward_pe" && v <= 0) continue;
-    n += 1;
-  }
-  return n;
-}
-
-/**
- * Hover tooltip for a row: weight % within the visible universe,
- * raw score, and input coverage. Weight + Score are omitted when
- * the row has no composite score.
- *
- * @param {number | null} score
- * @param {number} totalScore
- * @param {number} coverage
- * @returns {string}
- */
-function buildRowTitle(score, totalScore, coverage) {
-  const parts = [];
-  if (score != null && totalScore > 0) {
-    const weightPct = ((100 * Number(score)) / totalScore).toFixed(1);
-    parts.push(`Weight ${weightPct} %`);
-    parts.push(`Score ${Number(score).toFixed(0)}`);
-  }
-  parts.push(`${coverage}/9 inputs`);
-  return parts.join(" · ");
-}
-
-/**
- * Build the per-row `<tr>` — score cell heatmap, hover title, the 14
- * cellSpecs entries, KPI coloring, and empty-reason annotation.
- *
- * @param {any} row
- * @param {number} totalScore
- * @returns {HTMLTableRowElement}
- */
-function renderRow(row, totalScore) {
-  const tr = document.createElement("tr");
-  const score = nested(row, "composite_scores.screener_score");
-  tr.title = buildRowTitle(score, totalScore, coverageCount(row));
-  const scoreCell = td(fmtNum(score, 0), "num score-cell");
-  if (score != null) {
-    scoreCell.style.backgroundColor = `hsl(${Number(score) * 1.2}, 60%, 75%)`;
-  }
-  if (isAggregatorUniverse(activeUniverse)) {
-    const mean = meanComposite(row);
-    if (mean != null) {
-      scoreCell.title =
-        `Aggregator ranks on mean of 7 composites = ${mean.toFixed(1)}. ` +
-        `Score shown here is screener_score (one of the 7).`;
-    }
-  }
-  const universeCell = td(
-    /** @type {any} */ (row)._universe ?? activeUniverse,
-  );
-  universeCell.classList.add("universe-col");
-  /** @type {Array<[string, HTMLElement, boolean]>} */
-  const cellSpecs = [
-    ["symbol", td(row.symbol ?? "—"), true],
-    ["_universe", universeCell, true],
-    ["long_name", td(row.long_name ?? "—"), true],
-    ["sector", td(row.sector ?? "—"), true],
-    ["forward_pe", td(fmtNum(row.forward_pe, 2), "num"), false],
-    ["trailing_peg_ratio", td(fmtNum(row.trailing_peg_ratio, 2), "num"), false],
-    ["beta", td(fmtNum(row.beta, 2), "num"), false],
-    ["rd_to_revenue", td(fmtPct(row.rd_to_revenue), "num"), false],
-    ["operating_margins", td(fmtPct(row.operating_margins), "num"), false],
-    ["return_on_equity", td(fmtPct(row.return_on_equity), "num"), false],
-    ["return_on_assets", td(fmtPct(row.return_on_assets), "num"), false],
-    ["current_ratio", td(fmtNum(row.current_ratio, 2), "num"), false],
-    ["sortino_ratio", td(fmtNum(row.sortino_ratio, 2), "num"), false],
-    ["composite_scores.screener_score", scoreCell, true],
-  ];
-  for (const [col, cell, inSimple] of cellSpecs) {
-    const value = col === "composite_scores.screener_score" ? score : row[col];
-    const klass = cellClass(col, value);
-    if (klass) cell.classList.add(klass);
-    if (!inSimple) cell.classList.add("detail-only");
-    if (value == null) annotateEmpty(cell, row, col);
-    tr.appendChild(cell);
-  }
-  tr.addEventListener("click", () => onRowClick(row));
-  return tr;
-}
-
-/**
- * Reduce all visible rows' composite scores to a single normalisation
- * denominator for the `buildRowTitle` weight calculation.
- *
- * @param {any[]} rows
- * @returns {number}
- */
-function totalCompositeScore(rows) {
-  return rows.reduce((acc, row) => {
-    const s = nested(row, "composite_scores.screener_score");
-    return acc + (s == null ? 0 : Number(s));
-  }, 0);
-}
-
-/**
- * Empty-state message for the table body. Orchestrator-driven universes
- * (aggregator / longshort) can legitimately produce zero rows when the
- * ranking / conjunctive-gate returns an empty set — distinguish that
- * from a static universe whose cron hasn't run yet so the message reads
- * as a design outcome rather than an infrastructure bug.
- */
-function emptyTableMessage() {
-  if (filterQuery) return `no matches for "${filterQuery}"`;
-  if (activeUniverse.startsWith("enhanced-kpi-screener-")) {
-    return "0 candidates — the conjunctive 14-criteria gate matched no tickers in this snapshot.";
-  }
-  if (activeUniverse.startsWith("aggregated-scores-")) {
-    return "0 eligible tickers — the aggregator's freshness + min-composites gate excluded every candidate this run.";
-  }
-  return "no rows in this universe yet — first cron run pending";
-}
-
 function renderTable() {
-  const tbody = document.querySelector("#universe-table tbody");
-  if (!tbody) return;
-  tbody.replaceChildren();
-  const visible = filteredSnapshot();
-  if (visible.length === 0) {
-    const tr = document.createElement("tr");
-    const cell = document.createElement("td");
-    cell.colSpan = ALL_COLUMNS.length;
-    cell.className = "empty-state";
-    cell.textContent = emptyTableMessage();
-    tr.appendChild(cell);
-    tbody.appendChild(tr);
-    return;
-  }
-  const sorted = [...visible].sort((a, b) =>
-    compareValues(nested(a, state.sortKey), nested(b, state.sortKey), state.sortDir),
-  );
-  const totalScore = totalCompositeScore(visible);
-  for (const row of sorted) {
-    tbody.appendChild(renderRow(row, totalScore));
-  }
+  renderUniverseTable(filteredSnapshot(), {
+    sortKey: state.sortKey,
+    sortDir: state.sortDir,
+    activeUniverse,
+    filterQuery,
+    onRowClick,
+  });
 }
 
 function onRowClick(/** @type {Row} */ row) {
