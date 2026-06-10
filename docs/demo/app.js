@@ -11,6 +11,7 @@ import { buildAuditMap, formatObligated, loadAudit } from "./lib/audit.js";
 import { cellClass } from "./lib/coloring.js";
 import { exportCsv } from "./lib/csv.js";
 import { explainEmpty } from "./lib/empty_reason.js";
+import { compareValues, fmtNum, fmtPct, nested } from "./lib/format.js";
 import { aggregateMonthlyFG } from "./lib/monthly.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
@@ -210,33 +211,6 @@ const loadFearGreedYears = () =>
 /** @type {() => Promise<Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>>} */
 const loadYieldCurveYears = () =>
   loadYearsFromBranch("results/yield_curve", "date");
-
-function nested(/** @type {Row} */ obj, /** @type {string} */ key) {
-  return key
-    .split(".")
-    .reduce(
-      (/** @type {any} */ o, /** @type {string} */ k) => (o == null ? null : o[k]),
-      obj,
-    );
-}
-
-const fmtNum = (/** @type {unknown} */ v, /** @type {number} */ d = 1) =>
-  v == null || Number.isNaN(Number(v)) ? "—" : Number(v).toFixed(d);
-
-const fmtPct = (/** @type {unknown} */ v) =>
-  v == null ? "—" : (Number(v) * 100).toFixed(2);
-
-function compareValues(
-  /** @type {unknown} */ a,
-  /** @type {unknown} */ b,
-  /** @type {1 | -1} */ dir,
-) {
-  if (a == null && b == null) return 0;
-  if (a == null) return 1;
-  if (b == null) return -1;
-  if (typeof a === "string" && typeof b === "string") return dir * a.localeCompare(b);
-  return dir * (Number(a) - Number(b));
-}
 
 /**
  * @param {string} text
