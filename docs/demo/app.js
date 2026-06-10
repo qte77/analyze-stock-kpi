@@ -21,6 +21,7 @@ import {
 } from "./lib/state.js";
 import { resolveTheme } from "./lib/theme.js";
 import { buildTimeSeries } from "./lib/timeseries.js";
+import { filterByWindow, findClosestScore } from "./lib/window.js";
 
 const DATA_BASE_URL = (
   new URLSearchParams(window.location.search).get("base") ??
@@ -98,33 +99,6 @@ let currentDate = null;
 let activeLtFgWindow = "all";
 /** @type {import("./lib/state.js").WindowKey} */
 let activeYcWindow = "all";
-
-/** @type {Record<import("./lib/state.js").WindowKey, number>} */
-const WINDOW_DAYS = { "1y": 365, "5y": 1826, "10y": 3653, "all": Infinity };
-
-/**
- * Filter ascending-by-`isoField` entries to a trailing window measured
- * from the latest entry. Returns the input unchanged for "all" or when the
- * latest timestamp can't be parsed.
- *
- * @template {Record<string, unknown>} T
- * @param {Array<T>} entries
- * @param {import("./lib/state.js").WindowKey} windowKey
- * @param {string} isoField  property on each entry carrying the ISO date
- * @returns {Array<T>}
- */
-function filterByWindow(entries, windowKey, isoField) {
-  if (entries.length === 0) return entries;
-  const days = WINDOW_DAYS[windowKey];
-  if (!Number.isFinite(days)) return entries;
-  const latestIso = /** @type {string} */ (entries[entries.length - 1][isoField]);
-  const latestMs = Date.parse(latestIso);
-  if (Number.isNaN(latestMs)) return entries;
-  const cutoff = latestMs - days * 86400000;
-  return entries.filter(
-    (e) => Date.parse(/** @type {string} */ (e[isoField])) >= cutoff,
-  );
-}
 
 function rebuildFuseIndex() {
   fuseIndex =
@@ -1135,25 +1109,6 @@ function emptyHint(text) {
   return el;
 }
 
-function findClosestScore(
-  /** @type {Array<{timestamp: string, score: number}>} */ entries,
-  /** @type {number} */ latestMs,
-  /** @type {number} */ daysAgo,
-) {
-  const target = latestMs - daysAgo * 86400000;
-  /** @type {{timestamp: string, score: number} | null} */
-  let best = null;
-  let bestDiff = Number.POSITIVE_INFINITY;
-  for (const e of entries) {
-    const diff = Math.abs(new Date(e.timestamp).getTime() - target);
-    if (diff < bestDiff) {
-      bestDiff = diff;
-      best = e;
-    }
-  }
-  return best?.score;
-}
-
 function renderFearGreedHeader(
   /** @type {Array<{timestamp: string, score: number, rating?: string}>} */ entries,
 ) {
@@ -1260,27 +1215,6 @@ function renderRollingEmptyHint(
   }
 }
 
-/** Strict 12-month rolling window — the "rolling" tab label promises TTM,
- *  but the loader concatenates this-year + last-year files, so the raw
- *  span drifts between ~8 months (early January) and ~24 months (late
- *  December). Trim from the latest entry's date so the rendered window is
- *  always 12 months, regardless of when the user opens the dashboard. */
-const FG_ROLLING_WINDOW_DAYS = 365;
-
-/**
- * @template {{timestamp: string}} T
- * @param {Array<T>} entries  ascending by timestamp
- * @param {number} days
- * @returns {Array<T>}
- */
-function trimToRollingWindow(entries, days) {
-  if (entries.length === 0) return entries;
-  const latestMs = Date.parse(entries[entries.length - 1].timestamp);
-  if (Number.isNaN(latestMs)) return entries;
-  const cutoffMs = latestMs - days * 86400000;
-  return entries.filter((e) => Date.parse(e.timestamp) >= cutoffMs);
-}
-
 function renderFearGreedChart(
   /** @type {Array<{timestamp: string, score: number}>} */ entries,
 ) {
@@ -1288,7 +1222,9 @@ function renderFearGreedChart(
   if (!ctx) return;
   destroyChart(fearGreedChart);
   fearGreedChart = null;
-  const windowed = trimToRollingWindow(entries, FG_ROLLING_WINDOW_DAYS);
+  // Strict trailing 12-month window — the loader concatenates this-year +
+  // last-year files, so trim from the latest entry's date.
+  const windowed = filterByWindow(entries, "1y", "timestamp");
   renderRollingEmptyHint(windowed.length === 0);
   if (!windowed.length || typeof Chart === "undefined") return;
   fearGreedChart = new Chart(ctx, {
