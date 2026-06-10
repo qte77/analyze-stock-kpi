@@ -31,7 +31,7 @@ from src.domain.composite_scores import (
 from tqdm import tqdm
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Callable, Sequence
 
     import pandas as pd
 
@@ -283,24 +283,39 @@ def _read_rd_revenue(income_stmt: pd.DataFrame | None) -> tuple[float | None, fl
     )
 
 
+def _equity_ratio(
+    info: dict[str, Any],
+    fetch: Callable[[], tuple[float | None, float | None]],
+) -> float | None:
+    """EQUITY-gated ``num / den`` from a fault-tolerant ``(num, den)`` thunk.
+
+    Non-EQUITY ``quoteType`` (including a missing key) returns ``None``
+    WITHOUT invoking ``fetch`` — so ETFs / FX / futures / crypto skip the
+    extra yfinance HTTP entirely. ``fetch`` is a thunk so the yfinance
+    property access happens inside the ``try`` (those properties can raise);
+    any exception is swallowed to ``None``. The returned pair is divided via
+    ``_safe_ratio`` (``None`` on a missing operand or zero denominator).
+    """
+    if info.get("quoteType") != "EQUITY":
+        return None
+    try:
+        num, den = fetch()
+    except Exception:
+        return None
+    return _safe_ratio(num, den)
+
+
 def _fetch_rd_to_revenue(
     yf_ticker: yf.Ticker, info: dict[str, Any]
 ) -> float | None:
     """R&D-as-share-of-revenue from ``Ticker.income_stmt`` latest column.
 
-    Gated on ``info["quoteType"] == "EQUITY"`` so ETFs / FX / futures /
-    crypto skip the extra HTTP fetch entirely. Returns ``None`` on any
-    failure or missing data — empty income_stmt, missing rows, NaN
-    cells, zero revenue, network error, or IFRS schema drift on
-    international filers.
+    EQUITY-only (see ``_equity_ratio``); ``None`` on any missing data or
+    fetch error.
     """
-    if info.get("quoteType") != "EQUITY":
-        return None
-    try:
-        rd, revenue = _read_rd_revenue(yf_ticker.income_stmt)
-    except Exception:
-        return None
-    return _safe_ratio(rd, revenue)
+    return _equity_ratio(
+        info, lambda: _read_rd_revenue(yf_ticker.income_stmt)
+    )
 
 
 def _read_fcf_revenue(
@@ -323,20 +338,13 @@ def _fetch_fcf_margin(
 ) -> float | None:
     """Free-cash-flow margin from ``Ticker.cashflow`` / ``Ticker.income_stmt``.
 
-    Gated on ``info["quoteType"] == "EQUITY"`` so ETFs / FX / futures /
-    crypto skip the extra HTTP fetches entirely. Returns ``None`` on any
-    failure or missing data — empty frames, missing rows, NaN cells,
-    zero revenue, network error.
+    EQUITY-only (see ``_equity_ratio``); ``None`` on any missing data or
+    fetch error.
     """
-    if info.get("quoteType") != "EQUITY":
-        return None
-    try:
-        fcf, revenue = _read_fcf_revenue(
-            yf_ticker.cashflow, yf_ticker.income_stmt,
-        )
-    except Exception:
-        return None
-    return _safe_ratio(fcf, revenue)
+    return _equity_ratio(
+        info,
+        lambda: _read_fcf_revenue(yf_ticker.cashflow, yf_ticker.income_stmt),
+    )
 
 
 def fetch_fundamentals(ticker: str) -> FundamentalsSnapshot:
