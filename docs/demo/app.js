@@ -644,11 +644,8 @@ function renderSectorDonut() {
   const aggregated = aggregateSectors(state.snapshot);
   const labels = [...aggregated.keys()];
   const data = [...aggregated.values()];
-  if (sectorChart) {
-    liveCharts.delete(sectorChart);
-    sectorChart.destroy();
-    sectorChart = null;
-  }
+  destroyChart(sectorChart);
+  sectorChart = null;
   renderDonutEmptyHint(labels.length === 0);
   if (labels.length === 0) {
     renderSectorFilterChip();
@@ -760,25 +757,36 @@ function toggleSectorFilter(label) {
 const EMPTY_HISTORY = "no history yet";
 
 /**
- * Toggle a centered "no data" hint inside #sector-donut-wrap. Called
- * whenever the donut is about to render an empty dataset (e.g. before
- * the first snapshot loads or for a universe whose data branch is
- * missing). Idempotent — safe to call repeatedly with the same flag.
+ * Toggle a centered "no history yet" hint inside a wrap element: create it
+ * once when shown, remove it when hidden. Skip-if-existing — never
+ * overwrites a present hint's text. Shared by the sector-donut and
+ * long-term-F&G empty states (the rolling + yield-curve variants
+ * intentionally overwrite, so they stay separate).
  *
+ * @param {string} wrapId
+ * @param {string} hintClass
  * @param {boolean} show
  */
-function renderDonutEmptyHint(show) {
-  const wrap = document.getElementById("sector-donut-wrap");
+function toggleHistoryHint(wrapId, hintClass, show) {
+  const wrap = document.getElementById(wrapId);
   if (!wrap) return;
-  const existing = wrap.querySelector(".sector-donut-empty");
+  const existing = wrap.querySelector(`.${hintClass}`);
   if (show && !existing) {
     const hint = document.createElement("div");
-    hint.className = "sector-donut-empty";
+    hint.className = hintClass;
     hint.textContent = EMPTY_HISTORY;
     wrap.append(hint);
   } else if (!show && existing) {
     existing.remove();
   }
+}
+
+/**
+ * Toggle the sector-donut "no data" hint (#sector-donut-wrap). Idempotent.
+ * @param {boolean} show
+ */
+function renderDonutEmptyHint(show) {
+  toggleHistoryHint("sector-donut-wrap", "sector-donut-empty", show);
 }
 
 function renderSectorFilterChip() {
@@ -807,10 +815,7 @@ function renderRadar(
 ) {
   if (typeof Chart === "undefined") return;
   const axes = ["quality", "dividend", "growth", "big_call", "aaqs", "hgi", "screener_score"];
-  if (radarChart) {
-    liveCharts.delete(radarChart);
-    radarChart.destroy();
-  }
+  destroyChart(radarChart);
   radarChart = new Chart(canvas, {
     type: "radar",
     data: {
@@ -1087,10 +1092,7 @@ async function renderTimeSeriesPane(pane, row) {
   wrap.append(canvas);
   pane.append(wrap);
   if (typeof Chart === "undefined") return;
-  if (timeSeriesChart) {
-    liveCharts.delete(timeSeriesChart);
-    timeSeriesChart.destroy();
-  }
+  destroyChart(timeSeriesChart);
   timeSeriesChart = new Chart(canvas, {
     type: "line",
     data: {
@@ -1107,10 +1109,7 @@ async function renderTimeSeriesPane(pane, row) {
       maintainAspectRatio: false,
       scales: {
         y: {
-          min: 0,
-          max: 100,
-          ticks: { stepSize: 25, color: () => cssVar("--text", "#1d1d1f") },
-          grid: { color: () => cssVar("--border", "#d2d2d7") },
+          ...scoreYAxis(),
           title: { display: true, text: "Composite (0–100)", color: () => cssVar("--text", "#1d1d1f") },
         },
         y1: {
@@ -1209,6 +1208,39 @@ function cssVar(token, fallback) {
   );
 }
 
+/**
+ * Tear down a Chart.js instance: deregister from `liveCharts` + destroy.
+ * No-ops on null. Callers keep their own `slot = null` and `liveCharts.add`
+ * at their current sites — the add timing matters (e.g. the sector-donut
+ * ResizeObserver/legend setup must run before its add).
+ * @param {any} chart
+ */
+function destroyChart(chart) {
+  if (!chart) return;
+  liveCharts.delete(chart);
+  chart.destroy();
+}
+
+/** Themed 0–100 score y-axis (stepSize 25) shared by the composite line
+ *  charts. The cssVar closures re-resolve on theme flip via bindThemeObserver. */
+function scoreYAxis() {
+  return {
+    min: 0,
+    max: 100,
+    ticks: { stepSize: 25, color: () => cssVar("--text", "#1d1d1f") },
+    grid: { color: () => cssVar("--border", "#d2d2d7") },
+  };
+}
+
+/** Themed x-axis with a tick cap, shared by the time-series line charts.
+ *  @param {number} [maxTicks] */
+function themedXAxis(maxTicks = 14) {
+  return {
+    ticks: { maxTicksLimit: maxTicks, color: () => cssVar("--text", "#1d1d1f") },
+    grid: { color: () => cssVar("--border", "#d2d2d7") },
+  };
+}
+
 function renderRollingEmptyHint(
   /** @type {boolean} */ show,
   /** @type {string} */ text = EMPTY_HISTORY,
@@ -1254,11 +1286,8 @@ function renderFearGreedChart(
 ) {
   const ctx = /** @type {HTMLCanvasElement | null} */ (document.getElementById("fg-chart"));
   if (!ctx) return;
-  if (fearGreedChart) {
-    liveCharts.delete(fearGreedChart);
-    fearGreedChart.destroy();
-    fearGreedChart = null;
-  }
+  destroyChart(fearGreedChart);
+  fearGreedChart = null;
   const windowed = trimToRollingWindow(entries, FG_ROLLING_WINDOW_DAYS);
   renderRollingEmptyHint(windowed.length === 0);
   if (!windowed.length || typeof Chart === "undefined") return;
@@ -1283,35 +1312,14 @@ function renderFearGreedChart(
       maintainAspectRatio: false,
       animation: { duration: 250 },
       plugins: { legend: { display: false } },
-      scales: {
-        y: {
-          min: 0,
-          max: 100,
-          ticks: { stepSize: 25, color: () => cssVar("--text", "#1d1d1f") },
-          grid: { color: () => cssVar("--border", "#d2d2d7") },
-        },
-        x: {
-          ticks: { maxTicksLimit: 14, color: () => cssVar("--text", "#1d1d1f") },
-          grid: { color: () => cssVar("--border", "#d2d2d7") },
-        },
-      },
+      scales: { y: scoreYAxis(), x: themedXAxis() },
     },
   });
   liveCharts.add(fearGreedChart);
 }
 
 function renderLongTermEmptyHint(/** @type {boolean} */ show) {
-  const wrap = document.getElementById("lt-fg-chart-wrap");
-  if (!wrap) return;
-  const existing = wrap.querySelector(".lt-fg-empty");
-  if (show && !existing) {
-    const hint = document.createElement("div");
-    hint.className = "lt-fg-empty";
-    hint.textContent = EMPTY_HISTORY;
-    wrap.append(hint);
-  } else if (!show && existing) {
-    existing.remove();
-  }
+  toggleHistoryHint("lt-fg-chart-wrap", "lt-fg-empty", show);
 }
 
 function renderMonthlyFearGreedChart(
@@ -1322,11 +1330,8 @@ function renderMonthlyFearGreedChart(
   );
   if (!canvas) return;
   const monthly = aggregateMonthlyFG(entries);
-  if (monthlyFearGreedChart) {
-    liveCharts.delete(monthlyFearGreedChart);
-    monthlyFearGreedChart.destroy();
-    monthlyFearGreedChart = null;
-  }
+  destroyChart(monthlyFearGreedChart);
+  monthlyFearGreedChart = null;
   renderLongTermEmptyHint(monthly.months.length === 0);
   if (monthly.months.length === 0 || typeof Chart === "undefined") return;
   monthlyFearGreedChart = new Chart(canvas, {
@@ -1362,18 +1367,7 @@ function renderMonthlyFearGreedChart(
       maintainAspectRatio: false,
       animation: { duration: 250 },
       plugins: { legend: { display: true, position: "bottom" } },
-      scales: {
-        y: {
-          min: 0,
-          max: 100,
-          ticks: { stepSize: 25, color: () => cssVar("--text", "#1d1d1f") },
-          grid: { color: () => cssVar("--border", "#d2d2d7") },
-        },
-        x: {
-          ticks: { maxTicksLimit: 14, color: () => cssVar("--text", "#1d1d1f") },
-          grid: { color: () => cssVar("--border", "#d2d2d7") },
-        },
-      },
+      scales: { y: scoreYAxis(), x: themedXAxis() },
     },
   });
   liveCharts.add(monthlyFearGreedChart);
@@ -1564,11 +1558,8 @@ function renderYieldCurveChart(entries) {
     document.getElementById("yc-chart")
   );
   if (!canvas) return;
-  if (yieldCurveChart) {
-    liveCharts.delete(yieldCurveChart);
-    yieldCurveChart.destroy();
-    yieldCurveChart = null;
-  }
+  destroyChart(yieldCurveChart);
+  yieldCurveChart = null;
   const points = entries.filter((e) => e.slope_5s10s != null);
   renderYieldCurveEmptyHint(points.length === 0);
   if (points.length === 0 || typeof Chart === "undefined") return;
@@ -1600,10 +1591,7 @@ function renderYieldCurveChart(entries) {
           grid: { color: () => `${cssVar("--border", "#d2d2d7")}` },
           ticks: { color: () => cssVar("--text", "#1d1d1f") },
         },
-        x: {
-          ticks: { maxTicksLimit: 14, color: () => cssVar("--text", "#1d1d1f") },
-          grid: { color: () => cssVar("--border", "#d2d2d7") },
-        },
+        x: themedXAxis(),
       },
     },
   });
