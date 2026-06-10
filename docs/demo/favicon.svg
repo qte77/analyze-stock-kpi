@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="analyze-stock-kpi composite-score radar">
+  <style>
+    .grid { fill: none; stroke: #9aa0a6; stroke-width: 1; opacity: 0.5; }
+    .spokes { stroke: #9aa0a6; stroke-width: 0.75; opacity: 0.45; }
+    .data { fill: #0066cc; fill-opacity: 0.85; stroke: #0066cc; stroke-width: 1.25; stroke-linejoin: round; }
+    @media (prefers-color-scheme: dark) {
+      .grid, .spokes { stroke: #8a9096; }
+      .data { fill: #4d9bff; stroke: #4d9bff; }
+    }
+  </style>
+  <!-- radar grid: outer + mid hexagon rings -->
+  <polygon class="grid" points="16,4 26.39,10 26.39,22 16,28 5.61,22 5.61,10" />
+  <polygon class="grid" points="16,10 21.2,13 21.2,19 16,22 10.8,19 10.8,13" />
+  <!-- 6 axis spokes -->
+  <path class="spokes" d="M16,16 16,4 M16,16 26.39,10 M16,16 26.39,22 M16,16 16,28 M16,16 5.61,22 M16,16 5.61,10" />
+  <!-- composite-score data polygon -->
+  <polygon class="data" points="16,6 22.06,12.5 23.79,20.5 16,22 9.07,20 11.67,13.5" />
+</svg>
