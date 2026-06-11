@@ -9,6 +9,7 @@
 
 import { buildAuditMap, loadAudit } from "./lib/audit.js";
 import { exportCsv } from "./lib/csv.js";
+import { fetchJson, loadYearsFromBranch } from "./lib/fetch.js";
 import { fmtNum, nested } from "./lib/format.js";
 import { aggregateMonthlyFG } from "./lib/monthly.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
@@ -122,12 +123,6 @@ function filteredSnapshot() {
   return rows;
 }
 
-async function fetchJson(/** @type {string} */ url) {
-  const res = await fetch(url, { cache: "no-cache" });
-  if (!res.ok) throw new Error(`fetch ${url} failed: ${res.status}`);
-  return res.json();
-}
-
 const loadManifest = () =>
   fetchJson(`${DATA_BASE_URL}/results/demo/${activeUniverse}/index.json`);
 
@@ -136,39 +131,13 @@ const loadSnapshot = (/** @type {string} */ date) =>
 
 const loadUniverses = () => fetchJson("universes.json");
 
-/**
- * Fetch this-year + last-year per-year JSON files from the data branch
- * and concat. Silent-fail per leg so a brand-new repo (no
- * `results/<prefix>/<thisYear>.json` yet on the data branch) still
- * paints what's available. Sorts ascending by the named string field.
- *
- * @param {string} pathPrefix  e.g. "results/cnn_fg" / "results/yield_curve"
- * @param {string} sortKey     e.g. "timestamp" / "date"
- * @returns {Promise<Array<any>>}
- */
-async function loadYearsFromBranch(pathPrefix, sortKey) {
-  const thisYear = new Date().getUTCFullYear();
-  const results = await Promise.allSettled([
-    fetchJson(`${DATA_BASE_URL}/${pathPrefix}/${thisYear - 1}.json`),
-    fetchJson(`${DATA_BASE_URL}/${pathPrefix}/${thisYear}.json`),
-  ]);
-  /** @type {Array<any>} */
-  const merged = [];
-  for (const r of results) {
-    if (r.status === "fulfilled" && Array.isArray(r.value)) {
-      merged.push(...r.value);
-    }
-  }
-  return merged.sort((a, b) => a[sortKey].localeCompare(b[sortKey]));
-}
-
 /** @type {() => Promise<Array<{timestamp: string, score: number, rating?: string}>>} */
 const loadFearGreedYears = () =>
-  loadYearsFromBranch("results/cnn_fg", "timestamp");
+  loadYearsFromBranch(DATA_BASE_URL, "results/cnn_fg", "timestamp");
 
 /** @type {() => Promise<Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>>} */
 const loadYieldCurveYears = () =>
-  loadYearsFromBranch("results/yield_curve", "date");
+  loadYearsFromBranch(DATA_BASE_URL, "results/yield_curve", "date");
 
 // ───────────────────────── View-mode + URL state ───────────────────────────
 
