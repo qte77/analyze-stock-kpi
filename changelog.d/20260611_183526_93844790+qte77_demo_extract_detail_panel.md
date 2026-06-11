@@ -1,0 +1,3 @@
+### Changed
+
+- **`docs/demo/detail_panel.js`: extract the `#row-detail` side-panel lifecycle out of `app.js`.** `showDetail` / `bindDetailDismiss` (plus the private `dl` / `closeDetail` helpers) move to a new sibling DOM module that mirrors `table.js`: it owns the detail aside but takes the row's audit record and the two chart renderers (`renderRadar`, `renderTimeSeriesPane`) via a context object instead of reading `app.js` globals, so it stays free of `app.js` mutable state and chart slots. `app.js` keeps a one-line `onRowClick` adapter and drops its now-unused `detail_rows` import + `fmtPct`. Net −163 LOC in `app.js`. Behaviour-preserving (logic moved verbatim); the consumed pure builders stay covered by `tests/demo/detail_rows.test.mjs`.
