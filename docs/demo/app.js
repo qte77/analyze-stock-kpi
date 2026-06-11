@@ -237,10 +237,6 @@ function persistStateFromCurrent() {
   window.history.replaceState({}, "", url);
 }
 
-// Mobile auto-simple guard removed — detailed view is now allowed on
-// narrow viewports. The table-wrap's overflow: auto handles horizontal
-// scroll for the 13-column detail layout rather than hiding it.
-
 // ───────────────────────── Rendering ───────────────────────────
 
 /**
@@ -259,10 +255,6 @@ function renderTable() {
 }
 
 function onRowClick(/** @type {Row} */ row) {
-  // Both view modes open the side detail panel; the previous
-  // "simple-mode opens Yahoo externally" behaviour was jarring (users
-  // didn't want to leave the app). Yahoo + SEC EDGAR + Wikipedia links
-  // remain accessible inside the panel's `.detail-links` nav.
   showDetail(row);
 }
 
@@ -603,7 +595,6 @@ function showDetail(/** @type {Row} */ row) {
   const radarWrap = document.createElement("div");
   radarWrap.className = "radar-wrap";
   const radarCanvas = document.createElement("canvas");
-  radarCanvas.className = "radar-canvas";
   radarWrap.append(radarCanvas);
   overviewPane.append(radarWrap);
 
@@ -851,10 +842,7 @@ function themedXAxis(maxTicks = 14) {
   };
 }
 
-function renderRollingEmptyHint(
-  /** @type {boolean} */ show,
-  /** @type {string} */ text = EMPTY_HISTORY,
-) {
+function renderRollingEmptyHint(/** @type {boolean} */ show) {
   const wrap = document.getElementById("fg-chart-wrap");
   if (!wrap) return;
   let hint = wrap.querySelector(".fg-empty");
@@ -864,7 +852,7 @@ function renderRollingEmptyHint(
       hint.className = "fg-empty";
       wrap.append(hint);
     }
-    hint.textContent = text;
+    hint.textContent = EMPTY_HISTORY;
   } else if (hint) {
     hint.remove();
   }
