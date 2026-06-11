@@ -8,6 +8,7 @@
 // attach via the classic <script> tag.
 
 import { buildAuditMap, loadAudit } from "./lib/audit.js";
+import { scoreYAxis, themedXAxis } from "./lib/chart_axes.js";
 import { exportCsv } from "./lib/csv.js";
 import { fetchJson, loadYearsFromBranch } from "./lib/fetch.js";
 import { fmtNum, nested } from "./lib/format.js";
@@ -535,7 +536,7 @@ async function renderTimeSeriesPane(pane, row) {
       maintainAspectRatio: false,
       scales: {
         y: {
-          ...scoreYAxis(),
+          ...scoreYAxis(cssVar),
           title: { display: true, text: "Composite (0–100)", color: () => cssVar("--text", "#1d1d1f") },
         },
         y1: {
@@ -628,26 +629,6 @@ function destroyChart(chart) {
   chart.destroy();
 }
 
-/** Themed 0–100 score y-axis (stepSize 25) shared by the composite line
- *  charts. The cssVar closures re-resolve on theme flip via bindThemeObserver. */
-function scoreYAxis() {
-  return {
-    min: 0,
-    max: 100,
-    ticks: { stepSize: 25, color: () => cssVar("--text", "#1d1d1f") },
-    grid: { color: () => cssVar("--border", "#d2d2d7") },
-  };
-}
-
-/** Themed x-axis with a tick cap, shared by the time-series line charts.
- *  @param {number} [maxTicks] */
-function themedXAxis(maxTicks = 14) {
-  return {
-    ticks: { maxTicksLimit: maxTicks, color: () => cssVar("--text", "#1d1d1f") },
-    grid: { color: () => cssVar("--border", "#d2d2d7") },
-  };
-}
-
 function renderRollingEmptyHint(/** @type {boolean} */ show) {
   const wrap = document.getElementById("fg-chart-wrap");
   if (!wrap) return;
@@ -697,7 +678,7 @@ function renderFearGreedChart(
       maintainAspectRatio: false,
       animation: { duration: 250 },
       plugins: { legend: { display: false } },
-      scales: { y: scoreYAxis(), x: themedXAxis() },
+      scales: { y: scoreYAxis(cssVar), x: themedXAxis(cssVar) },
     },
   });
   liveCharts.add(fearGreedChart);
@@ -752,7 +733,7 @@ function renderMonthlyFearGreedChart(
       maintainAspectRatio: false,
       animation: { duration: 250 },
       plugins: { legend: { display: true, position: "bottom" } },
-      scales: { y: scoreYAxis(), x: themedXAxis() },
+      scales: { y: scoreYAxis(cssVar), x: themedXAxis(cssVar) },
     },
   });
   liveCharts.add(monthlyFearGreedChart);
@@ -976,7 +957,7 @@ function renderYieldCurveChart(entries) {
           grid: { color: () => `${cssVar("--border", "#d2d2d7")}` },
           ticks: { color: () => cssVar("--text", "#1d1d1f") },
         },
-        x: themedXAxis(),
+        x: themedXAxis(cssVar),
       },
     },
   });
