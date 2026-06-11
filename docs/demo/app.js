@@ -366,27 +366,32 @@ function toggleSectorFilter(label) {
 const EMPTY_HISTORY = "no history yet";
 
 /**
- * Toggle a centered "no history yet" hint inside a wrap element: create it
- * once when shown, remove it when hidden. Skip-if-existing — never
- * overwrites a present hint's text. Shared by the sector-donut and
- * long-term-F&G empty states (the rolling + yield-curve variants
- * intentionally overwrite, so they stay separate).
+ * Create-or-update a centered hint inside a wrap element, or remove it when
+ * hidden. Update-if-existing: when shown and a hint is already present (e.g. the
+ * static "loading…" placeholder shipped in #fg-chart-wrap / #yc-chart-wrap),
+ * its text is overwritten rather than left stale. Shared by all four chart
+ * empty states; `text` defaults to EMPTY_HISTORY — the sector-donut + long-term
+ * callers always use it and have no static placeholder, so the overwrite is a
+ * no-op for them.
  *
  * @param {string} wrapId
  * @param {string} hintClass
  * @param {boolean} show
+ * @param {string} [text]
  */
-function toggleHistoryHint(wrapId, hintClass, show) {
+function toggleHistoryHint(wrapId, hintClass, show, text = EMPTY_HISTORY) {
   const wrap = document.getElementById(wrapId);
   if (!wrap) return;
-  const existing = wrap.querySelector(`.${hintClass}`);
-  if (show && !existing) {
-    const hint = document.createElement("div");
-    hint.className = hintClass;
-    hint.textContent = EMPTY_HISTORY;
-    wrap.append(hint);
-  } else if (!show && existing) {
-    existing.remove();
+  let hint = wrap.querySelector(`.${hintClass}`);
+  if (show) {
+    if (!hint) {
+      hint = document.createElement("div");
+      hint.className = hintClass;
+      wrap.append(hint);
+    }
+    hint.textContent = text;
+  } else if (hint) {
+    hint.remove();
   }
 }
 
@@ -630,19 +635,7 @@ function destroyChart(chart) {
 }
 
 function renderRollingEmptyHint(/** @type {boolean} */ show) {
-  const wrap = document.getElementById("fg-chart-wrap");
-  if (!wrap) return;
-  let hint = wrap.querySelector(".fg-empty");
-  if (show) {
-    if (!hint) {
-      hint = document.createElement("div");
-      hint.className = "fg-empty";
-      wrap.append(hint);
-    }
-    hint.textContent = EMPTY_HISTORY;
-  } else if (hint) {
-    hint.remove();
-  }
+  toggleHistoryHint("fg-chart-wrap", "fg-empty", show);
 }
 
 function renderFearGreedChart(
@@ -865,29 +858,12 @@ function syncChipAriaPressed(
 let yieldCurveChart = null;
 
 /**
- * Toggle a "no history yet" hint inside #yc-chart-wrap. When the
- * static "loading…" placeholder is still in the DOM (lazy-render
- * path: data fetched but tab not yet clicked → empty result on
- * click), overwrite its text instead of double-appending.
- *
+ * Toggle the yield-curve "no history yet" hint (#yc-chart-wrap). Overwrites the
+ * static "loading…" placeholder via toggleHistoryHint's update-if-existing path.
  * @param {boolean} show
  */
 function renderYieldCurveEmptyHint(show) {
-  const wrap = document.getElementById("yc-chart-wrap");
-  if (!wrap) return;
-  const existing = wrap.querySelector(".yc-empty");
-  if (show) {
-    if (existing) {
-      existing.textContent = EMPTY_HISTORY;
-    } else {
-      const hint = document.createElement("div");
-      hint.className = "yc-empty";
-      hint.textContent = EMPTY_HISTORY;
-      wrap.append(hint);
-    }
-  } else if (existing) {
-    existing.remove();
-  }
+  toggleHistoryHint("yc-chart-wrap", "yc-empty", show);
 }
 
 /**
