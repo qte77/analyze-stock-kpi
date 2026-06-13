@@ -35,8 +35,8 @@ jobs:
       - name: Pyright type check
         run: uv run pyright src
 
-      - name: Complexipy cognitive complexity (max 15)
-        run: uv run complexipy src --max-complexity-allowed 15
+      - name: Complexipy cognitive complexity (max 10)
+        run: uv run complexipy src --max-complexity-allowed 10
 
       - name: Markdownlint
         run: |
