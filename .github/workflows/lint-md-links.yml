@@ -1,0 +1,18 @@
+---
+name: Lint MD and Links
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write  # required at workflow startup by reusable notify job (even when unused)
+
+jobs:
+  lint:
+    uses: qte77/.github/.github/workflows/lint-md-links.yml@5dfff1f73ac7241ef37b6103e04d2a8373ff68a4  # 2026-04-27
+...
