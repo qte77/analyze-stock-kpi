@@ -120,7 +120,7 @@ daily points, so a missed day repopulates on the next run.
 
 **Derived monthly aggregation (client-side).** The dashboard's F&G panel
 exposes a "Long-term context" tab that reduces the same per-year files to
-UTC `YYYY-MM` buckets via `docs/demo/lib/monthly.js::aggregateMonthlyFG`,
+UTC `YYYY-MM` buckets via `ui/lib/monthly.js::aggregateMonthlyFG`,
 surfacing per-month median + average + count without any new endpoint. UTC
 bucketing keeps month boundaries stable across viewer timezones; the chart
 resolves to two lines (median solid, average dashed) reading `--text` /

@@ -1,6 +1,6 @@
 ---
 # CodeQL static security analysis. Scans Python (`src/`) and JavaScript
-# (`docs/demo/app.js`). Vendored minified libs under `docs/demo/vendor/`
+# (`ui/app.js`). Vendored minified libs under `ui/vendor/`
 # are excluded via the inline `config:` block on the init step below.
 # https://docs.github.com/en/code-security/code-scanning
 name: CodeQL
@@ -41,7 +41,7 @@ jobs:
           # — exclude them so we don't analyze code we don't own.
           config: |
             paths-ignore:
-              - "docs/demo/vendor/**"
+              - "ui/vendor/**"
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@8aad20d150bbac5944a9f9d289da16a4b0d87c1e  # v4

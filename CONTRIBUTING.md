@@ -26,9 +26,9 @@ this file disagrees with `make help`, `make help` wins.
   `@pytest.mark.network`; they are excluded from `make test` by
   default and opt-in via `pytest -m network`. Aim for **one** smoke
   per data source so integration drift is still caught.
-- **JS units only.** `docs/demo/lib/*.js` are pure (DOM-free) and
+- **JS units only.** `ui/lib/*.js` are pure (DOM-free) and
   unit-tested via vitest (`tests/demo/*.test.mjs`); the DOM-coupled
-  glue in `docs/demo/app.js` is verified by hand with `make preview`.
+  glue in `ui/app.js` is verified by hand with `make preview`.
 
 ## Commit + PR conventions
 

@@ -1,9 +1,9 @@
-// Unit tests for docs/demo/lib/monthly.js — monthly aggregation of CNN
+// Unit tests for ui/lib/monthly.js — monthly aggregation of CNN
 // Fear & Greed daily entries for the long-term-context section. Pure
 // function: input `{timestamp, score}[]`, output parallel arrays of
 // month / median / avg / count, sorted ascending by month.
 import { describe, it, expect } from "vitest";
-import { aggregateMonthlyFG } from "../../docs/demo/lib/monthly.js";
+import { aggregateMonthlyFG } from "../../ui/lib/monthly.js";
 
 describe("aggregateMonthlyFG", () => {
   it("returns empty arrays for an empty input list", () => {

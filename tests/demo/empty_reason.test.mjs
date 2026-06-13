@@ -1,4 +1,4 @@
-// Unit tests for docs/demo/lib/empty_reason.js — per-cell tooltip text
+// Unit tests for ui/lib/empty_reason.js — per-cell tooltip text
 // when the value is missing. Pure rule-table lookup; renders `null`
 // when no rule applies so the cell stays a bare "—".
 //
@@ -6,7 +6,7 @@
 // that prove the rule doesn't over-match, and unknown-column / non-bank
 // fallthroughs.
 import { describe, it, expect } from "vitest";
-import { explainEmpty } from "../../docs/demo/lib/empty_reason.js";
+import { explainEmpty } from "../../ui/lib/empty_reason.js";
 
 const bankRow = {
   symbol: "JPM",

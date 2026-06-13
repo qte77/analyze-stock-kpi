@@ -1,4 +1,4 @@
-// Tests for docs/demo/lib/format.js — pure value formatters + a null-aware
+// Tests for ui/lib/format.js — pure value formatters + a null-aware
 // comparator + dotted-key accessor shared by the dashboard's table/detail
 // rendering. No DOM; plain values in/out.
 
@@ -8,7 +8,7 @@ import {
   fmtNum,
   fmtPct,
   compareValues,
-} from "../../docs/demo/lib/format.js";
+} from "../../ui/lib/format.js";
 
 describe("nested", () => {
   it("reads a flat key", () => {

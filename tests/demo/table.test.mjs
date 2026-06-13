@@ -1,4 +1,4 @@
-// Tests for the pure row helpers in docs/demo/table.js. The DOM rendering
+// Tests for the pure row helpers in ui/table.js. The DOM rendering
 // (renderUniverseTable / renderRow) is glue verified by hand via `make
 // preview`; here we cover the branchy pure logic only.
 
@@ -9,7 +9,7 @@ import {
   meanComposite,
   totalCompositeScore,
   emptyTableMessage,
-} from "../../docs/demo/table.js";
+} from "../../ui/table.js";
 
 describe("buildRowTitle", () => {
   it("shows weight + score + coverage when score and total are positive", () => {

@@ -36,7 +36,7 @@ def _snap(**kwargs: object) -> FundamentalsSnapshot:
 
 
 def test_summary_row_matches_13_column_dashboard_order() -> None:
-    """``_summary_row`` mirrors ``docs/demo/index.html`` column order.
+    """``_summary_row`` mirrors ``ui/index.html`` column order.
 
     Inputs chosen so every field formats to a clean string.
     """

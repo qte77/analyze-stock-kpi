@@ -1,7 +1,7 @@
 {
   "name": "analyze-stock-kpi-demo",
   "private": true,
-  "description": "Dev-only npm metadata for the docs/demo/ dashboard. Hosts the Vitest unit harness and TypeScript devDependency for JSDoc type-checking. The dashboard itself ships zero JS deps — Chart.js and Fuse.js are vendored under docs/demo/vendor/.",
+  "description": "Dev-only npm metadata for the ui/ dashboard. Hosts the Vitest unit harness and TypeScript devDependency for JSDoc type-checking. The dashboard itself ships zero JS deps — Chart.js and Fuse.js are vendored under ui/vendor/.",
   "type": "module",
   "scripts": {
     "test": "vitest run tests/demo",

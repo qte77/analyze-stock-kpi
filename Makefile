@@ -74,10 +74,10 @@ lint_md:  ## markdownlint *.md (uses .markdownlint.json)
 	  --ignore '.venv/**' --ignore 'results/**' --ignore 'node_modules/**' \
 	  --ignore 'changelog.d/**'
 
-lint_js:  ## node syntax check + tsc JSDoc type check on docs/demo/
+lint_js:  ## node syntax check + tsc JSDoc type check on ui/
 	echo "--- lint_js"
-	node --check docs/demo/app.js
-	tsc --noEmit --project docs/demo
+	node --check ui/app.js
+	tsc --noEmit --project ui
 
 lint_links:  ## lychee broken-link checker (network — slow; mandatory in CI)
 	echo "--- lint_links"
@@ -120,10 +120,10 @@ run:  ## run fundamentals (UNIVERSE=qte77-watchlist | TICKERS=AAPL,MSFT | TICKER
 	  $(if $(PERIOD),--period $(PERIOD)) \
 	  $(if $(SHOW_SCORES),--show-scores)
 
-preview:  ## serve docs/demo/ locally on PORT=8000 (data fetched cross-origin from data branch)
+preview:  ## serve ui/ locally on PORT=8000 (data fetched cross-origin from data branch)
 	echo "--- preview"
 	echo "Dashboard: http://localhost:$${PORT:-8000}/  (Ctrl+C to stop)"
-	uv run python -m http.server $${PORT:-8000} --directory docs/demo
+	uv run python -m http.server $${PORT:-8000} --directory ui
 
 preview_local:  ## like preview but serves the latest `make run` output (UNIVERSE=qte77-watchlist by default)
 	echo "--- preview_local"
@@ -136,7 +136,7 @@ preview_local:  ## like preview but serves the latest `make run` output (UNIVERS
 	cp "$$LATEST" "results/demo/$$U/$$(date -u +%Y-%m-%d).json"; \
 	uv run python scripts/build_demo_manifest.py "results/demo/$$U"
 	echo ""
-	echo "  Open in browser:  http://localhost:$${PORT:-8000}/docs/demo/?base=.."
+	echo "  Open in browser:  http://localhost:$${PORT:-8000}/ui/?base=.."
 	echo "  (the http.server URL printed below is the repo root — do NOT use it)"
 	echo ""
 	uv run python -m http.server $${PORT:-8000} --directory .

@@ -46,8 +46,8 @@ jobs:
 
       - name: Lint JS (node --check + tsc JSDoc type check)
         run: |
-          node --check docs/demo/app.js
-          npx --yes -p typescript@5 tsc --noEmit --project docs/demo
+          node --check ui/app.js
+          npx --yes -p typescript@5 tsc --noEmit --project ui
 
       - name: Vitest (demo unit tests)
         run: |

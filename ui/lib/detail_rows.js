@@ -2,7 +2,7 @@
 // Pure detail-panel data for the demo dashboard: the KPI glossary text and
 // the row-tuple builders for the federal-contracts audit block + external
 // links. DOM-free; side-effect-free. The showDetail() DOM rendering that
-// consumes these tuples lives in docs/demo/app.js (it stays there — it is
+// consumes these tuples lives in ui/app.js (it stays there — it is
 // knotted with the shared chart infra). Tested by tests/demo/detail_rows.test.mjs.
 
 import { formatObligated } from "./audit.js";

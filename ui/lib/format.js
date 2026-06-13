@@ -1,7 +1,7 @@
 // @ts-check
 // Pure value formatters + a null-aware comparator + dotted-key accessor for
 // the demo dashboard's table/detail rendering. DOM-free; side-effect-free.
-// The DOM cells that consume these (e.g. `td()`) live in docs/demo/app.js.
+// The DOM cells that consume these (e.g. `td()`) live in ui/app.js.
 // Tested by tests/demo/format.test.mjs.
 
 /**
