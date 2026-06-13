@@ -9,6 +9,10 @@ auth/persistence, this ADR governs distribution scope);
 [ADR-0006](0006-federal-contractors-universe.md) (amended in-place
 to relocate usaspending logic from `scripts/` into `src/`).
 
+**Amended by:** [ADR-0008](0008-ui-promotion-to-ui.md) — promotes the
+demo to a top-level `ui/` (Scope-3 reframe + stale Scope-1 paths
+corrected; see the 2026-06-13 amendment below).
+
 ## Context
 
 The repo's tree had grown to conflate three distinct concerns under
@@ -129,13 +133,41 @@ usaspending split):
     source lands (currently SEC and usaspending sit at `src/sec/`
     and `src/usaspending.py` — the rule-of-three is not yet hit).
 
+## Amendment (2026-06-13) — UI promotion to top-level `ui/` (ADR-0008)
+
+[ADR-0008](0008-ui-promotion-to-ui.md) promotes the demo dashboard from
+`docs/demo/` to a top-level `ui/` and re-themes it to the EyeRest brand.
+Two clarifications to this ADR's text follow; the **one-way import rule
+(Rule 1) is unchanged** and still governs `ui/`.
+
+- **Scope 3 reframe.** The Consequences line "Treat it as a reference
+  implementation, not a product feature" is superseded: the dashboard is
+  now a **maintained, EyeRest-branded product surface** at a top-level
+  **`ui/`** (relocated from `docs/demo/`). It is still **not shipped in
+  the wheel** — `ui/` sits outside `src/`, so the wheel boundary (Scope 1
+  = `src/`) is unchanged — and is still a downstream consumer of `src/`
+  outputs + the `data` branch governed by Rule 1.
+
+- **Stale Scope-1 example paths corrected.** The `data_sources/` and
+  `domain/` sub-namespaces (introduced after this ADR was drafted, and
+  by ADR-0006's library-first amendments) are now reflected. The Scope-1
+  examples should read: `src/data_sources/fundamentals.py`,
+  `src/data_sources/sentiment.py`, `src/domain/composite_scores.py`,
+  `src/domain/universe.py`, `src/data_sources/sec/cik_map.py`,
+  `src/data_sources/usaspending.py`,
+  `src/orchestrators/federal_contractors.py`, `src/utils/http_ua.py`,
+  `src/assets/universes/*.txt`. (The "refactor candidates" note's
+  `src/sec/` + `src/usaspending.py` likewise now sit under
+  `src/data_sources/`.)
+
 ## References
 
 - pyproject.toml `[tool.hatch.build.targets.wheel].packages = ["src"]`
   defines the wheel scope.
 - pyproject.toml `[project].readme = "README.md"` includes README in
   metadata.
-- The CNN F&G integration in `src/sentiment.py` is the precedent
-  for "library API + own `__main__` entry point" — the
-  `python -m src.sentiment` invocation is repo-CI's cron hook, but
-  the module's library API is accessible to any downstream caller.
+- The CNN F&G integration in `src/data_sources/sentiment.py` is the
+  precedent for "library API + own `__main__` entry point" — the
+  `python -m src.data_sources.sentiment` invocation is repo-CI's cron
+  hook, but the module's library API is accessible to any downstream
+  caller.
