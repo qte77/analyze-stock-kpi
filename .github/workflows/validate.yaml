@@ -49,5 +49,10 @@ jobs:
           node --check docs/demo/app.js
           npx --yes -p typescript@5 tsc --noEmit --project docs/demo
 
+      - name: Vitest (demo unit tests)
+        run: |
+          npm install --no-audit --no-fund
+          npm test
+
       - name: Pytest with coverage
-        run: uv run pytest --cov=src --cov-fail-under=0
+        run: make test_cov
