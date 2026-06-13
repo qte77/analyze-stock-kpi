@@ -44,15 +44,18 @@ jobs:
             --ignore '.venv/**' --ignore 'results/**' --ignore 'node_modules/**' \
             --ignore 'changelog.d/**'
 
-      - name: Lint JS (node --check + tsc JSDoc type check)
+      - name: Install JS dev dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Lint JS (node --check + tsc JSDoc + ESLint + Prettier)
         run: |
           node --check ui/app.js
           npx --yes -p typescript@5 tsc --noEmit --project ui
+          npm run lint
+          npm run format:check
 
       - name: Vitest (demo unit tests)
-        run: |
-          npm install --no-audit --no-fund
-          npm test
+        run: npm test
 
       - name: Pytest with coverage
         run: make test_cov
