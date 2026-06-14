@@ -1,6 +1,6 @@
 """Audit every bundled universe against current Yahoo coverage (#168).
 
-Thin wrapper around :func:`src.orchestrators.universe_audit.audit_universes`.
+Thin wrapper around :func:`analyze_stock_kpi.orchestrators.universe_audit.audit_universes`.
 Writes the structured report to ``results/audit/universes-<UTC-date>.json``
 for operator triage — surfaces stale-US-ticker rot (FI→FISV, RY→RY.TO,
 SUEZY→SZU.DE patterns) so per-ticker swap PRs can be opened.
@@ -16,7 +16,7 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
-from src.orchestrators.universe_audit import audit_universes
+from analyze_stock_kpi.orchestrators.universe_audit import audit_universes
 
 
 def main() -> None:
@@ -26,9 +26,7 @@ def main() -> None:
     out_path = Path(f"results/audit/universes-{today}.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(report.model_dump(mode="json"), indent=2))
-    print(
-        f"Audited {len(report.entries_by_universe)} universes → {out_path}"
-    )
+    print(f"Audited {len(report.entries_by_universe)} universes → {out_path}")
     for universe_id, entries in report.entries_by_universe.items():
         counts: dict[str, int] = {"OK": 0, "SPARSE": 0, "FAIL": 0}
         for entry in entries:

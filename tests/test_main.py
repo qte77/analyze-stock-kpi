@@ -1,4 +1,4 @@
-"""Tests for :mod:`src.__main__` helpers (pure-function layer only).
+"""Tests for :mod:`analyze_stock_kpi.__main__` helpers (pure-function layer only).
 
 The Rich-table printing side is not unit-tested by convention
 (``src/__main__.py`` is excluded from coverage in ``pyproject.toml``).
@@ -13,17 +13,17 @@ import json
 from datetime import date
 from typing import TYPE_CHECKING
 
-from src.__main__ import (
+from analyze_stock_kpi.__main__ import (
     _format_days_since,
     _persist_snapshots,
     _run_refresh_universe,
     _summary_row,
 )
-from src.config import settings
-from src.data_sources.fundamentals import FundamentalsSnapshot
-from src.domain.composite_scores import CompositeScores
-from src.orchestrators.federal_contractors import AuditRow
-from src.utils.parse_args import CliArgs
+from analyze_stock_kpi.config import settings
+from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
+from analyze_stock_kpi.domain.composite_scores import CompositeScores
+from analyze_stock_kpi.orchestrators.federal_contractors import AuditRow
+from analyze_stock_kpi.utils.parse_args import CliArgs
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -128,7 +128,8 @@ def test_summary_row_days_since_10q_renders_dash_when_missing() -> None:
 
 
 def test_persist_snapshots_serializes_sec_date_fields(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
 ) -> None:
     """Snapshot with populated SEC date fields serializes to valid JSON.
 
@@ -137,7 +138,7 @@ def test_persist_snapshots_serializes_sec_date_fields(
     ``json.dumps`` raises ``TypeError: Object of type date is not JSON serializable``.
     """
     monkeypatch.setattr(
-        "src.__main__.settings",
+        "analyze_stock_kpi.__main__.settings",
         settings.model_copy(update={"fundamentals_dir": tmp_path}),
     )
     snap = _snap(
@@ -154,24 +155,25 @@ def test_persist_snapshots_serializes_sec_date_fields(
     assert payload[0]["sec_last_8k_date"] == "2024-12-15"
 
 
-def _stub_build_universe(
-    tickers: list[str], audit: list[AuditRow]
-) -> object:
+def _stub_build_universe(tickers: list[str], audit: list[AuditRow]) -> object:
     """Build a fake ``build_universe(...)`` returning the given tuple."""
+
     def _stub(*_a: object, **_kw: object) -> tuple[list[str], list[AuditRow]]:
         return (tickers, audit)
+
     return _stub
 
 
 def test_run_refresh_universe_writes_to_explicit_overrides(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
 ) -> None:
     """``--output`` / ``--audit-output`` paths are honoured when set."""
     audit = [
         AuditRow(rank=1, recipient_name="LOCKHEED MARTIN CORPORATION", obligated_usd=1.0),
     ]
     monkeypatch.setattr(
-        "src.__main__.build_universe",
+        "analyze_stock_kpi.__main__.build_universe",
         _stub_build_universe(["LMT", "RTX"], audit),
     )
     args = CliArgs.model_construct(
@@ -189,15 +191,16 @@ def test_run_refresh_universe_writes_to_explicit_overrides(
 
 
 def test_run_refresh_universe_defaults_to_settings_dir(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
 ) -> None:
     """No overrides -> writes under ``settings.federal_contractors_dir``."""
     monkeypatch.setattr(
-        "src.__main__.settings",
+        "analyze_stock_kpi.__main__.settings",
         settings.model_copy(update={"federal_contractors_dir": tmp_path}),
     )
     monkeypatch.setattr(
-        "src.__main__.build_universe",
+        "analyze_stock_kpi.__main__.build_universe",
         _stub_build_universe(["LMT"], []),
     )
     args = CliArgs.model_construct(refresh_universe="federal-contractors")

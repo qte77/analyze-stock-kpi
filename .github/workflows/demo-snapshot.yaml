@@ -2,7 +2,7 @@
 # Weekly fundamentals snapshot for the demo dashboard (#59, #130).
 #
 # Runs Sundays at 06:15 UTC (staggers from sbom 00:00 Sun). Fans out
-# across every bundled universe in src/assets/universes/*.txt as
+# across every bundled universe in src/analyze_stock_kpi/assets/universes/*.txt as
 # independent matrix legs (fail-fast: false). Each leg fetches its
 # universe via `make run`, renames the timestamped output to
 # results/demo/<UNIVERSE>/<YYYY-MM-DD>.json, rebuilds the manifest,
@@ -65,7 +65,7 @@ concurrency:
 
 jobs:
   # Compute the matrix of universes once. Cron + dispatch-without-input
-  # discover every preset from src/assets/universes/*.txt so adding a
+  # discover every preset from src/analyze_stock_kpi/assets/universes/*.txt so adding a
   # new universe is a one-file change (drop the .txt — workflow inherits).
   # Dispatch with `universe` set collapses to a single leg so ad-hoc
   # debug runs stay cheap.
@@ -148,7 +148,7 @@ jobs:
         env:
           UNIVERSE: ${{ matrix.universe }}
           # Optional SEC EDGAR UA — same pattern as federal-contractors-refresh.
-          # `make run` invokes `python -m src` which calls enrich_snapshot_sec.
+          # `make run` invokes `python -m analyze_stock_kpi` which calls enrich_snapshot_sec.
           SSK_SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
         run: make run UNIVERSE="$UNIVERSE"
 

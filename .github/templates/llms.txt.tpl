@@ -21,21 +21,23 @@
 - [ADR-0005: Three-tier sentiment + risk sources](${BLOB}/docs/decisions/0005-sentiment-risk-sources.md)
 - [ADR-0006: Federal-contractors universe](${BLOB}/docs/decisions/0006-federal-contractors-universe.md)
 - [ADR-0007: Package vs infrastructure boundary](${BLOB}/docs/decisions/0007-package-vs-infrastructure-boundary.md)
+- [ADR-0008: Promote demo to top-level ui/](${BLOB}/docs/decisions/0008-ui-promotion-to-ui.md)
+- [ADR-0009: Rename package to analyze_stock_kpi](${BLOB}/docs/decisions/0009-rename-package-to-analyze-stock-kpi.md)
 
 ## Source
 
-- [src/__main__.py](${BLOB}/src/__main__.py)
-- [src/config.py](${BLOB}/src/config.py)
-- [src/domain/composite_scores.py](${BLOB}/src/domain/composite_scores.py)
-- [src/domain/universe.py](${BLOB}/src/domain/universe.py)
-- [src/data_sources/fundamentals.py](${BLOB}/src/data_sources/fundamentals.py)
-- [src/data_sources/sentiment.py](${BLOB}/src/data_sources/sentiment.py)
-- [src/data_sources/usaspending.py](${BLOB}/src/data_sources/usaspending.py)
-- [src/data_sources/sec/cik_map.py](${BLOB}/src/data_sources/sec/cik_map.py)
-- [src/data_sources/sec/submissions.py](${BLOB}/src/data_sources/sec/submissions.py)
-- [src/orchestrators/federal_contractors.py](${BLOB}/src/orchestrators/federal_contractors.py)
-- [src/utils/http_ua.py](${BLOB}/src/utils/http_ua.py)
-- [src/utils/parse_args.py](${BLOB}/src/utils/parse_args.py)
+- [src/analyze_stock_kpi/__main__.py](${BLOB}/src/analyze_stock_kpi/__main__.py)
+- [src/analyze_stock_kpi/config.py](${BLOB}/src/analyze_stock_kpi/config.py)
+- [src/analyze_stock_kpi/domain/composite_scores.py](${BLOB}/src/analyze_stock_kpi/domain/composite_scores.py)
+- [src/analyze_stock_kpi/domain/universe.py](${BLOB}/src/analyze_stock_kpi/domain/universe.py)
+- [src/analyze_stock_kpi/data_sources/fundamentals.py](${BLOB}/src/analyze_stock_kpi/data_sources/fundamentals.py)
+- [src/analyze_stock_kpi/data_sources/sentiment.py](${BLOB}/src/analyze_stock_kpi/data_sources/sentiment.py)
+- [src/analyze_stock_kpi/data_sources/usaspending.py](${BLOB}/src/analyze_stock_kpi/data_sources/usaspending.py)
+- [src/analyze_stock_kpi/data_sources/sec/cik_map.py](${BLOB}/src/analyze_stock_kpi/data_sources/sec/cik_map.py)
+- [src/analyze_stock_kpi/data_sources/sec/submissions.py](${BLOB}/src/analyze_stock_kpi/data_sources/sec/submissions.py)
+- [src/analyze_stock_kpi/orchestrators/federal_contractors.py](${BLOB}/src/analyze_stock_kpi/orchestrators/federal_contractors.py)
+- [src/analyze_stock_kpi/utils/http_ua.py](${BLOB}/src/analyze_stock_kpi/utils/http_ua.py)
+- [src/analyze_stock_kpi/utils/parse_args.py](${BLOB}/src/analyze_stock_kpi/utils/parse_args.py)
 
 ## Reference
 

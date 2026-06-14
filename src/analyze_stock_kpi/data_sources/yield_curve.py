@@ -4,7 +4,7 @@ Public API:
 
 - :func:`fetch_yield_curve_snapshot` returns the latest
   :class:`YieldCurveSnapshot` (10y minus 5y, percentage points).
-- ``python -m src.data_sources.yield_curve`` fetches the latest
+- ``python -m analyze_stock_kpi.data_sources.yield_curve`` fetches the latest
   reading and merges it into per-year files at
   ``results/yield_curve/YYYY.json``.
 
@@ -30,7 +30,8 @@ from typing import TYPE_CHECKING
 import pandas as pd
 import yfinance as yf
 from pydantic import BaseModel, ConfigDict, computed_field
-from src.config import settings
+
+from analyze_stock_kpi.config import settings
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -100,9 +101,7 @@ def fetch_yield_curve_snapshot() -> YieldCurveSnapshot | None:
         return None
     if tnx is None and fvx is None:
         return None
-    return YieldCurveSnapshot(
-        date=datetime.now(UTC).date(), tnx_yield=tnx, fvx_yield=fvx
-    )
+    return YieldCurveSnapshot(date=datetime.now(UTC).date(), tnx_yield=tnx, fvx_yield=fvx)
 
 
 def _fetch_history_closes(symbol: str, period: str) -> dict[date, float]:
@@ -177,9 +176,7 @@ def _load_year(year: int, *, root: Path) -> dict[str, YieldCurveSnapshot]:
     return {item["date"][:10]: YieldCurveSnapshot.model_validate(item) for item in raw}
 
 
-def _write_year(
-    year: int, by_date: dict[str, YieldCurveSnapshot], *, root: Path
-) -> Path:
+def _write_year(year: int, by_date: dict[str, YieldCurveSnapshot], *, root: Path) -> Path:
     """Write a year's snapshots as a date-sorted JSON array.
 
     ``exclude_none=True`` keeps each row tight — a row with one leg
@@ -189,9 +186,7 @@ def _write_year(
     """
     root.mkdir(parents=True, exist_ok=True)
     path = _year_path(year, root=root)
-    payload = [
-        by_date[k].model_dump(mode="json", exclude_none=True) for k in sorted(by_date)
-    ]
+    payload = [by_date[k].model_dump(mode="json", exclude_none=True) for k in sorted(by_date)]
     path.write_text(json.dumps(payload, indent=2) + "\n")
     return path
 

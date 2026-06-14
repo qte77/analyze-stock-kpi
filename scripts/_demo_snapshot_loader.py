@@ -8,7 +8,7 @@ files committed to the ``data`` branch:
 
 Phase 2b's FCF orchestrator (issue #192) will become the 3rd consumer;
 rule-of-three extraction follows the same logic as
-``src/orchestrators/_shared.py`` (PR #236).
+``src/analyze_stock_kpi/orchestrators/_shared.py`` (PR #236).
 
 Leading-underscore module name signals "internal to scripts/"; scripts/
 is repo infrastructure per ADR-0007, not shipped in the wheel.
@@ -21,7 +21,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from src.data_sources.fundamentals import FundamentalsSnapshot
+from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -66,9 +66,7 @@ def load_snapshots(
     return snapshots, latest
 
 
-def load_all_snapshots() -> tuple[
-    dict[str, list[FundamentalsSnapshot]], dict[str, str]
-]:
+def load_all_snapshots() -> tuple[dict[str, list[FundamentalsSnapshot]], dict[str, str]]:
     """Load every ``SOURCE_UNIVERSES`` entry; return two parallel dicts.
 
     Universes absent from ``results/demo/`` are printed to stdout and
@@ -101,7 +99,7 @@ def write_paired_universe_and_audit(
 
     Path conventions:
 
-    - ``src/assets/universes/<preset_name>.txt`` — preset files (one
+    - ``src/analyze_stock_kpi/assets/universes/<preset_name>.txt`` — preset files (one
       ticker per line; empty file when the corresponding list is empty).
     - ``results/<audit_dir>/audit/<UTC-date>.json`` — per-run audit trail
       (one JSON array of ``model_dump`` rows).
@@ -110,8 +108,8 @@ def write_paired_universe_and_audit(
     per-script behaviour.
     """
     today = datetime.now(UTC).strftime("%Y-%m-%d")
-    path_a = Path(f"src/assets/universes/{preset_a_name}.txt")
-    path_b = Path(f"src/assets/universes/{preset_b_name}.txt")
+    path_a = Path(f"src/analyze_stock_kpi/assets/universes/{preset_a_name}.txt")
+    path_b = Path(f"src/analyze_stock_kpi/assets/universes/{preset_b_name}.txt")
     audit_path = Path(f"results/{audit_dir}/audit/{today}.json")
 
     path_a.parent.mkdir(parents=True, exist_ok=True)

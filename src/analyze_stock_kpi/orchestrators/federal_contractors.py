@@ -1,6 +1,7 @@
 """Federal-contractors universe orchestrator.
 
-Chains :mod:`src.usaspending` → :mod:`src.sec.cik_map` → yfinance
+Chains :mod:`analyze_stock_kpi.data_sources.usaspending` →
+:mod:`analyze_stock_kpi.data_sources.sec.cik_map` → yfinance
 smoke-test to produce a list of publicly-traded contractor tickers
 plus a per-candidate :class:`AuditRow` trail. See
 ``docs/data-sources.md`` (Redistribution guardrails section) for the
@@ -15,8 +16,9 @@ from difflib import SequenceMatcher
 
 import yfinance as yf
 from pydantic import BaseModel, ConfigDict
-from src.data_sources.sec.cik_map import _load_records
-from src.data_sources.usaspending import RecipientRecord, fetch_top_contractors
+
+from analyze_stock_kpi.data_sources.sec.cik_map import _load_records
+from analyze_stock_kpi.data_sources.usaspending import RecipientRecord, fetch_top_contractors
 
 
 class AuditRow(BaseModel):

@@ -4,8 +4,8 @@ Reads the latest snapshot per bundled universe (from ``results/demo/<u>/``
 on the data branch, pulled into the workspace by the CI workflow), runs
 the aggregator's single ranking pass, then writes:
 
-- ``src/assets/universes/aggregated-scores-best.txt``  (top 25)
-- ``src/assets/universes/aggregated-scores-worst.txt`` (bottom 25)
+- ``src/analyze_stock_kpi/assets/universes/aggregated-scores-best.txt``  (top 25)
+- ``src/analyze_stock_kpi/assets/universes/aggregated-scores-worst.txt`` (bottom 25)
 - ``results/aggregated_scores_best_and_worst/audit/<UTC-date>.json``
 
 The two preset files are emitted together from one ranking pass; the
@@ -30,7 +30,8 @@ from _demo_snapshot_loader import (
     load_all_snapshots,
     write_paired_universe_and_audit,
 )
-from src.orchestrators.aggregated_scores_best_and_worst import build_universe
+
+from analyze_stock_kpi.orchestrators.aggregated_scores_best_and_worst import build_universe
 
 
 def main() -> None:

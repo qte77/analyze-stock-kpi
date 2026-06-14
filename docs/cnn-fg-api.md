@@ -2,7 +2,7 @@
 
 Observed shape of `https://production.dataviz.cnn.io/index/fearandgreed/graphdata`,
 captured live on 2026-05-10 via a one-shot inspector. CNN does not publish a
-formal schema; this is the source of truth for what `src/sentiment.py` may rely
+formal schema; this is the source of truth for what `src/analyze_stock_kpi/data_sources/sentiment.py` may rely
 on.
 
 ## Top-level keys

@@ -152,9 +152,7 @@ def _run_refresh_universe(args: CliArgs) -> Path:
     preset_path.parent.mkdir(parents=True, exist_ok=True)
     audit_path.parent.mkdir(parents=True, exist_ok=True)
     preset_path.write_text("\n".join(tickers) + "\n")
-    audit_path.write_text(
-        json.dumps([row.model_dump() for row in audit_rows], indent=2)
-    )
+    audit_path.write_text(json.dumps([row.model_dump() for row in audit_rows], indent=2))
     return preset_path
 
 
@@ -180,10 +178,7 @@ def main() -> None:
     except Exception as exc:
         logger.warning("Failed to fetch CNN Fear & Greed: %s", exc)
     tickers = resolve_universe(args)
-    console.print(
-        f"[green]analyze-stock-kpi[/green] resolving "
-        f"[bold]{len(tickers)}[/bold] tickers"
-    )
+    console.print(f"[green]analyze-stock-kpi[/green] resolving [bold]{len(tickers)}[/bold] tickers")
     raw_snapshots = fetch_universe_fundamentals(tickers)
     snapshots = [
         snap.model_copy(

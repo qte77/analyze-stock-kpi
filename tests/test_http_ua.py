@@ -1,11 +1,12 @@
-"""Tests for :mod:`src.http_ua` — browser-shape User-Agent pool + mixer."""
+"""Tests for :mod:`analyze_stock_kpi.utils.http_ua` — browser-shape User-Agent pool + mixer."""
 
 from __future__ import annotations
 
 import random
 
 import pytest
-from src.utils.http_ua import USER_AGENTS, pick_user_agent, require_https
+
+from analyze_stock_kpi.utils.http_ua import USER_AGENTS, pick_user_agent, require_https
 
 
 def test_pick_user_agent_returns_value_from_pool() -> None:

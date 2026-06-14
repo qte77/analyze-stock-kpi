@@ -1,4 +1,4 @@
-"""Tests for :mod:`src.composite_scores`.
+"""Tests for :mod:`analyze_stock_kpi.domain.composite_scores`.
 
 Each assertion uses a hand-computable expected value. Inputs are chosen
 so every term saturates at exactly 0 or 100, or rescales to a clean
@@ -7,8 +7,8 @@ midpoint. No ``pytest.approx`` — fixtures vendor exact values.
 
 from __future__ import annotations
 
-from src.data_sources.fundamentals import FundamentalsSnapshot
-from src.domain.composite_scores import (
+from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
+from analyze_stock_kpi.domain.composite_scores import (
     CompositeScores,
     aaqs,
     big_call,
@@ -141,23 +141,17 @@ def test_aaqs_returns_none_when_quality_missing() -> None:
 
 
 def test_hgi_saturates_with_margin_bonus() -> None:
-    snap = _snap(
-        revenue_growth=0.50, earnings_growth=0.50, operating_margins=0.30
-    )
+    snap = _snap(revenue_growth=0.50, earnings_growth=0.50, operating_margins=0.30)
     assert hgi(snap) == 100.0
 
 
 def test_hgi_no_bonus_below_margin_threshold() -> None:
-    snap = _snap(
-        revenue_growth=0.15, earnings_growth=0.15, operating_margins=0.05
-    )
+    snap = _snap(revenue_growth=0.15, earnings_growth=0.15, operating_margins=0.05)
     assert hgi(snap) == 50.0
 
 
 def test_hgi_bonus_above_margin_threshold() -> None:
-    snap = _snap(
-        revenue_growth=0.15, earnings_growth=0.15, operating_margins=0.15
-    )
+    snap = _snap(revenue_growth=0.15, earnings_growth=0.15, operating_margins=0.15)
     assert hgi(snap) == 60.0
 
 

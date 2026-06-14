@@ -1,4 +1,4 @@
-"""Tests for :mod:`src.orchestrators.universe_audit`.
+"""Tests for :mod:`analyze_stock_kpi.orchestrators.universe_audit`.
 
 Non-trivial cases only per repo convention: classification thresholds,
 network-failure fallthrough, multi-universe aggregation. One live
@@ -13,7 +13,8 @@ from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
-from src.orchestrators.universe_audit import (
+
+from analyze_stock_kpi.orchestrators.universe_audit import (
     AuditEntry,
     UniverseAuditReport,
     audit_universes,
@@ -36,7 +37,7 @@ def test_classify_ticker_ok_at_threshold() -> None:
     """Exactly ``_OK_THRESHOLD`` populated fields classifies as OK."""
     info = {f"k{i}": i + 1 for i in range(_OK_THRESHOLD)}
     with patch(
-        "src.orchestrators.universe_audit.yf.Ticker",
+        "analyze_stock_kpi.orchestrators.universe_audit.yf.Ticker",
         return_value=_fake_ticker(info),
     ):
         entry = classify_ticker("AAPL")
@@ -49,7 +50,7 @@ def test_classify_ticker_sparse_below_threshold() -> None:
     """One fewer populated field flips OK → SPARSE."""
     info = {f"k{i}": i + 1 for i in range(_OK_THRESHOLD - 1)}
     with patch(
-        "src.orchestrators.universe_audit.yf.Ticker",
+        "analyze_stock_kpi.orchestrators.universe_audit.yf.Ticker",
         return_value=_fake_ticker(info),
     ):
         entry = classify_ticker("BRK.B")
@@ -60,7 +61,7 @@ def test_classify_ticker_sparse_below_threshold() -> None:
 def test_classify_ticker_empty_info_is_fail() -> None:
     """Empty info dict (Yahoo returns this for delisted symbols) → FAIL."""
     with patch(
-        "src.orchestrators.universe_audit.yf.Ticker",
+        "analyze_stock_kpi.orchestrators.universe_audit.yf.Ticker",
         return_value=_fake_ticker({}),
     ):
         entry = classify_ticker("STALE")
@@ -71,7 +72,7 @@ def test_classify_ticker_empty_info_is_fail() -> None:
 def test_classify_ticker_none_info_is_fail() -> None:
     """yfinance returns ``info=None`` for some boundary cases — also FAIL."""
     with patch(
-        "src.orchestrators.universe_audit.yf.Ticker",
+        "analyze_stock_kpi.orchestrators.universe_audit.yf.Ticker",
         return_value=_fake_ticker(None),
     ):
         entry = classify_ticker("NONESUCH")
@@ -82,7 +83,7 @@ def test_classify_ticker_none_info_is_fail() -> None:
 def test_classify_ticker_network_error_is_fail_with_note() -> None:
     """Network failure must wrap-degrade: never raises, FAIL with reason in note."""
     with patch(
-        "src.orchestrators.universe_audit.yf.Ticker",
+        "analyze_stock_kpi.orchestrators.universe_audit.yf.Ticker",
         side_effect=ConnectionError("yahoo timed out"),
     ):
         entry = classify_ticker("AAPL")
@@ -103,7 +104,7 @@ def test_classify_ticker_excludes_none_and_empty_string_from_count() -> None:
         "empty_str": "",  # excluded
     }
     with patch(
-        "src.orchestrators.universe_audit.yf.Ticker",
+        "analyze_stock_kpi.orchestrators.universe_audit.yf.Ticker",
         return_value=_fake_ticker(info),
     ):
         entry = classify_ticker("MIXED")
@@ -126,11 +127,11 @@ def test_audit_universes_aggregates_explicit_ids(tmp_path: Path) -> None:
 
     with (
         patch(
-            "src.orchestrators.universe_audit.yf.Ticker",
+            "analyze_stock_kpi.orchestrators.universe_audit.yf.Ticker",
             side_effect=_ticker_side_effect,
         ),
         patch(
-            "src.orchestrators.universe_audit.PRESET_DIR",
+            "analyze_stock_kpi.orchestrators.universe_audit.PRESET_DIR",
             tmp_path,
         ),
     ):

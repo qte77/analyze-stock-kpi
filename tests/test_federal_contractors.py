@@ -1,13 +1,14 @@
-"""Tests for :mod:`src.federal_contractors`."""
+"""Tests for :mod:`analyze_stock_kpi.orchestrators.federal_contractors`."""
 
 from __future__ import annotations
 
 from datetime import date
 
 import pytest
-from src.data_sources.sec.cik_map import CikRecord
-from src.data_sources.usaspending import RecipientRecord
-from src.orchestrators.federal_contractors import (
+
+from analyze_stock_kpi.data_sources.sec.cik_map import CikRecord
+from analyze_stock_kpi.data_sources.usaspending import RecipientRecord
+from analyze_stock_kpi.orchestrators.federal_contractors import (
     CURATED_TICKERS,
     AuditRow,
     _ensure_seed,
@@ -23,7 +24,10 @@ def _records(*pairs: tuple[str, str, str]) -> dict[str, CikRecord]:
     """Build an EDGAR-shape records dict from (ticker, title, cik) triples."""
     return {
         ticker.upper(): CikRecord(
-            cik=cik.zfill(10), ticker=ticker, title=title, exchange="NYSE",
+            cik=cik.zfill(10),
+            ticker=ticker,
+            title=title,
+            exchange="NYSE",
         )
         for ticker, title, cik in pairs
     }
@@ -47,7 +51,7 @@ def test_fuzzy_match_lockheed_recipient_to_lmt(
 ) -> None:
     """SAM-style 'LOCKHEED MARTIN CORPORATION' resolves to ticker LMT >= 0.85."""
     monkeypatch.setattr(
-        "src.orchestrators.federal_contractors._load_records",
+        "analyze_stock_kpi.orchestrators.federal_contractors._load_records",
         lambda: _records(
             ("LMT", "Lockheed Martin Corp", "936468"),
             ("MSFT", "Microsoft Corp", "789019"),
@@ -66,7 +70,7 @@ def test_fuzzy_match_unrelated_recipient_returns_none(
 ) -> None:
     """A name with no EDGAR match returns (None, None)."""
     monkeypatch.setattr(
-        "src.orchestrators.federal_contractors._load_records",
+        "analyze_stock_kpi.orchestrators.federal_contractors._load_records",
         lambda: _records(
             ("MSFT", "Microsoft Corp", "789019"),
             ("AAPL", "Apple Inc.", "320193"),
@@ -84,18 +88,20 @@ def test_resolve_candidates_dedupes_subsidiary_to_parent_ticker(
 ) -> None:
     """Multiple recipient names collapsing to one EDGAR ticker yield one entry."""
     monkeypatch.setattr(
-        "src.orchestrators.federal_contractors._load_records",
+        "analyze_stock_kpi.orchestrators.federal_contractors._load_records",
         lambda: _records(
             ("LMT", "Lockheed Martin Corp", "936468"),
             ("MSFT", "Microsoft Corp", "789019"),
         ),
     )
 
-    candidates = _resolve_candidates([
-        _recipient(1, "LOCKHEED MARTIN CORPORATION"),
-        _recipient(2, "LOCKHEED MARTIN AERONAUTICS COMPANY"),
-        _recipient(3, "MICROSOFT CORPORATION"),
-    ])
+    candidates = _resolve_candidates(
+        [
+            _recipient(1, "LOCKHEED MARTIN CORPORATION"),
+            _recipient(2, "LOCKHEED MARTIN AERONAUTICS COMPANY"),
+            _recipient(3, "MICROSOFT CORPORATION"),
+        ]
+    )
 
     assert candidates == ["LMT", "MSFT"]
 
@@ -105,14 +111,16 @@ def test_resolve_candidates_drops_unmatched_recipients(
 ) -> None:
     """Recipients with no EDGAR match above threshold are skipped silently."""
     monkeypatch.setattr(
-        "src.orchestrators.federal_contractors._load_records",
+        "analyze_stock_kpi.orchestrators.federal_contractors._load_records",
         lambda: _records(("AAPL", "Apple Inc.", "320193")),
     )
 
-    candidates = _resolve_candidates([
-        _recipient(1, "WIDGET FOUNDRY INTERNATIONAL LLC"),
-        _recipient(2, "APPLE INC"),
-    ])
+    candidates = _resolve_candidates(
+        [
+            _recipient(1, "WIDGET FOUNDRY INTERNATIONAL LLC"),
+            _recipient(2, "APPLE INC"),
+        ]
+    )
 
     assert candidates == ["AAPL"]
 
@@ -130,7 +138,9 @@ def test_smoke_test_drops_unresolvable_tickers(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Tickers whose yfinance fast_info is empty are filtered out."""
-    monkeypatch.setattr("src.orchestrators.federal_contractors.yf.Ticker", _StubTicker)
+    monkeypatch.setattr(
+        "analyze_stock_kpi.orchestrators.federal_contractors.yf.Ticker", _StubTicker
+    )
 
     resolved = _smoke_test_yfinance(["AAPL", "FAKE", "MSFT", "DELISTED", "LMT"])
 
@@ -141,7 +151,9 @@ def test_smoke_test_preserves_input_order(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Resolution is order-preserving — sorting is a separate concern (cycle 9)."""
-    monkeypatch.setattr("src.orchestrators.federal_contractors.yf.Ticker", _StubTicker)
+    monkeypatch.setattr(
+        "analyze_stock_kpi.orchestrators.federal_contractors.yf.Ticker", _StubTicker
+    )
 
     resolved = _smoke_test_yfinance(["MSFT", "LMT", "AAPL"])
 
@@ -219,17 +231,19 @@ def test_build_universe_orchestrator_e2e(
         _recipient(4, "WIDGET FOUNDRY INTERNATIONAL LLC"),  # no EDGAR match
     ]
     monkeypatch.setattr(
-        "src.orchestrators.federal_contractors.fetch_top_contractors",
+        "analyze_stock_kpi.orchestrators.federal_contractors.fetch_top_contractors",
         lambda *_a, **_kw: fake_recipients,
     )
     monkeypatch.setattr(
-        "src.orchestrators.federal_contractors._load_records",
+        "analyze_stock_kpi.orchestrators.federal_contractors._load_records",
         lambda: _records(
             ("LMT", "Lockheed Martin Corp", "936468"),
             ("RTX", "RTX Corp", "1011059"),
         ),
     )
-    monkeypatch.setattr("src.orchestrators.federal_contractors.yf.Ticker", _StubTicker)
+    monkeypatch.setattr(
+        "analyze_stock_kpi.orchestrators.federal_contractors.yf.Ticker", _StubTicker
+    )
 
     tickers, audit = build_universe(fy=2025, top_n=10)
 
@@ -292,12 +306,16 @@ def test_build_universe_defaults_use_last_completed_fy(
         captured["fy_end"] = fy_end
         return []
 
-    monkeypatch.setattr("src.orchestrators.federal_contractors.fetch_top_contractors", fake_fetch)
     monkeypatch.setattr(
-        "src.orchestrators.federal_contractors._load_records",
+        "analyze_stock_kpi.orchestrators.federal_contractors.fetch_top_contractors", fake_fetch
+    )
+    monkeypatch.setattr(
+        "analyze_stock_kpi.orchestrators.federal_contractors._load_records",
         lambda: _records(("AAPL", "Apple Inc.", "320193")),
     )
-    monkeypatch.setattr("src.orchestrators.federal_contractors.yf.Ticker", _StubTicker)
+    monkeypatch.setattr(
+        "analyze_stock_kpi.orchestrators.federal_contractors.yf.Ticker", _StubTicker
+    )
 
     build_universe(fy=None, top_n=10)
 

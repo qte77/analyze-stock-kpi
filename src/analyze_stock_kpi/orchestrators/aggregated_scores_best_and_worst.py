@@ -9,9 +9,9 @@ The ranking primitive is composite-mean -- explicit signal that this is
 a meta-screening *starting point*, NOT a hedging primitive. Top-25 by
 composite-mean is not equivalent to "fundamentally strong long
 candidate"; the hedging-grade signal lives in
-:mod:`src.orchestrators.enhanced_kpi_screener_longshort` (issue #192).
+:mod:`analyze_stock_kpi.orchestrators.enhanced_kpi_screener_longshort` (issue #192).
 
-Mirrors :mod:`src.orchestrators.federal_contractors` for orchestrator
+Mirrors :mod:`analyze_stock_kpi.orchestrators.federal_contractors` for orchestrator
 shape: returns ``(list[ticker], list[AuditRow])``; per-ticker decisions
 captured in the audit JSON committed to the ``data`` branch.
 
@@ -24,12 +24,12 @@ from __future__ import annotations
 from datetime import UTC, date, datetime
 from typing import TYPE_CHECKING
 
-from src.domain.composite_scores import CompositeScores
+from analyze_stock_kpi.domain.composite_scores import CompositeScores
 
 from ._shared import AuditRowBase, dedup_by_ticker, is_stale
 
 if TYPE_CHECKING:
-    from src.data_sources.fundamentals import FundamentalsSnapshot
+    from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
 
     from ._shared import DedupedSnapshot
 

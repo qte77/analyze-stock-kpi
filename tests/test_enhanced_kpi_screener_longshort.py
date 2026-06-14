@@ -1,4 +1,4 @@
-"""Tests for :mod:`src.orchestrators.enhanced_kpi_screener_longshort`.
+"""Tests for :mod:`analyze_stock_kpi.orchestrators.enhanced_kpi_screener_longshort`.
 
 Non-trivial behaviours only (matches the aggregator file's convention).
 Trivial smoke cases (empty input, all-pass single ticker) ride along in
@@ -13,8 +13,9 @@ from __future__ import annotations
 from datetime import date
 
 import pytest
-from src.data_sources.fundamentals import FundamentalsSnapshot
-from src.orchestrators.enhanced_kpi_screener_longshort import build_universe
+
+from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
+from analyze_stock_kpi.orchestrators.enhanced_kpi_screener_longshort import build_universe
 
 _LONG_FIXTURE: dict[str, float | str | None] = {
     "market_cap": 5e9,

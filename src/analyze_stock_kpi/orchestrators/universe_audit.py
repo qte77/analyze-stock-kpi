@@ -1,6 +1,6 @@
 """Universe audit orchestrator (#168).
 
-Walks bundled-preset universes (``src/assets/universes/*.txt``) and
+Walks bundled-preset universes (``src/analyze_stock_kpi/assets/universes/*.txt``) and
 classifies each ticker against ``yfinance.Ticker(sym).info`` field
 density. Emits a structured :class:`UniverseAuditReport` for an
 operator to triage — surfaces stale-US-ticker rot (FI→FISV, RY→RY.TO,
@@ -25,7 +25,8 @@ from typing import TYPE_CHECKING, Literal
 
 import yfinance as yf
 from pydantic import BaseModel, ConfigDict
-from src.domain.universe import PRESET_DIR
+
+from analyze_stock_kpi.domain.universe import PRESET_DIR
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -65,18 +66,14 @@ def classify_ticker(symbol: str) -> AuditEntry:
         info = yf.Ticker(symbol).info
     except Exception as exc:
         # wrap-degrade boundary — see module docstring
-        return AuditEntry(
-            symbol=symbol, classification="FAIL", note=str(exc) or repr(exc)
-        )
+        return AuditEntry(symbol=symbol, classification="FAIL", note=str(exc) or repr(exc))
 
     if not info:
         return AuditEntry(symbol=symbol, classification="FAIL", fields_populated=0)
 
     populated = sum(1 for v in info.values() if v is not None and v != "")
     classification: Classification = "OK" if populated >= OK_THRESHOLD else "SPARSE"
-    return AuditEntry(
-        symbol=symbol, classification=classification, fields_populated=populated
-    )
+    return AuditEntry(symbol=symbol, classification=classification, fields_populated=populated)
 
 
 def audit_universes(
@@ -85,9 +82,9 @@ def audit_universes(
     """Classify every ticker in every requested universe.
 
     ``universe_ids=None`` walks every bundled preset under
-    :data:`src.domain.universe.PRESET_DIR`. Each id resolves to
+    :data:`analyze_stock_kpi.domain.universe.PRESET_DIR`. Each id resolves to
     ``<PRESET_DIR>/<id>.txt`` and is parsed with the same comment-and-
-    blank-line rules as :mod:`src.domain.universe`.
+    blank-line rules as :mod:`analyze_stock_kpi.domain.universe`.
     """
     ids = list(universe_ids) if universe_ids is not None else _bundled_universe_ids()
     entries_by_universe: dict[str, list[AuditEntry]] = {}

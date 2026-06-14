@@ -11,7 +11,10 @@ to relocate usaspending logic from `scripts/` into `src/`).
 
 **Amended by:** [ADR-0008](0008-ui-promotion-to-ui.md) — promotes the
 demo to a top-level `ui/` (Scope-3 reframe + stale Scope-1 paths
-corrected; see the 2026-06-13 amendment below).
+corrected; see the 2026-06-13 amendment below);
+[ADR-0009](0009-rename-package-to-analyze-stock-kpi.md) — implements the
+flagged "rename `src/` → `analyze_stock_kpi/`" refactor candidate (the
+Scope-1 package path becomes `src/analyze_stock_kpi/`).
 
 ## Context
 

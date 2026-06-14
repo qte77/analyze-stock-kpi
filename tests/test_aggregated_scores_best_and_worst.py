@@ -1,4 +1,4 @@
-"""Tests for :mod:`src.orchestrators.aggregated_scores_best_and_worst`.
+"""Tests for :mod:`analyze_stock_kpi.orchestrators.aggregated_scores_best_and_worst`.
 
 Non-trivial behaviours only (matches the `make test_js` convention).
 Trivial smoke cases (empty input, single ticker) are exercised
@@ -14,13 +14,15 @@ from __future__ import annotations
 from datetime import date
 
 import pytest
-from src.data_sources.fundamentals import FundamentalsSnapshot
-from src.domain.composite_scores import CompositeScores
-from src.orchestrators.aggregated_scores_best_and_worst import build_universe
+
+from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
+from analyze_stock_kpi.domain.composite_scores import CompositeScores
+from analyze_stock_kpi.orchestrators.aggregated_scores_best_and_worst import build_universe
 
 
 def _snap(
-    symbol: str, **composites: float | None,
+    symbol: str,
+    **composites: float | None,
 ) -> FundamentalsSnapshot:
     """Build a synthetic FundamentalsSnapshot with optional composite scores."""
     cs = CompositeScores(**composites) if composites else None
@@ -36,8 +38,14 @@ def test_composite_breakdown_covers_every_composite_scores_field() -> None:
     ranking without a separate edit here.
     """
     snap = _snap(
-        "AAPL", quality=80, dividend=20, growth=70, big_call=60,
-        aaqs=75, hgi=65, screener_score=70,
+        "AAPL",
+        quality=80,
+        dividend=20,
+        growth=70,
+        big_call=60,
+        aaqs=75,
+        hgi=65,
+        screener_score=70,
     )
 
     _, _, audit = build_universe(
@@ -80,8 +88,14 @@ def test_stale_snapshot_excluded() -> None:
     Guards against ranking on a universe whose cron is paused or broken.
     """
     snap = _snap(
-        "AAPL", quality=80, dividend=20, growth=70, big_call=60,
-        aaqs=75, hgi=65, screener_score=70,
+        "AAPL",
+        quality=80,
+        dividend=20,
+        growth=70,
+        big_call=60,
+        aaqs=75,
+        hgi=65,
+        screener_score=70,
     )
 
     best, worst, audit = build_universe(
@@ -104,12 +118,24 @@ def test_dedup_ticker_across_universes_first_seen_wins() -> None:
     we shouldn't double-rank and shouldn't lose the cross-universe membership signal.
     """
     snap_sp500 = _snap(
-        "AAPL", quality=80, dividend=20, growth=70, big_call=60,
-        aaqs=75, hgi=65, screener_score=70,
+        "AAPL",
+        quality=80,
+        dividend=20,
+        growth=70,
+        big_call=60,
+        aaqs=75,
+        hgi=65,
+        screener_score=70,
     )
     snap_watchlist = _snap(
-        "AAPL", quality=50, dividend=10, growth=40, big_call=30,
-        aaqs=45, hgi=35, screener_score=40,
+        "AAPL",
+        quality=50,
+        dividend=10,
+        growth=40,
+        big_call=30,
+        aaqs=45,
+        hgi=35,
+        screener_score=40,
     )
 
     best, worst, audit = build_universe(
@@ -136,9 +162,9 @@ def test_dedup_ticker_across_universes_first_seen_wins() -> None:
     ("n", "expected_best", "expected_worst", "expected_unranked"),
     [
         (60, 25, 25, 10),  # > 2*top_n: best 25 + worst 25, 10 middle excluded
-        (50, 25, 25, 0),   # exactly 2*top_n: all selected, no middle
-        (30, 25, 5, 0),    # < 2*top_n but > top_n: best fills first, partial worst
-        (20, 20, 0, 0),    # < top_n: all best, no worst (no room)
+        (50, 25, 25, 0),  # exactly 2*top_n: all selected, no middle
+        (30, 25, 5, 0),  # < 2*top_n but > top_n: best fills first, partial worst
+        (20, 20, 0, 0),  # < top_n: all best, no worst (no room)
     ],
 )
 def test_ranking_boundaries(
@@ -179,9 +205,7 @@ def test_ranking_boundaries(
     assert set(best).isdisjoint(set(worst))
     top_ranked = [row for row in audit if row.rank is not None and row.rank > 0]
     bottom_ranked = [row for row in audit if row.rank is not None and row.rank < 0]
-    unranked_eligible = [
-        row for row in audit if row.eligible and row.rank is None
-    ]
+    unranked_eligible = [row for row in audit if row.eligible and row.rank is None]
     assert len(top_ranked) == expected_best
     assert len(bottom_ranked) == expected_worst
     assert len(unranked_eligible) == expected_unranked
@@ -195,8 +219,14 @@ def test_ties_sort_ascii_ascending_by_ticker() -> None:
     """
     snaps = [
         _snap(
-            t, quality=50.0, dividend=50.0, growth=50.0, big_call=50.0,
-            aaqs=50.0, hgi=50.0, screener_score=50.0,
+            t,
+            quality=50.0,
+            dividend=50.0,
+            growth=50.0,
+            big_call=50.0,
+            aaqs=50.0,
+            hgi=50.0,
+            screener_score=50.0,
         )
         for t in ["MSFT", "AAPL", "GOOG"]
     ]
@@ -222,22 +252,46 @@ def test_integration_multiple_universes_mixed_eligibility() -> None:
     """3 universes, mixed eligible/ineligible -> correct best+worst pair + audit."""
     sp500 = [
         _snap(
-            "AAPL", quality=90, dividend=30, growth=80, big_call=70,
-            aaqs=85, hgi=75, screener_score=80,
+            "AAPL",
+            quality=90,
+            dividend=30,
+            growth=80,
+            big_call=70,
+            aaqs=85,
+            hgi=75,
+            screener_score=80,
         ),
         _snap(
-            "MSFT", quality=85, dividend=25, growth=75, big_call=65,
-            aaqs=80, hgi=70, screener_score=75,
+            "MSFT",
+            quality=85,
+            dividend=25,
+            growth=75,
+            big_call=65,
+            aaqs=80,
+            hgi=70,
+            screener_score=75,
         ),
         _snap(
-            "XOM", quality=40, dividend=60, growth=20, big_call=30,
-            aaqs=35, hgi=25, screener_score=30,
+            "XOM",
+            quality=40,
+            dividend=60,
+            growth=20,
+            big_call=30,
+            aaqs=35,
+            hgi=25,
+            screener_score=30,
         ),
     ]
     eurostoxx = [
         _snap(
-            "ASML", quality=82, dividend=22, growth=72, big_call=62,
-            aaqs=77, hgi=67, screener_score=72,
+            "ASML",
+            quality=82,
+            dividend=22,
+            growth=72,
+            big_call=62,
+            aaqs=77,
+            hgi=67,
+            screener_score=72,
         ),
     ]
     crypto = [_snap("BTC", quality=50, dividend=10)]  # 2/7 -> ineligible

@@ -5,7 +5,7 @@ Provides:
 - ``edgar_tickers_fixture``: loads the committed
   ``company_tickers_exchange.json`` subset used by ``cik_map`` tests.
 - ``_reset_cik_map_cache`` (autouse): clears the module-level cache in
-  :mod:`src.sec.cik_map` before and after every test in this package
+  :mod:`analyze_stock_kpi.data_sources.sec.cik_map` before and after every test in this package
   so tests don't bleed state into each other.
 """
 
@@ -16,7 +16,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
-from src.data_sources.sec import cik_map
+
+from analyze_stock_kpi.data_sources.sec import cik_map
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -40,8 +41,6 @@ def _reset_cik_map_cache() -> Iterator[None]:
 
 
 @pytest.fixture(autouse=True)
-def _isolate_edgar_cache(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def _isolate_edgar_cache(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Point ``cik_map._CACHE_PATH`` at ``tmp_path`` so tests never touch repo."""
     monkeypatch.setattr(cik_map, "_CACHE_PATH", tmp_path / "edgar.json", raising=False)

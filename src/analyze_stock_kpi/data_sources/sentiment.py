@@ -3,7 +3,7 @@
 Public API:
     - :func:`fetch_fear_greed` returns the headline :class:`FearGreedSnapshot`
       (used by the ``make run`` banner).
-    - ``python -m src.sentiment`` fetches the full payload and merges the
+    - ``python -m analyze_stock_kpi.data_sources.sentiment`` fetches the full payload and merges the
       headline + ~1y historical points + per-day subindicator readings into
       per-year files at ``results/cnn_fg/YYYY.json`` — sorted-by-date JSON
       arrays. Today's entry is always overwritten with the live headline
@@ -25,8 +25,9 @@ from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, ConfigDict
-from src.config import settings
-from src.utils.http_ua import STABLE_USER_AGENT, require_https
+
+from analyze_stock_kpi.config import settings
+from analyze_stock_kpi.utils.http_ua import STABLE_USER_AGENT, require_https
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -185,9 +186,7 @@ def _build_historical_subindicators(
         point = by_date.get(date_key)
         if point is None:
             continue
-        out[key] = SubindicatorReading(
-            score=None, rating=point["rating"], raw_value=point["y"]
-        )
+        out[key] = SubindicatorReading(score=None, rating=point["rating"], raw_value=point["y"])
     return out or None
 
 
@@ -246,16 +245,12 @@ def _write_year(
     """
     root.mkdir(parents=True, exist_ok=True)
     path = _year_path(year, root=root)
-    payload = [
-        by_date[k].model_dump(mode="json", exclude_none=True) for k in sorted(by_date)
-    ]
+    payload = [by_date[k].model_dump(mode="json", exclude_none=True) for k in sorted(by_date)]
     path.write_text(json.dumps(payload, indent=2) + "\n")
     return path
 
 
-def _upsert(
-    by_date: dict[str, FearGreedSnapshot], snap: FearGreedSnapshot, *, force: bool
-) -> bool:
+def _upsert(by_date: dict[str, FearGreedSnapshot], snap: FearGreedSnapshot, *, force: bool) -> bool:
     """Insert/replace a snapshot keyed by its UTC date.
 
     ``force=True`` always wins (used for the live headline). Otherwise:

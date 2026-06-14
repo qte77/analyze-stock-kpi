@@ -1,6 +1,6 @@
 """One-shot backfill: whit3rabbit/fear-greed-data → results/cnn_fg/YYYY.json (#164).
 
-Thin wrapper around :mod:`src.data_sources.sentiment_backfill`. Pinned
+Thin wrapper around :mod:`analyze_stock_kpi.data_sources.sentiment_backfill`. Pinned
 to a specific upstream commit SHA for deterministic backfill —
 re-running on the same SHA must produce byte-identical output.
 
@@ -25,15 +25,14 @@ from __future__ import annotations
 import logging
 import urllib.request
 
-from src.config import settings
-from src.data_sources.sentiment import _write_year
-from src.data_sources.sentiment_backfill import merge_into_years, parse_csv
-from src.utils.http_ua import STABLE_USER_AGENT, require_https
+from analyze_stock_kpi.config import settings
+from analyze_stock_kpi.data_sources.sentiment import _write_year
+from analyze_stock_kpi.data_sources.sentiment_backfill import merge_into_years, parse_csv
+from analyze_stock_kpi.utils.http_ua import STABLE_USER_AGENT, require_https
 
 PINNED_SHA = "aa4f600959a12f9266d5bff75a78a50987b7e760"
 CSV_URL = (
-    "https://raw.githubusercontent.com/whit3rabbit/fear-greed-data/"
-    f"{PINNED_SHA}/fear-greed.csv"
+    f"https://raw.githubusercontent.com/whit3rabbit/fear-greed-data/{PINNED_SHA}/fear-greed.csv"
 )
 
 logger = logging.getLogger(__name__)
@@ -43,7 +42,7 @@ def _fetch_csv() -> str:
     """Fetch the pinned whit3rabbit CSV body."""
     # S310 / B310: CSV_URL is a constant HTTPS string; the require_https
     # call below is the defense-in-depth boundary. Pattern mirrors
-    # src/data_sources/sentiment.py::_fetch_payload.
+    # src/analyze_stock_kpi/data_sources/sentiment.py::_fetch_payload.
     request = urllib.request.Request(  # noqa: S310  # nosec B310
         CSV_URL, headers={"User-Agent": STABLE_USER_AGENT}
     )

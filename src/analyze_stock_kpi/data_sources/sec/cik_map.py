@@ -38,8 +38,9 @@ from email.utils import formatdate, parsedate_to_datetime
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
-from src.config import settings
-from src.utils.http_ua import require_https
+
+from analyze_stock_kpi.config import settings
+from analyze_stock_kpi.utils.http_ua import require_https
 
 logger = logging.getLogger(__name__)
 
@@ -82,8 +83,7 @@ def _http_error_cache_fallback(exc: urllib.error.HTTPError) -> dict | None:
         return json.loads(_CACHE_PATH.read_bytes())
     if exc.code == 403:
         logger.warning(
-            "EDGAR fetch returned 403 Forbidden (anti-bot likely); "
-            "reusing stale cache at %s",
+            "EDGAR fetch returned 403 Forbidden (anti-bot likely); reusing stale cache at %s",
             _CACHE_PATH,
         )
         return json.loads(_CACHE_PATH.read_bytes())
@@ -105,9 +105,7 @@ def _fetch_json() -> dict:
         "Referer": settings.sec_referer,
     }
     if _CACHE_PATH.is_file():
-        headers["If-Modified-Since"] = formatdate(
-            _CACHE_PATH.stat().st_mtime, usegmt=True
-        )
+        headers["If-Modified-Since"] = formatdate(_CACHE_PATH.stat().st_mtime, usegmt=True)
     # S310 / B310: settings.edgar_tickers_url is an HTTPS string; the explicit
     # scheme check below is the defense-in-depth boundary if a future refactor
     # ever lets external input flow into it.
@@ -131,7 +129,8 @@ def _fetch_json() -> dict:
         if _CACHE_PATH.is_file():
             logger.warning(
                 "EDGAR fetch failed (%s); reusing stale cache at %s",
-                exc, _CACHE_PATH,
+                exc,
+                _CACHE_PATH,
             )
             return json.loads(_CACHE_PATH.read_bytes())
         raise

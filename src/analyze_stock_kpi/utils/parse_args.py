@@ -20,7 +20,7 @@ class CliArgs(BaseSettings):
 
     The asset universe is selected by **exactly one** of these fields, in
     precedence order: ``tickers`` > ``tickers_file`` > ``universe``. The
-    resolver in :mod:`src.universe` enforces the precedence at runtime.
+    resolver in :mod:`analyze_stock_kpi.domain.universe` enforces the precedence at runtime.
     """
 
     model_config = SettingsConfigDict(
@@ -33,7 +33,7 @@ class CliArgs(BaseSettings):
     )
 
     universe: str = "qte77-watchlist"
-    """Preset universe name (file basename in `src/assets/universes/`)."""
+    """Preset universe name (file basename in `src/analyze_stock_kpi/assets/universes/`)."""
 
     tickers: str | None = None
     """Comma-separated Yahoo symbols, e.g. ``MSFT,SPY,EURUSD=X,GC=F``."""
@@ -42,11 +42,12 @@ class CliArgs(BaseSettings):
     """Path to a file containing one Yahoo symbol per line."""
 
     period: str = "5y"
-    """Price-history depth for :func:`src.fundamentals.fetch_price_history`.
+    """Price-history depth for
+    :func:`analyze_stock_kpi.data_sources.fundamentals.fetch_price_history`.
 
     Accepts any value yfinance accepts (``1d``/``5d``/``1mo``/``1y``/``5y``
     /``max`` etc.). Not consumed by the default fundamentals flow in
-    :mod:`src.__main__`.
+    :mod:`analyze_stock_kpi.__main__`.
     """
 
     show_scores: bool = False
@@ -60,7 +61,7 @@ class CliArgs(BaseSettings):
     """Orchestrator name to rebuild (e.g. ``"federal-contractors"``).
 
     When set, the CLI runs the named orchestrator (per
-    :mod:`src.orchestrators`) instead of the fundamentals fetch flow.
+    :mod:`analyze_stock_kpi.orchestrators`) instead of the fundamentals fetch flow.
     """
 
     output: Path | None = None

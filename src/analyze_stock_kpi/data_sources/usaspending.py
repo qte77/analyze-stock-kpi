@@ -13,8 +13,9 @@ import urllib.request
 from datetime import date  # noqa: TC003 — pydantic needs runtime access in callers
 
 from pydantic import BaseModel, ConfigDict
-from src.config import settings
-from src.utils.http_ua import require_https
+
+from analyze_stock_kpi.config import settings
+from analyze_stock_kpi.utils.http_ua import require_https
 
 
 class RecipientRecord(BaseModel):
@@ -94,7 +95,8 @@ def fetch_top_contractors(
     require_https(req.full_url)
     req.add_header("Content-Type", "application/json")
     with urllib.request.urlopen(  # noqa: S310  # nosec B310
-        req, timeout=settings.usaspending_timeout_sec,
+        req,
+        timeout=settings.usaspending_timeout_sec,
     ) as resp:
         payload = json.loads(resp.read())
     return _parse_results(payload.get("results", []))
