@@ -15,26 +15,22 @@ export const KPI_GLOSSARY = {
   trailing_peg_ratio:
     "Trailing PEG = P/E adjusted for historical earnings growth. Lower better; <1 is the classic Peter Lynch threshold.",
   beta: "5y market sensitivity. <1 = less volatile than market.",
-  rd_to_revenue:
-    "R&D expense / total revenue (latest annual income statement). EQUITY-only.",
+  rd_to_revenue: "R&D expense / total revenue (latest annual income statement). EQUITY-only.",
   operating_margins:
     "Operating income / revenue. Pre-tax, pre-interest — comparable across countries.",
   gross_margins: "(Revenue - COGS) / revenue. Pricing power / cost discipline.",
-  profit_margins:
-    "Net margin = net income / revenue. Bottom-line efficiency after tax + interest.",
+  profit_margins: "Net margin = net income / revenue. Bottom-line efficiency after tax + interest.",
   return_on_equity:
     "ROE = net income / equity. Profitability per equity dollar; sensitive to leverage.",
   return_on_assets:
     "ROA = net income / total assets. Leverage-neutral profitability per asset dollar.",
-  roi:
-    "Simplified ROIC = NetIncome / (BookEquity + TotalDebt - TotalCash). Screener-style; not company-filed ROIC.",
+  roi: "Simplified ROIC = NetIncome / (BookEquity + TotalDebt - TotalCash). Screener-style; not company-filed ROIC.",
   current_ratio:
     "Current assets / current liabilities. Short-term liquidity (>1 = assets cover liabilities).",
   quick_ratio:
     "(Current assets - inventory) / current liabilities. Stricter liquidity than Current.",
   debt_to_equity: "Total debt / equity. Leverage (higher = more leveraged).",
-  sortino_ratio:
-    "Annualized Sortino over 1y (rf=0). Higher = better upside vs downside skew.",
+  sortino_ratio: "Annualized Sortino over 1y (rf=0). Higher = better upside vs downside skew.",
   screener_score:
     "qte77 Score — factor-weighted mean of 4 thematic groups: Profitability (>=2/4 inputs); Valuation (>=1/2); Risk (>=1/2); Momentum (1/1). Higher = better.",
   quality:

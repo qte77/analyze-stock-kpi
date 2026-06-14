@@ -13,9 +13,7 @@ import {
 
 describe("buildRowTitle", () => {
   it("shows weight + score + coverage when score and total are positive", () => {
-    expect(buildRowTitle(50, 200, 9)).toBe(
-      "Weight 25.0 % · Score 50 · 9/9 inputs",
-    );
+    expect(buildRowTitle(50, 200, 9)).toBe("Weight 25.0 % · Score 50 · 9/9 inputs");
   });
   it("omits weight/score when score is null", () => {
     expect(buildRowTitle(null, 200, 4)).toBe("4/9 inputs");
@@ -61,9 +59,7 @@ describe("meanComposite", () => {
     expect(meanComposite({ composite_scores: {} })).toBeNull();
   });
   it("averages only the populated composite fields", () => {
-    expect(
-      meanComposite({ composite_scores: { quality: 80, growth: 40 } }),
-    ).toBe(60);
+    expect(meanComposite({ composite_scores: { quality: 80, growth: 40 } })).toBe(60);
   });
   it("averages all 7 when fully populated", () => {
     const cs = {
@@ -110,9 +106,7 @@ describe("emptyTableMessage", () => {
     );
   });
   it("explains the aggregator freshness gate", () => {
-    expect(emptyTableMessage("", "aggregated-scores-best")).toContain(
-      "min-composites gate",
-    );
+    expect(emptyTableMessage("", "aggregated-scores-best")).toContain("min-composites gate");
   });
   it("falls back to the pending-cron message for a static universe", () => {
     expect(emptyTableMessage("", "sp500")).toContain("first cron run pending");

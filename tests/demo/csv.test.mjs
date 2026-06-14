@@ -27,18 +27,12 @@ describe("exportCsv", () => {
   });
 
   it("renders null and undefined as the empty cell (no string 'null')", () => {
-    const out = exportCsv(
-      [{ a: null, b: undefined, c: 0 }],
-      ["a", "b", "c"],
-    );
+    const out = exportCsv([{ a: null, b: undefined, c: 0 }], ["a", "b", "c"]);
     expect(out).toBe("a,b,c\n,,0");
   });
 
   it("honours the headers array's order, ignoring extra keys on the rows", () => {
-    const out = exportCsv(
-      [{ extra: "ignored", b: 2, a: 1 }],
-      ["a", "b"],
-    );
+    const out = exportCsv([{ extra: "ignored", b: 2, a: 1 }], ["a", "b"]);
     expect(out).toBe("a,b\n1,2");
   });
 });

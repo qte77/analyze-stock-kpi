@@ -2,7 +2,7 @@
 .ONESHELL:
 .PHONY: \
 	setup_uv setup_dev setup_lychee setup_npm_tools \
-	lint autofix check_types check_complexity lint_md lint_js lint_links \
+	lint autofix autofix_js check_types check_complexity lint_md lint_js lint_links \
 	test test_cov test_js retest validate \
 	run preview preview_local \
 	changelog_new changelog_preview changelog_release \
@@ -44,8 +44,9 @@ setup_lychee:  ## Install lychee link checker (override LYCHEE_URL / LYCHEE_BIN 
 	rm -rf "$$tmp"
 	echo "lychee version: $$($(LYCHEE_BIN) --version)"
 
-setup_npm_tools:  ## Install npm-based dev tools (markdownlint-cli, typescript)
+setup_npm_tools:  ## Install npm dev tools (markdownlint-cli, typescript) + project devDeps (eslint, prettier, vitest)
 	npm install -gs markdownlint-cli typescript
+	npm install
 	echo "markdownlint version: $$(markdownlint --version)"
 	echo "typescript version: $$(tsc --version)"
 
@@ -74,10 +75,16 @@ lint_md:  ## markdownlint *.md (uses .markdownlint.json)
 	  --ignore '.venv/**' --ignore 'results/**' --ignore 'node_modules/**' \
 	  --ignore 'changelog.d/**'
 
-lint_js:  ## node syntax check + tsc JSDoc type check on ui/
+lint_js:  ## node --check + tsc JSDoc + ESLint + Prettier on ui/ + tests/demo/
 	echo "--- lint_js"
 	node --check ui/app.js
 	tsc --noEmit --project ui
+	npm run lint
+	npm run format:check
+
+autofix_js:  ## ESLint --fix + Prettier --write on ui/ + tests/demo/ (JS counterpart to autofix)
+	npm run lint:fix
+	npm run format
 
 lint_links:  ## lychee broken-link checker (network — slow; mandatory in CI)
 	echo "--- lint_links"

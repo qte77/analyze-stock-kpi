@@ -170,9 +170,7 @@ function renderRow(row, totalScore, activeUniverse, onRowClick) {
         `Score shown here is screener_score (one of the 7).`;
     }
   }
-  const universeCell = td(
-    /** @type {any} */ (row)._universe ?? activeUniverse,
-  );
+  const universeCell = td(/** @type {any} */ (row)._universe ?? activeUniverse);
   universeCell.classList.add("universe-col");
   /** @type {Array<[string, HTMLElement, boolean]>} */
   const cellSpecs = [
