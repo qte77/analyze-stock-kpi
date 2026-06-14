@@ -28,11 +28,14 @@
   --kpi-good: color-mix(in oklab, var(--data-positive), var(--panel) 78%);
   --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--panel) 78%);
   --kpi-bad: color-mix(in oklab, var(--data-negative), var(--panel) 78%);
-  /* Score-cell ramp endpoints — fixed light pastels anchored on the EyeRest
-     light parchment (#ece8d8, frozen — NOT var(--bg) which flips dark) so the
-     dark forced text stays readable + warm in both themes. */
-  --score-lo: color-mix(in oklab, var(--data-negative), #ece8d8 78%);
-  --score-hi: color-mix(in oklab, var(--data-positive), #ece8d8 78%);
+  /* Score-cell ramp — fixed light pastels anchored on the EyeRest parchment
+     (#ece8d8, frozen so the forced dark text stays readable in both themes).
+     Diverging 3-stop (rust → amber → green) at a lower anchor so worst / mid /
+     best read by distinct hue; table.js mixes lo↔mid over 0–50, mid↔hi over
+     50–100. */
+  --score-lo: color-mix(in oklab, var(--data-negative), #ece8d8 50%);
+  --score-mid: color-mix(in oklab, var(--data-caution), #ece8d8 50%);
+  --score-hi: color-mix(in oklab, var(--data-positive), #ece8d8 50%);
 }
 
 * { box-sizing: border-box; }
