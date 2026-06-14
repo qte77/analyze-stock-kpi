@@ -1,13 +1,13 @@
-// Tests for docs/demo/lib/window.js — pure time-window helpers for the
+// Tests for ui/lib/window.js — pure time-window helpers for the
 // dashboard's long-term charts. No DOM; plain data in/out. The Chart.js
-// render that consumes these lives in docs/demo/app.js.
+// render that consumes these lives in ui/app.js.
 
 import { describe, it, expect } from "vitest";
 import {
   WINDOW_DAYS,
   filterByWindow,
   findClosestScore,
-} from "../../docs/demo/lib/window.js";
+} from "../../ui/lib/window.js";
 
 describe("WINDOW_DAYS", () => {
   it("maps each window key to its trailing day count; 'all' is Infinity", () => {

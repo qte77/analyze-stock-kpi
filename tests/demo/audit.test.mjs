@@ -1,4 +1,4 @@
-// Unit tests for docs/demo/lib/audit.js — pure audit-Map builder + the
+// Unit tests for ui/lib/audit.js — pure audit-Map builder + the
 // universe-aware fetch wrapper + obligated-USD formatter. Non-trivial
 // cases only: silent-404 contract, null/last-wins keying, boundary
 // formatting.
@@ -7,7 +7,7 @@ import {
   buildAuditMap,
   loadAudit,
   formatObligated,
-} from "../../docs/demo/lib/audit.js";
+} from "../../ui/lib/audit.js";
 
 describe("buildAuditMap", () => {
   it("returns null when the input is not an array (404 fallback path)", () => {

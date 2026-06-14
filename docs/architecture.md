@@ -86,7 +86,7 @@ A separate daily GitHub Actions cron (`.github/workflows/fear-greed.yaml`) runs 
 
 A second cron (`.github/workflows/demo-snapshot.yaml`, Sunday 06:15 UTC) runs `make run UNIVERSE=qte77-watchlist`, renames the timestamped output to `results/demo/qte77-watchlist/YYYY-MM-DD.json`, rebuilds the manifest via `scripts/build_demo_manifest.py`, and commits both files to the `data` branch through the same verified-commit mechanism.
 
-A third workflow (`.github/workflows/gh-pages.yaml`) deploys the static dashboard at `docs/demo/{index.html, app.js, style.css}` to GitHub Pages via `actions/upload-pages-artifact` + `actions/deploy-pages` whenever those files change. The dashboard fetches data files at runtime cross-origin from `raw.githubusercontent.com/qte77/analyze-stock-kpi/data/results/…`; this decouples data-update cadence from page deploys.
+A third workflow (`.github/workflows/gh-pages.yaml`) deploys the static dashboard at `ui/{index.html, app.js, style.css}` to GitHub Pages via `actions/upload-pages-artifact` + `actions/deploy-pages` whenever those files change. The dashboard fetches data files at runtime cross-origin from `raw.githubusercontent.com/qte77/analyze-stock-kpi/data/results/…`; this decouples data-update cadence from page deploys.
 
 v0.5.0 attaches a `CompositeScores` object to every `FundamentalsSnapshot` after fetch via `model_copy(update={"composite_scores": compute_scores(snap)})`. The rich summary table appends Quality / Div / Growth columns only when `--show-scores` is passed; persistence carries the composites unconditionally.
 
@@ -119,7 +119,7 @@ The repo tree splits into three concentric scopes per
 [ADR-0007](decisions/0007-package-vs-infrastructure-boundary.md):
 **package** (`src/` + `README.md`, ships in the wheel),
 **repo infrastructure** (`scripts/`, `.github/`, `Makefile`, lint
-configs — CI-only), and **demo + dev docs** (`docs/demo/`,
+configs — CI-only), and **demo + dev docs** (`ui/`,
 `docs/*.md`, `tests/` — reference / showcase only). One-way
 direction rule: infrastructure and demo MAY import from package;
 package MUST NOT reference scripts or workflow artifacts, and the

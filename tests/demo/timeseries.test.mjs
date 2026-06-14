@@ -1,9 +1,9 @@
-// Unit tests for docs/demo/lib/timeseries.js — per-ticker time-series
+// Unit tests for ui/lib/timeseries.js — per-ticker time-series
 // builder for the detail-panel time-series tab (C3 of #137). Non-trivial
 // cases only: empty input, missing-ticker holes, composite-scores nested
 // access, exact (case-sensitive) symbol matching.
 import { describe, it, expect } from "vitest";
-import { buildTimeSeries } from "../../docs/demo/lib/timeseries.js";
+import { buildTimeSeries } from "../../ui/lib/timeseries.js";
 
 describe("buildTimeSeries", () => {
   it("returns empty series for an empty input list", () => {

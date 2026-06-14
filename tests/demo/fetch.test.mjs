@@ -1,10 +1,10 @@
-// Tests for the fetch helpers in docs/demo/lib/fetch.js. `globalThis.fetch`
+// Tests for the fetch helpers in ui/lib/fetch.js. `globalThis.fetch`
 // is stubbed per-test; loadYearsFromBranch's this-year/last-year URLs are
 // distinguished by the year suffix so concat-order, ascending sort, and the
 // per-leg silent-fail can be asserted without a live network.
 
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { fetchJson, loadYearsFromBranch } from "../../docs/demo/lib/fetch.js";
+import { fetchJson, loadYearsFromBranch } from "../../ui/lib/fetch.js";
 
 const originalFetch = globalThis.fetch;
 afterEach(() => {

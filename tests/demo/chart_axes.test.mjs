@@ -1,11 +1,11 @@
-// Tests for the themed axis factories in docs/demo/lib/chart_axes.js. The
+// Tests for the themed axis factories in ui/lib/chart_axes.js. The
 // point of the module is dependency injection + deferred color closures, so the
 // tests assert the static shape AND that the tick/grid colors are NOT resolved
 // at call time but defer to the injected cssVarFn when Chart.js later invokes
 // them.
 
 import { describe, it, expect, vi } from "vitest";
-import { scoreYAxis, themedXAxis } from "../../docs/demo/lib/chart_axes.js";
+import { scoreYAxis, themedXAxis } from "../../ui/lib/chart_axes.js";
 
 describe("scoreYAxis", () => {
   it("returns a 0–100 axis with stepSize 25", () => {

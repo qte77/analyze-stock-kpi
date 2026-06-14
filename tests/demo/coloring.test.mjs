@@ -1,9 +1,9 @@
-// Unit tests for docs/demo/lib/coloring.js — A1 conditional cell
+// Unit tests for ui/lib/coloring.js — A1 conditional cell
 // coloring thresholds per KPI. Non-trivial cases only: boundary
 // inclusivity, lower-better vs higher-better direction, null/NaN/
 // unknown-column null returns.
 import { describe, it, expect } from "vitest";
-import { cellClass } from "../../docs/demo/lib/coloring.js";
+import { cellClass } from "../../ui/lib/coloring.js";
 
 describe("cellClass", () => {
   it("returns null when the column is not in the threshold map", () => {

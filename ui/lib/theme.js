@@ -5,7 +5,7 @@
 //   - "dark"    → force dark palette regardless of OS
 //
 // Pure module — no DOM, no side effects. The corresponding CSS lives in
-// docs/demo/style.css under `body.theme-light` / `body.theme-dark`
+// ui/style.css under `body.theme-light` / `body.theme-dark`
 // blocks plus a `@media (prefers-color-scheme: dark)` rule that applies
 // the dark palette when `body.theme-system` is active.
 // Tested by tests/demo/theme.test.mjs.

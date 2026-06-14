@@ -1,5 +1,5 @@
 // @ts-check
-// Federal-contractors audit JSON helpers extracted from docs/demo/app.js
+// Federal-contractors audit JSON helpers extracted from ui/app.js
 // so they can be unit-tested without a DOM. Tested by
 // tests/demo/audit.test.mjs.
 //

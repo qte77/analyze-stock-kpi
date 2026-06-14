@@ -2,7 +2,7 @@
 # Demo dashboard deploy to GitHub Pages (#59).
 #
 # Modern Pages source = "GitHub Actions" (Settings -> Pages -> Source).
-# Workflow assembles docs/demo/* into _site/ and deploys via
+# Workflow assembles ui/* into _site/ and deploys via
 # actions/upload-pages-artifact + actions/deploy-pages. No gh-pages
 # branch.
 #
@@ -11,7 +11,7 @@
 # from raw.githubusercontent.com on the `data` branch, where the
 # fear-greed.yaml and demo-snapshot.yml workflows commit verified
 # updates. This decouples data-update cadence from page deploys —
-# this workflow runs only when docs/demo/* or this workflow itself
+# this workflow runs only when ui/* or this workflow itself
 # changes.
 
 name: gh-pages
@@ -20,7 +20,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "docs/demo/**"
+      - "ui/**"
       - ".github/workflows/gh-pages.yaml"
   workflow_dispatch:
 
@@ -35,7 +35,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: assemble + deploy docs/demo to Pages
+    name: assemble + deploy ui to Pages
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -47,7 +47,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p _site
-          cp -r docs/demo/. _site/
+          cp -r ui/. _site/
 
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6.0.0
 

@@ -108,7 +108,7 @@ def _print_summary_table(
     *,
     show_scores: bool = False,
 ) -> None:
-    """Mirrors the demo dashboard's 13-column default view (`docs/demo/`).
+    """Mirrors the demo dashboard's 13-column default view (`ui/`).
 
     With ``--show-scores`` (env ``SSK_SHOW_SCORES=1``) three legacy
     composite columns (Quality / Dividend / Growth) are appended for

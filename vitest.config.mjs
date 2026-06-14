@@ -1,5 +1,5 @@
 // Vitest config — kept minimal. Tests run against the pure-JS modules
-// extracted out of docs/demo/app.js into docs/demo/lib/*.js (closes #131).
+// extracted out of ui/app.js into ui/lib/*.js (closes #131).
 // The DOM-coupled app.js is not unit-tested; the lib/ split exists so
 // the testable units don't carry DOM imports.
 import { defineConfig } from "vitest/config";

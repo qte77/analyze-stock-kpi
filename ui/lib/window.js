@@ -3,7 +3,7 @@
 // DOM-free; side-effect-free. `filterByWindow` trims an ascending-by-date
 // series to a trailing window keyed by WindowKey; `findClosestScore` picks
 // the entry nearest a target offset. The Chart.js render that consumes
-// these lives in docs/demo/app.js. Tested by tests/demo/window.test.mjs.
+// these lives in ui/app.js. Tested by tests/demo/window.test.mjs.
 
 /** @typedef {import("./state.js").WindowKey} WindowKey */
 

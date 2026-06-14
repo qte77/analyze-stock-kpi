@@ -1,8 +1,8 @@
-// Unit tests for docs/demo/lib/csv.js — RFC 4180-shaped CSV exporter.
+// Unit tests for ui/lib/csv.js — RFC 4180-shaped CSV exporter.
 // Non-trivial cases only: the four escape edges (comma, double-quote,
 // newline, null/undefined) + header alignment.
 import { describe, it, expect } from "vitest";
-import { exportCsv } from "../../docs/demo/lib/csv.js";
+import { exportCsv } from "../../ui/lib/csv.js";
 
 describe("exportCsv", () => {
   it("emits the header row before any data rows", () => {

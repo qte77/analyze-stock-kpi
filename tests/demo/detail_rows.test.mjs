@@ -1,4 +1,4 @@
-// Tests for the pure detail-panel row builders in docs/demo/lib/detail_rows.js.
+// Tests for the pure detail-panel row builders in ui/lib/detail_rows.js.
 // (KPI_GLOSSARY is static data — no test; the DOM rendering that consumes
 // these tuples lives in showDetail() in app.js.)
 
@@ -6,7 +6,7 @@ import { describe, it, expect } from "vitest";
 import {
   auditDetailRows,
   externalLinkRows,
-} from "../../docs/demo/lib/detail_rows.js";
+} from "../../ui/lib/detail_rows.js";
 
 describe("auditDetailRows", () => {
   it("returns [] for a null audit", () => {

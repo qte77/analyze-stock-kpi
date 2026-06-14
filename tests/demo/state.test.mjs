@@ -1,4 +1,4 @@
-// Unit tests for docs/demo/lib/state.js — URL state parse/serialize +
+// Unit tests for ui/lib/state.js — URL state parse/serialize +
 // view-mode resolution. Non-trivial cases only: validation contracts,
 // multi-universe parsing, precedence rules, round-trip stability.
 import { describe, it, expect } from "vitest";
@@ -6,7 +6,7 @@ import {
   parseState,
   serializeState,
   resolveViewMode,
-} from "../../docs/demo/lib/state.js";
+} from "../../ui/lib/state.js";
 
 const KNOWN = [
   "qte77-watchlist",
@@ -87,8 +87,8 @@ describe("serializeState ↔ parseState round-trip", () => {
       filter: "tech",
       date: "2024-05-15",
       sector: "Technology",
-      ltFgWindow: /** @type {import("../../docs/demo/lib/state.js").WindowKey} */ ("5y"),
-      ycWindow: /** @type {import("../../docs/demo/lib/state.js").WindowKey} */ ("1y"),
+      ltFgWindow: /** @type {import("../../ui/lib/state.js").WindowKey} */ ("5y"),
+      ycWindow: /** @type {import("../../ui/lib/state.js").WindowKey} */ ("1y"),
     };
     const url = serializeState(original, "https://example.com/demo/");
     const reparsed = parseState(new URL(url).search, KNOWN);
@@ -104,8 +104,8 @@ describe("serializeState ↔ parseState round-trip", () => {
       filter: "",
       date: null,
       sector: null,
-      ltFgWindow: /** @type {import("../../docs/demo/lib/state.js").WindowKey} */ ("all"),
-      ycWindow: /** @type {import("../../docs/demo/lib/state.js").WindowKey} */ ("all"),
+      ltFgWindow: /** @type {import("../../ui/lib/state.js").WindowKey} */ ("all"),
+      ycWindow: /** @type {import("../../ui/lib/state.js").WindowKey} */ ("all"),
     };
     const url = serializeState(minimal, "https://example.com/demo/");
     expect(new URL(url).search).toBe("");
