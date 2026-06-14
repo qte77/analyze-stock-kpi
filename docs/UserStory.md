@@ -11,7 +11,7 @@ Solo investors building their own auditable, rule-based screening pipeline. Anyo
 ## Core user stories
 
 - **As an investor**, I want to point the tool at a list of tickers (or a curated universe preset) and get one JSON snapshot per asset so I can sort/filter on KPIs in any downstream tool.
-- **As an investor**, I want quality / dividend / growth / robustness / screener composite scores derived from documented public formulas (Piotroski, ROIC stability, dividend coverage, CAGR) so I can audit and tune the weighting myself.
+- **As an investor**, I want quality / dividend / growth / robustness (big_call, aaqs, hgi) / screener composite scores derived from documented public formulas (Piotroski, ROIC stability, dividend coverage, CAGR) so I can audit and tune the weighting myself.
 - **As an investor**, I want a daily CNN Fear & Greed sentiment snapshot committed to the repo so I have a long-running market-mood timeseries without paying for one.
 - **As a maintainer**, I want every structured payload validated by pydantic and every module within strict cyclomatic + cognitive complexity budgets so the codebase stays readable and the failure modes are loud.
 
