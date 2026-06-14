@@ -70,7 +70,7 @@ export function renderSectorDonut() {
   // Seam color follows --panel so slice borders blend cleanly with the
   // section background in both light and dark themes. Scriptable so it
   // re-resolves on theme flip via bindThemeObserver → chart.update().
-  const borderColor = () => cssVar("--panel", "#ffffff");
+  const borderColor = () => cssVar("--panel", "#e2dec8");
   // Pull the active sector's slice outward so the user has visual
   // confirmation of which slice the table is filtered by.
   const offset = labels.map((l) => (l === ctx.sectorFilter ? 12 : 0));
@@ -253,12 +253,12 @@ export function renderRadar(
           max: 100,
           ticks: {
             stepSize: 25,
-            color: () => cssVar("--text", "#1d1d1f"),
+            color: () => cssVar("--text", "#2c2818"),
             backdropColor: "transparent",
           },
-          grid: { color: () => cssVar("--border", "#d2d2d7") },
-          angleLines: { color: () => cssVar("--border", "#d2d2d7") },
-          pointLabels: { color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => cssVar("--border", "#c8c4b0") },
+          angleLines: { color: () => cssVar("--border", "#c8c4b0") },
+          pointLabels: { color: () => cssVar("--text", "#2c2818") },
         },
       },
       plugins: { legend: { display: false } },
@@ -377,14 +377,14 @@ export async function renderTimeSeriesPane(pane, row) {
           title: {
             display: true,
             text: "Composite (0–100)",
-            color: () => cssVar("--text", "#1d1d1f"),
+            color: () => cssVar("--text", "#2c2818"),
           },
         },
         y1: {
           position: "right",
           grid: { drawOnChartArea: false },
-          ticks: { color: () => cssVar("--text", "#1d1d1f") },
-          title: { display: true, text: "Sortino", color: () => cssVar("--text", "#1d1d1f") },
+          ticks: { color: () => cssVar("--text", "#2c2818") },
+          title: { display: true, text: "Sortino", color: () => cssVar("--text", "#2c2818") },
         },
       },
     },
@@ -464,8 +464,8 @@ export function renderFearGreedChart(
       datasets: [
         {
           data: windowed.map((e) => e.score),
-          borderColor: () => cssVar("--text", "#1d1d1f"),
-          backgroundColor: () => `${cssVar("--text", "#1d1d1f")}14`,
+          borderColor: () => cssVar("--text", "#2c2818"),
+          backgroundColor: () => `${cssVar("--text", "#2c2818")}14`,
           fill: true,
           pointRadius: 0,
           borderWidth: 1.5,
@@ -506,8 +506,8 @@ function renderMonthlyFearGreedChart(
         {
           label: "Median",
           data: monthly.median,
-          borderColor: () => cssVar("--text", "#1d1d1f"),
-          backgroundColor: () => `${cssVar("--text", "#1d1d1f")}14`,
+          borderColor: () => cssVar("--text", "#2c2818"),
+          backgroundColor: () => `${cssVar("--text", "#2c2818")}14`,
           fill: false,
           pointRadius: 2,
           borderWidth: 1.5,
@@ -726,8 +726,8 @@ function renderYieldCurveChart(entries) {
       scales: {
         // Highlight the zero line — inversions sit below.
         y: {
-          grid: { color: () => `${cssVar("--border", "#d2d2d7")}` },
-          ticks: { color: () => cssVar("--text", "#1d1d1f") },
+          grid: { color: () => `${cssVar("--border", "#c8c4b0")}` },
+          ticks: { color: () => cssVar("--text", "#2c2818") },
         },
         x: themedXAxis(cssVar),
       },

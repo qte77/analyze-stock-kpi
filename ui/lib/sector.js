@@ -9,10 +9,10 @@ const NULL_BUCKET = "—";
 /** Neutral grey for the null bucket and unknown sectors. Matches the
  *  dark-theme --muted token so the slice blends gracefully in both
  *  themes without looking like a real GICS sector. */
-const NEUTRAL = "#98989D";
+const NEUTRAL = "#a89878";
 
 /**
- * GICS sector palette tuned for both light (#ffffff) and dark (#2c2c2e)
+ * GICS sector palette tuned for both light (#e2dec8) and dark (#242018)
  * panels. Tableau-10-Muted-derived: ~55% saturation, ~55% lightness so
  * the slices stay readable without feeling neon. Technology +
  * Communication Services use EyeRest brand tokens (amber / data-alt)

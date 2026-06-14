@@ -55,10 +55,10 @@ describe("sectorColor", () => {
   });
 
   it("maps the '—' null bucket to a neutral grey so empty sectors stay visually subdued", () => {
-    expect(sectorColor("—")).toBe("#98989D");
+    expect(sectorColor("—")).toBe("#a89878");
   });
 
   it("falls back to the neutral grey for unknown sectors instead of returning null", () => {
-    expect(sectorColor("Definitely Not A GICS Sector")).toBe("#98989D");
+    expect(sectorColor("Definitely Not A GICS Sector")).toBe("#a89878");
   });
 });
