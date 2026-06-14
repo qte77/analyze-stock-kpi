@@ -11,6 +11,12 @@
   --data-caution: #787010;
   --data-negative: #983828;
   --data-alt: #587818;
+  /* Theme-flipping chart reference lines (time-series Quality/Growth/Sortino):
+     light = data arc, dark = the brand dark variants so lines stay legible on
+     the dark panel. Distinct from the fixed-saturated rating chips. */
+  --chart-quality: var(--data-alt);
+  --chart-growth: var(--data-caution);
+  --chart-sortino: var(--data-negative);
   /* CNN Fear&Greed gauge → brand arc (red→amber→·→yellow-green→green).
      neutral has no hue so it recedes and never clashes with the amber. */
   --rating-extreme-fear: var(--data-negative);
@@ -659,6 +665,9 @@ body.theme-dark {
   --kpi-good: color-mix(in oklab, var(--data-positive), var(--panel) 58%);
   --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--panel) 58%);
   --kpi-bad: color-mix(in oklab, var(--data-negative), var(--panel) 58%);
+  --chart-quality: #a8b870;
+  --chart-growth: #c8b868;
+  --chart-sortino: #c08060;
   /* Opt native widgets (select chevron, scrollbars, focus rings) into
      their dark variant — no per-widget CSS needed. */
   color-scheme: dark;
@@ -675,6 +684,9 @@ body.theme-dark {
     --kpi-good: color-mix(in oklab, var(--data-positive), var(--panel) 58%);
     --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--panel) 58%);
     --kpi-bad: color-mix(in oklab, var(--data-negative), var(--panel) 58%);
+    --chart-quality: #a8b870;
+    --chart-growth: #c8b868;
+    --chart-sortino: #c08060;
     color-scheme: dark;
   }
 }

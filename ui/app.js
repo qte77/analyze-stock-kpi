@@ -509,17 +509,17 @@ async function renderTimeSeriesPane(pane, row) {
         {
           label: "Quality",
           data: series.quality,
-          borderColor: () => cssVar("--rating-greed", "#587818"),
+          borderColor: () => cssVar("--chart-quality", "#587818"),
         },
         {
           label: "Growth",
           data: series.growth,
-          borderColor: () => cssVar("--rating-fear", "#787010"),
+          borderColor: () => cssVar("--chart-growth", "#787010"),
         },
         {
           label: "Sortino",
           data: series.sortino,
-          borderColor: () => cssVar("--rating-extreme-fear", "#983828"),
+          borderColor: () => cssVar("--chart-sortino", "#983828"),
           yAxisID: "y1",
         },
       ],
