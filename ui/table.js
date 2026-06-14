@@ -160,7 +160,7 @@ function renderRow(row, totalScore, activeUniverse, onRowClick) {
   tr.title = buildRowTitle(score, totalScore, coverageCount(row));
   const scoreCell = td(fmtNum(score, 0), "num score-cell");
   if (score != null) {
-    scoreCell.style.backgroundColor = `hsl(${Number(score) * 1.2}, 60%, 75%)`;
+    scoreCell.style.backgroundColor = `color-mix(in oklab, var(--score-lo), var(--score-hi) ${Math.max(0, Math.min(100, Number(score)))}%)`;
   }
   if (isAggregatorUniverse(activeUniverse)) {
     const mean = meanComposite(row);
