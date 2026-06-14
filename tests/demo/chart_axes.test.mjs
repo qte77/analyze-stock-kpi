@@ -19,8 +19,8 @@ describe("scoreYAxis", () => {
     const cssVarFn = vi.fn((token, fallback) => `${token}:${fallback}`);
     const axis = scoreYAxis(cssVarFn);
     expect(cssVarFn).not.toHaveBeenCalled(); // closures are deferred, not eager
-    expect(axis.ticks.color()).toBe("--text:#1d1d1f");
-    expect(axis.grid.color()).toBe("--border:#d2d2d7");
+    expect(axis.ticks.color()).toBe("--text:#2c2818");
+    expect(axis.grid.color()).toBe("--border:#c8c4b0");
     expect(cssVarFn).toHaveBeenCalledTimes(2);
   });
 });
@@ -35,7 +35,7 @@ describe("themedXAxis", () => {
     const cssVarFn = vi.fn((token, fallback) => `${token}:${fallback}`);
     const axis = themedXAxis(cssVarFn);
     expect(cssVarFn).not.toHaveBeenCalled();
-    expect(axis.ticks.color()).toBe("--text:#1d1d1f");
-    expect(axis.grid.color()).toBe("--border:#d2d2d7");
+    expect(axis.ticks.color()).toBe("--text:#2c2818");
+    expect(axis.grid.color()).toBe("--border:#c8c4b0");
   });
 });

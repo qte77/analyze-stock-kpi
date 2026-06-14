@@ -20,8 +20,8 @@ export function scoreYAxis(cssVarFn) {
   return {
     min: 0,
     max: 100,
-    ticks: { stepSize: 25, color: () => cssVarFn("--text", "#1d1d1f") },
-    grid: { color: () => cssVarFn("--border", "#d2d2d7") },
+    ticks: { stepSize: 25, color: () => cssVarFn("--text", "#2c2818") },
+    grid: { color: () => cssVarFn("--border", "#c8c4b0") },
   };
 }
 
@@ -34,7 +34,7 @@ export function scoreYAxis(cssVarFn) {
  */
 export function themedXAxis(cssVarFn, maxTicks = 14) {
   return {
-    ticks: { maxTicksLimit: maxTicks, color: () => cssVarFn("--text", "#1d1d1f") },
-    grid: { color: () => cssVarFn("--border", "#d2d2d7") },
+    ticks: { maxTicksLimit: maxTicks, color: () => cssVarFn("--text", "#2c2818") },
+    grid: { color: () => cssVarFn("--border", "#c8c4b0") },
   };
 }

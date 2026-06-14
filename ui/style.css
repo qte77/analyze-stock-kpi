@@ -1,9 +1,9 @@
 :root {
-  --bg: #f5f5f7;
-  --panel: #ffffff;
-  --text: #1d1d1f;
-  --muted: #6e6e73;
-  --border: #d2d2d7;
+  --bg: #ece8d8;
+  --panel: #e2dec8;
+  --text: #2c2818;
+  --muted: #686040;
+  --border: #c8c4b0;
   --accent: #7a6010;
   /* EyeRest zero-blue data arc (qte77 brand DESIGN.md). Fixed across
      themes: drives rating chips (white text) + chart lines + KPI tints. */
@@ -28,10 +28,11 @@
   --kpi-good: color-mix(in oklab, var(--data-positive), var(--panel) 78%);
   --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--panel) 78%);
   --kpi-bad: color-mix(in oklab, var(--data-negative), var(--panel) 78%);
-  /* Score-cell ramp endpoints — fixed light pastels (white anchor, not a
-     brand colour) so the dark forced text stays readable in both themes. */
-  --score-lo: color-mix(in oklab, var(--data-negative), #ffffff 78%);
-  --score-hi: color-mix(in oklab, var(--data-positive), #ffffff 78%);
+  /* Score-cell ramp endpoints — fixed light pastels anchored on the EyeRest
+     light parchment (#ece8d8, frozen — NOT var(--bg) which flips dark) so the
+     dark forced text stays readable + warm in both themes. */
+  --score-lo: color-mix(in oklab, var(--data-negative), #ece8d8 78%);
+  --score-hi: color-mix(in oklab, var(--data-positive), #ece8d8 78%);
 }
 
 * { box-sizing: border-box; }
@@ -395,7 +396,7 @@ tbody tr:hover td.score-cell {
    those cells switch to darker pastels in dark mode where white text
    already reads, so no override needed there. */
 tbody td.score-cell {
-  color: #1d1d1f;
+  color: #2c2818;
 }
 
 #row-detail {
@@ -656,11 +657,11 @@ tbody tr:hover td.empty-state { background: var(--panel); }
    selectors set the same custom-property values so the downstream
    rules don't need to know which path triggered. */
 body.theme-dark {
-  --bg: #1d1d1f;
-  --panel: #2c2c2e;
-  --text: #f5f5f7;
-  --muted: #98989d;
-  --border: #3a3a3c;
+  --bg: #1c1a14;
+  --panel: #242018;
+  --text: #d8d0b8;
+  --muted: #a89878;
+  --border: #383428;
   --accent: #c8a858;
   --kpi-good: color-mix(in oklab, var(--data-positive), var(--panel) 58%);
   --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--panel) 58%);
@@ -675,11 +676,11 @@ body.theme-dark {
 
 @media (prefers-color-scheme: dark) {
   body.theme-system {
-    --bg: #1d1d1f;
-    --panel: #2c2c2e;
-    --text: #f5f5f7;
-    --muted: #98989d;
-    --border: #3a3a3c;
+    --bg: #1c1a14;
+    --panel: #242018;
+    --text: #d8d0b8;
+    --muted: #a89878;
+    --border: #383428;
     --accent: #c8a858;
     --kpi-good: color-mix(in oklab, var(--data-positive), var(--panel) 58%);
     --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--panel) 58%);
