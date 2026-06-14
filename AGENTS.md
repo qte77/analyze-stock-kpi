@@ -42,14 +42,35 @@ a single PR.
 
 ## Quality Thresholds
 
-Subjective gut-check before starting any task. If below threshold:
-gather more context or ask the user.
+**Experimental** (adopted 2026-06-14) — re-evaluate by **2026-06-21**; tracked in
+[#283](https://github.com/qte77/analyze-stock-kpi/issues/283). Replaces the prior
+1–10 scale.
 
-- **Context** 8/10 — understand requirements, codebase patterns, target API
-- **Clarity** 7/10 — clear implementation path and expected outcomes
-- **Alignment** 8/10 — follows project patterns, respects KISS / DRY /
-  YAGNI / AHA
-- **Success** 7/10 — confident in completing task correctly
+Before starting any task, gut-check four dimensions on a **`1 / 0 / -1`** scale —
+the assessment exists only to pick the next action, so it has three states, not ten.
+
+- **Context** — requirements, codebase patterns, and target API understood
+- **Clarity** — implementation path and expected outcome are clear
+- **Alignment** — follows project patterns + KISS / DRY / YAGNI / AHA
+- **Success** — confident the task can be completed correctly
+
+Rate each:
+
+- **`1`** sufficient — can act now; no material unknowns
+- **`0`** borderline — a real gap, or an assumption being guessed at
+- **`-1`** insufficient — largely guessing; cannot responsibly start
+
+Then act on the assessment:
+
+- **Any `-1` → STOP and ask the user.**
+- **`0` on Context or Alignment → resolve before proceeding** (research it, or ask)
+  — wrong understanding or a wrong-pattern fit cascades into rework.
+- **`0` on Clarity or Success → may proceed**, but state the assumption and
+  checkpoint early — these correct cheaply as you go.
+- **All `1` → proceed.**
+
+Judge per-dimension; **don't sum** — a single `-1` on Context or Alignment dominates
+and a total would mask it.
 
 ## Agent-specific reminders
 
