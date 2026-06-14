@@ -2,10 +2,10 @@
   <style>
     .grid { fill: none; stroke: #9aa0a6; stroke-width: 1; opacity: 0.5; }
     .spokes { stroke: #9aa0a6; stroke-width: 0.75; opacity: 0.45; }
-    .data { fill: #0066cc; fill-opacity: 0.85; stroke: #0066cc; stroke-width: 1.25; stroke-linejoin: round; }
+    .data { fill: #7a6010; fill-opacity: 0.85; stroke: #7a6010; stroke-width: 1.25; stroke-linejoin: round; }
     @media (prefers-color-scheme: dark) {
       .grid, .spokes { stroke: #8a9096; }
-      .data { fill: #4d9bff; stroke: #4d9bff; }
+      .data { fill: #c8a858; stroke: #c8a858; }
     }
   </style>
   <!-- radar grid: outer + mid hexagon rings -->
