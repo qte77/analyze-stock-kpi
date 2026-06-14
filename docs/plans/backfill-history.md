@@ -1,4 +1,4 @@
-# Plan 0287 — Backfill F&G long-term + 5s10s history
+# Plan — Backfill F&G long-term + 5s10s history
 
 Issue [#287](https://github.com/qte77/analyze-stock-kpi/issues/287) · status: proposed.
 
@@ -6,7 +6,7 @@ Issue [#287](https://github.com/qte77/analyze-stock-kpi/issues/287) · status: p
 
 History is shallow: CNN F&G long-term goes back only to **2025-05**, the 5s10s slope to
 **2025-02**. Deeper history makes the long-term-context + slope charts (and the merged
-chart, [0288](0288-merge-longterm-charts.md)) far more useful.
+chart, [merge-longterm-charts](merge-longterm-charts.md)) far more useful.
 
 ## Approach
 
@@ -29,5 +29,5 @@ exposes, using the existing backfill paths — no schema change.
 
 ## References
 
-- [#287](https://github.com/qte77/analyze-stock-kpi/issues/287); unblocks [0288](0288-merge-longterm-charts.md).
+- [#287](https://github.com/qte77/analyze-stock-kpi/issues/287); unblocks [merge-longterm-charts](merge-longterm-charts.md).
 - `src/analyze_stock_kpi/data_sources/{sentiment_backfill,yield_curve}.py`; `.github/workflows/{fear-greed,yield-curve}.yaml`.

@@ -1,4 +1,4 @@
-# Plan 0101 — XBRL cross-validation of yfinance financials
+# Plan — XBRL cross-validation of yfinance financials
 
 Issue [#101](https://github.com/qte77/analyze-stock-kpi/issues/101) · status: deferred-but-tracked (roadmap "Open research").
 
