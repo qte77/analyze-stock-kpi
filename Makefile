@@ -88,7 +88,7 @@ autofix_js:  ## ESLint --fix + Prettier --write on ui/ + tests/demo/ (JS counter
 
 lint_links:  ## lychee broken-link checker (network — slow; mandatory in CI)
 	echo "--- lint_links"
-	lychee --config .lychee.toml .
+	lychee --config lychee.toml .
 
 test:  ## pytest
 	echo "--- test"
