@@ -1,4 +1,4 @@
-# Plan 0289 — Consolidate JS tooling + tests into `ui/` (Vite build)
+# Plan — Consolidate JS tooling + tests into `ui/` (Vite build)
 
 Issue [#289](https://github.com/qte77/analyze-stock-kpi/issues/289) · status: proposed · likely **graduates to an ADR** (build-tooling decision).
 

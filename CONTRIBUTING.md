@@ -100,6 +100,9 @@ Only the three categories currently in use are configured (`Added`,
 - **[`docs/decisions/`](docs/decisions/)** — ADRs (Traderfox removal,
   composite-score formulas, federal-contractors universe, package
   vs. repo-infrastructure boundary, etc.)
+- **[`docs/plans/`](docs/plans/)** — working implementation plans for
+  substantial issues (the *how* between issue and code); its README
+  gives the slug-naming + structure convention and when to write one
 - **[`AGENTS.md`](AGENTS.md)** — AI agent behavioural rules
   (KISS / DRY / YAGNI / AHA, decision framework, quality thresholds)
 - **[`README.md`](README.md)** — project overview, live demo, sample

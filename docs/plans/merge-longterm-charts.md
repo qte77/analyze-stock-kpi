@@ -1,6 +1,6 @@
-# Plan 0288 — Merge long-term charts + SP500 overlay
+# Plan — Merge long-term charts + SP500 overlay
 
-Issue [#288](https://github.com/qte77/analyze-stock-kpi/issues/288) · status: proposed · depends on [0287](0287-backfill-history.md).
+Issue [#288](https://github.com/qte77/analyze-stock-kpi/issues/288) · status: proposed · depends on [backfill-history](backfill-history.md).
 
 ## Context
 
@@ -32,5 +32,5 @@ of magnitude (hence log).
 
 ## References
 
-- [#288](https://github.com/qte77/analyze-stock-kpi/issues/288); depends on [0287](0287-backfill-history.md) (deep history).
+- [#288](https://github.com/qte77/analyze-stock-kpi/issues/288); depends on [backfill-history](backfill-history.md) (deep history).
 - `ui/charts.js` (`renderMonthlyFearGreedChart`, `renderYieldCurveChart`, `bindLongTermTabs`).
