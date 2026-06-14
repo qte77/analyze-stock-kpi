@@ -6,6 +6,8 @@
 
 **Drives:** [#18](https://github.com/qte77/analyze-stock-kpi/issues/18)
 
+**Amended by:** [ADR-0002](0002-simplified-composites.md) §Accepted risks (simplified composite formulas chosen; `financetoolkit` was not added)
+
 ## Context
 
 ADR-0000 specified `yfinance + financetoolkit` for the new fundamentals layer. While planning PR 1D (#28), `context7` MCP research surfaced three findings:
