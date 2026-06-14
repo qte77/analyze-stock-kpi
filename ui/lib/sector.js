@@ -23,7 +23,7 @@ const NEUTRAL = "#98989D";
  * @type {Readonly<Record<string, string>>}
  */
 export const SECTOR_COLORS = Object.freeze({
-  Technology: "#7a6010",
+  Technology: "#c06010",
   Healthcare: "#6ACC64",
   "Financial Services": "#D5BB67",
   "Consumer Cyclical": "#EE854A",
