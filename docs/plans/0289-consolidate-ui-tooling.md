@@ -22,10 +22,15 @@ uploads `ui/dist` (not raw `ui/`). Adopt the same shape here.
 2. Move into `ui/`: `package.json` + `package-lock.json`, the eslint/prettier/vitest
    configs; and `tests/demo/` → `ui/tests/`.
 3. Repoint eslint/vitest/tsc globs (relative to `ui/`); update the `Makefile` JS
-   targets + `validate.yaml` to run npm from `ui/` (`--prefix ui` / `working-directory: ui`).
-4. `gh-pages.yaml`: `cp -r ui/. _site/` → `npm ci && npm run build` (in `ui/`) +
+   targets to run npm from `ui/` (`--prefix ui`).
+4. **Split the JS CI into a dedicated `ui.yml`** — path-filtered (`ui/**`),
+   `defaults.run.working-directory: ui`, least-privilege (`permissions: contents: read`),
+   running `npm ci` + lint + `format:check` + `tsc` typecheck + vitest. `validate.yaml`
+   drops its JS steps → **Python-only**. (paperverse's `ui.yml` is the template; theirs
+   is typecheck + test only — ours also carries eslint/prettier.)
+5. `gh-pages.yaml`: `cp -r ui/. _site/` → `npm ci && npm run build` (in `ui/`) +
    `upload-pages-artifact path: ui/dist`.
-5. Data stays **runtime-fetched** from the `data` branch (Vite bundles only JS/CSS).
+6. Data stays **runtime-fetched** from the `data` branch (Vite bundles only JS/CSS).
 
 ## Open questions
 
@@ -36,4 +41,4 @@ uploads `ui/dist` (not raw `ui/`). Adopt the same shape here.
 ## References
 
 - [#289](https://github.com/qte77/analyze-stock-kpi/issues/289); [ADR-0007](../decisions/0007-package-vs-infrastructure-boundary.md) (scope boundary).
-- `../paperverse/ui/` + `../paperverse/.github/workflows/gh-pages.yaml` (build → upload `ui/dist`).
+- `../paperverse/ui/` + `../paperverse/.github/workflows/`: `gh-pages.yaml` (build → upload `ui/dist`) and `ui.yml` (the dedicated UI CI — path-filtered, `working-directory: ui`, `npm ci` + typecheck + test).
