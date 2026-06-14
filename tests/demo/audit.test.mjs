@@ -3,11 +3,7 @@
 // cases only: silent-404 contract, null/last-wins keying, boundary
 // formatting.
 import { describe, it, expect } from "vitest";
-import {
-  buildAuditMap,
-  loadAudit,
-  formatObligated,
-} from "../../ui/lib/audit.js";
+import { buildAuditMap, loadAudit, formatObligated } from "../../ui/lib/audit.js";
 
 describe("buildAuditMap", () => {
   it("returns null when the input is not an array (404 fallback path)", () => {
@@ -53,28 +49,16 @@ describe("loadAudit", () => {
     const fetcher = async () => {
       throw new Error("404 Not Found");
     };
-    const result = await loadAudit(
-      "federal-contractors",
-      "2024-05-15",
-      BASE,
-      fetcher,
-    );
+    const result = await loadAudit("federal-contractors", "2024-05-15", BASE, fetcher);
     expect(result).toBeNull();
   });
 
   it("returns a Map keyed by final_ticker on the happy path", async () => {
     const fetcher = async (/** @type {string} */ url) => {
       expect(url).toBe(`${BASE}/results/federal_contractors/audit/2024-05-15.json`);
-      return [
-        { rank: 1, recipient_name: "LOCKHEED MARTIN CORPORATION", final_ticker: "LMT" },
-      ];
+      return [{ rank: 1, recipient_name: "LOCKHEED MARTIN CORPORATION", final_ticker: "LMT" }];
     };
-    const map = await loadAudit(
-      "federal-contractors",
-      "2024-05-15",
-      BASE,
-      fetcher,
-    );
+    const map = await loadAudit("federal-contractors", "2024-05-15", BASE, fetcher);
     expect(map?.get("LMT")?.recipient_name).toBe("LOCKHEED MARTIN CORPORATION");
   });
 });

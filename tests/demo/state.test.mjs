@@ -2,18 +2,9 @@
 // view-mode resolution. Non-trivial cases only: validation contracts,
 // multi-universe parsing, precedence rules, round-trip stability.
 import { describe, it, expect } from "vitest";
-import {
-  parseState,
-  serializeState,
-  resolveViewMode,
-} from "../../ui/lib/state.js";
+import { parseState, serializeState, resolveViewMode } from "../../ui/lib/state.js";
 
-const KNOWN = [
-  "qte77-watchlist",
-  "sp500",
-  "eurostoxx",
-  "federal-contractors",
-];
+const KNOWN = ["qte77-watchlist", "sp500", "eurostoxx", "federal-contractors"];
 
 describe("parseState", () => {
   it("returns defaults for an empty query string", () => {
@@ -47,10 +38,7 @@ describe("parseState", () => {
   });
 
   it("parses multi-universe comma list filtered against the known whitelist", () => {
-    const s = parseState(
-      "?universe=sp500,UNKNOWN,federal-contractors,,",
-      KNOWN,
-    );
+    const s = parseState("?universe=sp500,UNKNOWN,federal-contractors,,", KNOWN);
     expect(s.universes).toEqual(["sp500", "federal-contractors"]);
   });
 
@@ -59,10 +47,7 @@ describe("parseState", () => {
   });
 
   it("preserves sortKey verbatim and validates sortDir to {-1, 1}", () => {
-    const s = parseState(
-      "?sort=composite_scores.screener_score&sortDir=1",
-      KNOWN,
-    );
+    const s = parseState("?sort=composite_scores.screener_score&sortDir=1", KNOWN);
     expect(s.sortKey).toBe("composite_scores.screener_score");
     expect(s.sortDir).toBe(1);
     expect(parseState("?sort=foo&sortDir=2", KNOWN).sortDir).toBe(-1);

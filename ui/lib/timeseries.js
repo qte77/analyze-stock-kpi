@@ -42,9 +42,7 @@ export function buildTimeSeries(snapshotsByDate, symbol) {
   const series = { dates: [], score: [], quality: [], growth: [], sortino: [] };
   for (const { date, rows } of snapshotsByDate) {
     if (!date) continue;
-    const row = Array.isArray(rows)
-      ? rows.find((r) => r.symbol === symbol)
-      : undefined;
+    const row = Array.isArray(rows) ? rows.find((r) => r.symbol === symbol) : undefined;
     const cs = row?.composite_scores ?? {};
     series.dates.push(date);
     series.score.push(num(cs.screener_score));

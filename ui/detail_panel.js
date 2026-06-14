@@ -82,7 +82,7 @@ export function bindDetailDismiss() {
 export function showDetail(row, ctx) {
   const cs = row.composite_scores ?? {};
   const mcap = row.market_cap ? `$${(row.market_cap / 1e9).toFixed(2)} B` : "—";
-  const audit = row.symbol ? ctx.auditByTicker?.get(row.symbol) ?? null : null;
+  const audit = row.symbol ? (ctx.auditByTicker?.get(row.symbol) ?? null) : null;
 
   const aside = document.getElementById("row-detail");
   if (!aside) return;
@@ -153,8 +153,7 @@ export function showDetail(row, ctx) {
 
   const trail = row.trailing_pe;
   const fwd = row.forward_pe;
-  const trailFwd =
-    trail != null && fwd != null && fwd !== 0 ? (trail / fwd).toFixed(2) : "—";
+  const trailFwd = trail != null && fwd != null && fwd !== 0 ? (trail / fwd).toFixed(2) : "—";
 
   const list = document.createElement("dl");
   list.append(
@@ -163,12 +162,22 @@ export function showDetail(row, ctx) {
       ["Industry", row.industry ?? "—"],
       ["Exchange", `${row.exchange ?? "—"} (${row.currency ?? "—"})`],
       ["Market cap", mcap],
-      ["Trail / Fwd P/E", `${fmtNum(row.trailing_pe, 2)} / ${fmtNum(row.forward_pe, 2)}`, false, KPI_GLOSSARY.trailing_pe],
+      [
+        "Trail / Fwd P/E",
+        `${fmtNum(row.trailing_pe, 2)} / ${fmtNum(row.forward_pe, 2)}`,
+        false,
+        KPI_GLOSSARY.trailing_pe,
+      ],
       ["Trail/Fwd P/E ratio", trailFwd, false, KPI_GLOSSARY.trail_fwd_pe],
       ["P/B / P/S TTM", `${fmtNum(row.price_to_book, 2)} / ${fmtNum(row.price_to_sales_ttm, 2)}`],
       ["Gross margin %", fmtPct(row.gross_margins), false, KPI_GLOSSARY.gross_margins],
       ["Net margin %", fmtPct(row.profit_margins), false, KPI_GLOSSARY.profit_margins],
-      ["ROE / ROA", `${fmtPct(row.return_on_equity)} % / ${fmtPct(row.return_on_assets)} %`, false, KPI_GLOSSARY.return_on_equity],
+      [
+        "ROE / ROA",
+        `${fmtPct(row.return_on_equity)} % / ${fmtPct(row.return_on_assets)} %`,
+        false,
+        KPI_GLOSSARY.return_on_equity,
+      ],
       ["ROI", fmtPct(row.roi), false, KPI_GLOSSARY.roi],
       ["R&D / Revenue %", fmtPct(row.rd_to_revenue), false, KPI_GLOSSARY.rd_to_revenue],
       ["Op margin %", fmtPct(row.operating_margins), false, KPI_GLOSSARY.operating_margins],
@@ -178,7 +187,10 @@ export function showDetail(row, ctx) {
       ["Revenue growth", `${fmtPct(row.revenue_growth)} %`],
       ["Earnings growth", `${fmtPct(row.earnings_growth)} %`],
       ["Div yield / Payout", `${fmtPct(row.dividend_yield)} % / ${fmtPct(row.payout_ratio)} %`],
-      ["52w high / low", `$${fmtNum(row.fifty_two_week_high, 2)} / $${fmtNum(row.fifty_two_week_low, 2)}`],
+      [
+        "52w high / low",
+        `$${fmtNum(row.fifty_two_week_high, 2)} / $${fmtNum(row.fifty_two_week_low, 2)}`,
+      ],
       ["Beta", fmtNum(row.beta, 2), false, KPI_GLOSSARY.beta],
       ["PEG (trailing)", fmtNum(row.trailing_peg_ratio, 2), false, KPI_GLOSSARY.trailing_peg_ratio],
       ["Sortino (1y, rf=0)", fmtNum(row.sortino_ratio, 2), false, KPI_GLOSSARY.sortino_ratio],

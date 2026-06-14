@@ -3,12 +3,7 @@
 // rendering. No DOM; plain values in/out.
 
 import { describe, it, expect } from "vitest";
-import {
-  nested,
-  fmtNum,
-  fmtPct,
-  compareValues,
-} from "../../ui/lib/format.js";
+import { nested, fmtNum, fmtPct, compareValues } from "../../ui/lib/format.js";
 
 describe("nested", () => {
   it("reads a flat key", () => {

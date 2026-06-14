@@ -20,15 +20,15 @@ const NEUTRAL = "#98989D";
  * @type {Readonly<Record<string, string>>}
  */
 export const SECTOR_COLORS = Object.freeze({
-  "Technology": "#4878D0",
-  "Healthcare": "#6ACC64",
+  Technology: "#4878D0",
+  Healthcare: "#6ACC64",
   "Financial Services": "#D5BB67",
   "Consumer Cyclical": "#EE854A",
   "Consumer Defensive": "#956CB4",
   "Communication Services": "#82C6E2",
-  "Industrials": "#8C613C",
-  "Energy": "#D65F5F",
-  "Utilities": "#DC7EC0",
+  Industrials: "#8C613C",
+  Energy: "#D65F5F",
+  Utilities: "#DC7EC0",
   "Basic Materials": "#B47CC7",
   "Real Estate": "#5FAB87",
   [NULL_BUCKET]: NEUTRAL,
@@ -58,8 +58,6 @@ export function aggregateSectors(rows) {
     const sector = row.sector ?? NULL_BUCKET;
     counts.set(sector, (counts.get(sector) ?? 0) + 1);
   }
-  const entries = [...counts.entries()].sort(
-    (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
-  );
+  const entries = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   return new Map(entries);
 }

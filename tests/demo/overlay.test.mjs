@@ -11,9 +11,7 @@ describe("mergeUniverseSnapshots", () => {
   });
 
   it("returns an empty array when every universe failed (all null/undefined values)", () => {
-    expect(
-      mergeUniverseSnapshots({ sp500: null, eurostoxx: undefined }),
-    ).toEqual([]);
+    expect(mergeUniverseSnapshots({ sp500: null, eurostoxx: undefined })).toEqual([]);
   });
 
   it("annotates each row with its source universe id under the `_universe` key", () => {

@@ -3,11 +3,7 @@
 // render that consumes these lives in ui/app.js.
 
 import { describe, it, expect } from "vitest";
-import {
-  WINDOW_DAYS,
-  filterByWindow,
-  findClosestScore,
-} from "../../ui/lib/window.js";
+import { WINDOW_DAYS, filterByWindow, findClosestScore } from "../../ui/lib/window.js";
 
 describe("WINDOW_DAYS", () => {
   it("maps each window key to its trailing day count; 'all' is Infinity", () => {
@@ -19,8 +15,7 @@ describe("WINDOW_DAYS", () => {
 });
 
 describe("filterByWindow", () => {
-  const mk = (/** @type {string[]} */ days) =>
-    days.map((d) => ({ timestamp: d }));
+  const mk = (/** @type {string[]} */ days) => days.map((d) => ({ timestamp: d }));
 
   it("returns the same array reference for an empty list", () => {
     const empty = [];

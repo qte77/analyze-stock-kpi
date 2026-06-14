@@ -45,15 +45,11 @@ describe("explainEmpty", () => {
 
   describe("Financial Services sector — bank-specific gaps", () => {
     it("explains R&D as not reported by banks", () => {
-      expect(explainEmpty(bankRow, "rd_to_revenue")).toBe(
-        "Banks don't report R&D",
-      );
+      expect(explainEmpty(bankRow, "rd_to_revenue")).toBe("Banks don't report R&D");
     });
 
     it("explains current ratio absence as no current/long-term split", () => {
-      expect(explainEmpty(bankRow, "current_ratio")).toBe(
-        "Banks have no current/long-term split",
-      );
+      expect(explainEmpty(bankRow, "current_ratio")).toBe("Banks have no current/long-term split");
     });
 
     it("does not over-match: returns null for forward_pe on a bank", () => {

@@ -51,9 +51,7 @@ function isValidIsoDate(value) {
  * @returns {State}
  */
 export function parseState(search, knownUniverses) {
-  const params = new URLSearchParams(
-    search.startsWith("?") ? search : `?${search}`,
-  );
+  const params = new URLSearchParams(search.startsWith("?") ? search : `?${search}`);
   const viewRaw = params.get("view");
   const view = viewRaw === "simple" || viewRaw === "detailed" ? viewRaw : "simple";
   const universes = (params.get("universe") ?? "")

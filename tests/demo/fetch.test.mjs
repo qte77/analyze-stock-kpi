@@ -49,9 +49,7 @@ describe("loadYearsFromBranch", () => {
 
   it("keeps the fulfilled leg when the other one fails", async () => {
     globalThis.fetch = vi.fn(async (url) =>
-      String(url).endsWith(`${year}.json`)
-        ? res(true, [{ t: "x" }, { t: "y" }])
-        : res(false),
+      String(url).endsWith(`${year}.json`) ? res(true, [{ t: "x" }, { t: "y" }]) : res(false),
     );
     const out = await loadYearsFromBranch("https://base", "results/x", "t");
     expect(out.map((e) => e.t)).toEqual(["x", "y"]);

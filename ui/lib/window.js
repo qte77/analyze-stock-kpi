@@ -8,7 +8,7 @@
 /** @typedef {import("./state.js").WindowKey} WindowKey */
 
 /** @type {Record<WindowKey, number>} */
-export const WINDOW_DAYS = { "1y": 365, "5y": 1826, "10y": 3653, "all": Infinity };
+export const WINDOW_DAYS = { "1y": 365, "5y": 1826, "10y": 3653, all: Infinity };
 
 /**
  * Filter ascending-by-`isoField` entries to a trailing window measured
@@ -29,9 +29,7 @@ export function filterByWindow(entries, windowKey, isoField) {
   const latestMs = Date.parse(latestIso);
   if (Number.isNaN(latestMs)) return entries;
   const cutoff = latestMs - days * 86400000;
-  return entries.filter(
-    (e) => Date.parse(/** @type {string} */ (e[isoField])) >= cutoff,
-  );
+  return entries.filter((e) => Date.parse(/** @type {string} */ (e[isoField])) >= cutoff);
 }
 
 /**

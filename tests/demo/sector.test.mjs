@@ -34,11 +34,7 @@ describe("aggregateSectors", () => {
   });
 
   it("buckets null and undefined sectors into the '—' segment (no silent drop)", () => {
-    const map = aggregateSectors([
-      { sector: null },
-      { sector: undefined },
-      { sector: "Tech" },
-    ]);
+    const map = aggregateSectors([{ sector: null }, { sector: undefined }, { sector: "Tech" }]);
     expect(map.get("—")).toBe(2);
     expect(map.get("Tech")).toBe(1);
   });

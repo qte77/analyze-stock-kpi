@@ -15,11 +15,7 @@ import { fmtNum, nested } from "./lib/format.js";
 import { aggregateMonthlyFG } from "./lib/monthly.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
-import {
-  parseState,
-  resolveViewMode,
-  serializeState,
-} from "./lib/state.js";
+import { parseState, resolveViewMode, serializeState } from "./lib/state.js";
 import { resolveTheme } from "./lib/theme.js";
 import { buildTimeSeries } from "./lib/timeseries.js";
 import { filterByWindow, findClosestScore } from "./lib/window.js";
@@ -68,9 +64,9 @@ let viewMode = "simple";
 
 const RATING_CLASSES = {
   "extreme fear": "rating-extreme-fear",
-  "fear": "rating-fear",
-  "neutral": "rating-neutral",
-  "greed": "rating-greed",
+  fear: "rating-fear",
+  neutral: "rating-neutral",
+  greed: "rating-greed",
   "extreme greed": "rating-extreme-greed",
 };
 
@@ -124,8 +120,7 @@ function filteredSnapshot() {
   return rows;
 }
 
-const loadManifest = () =>
-  fetchJson(`${DATA_BASE_URL}/results/demo/${activeUniverse}/index.json`);
+const loadManifest = () => fetchJson(`${DATA_BASE_URL}/results/demo/${activeUniverse}/index.json`);
 
 const loadSnapshot = (/** @type {string} */ date) =>
   fetchJson(`${DATA_BASE_URL}/results/demo/${activeUniverse}/${date}.json`);
@@ -133,12 +128,10 @@ const loadSnapshot = (/** @type {string} */ date) =>
 const loadUniverses = () => fetchJson("universes.json");
 
 /** @type {() => Promise<Array<{timestamp: string, score: number, rating?: string}>>} */
-const loadFearGreedYears = () =>
-  loadYearsFromBranch(DATA_BASE_URL, "results/cnn_fg", "timestamp");
+const loadFearGreedYears = () => loadYearsFromBranch(DATA_BASE_URL, "results/cnn_fg", "timestamp");
 
 /** @type {() => Promise<Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>>} */
-const loadYieldCurveYears = () =>
-  loadYearsFromBranch(DATA_BASE_URL, "results/yield_curve", "date");
+const loadYieldCurveYears = () => loadYearsFromBranch(DATA_BASE_URL, "results/yield_curve", "date");
 
 // ───────────────────────── View-mode + URL state ───────────────────────────
 
@@ -154,9 +147,7 @@ function applyViewMode() {
     const desc = btn.querySelector(".view-toggle-desc");
     if (label && desc) {
       label.textContent = viewMode === "simple" ? "Detailed view" : "Simple view";
-      desc.textContent = viewMode === "simple"
-        ? "Show all KPI columns"
-        : "Show essentials only";
+      desc.textContent = viewMode === "simple" ? "Show all KPI columns" : "Show essentials only";
     }
   }
 }
@@ -179,17 +170,12 @@ function applyTheme() {
   if (!toggle) return;
   for (const btn of toggle.querySelectorAll("button[data-theme]")) {
     if (!(btn instanceof HTMLButtonElement)) continue;
-    btn.setAttribute(
-      "aria-pressed",
-      btn.dataset.theme === activeTheme ? "true" : "false",
-    );
+    btn.setAttribute("aria-pressed", btn.dataset.theme === activeTheme ? "true" : "false");
   }
 }
 
 function persistStateFromCurrent() {
-  const universes = activeUniverse
-    ? [activeUniverse, ...extraUniverses]
-    : [];
+  const universes = activeUniverse ? [activeUniverse, ...extraUniverses] : [];
   const url = serializeState(
     {
       view: viewMode,
@@ -244,11 +230,8 @@ const SECTOR_LEGEND_MIN_WIDTH = 380;
 /** @type {ResizeObserver | null} */
 let sectorLegendRo = null;
 
-
 function renderSectorDonut() {
-  const canvas = /** @type {HTMLCanvasElement | null} */ (
-    document.getElementById("sector-donut")
-  );
+  const canvas = /** @type {HTMLCanvasElement | null} */ (document.getElementById("sector-donut"));
   if (!canvas || typeof Chart === "undefined") return;
   const aggregated = aggregateSectors(state.snapshot);
   const labels = [...aggregated.keys()];
@@ -294,8 +277,7 @@ function renderSectorDonut() {
                 (/** @type {number} */ a, /** @type {number} */ b) => a + b,
                 0,
               );
-              const pct =
-                total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : "0";
+              const pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : "0";
               return `${ctx.label}: ${ctx.parsed} (${pct}%)`;
             },
           },
@@ -325,14 +307,9 @@ function renderSectorDonut() {
     // onResize with "none" mode stalls the legend reflow (see #152).
     sectorLegendRo = new ResizeObserver((entries) => {
       for (const entry of entries) {
-        const w =
-          entry.contentBoxSize?.[0]?.inlineSize ??
-          entry.contentRect.width;
+        const w = entry.contentBoxSize?.[0]?.inlineSize ?? entry.contentRect.width;
         const shouldShow = w >= SECTOR_LEGEND_MIN_WIDTH;
-        if (
-          sectorChart &&
-          sectorChart.options.plugins.legend.display !== shouldShow
-        ) {
+        if (sectorChart && sectorChart.options.plugins.legend.display !== shouldShow) {
           sectorChart.options.plugins.legend.display = shouldShow;
           sectorChart.update();
         }
@@ -438,8 +415,7 @@ function renderRadar(
         {
           label: "score",
           data: axes.map(
-            (a) =>
-              /** @type {Record<string, number | null | undefined>} */ (scores)[a] ?? 0,
+            (a) => /** @type {Record<string, number | null | undefined>} */ (scores)[a] ?? 0,
           ),
           borderColor: () => cssVar("--accent", "#0066cc"),
           backgroundColor: () => `${cssVar("--accent", "#0066cc")}26`,
@@ -497,17 +473,12 @@ async function renderTimeSeriesPane(pane, row) {
   const dates = [...manifestCache.dates].sort();
   pane.append(emptyHint(`loading ${dates.length} snapshots…`));
   const results = await Promise.allSettled(
-    dates.map((d) =>
-      fetchJson(`${DATA_BASE_URL}/results/demo/${activeUniverse}/${d}.json`),
-    ),
+    dates.map((d) => fetchJson(`${DATA_BASE_URL}/results/demo/${activeUniverse}/${d}.json`)),
   );
   /** @type {Array<{date: string, rows: Row[] | null}>} */
   const snapshotsByDate = dates.map((d, i) => ({
     date: d,
-    rows:
-      results[i].status === "fulfilled"
-        ? /** @type {Row[]} */ (results[i].value)
-        : null,
+    rows: results[i].status === "fulfilled" ? /** @type {Row[]} */ (results[i].value) : null,
   }));
   const series = buildTimeSeries(snapshotsByDate, row.symbol);
   pane.replaceChildren();
@@ -530,10 +501,27 @@ async function renderTimeSeriesPane(pane, row) {
     data: {
       labels: series.dates,
       datasets: [
-        { label: "qte77 Score", data: series.score, borderColor: () => cssVar("--accent", "#0066cc") },
-        { label: "Quality", data: series.quality, borderColor: () => cssVar("--rating-greed", "#27ae60") },
-        { label: "Growth", data: series.growth, borderColor: () => cssVar("--rating-fear", "#e67e22") },
-        { label: "Sortino", data: series.sortino, borderColor: () => cssVar("--rating-extreme-fear", "#c0392b"), yAxisID: "y1" },
+        {
+          label: "qte77 Score",
+          data: series.score,
+          borderColor: () => cssVar("--accent", "#0066cc"),
+        },
+        {
+          label: "Quality",
+          data: series.quality,
+          borderColor: () => cssVar("--rating-greed", "#27ae60"),
+        },
+        {
+          label: "Growth",
+          data: series.growth,
+          borderColor: () => cssVar("--rating-fear", "#e67e22"),
+        },
+        {
+          label: "Sortino",
+          data: series.sortino,
+          borderColor: () => cssVar("--rating-extreme-fear", "#c0392b"),
+          yAxisID: "y1",
+        },
       ],
     },
     options: {
@@ -542,7 +530,11 @@ async function renderTimeSeriesPane(pane, row) {
       scales: {
         y: {
           ...scoreYAxis(cssVar),
-          title: { display: true, text: "Composite (0–100)", color: () => cssVar("--text", "#1d1d1f") },
+          title: {
+            display: true,
+            text: "Composite (0–100)",
+            color: () => cssVar("--text", "#1d1d1f"),
+          },
         },
         y1: {
           position: "right",
@@ -584,9 +576,7 @@ function renderFearGreedHeader(
   scoreEl.textContent = fmtNum(last.score, 0);
   const rating = (last.rating ?? "").toLowerCase();
   chipEl.textContent = last.rating ?? "—";
-  chipEl.className = `chip ${
-    /** @type {Record<string, string>} */ (RATING_CLASSES)[rating] ?? ""
-  }`;
+  chipEl.className = `chip ${/** @type {Record<string, string>} */ (RATING_CLASSES)[rating] ?? ""}`;
   const latestMs = new Date(last.timestamp).getTime();
   const deltas = [
     ["yesterday", 1],
@@ -616,9 +606,7 @@ const liveCharts = new Set();
  * @returns {string}  Resolved hex/rgb string (no alpha).
  */
 function cssVar(token, fallback) {
-  return (
-    getComputedStyle(document.body).getPropertyValue(token).trim() || fallback
-  );
+  return getComputedStyle(document.body).getPropertyValue(token).trim() || fallback;
 }
 
 /**
@@ -638,9 +626,7 @@ function renderRollingEmptyHint(/** @type {boolean} */ show) {
   toggleHistoryHint("fg-chart-wrap", "fg-empty", show);
 }
 
-function renderFearGreedChart(
-  /** @type {Array<{timestamp: string, score: number}>} */ entries,
-) {
+function renderFearGreedChart(/** @type {Array<{timestamp: string, score: number}>} */ entries) {
   const ctx = /** @type {HTMLCanvasElement | null} */ (document.getElementById("fg-chart"));
   if (!ctx) return;
   destroyChart(fearGreedChart);
@@ -684,9 +670,7 @@ function renderLongTermEmptyHint(/** @type {boolean} */ show) {
 function renderMonthlyFearGreedChart(
   /** @type {Array<{timestamp: string, score: number}>} */ entries,
 ) {
-  const canvas = /** @type {HTMLCanvasElement | null} */ (
-    document.getElementById("lt-fg-chart")
-  );
+  const canvas = /** @type {HTMLCanvasElement | null} */ (document.getElementById("lt-fg-chart"));
   if (!canvas) return;
   const monthly = aggregateMonthlyFG(entries);
   destroyChart(monthlyFearGreedChart);
@@ -794,9 +778,7 @@ let ltFgRendered = false;
 let ycRendered = false;
 
 function renderActiveLtFg() {
-  renderMonthlyFearGreedChart(
-    filterByWindow(rawFgEntries, activeLtFgWindow, "timestamp"),
-  );
+  renderMonthlyFearGreedChart(filterByWindow(rawFgEntries, activeLtFgWindow, "timestamp"));
 }
 
 function renderActiveYc() {
@@ -823,9 +805,7 @@ function bindWindowChips() {
     row.addEventListener("click", (event) => {
       const target = event.target;
       if (!(target instanceof HTMLButtonElement)) return;
-      const next = /** @type {import("./lib/state.js").WindowKey} */ (
-        target.dataset.window
-      );
+      const next = /** @type {import("./lib/state.js").WindowKey} */ (target.dataset.window);
       if (!next) return;
       if (kind === "ltFg") {
         activeLtFgWindow = next;
@@ -847,10 +827,7 @@ function syncChipAriaPressed(
   /** @type {import("./lib/state.js").WindowKey} */ active,
 ) {
   for (const btn of row.querySelectorAll("button[data-window]")) {
-    btn.setAttribute(
-      "aria-pressed",
-      btn.getAttribute("data-window") === active ? "true" : "false",
-    );
+    btn.setAttribute("aria-pressed", btn.getAttribute("data-window") === active ? "true" : "false");
   }
 }
 
@@ -896,9 +873,7 @@ function renderYieldCurveHeader(entries) {
  * @param {Array<{date: string, slope_5s10s: number | null}>} entries
  */
 function renderYieldCurveChart(entries) {
-  const canvas = /** @type {HTMLCanvasElement | null} */ (
-    document.getElementById("yc-chart")
-  );
+  const canvas = /** @type {HTMLCanvasElement | null} */ (document.getElementById("yc-chart"));
   if (!canvas) return;
   destroyChart(yieldCurveChart);
   yieldCurveChart = null;
@@ -997,9 +972,7 @@ function bindCsvExport() {
     const rows = filteredSnapshot();
     const headers = [...ALL_COLUMNS];
     const csv = exportCsv(
-      rows.map((/** @type {Row} */ r) =>
-        Object.fromEntries(headers.map((h) => [h, nested(r, h)])),
-      ),
+      rows.map((/** @type {Row} */ r) => Object.fromEntries(headers.map((h) => [h, nested(r, h)]))),
       headers,
     );
     const blob = new Blob([csv], { type: "text/csv" });
@@ -1013,10 +986,7 @@ function bindCsvExport() {
 }
 
 /** Fetch one universe's snapshot at a given date; null on any failure. */
-async function fetchUniverseSnapshot(
-  /** @type {string} */ universe,
-  /** @type {string} */ date,
-) {
+async function fetchUniverseSnapshot(/** @type {string} */ universe, /** @type {string} */ date) {
   try {
     return /** @type {Row[]} */ (
       await fetchJson(`${DATA_BASE_URL}/results/demo/${universe}/${date}.json`)
@@ -1071,18 +1041,10 @@ async function loadActiveUniverse() {
       byUniverse[u] = r.status === "fulfilled" ? r.value : null;
     });
   }
-  state.snapshot =
-    extraUniverses.length === 0
-      ? primary
-      : mergeUniverseSnapshots(byUniverse);
+  state.snapshot = extraUniverses.length === 0 ? primary : mergeUniverseSnapshots(byUniverse);
   document.body.classList.toggle("overlay-active", extraUniverses.length >= 1);
 
-  const auditMap = await loadAudit(
-    activeUniverse,
-    manifest.latest,
-    DATA_BASE_URL,
-    fetchJson,
-  );
+  const auditMap = await loadAudit(activeUniverse, manifest.latest, DATA_BASE_URL, fetchJson);
   auditByTicker = auditMap ?? buildAuditMap([]);
   rebuildFuseIndex();
   sizeEl.textContent =
@@ -1223,12 +1185,7 @@ function bindDateSelector(dateSelector) {
   dateSelector.addEventListener("change", async () => {
     const newDate = dateSelector.value;
     state.snapshot = await loadSnapshot(newDate);
-    const auditMap = await loadAudit(
-      activeUniverse,
-      newDate,
-      DATA_BASE_URL,
-      fetchJson,
-    );
+    const auditMap = await loadAudit(activeUniverse, newDate, DATA_BASE_URL, fetchJson);
     auditByTicker = auditMap ?? buildAuditMap([]);
     currentDate = newDate;
     rebuildFuseIndex();
@@ -1289,7 +1246,7 @@ async function init() {
   activeUniverse =
     requested && knownUniverseIds.includes(requested)
       ? requested
-      : universes[0]?.id ?? "qte77-watchlist";
+      : (universes[0]?.id ?? "qte77-watchlist");
   // Extras are universes 2..N from the URL, filtered against the
   // whitelist and de-duplicated against the primary.
   extraUniverses = parsed.universes
@@ -1309,10 +1266,7 @@ async function init() {
   await loadActiveUniverse();
   applyDateFromUrl(parsed.date, dateSelector);
 
-  const [fgEntries, ycEntries] = await Promise.all([
-    loadFearGreedYears(),
-    loadYieldCurveYears(),
-  ]);
+  const [fgEntries, ycEntries] = await Promise.all([loadFearGreedYears(), loadYieldCurveYears()]);
   renderFearGreedHeader(fgEntries);
   renderFearGreedChart(fgEntries);
   renderYieldCurveHeader(ycEntries);
