@@ -75,7 +75,9 @@ and a total would mask it.
 ## Agent-specific reminders
 
 - **Pre-task:** read AGENTS.md → CONTRIBUTING.md → README.md →
-  relevant `docs/` files; confirm quality thresholds; check
+  relevant `docs/` files; for a substantial issue check
+  [`docs/plans/`](docs/plans/) for an existing plan (its README gives
+  the when + structure); confirm quality thresholds; check
   `make help` for available recipes.
 - **Verify before claiming done.** `make validate` must pass locally
   (or document why a step couldn't run — e.g. sandbox restrictions);
