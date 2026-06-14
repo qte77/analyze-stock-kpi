@@ -4,16 +4,28 @@
   --text: #1d1d1f;
   --muted: #6e6e73;
   --border: #d2d2d7;
-  --accent: #0066cc;
-  --rating-extreme-fear: #c0392b;
-  --rating-fear: #e67e22;
-  --rating-neutral: #95a5a6;
-  --rating-greed: #27ae60;
-  --rating-extreme-greed: #16a085;
-  /* KPI heatmap palette (light defaults) */
-  --kpi-good: hsl(120, 60%, 88%);
-  --kpi-neutral: hsl(60, 60%, 88%);
-  --kpi-bad: hsl(0, 60%, 88%);
+  --accent: #7a6010;
+  /* EyeRest zero-blue data arc (qte77 brand DESIGN.md). Fixed across
+     themes: drives rating chips (white text) + chart lines + KPI tints. */
+  --data-positive: #4a6818;
+  --data-caution: #787010;
+  --data-negative: #983828;
+  --data-alt: #587818;
+  /* CNN Fear&Greed gauge → brand arc (red→amber→·→yellow-green→green).
+     neutral has no hue so it recedes and never clashes with the amber. */
+  --rating-extreme-fear: var(--data-negative);
+  --rating-fear: var(--data-caution);
+  --rating-neutral: var(--border);
+  --rating-greed: var(--data-alt);
+  --rating-extreme-greed: var(--data-positive);
+  /* KPI heatmap (light): data-arc tinted toward the panel for pastels. */
+  --kpi-good: color-mix(in oklab, var(--data-positive), var(--panel) 78%);
+  --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--panel) 78%);
+  --kpi-bad: color-mix(in oklab, var(--data-negative), var(--panel) 78%);
+  /* Score-cell ramp endpoints — fixed light pastels (white anchor, not a
+     brand colour) so the dark forced text stays readable in both themes. */
+  --score-lo: color-mix(in oklab, var(--data-negative), #ffffff 78%);
+  --score-hi: color-mix(in oklab, var(--data-positive), #ffffff 78%);
 }
 
 * { box-sizing: border-box; }
@@ -111,7 +123,7 @@ h2 {
 
 .chip.rating-extreme-fear { background: var(--rating-extreme-fear); }
 .chip.rating-fear { background: var(--rating-fear); }
-.chip.rating-neutral { background: var(--rating-neutral); }
+.chip.rating-neutral { background: var(--rating-neutral); color: var(--text); }
 .chip.rating-greed { background: var(--rating-greed); }
 .chip.rating-extreme-greed { background: var(--rating-extreme-greed); }
 
@@ -643,10 +655,10 @@ body.theme-dark {
   --text: #f5f5f7;
   --muted: #98989d;
   --border: #3a3a3c;
-  --accent: #5b9dff;
-  --kpi-good: hsl(120, 40%, 28%);
-  --kpi-neutral: hsl(60, 40%, 28%);
-  --kpi-bad: hsl(0, 50%, 32%);
+  --accent: #c8a858;
+  --kpi-good: color-mix(in oklab, var(--data-positive), var(--panel) 58%);
+  --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--panel) 58%);
+  --kpi-bad: color-mix(in oklab, var(--data-negative), var(--panel) 58%);
   /* Opt native widgets (select chevron, scrollbars, focus rings) into
      their dark variant — no per-widget CSS needed. */
   color-scheme: dark;
@@ -659,10 +671,10 @@ body.theme-dark {
     --text: #f5f5f7;
     --muted: #98989d;
     --border: #3a3a3c;
-    --accent: #5b9dff;
-    --kpi-good: hsl(120, 40%, 28%);
-    --kpi-neutral: hsl(60, 40%, 28%);
-    --kpi-bad: hsl(0, 50%, 32%);
+    --accent: #c8a858;
+    --kpi-good: color-mix(in oklab, var(--data-positive), var(--panel) 58%);
+    --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--panel) 58%);
+    --kpi-bad: color-mix(in oklab, var(--data-negative), var(--panel) 58%);
     color-scheme: dark;
   }
 }
