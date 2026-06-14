@@ -13,6 +13,8 @@ numbers assigned sequentially and never reused.
 | [0005](0005-sentiment-risk-sources.md) | Three-tier sentiment + risk source framework | Accepted 2026-05-20 |
 | [0006](0006-federal-contractors-universe.md) | Federal-contractors universe via usaspending.gov + EDGAR | Accepted 2026-05-20 |
 | [0007](0007-package-vs-infrastructure-boundary.md) | Package vs repo-infrastructure boundary | Accepted 2026-05-21 |
+| [0008](0008-ui-promotion-to-ui.md) | Promote demo dashboard to top-level `ui/` | Accepted 2026-06-13 |
+| [0009](0009-rename-package-to-analyze-stock-kpi.md) | Rename import package `src` → `analyze_stock_kpi` | Accepted 2026-06-14 |
 
 New ADR: copy the most recent file, increment the number, fill in
 **Status / Context / Decision / Consequences**. Supersedes / amendments
