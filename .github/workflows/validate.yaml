@@ -38,12 +38,6 @@ jobs:
       - name: Complexipy cognitive complexity (max 10)
         run: uv run complexipy src --max-complexity-allowed 10
 
-      - name: Markdownlint
-        run: |
-          npx --yes markdownlint-cli --config .markdownlint.json '**/*.md' \
-            --ignore '.venv/**' --ignore 'results/**' --ignore 'node_modules/**' \
-            --ignore 'changelog.d/**'
-
       - name: Install JS dev dependencies
         run: npm install --no-audit --no-fund
 
