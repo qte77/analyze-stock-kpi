@@ -86,6 +86,10 @@ Shipped on `main`; rolls into the next semver tag. See the `[Unreleased]` block 
 - [x] **Enhanced KPI long/short screener — Phase 2b (FCF margin)** — criterion 12 (`fcf_margin` enrichment via `Ticker.cashflow` / `Ticker.income_stmt`, EQUITY-gated, `_find_row` reuse) wired into `_NUMERIC_GATES`; screener now runs 15 of 16 criteria. ADR-0002 amended. Offline + `@pytest.mark.network` live tests added. PR [#248](https://github.com/qte77/analyze-stock-kpi/pull/248), closes [#192](https://github.com/qte77/analyze-stock-kpi/issues/192). Tech-rating (criterion 15) stays parked under "Open research" pending #21.
 - [ ] **Gate-threshold tuning for the long/short screener** — Phase 2a's conjunction returned 0 candidates each side on a 7-universe source set; the post-#248 longs preset is now META + NVDA + AVGO (3) on the same set. Thresholds remain honest-but-strict; worth revisiting once a broader source-universe spread lands.
 - [ ] **Surface "Why these universes?" dashboard tab** — analog of the F&G "Why these charts?" pane; explains best/worst (mean-of-7 ranking) vs longshort (conjunctive-gate filter) so the empty-state for unpopulated universes reads as a design outcome, not a bug.
+- [ ] **Score-cell heatmap legibility** — the EyeRest score ramp is too faint to separate best / worst / mid. Issue [#286](https://github.com/qte77/analyze-stock-kpi/issues/286).
+- [ ] **Backfill F&G long-term + 5s10s history deeper** — currently 2025-05 / 2025-02; extend each per-year series as far back as the sources allow. Issue [#287](https://github.com/qte77/analyze-stock-kpi/issues/287), plan [`0287`](plans/0287-backfill-history.md).
+- [ ] **Merge F&G long-term + 5s10s into one chart + SP500** (log secondary axis) — collapse the two long-term-context tabs, overlay SP500 price; 5s10s normalized or a third axis. Issue [#288](https://github.com/qte77/analyze-stock-kpi/issues/288), plan [`0288`](plans/0288-merge-longterm-charts.md); depends on #287.
+- [ ] **Consolidate JS tooling + tests into `ui/`** (Vite build, deploy `dist`) — move `package.json` + configs + `tests/demo/` under `ui/`; follows `../paperverse/ui/`. Issue [#289](https://github.com/qte77/analyze-stock-kpi/issues/289), plan [`0289`](plans/0289-consolidate-ui-tooling.md) (likely own ADR).
 
 ## Deferred
 
@@ -99,7 +103,7 @@ Shipped on `main`; rolls into the next semver tag. See the `[Unreleased]` block 
 - [ ] Volatility indices overlay (^VIX / ^VIX9D) — issue [#187](https://github.com/qte77/analyze-stock-kpi/issues/187), deferred pending Part 1 of #100 (F&G subindicator panels, also deferred per session re-evaluation)
 - [ ] F&G 9-subindicator panels (narrowed) — issue [#100](https://github.com/qte77/analyze-stock-kpi/issues/100), deferred (9-sparkline grid more visual load than action signal)
 - [x] Federal-contractors universe (Tier 0 pipeline: usaspending.gov + EDGAR + yfinance) — shipped via PRs #107 (CIK resolver), #110 (last-filed flags), #123 (Item 3a usaspending client), #125 (Item 3b orchestrator + CLI + workflow). Library-first reorg documented in [ADR-0006 amendment](decisions/0006-federal-contractors-universe.md).
-- [ ] Deferred EDGAR product use cases — XBRL cross-validation [#101](https://github.com/qte77/analyze-stock-kpi/issues/101), Form 4 insider momentum [#102](https://github.com/qte77/analyze-stock-kpi/issues/102), 8-K material events [#103](https://github.com/qte77/analyze-stock-kpi/issues/103)
+- [ ] Deferred EDGAR product use cases — XBRL cross-validation [#101](https://github.com/qte77/analyze-stock-kpi/issues/101) ([plan](plans/0101-xbrl-crossval.md)), Form 4 insider momentum [#102](https://github.com/qte77/analyze-stock-kpi/issues/102), 8-K material events [#103](https://github.com/qte77/analyze-stock-kpi/issues/103)
 
 ## Out of scope
 
