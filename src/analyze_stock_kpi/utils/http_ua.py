@@ -21,7 +21,7 @@ from __future__ import annotations
 import random  # UA shuffling, not crypto
 from typing import Protocol
 
-from src.config import settings
+from analyze_stock_kpi.config import settings
 
 # Re-exports from settings (the canonical UA pool lives in AppSettings).
 # Refresh ``settings.user_agents`` quarterly from https://useragents.me/.
@@ -58,7 +58,7 @@ def require_https(url: str) -> None:
     """Raise ``ValueError`` if ``url`` does not begin with ``https://``.
 
     Defence-in-depth guard at every ``urllib.urlopen()`` call site:
-    the URLs come from :class:`src.config.AppSettings` strings that
+    the URLs come from :class:`analyze_stock_kpi.config.AppSettings` strings that
     ARE HTTPS today, but a future refactor could route external input
     through them.
     """

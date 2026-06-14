@@ -1,10 +1,10 @@
-"""Tests for :mod:`src.utils.parse_args` — CLI args parsing."""
+"""Tests for :mod:`analyze_stock_kpi.utils.parse_args` — CLI args parsing."""
 
 from __future__ import annotations
 
 from pathlib import Path
 
-from src.utils.parse_args import CliArgs
+from analyze_stock_kpi.utils.parse_args import CliArgs
 
 
 def test_refresh_universe_flag_default_none() -> None:

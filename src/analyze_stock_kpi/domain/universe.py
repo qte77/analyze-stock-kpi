@@ -7,18 +7,18 @@ first); exactly one wins:
 1. ``CliArgs.tickers`` — comma-separated symbols, e.g. ``"AAPL,SPY,EURUSD=X"``
 2. ``CliArgs.tickers_file`` — path to a file with one symbol per line
 3. ``CliArgs.universe`` — preset name; resolved against
-   :data:`PRESET_DIR` (``src/assets/universes/<name>.txt``)
+   :data:`PRESET_DIR` (``src/analyze_stock_kpi/assets/universes/<name>.txt``)
 
 Preset files and inline ticker files use the same format: one Yahoo symbol per
 line, ``#`` and blank lines ignored.
 
-See :mod:`src.utils.parse_args` for the ``CliArgs`` shape and
+See :mod:`analyze_stock_kpi.utils.parse_args` for the ``CliArgs`` shape and
 ``docs/architecture.md`` for module placement.
 """
 
 from pathlib import Path
 
-from src.utils.parse_args import CliArgs
+from analyze_stock_kpi.utils.parse_args import CliArgs
 
 PRESET_DIR = Path(__file__).parent.parent / "assets" / "universes"
 

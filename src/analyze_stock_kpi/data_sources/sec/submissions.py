@@ -21,7 +21,7 @@ The two arrays are zipped by position — ``form[i]`` was filed on
 ``filingDate[i]``. We extract the **most-recent** date per US form
 type (10-K, 10-Q, 8-K) and expose them as
 :class:`LastFiledSnapshot` for attachment to
-:class:`src.fundamentals.FundamentalsSnapshot` via
+:class:`analyze_stock_kpi.data_sources.fundamentals.FundamentalsSnapshot` via
 ``model_copy(update=...)``.
 
 Public API:
@@ -44,9 +44,10 @@ import urllib.request
 from datetime import date
 
 from pydantic import BaseModel, ConfigDict
-from src.config import settings
-from src.data_sources.sec.cik_map import resolve_cik
-from src.utils.http_ua import require_https
+
+from analyze_stock_kpi.config import settings
+from analyze_stock_kpi.data_sources.sec.cik_map import resolve_cik
+from analyze_stock_kpi.utils.http_ua import require_https
 
 logger = logging.getLogger(__name__)
 

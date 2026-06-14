@@ -9,8 +9,9 @@ the input shape at the CliArgs boundary.
 from pathlib import Path
 
 import pytest
-from src.domain.universe import UniverseError, resolve_universe
-from src.utils.parse_args import CliArgs
+
+from analyze_stock_kpi.domain.universe import UniverseError, resolve_universe
+from analyze_stock_kpi.utils.parse_args import CliArgs
 
 
 def _args(**overrides: object) -> CliArgs:
@@ -56,12 +57,7 @@ def test_symbol_file_skips_comments_and_blanks(tmp_path: Path) -> None:
     """``#`` comments (full-line and trailing) and blank lines are ignored."""
     file = tmp_path / "u.txt"
     file.write_text(
-        "# header comment\n"
-        "AAPL\n"
-        "\n"
-        "MSFT  # inline comment\n"
-        "  # indented comment\n"
-        "GOOGL\n"
+        "# header comment\nAAPL\n\nMSFT  # inline comment\n  # indented comment\nGOOGL\n"
     )
     args = _args(tickers_file=file)
     assert resolve_universe(args) == ["AAPL", "MSFT", "GOOGL"]
@@ -101,7 +97,8 @@ def test_empty_symbol_file_raises_universe_error(tmp_path: Path) -> None:
 
 
 def test_empty_preset_tolerated_returns_empty_list(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
 ) -> None:
     """An existing-but-empty preset returns ``[]`` instead of raising.
 
@@ -113,7 +110,7 @@ def test_empty_preset_tolerated_returns_empty_list(
     preset_dir = tmp_path / "universes"
     preset_dir.mkdir()
     (preset_dir / "phase2a-longs.txt").write_text("")
-    monkeypatch.setattr("src.domain.universe.PRESET_DIR", preset_dir)
+    monkeypatch.setattr("analyze_stock_kpi.domain.universe.PRESET_DIR", preset_dir)
     args = _args(universe="phase2a-longs")
     assert resolve_universe(args) == []
 
@@ -131,7 +128,7 @@ def test_default_preset_resolves_to_nonempty_list() -> None:
 
 def test_federal_contractors_preset_resolves_to_curated_seed() -> None:
     """The bundled `federal-contractors` preset includes the DoD Top-25 seed."""
-    from src.orchestrators.federal_contractors import CURATED_TICKERS
+    from analyze_stock_kpi.orchestrators.federal_contractors import CURATED_TICKERS
 
     args = _args(universe="federal-contractors")
     result = resolve_universe(args)

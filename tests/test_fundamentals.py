@@ -1,4 +1,4 @@
-"""Tests for :mod:`src.fundamentals`."""
+"""Tests for :mod:`analyze_stock_kpi.data_sources.fundamentals`."""
 
 from __future__ import annotations
 
@@ -9,13 +9,13 @@ from unittest.mock import patch
 
 import pytest
 from pydantic import ValidationError
-from src.data_sources.fundamentals import (
+
+from analyze_stock_kpi.data_sources.fundamentals import (
     FundamentalsSnapshot,
     fetch_fundamentals,
     fetch_price_history,
     fetch_universe_fundamentals,
 )
-
 from tests.conftest import load_fundamentals_fixture
 
 
@@ -42,9 +42,7 @@ def test_snapshot_parses_trailing_peg_ratio() -> None:
     ``trailingPegRatio`` continues to work and is fetched from a separate
     fundamentals-timeseries endpoint. We model only the working one.
     """
-    snap = FundamentalsSnapshot.model_validate(
-        {"symbol": "X", "trailingPegRatio": 1.23}
-    )
+    snap = FundamentalsSnapshot.model_validate({"symbol": "X", "trailingPegRatio": 1.23})
     assert snap.trailing_peg_ratio == 1.23
 
 
@@ -53,7 +51,7 @@ def test_normalize_yfinance_info_divides_dividend_yield() -> None:
     0.37 for AAPL's 0.37 %). `_normalize_yfinance_info` divides by 100 at
     the fetch boundary so the rest of the codebase sees a fraction.
     """
-    from src.data_sources.fundamentals import _normalize_yfinance_info
+    from analyze_stock_kpi.data_sources.fundamentals import _normalize_yfinance_info
 
     normalized = _normalize_yfinance_info({"dividendYield": 0.37, "trailingPE": 35.0})
     assert normalized["dividendYield"] == 0.0037
@@ -64,7 +62,7 @@ def test_normalize_yfinance_info_handles_missing_yield() -> None:
     """Sparse snapshots (FX, futures, crypto) have no `dividendYield` key.
     The normalizer leaves the input dict structurally unchanged.
     """
-    from src.data_sources.fundamentals import _normalize_yfinance_info
+    from analyze_stock_kpi.data_sources.fundamentals import _normalize_yfinance_info
 
     assert _normalize_yfinance_info({"symbol": "X"}) == {"symbol": "X"}
 
@@ -83,7 +81,7 @@ def test_fetch_fundamentals_normalizes_live_yield() -> None:
             "dividendYield": 0.37,  # current yfinance: percentage-shaped
         }
 
-    with patch("src.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()):
+    with patch("analyze_stock_kpi.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()):
         snap = fetch_fundamentals("AAPL")
     assert snap.dividend_yield == 0.0037
 
@@ -96,7 +94,7 @@ def test_compute_roi_full_inputs() -> None:
     invested_capital = book_equity + totalDebt - totalCash = 100 + 50 - 30 = 120
     roi = netIncomeToCommon / invested_capital = 24 / 120 = 0.20
     """
-    from src.data_sources.fundamentals import _compute_roi
+    from analyze_stock_kpi.data_sources.fundamentals import _compute_roi
 
     info = {
         "netIncomeToCommon": 24.0,
@@ -110,7 +108,7 @@ def test_compute_roi_full_inputs() -> None:
 
 def test_compute_roi_missing_input_returns_none() -> None:
     """A single missing input collapses ROI to ``None``."""
-    from src.data_sources.fundamentals import _compute_roi
+    from analyze_stock_kpi.data_sources.fundamentals import _compute_roi
 
     info = {
         "netIncomeToCommon": 24.0,
@@ -124,7 +122,7 @@ def test_compute_roi_missing_input_returns_none() -> None:
 
 def test_compute_roi_zero_price_to_book_returns_none() -> None:
     """Avoid ``ZeroDivisionError`` when book equity cannot be derived."""
-    from src.data_sources.fundamentals import _compute_roi
+    from analyze_stock_kpi.data_sources.fundamentals import _compute_roi
 
     info = {
         "netIncomeToCommon": 24.0,
@@ -141,7 +139,7 @@ def test_compute_roi_zero_invested_capital_returns_none() -> None:
 
     Inputs: book_equity = 100, debt = 0, cash = 100 -> invested_capital = 0.
     """
-    from src.data_sources.fundamentals import _compute_roi
+    from analyze_stock_kpi.data_sources.fundamentals import _compute_roi
 
     info = {
         "netIncomeToCommon": 24.0,
@@ -168,42 +166,42 @@ def test_fetch_fundamentals_attaches_roi() -> None:
             "totalCash": 30.0,
         }
 
-    with patch("src.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()):
+    with patch("analyze_stock_kpi.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()):
         snap = fetch_fundamentals("AAPL")
     assert snap.roi == 0.20
 
 
 def test_safe_ratio_none_numerator_returns_none() -> None:
     """Missing numerator collapses the ratio to ``None``."""
-    from src.data_sources.fundamentals import _safe_ratio
+    from analyze_stock_kpi.data_sources.fundamentals import _safe_ratio
 
     assert _safe_ratio(None, 5.0) is None
 
 
 def test_safe_ratio_none_denominator_returns_none() -> None:
     """Missing denominator collapses the ratio to ``None``."""
-    from src.data_sources.fundamentals import _safe_ratio
+    from analyze_stock_kpi.data_sources.fundamentals import _safe_ratio
 
     assert _safe_ratio(10.0, None) is None
 
 
 def test_safe_ratio_zero_denominator_returns_none() -> None:
     """Zero denominator avoids ``ZeroDivisionError`` -> ``None``."""
-    from src.data_sources.fundamentals import _safe_ratio
+    from analyze_stock_kpi.data_sources.fundamentals import _safe_ratio
 
     assert _safe_ratio(10.0, 0.0) is None
 
 
 def test_safe_ratio_zero_numerator_is_valid() -> None:
     """A zero numerator is a real ``0.0`` ratio, not a missing value."""
-    from src.data_sources.fundamentals import _safe_ratio
+    from analyze_stock_kpi.data_sources.fundamentals import _safe_ratio
 
     assert _safe_ratio(0.0, 5.0) == 0.0
 
 
 def test_safe_ratio_negative_values() -> None:
     """Sign is preserved through the division."""
-    from src.data_sources.fundamentals import _safe_ratio
+    from analyze_stock_kpi.data_sources.fundamentals import _safe_ratio
 
     assert _safe_ratio(-3.0, 4.0) == -0.75
 
@@ -211,18 +209,21 @@ def test_safe_ratio_negative_values() -> None:
 def test_extract_two_rows_none_frame_returns_none_pair() -> None:
     """A ``None`` frame in any pair short-circuits to ``(None, None)``."""
     import pandas as pd
-    from src.data_sources.fundamentals import _extract_two_rows
+
+    from analyze_stock_kpi.data_sources.fundamentals import _extract_two_rows
 
     income_stmt = pd.DataFrame({"latest": [100.0]}, index=["Total Revenue"])
-    assert _extract_two_rows(
-        [(None, "free cash flow"), (income_stmt, "total revenue")]
-    ) == (None, None)
+    assert _extract_two_rows([(None, "free cash flow"), (income_stmt, "total revenue")]) == (
+        None,
+        None,
+    )
 
 
 def test_extract_two_rows_empty_frame_returns_none_pair() -> None:
     """An empty frame in any pair short-circuits to ``(None, None)``."""
     import pandas as pd
-    from src.data_sources.fundamentals import _extract_two_rows
+
+    from analyze_stock_kpi.data_sources.fundamentals import _extract_two_rows
 
     income_stmt = pd.DataFrame({"latest": [100.0]}, index=["Total Revenue"])
     assert _extract_two_rows(
@@ -237,54 +238,60 @@ def test_extract_two_rows_missing_row_returns_none_pair() -> None:
     is absent from the index, so neither value is returned.
     """
     import pandas as pd
-    from src.data_sources.fundamentals import _extract_two_rows
 
-    income_stmt = pd.DataFrame(
-        {"latest": [20.0]}, index=["Research And Development"]
+    from analyze_stock_kpi.data_sources.fundamentals import _extract_two_rows
+
+    income_stmt = pd.DataFrame({"latest": [20.0]}, index=["Research And Development"])
+    assert _extract_two_rows([(income_stmt, "research"), (income_stmt, "total revenue")]) == (
+        None,
+        None,
     )
-    assert _extract_two_rows(
-        [(income_stmt, "research"), (income_stmt, "total revenue")]
-    ) == (None, None)
 
 
 def test_extract_two_rows_nan_cell_returns_none_pair() -> None:
     """A NaN cell propagates via the identity check -> ``(None, None)``."""
     import pandas as pd
-    from src.data_sources.fundamentals import _extract_two_rows
+
+    from analyze_stock_kpi.data_sources.fundamentals import _extract_two_rows
 
     income_stmt = pd.DataFrame(
         {"latest": [float("nan"), 100.0]},
         index=["Research And Development", "Total Revenue"],
     )
-    assert _extract_two_rows(
-        [(income_stmt, "research"), (income_stmt, "total revenue")]
-    ) == (None, None)
+    assert _extract_two_rows([(income_stmt, "research"), (income_stmt, "total revenue")]) == (
+        None,
+        None,
+    )
 
 
 def test_extract_two_rows_two_frames_happy_path() -> None:
     """Two distinct frames (cashflow + income_stmt) read independently."""
     import pandas as pd
-    from src.data_sources.fundamentals import _extract_two_rows
+
+    from analyze_stock_kpi.data_sources.fundamentals import _extract_two_rows
 
     cashflow = pd.DataFrame({"latest": [15.0]}, index=["Free Cash Flow"])
     income_stmt = pd.DataFrame({"latest": [100.0]}, index=["Total Revenue"])
-    assert _extract_two_rows(
-        [(cashflow, "free cash flow"), (income_stmt, "total revenue")]
-    ) == (15.0, 100.0)
+    assert _extract_two_rows([(cashflow, "free cash flow"), (income_stmt, "total revenue")]) == (
+        15.0,
+        100.0,
+    )
 
 
 def test_extract_two_rows_single_frame_happy_path() -> None:
     """Both rows read from one frame (the R&D / revenue case)."""
     import pandas as pd
-    from src.data_sources.fundamentals import _extract_two_rows
+
+    from analyze_stock_kpi.data_sources.fundamentals import _extract_two_rows
 
     income_stmt = pd.DataFrame(
         {"latest": [20.0, 100.0]},
         index=["Research And Development", "Total Revenue"],
     )
-    assert _extract_two_rows(
-        [(income_stmt, "research"), (income_stmt, "total revenue")]
-    ) == (20.0, 100.0)
+    assert _extract_two_rows([(income_stmt, "research"), (income_stmt, "total revenue")]) == (
+        20.0,
+        100.0,
+    )
 
 
 def test_fetch_rd_to_revenue_equity_happy_path() -> None:
@@ -293,7 +300,8 @@ def test_fetch_rd_to_revenue_equity_happy_path() -> None:
     Chosen so the arithmetic is exact: 20 / 100 = 0.20.
     """
     import pandas as pd
-    from src.data_sources.fundamentals import _fetch_rd_to_revenue
+
+    from analyze_stock_kpi.data_sources.fundamentals import _fetch_rd_to_revenue
 
     income_stmt = pd.DataFrame(
         {"latest": [20.0, 100.0]},
@@ -305,7 +313,7 @@ def test_fetch_rd_to_revenue_equity_happy_path() -> None:
 
 def test_fetch_rd_to_revenue_non_equity_skips_fetch() -> None:
     """Non-EQUITY quote types must not touch ``.income_stmt``."""
-    from src.data_sources.fundamentals import _fetch_rd_to_revenue
+    from analyze_stock_kpi.data_sources.fundamentals import _fetch_rd_to_revenue
 
     class _Tripwire:
         @property
@@ -317,7 +325,7 @@ def test_fetch_rd_to_revenue_non_equity_skips_fetch() -> None:
 
 def test_fetch_rd_to_revenue_missing_quote_type_returns_none() -> None:
     """Missing ``quoteType`` is treated as non-EQUITY (defensive)."""
-    from src.data_sources.fundamentals import _fetch_rd_to_revenue
+    from analyze_stock_kpi.data_sources.fundamentals import _fetch_rd_to_revenue
 
     class _Tripwire:
         @property
@@ -330,7 +338,8 @@ def test_fetch_rd_to_revenue_missing_quote_type_returns_none() -> None:
 def test_fetch_rd_to_revenue_missing_row_returns_none() -> None:
     """``income_stmt`` without an ``Research And Development`` row -> ``None``."""
     import pandas as pd
-    from src.data_sources.fundamentals import _fetch_rd_to_revenue
+
+    from analyze_stock_kpi.data_sources.fundamentals import _fetch_rd_to_revenue
 
     income_stmt = pd.DataFrame(
         {"latest": [100.0, 50.0]},
@@ -343,7 +352,8 @@ def test_fetch_rd_to_revenue_missing_row_returns_none() -> None:
 def test_fetch_rd_to_revenue_zero_revenue_returns_none() -> None:
     """Avoid ``ZeroDivisionError`` when Total Revenue is zero."""
     import pandas as pd
-    from src.data_sources.fundamentals import _fetch_rd_to_revenue
+
+    from analyze_stock_kpi.data_sources.fundamentals import _fetch_rd_to_revenue
 
     income_stmt = pd.DataFrame(
         {"latest": [20.0, 0.0]},
@@ -355,7 +365,7 @@ def test_fetch_rd_to_revenue_zero_revenue_returns_none() -> None:
 
 def test_fetch_rd_to_revenue_exception_returns_none() -> None:
     """Network errors / IFRS schema drift swallowed; returns ``None``."""
-    from src.data_sources.fundamentals import _fetch_rd_to_revenue
+    from analyze_stock_kpi.data_sources.fundamentals import _fetch_rd_to_revenue
 
     class _Broken:
         @property
@@ -368,7 +378,8 @@ def test_fetch_rd_to_revenue_exception_returns_none() -> None:
 def test_fetch_rd_to_revenue_label_without_and() -> None:
     """Older yfinance + many IFRS filers ship ``Research Development`` (no ``And``)."""
     import pandas as pd
-    from src.data_sources.fundamentals import _fetch_rd_to_revenue
+
+    from analyze_stock_kpi.data_sources.fundamentals import _fetch_rd_to_revenue
 
     income_stmt = pd.DataFrame(
         {"latest": [20.0, 100.0]},
@@ -381,7 +392,8 @@ def test_fetch_rd_to_revenue_label_without_and() -> None:
 def test_fetch_rd_to_revenue_label_lowercase() -> None:
     """Some upstream shapes lower-case the row labels."""
     import pandas as pd
-    from src.data_sources.fundamentals import _fetch_rd_to_revenue
+
+    from analyze_stock_kpi.data_sources.fundamentals import _fetch_rd_to_revenue
 
     income_stmt = pd.DataFrame(
         {"latest": [20.0, 100.0]},
@@ -394,7 +406,8 @@ def test_fetch_rd_to_revenue_label_lowercase() -> None:
 def test_fetch_rd_to_revenue_label_with_whitespace() -> None:
     """Stray surrounding whitespace must not break the lookup."""
     import pandas as pd
-    from src.data_sources.fundamentals import _fetch_rd_to_revenue
+
+    from analyze_stock_kpi.data_sources.fundamentals import _fetch_rd_to_revenue
 
     income_stmt = pd.DataFrame(
         {"latest": [20.0, 100.0]},
@@ -421,7 +434,7 @@ def test_fetch_fundamentals_attaches_rd_to_revenue() -> None:
         }
         income_stmt = income_stmt_df
 
-    with patch("src.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()):
+    with patch("analyze_stock_kpi.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()):
         snap = fetch_fundamentals("AAPL")
     assert snap.rd_to_revenue == 0.20
 
@@ -432,13 +445,16 @@ def test_fetch_fcf_margin_equity_happy_path() -> None:
     Chosen so the arithmetic is exact: 15 / 100 = 0.15.
     """
     import pandas as pd
-    from src.data_sources.fundamentals import _fetch_fcf_margin
+
+    from analyze_stock_kpi.data_sources.fundamentals import _fetch_fcf_margin
 
     cashflow = pd.DataFrame(
-        {"latest": [15.0]}, index=["Free Cash Flow"],
+        {"latest": [15.0]},
+        index=["Free Cash Flow"],
     )
     income_stmt = pd.DataFrame(
-        {"latest": [100.0]}, index=["Total Revenue"],
+        {"latest": [100.0]},
+        index=["Total Revenue"],
     )
     fake = SimpleNamespace(cashflow=cashflow, income_stmt=income_stmt)
     assert _fetch_fcf_margin(fake, {"quoteType": "EQUITY"}) == 0.15
@@ -446,7 +462,7 @@ def test_fetch_fcf_margin_equity_happy_path() -> None:
 
 def test_fetch_fcf_margin_non_equity_skips_fetch() -> None:
     """Non-EQUITY quote types must not touch ``.cashflow`` or ``.income_stmt``."""
-    from src.data_sources.fundamentals import _fetch_fcf_margin
+    from analyze_stock_kpi.data_sources.fundamentals import _fetch_fcf_margin
 
     class _Tripwire:
         @property
@@ -465,10 +481,12 @@ def test_fetch_fundamentals_attaches_fcf_margin() -> None:
     import pandas as pd
 
     cashflow_df = pd.DataFrame(
-        {"latest": [15.0]}, index=["Free Cash Flow"],
+        {"latest": [15.0]},
+        index=["Free Cash Flow"],
     )
     income_stmt_df = pd.DataFrame(
-        {"latest": [100.0]}, index=["Total Revenue"],
+        {"latest": [100.0]},
+        index=["Total Revenue"],
     )
 
     class _FakeTicker:
@@ -480,7 +498,7 @@ def test_fetch_fundamentals_attaches_fcf_margin() -> None:
         cashflow = cashflow_df
         income_stmt = income_stmt_df
 
-    with patch("src.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()):
+    with patch("analyze_stock_kpi.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()):
         snap = fetch_fundamentals("AAPL")
     assert snap.fcf_margin == 0.15
 
@@ -489,7 +507,8 @@ def test_fetch_fundamentals_attaches_fcf_margin() -> None:
 def test_fetch_fcf_margin_live_aapl() -> None:
     """Live yfinance schema-drift guard: AAPL must yield a populated FCF margin."""
     import yfinance as yf
-    from src.data_sources.fundamentals import _fetch_fcf_margin
+
+    from analyze_stock_kpi.data_sources.fundamentals import _fetch_fcf_margin
 
     ticker = yf.Ticker("AAPL")
     margin = _fetch_fcf_margin(ticker, ticker.info)
@@ -506,7 +525,8 @@ def test_compute_sortino_positive_skew_series() -> None:
     annualized ≈ 0.1449. Sortino ≈ 5.51.
     """
     import pandas as pd
-    from src.data_sources.fundamentals import _compute_sortino
+
+    from analyze_stock_kpi.data_sources.fundamentals import _compute_sortino
 
     returns = [0.005] * 29 + [-0.05]
     prices = [100.0]
@@ -521,7 +541,8 @@ def test_compute_sortino_positive_skew_series() -> None:
 def test_compute_sortino_too_few_datapoints_returns_none() -> None:
     """Series shorter than 30 returns -> ``None`` (insufficient sample)."""
     import pandas as pd
-    from src.data_sources.fundamentals import _compute_sortino
+
+    from analyze_stock_kpi.data_sources.fundamentals import _compute_sortino
 
     close = pd.Series([100.0 + i for i in range(20)])
     assert _compute_sortino(close) is None
@@ -530,9 +551,10 @@ def test_compute_sortino_too_few_datapoints_returns_none() -> None:
 def test_compute_sortino_all_positive_returns_none() -> None:
     """No losing days -> downside_dev is zero -> ``None`` (undefined)."""
     import pandas as pd
-    from src.data_sources.fundamentals import _compute_sortino
 
-    close = pd.Series([100.0 * (1.001 ** i) for i in range(50)])
+    from analyze_stock_kpi.data_sources.fundamentals import _compute_sortino
+
+    close = pd.Series([100.0 * (1.001**i) for i in range(50)])
     assert _compute_sortino(close) is None
 
 
@@ -554,7 +576,8 @@ def test_compute_sortino_with_target_annual_shifts_result() -> None:
     than our prior T=0-only behaviour.
     """
     import pandas as pd
-    from src.data_sources.fundamentals import _compute_sortino
+
+    from analyze_stock_kpi.data_sources.fundamentals import _compute_sortino
 
     returns = [0.005] * 29 + [-0.05]
     prices = [100.0]
@@ -569,7 +592,8 @@ def test_compute_sortino_with_target_annual_shifts_result() -> None:
 def test_compute_sortino_empty_series_returns_none() -> None:
     """Empty close-series -> ``None``."""
     import pandas as pd
-    from src.data_sources.fundamentals import _compute_sortino
+
+    from analyze_stock_kpi.data_sources.fundamentals import _compute_sortino
 
     assert _compute_sortino(pd.Series([], dtype=float)) is None
 
@@ -618,16 +642,14 @@ def test_fetch_universe_continues_on_error(caplog: pytest.LogCaptureFixture) -> 
         return _FakeTicker(aapl_info if symbol == "AAPL" else gold_info)
 
     with (
-        caplog.at_level("WARNING", logger="src.data_sources.fundamentals"),
-        patch("src.data_sources.fundamentals.yf.Ticker", side_effect=fake_ticker),
+        caplog.at_level("WARNING", logger="analyze_stock_kpi.data_sources.fundamentals"),
+        patch("analyze_stock_kpi.data_sources.fundamentals.yf.Ticker", side_effect=fake_ticker),
         patch(
-            "src.data_sources.fundamentals.yf.download",
+            "analyze_stock_kpi.data_sources.fundamentals.yf.download",
             side_effect=RuntimeError("batch skipped in unit test"),
         ),
     ):
-        results = fetch_universe_fundamentals(
-            ["AAPL", "BROKEN", "GC=F"], show_progress=False
-        )
+        results = fetch_universe_fundamentals(["AAPL", "BROKEN", "GC=F"], show_progress=False)
 
     assert len(results) == 2
     assert {s.symbol for s in results} == {"AAPL", "GC=F"}
@@ -669,12 +691,12 @@ def test_fetch_universe_fundamentals_attaches_sortino_via_batch() -> None:
         return _FakeTicker(aapl_info if symbol == "AAPL" else msft_info)
 
     with (
-        patch("src.data_sources.fundamentals.yf.Ticker", side_effect=fake_ticker),
-        patch("src.data_sources.fundamentals.yf.download", return_value=close_df) as mock_dl,
+        patch("analyze_stock_kpi.data_sources.fundamentals.yf.Ticker", side_effect=fake_ticker),
+        patch(
+            "analyze_stock_kpi.data_sources.fundamentals.yf.download", return_value=close_df
+        ) as mock_dl,
     ):
-        snapshots = fetch_universe_fundamentals(
-            ["AAPL", "MSFT"], show_progress=False
-        )
+        snapshots = fetch_universe_fundamentals(["AAPL", "MSFT"], show_progress=False)
 
     mock_dl.assert_called_once()
     call_args = mock_dl.call_args
@@ -698,9 +720,9 @@ def test_fetch_universe_fundamentals_batch_failure_gives_none_sortino() -> None:
         }
 
     with (
-        patch("src.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()),
+        patch("analyze_stock_kpi.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()),
         patch(
-            "src.data_sources.fundamentals.yf.download",
+            "analyze_stock_kpi.data_sources.fundamentals.yf.download",
             side_effect=RuntimeError("simulated batch failure"),
         ),
     ):

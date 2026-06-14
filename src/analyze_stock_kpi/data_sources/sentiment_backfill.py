@@ -3,7 +3,7 @@
 Parses the [whit3rabbit/fear-greed-data](https://github.com/whit3rabbit/fear-greed-data)
 mirror CSV (pinned via commit SHA in :mod:`scripts.backfill_fear_greed_whitrabbit`)
 and merges its rows onto the same per-year ``results/cnn_fg/YYYY.json``
-files :mod:`src.data_sources.sentiment` writes, via the same
+files :mod:`analyze_stock_kpi.data_sources.sentiment` writes, via the same
 :func:`_upsert` semantics. Backfill is always ``force=False`` — a
 higher-fidelity CNN-direct entry (intraday timestamp + subindicators)
 always wins; backfill only fills genuine gaps.
@@ -29,8 +29,8 @@ import logging
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
-from src.config import settings
-from src.data_sources.sentiment import (
+from analyze_stock_kpi.config import settings
+from analyze_stock_kpi.data_sources.sentiment import (
     FearGreedSnapshot,
     _load_year,
     _upsert,
@@ -90,7 +90,7 @@ def merge_into_years(
     timestamp wins).
 
     Caller persists each year via
-    :func:`src.data_sources.sentiment._write_year`.
+    :func:`analyze_stock_kpi.data_sources.sentiment._write_year`.
     """
     by_year: dict[int, dict[str, FearGreedSnapshot]] = {}
     for snap in snapshots:

@@ -29,7 +29,7 @@ tech rating (criterion 15; blocked on TradingView decision #21).
 | 14 | analyst_recommendation     | buy / strong_buy  | sell / strong_sell    |
 | 16 | rd_to_revenue              | > 0.05            | (long-only)           |
 
-Mirrors :mod:`src.orchestrators.aggregated_scores_best_and_worst` for
+Mirrors :mod:`analyze_stock_kpi.orchestrators.aggregated_scores_best_and_worst` for
 shape: returns ``(longs, shorts, audit)`` from ``build_universe``;
 per-ticker audit captures pass/fail per criterion plus the assigned tier.
 """
@@ -43,7 +43,7 @@ from typing import TYPE_CHECKING, Literal
 from ._shared import AuditRowBase, dedup_by_ticker, is_stale
 
 if TYPE_CHECKING:
-    from src.data_sources.fundamentals import FundamentalsSnapshot
+    from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
 
     from ._shared import DedupedSnapshot
 
@@ -152,7 +152,9 @@ def _classify(
         return AuditRow(**base, eligible=False, excluded_reason="stale")
     if populated < min_criteria:
         return AuditRow(
-            **base, eligible=False, excluded_reason="insufficient_criteria",
+            **base,
+            eligible=False,
+            excluded_reason="insufficient_criteria",
         )
     # 15 long-side gates (incl. rd_to_revenue), 14 short-side (no R&D).
     tier: Tier
@@ -199,7 +201,8 @@ def build_universe(
         return [], [], []
 
     per_ticker = dedup_by_ticker(
-        snapshots_by_universe, snapshot_dates_by_universe,
+        snapshots_by_universe,
+        snapshot_dates_by_universe,
     )
 
     longs: list[str] = []

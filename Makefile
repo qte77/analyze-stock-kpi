@@ -96,7 +96,7 @@ test:  ## pytest
 
 test_cov:  ## pytest with coverage (--cov-fail-under=0; raise once tests exist)
 	echo "--- test_cov"
-	uv run pytest --cov=src --cov-fail-under=0 $(PYTEST_QUIET)
+	uv run pytest --cov=analyze_stock_kpi --cov-fail-under=0 $(PYTEST_QUIET)
 
 test_js:  ## vitest run on tests/demo/ (closes #131; non-trivial units only)
 	echo "--- test_js"
@@ -120,7 +120,7 @@ validate:  ## CI gate: lint + check_types + check_complexity + lint_md + lint_js
 
 
 run:  ## run fundamentals (UNIVERSE=qte77-watchlist | TICKERS=AAPL,MSFT | TICKERS_FILE=path | PERIOD=5y | SHOW_SCORES=1)
-	uv run python -m src \
+	uv run python -m analyze_stock_kpi \
 	  $(if $(UNIVERSE),--universe $(UNIVERSE)) \
 	  $(if $(TICKERS),--tickers $(TICKERS)) \
 	  $(if $(TICKERS_FILE),--tickers-file $(TICKERS_FILE)) \

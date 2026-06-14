@@ -67,9 +67,9 @@ the screenshot near the top of this README.
 The persisted JSON `results/fundamentals/<UTC>.json` carries one
 `FundamentalsSnapshot` per ticker with a nested `composite_scores`
 block. Field list lives in
-[`src/data_sources/fundamentals.py`](src/data_sources/fundamentals.py);
+[`src/analyze_stock_kpi/data_sources/fundamentals.py`](src/analyze_stock_kpi/data_sources/fundamentals.py);
 composite formulas in
-[`src/domain/composite_scores.py`](src/domain/composite_scores.py).
+[`src/analyze_stock_kpi/domain/composite_scores.py`](src/analyze_stock_kpi/domain/composite_scores.py).
 
 ## Universe sources
 
@@ -79,7 +79,7 @@ In priority order:
 |---|---|
 | Inline list | `TICKERS=AAPL,MSFT` |
 | File (one symbol per line) | `TICKERS_FILE=path/to/list.txt` |
-| Preset | `UNIVERSE=qte77-watchlist` (see [`src/assets/universes/`](src/assets/universes) for all 11 available presets, including `aggregated-scores-best` / `-worst` and `enhanced-kpi-screener-longs` / `-shorts`) |
+| Preset | `UNIVERSE=qte77-watchlist` (see [`src/analyze_stock_kpi/assets/universes/`](src/analyze_stock_kpi/assets/universes) for all 11 available presets, including `aggregated-scores-best` / `-worst` and `enhanced-kpi-screener-longs` / `-shorts`) |
 
 ## Documentation
 

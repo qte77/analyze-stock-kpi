@@ -25,10 +25,11 @@ from typing import TYPE_CHECKING, Any
 
 import yfinance as yf
 from pydantic import BaseModel, ConfigDict, Field
-from src.domain.composite_scores import (
-    CompositeScores,  # noqa: TC002  # pydantic runtime requirement
-)
 from tqdm import tqdm
+
+from analyze_stock_kpi.domain.composite_scores import (
+    CompositeScores,  # noqa: TC001  # pydantic runtime requirement
+)
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
@@ -67,9 +68,7 @@ class FundamentalsSnapshot(BaseModel):
     trailing_pe: float | None = Field(default=None, alias="trailingPE")
     forward_pe: float | None = Field(default=None, alias="forwardPE")
     price_to_book: float | None = Field(default=None, alias="priceToBook")
-    price_to_sales_ttm: float | None = Field(
-        default=None, alias="priceToSalesTrailing12Months"
-    )
+    price_to_sales_ttm: float | None = Field(default=None, alias="priceToSalesTrailing12Months")
     enterprise_value: float | None = Field(default=None, alias="enterpriseValue")
     enterprise_to_ebitda: float | None = Field(default=None, alias="enterpriseToEbitda")
     trailing_peg_ratio: float | None = Field(default=None, alias="trailingPegRatio")
@@ -111,7 +110,8 @@ class FundamentalsSnapshot(BaseModel):
     # Values are lowercase Yahoo Finance recommendation buckets:
     # "strong_buy" / "buy" / "hold" / "sell" / "strong_sell" / None.
     analyst_recommendation: str | None = Field(
-        default=None, alias="recommendationKey",
+        default=None,
+        alias="recommendationKey",
     )
 
     # -- enrichment (attached post-fetch via ``model_copy``) --
@@ -195,9 +195,7 @@ _TRADING_DAYS = 252
 _MIN_SORTINO_DATAPOINTS = 30
 
 
-def _compute_sortino(
-    close_series: pd.Series, target_annual: float = 0.0
-) -> float | None:
+def _compute_sortino(close_series: pd.Series, target_annual: float = 0.0) -> float | None:
     """Annualized Sortino ratio ``S = (R - T) / DR`` from daily closes.
 
     Canonical Wikipedia definition with ``T`` = user-supplied annual
@@ -278,9 +276,7 @@ def _read_rd_revenue(income_stmt: pd.DataFrame | None) -> tuple[float | None, fl
     Thin wrapper over ``_extract_two_rows`` — both rows come from the same
     frame. Returns ``(None, None)`` on any structural issue.
     """
-    return _extract_two_rows(
-        [(income_stmt, "research"), (income_stmt, "total revenue")]
-    )
+    return _extract_two_rows([(income_stmt, "research"), (income_stmt, "total revenue")])
 
 
 def _equity_ratio(
@@ -305,17 +301,13 @@ def _equity_ratio(
     return _safe_ratio(num, den)
 
 
-def _fetch_rd_to_revenue(
-    yf_ticker: yf.Ticker, info: dict[str, Any]
-) -> float | None:
+def _fetch_rd_to_revenue(yf_ticker: yf.Ticker, info: dict[str, Any]) -> float | None:
     """R&D-as-share-of-revenue from ``Ticker.income_stmt`` latest column.
 
     EQUITY-only (see ``_equity_ratio``); ``None`` on any missing data or
     fetch error.
     """
-    return _equity_ratio(
-        info, lambda: _read_rd_revenue(yf_ticker.income_stmt)
-    )
+    return _equity_ratio(info, lambda: _read_rd_revenue(yf_ticker.income_stmt))
 
 
 def _read_fcf_revenue(
@@ -328,14 +320,10 @@ def _read_fcf_revenue(
     revenue from ``income_stmt``. Returns ``(None, None)`` on any
     structural issue.
     """
-    return _extract_two_rows(
-        [(cashflow, "free cash flow"), (income_stmt, "total revenue")]
-    )
+    return _extract_two_rows([(cashflow, "free cash flow"), (income_stmt, "total revenue")])
 
 
-def _fetch_fcf_margin(
-    yf_ticker: yf.Ticker, info: dict[str, Any]
-) -> float | None:
+def _fetch_fcf_margin(yf_ticker: yf.Ticker, info: dict[str, Any]) -> float | None:
     """Free-cash-flow margin from ``Ticker.cashflow`` / ``Ticker.income_stmt``.
 
     EQUITY-only (see ``_equity_ratio``); ``None`` on any missing data or
@@ -382,9 +370,7 @@ def _batch_close_prices(tickers: list[str]) -> dict[str, Any] | None:
     if not tickers:
         return None
     try:
-        df = yf.download(
-            tickers, period="1y", progress=False, auto_adjust=True
-        )
+        df = yf.download(tickers, period="1y", progress=False, auto_adjust=True)
     except Exception:
         return None
     if df is None or df.empty:
@@ -397,9 +383,7 @@ def _batch_close_prices(tickers: list[str]) -> dict[str, Any] | None:
         close_block = df["Close"]
     except Exception:
         return None
-    result: dict[str, Any] = {
-        t: close_block[t] for t in tickers if t in close_block.columns
-    }
+    result: dict[str, Any] = {t: close_block[t] for t in tickers if t in close_block.columns}
     return result or None
 
 

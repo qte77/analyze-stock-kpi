@@ -1,11 +1,11 @@
-"""Tests for :mod:`src.config` — runtime config defaults + env override."""
+"""Tests for :mod:`analyze_stock_kpi.config` — runtime config defaults + env override."""
 
 from __future__ import annotations
 
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from src.config import AppSettings
+from analyze_stock_kpi.config import AppSettings
 
 if TYPE_CHECKING:
     import pytest
@@ -14,16 +14,10 @@ if TYPE_CHECKING:
 def test_app_settings_defaults_match_pre_refactor_literals() -> None:
     """Default values reproduce the constants that lived in per-module code."""
     s = AppSettings()
-    assert s.edgar_tickers_url == (
-        "https://www.sec.gov/files/company_tickers_exchange.json"
-    )
-    assert s.edgar_submissions_url_template == (
-        "https://data.sec.gov/submissions/CIK{cik}.json"
-    )
+    assert s.edgar_tickers_url == ("https://www.sec.gov/files/company_tickers_exchange.json")
+    assert s.edgar_submissions_url_template == ("https://data.sec.gov/submissions/CIK{cik}.json")
     assert s.edgar_cache_dir == Path("results/edgar")
-    assert s.cnn_fg_url == (
-        "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
-    )
+    assert s.cnn_fg_url == ("https://production.dataviz.cnn.io/index/fearandgreed/graphdata")
     assert s.cnn_fg_referer == "https://edition.cnn.com/"
     assert s.cnn_fg_cache_dir == Path("results/cnn_fg")
     assert s.http_accept == "application/json, text/plain, */*"
@@ -61,9 +55,7 @@ def test_app_settings_sec_referer_default() -> None:
 
 def test_app_settings_sec_user_agent_default_is_placeholder() -> None:
     """``sec_user_agent`` defaults to an identity-shape RFC-doc placeholder."""
-    assert AppSettings().sec_user_agent == (
-        "opensource-research-client contact@example.com"
-    )
+    assert AppSettings().sec_user_agent == ("opensource-research-client contact@example.com")
 
 
 def test_app_settings_sec_user_agent_env_override(
@@ -84,9 +76,7 @@ def test_app_settings_sec_user_agent_empty_env_falls_back_to_default(
     ``User-Agent`` header — SEC rejects empty UA with 403.
     """
     monkeypatch.setenv("SSK_SEC_USER_AGENT", "")
-    assert AppSettings().sec_user_agent == (
-        "opensource-research-client contact@example.com"
-    )
+    assert AppSettings().sec_user_agent == ("opensource-research-client contact@example.com")
 
 
 def test_app_settings_user_agents_pool_non_empty_browser_shape() -> None:

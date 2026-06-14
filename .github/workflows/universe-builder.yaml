@@ -88,27 +88,27 @@ jobs:
           case "$U" in
             federal-contractors)
               echo "script=scripts/build_federal_contractors.py"             >> "$GITHUB_OUTPUT"
-              echo "preset=src/assets/universes/federal-contractors.txt"     >> "$GITHUB_OUTPUT"
+              echo "preset=src/analyze_stock_kpi/assets/universes/federal-contractors.txt"     >> "$GITHUB_OUTPUT"
               echo "audit_dir=results/federal_contractors/audit"             >> "$GITHUB_OUTPUT"
               echo "needs_data_branch=false"                                  >> "$GITHUB_OUTPUT" ;;
             aggregated-scores-best)
               echo "script=scripts/build_aggregated_scores_best_and_worst.py" >> "$GITHUB_OUTPUT"
-              echo "preset=src/assets/universes/aggregated-scores-best.txt" >> "$GITHUB_OUTPUT"
+              echo "preset=src/analyze_stock_kpi/assets/universes/aggregated-scores-best.txt" >> "$GITHUB_OUTPUT"
               echo "audit_dir=results/aggregated_scores_best_and_worst/audit" >> "$GITHUB_OUTPUT"
               echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
             aggregated-scores-worst)
               echo "script=scripts/build_aggregated_scores_best_and_worst.py" >> "$GITHUB_OUTPUT"
-              echo "preset=src/assets/universes/aggregated-scores-worst.txt" >> "$GITHUB_OUTPUT"
+              echo "preset=src/analyze_stock_kpi/assets/universes/aggregated-scores-worst.txt" >> "$GITHUB_OUTPUT"
               echo "audit_dir=results/aggregated_scores_best_and_worst/audit" >> "$GITHUB_OUTPUT"
               echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
             enhanced-kpi-screener-longs)
               echo "script=scripts/build_enhanced_kpi_screener_longshort.py"  >> "$GITHUB_OUTPUT"
-              echo "preset=src/assets/universes/enhanced-kpi-screener-longs.txt" >> "$GITHUB_OUTPUT"
+              echo "preset=src/analyze_stock_kpi/assets/universes/enhanced-kpi-screener-longs.txt" >> "$GITHUB_OUTPUT"
               echo "audit_dir=results/enhanced_kpi_screener_longshort/audit"  >> "$GITHUB_OUTPUT"
               echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
             enhanced-kpi-screener-shorts)
               echo "script=scripts/build_enhanced_kpi_screener_longshort.py"  >> "$GITHUB_OUTPUT"
-              echo "preset=src/assets/universes/enhanced-kpi-screener-shorts.txt" >> "$GITHUB_OUTPUT"
+              echo "preset=src/analyze_stock_kpi/assets/universes/enhanced-kpi-screener-shorts.txt" >> "$GITHUB_OUTPUT"
               echo "audit_dir=results/enhanced_kpi_screener_longshort/audit"  >> "$GITHUB_OUTPUT"
               echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
             *)

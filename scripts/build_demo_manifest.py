@@ -21,9 +21,7 @@ def main(directory: Path) -> int:
     if not directory.is_dir():
         print(f"not a directory: {directory}", file=sys.stderr)
         return 1
-    dates = sorted(
-        f.stem for f in directory.glob("*.json") if _DATE_PATTERN.match(f.name)
-    )
+    dates = sorted(f.stem for f in directory.glob("*.json") if _DATE_PATTERN.match(f.name))
     if not dates:
         print(f"no YYYY-MM-DD.json files in {directory}", file=sys.stderr)
         return 1

@@ -1,4 +1,4 @@
-"""Tests for :mod:`src.sentiment`."""
+"""Tests for :mod:`analyze_stock_kpi.data_sources.sentiment`."""
 
 from __future__ import annotations
 
@@ -13,8 +13,9 @@ if TYPE_CHECKING:
 
 import pytest
 from pydantic import ValidationError
-from src.config import settings
-from src.data_sources.sentiment import (
+
+from analyze_stock_kpi.config import settings
+from analyze_stock_kpi.data_sources.sentiment import (
     SUBINDICATOR_KEYS,
     FearGreedSnapshot,
     SubindicatorReading,
@@ -26,7 +27,6 @@ from src.data_sources.sentiment import (
     merge_payload_into_years,
     parse_historical,
 )
-
 from tests.conftest import load_fear_greed_fixture
 
 
@@ -90,7 +90,7 @@ def test_fetch_fear_greed_returns_snapshot_from_payload() -> None:
     payload = load_fear_greed_fixture("current")
 
     with patch(
-        "src.data_sources.sentiment.urllib.request.urlopen",
+        "analyze_stock_kpi.data_sources.sentiment.urllib.request.urlopen",
         return_value=_FakeResponse(payload),
     ):
         snap = fetch_fear_greed()
@@ -107,10 +107,12 @@ def test_fetch_fear_greed_sends_browser_headers() -> None:
         captured["request"] = request
         return _FakeResponse(payload)
 
-    with patch("src.data_sources.sentiment.urllib.request.urlopen", side_effect=fake_urlopen):
+    with patch(
+        "analyze_stock_kpi.data_sources.sentiment.urllib.request.urlopen", side_effect=fake_urlopen
+    ):
         fetch_fear_greed()
 
-    from src.utils.http_ua import STABLE_USER_AGENT
+    from analyze_stock_kpi.utils.http_ua import STABLE_USER_AGENT
 
     assert captured["request"].get_header("User-agent") == STABLE_USER_AGENT
     assert captured["request"].get_header("Accept") == settings.http_accept
@@ -189,9 +191,7 @@ def test_upsert_replaces_when_same_timestamp_but_richer_content() -> None:
         rating="extreme fear",
         timestamp=stored.timestamp,
         subindicators={
-            "market_momentum_sp500": SubindicatorReading(
-                rating="extreme greed", raw_value=5800.0
-            ),
+            "market_momentum_sp500": SubindicatorReading(rating="extreme greed", raw_value=5800.0),
         },
     )
 

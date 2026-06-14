@@ -1,4 +1,4 @@
-"""Tests for :mod:`src.sec.submissions` — EDGAR last-filed extraction."""
+"""Tests for :mod:`analyze_stock_kpi.data_sources.sec.submissions` — EDGAR last-filed extraction."""
 
 from __future__ import annotations
 
@@ -7,7 +7,8 @@ from datetime import date
 from pathlib import Path
 
 import pytest
-from src.data_sources.sec.submissions import _extract_last_filed
+
+from analyze_stock_kpi.data_sources.sec.submissions import _extract_last_filed
 
 _FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
@@ -74,8 +75,8 @@ def test_enrich_snapshot_sec_resolves_dates_for_sec_registered_symbol(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """When ``resolve_cik`` returns a CIK, the three date fields are populated."""
-    from src.data_sources.sec import submissions
-    from src.data_sources.sec.submissions import LastFiledSnapshot
+    from analyze_stock_kpi.data_sources.sec import submissions
+    from analyze_stock_kpi.data_sources.sec.submissions import LastFiledSnapshot
 
     fake_snap = LastFiledSnapshot(
         last_10k_date=date(2024, 11, 1),
@@ -114,15 +115,16 @@ def test_enrich_snapshot_sec_resolves_dates_for_sec_registered_symbol(
     ],
 )
 def test_enrich_snapshot_sec_returns_empty_on_network_failure(
-    monkeypatch: pytest.MonkeyPatch, exc_factory: object,
+    monkeypatch: pytest.MonkeyPatch,
+    exc_factory: object,
 ) -> None:
     """Network/HTTP error from ``fetch_last_filed`` → caller gets ``{}``.
 
     Wrap-degrade policy: one ticker's SEC failure leaves enrichment
     empty, snapshot survives.
     """
-    from src.data_sources.sec import submissions
-    from src.data_sources.sec.submissions import LastFiledSnapshot
+    from analyze_stock_kpi.data_sources.sec import submissions
+    from analyze_stock_kpi.data_sources.sec.submissions import LastFiledSnapshot
 
     def raising_fetch(_cik: str) -> LastFiledSnapshot:
         raise exc_factory()  # type: ignore[operator]
@@ -137,8 +139,8 @@ def test_enrich_snapshot_sec_no_cik_returns_empty_no_fetch_call(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Non-SEC-registered symbols return ``{}`` and skip the EDGAR fetch."""
-    from src.data_sources.sec import submissions
-    from src.data_sources.sec.submissions import LastFiledSnapshot
+    from analyze_stock_kpi.data_sources.sec import submissions
+    from analyze_stock_kpi.data_sources.sec.submissions import LastFiledSnapshot
 
     fetch_call_count = 0
 
@@ -164,8 +166,8 @@ def test_fetch_last_filed_sends_browser_shape_headers_to_cik_url(
     import urllib.request
     from io import BytesIO
 
-    from src.data_sources.sec import submissions
-    from src.data_sources.sec.submissions import fetch_last_filed
+    from analyze_stock_kpi.data_sources.sec import submissions
+    from analyze_stock_kpi.data_sources.sec.submissions import fetch_last_filed
 
     expected_accept = "application/json, text/plain, */*"
     expected_url = "https://data.sec.gov/submissions/CIK0000320193.json"
@@ -195,7 +197,7 @@ def test_fetch_last_filed_returns_parsed_snapshot(
     import urllib.request
     from io import BytesIO
 
-    from src.data_sources.sec.submissions import fetch_last_filed
+    from analyze_stock_kpi.data_sources.sec.submissions import fetch_last_filed
 
     def fake_urlopen(_req: object, *args: object, **kwargs: object) -> BytesIO:
         return BytesIO(json.dumps(aapl_submissions_fixture).encode())
@@ -217,7 +219,7 @@ def test_fetch_last_filed_zero_pads_short_cik(
     import urllib.request
     from io import BytesIO
 
-    from src.data_sources.sec.submissions import fetch_last_filed
+    from analyze_stock_kpi.data_sources.sec.submissions import fetch_last_filed
 
     captured: dict[str, str] = {}
 
@@ -235,7 +237,7 @@ def test_fetch_last_filed_zero_pads_short_cik(
 @pytest.mark.network
 def test_fetch_last_filed_live_aapl_returns_recent_10q_date() -> None:
     """End-to-end against real EDGAR — AAPL must yield a real 10-Q date."""
-    from src.data_sources.sec.submissions import fetch_last_filed
+    from analyze_stock_kpi.data_sources.sec.submissions import fetch_last_filed
 
     snap = fetch_last_filed("0000320193")
 

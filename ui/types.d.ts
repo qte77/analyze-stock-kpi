@@ -37,7 +37,7 @@ interface CompositeScores {
   screener_score?: number | null;
 }
 
-// Mirrors `src/orchestrators/federal_contractors.AuditRow`. All fields
+// Mirrors `src/analyze_stock_kpi/orchestrators/federal_contractors.AuditRow`. All fields
 // optional because the dashboard treats missing fields as a degraded
 // reading rather than an error (the audit JSON may evolve faster than
 // this declaration). `final_ticker` is the join key onto `Row.symbol`.

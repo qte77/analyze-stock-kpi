@@ -17,10 +17,10 @@ specific numbers as accurate-at-that-date and re-verify before relying.
 
 | Source | Tier | Auth | Rate limit | Redistribute? | Used by |
 |---|---|---|---|---|---|
-| **EDGAR (SEC)** | 0 | none — `User-Agent` header only | ~10 req/sec self-limit | yes (public-domain federal data) | runtime: `src/sec/` |
+| **EDGAR (SEC)** | 0 | none — `User-Agent` header only | ~10 req/sec self-limit | yes (public-domain federal data) | runtime: `src/analyze_stock_kpi/data_sources/sec/` |
 | **usaspending.gov** | 0 | none | unpublished, generous | yes (DATA Act § 6101) | build-time: `scripts/build_federal_contractors.py` |
 | **whit3rabbit/fear-greed-data** (mirror) | 0 | none | GitHub raw-content (generous) | accept-as-is (no LICENSE upstream; derivative of CNN public endpoint) | backfill: `scripts/backfill_fear_greed_whitrabbit.py` (pinned SHA) |
-| **yfinance `^TNX` / `^FVX`** (US Treasury yields) | 0 | none | yfinance (rate-limit risk on bulk runs) | yes — derived percentage-point values; CBOE-derived public indices | daily cron: `src/data_sources/yield_curve.py` → `.github/workflows/yield-curve.yaml` |
+| **yfinance `^TNX` / `^FVX`** (US Treasury yields) | 0 | none | yfinance (rate-limit risk on bulk runs) | yes — derived percentage-point values; CBOE-derived public indices | daily cron: `src/analyze_stock_kpi/data_sources/yield_curve.py` → `.github/workflows/yield-curve.yaml` |
 | **sam.gov Entity Management** | 1 | free key, 90-day rotate | 10/day → 1000/day (entity-reg) | yes — public tier only | deferred — future enrichment, not in critical path |
 | **Yahoo Finance search/lookup** | n/a | none (cookie/crumb session) | ~360/hr unofficial | n/a — bridge only | build-time: bootstrap candidate resolution in the universe builder |
 
@@ -39,7 +39,7 @@ spending_by_category/recipient   company_tickers_exchange.json  Ticker(t).fast_i
    └──────────────────────────────▶───────────────────────────────▶
                                                                   │
                                                                   ▼
-                                                  src/assets/universes/federal-contractors.txt
+                                                  src/analyze_stock_kpi/assets/universes/federal-contractors.txt
                                                   (~25-40 verified public tickers)
                                                   +
                                                   results/federal-contractors/<date>.json
@@ -53,7 +53,7 @@ them — but the universe build does NOT require it.
 
 EDGAR has a second role beyond the bridge: runtime per-ticker
 last-filed dates (10-K / 10-Q / 8-K) land on every
-`FundamentalsSnapshot` via `src/sec/submissions.py` (planned). Same
+`FundamentalsSnapshot` via `src/analyze_stock_kpi/data_sources/sec/submissions.py` (planned). Same
 authentication, different endpoint.
 
 ## Redistribution guardrails (verified 2026-05-21)
@@ -113,7 +113,7 @@ Without it the API returns HTTP 403. SEC documents a **10 req/sec**
 hard ceiling per IP; community practice is to self-limit to 9 req/sec.
 No OAuth, no registration, no redistribution restrictions.
 
-The project sends a browser-shape UA from `src/utils/http_ua.py` (refreshed
+The project sends a browser-shape UA from `src/analyze_stock_kpi/utils/http_ua.py` (refreshed
 quarterly from <https://useragents.me/>) rather than the
 identify-as-the-project format that SEC's docs suggest. Both are
 acceptable to SEC's rate-limiter; the browser-shape blends the egress
@@ -617,7 +617,7 @@ symbols, and OTC tickers that yfinance can't resolve.
 
 | Source | Cadence | Owner |
 |---|---|---|
-| EDGAR `company_tickers_exchange.json` | Per-run, in-process cache (one fetch per `make run`) | `src/sec/cik_map.py` |
+| EDGAR `company_tickers_exchange.json` | Per-run, in-process cache (one fetch per `make run`) | `src/analyze_stock_kpi/data_sources/sec/cik_map.py` |
 | EDGAR submissions / XBRL / Form-4 / 8-K | Per-ticker per-run | Per-feature SEC module |
 | usaspending `spending_by_category/recipient` | **Weekly** Sunday 04:00 UTC, 2h before `demo-snapshot.yaml` | `.github/workflows/federal-contractors-refresh.yaml` (per ADR-0006 + thread refinement 2026-05-20) |
 | sam.gov Entity API | n/a — not in critical path | Deferred |

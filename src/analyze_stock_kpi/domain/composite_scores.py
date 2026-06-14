@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict
 
 if TYPE_CHECKING:
-    from src.data_sources.fundamentals import FundamentalsSnapshot
+    from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
 
 
 _ROE_LO, _ROE_HI = 0.0, 0.30
@@ -63,9 +63,7 @@ def _mean(values: list[float]) -> float:
     return sum(values) / len(values)
 
 
-def _factor_mean(
-    *norm_values: float | None, min_inputs: int
-) -> float | None:
+def _factor_mean(*norm_values: float | None, min_inputs: int) -> float | None:
     """Mean of non-``None`` inputs; ``None`` if fewer than ``min_inputs`` present."""
     present = [v for v in norm_values if v is not None]
     return _mean(present) if len(present) >= min_inputs else None
@@ -105,9 +103,7 @@ def quality(snap: FundamentalsSnapshot) -> float | None:
     if snap.return_on_assets is not None:
         terms.append(_rescale(snap.return_on_assets, _ROA_LO, _ROA_HI))
     if snap.operating_margins is not None:
-        terms.append(
-            _rescale(snap.operating_margins, _OP_MARGIN_LO, _OP_MARGIN_HI)
-        )
+        terms.append(_rescale(snap.operating_margins, _OP_MARGIN_LO, _OP_MARGIN_HI))
     if snap.debt_to_equity is not None and snap.debt_to_equity >= 0:
         terms.append(100 - _rescale(snap.debt_to_equity, _DE_LO, _DE_HI))
     return _mean(terms) if terms else None
@@ -193,10 +189,7 @@ def hgi(snap: FundamentalsSnapshot) -> float | None:
     if not terms:
         return None
     score = _mean(terms)
-    if (
-        snap.operating_margins is not None
-        and snap.operating_margins > _HGI_MARGIN_THRESHOLD
-    ):
+    if snap.operating_margins is not None and snap.operating_margins > _HGI_MARGIN_THRESHOLD:
         score = min(100.0, score + _HGI_MARGIN_BONUS)
     return score
 
@@ -240,26 +233,16 @@ def screener_score(snap: FundamentalsSnapshot) -> float | None:
     Negative ``forward_pe`` (loss-making companies) drops the term
     rather than rewarding it via the inverted cheapness rescale.
     """
-    forward_pe = (
-        snap.forward_pe
-        if snap.forward_pe is None or snap.forward_pe > 0
-        else None
-    )
+    forward_pe = snap.forward_pe if snap.forward_pe is None or snap.forward_pe > 0 else None
     profitability = [
         _normalize_term(snap.return_on_equity, _ROE_LO, _ROE_HI),
         _normalize_term(snap.return_on_assets, _ROA_LO, _ROA_HI),
-        _normalize_term(
-            snap.operating_margins, _OP_MARGIN_LO, _OP_MARGIN_HI
-        ),
+        _normalize_term(snap.operating_margins, _OP_MARGIN_LO, _OP_MARGIN_HI),
         _normalize_term(snap.rd_to_revenue, _RD_REV_LO, _RD_REV_HI),
     ]
     valuation = [
-        _normalize_term(
-            forward_pe, _FORWARD_PE_LO, _FORWARD_PE_HI, invert=True
-        ),
-        _normalize_term(
-            snap.trailing_peg_ratio, _PEG_LO, _PEG_HI, invert=True
-        ),
+        _normalize_term(forward_pe, _FORWARD_PE_LO, _FORWARD_PE_HI, invert=True),
+        _normalize_term(snap.trailing_peg_ratio, _PEG_LO, _PEG_HI, invert=True),
     ]
     risk = [
         _normalize_term(snap.beta, _BETA_LO, _BETA_HI, invert=True),

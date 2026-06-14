@@ -1,4 +1,4 @@
-"""Tests for :mod:`src.data_sources.sentiment_backfill`.
+"""Tests for :mod:`analyze_stock_kpi.data_sources.sentiment_backfill`.
 
 Non-trivial cases only: parse boundaries (CNN-era float vs pre-2021 int
 scores, blank rows, malformed dates, missing fields), multi-year UTC
@@ -11,12 +11,12 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
-from src.data_sources.sentiment import (
+from analyze_stock_kpi.data_sources.sentiment import (
     FearGreedSnapshot,
     SubindicatorReading,
     _write_year,
 )
-from src.data_sources.sentiment_backfill import (
+from analyze_stock_kpi.data_sources.sentiment_backfill import (
     merge_into_years,
     parse_csv,
     parse_row,
@@ -53,10 +53,7 @@ def test_parse_row_blank_returns_none() -> None:
 
 
 def test_parse_row_malformed_date_returns_none() -> None:
-    assert (
-        parse_row({"Date": "not-a-date", "Fear Greed": "50", "Rating": "neutral"})
-        is None
-    )
+    assert parse_row({"Date": "not-a-date", "Fear Greed": "50", "Rating": "neutral"}) is None
 
 
 def test_parse_row_missing_rating_returns_none() -> None:
@@ -67,12 +64,7 @@ def test_parse_row_missing_rating_returns_none() -> None:
 
 
 def test_parse_csv_skips_blanks_and_yields_valid_rows() -> None:
-    text = (
-        "Date,Fear Greed,Rating\n"
-        "2011-01-03,45,greed\n"
-        ",,\n"
-        "2026-05-29,33.2,fear\n"
-    )
+    text = "Date,Fear Greed,Rating\n2011-01-03,45,greed\n,,\n2026-05-29,33.2,fear\n"
     snaps = list(parse_csv(text))
     assert [s.score for s in snaps] == [45.0, 33.2]
 
@@ -82,9 +74,7 @@ def test_parse_csv_skips_blanks_and_yields_valid_rows() -> None:
 
 def test_merge_into_years_groups_by_utc_year(tmp_path: Path) -> None:
     snaps = [
-        FearGreedSnapshot(
-            score=20.0, rating="fear", timestamp=datetime(2011, 1, 3, tzinfo=UTC)
-        ),
+        FearGreedSnapshot(score=20.0, rating="fear", timestamp=datetime(2011, 1, 3, tzinfo=UTC)),
         FearGreedSnapshot(
             score=50.0, rating="neutral", timestamp=datetime(2026, 5, 29, tzinfo=UTC)
         ),
@@ -108,9 +98,7 @@ def test_merge_into_years_does_not_overwrite_cnn_direct_entry(tmp_path: Path) ->
         rating="neutral",
         timestamp=datetime(2026, 5, 29, 12, 0, tzinfo=UTC),
         subindicators={
-            "market_momentum_sp500": SubindicatorReading(
-                rating="greed", raw_value=5800.0
-            ),
+            "market_momentum_sp500": SubindicatorReading(rating="greed", raw_value=5800.0),
         },
     )
     _write_year(2026, {"2026-05-29": existing}, root=tmp_path)

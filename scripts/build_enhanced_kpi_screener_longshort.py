@@ -4,8 +4,8 @@ Phase 2a of issue #192. Reads the latest snapshot per bundled universe
 from ``results/demo/<u>/`` on the data branch (pulled into the workspace
 by the CI workflow), runs the conjunctive-gate screener, then writes:
 
-- ``src/assets/universes/enhanced-kpi-screener-longs.txt``
-- ``src/assets/universes/enhanced-kpi-screener-shorts.txt``
+- ``src/analyze_stock_kpi/assets/universes/enhanced-kpi-screener-longs.txt``
+- ``src/analyze_stock_kpi/assets/universes/enhanced-kpi-screener-shorts.txt``
 - ``results/enhanced_kpi_screener_longshort/audit/<UTC-date>.json``
 
 Mirrors ``scripts/build_aggregated_scores_best_and_worst.py``: one
@@ -25,7 +25,8 @@ from _demo_snapshot_loader import (
     load_all_snapshots,
     write_paired_universe_and_audit,
 )
-from src.orchestrators.enhanced_kpi_screener_longshort import build_universe
+
+from analyze_stock_kpi.orchestrators.enhanced_kpi_screener_longshort import build_universe
 
 
 def main() -> None:

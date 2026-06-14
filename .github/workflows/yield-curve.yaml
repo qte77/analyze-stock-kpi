@@ -62,7 +62,7 @@ jobs:
         run: uv sync
 
       - name: Fetch yield-curve snapshot
-        run: uv run python -m src.data_sources.yield_curve
+        run: uv run python -m analyze_stock_kpi.data_sources.yield_curve
 
       - name: Detect changed history files
         id: changed

@@ -1,4 +1,4 @@
-"""Tests for :mod:`src.usaspending` — POST top-contractors API client."""
+"""Tests for :mod:`analyze_stock_kpi.data_sources.usaspending` — POST top-contractors API client."""
 
 from __future__ import annotations
 
@@ -10,8 +10,9 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from src.config import settings
-from src.data_sources.usaspending import RecipientRecord, fetch_top_contractors
+
+from analyze_stock_kpi.config import settings
+from analyze_stock_kpi.data_sources.usaspending import RecipientRecord, fetch_top_contractors
 
 _FIXTURE_PATH = Path(__file__).parent / "fixtures" / "usaspending_top_recipients.json"
 

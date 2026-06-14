@@ -1,4 +1,4 @@
-"""Tests for :mod:`src.data_sources.yield_curve` (#165).
+"""Tests for :mod:`analyze_stock_kpi.data_sources.yield_curve` (#165).
 
 Non-trivial cases only: slope computation invariants, multi-year UTC
 grouping, wrap-degrade boundary policy on the yfinance ``^TNX`` /
@@ -16,7 +16,8 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 from pydantic import ValidationError
-from src.data_sources.yield_curve import (
+
+from analyze_stock_kpi.data_sources.yield_curve import (
     YieldCurveSnapshot,
     fetch_yield_curve_history,
     fetch_yield_curve_snapshot,
@@ -31,19 +32,13 @@ if TYPE_CHECKING:
 
 
 def test_snapshot_computes_slope_when_both_legs_present() -> None:
-    snap = YieldCurveSnapshot(
-        date=date_cls(2026, 5, 30), tnx_yield=4.453, fvx_yield=4.149
-    )
+    snap = YieldCurveSnapshot(date=date_cls(2026, 5, 30), tnx_yield=4.453, fvx_yield=4.149)
     assert snap.slope_5s10s == pytest.approx(0.304, abs=1e-9)
 
 
 def test_snapshot_slope_is_none_when_either_leg_missing() -> None:
-    only_tnx = YieldCurveSnapshot(
-        date=date_cls(2026, 5, 30), tnx_yield=4.453, fvx_yield=None
-    )
-    only_fvx = YieldCurveSnapshot(
-        date=date_cls(2026, 5, 30), tnx_yield=None, fvx_yield=4.149
-    )
+    only_tnx = YieldCurveSnapshot(date=date_cls(2026, 5, 30), tnx_yield=4.453, fvx_yield=None)
+    only_fvx = YieldCurveSnapshot(date=date_cls(2026, 5, 30), tnx_yield=None, fvx_yield=4.149)
     neither = YieldCurveSnapshot(date=date_cls(2026, 5, 30))
 
     assert only_tnx.slope_5s10s is None
@@ -53,16 +48,12 @@ def test_snapshot_slope_is_none_when_either_leg_missing() -> None:
 
 def test_snapshot_slope_negative_on_inverted_curve() -> None:
     """During curve inversion TNX < FVX; slope must surface as negative."""
-    snap = YieldCurveSnapshot(
-        date=date_cls(2023, 7, 3), tnx_yield=3.85, fvx_yield=4.40
-    )
+    snap = YieldCurveSnapshot(date=date_cls(2023, 7, 3), tnx_yield=3.85, fvx_yield=4.40)
     assert snap.slope_5s10s == pytest.approx(-0.55, abs=1e-9)
 
 
 def test_snapshot_is_frozen() -> None:
-    snap = YieldCurveSnapshot(
-        date=date_cls(2026, 5, 30), tnx_yield=4.453, fvx_yield=4.149
-    )
+    snap = YieldCurveSnapshot(date=date_cls(2026, 5, 30), tnx_yield=4.453, fvx_yield=4.149)
     with pytest.raises(ValidationError, match="frozen"):
         snap.tnx_yield = 0.0  # type: ignore[misc]
 
@@ -72,12 +63,8 @@ def test_snapshot_is_frozen() -> None:
 
 def test_merge_groups_snapshots_by_utc_year(tmp_path: Path) -> None:
     snaps = [
-        YieldCurveSnapshot(
-            date=date_cls(2025, 12, 31), tnx_yield=4.0, fvx_yield=3.8
-        ),
-        YieldCurveSnapshot(
-            date=date_cls(2026, 1, 2), tnx_yield=4.1, fvx_yield=3.9
-        ),
+        YieldCurveSnapshot(date=date_cls(2025, 12, 31), tnx_yield=4.0, fvx_yield=3.8),
+        YieldCurveSnapshot(date=date_cls(2026, 1, 2), tnx_yield=4.1, fvx_yield=3.9),
     ]
 
     by_year = merge_payload_into_years(snaps, root=tmp_path)
@@ -91,16 +78,8 @@ def test_merge_replaces_existing_same_date_with_newer_payload(
     tmp_path: Path,
 ) -> None:
     """A re-run should refresh a same-date entry, not duplicate it."""
-    initial = [
-        YieldCurveSnapshot(
-            date=date_cls(2026, 5, 30), tnx_yield=4.0, fvx_yield=3.8
-        )
-    ]
-    refresh = [
-        YieldCurveSnapshot(
-            date=date_cls(2026, 5, 30), tnx_yield=4.453, fvx_yield=4.149
-        )
-    ]
+    initial = [YieldCurveSnapshot(date=date_cls(2026, 5, 30), tnx_yield=4.0, fvx_yield=3.8)]
+    refresh = [YieldCurveSnapshot(date=date_cls(2026, 5, 30), tnx_yield=4.453, fvx_yield=4.149)]
     merge_payload_into_years(initial, root=tmp_path)
 
     by_year = merge_payload_into_years(refresh, root=tmp_path)
@@ -128,7 +107,7 @@ def test_fetch_returns_snapshot_with_both_legs_on_happy_path() -> None:
         return SimpleNamespace(history=lambda period: _fake_history(closes[sym]))
 
     with patch(
-        "src.data_sources.yield_curve.yf.Ticker", side_effect=_ticker_side_effect
+        "analyze_stock_kpi.data_sources.yield_curve.yf.Ticker", side_effect=_ticker_side_effect
     ):
         snap = fetch_yield_curve_snapshot()
 
@@ -143,7 +122,7 @@ def test_fetch_wrap_degrades_to_none_on_network_error() -> None:
     wrap-degrade (return None), never raise — daily cron then skips
     today's write rather than aborting."""
     with patch(
-        "src.data_sources.yield_curve.yf.Ticker",
+        "analyze_stock_kpi.data_sources.yield_curve.yf.Ticker",
         side_effect=ConnectionError("yahoo timed out"),
     ):
         snap = fetch_yield_curve_snapshot()
@@ -161,7 +140,7 @@ def test_fetch_returns_sparse_snapshot_when_only_one_leg_responds() -> None:
         return SimpleNamespace(history=lambda period: _fake_history(None))
 
     with patch(
-        "src.data_sources.yield_curve.yf.Ticker", side_effect=_ticker_side_effect
+        "analyze_stock_kpi.data_sources.yield_curve.yf.Ticker", side_effect=_ticker_side_effect
     ):
         snap = fetch_yield_curve_snapshot()
 
@@ -187,15 +166,11 @@ def test_history_handles_one_leg_returning_empty() -> None:
     """If ^FVX is delisted / 404s, snapshots still carry the ^TNX leg."""
 
     def _ticker_side_effect(sym: str) -> SimpleNamespace:
-        frame = (
-            _history_frame([(date_cls(2024, 5, 1), 4.5)])
-            if sym == "^TNX"
-            else pd.DataFrame()
-        )
+        frame = _history_frame([(date_cls(2024, 5, 1), 4.5)]) if sym == "^TNX" else pd.DataFrame()
         return SimpleNamespace(history=lambda period: frame)
 
     with patch(
-        "src.data_sources.yield_curve.yf.Ticker", side_effect=_ticker_side_effect
+        "analyze_stock_kpi.data_sources.yield_curve.yf.Ticker", side_effect=_ticker_side_effect
     ):
         snaps = fetch_yield_curve_history(period="1y")
 
@@ -208,7 +183,7 @@ def test_history_handles_one_leg_returning_empty() -> None:
 def test_history_returns_empty_when_both_legs_fail() -> None:
     """Network error on both legs → no snapshots, no exception."""
     with patch(
-        "src.data_sources.yield_curve.yf.Ticker",
+        "analyze_stock_kpi.data_sources.yield_curve.yf.Ticker",
         side_effect=ConnectionError("yahoo timed out"),
     ):
         snaps = fetch_yield_curve_history(period="5y")
@@ -231,7 +206,7 @@ def test_history_drops_nan_close_rows_entirely() -> None:
         return SimpleNamespace(history=lambda period: frame)
 
     with patch(
-        "src.data_sources.yield_curve.yf.Ticker", side_effect=_ticker_side_effect
+        "analyze_stock_kpi.data_sources.yield_curve.yf.Ticker", side_effect=_ticker_side_effect
     ):
         snaps = fetch_yield_curve_history(period="5d")
 

@@ -9,7 +9,7 @@ on the roadmap (Phase 2b's FCF-margin addition), so extracting now
 follows AHA (rule-of-three) rather than fighting it.
 
 Leading-underscore module name signals "internal to the orchestrators
-package"; do not import from outside :mod:`src.orchestrators`.
+package"; do not import from outside :mod:`analyze_stock_kpi.orchestrators`.
 """
 
 from __future__ import annotations
@@ -17,8 +17,9 @@ from __future__ import annotations
 from datetime import date
 
 from pydantic import BaseModel, ConfigDict
-from src.data_sources.fundamentals import (
-    FundamentalsSnapshot,  # noqa: TC002  # pydantic runtime requirement
+
+from analyze_stock_kpi.data_sources.fundamentals import (
+    FundamentalsSnapshot,  # noqa: TC001  # pydantic runtime requirement
 )
 
 
