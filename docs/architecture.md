@@ -64,7 +64,7 @@ src/
     └── parse_args.py                 CliArgs(BaseSettings) — pydantic-settings CLI + env (env_prefix="SSK_")
 ```
 
-## Data flow (v0.5.0 current)
+## Data flow (v1.1.0 current)
 
 ```text
 CLI args  ──► CliArgs(BaseSettings)
@@ -88,7 +88,7 @@ A second cron (`.github/workflows/demo-snapshot.yaml`, Sunday 06:15 UTC) runs `m
 
 A third workflow (`.github/workflows/gh-pages.yaml`) deploys the static dashboard at `ui/{index.html, app.js, style.css}` to GitHub Pages via `actions/upload-pages-artifact` + `actions/deploy-pages` whenever those files change. The dashboard fetches data files at runtime cross-origin from `raw.githubusercontent.com/qte77/analyze-stock-kpi/data/results/…`; this decouples data-update cadence from page deploys.
 
-v0.5.0 attaches a `CompositeScores` object to every `FundamentalsSnapshot` after fetch via `model_copy(update={"composite_scores": compute_scores(snap)})`. The rich summary table appends Quality / Div / Growth columns only when `--show-scores` is passed; persistence carries the composites unconditionally.
+v1.1.0 attaches a `CompositeScores` object to every `FundamentalsSnapshot` after fetch via `model_copy(update={"composite_scores": compute_scores(snap)})`. The rich summary table appends Quality / Div / Growth columns only when `--show-scores` is passed; persistence carries the composites unconditionally.
 
 ## Public types (`pydantic.BaseModel`)
 
@@ -105,12 +105,12 @@ v0.5.0 attaches a `CompositeScores` object to every `FundamentalsSnapshot` after
 - **SEC EDGAR JSON endpoints** — `www.sec.gov/files/company_tickers_exchange.json` (CIK / ticker registry) and `data.sec.gov/submissions/CIK<10>.json` (per-company filing index); SEC prefers *identity-shape* `User-Agent`. `_fetch_json` / `fetch_last_filed` send `settings.sec_user_agent` — identity-shape default (RFC 2606 placeholder, opposite of CNN below); operator overrides via `SSK_SEC_USER_AGENT` env (CI: `vars.SEC_USER_AGENT`). Stdlib `urllib.request`, no extra deps. Disk cache at `settings.edgar_cache_dir` lets `_http_error_cache_fallback` survive 403/304 once primed; first cold-cache CI call can still 403 if the placeholder default is rejected. Rationale in [ADR-0006 amendment 2026-05-22 (later)](decisions/0006-federal-contractors-universe.md).
 - **CNN F&G JSON endpoint** — `production.dataviz.cnn.io/index/fearandgreed/graphdata`; requires browser-shape headers (UA + `Accept` + `Referer`; returns 418 otherwise); stdlib `urllib.request`, no extra deps. Observed schema in [`cnn-fg-api.md`](cnn-fg-api.md). Classified as Tier 0 (keyless, default-on, public-`data`-branch-persistable) per [ADR-0005](decisions/0005-sentiment-risk-sources.md)'s three-tier framework — additional sentiment / risk sources must declare their tier under the same rubric.
 - **GitHub Actions cron** — `.github/workflows/fear-greed.yaml` (daily 21:30 UTC) commits per-year history files `results/cnn_fg/YYYY.json`; `.github/workflows/demo-snapshot.yaml` (Sunday 06:15 UTC) commits per-week universe snapshots under `results/demo/<UNIVERSE>/`. Both target the `data` branch via verified REST Git Data API commits from `actions/github-script@v9`.
-- **`financetoolkit`** — *not used; v0.5.0 composites use simplified formulas with point-in-time `FundamentalsSnapshot` inputs only. See [`decisions/0001-defer-financetoolkit.md`](decisions/0001-defer-financetoolkit.md) and [`decisions/0002-simplified-composites.md`](decisions/0002-simplified-composites.md).*
+- **`financetoolkit`** — *not used; v1.1.0 composites use simplified formulas with point-in-time `FundamentalsSnapshot` inputs only. See [`decisions/0001-defer-financetoolkit.md`](decisions/0001-defer-financetoolkit.md) and [`decisions/0002-simplified-composites.md`](decisions/0002-simplified-composites.md).*
 
 ## What's not here
 
 - Traderfox provider, Playwright, DOM scraping (removed; see [`decisions/0000-remove-traderfox.md`](decisions/0000-remove-traderfox.md))
-- Long/short hedging strategy (Mansfield RS, regime split, ranking) — deferred per roadmap §0.5+
+- Long/short hedging strategy (Mansfield RS, regime split, ranking) — deferred per [ADR-0003](decisions/0003-defer-rs-hedging-epic.md)
 - Paid-data integrations (CDS, Bloomberg, FMP) — explicitly out of scope per [`UserStory.md`](UserStory.md)
 
 ## Distribution scope
