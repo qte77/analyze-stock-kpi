@@ -1,18 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="analyze-stock-kpi composite-score radar">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="qte77 mark">
   <style>
-    .grid { fill: none; stroke: #c8c4b0; stroke-width: 1; opacity: 0.5; }
-    .spokes { stroke: #c8c4b0; stroke-width: 0.75; opacity: 0.45; }
-    .data { fill: #7a6010; fill-opacity: 0.85; stroke: #7a6010; stroke-width: 1.25; stroke-linejoin: round; }
-    @media (prefers-color-scheme: dark) {
-      .grid, .spokes { stroke: #a89878; }
-      .data { fill: #c8a858; stroke: #c8a858; }
+    .mark-bg { fill: #0d1117; }
+    .mark-fg { fill: #e6edf3; }
+    .mark-accent { fill: #388bfd; }
+    @media (prefers-color-scheme: light) {
+      .mark-bg { fill: #ffffff; }
+      .mark-fg { fill: #1f2328; }
+      .mark-accent { fill: #1f6feb; }
     }
   </style>
-  <!-- radar grid: outer + mid hexagon rings -->
-  <polygon class="grid" points="16,4 26.39,10 26.39,22 16,28 5.61,22 5.61,10" />
-  <polygon class="grid" points="16,10 21.2,13 21.2,19 16,22 10.8,19 10.8,13" />
-  <!-- 6 axis spokes -->
-  <path class="spokes" d="M16,16 16,4 M16,16 26.39,10 M16,16 26.39,22 M16,16 16,28 M16,16 5.61,22 M16,16 5.61,10" />
-  <!-- composite-score data polygon -->
-  <polygon class="data" points="16,6 22.06,12.5 23.79,20.5 16,22 9.07,20 11.67,13.5" />
+  <rect class="mark-bg" x="0" y="0" width="80" height="80" rx="12" />
+  <g><path d="M383 561Q383 399 437.0 307.0Q491 215 586 215Q681 215 736.0 307.0Q791 399 791 561Q791 723 736.0 815.0Q681 907 586 907Q491 907 437.0 815.0Q383 723 383 561ZM791 158Q737 64 665.5 17.5Q594 -29 504 -29Q305 -29 197.5 123.0Q90 275 90 559Q90 839 196.0 993.0Q302 1147 494 1147Q595 1147 669.5 1098.0Q744 1049 791 952V1120H1083V-426H791Z" transform="translate(14.7126,47.2900) scale(0.013672,-0.013672)" class="mark-fg" /><path d="M135 1493H1079V1284L573 0H272L758 1233H135Z" transform="translate(31.5700,47.2900) scale(0.013672,-0.013672)" class="mark-fg" /></g><rect class="mark-accent" x="48.43" y="44.29" width="16.86" height="3" rx="1.5" />
 </svg>
