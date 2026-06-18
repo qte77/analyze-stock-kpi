@@ -202,8 +202,11 @@ h2 {
    give the canvas its own flex-sized box (.chart-canvas) so Chart.js sizes the
    chart to the space that's left — without this it sized to the full 220px wrap
    and pushed the legend / x-axis labels below the panel. */
-#lt-fg-chart-wrap,
-#yc-chart-wrap {
+/* `:not([hidden])` so this ID-specificity `display` doesn't override the
+   `[hidden]` that the tab switcher sets to hide an inactive pane — without it
+   every long-term pane renders at once (stacked charts). */
+#lt-fg-chart-wrap:not([hidden]),
+#yc-chart-wrap:not([hidden]) {
   display: flex;
   flex-direction: column;
 }
