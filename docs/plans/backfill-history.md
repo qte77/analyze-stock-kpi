@@ -1,12 +1,13 @@
 # Plan — Backfill F&G long-term + 5s10s history
 
-Issue [#287](https://github.com/qte77/analyze-stock-kpi/issues/287) · status: proposed.
+Issue [#287](https://github.com/qte77/analyze-stock-kpi/issues/287) · status: **shipped** (PRs #297 + #300).
 
 ## Context
 
-History is shallow: CNN F&G long-term goes back only to **2025-05**, the 5s10s slope to
-**2025-02**. Deeper history makes the long-term-context + slope charts (and the merged
-chart, [merge-longterm-charts](merge-longterm-charts.md)) far more useful.
+**Shipped.** History was shallow — CNN F&G long-term went back only to 2025-05, the
+5s10s slope to 2025-02. Both per-year series now reach **2011** on the `data` branch,
+and the demo loader fetches the full range so the long-term-context + slope charts (and
+the future merged chart, [merge-longterm-charts](merge-longterm-charts.md)) paint it.
 
 ## Approach
 

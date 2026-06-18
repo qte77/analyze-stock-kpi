@@ -47,7 +47,8 @@ src/
 ├── data_sources/
 │   ├── fundamentals.py               fetch_fundamentals / fetch_price_history / fetch_universe_fundamentals — yfinance
 │   ├── sentiment.py                  fetch_fear_greed() -> FearGreedSnapshot; `python -m analyze_stock_kpi.data_sources.sentiment` merges into per-year files results/cnn_fg/YYYY.json
-│   ├── sentiment_backfill.py         parse_csv / merge_into_years — whit3rabbit/fear-greed-data CSV → per-year F&G files; one-shot backfill (#164)
+│   ├── sentiment_backfill.py         parse_csv / merge_into_years — whit3rabbit/fear-greed-data CSV → per-year F&G files; one-shot gap-fill backfill (#164)
+│   ├── yield_curve.py                fetch_yield_curve_snapshot / fetch_yield_curve_history — yfinance ^TNX/^FVX 5s10s slope → per-year results/yield_curve/YYYY.json (daily cron #165; one-shot deep backfill to 2011 via scripts/backfill_yield_curve.py, #287)
 │   ├── usaspending.py                fetch_top_contractors(...) -> list[RecipientRecord] — usaspending.gov POST client
 │   └── sec/
 │       ├── cik_map.py                resolve_cik / lookup_record — EDGAR company_tickers_exchange.json with HTTP conditional GET + disk cache
