@@ -32,7 +32,7 @@ from analyze_stock_kpi.domain.composite_scores import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Sequence
+    from collections.abc import Callable
 
     import pandas as pd
 
@@ -184,9 +184,9 @@ def _compute_roi(info: dict[str, Any]) -> float | None:
         or total_cash is None
     ):
         return None
-    if price_to_book == 0:
+    book_equity = _safe_ratio(market_cap, price_to_book)
+    if book_equity is None:
         return None
-    book_equity = market_cap / price_to_book
     invested_capital = book_equity + total_debt - total_cash
     return _safe_ratio(net_income, invested_capital)
 
@@ -248,9 +248,10 @@ def _find_row(latest: pd.Series, needle: str) -> float | None:
 
 
 def _extract_two_rows(
-    pairs: Sequence[tuple[pd.DataFrame | None, str]],
+    pair_a: tuple[pd.DataFrame | None, str],
+    pair_b: tuple[pd.DataFrame | None, str],
 ) -> tuple[float | None, float | None]:
-    """Read two latest-column rows from ``(frame, needle)`` pairs.
+    """Read two latest-column rows from two ``(frame, needle)`` pairs.
 
     All-or-nothing: returns ``(None, None)`` on any structural issue in
     either pair — ``None`` / empty frame, missing row (case-insensitive
@@ -259,15 +260,15 @@ def _extract_two_rows(
     same frame twice (R&D + revenue from one income_stmt) or two distinct
     frames (FCF from cashflow, revenue from income_stmt).
     """
-    values: list[float] = []
-    for frame, needle in pairs:
+    out: list[float] = []
+    for frame, needle in (pair_a, pair_b):
         if frame is None or frame.empty:
             return None, None
         value = _find_row(frame.iloc[:, 0], needle)
         if value is None or value != value:  # NaN propagates via identity check
             return None, None
-        values.append(value)
-    return values[0], values[1]
+        out.append(value)
+    return out[0], out[1]
 
 
 def _read_rd_revenue(income_stmt: pd.DataFrame | None) -> tuple[float | None, float | None]:
@@ -276,7 +277,7 @@ def _read_rd_revenue(income_stmt: pd.DataFrame | None) -> tuple[float | None, fl
     Thin wrapper over ``_extract_two_rows`` — both rows come from the same
     frame. Returns ``(None, None)`` on any structural issue.
     """
-    return _extract_two_rows([(income_stmt, "research"), (income_stmt, "total revenue")])
+    return _extract_two_rows((income_stmt, "research"), (income_stmt, "total revenue"))
 
 
 def _equity_ratio(
@@ -320,7 +321,7 @@ def _read_fcf_revenue(
     revenue from ``income_stmt``. Returns ``(None, None)`` on any
     structural issue.
     """
-    return _extract_two_rows([(cashflow, "free cash flow"), (income_stmt, "total revenue")])
+    return _extract_two_rows((cashflow, "free cash flow"), (income_stmt, "total revenue"))
 
 
 def _fetch_fcf_margin(yf_ticker: yf.Ticker, info: dict[str, Any]) -> float | None:

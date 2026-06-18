@@ -21,6 +21,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from analyze_stock_kpi.config import settings
 from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
 
 if TYPE_CHECKING:
@@ -50,7 +51,7 @@ def load_snapshots(
     Uses the ``index.json`` manifest (written by ``build_demo_manifest.py``)
     to discover the latest date so we don't need to ls the directory.
     """
-    base = Path(f"results/demo/{universe_id}")
+    base = settings.demo_dir / universe_id
     index_path = base / "index.json"
     if not index_path.exists():
         return None
@@ -110,7 +111,7 @@ def write_paired_universe_and_audit(
     today = datetime.now(UTC).strftime("%Y-%m-%d")
     path_a = Path(f"src/analyze_stock_kpi/assets/universes/{preset_a_name}.txt")
     path_b = Path(f"src/analyze_stock_kpi/assets/universes/{preset_b_name}.txt")
-    audit_path = Path(f"results/{audit_dir}/audit/{today}.json")
+    audit_path = settings.results_dir / audit_dir / "audit" / f"{today}.json"
 
     path_a.parent.mkdir(parents=True, exist_ok=True)
     audit_path.parent.mkdir(parents=True, exist_ok=True)

@@ -1,6 +1,6 @@
 // Tests for the fetch helpers in ui/lib/fetch.js. `globalThis.fetch`
-// is stubbed per-test; loadYearsFromBranch's this-year/last-year URLs are
-// distinguished by the year suffix so concat-order, ascending sort, and the
+// is stubbed per-test; loadYearsFromBranch's per-year URLs are distinguished
+// by the year suffix so the full floor->now range, ascending sort, and the
 // per-leg silent-fail can be asserted without a live network.
 
 import { describe, it, expect, vi, afterEach } from "vitest";
@@ -63,5 +63,43 @@ describe("loadYearsFromBranch", () => {
     );
     const out = await loadYearsFromBranch("https://base", "results/x", "t");
     expect(out.map((e) => e.t)).toEqual(["z"]);
+  });
+
+  it("fetches every year from the floor through this year, sorted ascending", async () => {
+    const floor = 2011;
+    const expected = Array.from({ length: year - floor + 1 }, (_, i) => floor + i);
+    const seen = [];
+    globalThis.fetch = vi.fn(async (url) => {
+      const m = String(url).match(/(\d{4})\.json$/);
+      const y = m ? Number(m[1]) : null;
+      if (y) seen.push(y);
+      return res(true, [{ t: String(y) }]);
+    });
+    const out = await loadYearsFromBranch("https://base", "results/x", "t");
+    expect([...seen].sort((a, b) => a - b)).toEqual(expected);
+    expect(out.map((e) => e.t)).toEqual(expected.map(String));
+  });
+
+  it("honours an explicit floorYear", async () => {
+    const floor = year - 2;
+    const seen = [];
+    globalThis.fetch = vi.fn(async (url) => {
+      const m = String(url).match(/(\d{4})\.json$/);
+      if (m) seen.push(Number(m[1]));
+      return res(true, []);
+    });
+    await loadYearsFromBranch("https://base", "results/x", "t", floor);
+    expect([...seen].sort((a, b) => a - b)).toEqual([floor, year - 1, year]);
+  });
+
+  it("silently skips years whose file 404s and returns the rest sorted", async () => {
+    globalThis.fetch = vi.fn(async (url) => {
+      const u = String(url);
+      if (u.endsWith(`${year - 1}.json`)) return res(true, [{ t: `${year - 1}` }]);
+      if (u.endsWith(`${year}.json`)) return res(true, [{ t: `${year}` }]);
+      return res(false);
+    });
+    const out = await loadYearsFromBranch("https://base", "results/x", "t");
+    expect(out.map((e) => e.t)).toEqual([`${year - 1}`, `${year}`]);
   });
 });

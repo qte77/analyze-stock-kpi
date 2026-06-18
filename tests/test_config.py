@@ -25,6 +25,14 @@ def test_app_settings_defaults_match_pre_refactor_literals() -> None:
     assert s.results_dir == Path("results")
 
 
+def test_app_settings_results_subdir_defaults() -> None:
+    """`demo_dir` / `audit_dir` default under `results/` so scripts route paths
+    through settings instead of hardcoding f-strings."""
+    s = AppSettings()
+    assert s.demo_dir == Path("results/demo")
+    assert s.audit_dir == Path("results/audit")
+
+
 def test_app_settings_env_override_via_ssk_prefix(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

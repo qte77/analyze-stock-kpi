@@ -14,8 +14,8 @@ from __future__ import annotations
 
 import json
 from datetime import UTC, datetime
-from pathlib import Path
 
+from analyze_stock_kpi.config import settings
 from analyze_stock_kpi.orchestrators.universe_audit import audit_universes
 
 
@@ -23,7 +23,7 @@ def main() -> None:
     """Build the audit report and persist to ``results/audit/``."""
     report = audit_universes()
     today = datetime.now(UTC).strftime("%Y-%m-%d")
-    out_path = Path(f"results/audit/universes-{today}.json")
+    out_path = settings.audit_dir / f"universes-{today}.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(report.model_dump(mode="json"), indent=2))
     print(f"Audited {len(report.entries_by_universe)} universes → {out_path}")

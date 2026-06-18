@@ -22,22 +22,25 @@ export async function fetchJson(url) {
 }
 
 /**
- * Fetch this-year + last-year per-year JSON files from the data branch and
- * concat. Silent-fail per leg so a brand-new repo (no
- * `<baseUrl>/<pathPrefix>/<thisYear>.json` yet on the data branch) still paints
- * what's available. Sorts ascending by the named string field.
+ * Fetch every per-year JSON file from `floorYear` through the current UTC year
+ * off the data branch and concat. Fetched in parallel; silent-fail per leg so
+ * years with no file yet (a 404 before the series started, or this year before
+ * the first cron run) are simply skipped — the chart still paints what exists.
+ * Sorts ascending by the named string field. The default floor (2011) is the
+ * CNN F&G / 5s10s inception; pass an explicit `floorYear` for a shallower series.
  *
  * @param {string} baseUrl     data-branch base URL (no trailing slash)
  * @param {string} pathPrefix  e.g. "results/cnn_fg" / "results/yield_curve"
  * @param {string} sortKey     e.g. "timestamp" / "date"
+ * @param {number} [floorYear] first year to try (inclusive); default 2011
  * @returns {Promise<Array<any>>}
  */
-export async function loadYearsFromBranch(baseUrl, pathPrefix, sortKey) {
+export async function loadYearsFromBranch(baseUrl, pathPrefix, sortKey, floorYear = 2011) {
   const thisYear = new Date().getUTCFullYear();
-  const results = await Promise.allSettled([
-    fetchJson(`${baseUrl}/${pathPrefix}/${thisYear - 1}.json`),
-    fetchJson(`${baseUrl}/${pathPrefix}/${thisYear}.json`),
-  ]);
+  const years = Array.from({ length: thisYear - floorYear + 1 }, (_, i) => floorYear + i);
+  const results = await Promise.allSettled(
+    years.map((y) => fetchJson(`${baseUrl}/${pathPrefix}/${y}.json`)),
+  );
   /** @type {Array<any>} */
   const merged = [];
   for (const r of results) {

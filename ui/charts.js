@@ -37,6 +37,12 @@ export function initCharts(context) {
   ctx = context;
 }
 
+// Shared Chart.js option bases. Every chart is responsive + non-aspect-locked;
+// the time-series charts also share the 250ms animation. Spread first in each
+// `options` block so per-chart `plugins`/`scales` extend them.
+const BASE_CHART_OPTS = { responsive: true, maintainAspectRatio: false };
+const BASE_ANIMATED_OPTS = { ...BASE_CHART_OPTS, animation: { duration: 250 } };
+
 /** @type {any} */
 let sectorChart = null;
 /** @type {any} */
@@ -81,8 +87,7 @@ export function renderSectorDonut() {
       datasets: [{ data, backgroundColor, borderColor, borderWidth: 1, offset }],
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      ...BASE_CHART_OPTS,
       plugins: {
         legend: {
           display: false, // updated below after wrap width check
@@ -245,8 +250,7 @@ export function renderRadar(
       ],
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      ...BASE_CHART_OPTS,
       scales: {
         r: {
           min: 0,
@@ -369,8 +373,7 @@ export async function renderTimeSeriesPane(pane, row) {
       ],
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      ...BASE_CHART_OPTS,
       scales: {
         y: {
           ...scoreYAxis(cssVar),
@@ -474,9 +477,7 @@ export function renderFearGreedChart(
       ],
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: { duration: 250 },
+      ...BASE_ANIMATED_OPTS,
       plugins: { legend: { display: false } },
       scales: { y: scoreYAxis(cssVar), x: themedXAxis(cssVar) },
     },
@@ -527,9 +528,7 @@ function renderMonthlyFearGreedChart(
       ],
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: { duration: 250 },
+      ...BASE_ANIMATED_OPTS,
       plugins: { legend: { display: true, position: "bottom" } },
       scales: { y: scoreYAxis(cssVar), x: themedXAxis(cssVar) },
     },
@@ -719,9 +718,7 @@ function renderYieldCurveChart(entries) {
       ],
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: { duration: 250 },
+      ...BASE_ANIMATED_OPTS,
       plugins: { legend: { display: false } },
       scales: {
         // Highlight the zero line — inversions sit below.
