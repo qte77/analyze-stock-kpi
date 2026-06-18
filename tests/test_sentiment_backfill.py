@@ -88,15 +88,17 @@ def test_merge_into_years_groups_by_utc_year(tmp_path: Path) -> None:
 def test_merge_into_years_does_not_overwrite_cnn_direct_entry(tmp_path: Path) -> None:
     """Backfill must never clobber a higher-fidelity CNN-direct row.
 
-    CNN-direct rows carry intraday timestamps + subindicators; whit3rabbit
-    rows use midnight UTC and have no subindicators. The newer-timestamp
-    rule in ``_upsert`` keeps CNN-direct rows when both target the same
-    date.
+    Real CNN *historical* rows are stored at **midnight UTC** (the data-point
+    date boundary) — the same key a whit3rabbit row produces, not an intraday
+    timestamp. So the guard cannot rely on a newer timestamp: backfill is a
+    strict gap-fill and keeps whatever is already on disk for that date, even
+    when the timestamps tie and the backfill row looks "different" (it lacks
+    subindicators). A same-midnight backfill row must NOT replace it.
     """
     existing = FearGreedSnapshot(
         score=42.0,
         rating="neutral",
-        timestamp=datetime(2026, 5, 29, 12, 0, tzinfo=UTC),
+        timestamp=datetime(2026, 5, 29, tzinfo=UTC),
         subindicators={
             "market_momentum_sp500": SubindicatorReading(rating="greed", raw_value=5800.0),
         },

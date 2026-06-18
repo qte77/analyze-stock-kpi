@@ -33,7 +33,6 @@ from analyze_stock_kpi.config import settings
 from analyze_stock_kpi.data_sources.sentiment import (
     FearGreedSnapshot,
     _load_year,
-    _upsert,
 )
 
 if TYPE_CHECKING:
@@ -84,10 +83,14 @@ def merge_into_years(
 ) -> dict[int, dict[str, FearGreedSnapshot]]:
     """Merge backfill snapshots onto on-disk per-year files (in-memory only).
 
-    Each snapshot routes to its UTC year. ``_upsert`` with
-    ``force=False`` ensures backfill never overwrites a higher-fidelity
-    CNN-direct entry that already exists for the same date (newer
-    timestamp wins).
+    Each snapshot routes to its UTC year and is inserted **only when that
+    date is absent** — backfill is a strict gap-fill and never replaces an
+    existing row. This matters because CNN-direct *historical* rows are
+    stored at midnight UTC (the data-point date boundary), the same key a
+    whit3rabbit row produces; a replace would silently drop the CNN-direct
+    row's higher-fidelity ``subindicators`` / ``previous_*`` fields. The
+    daily ``fear-greed.yaml`` cron remains authoritative for new/updated
+    dates via :func:`analyze_stock_kpi.data_sources.sentiment._upsert`.
 
     Caller persists each year via
     :func:`analyze_stock_kpi.data_sources.sentiment._write_year`.
@@ -97,5 +100,6 @@ def merge_into_years(
         year = snap.timestamp.astimezone(UTC).year
         if year not in by_year:
             by_year[year] = _load_year(year, root=root)
-        _upsert(by_year[year], snap, force=False)
+        date_key = snap.timestamp.astimezone(UTC).strftime("%Y-%m-%d")
+        by_year[year].setdefault(date_key, snap)
     return by_year
