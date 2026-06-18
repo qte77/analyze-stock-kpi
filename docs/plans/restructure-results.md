@@ -1,6 +1,6 @@
 # Plan — Restructure data-branch `results/` layout (group by kind)
 
-Issue `none — pre-issue design` (adjacent: [#288](https://github.com/qte77/analyze-stock-kpi/issues/288), [#289](https://github.com/qte77/analyze-stock-kpi/issues/289)) · status: **in progress** (code PR; data move pending).
+Issue `none — pre-issue design` (adjacent: [#288](https://github.com/qte77/analyze-stock-kpi/issues/288), [#289](https://github.com/qte77/analyze-stock-kpi/issues/289)) · status: **shipped** (PR #305, 2026-06-18; data branch migrated) — one tail deferred (see below).
 
 ## Context
 
@@ -66,8 +66,14 @@ scripts, workflow YAML, or DOM-glue path strings.
       charts; federal-contractors audit overlay; no 404s), then **delete**
       the old paths from `data`.
 
-## Open questions / out of scope
+## Deferred / open questions / out of scope
 
+- **Deferred — rename `results/demo/` → `results/snapshots/`**: de-"demo" the
+  production snapshot dir. Fold into [#289](https://github.com/qte77/analyze-stock-kpi/issues/289)
+  (consolidate-ui-tooling), which already reworks the demo/UI layer — rename the
+  path *and* the subsystem (`demo-snapshot.yaml`, `demo_dir`, docs) together, not
+  as a standalone migration. `universes/` was rejected: ambiguous vs
+  `universes.json` / `audit/universes-*.json`, and `audit/` is also per-universe.
 - **Naming mismatch** — universe id `federal-contractors` (hyphen) vs path
   `federal_contractors` (underscore) is pre-existing; normalizing would
   balloon the data move → out of scope.
