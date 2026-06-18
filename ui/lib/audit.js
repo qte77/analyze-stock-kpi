@@ -45,7 +45,7 @@ export function buildAuditMap(rows) {
 export async function loadAudit(universe, date, baseUrl, fetcher) {
   if (universe !== "federal-contractors") return null;
   try {
-    const rows = await fetcher(`${baseUrl}/results/federal_contractors/audit/${date}.json`);
+    const rows = await fetcher(`${baseUrl}/results/audit/federal_contractors/${date}.json`);
     return buildAuditMap(rows);
   } catch {
     return null;

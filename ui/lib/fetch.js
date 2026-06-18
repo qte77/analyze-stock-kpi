@@ -30,7 +30,7 @@ export async function fetchJson(url) {
  * CNN F&G / 5s10s inception; pass an explicit `floorYear` for a shallower series.
  *
  * @param {string} baseUrl     data-branch base URL (no trailing slash)
- * @param {string} pathPrefix  e.g. "results/cnn_fg" / "results/yield_curve"
+ * @param {string} pathPrefix  e.g. "results/series/cnn_fg" / "results/series/yield_curve"
  * @param {string} sortKey     e.g. "timestamp" / "date"
  * @param {number} [floorYear] first year to try (inclusive); default 2011
  * @returns {Promise<Array<any>>}
