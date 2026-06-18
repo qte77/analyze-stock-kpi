@@ -31,6 +31,14 @@ function parseWindow(/** @type {string | null} */ raw) {
 }
 
 /**
+ * @param {string | null} v
+ * @returns {v is "simple" | "detailed"}
+ */
+function isValidView(v) {
+  return v === "simple" || v === "detailed";
+}
+
+/**
  * @param {string} value
  * @returns {boolean}
  */
@@ -53,7 +61,7 @@ function isValidIsoDate(value) {
 export function parseState(search, knownUniverses) {
   const params = new URLSearchParams(search.startsWith("?") ? search : `?${search}`);
   const viewRaw = params.get("view");
-  const view = viewRaw === "simple" || viewRaw === "detailed" ? viewRaw : "simple";
+  const view = isValidView(viewRaw) ? viewRaw : "simple";
   const universes = (params.get("universe") ?? "")
     .split(",")
     .map((u) => u.trim())
@@ -63,8 +71,7 @@ export function parseState(search, knownUniverses) {
   const filter = params.get("filter") ?? "";
   const dateRaw = params.get("date");
   const date = dateRaw && isValidIsoDate(dateRaw) ? dateRaw : null;
-  const sectorRaw = params.get("sector");
-  const sector = sectorRaw && sectorRaw.length > 0 ? sectorRaw : null;
+  const sector = params.get("sector") || null;
   const ltFgWindow = parseWindow(params.get("ltFgWindow"));
   const ycWindow = parseWindow(params.get("ycWindow"));
   return {
@@ -118,9 +125,7 @@ export function serializeState(state, baseUrl) {
  * @returns {"simple" | "detailed"}
  */
 export function resolveViewMode(urlValue, localStorageValue) {
-  if (urlValue === "simple" || urlValue === "detailed") return urlValue;
-  if (localStorageValue === "simple" || localStorageValue === "detailed") {
-    return localStorageValue;
-  }
+  if (isValidView(urlValue)) return urlValue;
+  if (isValidView(localStorageValue)) return localStorageValue;
   return "simple";
 }
