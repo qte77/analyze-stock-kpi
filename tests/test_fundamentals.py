@@ -213,7 +213,7 @@ def test_extract_two_rows_none_frame_returns_none_pair() -> None:
     from analyze_stock_kpi.data_sources.fundamentals import _extract_two_rows
 
     income_stmt = pd.DataFrame({"latest": [100.0]}, index=["Total Revenue"])
-    assert _extract_two_rows([(None, "free cash flow"), (income_stmt, "total revenue")]) == (
+    assert _extract_two_rows((None, "free cash flow"), (income_stmt, "total revenue")) == (
         None,
         None,
     )
@@ -227,7 +227,7 @@ def test_extract_two_rows_empty_frame_returns_none_pair() -> None:
 
     income_stmt = pd.DataFrame({"latest": [100.0]}, index=["Total Revenue"])
     assert _extract_two_rows(
-        [(pd.DataFrame(), "free cash flow"), (income_stmt, "total revenue")]
+        (pd.DataFrame(), "free cash flow"), (income_stmt, "total revenue")
     ) == (None, None)
 
 
@@ -242,7 +242,7 @@ def test_extract_two_rows_missing_row_returns_none_pair() -> None:
     from analyze_stock_kpi.data_sources.fundamentals import _extract_two_rows
 
     income_stmt = pd.DataFrame({"latest": [20.0]}, index=["Research And Development"])
-    assert _extract_two_rows([(income_stmt, "research"), (income_stmt, "total revenue")]) == (
+    assert _extract_two_rows((income_stmt, "research"), (income_stmt, "total revenue")) == (
         None,
         None,
     )
@@ -258,7 +258,7 @@ def test_extract_two_rows_nan_cell_returns_none_pair() -> None:
         {"latest": [float("nan"), 100.0]},
         index=["Research And Development", "Total Revenue"],
     )
-    assert _extract_two_rows([(income_stmt, "research"), (income_stmt, "total revenue")]) == (
+    assert _extract_two_rows((income_stmt, "research"), (income_stmt, "total revenue")) == (
         None,
         None,
     )
@@ -272,7 +272,7 @@ def test_extract_two_rows_two_frames_happy_path() -> None:
 
     cashflow = pd.DataFrame({"latest": [15.0]}, index=["Free Cash Flow"])
     income_stmt = pd.DataFrame({"latest": [100.0]}, index=["Total Revenue"])
-    assert _extract_two_rows([(cashflow, "free cash flow"), (income_stmt, "total revenue")]) == (
+    assert _extract_two_rows((cashflow, "free cash flow"), (income_stmt, "total revenue")) == (
         15.0,
         100.0,
     )
@@ -288,7 +288,7 @@ def test_extract_two_rows_single_frame_happy_path() -> None:
         {"latest": [20.0, 100.0]},
         index=["Research And Development", "Total Revenue"],
     )
-    assert _extract_two_rows([(income_stmt, "research"), (income_stmt, "total revenue")]) == (
+    assert _extract_two_rows((income_stmt, "research"), (income_stmt, "total revenue")) == (
         20.0,
         100.0,
     )
