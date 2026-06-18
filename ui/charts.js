@@ -725,8 +725,24 @@ function renderYieldCurveChart(entries) {
         y: {
           grid: { color: () => `${cssVar("--border", "#c8c4b0")}` },
           ticks: { color: () => cssVar("--text", "#2c2818") },
+          // Header reports the current slope in bps; label the axis so its
+          // decimal percentage-point scale isn't mistaken for bps.
+          title: { display: true, text: "% pts", color: () => cssVar("--text", "#2c2818") },
         },
-        x: themedXAxis(cssVar),
+        // Daily series over ~15y — label the first point of each calendar year
+        // (including the latest) so the axis doesn't orphan the most recent
+        // ~year the way an evenly-strided maxTicksLimit does.
+        x: {
+          grid: { color: () => cssVar("--border", "#c8c4b0") },
+          ticks: {
+            color: () => cssVar("--text", "#2c2818"),
+            autoSkip: false,
+            callback: (/** @type {unknown} */ _value, /** @type {number} */ index) =>
+              index === 0 || points[index].date.slice(0, 4) !== points[index - 1].date.slice(0, 4)
+                ? points[index].date.slice(0, 4)
+                : "",
+          },
+        },
       },
     },
   });
