@@ -194,10 +194,16 @@ def test_run_refresh_universe_defaults_to_settings_dir(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
-    """No overrides -> writes under ``settings.federal_contractors_dir``."""
+    """No overrides -> preset under ``federal_contractors_dir``, audit under
+    ``audit_dir / "federal_contractors"``."""
     monkeypatch.setattr(
         "analyze_stock_kpi.__main__.settings",
-        settings.model_copy(update={"federal_contractors_dir": tmp_path}),
+        settings.model_copy(
+            update={
+                "federal_contractors_dir": tmp_path,
+                "audit_dir": tmp_path / "audit_root",
+            },
+        ),
     )
     monkeypatch.setattr(
         "analyze_stock_kpi.__main__.build_universe",
@@ -209,8 +215,8 @@ def test_run_refresh_universe_defaults_to_settings_dir(
 
     assert preset_path == tmp_path / "universe.txt"
     assert preset_path.read_text() == "LMT\n"
-    # Audit JSON sits under an audit/ subdirectory with a UTC-date filename
-    audit_dir = tmp_path / "audit"
+    # Audit JSON lands under audit_dir/federal_contractors/<UTC-date>.json
+    audit_dir = tmp_path / "audit_root" / "federal_contractors"
     assert audit_dir.is_dir()
     audit_files = list(audit_dir.glob("*.json"))
     assert len(audit_files) == 1

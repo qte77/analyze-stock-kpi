@@ -1,4 +1,4 @@
-"""One-shot backfill: full yfinance ^TNX/^FVX history → results/yield_curve/YYYY.json (#287).
+"""One-shot backfill: full yfinance ^TNX/^FVX history → results/series/yield_curve/YYYY.json (#287).
 
 Thin wrapper around :mod:`analyze_stock_kpi.data_sources.yield_curve`. The daily
 cron (``yield-curve.yaml``) only fetches deep history on a *first* run
@@ -15,10 +15,10 @@ Operator workflow::
 
     uv run python scripts/backfill_yield_curve.py
 
-Then commit the changed ``results/yield_curve/<YYYY>.json`` files to the
+Then commit the changed ``results/series/yield_curve/<YYYY>.json`` files to the
 ``data`` branch (the daily ``yield-curve.yaml`` cron keeps them current after).
 Override ``SSK_YIELD_CURVE_CACHE_DIR`` to write somewhere other than the default
-``results/yield_curve``.
+``results/series/yield_curve``.
 """
 
 from __future__ import annotations

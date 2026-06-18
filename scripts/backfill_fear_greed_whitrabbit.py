@@ -1,4 +1,4 @@
-"""One-shot backfill: whit3rabbit/fear-greed-data → results/cnn_fg/YYYY.json (#164).
+"""One-shot backfill: whit3rabbit/fear-greed-data → results/series/cnn_fg/YYYY.json (#164).
 
 Thin wrapper around :mod:`analyze_stock_kpi.data_sources.sentiment_backfill`. Pinned
 to a specific upstream commit SHA for deterministic backfill —
@@ -8,7 +8,7 @@ Operator workflow::
 
     uv run python scripts/backfill_fear_greed_whitrabbit.py
 
-Then commit the changed ``results/cnn_fg/<YYYY>.json`` files to the
+Then commit the changed ``results/series/cnn_fg/<YYYY>.json`` files to the
 ``data`` branch via the verified Git Data API pattern
 (see ``.github/workflows/fear-greed.yaml`` for the cron analogue).
 After the data-branch commit, the demo dashboard's Long-Term Context

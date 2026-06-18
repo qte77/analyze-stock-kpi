@@ -104,7 +104,7 @@ results/demo/
 # CNN Fear & Greed year files — production cron writes them to the `data`
 # branch only. Existing tracked files on `main` are legacy; new years won't be
 # accidentally committed from feature branches.
-results/cnn_fg/*.json
+results/series/cnn_fg/*.json
 # EDGAR ticker registry — disk cache for the conditional-GET shim in
 # src/sec/cik_map.py. Refreshed on If-Modified-Since hit; never committed
 # (the file is ~13 MB and changes daily).

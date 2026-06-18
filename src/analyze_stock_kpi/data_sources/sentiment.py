@@ -5,7 +5,7 @@ Public API:
       (used by the ``make run`` banner).
     - ``python -m analyze_stock_kpi.data_sources.sentiment`` fetches the full payload and merges the
       headline + ~1y historical points + per-day subindicator readings into
-      per-year files at ``results/cnn_fg/YYYY.json`` — sorted-by-date JSON
+      per-year files at ``results/series/cnn_fg/YYYY.json`` — sorted-by-date JSON
       arrays. Today's entry is always overwritten with the live headline
       (which carries ``previous_*`` deltas + the precise 0-100 subindicator
       scores CNN only ships for today); older dates are gap-filled and only

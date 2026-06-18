@@ -6,7 +6,7 @@ by the CI workflow), runs the conjunctive-gate screener, then writes:
 
 - ``src/analyze_stock_kpi/assets/universes/enhanced-kpi-screener-longs.txt``
 - ``src/analyze_stock_kpi/assets/universes/enhanced-kpi-screener-shorts.txt``
-- ``results/enhanced_kpi_screener_longshort/audit/<UTC-date>.json``
+- ``results/audit/enhanced_kpi_screener_longshort/<UTC-date>.json``
 
 Mirrors ``scripts/build_aggregated_scores_best_and_worst.py``: one
 ranking pass per cron tick produces both presets; the universe-builder

@@ -45,7 +45,7 @@ CLI args double as env vars with the `SSK_` prefix
   Growth / Big Call / AAQS / HGI / Screener — shown as **qte77
   Score** in the dashboard). Sparse fields for non-equities (FX,
   futures, crypto) are valid by design.
-* **Sentiment** — `results/cnn_fg/YYYY.json`: per-year date-sorted
+* **Sentiment** — `results/series/cnn_fg/YYYY.json`: per-year date-sorted
   array of CNN Fear & Greed snapshots (headline + 9 subindicators).
   Updated daily by a GitHub Actions cron at 21:30 UTC.
 

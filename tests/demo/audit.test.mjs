@@ -55,7 +55,7 @@ describe("loadAudit", () => {
 
   it("returns a Map keyed by final_ticker on the happy path", async () => {
     const fetcher = async (/** @type {string} */ url) => {
-      expect(url).toBe(`${BASE}/results/federal_contractors/audit/2024-05-15.json`);
+      expect(url).toBe(`${BASE}/results/audit/federal_contractors/2024-05-15.json`);
       return [{ rank: 1, recipient_name: "LOCKHEED MARTIN CORPORATION", final_ticker: "LMT" }];
     };
     const map = await loadAudit("federal-contractors", "2024-05-15", BASE, fetcher);

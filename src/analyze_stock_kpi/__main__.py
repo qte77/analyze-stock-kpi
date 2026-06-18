@@ -147,7 +147,9 @@ def _run_refresh_universe(args: CliArgs) -> Path:
     base = settings.federal_contractors_dir
     preset_path = args.output or base / "universe.txt"
     audit_path = args.audit_output or (
-        base / "audit" / f"{datetime.now(UTC).strftime('%Y-%m-%d')}.json"
+        settings.audit_dir
+        / "federal_contractors"
+        / f"{datetime.now(UTC).strftime('%Y-%m-%d')}.json"
     )
     preset_path.parent.mkdir(parents=True, exist_ok=True)
     audit_path.parent.mkdir(parents=True, exist_ok=True)

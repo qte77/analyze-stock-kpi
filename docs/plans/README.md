@@ -24,3 +24,4 @@ tracker) stays issue-only — no plan file.
 | [Backfill F&G + 5s10s history](backfill-history.md) | [#287](https://github.com/qte77/analyze-stock-kpi/issues/287) |
 | [Merge long-term charts + SP500](merge-longterm-charts.md) | [#288](https://github.com/qte77/analyze-stock-kpi/issues/288) |
 | [Consolidate UI tooling into ui/](consolidate-ui-tooling.md) | [#289](https://github.com/qte77/analyze-stock-kpi/issues/289) |
+| [Restructure data-branch results/ layout](restructure-results.md) | none — pre-issue design |

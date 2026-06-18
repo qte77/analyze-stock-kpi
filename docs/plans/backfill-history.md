@@ -16,9 +16,9 @@ exposes, using the existing backfill paths — no schema change.
 
 ## Steps
 
-1. **CNN F&G** — extend `results/cnn_fg/YYYY.json` earlier than 2025-05 via
+1. **CNN F&G** — extend `results/series/cnn_fg/YYYY.json` earlier than 2025-05 via
    `src/analyze_stock_kpi/data_sources/sentiment_backfill.py`; verify CNN's API horizon.
-2. **5s10s / yield curve** — extend `results/yield_curve/…` earlier than 2025-02 via
+2. **5s10s / yield curve** — extend `results/series/yield_curve/…` earlier than 2025-02 via
    `src/analyze_stock_kpi/data_sources/yield_curve.py`; verify the source horizon.
 3. One-off backfill run, committed to `data` via the verified-commit path; the
    daily/weekly crons keep it current going forward.

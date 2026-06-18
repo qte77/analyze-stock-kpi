@@ -141,10 +141,12 @@ const loadSnapshot = (/** @type {string} */ date) => fetchJson(snapshotUrl(activ
 const loadUniverses = () => fetchJson("universes.json");
 
 /** @type {() => Promise<Array<{timestamp: string, score: number, rating?: string}>>} */
-const loadFearGreedYears = () => loadYearsFromBranch(DATA_BASE_URL, "results/cnn_fg", "timestamp");
+const loadFearGreedYears = () =>
+  loadYearsFromBranch(DATA_BASE_URL, "results/series/cnn_fg", "timestamp");
 
 /** @type {() => Promise<Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>>} */
-const loadYieldCurveYears = () => loadYearsFromBranch(DATA_BASE_URL, "results/yield_curve", "date");
+const loadYieldCurveYears = () =>
+  loadYearsFromBranch(DATA_BASE_URL, "results/series/yield_curve", "date");
 
 // ───────────────────────── View-mode + URL state ───────────────────────────
 

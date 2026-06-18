@@ -3,7 +3,7 @@
 Thin wrapper around :func:`analyze_stock_kpi.orchestrators.federal_contractors.build_universe`.
 Writes the preset to ``src/analyze_stock_kpi/assets/universes/federal-contractors.txt`` (the
 bundled asset shipped in the wheel) and the audit JSON to
-``results/federal_contractors/audit/<UTC-date>.json``.
+``results/audit/federal_contractors/<UTC-date>.json``.
 
 Invoked by ``.github/workflows/federal-contractors-refresh.yaml`` on a
 Sunday cron; can also be run ad-hoc locally.
@@ -25,7 +25,7 @@ def main() -> None:
 
     preset_path = Path("src/analyze_stock_kpi/assets/universes/federal-contractors.txt")
     today = datetime.now(UTC).strftime("%Y-%m-%d")
-    audit_path = settings.federal_contractors_dir / "audit" / f"{today}.json"
+    audit_path = settings.audit_dir / "federal_contractors" / f"{today}.json"
 
     preset_path.parent.mkdir(parents=True, exist_ok=True)
     audit_path.parent.mkdir(parents=True, exist_ok=True)

@@ -13,7 +13,7 @@ volatility-indices chart (concrete Tier-0 implementation).
 
 The repo currently surfaces one sentiment indicator (CNN Fear & Greed)
 via `src/sentiment.py`, with daily snapshots persisted to the `data`
-branch under `results/cnn_fg/YYYY.json` by
+branch under `results/series/cnn_fg/YYYY.json` by
 `.github/workflows/fear-greed.yaml`.
 [#22](https://github.com/qte77/analyze-stock-kpi/issues/22) opened a
 survey of alternative risk-sentiment sources (UBS, Citi, Goldman, State
@@ -152,7 +152,7 @@ The mirror satisfies the Tier-0 criteria:
   by default; whit3rabbit is invoked manually via
   `scripts/backfill_fear_greed_whitrabbit.py`.
 - **Persistence:** outputs land on the `data` branch — same
-  `results/cnn_fg/YYYY.json` files the CNN-direct path writes,
+  `results/series/cnn_fg/YYYY.json` files the CNN-direct path writes,
   merged via the existing `_upsert` semantics with `force=False`
   so a higher-fidelity CNN-direct row always wins on shared dates.
 
@@ -225,7 +225,7 @@ of composite-mean ranking.
   federal-contractors at `04:00` and demo-snapshot at `06:15`).
 - **Persistence:** preset `.txt` lives in `src/assets/universes/` on
   `main` (auto PR-on-diff); per-ticker audit JSON lives on the `data`
-  branch under `results/aggregated_scores_best_and_worst/audit/`.
+  branch under `results/audit/aggregated_scores_best_and_worst/`.
 
 ### NOT a hedging primitive
 
