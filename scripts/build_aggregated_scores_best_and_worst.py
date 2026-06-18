@@ -6,7 +6,7 @@ the aggregator's single ranking pass, then writes:
 
 - ``src/analyze_stock_kpi/assets/universes/aggregated-scores-best.txt``  (top 25)
 - ``src/analyze_stock_kpi/assets/universes/aggregated-scores-worst.txt`` (bottom 25)
-- ``results/aggregated_scores_best_and_worst/audit/<UTC-date>.json``
+- ``results/audit/aggregated_scores_best_and_worst/<UTC-date>.json``
 
 The two preset files are emitted together from one ranking pass; the
 universe-builder workflow runs this script per-leg (matrix dispatches

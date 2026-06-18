@@ -41,8 +41,8 @@ class AppSettings(BaseSettings):
     """
     cnn_fg_url: str = "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
     cnn_fg_referer: str = "https://edition.cnn.com/"
-    cnn_fg_cache_dir: Path = Path("results/cnn_fg")
-    yield_curve_cache_dir: Path = Path("results/yield_curve")
+    cnn_fg_cache_dir: Path = Path("results/series/cnn_fg")
+    yield_curve_cache_dir: Path = Path("results/series/yield_curve")
     demo_dir: Path = Path("results/demo")
     audit_dir: Path = Path("results/audit")
     user_agents: tuple[str, ...] = (

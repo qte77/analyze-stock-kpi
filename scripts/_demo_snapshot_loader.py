@@ -102,7 +102,7 @@ def write_paired_universe_and_audit(
 
     - ``src/analyze_stock_kpi/assets/universes/<preset_name>.txt`` — preset files (one
       ticker per line; empty file when the corresponding list is empty).
-    - ``results/<audit_dir>/audit/<UTC-date>.json`` — per-run audit trail
+    - ``results/audit/<audit_dir>/<UTC-date>.json`` — per-run audit trail
       (one JSON array of ``model_dump`` rows).
 
     Each preset and the audit are reported on stdout to match the prior
@@ -111,7 +111,7 @@ def write_paired_universe_and_audit(
     today = datetime.now(UTC).strftime("%Y-%m-%d")
     path_a = Path(f"src/analyze_stock_kpi/assets/universes/{preset_a_name}.txt")
     path_b = Path(f"src/analyze_stock_kpi/assets/universes/{preset_b_name}.txt")
-    audit_path = settings.results_dir / audit_dir / "audit" / f"{today}.json"
+    audit_path = settings.audit_dir / audit_dir / f"{today}.json"
 
     path_a.parent.mkdir(parents=True, exist_ok=True)
     audit_path.parent.mkdir(parents=True, exist_ok=True)

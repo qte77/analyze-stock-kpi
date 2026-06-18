@@ -6,7 +6,7 @@ Public API:
   :class:`YieldCurveSnapshot` (10y minus 5y, percentage points).
 - ``python -m analyze_stock_kpi.data_sources.yield_curve`` fetches the latest
   reading and merges it into per-year files at
-  ``results/yield_curve/YYYY.json``.
+  ``results/series/yield_curve/YYYY.json``.
 
 Boundary policy (per ``docs/architecture.md``): yfinance reads are
 **wrap-degrade**. A network failure on either leg returns ``None``

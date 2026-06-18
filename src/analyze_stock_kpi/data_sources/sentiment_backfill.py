@@ -2,7 +2,7 @@
 
 Parses the [whit3rabbit/fear-greed-data](https://github.com/whit3rabbit/fear-greed-data)
 mirror CSV (pinned via commit SHA in :mod:`scripts.backfill_fear_greed_whitrabbit`)
-and merges its rows onto the same per-year ``results/cnn_fg/YYYY.json``
+and merges its rows onto the same per-year ``results/series/cnn_fg/YYYY.json``
 files :mod:`analyze_stock_kpi.data_sources.sentiment` writes, via the same
 :func:`_upsert` semantics. Backfill is always ``force=False`` — a
 higher-fidelity CNN-direct entry (intraday timestamp + subindicators)

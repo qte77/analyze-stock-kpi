@@ -19,7 +19,8 @@ def test_app_settings_defaults_match_pre_refactor_literals() -> None:
     assert s.edgar_cache_dir == Path("results/edgar")
     assert s.cnn_fg_url == ("https://production.dataviz.cnn.io/index/fearandgreed/graphdata")
     assert s.cnn_fg_referer == "https://edition.cnn.com/"
-    assert s.cnn_fg_cache_dir == Path("results/cnn_fg")
+    assert s.cnn_fg_cache_dir == Path("results/series/cnn_fg")
+    assert s.yield_curve_cache_dir == Path("results/series/yield_curve")
     assert s.http_accept == "application/json, text/plain, */*"
     assert s.request_timeout_sec == 10
     assert s.results_dir == Path("results")
