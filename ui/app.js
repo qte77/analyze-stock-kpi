@@ -133,8 +133,10 @@ function filteredSnapshot() {
 
 const loadManifest = () => fetchJson(`${DATA_BASE_URL}/results/demo/${activeUniverse}/index.json`);
 
-const loadSnapshot = (/** @type {string} */ date) =>
-  fetchJson(`${DATA_BASE_URL}/results/demo/${activeUniverse}/${date}.json`);
+const snapshotUrl = (/** @type {string} */ universe, /** @type {string} */ date) =>
+  `${DATA_BASE_URL}/results/demo/${universe}/${date}.json`;
+
+const loadSnapshot = (/** @type {string} */ date) => fetchJson(snapshotUrl(activeUniverse, date));
 
 const loadUniverses = () => fetchJson("universes.json");
 
@@ -284,9 +286,7 @@ function bindCsvExport() {
 /** Fetch one universe's snapshot at a given date; null on any failure. */
 async function fetchUniverseSnapshot(/** @type {string} */ universe, /** @type {string} */ date) {
   try {
-    return /** @type {Row[]} */ (
-      await fetchJson(`${DATA_BASE_URL}/results/demo/${universe}/${date}.json`)
-    );
+    return /** @type {Row[]} */ (await fetchJson(snapshotUrl(universe, date)));
   } catch {
     return null;
   }
@@ -480,8 +480,12 @@ function hydrateUrlState(parsed) {
 function bindDateSelector(dateSelector) {
   dateSelector.addEventListener("change", async () => {
     const newDate = dateSelector.value;
-    state.snapshot = await loadSnapshot(newDate);
-    const auditMap = await loadAudit(activeUniverse, newDate, DATA_BASE_URL, fetchJson);
+    // Independent reads — fetch the snapshot + its audit concurrently.
+    const [snapshot, auditMap] = await Promise.all([
+      loadSnapshot(newDate),
+      loadAudit(activeUniverse, newDate, DATA_BASE_URL, fetchJson),
+    ]);
+    state.snapshot = snapshot;
     auditByTicker = auditMap ?? buildAuditMap([]);
     currentDate = newDate;
     rebuildFuseIndex();
