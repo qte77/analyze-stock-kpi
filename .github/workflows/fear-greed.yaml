@@ -3,7 +3,7 @@
 #
 # Runs at 21:30 UTC (~30 min after NYSE 16:00 ET close, year-round).
 # Fetches the live CNN F&G headline + ~1y of historical readings, merges
-# into per-year history files at results/cnn_fg/YYYY.json, and commits
+# into per-year history files at results/series/cnn_fg/YYYY.json, and commits
 # changed files as a single verified commit via the REST Git Data API
 # (Blob -> Tree -> Commit -> Ref).
 #
@@ -49,14 +49,14 @@ jobs:
       # Pull the accumulated F&G history from the data branch into the
       # local checkout so sentiment.py merges into it rather than starting
       # from main's older snapshot. Path-scoped `git checkout` touches
-      # only results/cnn_fg/; nothing else from data leaks into the
+      # only results/series/cnn_fg/; nothing else from data leaks into the
       # workspace (we don't want data's stale src/).
       - name: Fetch existing F&G history from data branch
         run: |
           set -euo pipefail
           git fetch origin data --depth=1
-          rm -rf results/cnn_fg
-          git checkout origin/data -- results/cnn_fg/
+          rm -rf results/series/cnn_fg
+          git checkout origin/data -- results/series/cnn_fg/
 
       - uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
@@ -76,10 +76,10 @@ jobs:
         id: changed
         run: |
           set -euo pipefail
-          # -uall so files inside an untracked results/cnn_fg/ get
+          # -uall so files inside an untracked results/series/cnn_fg/ get
           # enumerated (defensive — relevant on a fresh repo / first run).
-          FILES=$(git status --porcelain -uall results/cnn_fg/ \
-            | awk '$2 ~ /^results\/cnn_fg\/[0-9]{4}\.json$/ {print $2}' \
+          FILES=$(git status --porcelain -uall results/series/cnn_fg/ \
+            | awk '$2 ~ /^results\/series\/cnn_fg\/[0-9]{4}\.json$/ {print $2}' \
             | paste -sd ',' -)
           echo "files=$FILES" >> "$GITHUB_OUTPUT"
           if [ -z "$FILES" ]; then

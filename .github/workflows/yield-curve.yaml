@@ -4,7 +4,7 @@
 # Runs at 22:30 UTC (~1h after the F&G cron at 21:30 — staggered so
 # the two crons don't race on the same `data` branch ref). Fetches the
 # latest yfinance ^TNX and ^FVX closes, computes the 10y−5y slope,
-# merges into per-year history files at results/yield_curve/YYYY.json,
+# merges into per-year history files at results/series/yield_curve/YYYY.json,
 # and commits changed files as a single verified commit via the REST
 # Git Data API (Blob -> Tree -> Commit -> Ref).
 #
@@ -41,14 +41,14 @@ jobs:
 
       # Pull the accumulated yield-curve history from the data branch
       # so yield_curve.py merges into it rather than starting fresh.
-      # Path-scoped checkout touches only results/yield_curve/.
+      # Path-scoped checkout touches only results/series/yield_curve/.
       - name: Fetch existing yield-curve history from data branch
         run: |
           set -euo pipefail
           git fetch origin data --depth=1
-          rm -rf results/yield_curve
-          git checkout origin/data -- results/yield_curve/ || \
-            echo "no existing results/yield_curve/ on data — first run"
+          rm -rf results/series/yield_curve
+          git checkout origin/data -- results/series/yield_curve/ || \
+            echo "no existing results/series/yield_curve/ on data — first run"
 
       - uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
@@ -69,11 +69,11 @@ jobs:
         run: |
           set -euo pipefail
           # -uall enumerates files inside untracked directories — without
-          # it the first run (no prior results/yield_curve/ on data
-          # branch) shows "?? results/yield_curve/" summarised and awk
+          # it the first run (no prior results/series/yield_curve/ on data
+          # branch) shows "?? results/series/yield_curve/" summarised and awk
           # finds nothing, silently skipping the commit.
-          FILES=$(git status --porcelain -uall results/yield_curve/ \
-            | awk '$2 ~ /^results\/yield_curve\/[0-9]{4}\.json$/ {print $2}' \
+          FILES=$(git status --porcelain -uall results/series/yield_curve/ \
+            | awk '$2 ~ /^results\/series\/yield_curve\/[0-9]{4}\.json$/ {print $2}' \
             | paste -sd ',' -)
           echo "files=$FILES" >> "$GITHUB_OUTPUT"
           if [ -z "$FILES" ]; then

@@ -6,7 +6,7 @@
 # actions/upload-pages-artifact + actions/deploy-pages. No gh-pages
 # branch.
 #
-# Data files (results/cnn_fg/YYYY.json, results/demo/<UNIVERSE>/*.json)
+# Data files (results/series/cnn_fg/YYYY.json, results/demo/<UNIVERSE>/*.json)
 # are NOT bundled into the artifact. The page fetches them at runtime
 # from raw.githubusercontent.com on the `data` branch, where the
 # fear-greed.yaml and demo-snapshot.yml workflows commit verified
