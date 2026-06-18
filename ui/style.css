@@ -1,3 +1,36 @@
+/* Self-hosted brand typography (qte77 EyeRest DESIGN.md): Inter for UI/prose,
+   JetBrains Mono for numeric tables + code. Latin TTF subsets in ui/fonts/
+   (SIL OFL 1.1 — see ui/fonts/OFL.txt). font-display: swap paints the system
+   fallback immediately, then swaps the brand face in once loaded — no FOIT. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/Inter-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/Inter-Bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/JetBrainsMono-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/JetBrainsMono-Bold.ttf") format("truetype");
+}
+
 :root {
   --bg: #ece8d8;
   --panel: #e2dec8;
@@ -41,11 +74,15 @@
 * { box-sizing: border-box; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
   margin: 0;
   line-height: 1.5;
+}
+
+code {
+  font-family: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
 }
 
 header {
@@ -372,7 +409,11 @@ thead th:hover { color: var(--text); }
 thead th.sort-asc::after { content: " ↑"; color: var(--accent); }
 thead th.sort-desc::after { content: " ↓"; color: var(--accent); }
 
-.num { text-align: center; font-variant-numeric: tabular-nums; }
+.num {
+  text-align: center;
+  font-family: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  font-variant-numeric: tabular-nums;
+}
 
 tbody td {
   padding: 0.5rem 0.75rem;
