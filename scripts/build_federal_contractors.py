@@ -15,6 +15,7 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
+from analyze_stock_kpi.config import settings
 from analyze_stock_kpi.orchestrators.federal_contractors import build_universe
 
 
@@ -24,7 +25,7 @@ def main() -> None:
 
     preset_path = Path("src/analyze_stock_kpi/assets/universes/federal-contractors.txt")
     today = datetime.now(UTC).strftime("%Y-%m-%d")
-    audit_path = Path(f"results/federal_contractors/audit/{today}.json")
+    audit_path = settings.federal_contractors_dir / "audit" / f"{today}.json"
 
     preset_path.parent.mkdir(parents=True, exist_ok=True)
     audit_path.parent.mkdir(parents=True, exist_ok=True)

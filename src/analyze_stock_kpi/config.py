@@ -43,6 +43,8 @@ class AppSettings(BaseSettings):
     cnn_fg_referer: str = "https://edition.cnn.com/"
     cnn_fg_cache_dir: Path = Path("results/cnn_fg")
     yield_curve_cache_dir: Path = Path("results/yield_curve")
+    demo_dir: Path = Path("results/demo")
+    audit_dir: Path = Path("results/audit")
     user_agents: tuple[str, ...] = (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
