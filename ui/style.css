@@ -197,6 +197,23 @@ h2 {
   height: 220px;
 }
 
+/* The long-term + slope panels stack a window-chip row (and, for the slope, a
+   current-reading header) ABOVE the canvas. Lay them out as a flex column and
+   give the canvas its own flex-sized box (.chart-canvas) so Chart.js sizes the
+   chart to the space that's left — without this it sized to the full 220px wrap
+   and pushed the legend / x-axis labels below the panel. */
+#lt-fg-chart-wrap,
+#yc-chart-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-canvas {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 0;
+}
+
 /* Explainer-tab content: a tight definition list of timeframe choices
    per tab. dt's font-weight separates the label from the rationale
    below; --muted on dd matches the other secondary text in the demo. */
@@ -341,6 +358,12 @@ h2 {
 
 #universe-filter {
   min-width: 14rem;
+  max-width: 20rem;
+}
+
+/* Bound the picker too (a long option like "Aggregated scores (worst 25)" would
+   otherwise widen the fit-content controls column and overflow to the right). */
+#universe-picker {
   max-width: 20rem;
 }
 
@@ -919,6 +942,9 @@ body.overlay-active td.universe-col {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 6px;
+  /* Cap the width so the long explainer lines wrap instead of stretching the
+     fit-content controls column past the section (overflow to the right). */
+  max-width: 42rem;
 }
 
 #universe-help dl.why-list dt {

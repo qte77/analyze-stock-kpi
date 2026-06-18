@@ -104,10 +104,12 @@
           <button type="button" data-window="10y" aria-pressed="false">10y</button>
           <button type="button" data-window="all" aria-pressed="true">all</button>
         </div>
-        <canvas
-          id="lt-fg-chart"
-          aria-label="Monthly Fear and Greed median and average"
-        ></canvas>
+        <div class="chart-canvas">
+          <canvas
+            id="lt-fg-chart"
+            aria-label="Monthly Fear and Greed median and average"
+          ></canvas>
+        </div>
       </div>
       <div
         id="yc-chart-wrap"
@@ -126,10 +128,12 @@
           <button type="button" data-window="all" aria-pressed="true">all</button>
         </div>
         <div class="yc-empty">loading…</div>
-        <canvas
-          id="yc-chart"
-          aria-label="US Treasury 5s10s slope (10y minus 5y yield, percentage points)"
-        ></canvas>
+        <div class="chart-canvas">
+          <canvas
+            id="yc-chart"
+            aria-label="US Treasury 5s10s slope (10y minus 5y yield, percentage points)"
+          ></canvas>
+        </div>
       </div>
       <div
         id="why-wrap"
