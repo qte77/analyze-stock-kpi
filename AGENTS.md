@@ -42,10 +42,6 @@ a single PR.
 
 ## Quality Thresholds
 
-**Experimental** (adopted 2026-06-14) — re-evaluate by **2026-06-21**; tracked in
-[#283](https://github.com/qte77/analyze-stock-kpi/issues/283). Replaces the prior
-1–10 scale.
-
 Before starting any task, gut-check four dimensions on a **`1 / 0 / -1`** scale —
 the assessment exists only to pick the next action, so it has three states, not ten.
 
