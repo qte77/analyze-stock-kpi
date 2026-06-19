@@ -9,6 +9,7 @@ import { fmtNum } from "./lib/format.js";
 import { aggregateMonthlyFG } from "./lib/monthly.js";
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
 import { buildTimeSeries } from "./lib/timeseries.js";
+import { aggregateWeekly } from "./lib/weekly.js";
 import { filterByWindow, findClosestScore } from "./lib/window.js";
 
 /**
@@ -602,7 +603,7 @@ function renderActiveLtFg() {
 }
 
 function renderActiveYc() {
-  renderYieldCurveChart(filterByWindow(rawYcEntries, ctx.ycWindow, "date"));
+  renderYieldCurveChart(filterByWindow(rawYcEntries, ctx.ycWindow, "date"), ctx.ycWindow);
 }
 
 /**
@@ -687,17 +688,28 @@ export function renderYieldCurveHeader(entries) {
 }
 
 /**
- * Render the slope line over all loaded history. Theme-aware via the
- * same scriptable cssVar() colour pattern as renderFearGreedChart.
+ * Render the slope line over the windowed history. For windows wider than
+ * 1y the daily series is visually noisy, so it's de-noised to a weekly mean
+ * (mirrors the F&G long-term monthly view); 1y stays daily. Theme-aware via
+ * the same scriptable cssVar() colour pattern as renderFearGreedChart.
  *
  * @param {Array<{date: string, slope_5s10s: number | null}>} entries
+ * @param {import("./lib/state.js").WindowKey} [windowKey]
  */
-function renderYieldCurveChart(entries) {
+function renderYieldCurveChart(entries, windowKey) {
   const canvas = /** @type {HTMLCanvasElement | null} */ (document.getElementById("yc-chart"));
   if (!canvas) return;
   destroyChart(yieldCurveChart);
   yieldCurveChart = null;
-  const points = entries.filter((e) => e.slope_5s10s != null);
+  let points = entries
+    .filter((e) => e.slope_5s10s != null)
+    .map((e) => ({ date: e.date, slope_5s10s: /** @type {number} */ (e.slope_5s10s) }));
+  // Wide windows: collapse the daily slope to a weekly mean so multi-year
+  // views read as trend, not noise. 1y keeps daily resolution.
+  if (windowKey && windowKey !== "1y" && points.length) {
+    const weekly = aggregateWeekly(points, { dateKey: "date", valueKey: "slope_5s10s" });
+    points = weekly.weeks.map((w, i) => ({ date: w, slope_5s10s: weekly.mean[i] }));
+  }
   renderYieldCurveEmptyHint(points.length === 0);
   if (points.length === 0 || typeof Chart === "undefined") return;
   yieldCurveChart = new Chart(canvas, {
