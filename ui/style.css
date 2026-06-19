@@ -87,6 +87,8 @@ code {
 
 header {
   padding: 1rem 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
   border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
