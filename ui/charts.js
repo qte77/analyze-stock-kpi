@@ -3,13 +3,12 @@
 // Chart rendering extracted from app.js (#268).
 // All app-state is accessed through the injected `ctx` object.
 
-import { scoreYAxis, themedXAxis } from "./lib/chart_axes.js";
+import { logRightAxis, scoreYAxis, themedXAxis } from "./lib/chart_axes.js";
+import { buildCombinedSeries } from "./lib/combined.js";
 import { fetchJson } from "./lib/fetch.js";
 import { fmtNum } from "./lib/format.js";
-import { aggregateMonthlyFG } from "./lib/monthly.js";
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
 import { buildTimeSeries } from "./lib/timeseries.js";
-import { aggregateWeekly } from "./lib/weekly.js";
 import { filterByWindow, findClosestScore } from "./lib/window.js";
 
 /**
@@ -443,7 +442,7 @@ export function renderFearGreedHeader(
 /** @type {any} */
 let fearGreedChart = null;
 /** @type {any} */
-let monthlyFearGreedChart = null;
+let combinedChart = null;
 
 function renderRollingEmptyHint(/** @type {boolean} */ show) {
   toggleHistoryHint("fg-chart-wrap", "fg-empty", show);
@@ -486,80 +485,108 @@ export function renderFearGreedChart(
   liveCharts.add(fearGreedChart);
 }
 
-function renderLongTermEmptyHint(/** @type {boolean} */ show) {
-  toggleHistoryHint("lt-fg-chart-wrap", "lt-fg-empty", show);
+function renderCombinedEmptyHint(/** @type {boolean} */ show) {
+  toggleHistoryHint("lt-combined-wrap", "lt-combined-empty", show);
 }
 
-function renderMonthlyFearGreedChart(
-  /** @type {Array<{timestamp: string, score: number}>} */ entries,
-) {
-  const canvas = /** @type {HTMLCanvasElement | null} */ (document.getElementById("lt-fg-chart"));
+/**
+ * Render the merged long-term-context chart (#288): CNN F&G monthly median and
+ * the 5s10s monthly mean (normalized to 0-100) share the left score axis, while
+ * SPY's indexed return sits on a logarithmic right axis. All three are
+ * reconciled onto one monthly grid by buildCombinedSeries; renderActiveCombined
+ * trims the window upstream.
+ *
+ * @param {Array<{timestamp: string, score: number}>} fgEntries
+ * @param {Array<{date: string, slope_5s10s: number | null}>} ycEntries
+ * @param {Array<{date: string, ret_indexed: number}>} spyEntries
+ */
+function renderCombinedLongTerm(fgEntries, ycEntries, spyEntries) {
+  const canvas = /** @type {HTMLCanvasElement | null} */ (
+    document.getElementById("lt-combined-chart")
+  );
   if (!canvas) return;
-  const monthly = aggregateMonthlyFG(entries);
-  destroyChart(monthlyFearGreedChart);
-  monthlyFearGreedChart = null;
-  renderLongTermEmptyHint(monthly.months.length === 0);
-  if (monthly.months.length === 0 || typeof Chart === "undefined") return;
-  monthlyFearGreedChart = new Chart(canvas, {
+  destroyChart(combinedChart);
+  combinedChart = null;
+  const series = buildCombinedSeries(fgEntries, ycEntries, spyEntries, { slopeLo: -2, slopeHi: 3 });
+  renderCombinedEmptyHint(series.labels.length === 0);
+  if (series.labels.length === 0 || typeof Chart === "undefined") return;
+  combinedChart = new Chart(canvas, {
     type: "line",
     data: {
-      labels: monthly.months,
+      labels: series.labels,
       datasets: [
         {
-          label: "Median",
-          data: monthly.median,
+          label: "CNN F&G (median)",
+          data: series.fgMedian,
+          yAxisID: "y",
           borderColor: () => cssVar("--text", "#2c2818"),
           backgroundColor: () => `${cssVar("--text", "#2c2818")}14`,
           fill: false,
-          pointRadius: 2,
+          pointRadius: 0,
           borderWidth: 1.5,
           tension: 0.2,
+          spanGaps: true,
         },
         {
-          label: "Average",
-          data: monthly.avg,
+          label: "5s10s slope (norm.)",
+          data: series.slopeNorm,
+          yAxisID: "y",
           borderColor: () => cssVar("--accent", "#7a6010"),
           backgroundColor: () => `${cssVar("--accent", "#7a6010")}14`,
           fill: false,
-          pointRadius: 2,
+          pointRadius: 0,
           borderWidth: 1.5,
           tension: 0.2,
           borderDash: [4, 3],
+          spanGaps: true,
+        },
+        {
+          label: "SPY (indexed)",
+          data: series.spyIndexed,
+          yAxisID: "spy",
+          borderColor: () => cssVar("--muted", "#686040"),
+          backgroundColor: () => `${cssVar("--muted", "#686040")}14`,
+          fill: false,
+          pointRadius: 0,
+          borderWidth: 1.5,
+          tension: 0.2,
+          spanGaps: true,
         },
       ],
     },
     options: {
       ...BASE_ANIMATED_OPTS,
       plugins: { legend: { display: true, position: "bottom" } },
-      scales: { y: scoreYAxis(cssVar), x: themedXAxis(cssVar) },
+      scales: { y: scoreYAxis(cssVar), spy: logRightAxis(cssVar), x: themedXAxis(cssVar) },
     },
   });
-  liveCharts.add(monthlyFearGreedChart);
+  liveCharts.add(combinedChart);
 }
 
 /**
- * Wires the three-tab Long-term-context tab group:
+ * Wires the Long-term-context tab group:
  *   - Rolling history (F&G live + ~1y)
- *   - Long-term context (monthly F&G aggregate)
- *   - Yield curve (5s10s slope)
+ *   - Long-term context (merged: F&G monthly + normalized 5s10s + SPY indexed)
+ *   - Why these charts?
  *
- * Both the monthly chart and the yield-curve chart are lazily
- * constructed on first click — matches the detail-panel time-series
- * lazy pattern so initial paint stays cheap. The raw entry arrays are
- * captured at module level (`rawFgEntries` / `rawYcEntries`) so the
- * window-chip handlers can re-filter and re-render without re-fetching.
+ * The merged chart is lazily constructed on first click — matches the
+ * detail-panel time-series lazy pattern so initial paint stays cheap. The raw
+ * entry arrays are captured at module level (`rawFgEntries` / `rawYcEntries` /
+ * `rawSpyEntries`) so the window-chip handler can re-filter and re-render
+ * without re-fetching.
  *
  * @param {Array<{timestamp: string, score: number}>} fgEntries
  * @param {Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>} ycEntries
+ * @param {Array<{date: string, ret_indexed: number}>} spyEntries
  */
-export function bindLongTermTabs(fgEntries, ycEntries) {
+export function bindLongTermTabs(fgEntries, ycEntries, spyEntries) {
   rawFgEntries = fgEntries;
   rawYcEntries = ycEntries;
+  rawSpyEntries = spyEntries;
   /** @type {Array<[string, string]>} */
   const tabs = [
     ["fg-tab-rolling", "fg-chart-wrap"],
-    ["fg-tab-monthly", "lt-fg-chart-wrap"],
-    ["fg-tab-yield-curve", "yc-chart-wrap"],
+    ["fg-tab-longterm", "lt-combined-wrap"],
     ["fg-tab-why", "why-wrap"],
   ];
   /** @type {Array<[HTMLElement, HTMLElement]>} */
@@ -577,13 +604,9 @@ export function bindLongTermTabs(fgEntries, ycEntries) {
         t.setAttribute("aria-selected", selected ? "true" : "false");
         p.hidden = !selected;
       }
-      if (pane.id === "lt-fg-chart-wrap" && !ltFgRendered) {
-        renderActiveLtFg();
-        ltFgRendered = true;
-      }
-      if (pane.id === "yc-chart-wrap" && !ycRendered) {
-        renderActiveYc();
-        ycRendered = true;
+      if (pane.id === "lt-combined-wrap" && !combinedRendered) {
+        renderActiveCombined();
+        combinedRendered = true;
       }
     });
   }
@@ -595,15 +618,17 @@ export function bindLongTermTabs(fgEntries, ycEntries) {
 let rawFgEntries = [];
 /** @type {Array<{date: string, tnx_yield: number | null, fvx_yield: number | null, slope_5s10s: number | null}>} */
 let rawYcEntries = [];
-let ltFgRendered = false;
-let ycRendered = false;
+/** @type {Array<{date: string, ret_indexed: number}>} */
+let rawSpyEntries = [];
+let combinedRendered = false;
 
-function renderActiveLtFg() {
-  renderMonthlyFearGreedChart(filterByWindow(rawFgEntries, ctx.ltFgWindow, "timestamp"));
-}
-
-function renderActiveYc() {
-  renderYieldCurveChart(filterByWindow(rawYcEntries, ctx.ycWindow, "date"), ctx.ycWindow);
+function renderActiveCombined() {
+  const w = ctx.ltFgWindow;
+  renderCombinedLongTerm(
+    filterByWindow(rawFgEntries, w, "timestamp"),
+    filterByWindow(rawYcEntries, w, "date"),
+    filterByWindow(rawSpyEntries, w, "date"),
+  );
 }
 
 /**
@@ -613,34 +638,21 @@ function renderActiveYc() {
  * next tab activation picks up the new window), and persists state via URL.
  */
 export function bindWindowChips() {
-  /** @type {Array<[string, "ltFg" | "yc"]>} */
-  const groups = [
-    ["lt-fg-chart-wrap", "ltFg"],
-    ["yc-chart-wrap", "yc"],
-  ];
-  for (const [wrapId, kind] of groups) {
-    const wrap = document.getElementById(wrapId);
-    const row = wrap?.querySelector(".window-chips");
-    if (!wrap || !row) continue;
-    syncChipAriaPressed(row, kind === "ltFg" ? ctx.ltFgWindow : ctx.ycWindow);
-    row.addEventListener("click", (event) => {
-      const target = event.target;
-      if (!(target instanceof HTMLButtonElement)) return;
-      const next = /** @type {import("./lib/state.js").WindowKey} */ (target.dataset.window);
-      if (!next) return;
-      if (kind === "ltFg") {
-        ctx.ltFgWindow = next;
-        if (wrap.hidden) ltFgRendered = false;
-        else renderActiveLtFg();
-      } else {
-        ctx.ycWindow = next;
-        if (wrap.hidden) ycRendered = false;
-        else renderActiveYc();
-      }
-      syncChipAriaPressed(row, next);
-      ctx.afterWindowChange();
-    });
-  }
+  const wrap = document.getElementById("lt-combined-wrap");
+  const row = wrap?.querySelector(".window-chips");
+  if (!wrap || !row) return;
+  syncChipAriaPressed(row, ctx.ltFgWindow);
+  row.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLButtonElement)) return;
+    const next = /** @type {import("./lib/state.js").WindowKey} */ (target.dataset.window);
+    if (!next) return;
+    ctx.ltFgWindow = next;
+    if (wrap.hidden) combinedRendered = false;
+    else renderActiveCombined();
+    syncChipAriaPressed(row, next);
+    ctx.afterWindowChange();
+  });
 }
 
 function syncChipAriaPressed(
@@ -650,18 +662,6 @@ function syncChipAriaPressed(
   for (const btn of row.querySelectorAll("button[data-window]")) {
     btn.setAttribute("aria-pressed", btn.getAttribute("data-window") === active ? "true" : "false");
   }
-}
-
-/** @type {any} */
-let yieldCurveChart = null;
-
-/**
- * Toggle the yield-curve "no history yet" hint (#yc-chart-wrap). Overwrites the
- * static "loading…" placeholder via toggleHistoryHint's update-if-existing path.
- * @param {boolean} show
- */
-function renderYieldCurveEmptyHint(show) {
-  toggleHistoryHint("yc-chart-wrap", "yc-empty", show);
 }
 
 /**
@@ -685,80 +685,6 @@ export function renderYieldCurveHeader(entries) {
   const tnx = latest.tnx_yield != null ? `${latest.tnx_yield.toFixed(2)} %` : "—";
   const fvx = latest.fvx_yield != null ? `${latest.fvx_yield.toFixed(2)} %` : "—";
   legs.textContent = `10y ${tnx} − 5y ${fvx} · ${latest.date}`;
-}
-
-/**
- * Render the slope line over the windowed history. For windows wider than
- * 1y the daily series is visually noisy, so it's de-noised to a weekly mean
- * (mirrors the F&G long-term monthly view); 1y stays daily. Theme-aware via
- * the same scriptable cssVar() colour pattern as renderFearGreedChart.
- *
- * @param {Array<{date: string, slope_5s10s: number | null}>} entries
- * @param {import("./lib/state.js").WindowKey} [windowKey]
- */
-function renderYieldCurveChart(entries, windowKey) {
-  const canvas = /** @type {HTMLCanvasElement | null} */ (document.getElementById("yc-chart"));
-  if (!canvas) return;
-  destroyChart(yieldCurveChart);
-  yieldCurveChart = null;
-  let points = entries
-    .filter((e) => e.slope_5s10s != null)
-    .map((e) => ({ date: e.date, slope_5s10s: /** @type {number} */ (e.slope_5s10s) }));
-  // Wide windows: collapse the daily slope to a weekly mean so multi-year
-  // views read as trend, not noise. 1y keeps daily resolution.
-  if (windowKey && windowKey !== "1y" && points.length) {
-    const weekly = aggregateWeekly(points, { dateKey: "date", valueKey: "slope_5s10s" });
-    points = weekly.weeks.map((w, i) => ({ date: w, slope_5s10s: weekly.mean[i] }));
-  }
-  renderYieldCurveEmptyHint(points.length === 0);
-  if (points.length === 0 || typeof Chart === "undefined") return;
-  yieldCurveChart = new Chart(canvas, {
-    type: "line",
-    data: {
-      labels: points.map((p) => p.date),
-      datasets: [
-        {
-          label: "5s10s slope (10y − 5y, % pts)",
-          data: points.map((p) => p.slope_5s10s),
-          borderColor: () => cssVar("--accent", "#7a6010"),
-          backgroundColor: () => `${cssVar("--accent", "#7a6010")}14`,
-          fill: false,
-          pointRadius: 1,
-          borderWidth: 1.5,
-          tension: 0.2,
-        },
-      ],
-    },
-    options: {
-      ...BASE_ANIMATED_OPTS,
-      plugins: { legend: { display: false } },
-      scales: {
-        // Highlight the zero line — inversions sit below.
-        y: {
-          grid: { color: () => `${cssVar("--border", "#c8c4b0")}` },
-          ticks: { color: () => cssVar("--text", "#2c2818") },
-          // Header reports the current slope in bps; label the axis so its
-          // decimal percentage-point scale isn't mistaken for bps.
-          title: { display: true, text: "% pts", color: () => cssVar("--text", "#2c2818") },
-        },
-        // Daily series over ~15y — label the first point of each calendar year
-        // (including the latest) so the axis doesn't orphan the most recent
-        // ~year the way an evenly-strided maxTicksLimit does.
-        x: {
-          grid: { color: () => cssVar("--border", "#c8c4b0") },
-          ticks: {
-            color: () => cssVar("--text", "#2c2818"),
-            autoSkip: false,
-            callback: (/** @type {unknown} */ _value, /** @type {number} */ index) =>
-              index === 0 || points[index].date.slice(0, 4) !== points[index - 1].date.slice(0, 4)
-                ? points[index].date.slice(0, 4)
-                : "",
-          },
-        },
-      },
-    },
-  });
-  liveCharts.add(yieldCurveChart);
 }
 
 /**

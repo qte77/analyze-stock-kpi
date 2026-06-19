@@ -38,3 +38,23 @@ export function themedXAxis(cssVarFn, maxTicks = 14) {
     grid: { color: () => cssVarFn("--border", "#c8c4b0") },
   };
 }
+
+/**
+ * Themed logarithmic right-hand y-axis for an absolute price/level series (the
+ * SPY indexed return on the merged long-term chart, #288). Lives on the right so
+ * it doesn't collide with the shared 0-100 left axis; its grid is suppressed so
+ * the two axes' gridlines don't overlap. Same deferred-closure caveat as
+ * scoreYAxis.
+ *
+ * @param {CssVarFn} cssVarFn
+ * @param {string} [title]
+ */
+export function logRightAxis(cssVarFn, title = "SPY (indexed)") {
+  return {
+    type: "logarithmic",
+    position: "right",
+    grid: { drawOnChartArea: false, color: () => cssVarFn("--border", "#c8c4b0") },
+    ticks: { color: () => cssVarFn("--muted", "#686040") },
+    title: { display: true, text: title, color: () => cssVarFn("--muted", "#686040") },
+  };
+}

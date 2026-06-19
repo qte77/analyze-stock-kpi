@@ -5,7 +5,7 @@
 // them.
 
 import { describe, it, expect, vi } from "vitest";
-import { scoreYAxis, themedXAxis } from "../lib/chart_axes.js";
+import { scoreYAxis, themedXAxis, logRightAxis } from "../lib/chart_axes.js";
 
 describe("scoreYAxis", () => {
   it("returns a 0–100 axis with stepSize 25", () => {
@@ -37,5 +37,22 @@ describe("themedXAxis", () => {
     expect(cssVarFn).not.toHaveBeenCalled();
     expect(axis.ticks.color()).toBe("--text:#2c2818");
     expect(axis.grid.color()).toBe("--border:#c8c4b0");
+  });
+});
+
+describe("logRightAxis", () => {
+  it("is a logarithmic axis pinned to the right with its chart-area grid off", () => {
+    const axis = logRightAxis(() => "x");
+    expect(axis.type).toBe("logarithmic");
+    expect(axis.position).toBe("right");
+    expect(axis.grid.drawOnChartArea).toBe(false);
+  });
+
+  it("uses the given title and defers colors to the injected cssVarFn", () => {
+    const cssVarFn = vi.fn((token, fallback) => `${token}:${fallback}`);
+    const axis = logRightAxis(cssVarFn, "Custom");
+    expect(axis.title.text).toBe("Custom");
+    expect(cssVarFn).not.toHaveBeenCalled();
+    expect(axis.ticks.color()).toBe("--muted:#686040");
   });
 });
