@@ -1,0 +1,41 @@
+analyze-stock-kpi
+Copyright the qte77/analyze-stock-kpi contributors.
+Licensed under the terms in LICENSE.
+
+================================================================================
+Data provenance and non-commercial / educational use
+================================================================================
+
+This project is a non-commercial, educational research tool. It fetches data
+from third-party sources and publishes only DERIVED, non-substitutive outputs
+(computed facts, ratings, slopes, indexed returns — never raw upstream payloads)
+to the public `data` branch, consistent with the redistribution analysis in
+docs/data-sources.md.
+
+This project is NOT affiliated with, endorsed by, or sponsored by any data
+provider below. Trademarks (e.g. "S&P 500®" / S&P Dow Jones Indices,
+"CNN Fear & Greed Index", "SPDR®") belong to their respective owners.
+
+Upstream sources and their terms (re-verify before relying):
+
+- Yahoo Finance (via the `yfinance` library) — equity/ETF/index quotes and
+  fundamentals. https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html
+  Only derived state (e.g. resolution booleans, slopes, indexed returns) is
+  persisted; raw `.info`/`.fast_info`/price payloads are never committed.
+
+- CNN Fear & Greed Index — numeric headline scores only.
+  https://www.cnn.com/terms
+
+- CBOE Interest Rate Indices `^TNX` / `^FVX` (via Yahoo) — only the derived
+  5s10s slope (10y − 5y) is persisted, not raw index levels.
+
+- SPDR S&P 500 ETF (`SPY`, State Street; via Yahoo) — only a derived indexed
+  return (rebased to 100) is persisted, never raw closing prices and never the
+  S&P 500 index level. The S&P 500® index itself is the intellectual property of
+  S&P Dow Jones Indices LLC and is not reproduced here. See ADR-0011.
+
+- SEC EDGAR — U.S. federal public-domain data (17 U.S.C. § 105).
+- usaspending.gov — U.S. federal public-domain data (DATA Act, 31 U.S.C. § 6101).
+
+Nothing here is investment advice. See docs/data-sources.md for the full
+per-source redistribution analysis.

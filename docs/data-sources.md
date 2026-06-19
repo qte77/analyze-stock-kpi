@@ -56,7 +56,7 @@ last-filed dates (10-K / 10-Q / 8-K) land on every
 `FundamentalsSnapshot` via `src/analyze_stock_kpi/data_sources/sec/submissions.py` (planned). Same
 authentication, different endpoint.
 
-## Redistribution guardrails (verified 2026-05-21)
+## Redistribution guardrails (verified 2026-05-21; `equity_spy`/SPY row added 2026-06-19)
 
 Independent ToS / license audit run pre-Item 3 against the canonical
 sources (not relying on prior summaries). Verdict per source for
@@ -71,6 +71,7 @@ repo's MIT licence:
 | yfinance-derived ticker list | **CLEAR** | A list of ticker symbols + a "this resolves" boolean is your pipeline's state, not Yahoo's copyrightable expression (Feist v. Rural Telephone) | Same as above — keep the audit row schema lean |
 | `fedspendingtransparency/usaspending-api` API contract files | **CLEAR** | Repo is CC0 1.0; LOCKHEED MARTIN / MULTIPLE RECIPIENTS example JSON is in the public domain | Verbatim copy into test fixtures is permitted; no attribution required, but mention provenance in commit messages |
 | CNN Fear & Greed numeric values | **LOW RISK** | (a) Copyright: facts are uncopyrightable per *Feist Publications v. Rural Telephone*, 499 U.S. 340 (1991). The integer 1-100 and label are computed facts, not original expression. (b) CFAA: User-Agent / Referer spoofing is not "gate circumvention" on a publicly-accessible endpoint per *Van Buren v. United States*, 594 U.S. 374 (2021) and *hiQ Labs v. LinkedIn*, 938 F.3d 985 (9th Cir. 2022). (c) ToS: a browsewrap contract claim is theoretically possible but unenforced — zero DMCA / C&D against ≥10 public CNN F&G redistributors on PyPI / Kaggle / GitHub. (d) No US sui-generis database right | Already in place: cache numeric-only history to `data` branch; never store raw HTML; daily cron only; graceful degradation on 418 |
+| **SPY** (SPDR S&P 500 ETF) via yfinance | **CLEAR (derived-only)** | SPY's market price is an ETF *security* quote, **not** the S&P DJI index level — so S&P DJI's "no reproduction in any form" index IP does not attach (only Yahoo's ToS remains, same tier as the `yield_curve` legs). A derived indexed return is a fact, uncopyrightable per *Feist*. Raw `^GSPC`/SP500 *levels* would be CAUTION→prohibited (dual-layer S&P DJI IP) — hence SPY, not the index | **Never commit raw `close`.** Persist only `ret_indexed` (`close / close_epoch * 100`, rebased to 100). UI labels the line "SPY (indexed)", never the "S&P 500®" trademark. See [ADR-0011](decisions/0011-equity-macro-overlay-via-spy-indexed-returns.md) |
 
 ### Standing rules these verdicts impose
 
