@@ -1,0 +1,101 @@
+---
+# Daily SPY indexed-return snapshot (#288).
+#
+# Runs at 23:00 UTC (~30min after the yield-curve cron at 22:30 — staggered so
+# the data-branch-writing crons don't race the same ref). Recomputes the SPY
+# indexed-return series (derived ret_indexed = close / epoch_close * 100, rebased
+# to 100 at the 2011 epoch; never the raw close or the S&P 500 index level — see
+# ADR-0011), merges into per-year history files at
+# results/series/equity_spy/YYYY.json, and commits changed files as a single
+# verified commit via the REST Git Data API.
+#
+# Same verified-commit pattern + data-branch rationale as yield-curve.yaml (the
+# default-branch ruleset rejects direct ref updates on main even from verified
+# API commits — `data` is unrestricted).
+
+name: equity-spy-snapshot
+
+on:
+  schedule:
+    # 23:00 UTC daily — 30min after the yield-curve cron so they don't race the
+    # same data-branch ref
+    - cron: "0 23 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: equity-spy-snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    name: fetch + commit equity-spy snapshot
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the workflow ref (main) for the current src/ layout —
+      # `analyze_stock_kpi.data_sources.equity_spy` lives on main only. The
+      # `data` branch carries data only.
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+
+      # Pull the accumulated equity-spy history from the data branch so
+      # equity_spy.py merges into it rather than starting fresh. The rebase
+      # epoch is stable, so only the current year's file actually changes.
+      - name: Fetch existing equity-spy history from data branch
+        run: |
+          set -euo pipefail
+          git fetch origin data --depth=1
+          rm -rf results/series/equity_spy
+          git checkout origin/data -- results/series/equity_spy/ || \
+            echo "no existing results/series/equity_spy/ on data — first run"
+
+      - uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install runtime dependencies
+        run: uv sync
+
+      - name: Fetch equity-spy snapshot
+        run: uv run python -m analyze_stock_kpi.data_sources.equity_spy
+
+      - name: Detect changed history files
+        id: changed
+        run: |
+          set -euo pipefail
+          # -uall enumerates files inside untracked directories — without it the
+          # first run (no prior results/series/equity_spy/ on data) shows the dir
+          # summarised and awk finds nothing, silently skipping the commit.
+          FILES=$(git status --porcelain -uall results/series/equity_spy/ \
+            | awk '$2 ~ /^results\/series\/equity_spy\/[0-9]{4}\.json$/ {print $2}' \
+            | paste -sd ',' -)
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+          if [ -z "$FILES" ]; then
+            echo "no equity-spy history changes; skipping commit"
+          else
+            echo "changed: $FILES"
+          fi
+
+      - name: Commit history file(s) as a single verified commit
+        if: steps.changed.outputs.files != ''
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
+        env:
+          FILES: ${{ steps.changed.outputs.files }}
+        with:
+          # Retry-aware verified-commit lives in scripts/data-branch-commit.cjs
+          # so it is reused across every data-branch-writing workflow and
+          # survives the 422 race the matrix legs occasionally hit.
+          script: |
+            const { FILES } = process.env;
+            const paths = FILES.split(',').filter(Boolean);
+            const { run } = require("./scripts/data-branch-commit.cjs");
+            return run({
+              github, context, core,
+              paths,
+              message: 'chore(equity-spy): daily SPY indexed-return snapshot',
+            });
