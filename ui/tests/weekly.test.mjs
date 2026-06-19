@@ -3,7 +3,7 @@
 // Pure function: input rows with a date + numeric field, output parallel
 // arrays of ISO week / mean / count, sorted ascending by week.
 import { describe, it, expect } from "vitest";
-import { aggregateWeekly } from "../../ui/lib/weekly.js";
+import { aggregateWeekly } from "../lib/weekly.js";
 
 describe("aggregateWeekly", () => {
   it("returns empty arrays for an empty input list", () => {

@@ -1,0 +1,29 @@
+{
+  "name": "analyze-stock-kpi-demo",
+  "private": true,
+  "type": "module",
+  "description": "Dev-only npm metadata for the ui/ dashboard. Vite build (ui/ = source, ui/dist = deployable), Vitest unit harness, ESLint + Prettier, and TypeScript for JSDoc type-checking. The dashboard ships zero runtime JS deps — Chart.js and Fuse.js are vendored under public/vendor/ and loaded as script-tag globals.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run tests",
+    "test:watch": "vitest tests",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.js\" \"**/*.mjs\"",
+    "format:check": "prettier --check \"**/*.js\" \"**/*.mjs\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.0",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.0",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.8"
+  }
+}

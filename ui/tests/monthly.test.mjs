@@ -3,7 +3,7 @@
 // function: input `{timestamp, score}[]`, output parallel arrays of
 // month / median / avg / count, sorted ascending by month.
 import { describe, it, expect } from "vitest";
-import { aggregateMonthlyFG } from "../../ui/lib/monthly.js";
+import { aggregateMonthlyFG } from "../lib/monthly.js";
 
 describe("aggregateMonthlyFG", () => {
   it("returns empty arrays for an empty input list", () => {

@@ -12,7 +12,7 @@
 # `workflow_dispatch` still accepts a `universe` input; when set, the
 # matrix collapses to that single universe so ad-hoc dispatch stays
 # cheap. Unset (scheduled or dispatched without input) reads
-# `ui/universes.json` (the dashboard picker's source of truth)
+# `ui/public/universes.json` (the dashboard picker's source of truth)
 # and fans out across every universe the dashboard knows about —
 # regardless of whether the preset .txt exists or is empty. Adding a
 # new universe is a single edit to that JSON. The dispatch dropdown
@@ -77,7 +77,7 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
         with:
-          sparse-checkout: ui/universes.json
+          sparse-checkout: ui/public/universes.json
           sparse-checkout-cone-mode: false
       - id: compute
         env:
@@ -89,14 +89,14 @@ jobs:
             # preset name; quoting is safe.
             echo "universes=[\"$INPUT_UNIVERSE\"]" >> "$GITHUB_OUTPUT"
           else
-            # Source of truth: ui/universes.json — every universe
+            # Source of truth: ui/public/universes.json — every universe
             # the dashboard picker can show. (Re-)build all of them
             # regardless of whether the underlying preset .txt exists,
             # is missing, or is empty; emitting a zero-row snapshot
             # for an unpopulated universe is the right rebuild
             # behaviour. The preset itself is the orchestrator's
             # contract (universe-builder.yaml), not demo-snapshot's.
-            UNIVERSES=$(jq -c '[.universes[].id]' ui/universes.json)
+            UNIVERSES=$(jq -c '[.universes[].id]' ui/public/universes.json)
             echo "universes=$UNIVERSES" >> "$GITHUB_OUTPUT"
           fi
 

@@ -3,7 +3,7 @@
 // render that consumes these lives in ui/app.js.
 
 import { describe, it, expect } from "vitest";
-import { WINDOW_DAYS, filterByWindow, findClosestScore } from "../../ui/lib/window.js";
+import { WINDOW_DAYS, filterByWindow, findClosestScore } from "../lib/window.js";
 
 describe("WINDOW_DAYS", () => {
   it("maps each window key to its trailing day count; 'all' is Infinity", () => {

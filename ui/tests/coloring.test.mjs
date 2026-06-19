@@ -3,7 +3,7 @@
 // inclusivity, lower-better vs higher-better direction, null/NaN/
 // unknown-column null returns.
 import { describe, it, expect } from "vitest";
-import { cellClass } from "../../ui/lib/coloring.js";
+import { cellClass } from "../lib/coloring.js";
 
 describe("cellClass", () => {
   it("returns null when the column is not in the threshold map", () => {

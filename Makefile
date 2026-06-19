@@ -44,9 +44,9 @@ setup_lychee:  ## Install lychee link checker (override LYCHEE_URL / LYCHEE_BIN 
 	rm -rf "$$tmp"
 	echo "lychee version: $$($(LYCHEE_BIN) --version)"
 
-setup_npm_tools:  ## Install npm dev tools (markdownlint-cli, typescript) + project devDeps (eslint, prettier, vitest)
+setup_npm_tools:  ## Install npm dev tools (markdownlint-cli, typescript) + ui/ devDeps (vite, eslint, prettier, vitest)
 	npm install -gs markdownlint-cli typescript
-	npm install
+	npm --prefix ui install
 	echo "markdownlint version: $$(markdownlint --version)"
 	echo "typescript version: $$(tsc --version)"
 
@@ -72,19 +72,19 @@ check_complexity:  ## complexipy cognitive complexity gate (max 10)
 lint_md:  ## markdownlint *.md (uses .markdownlint.json)
 	echo "--- lint_md"
 	markdownlint --config .markdownlint.json '**/*.md' \
-	  --ignore '.venv/**' --ignore 'results/**' --ignore 'node_modules/**' \
-	  --ignore 'changelog.d/**'
+	  --ignore '.venv/**' --ignore 'results/**' --ignore '**/node_modules/**' \
+	  --ignore 'ui/dist/**' --ignore 'changelog.d/**'
 
-lint_js:  ## node --check + tsc JSDoc + ESLint + Prettier on ui/ + tests/demo/
+lint_js:  ## node --check + tsc JSDoc + ESLint + Prettier on ui/ (run from ui/)
 	echo "--- lint_js"
 	node --check ui/app.js
-	tsc --noEmit --project ui
-	npm run lint
-	npm run format:check
+	npm --prefix ui run typecheck
+	npm --prefix ui run lint
+	npm --prefix ui run format:check
 
-autofix_js:  ## ESLint --fix + Prettier --write on ui/ + tests/demo/ (JS counterpart to autofix)
-	npm run lint:fix
-	npm run format
+autofix_js:  ## ESLint --fix + Prettier --write on ui/ (JS counterpart to autofix)
+	npm --prefix ui run lint:fix
+	npm --prefix ui run format
 
 lint_links:  ## lychee broken-link checker (network — slow; mandatory in CI)
 	echo "--- lint_links"
@@ -98,9 +98,9 @@ test_cov:  ## pytest with coverage (--cov-fail-under=0; raise once tests exist)
 	echo "--- test_cov"
 	uv run pytest --cov=analyze_stock_kpi --cov-fail-under=0 $(PYTEST_QUIET)
 
-test_js:  ## vitest run on tests/demo/ (closes #131; non-trivial units only)
+test_js:  ## vitest run on ui/tests/ (closes #131; non-trivial units only)
 	echo "--- test_js"
-	npx --yes vitest run tests/demo --passWithNoTests
+	npm --prefix ui test
 
 retest:  ## rerun last failed tests only
 	uv run pytest --lf -x

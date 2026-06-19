@@ -2,7 +2,7 @@
 // precedence. Non-trivial cases only: invalid values fall through,
 // URL beats localStorage, default is "system".
 import { describe, it, expect } from "vitest";
-import { resolveTheme, isThemeMode } from "../../ui/lib/theme.js";
+import { resolveTheme, isThemeMode } from "../lib/theme.js";
 
 describe("isThemeMode", () => {
   it("accepts only the three valid mode strings", () => {

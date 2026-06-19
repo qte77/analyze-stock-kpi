@@ -4,7 +4,7 @@
 // per-leg silent-fail can be asserted without a live network.
 
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { fetchJson, loadYearsFromBranch } from "../../ui/lib/fetch.js";
+import { fetchJson, loadYearsFromBranch } from "../lib/fetch.js";
 
 const originalFetch = globalThis.fetch;
 afterEach(() => {

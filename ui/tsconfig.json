@@ -11,5 +11,5 @@
     "lib": ["ES2021", "DOM", "DOM.Iterable"]
   },
   "include": ["*.js", "lib/**/*.js", "types.d.ts"],
-  "exclude": ["vendor"]
+  "exclude": ["vendor", "public", "dist", "node_modules", "vite.config.js"]
 }

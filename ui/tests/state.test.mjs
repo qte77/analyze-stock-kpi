@@ -2,7 +2,7 @@
 // view-mode resolution. Non-trivial cases only: validation contracts,
 // multi-universe parsing, precedence rules, round-trip stability.
 import { describe, it, expect } from "vitest";
-import { parseState, serializeState, resolveViewMode } from "../../ui/lib/state.js";
+import { parseState, serializeState, resolveViewMode } from "../lib/state.js";
 
 const KNOWN = ["qte77-watchlist", "sp500", "eurostoxx", "federal-contractors"];
 
@@ -72,8 +72,8 @@ describe("serializeState ↔ parseState round-trip", () => {
       filter: "tech",
       date: "2024-05-15",
       sector: "Technology",
-      ltFgWindow: /** @type {import("../../ui/lib/state.js").WindowKey} */ ("5y"),
-      ycWindow: /** @type {import("../../ui/lib/state.js").WindowKey} */ ("1y"),
+      ltFgWindow: /** @type {import("../lib/state.js").WindowKey} */ ("5y"),
+      ycWindow: /** @type {import("../lib/state.js").WindowKey} */ ("1y"),
     };
     const url = serializeState(original, "https://example.com/demo/");
     const reparsed = parseState(new URL(url).search, KNOWN);
@@ -89,8 +89,8 @@ describe("serializeState ↔ parseState round-trip", () => {
       filter: "",
       date: null,
       sector: null,
-      ltFgWindow: /** @type {import("../../ui/lib/state.js").WindowKey} */ ("all"),
-      ycWindow: /** @type {import("../../ui/lib/state.js").WindowKey} */ ("all"),
+      ltFgWindow: /** @type {import("../lib/state.js").WindowKey} */ ("all"),
+      ycWindow: /** @type {import("../lib/state.js").WindowKey} */ ("all"),
     };
     const url = serializeState(minimal, "https://example.com/demo/");
     expect(new URL(url).search).toBe("");

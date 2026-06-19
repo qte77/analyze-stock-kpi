@@ -6,7 +6,7 @@
 // that prove the rule doesn't over-match, and unknown-column / non-bank
 // fallthroughs.
 import { describe, it, expect } from "vitest";
-import { explainEmpty } from "../../ui/lib/empty_reason.js";
+import { explainEmpty } from "../lib/empty_reason.js";
 
 const bankRow = {
   symbol: "JPM",
