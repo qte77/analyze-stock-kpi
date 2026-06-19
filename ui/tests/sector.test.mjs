@@ -2,7 +2,7 @@
 // donut (B3). Non-trivial cases only: ordering contract (desc by count,
 // alphabetical tiebreak), null-sector bucketing, empty input.
 import { describe, it, expect } from "vitest";
-import { aggregateSectors, sectorColor } from "../../ui/lib/sector.js";
+import { aggregateSectors, sectorColor } from "../lib/sector.js";
 
 describe("aggregateSectors", () => {
   it("returns an empty Map for an empty input list", () => {

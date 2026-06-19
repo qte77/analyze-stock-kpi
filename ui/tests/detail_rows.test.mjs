@@ -3,7 +3,7 @@
 // these tuples lives in showDetail() in app.js.)
 
 import { describe, it, expect } from "vitest";
-import { auditDetailRows, externalLinkRows } from "../../ui/lib/detail_rows.js";
+import { auditDetailRows, externalLinkRows } from "../lib/detail_rows.js";
 
 describe("auditDetailRows", () => {
   it("returns [] for a null audit", () => {

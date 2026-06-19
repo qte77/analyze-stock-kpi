@@ -41,7 +41,7 @@ jobs:
           # — exclude them so we don't analyze code we don't own.
           config: |
             paths-ignore:
-              - "ui/vendor/**"
+              - "ui/public/vendor/**"
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@8aad20d150bbac5944a9f9d289da16a4b0d87c1e  # v4

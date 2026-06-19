@@ -3,7 +3,7 @@
 // cases only: silent-404 contract, null/last-wins keying, boundary
 // formatting.
 import { describe, it, expect } from "vitest";
-import { buildAuditMap, loadAudit, formatObligated } from "../../ui/lib/audit.js";
+import { buildAuditMap, loadAudit, formatObligated } from "../lib/audit.js";
 
 describe("buildAuditMap", () => {
   it("returns null when the input is not an array (404 fallback path)", () => {

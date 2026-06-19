@@ -3,7 +3,7 @@
 // fetch failed isn't in the input), per-row `_universe` annotation,
 // preserved insertion order across universes.
 import { describe, it, expect } from "vitest";
-import { mergeUniverseSnapshots } from "../../ui/lib/overlay.js";
+import { mergeUniverseSnapshots } from "../lib/overlay.js";
 
 describe("mergeUniverseSnapshots", () => {
   it("returns an empty array when no universes are provided", () => {

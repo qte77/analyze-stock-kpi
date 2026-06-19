@@ -2,9 +2,9 @@
 # Demo dashboard deploy to GitHub Pages (#59).
 #
 # Modern Pages source = "GitHub Actions" (Settings -> Pages -> Source).
-# Workflow assembles ui/* into _site/ and deploys via
-# actions/upload-pages-artifact + actions/deploy-pages. No gh-pages
-# branch.
+# Workflow builds ui/ with Vite (npm run build → ui/dist) and deploys it
+# via actions/upload-pages-artifact + actions/deploy-pages (ADR-0010). No
+# gh-pages branch.
 #
 # Data files (results/series/cnn_fg/YYYY.json, results/demo/<UNIVERSE>/*.json)
 # are NOT bundled into the artifact. The page fetches them at runtime
@@ -35,7 +35,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: assemble + deploy ui to Pages
+    name: build + deploy ui to Pages
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -43,17 +43,18 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
 
-      - name: Assemble _site
+      - name: Build the UI (Vite)
+        working-directory: ui
         run: |
           set -euo pipefail
-          mkdir -p _site
-          cp -r ui/. _site/
+          npm install --no-audit --no-fund
+          npm run build
 
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6.0.0
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
         with:
-          path: _site
+          path: ui/dist
 
       - id: deploy
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128  # v5.0.0

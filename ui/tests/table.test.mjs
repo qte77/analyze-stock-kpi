@@ -9,7 +9,7 @@ import {
   meanComposite,
   totalCompositeScore,
   emptyTableMessage,
-} from "../../ui/table.js";
+} from "../table.js";
 
 describe("buildRowTitle", () => {
   it("shows weight + score + coverage when score and total are positive", () => {

@@ -5,7 +5,7 @@
 // them.
 
 import { describe, it, expect, vi } from "vitest";
-import { scoreYAxis, themedXAxis } from "../../ui/lib/chart_axes.js";
+import { scoreYAxis, themedXAxis } from "../lib/chart_axes.js";
 
 describe("scoreYAxis", () => {
   it("returns a 0–100 axis with stepSize 25", () => {

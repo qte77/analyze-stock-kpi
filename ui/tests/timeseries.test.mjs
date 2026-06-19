@@ -3,7 +3,7 @@
 // cases only: empty input, missing-ticker holes, composite-scores nested
 // access, exact (case-sensitive) symbol matching.
 import { describe, it, expect } from "vitest";
-import { buildTimeSeries } from "../../ui/lib/timeseries.js";
+import { buildTimeSeries } from "../lib/timeseries.js";
 
 describe("buildTimeSeries", () => {
   it("returns empty series for an empty input list", () => {

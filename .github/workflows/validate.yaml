@@ -39,17 +39,24 @@ jobs:
         run: uv run complexipy src --max-complexity-allowed 10
 
       - name: Install JS dev dependencies
+        working-directory: ui
         run: npm install --no-audit --no-fund
 
       - name: Lint JS (node --check + tsc JSDoc + ESLint + Prettier)
+        working-directory: ui
         run: |
-          node --check ui/app.js
-          npx --yes -p typescript@5 tsc --noEmit --project ui
+          node --check app.js
+          npm run typecheck
           npm run lint
           npm run format:check
 
       - name: Vitest (demo unit tests)
+        working-directory: ui
         run: npm test
+
+      - name: Build UI (Vite)
+        working-directory: ui
+        run: npm run build
 
       - name: Pytest with coverage
         run: make test_cov

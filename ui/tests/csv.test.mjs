@@ -2,7 +2,7 @@
 // Non-trivial cases only: the four escape edges (comma, double-quote,
 // newline, null/undefined) + header alignment.
 import { describe, it, expect } from "vitest";
-import { exportCsv } from "../../ui/lib/csv.js";
+import { exportCsv } from "../lib/csv.js";
 
 describe("exportCsv", () => {
   it("emits the header row before any data rows", () => {
