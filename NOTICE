@@ -39,3 +39,17 @@ Upstream sources and their terms (re-verify before relying):
 
 Nothing here is investment advice. See docs/data-sources.md for the full
 per-source redistribution analysis.
+
+================================================================================
+Third-party software bundled in the dashboard
+================================================================================
+
+The browser dashboard vendors these libraries; their full license texts are
+retained alongside the code under ui/public/vendor/ and ship in the built site:
+
+- Chart.js — MIT License (ui/public/vendor/CHARTJS_LICENSE).
+- Fuse.js  — Apache License 2.0 (ui/public/vendor/LICENSE).
+
+Python and JavaScript build/runtime dependencies (e.g. yfinance, Vite, ESLint,
+Prettier, Vitest) are installed from their respective package registries and are
+NOT redistributed by this project; their upstream licenses apply as published.
