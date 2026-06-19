@@ -118,10 +118,8 @@
         <dl class="why-list">
           <dt><a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank" rel="noopener noreferrer">CNN F&amp;G</a> rolling (TTM)</dt>
           <dd>Trimmed to a strict 12-month trailing window before render, so the span stays consistent regardless of when the dashboard is opened.</dd>
-          <dt><a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank" rel="noopener noreferrer">CNN F&amp;G</a> long-term (monthly)</dt>
-          <dd>Monthly median + average aggregation of the headline scores reveals multi-year regime patterns that daily noise obscures. Pre-2025 history backfilled via the <a href="https://github.com/whit3rabbit/fear-greed-data" target="_blank" rel="noopener noreferrer">whit3rabbit/fear-greed-data</a> mirror.</dd>
-          <dt>5s10s slope (10y − 5y, % pts)</dt>
-          <dd>Curve-steepness measure that smooths the short-end Fed-policy noise the more-famous 2y/10y carries. yfinance ships <code>^TNX</code> (10y) and <code>^FVX</code> (5y) as keyless Tier-0 tickers; <code>^IRX</code> (3-month) drops in and out, so we stick to the pair that's always available.</dd>
+          <dt>Long-term context (merged)</dt>
+          <dd>One chart for multi-year regime context. On the 0–100 left axis: the <a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank" rel="noopener noreferrer">CNN F&amp;G</a> monthly median (history backfilled via the <a href="https://github.com/whit3rabbit/fear-greed-data" target="_blank" rel="noopener noreferrer">whit3rabbit/fear-greed-data</a> mirror) and the <strong>5s10s slope</strong> (10y − 5y curve-steepness from yfinance <code>^TNX</code>/<code>^FVX</code>, normalized onto the same 0–100 scale). On a logarithmic right axis: a <strong>broad-equity index</strong> — the <code>SPY</code> ETF's return rebased to 100, a derived series (never the S&amp;P 500 index level). All three are aggregated to a shared monthly grid.</dd>
         </dl>
       </div>
     </section>
