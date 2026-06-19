@@ -61,7 +61,7 @@ authentication, different endpoint.
 Independent ToS / license audit run pre-Item 3 against the canonical
 sources (not relying on prior summaries). Verdict per source for
 committing **derived outputs** to the public `data` branch under this
-repo's MIT licence:
+repo's Apache-2.0 licence:
 
 | Source | Verdict | Why | Operational guardrail |
 |---|---|---|---|
