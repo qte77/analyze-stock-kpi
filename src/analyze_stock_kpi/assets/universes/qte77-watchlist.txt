@@ -73,3 +73,32 @@ TMRAY
 TMUS
 UL
 UNH
+
+# 2026-06 additions (Yahoo symbols verified against yfinance KPI surfaces)
+ALV.DE     # Allianz SE
+DECK       # Deckers Outdoor
+ENEL.MI    # Enel SpA
+FIX        # Comfort Systems USA
+ICTEF      # Intl Container Terminal Services
+IDCC       # InterDigital
+LPX        # Louisiana-Pacific
+MCO        # Moody's
+META       # Meta Platforms
+MNST       # Monster Beverage
+MPWR       # Monolithic Power Systems
+NTES       # NetEase
+QCOM       # Qualcomm
+REA.AX     # REA Group
+SEZL       # Sezzle
+STRL       # Sterling Infrastructure
+TSM        # TSMC (Taiwan Semiconductor ADR)
+YOU        # Clear Secure
+000660.KS  # SK hynix
+002001.SZ  # Zhejiang NHU
+2371.T     # kakaku.com
+2379.TW    # Realtek Semiconductor
+2454.TW    # MediaTek
+2603.TW    # Evergreen Marine (Taiwan)
+600066.SS  # Yutong Bus
+6368.T     # Organo
+6857.T     # Advantest
