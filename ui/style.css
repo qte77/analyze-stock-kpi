@@ -764,32 +764,48 @@ body.theme-dark {
   }
 }
 
-/* Theme toggle UI — three small segmented buttons. */
+/* Theme toggle UI — single pill button cycling system → light → dark.
+   The visible "<icon> <word>" label keeps the active mode glanceable
+   for sighted users; the #theme-status live region carries it to
+   screen readers. */
 #theme-toggle {
-  display: inline-flex;
+  background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 999px;
-  overflow: hidden;
-}
-
-#theme-toggle button {
-  background: var(--panel);
-  border: 0;
-  padding: 0.3rem 0.55rem;
+  padding: 0.3rem 0.7rem;
   font: inherit;
   font-size: 0.8125rem;
+  line-height: 1;
   cursor: pointer;
   color: var(--muted);
-  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
 }
 
-#theme-toggle button[aria-pressed="true"] {
-  background: var(--accent);
-  color: white;
+/* Reserve the widest label ("⏿ System") so the pill doesn't resize as
+   it cycles through the shorter Light / Dark labels — same sizer trick
+   as #view-toggle above. */
+#theme-toggle::before {
+  content: "⏿ System";
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
 }
 
-#theme-toggle button:hover:not([aria-pressed="true"]) {
-  color: var(--accent);
+#theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Visually hidden but exposed to assistive tech (the aria-live status). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Narrow-viewport tweaks. The detailed view is allowed on mobile —

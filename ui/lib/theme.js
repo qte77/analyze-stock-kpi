@@ -8,7 +8,7 @@
 // ui/style.css under `body.theme-light` / `body.theme-dark`
 // blocks plus a `@media (prefers-color-scheme: dark)` rule that applies
 // the dark palette when `body.theme-system` is active.
-// Tested by tests/demo/theme.test.mjs.
+// Tested by tests/theme.test.mjs.
 
 /** @typedef {"system" | "light" | "dark"} ThemeMode */
 
@@ -37,4 +37,21 @@ export function resolveTheme(urlValue, localStorageValue) {
   if (isThemeMode(urlValue)) return urlValue;
   if (isThemeMode(localStorageValue)) return localStorageValue;
   return "system";
+}
+
+/** Cycle order for the single-button toggle. @type {readonly ThemeMode[]} */
+export const THEME_CYCLE = ["system", "light", "dark"];
+
+/**
+ * Next mode in the system → light → dark → system cycle, for the
+ * single-button toggle. `mode` is always a valid ThemeMode (it is the
+ * resolved `activeTheme`), so the wrap-around (dark → system) is the
+ * only edge worth guarding.
+ *
+ * @param {ThemeMode} mode
+ * @returns {ThemeMode}
+ */
+export function nextTheme(mode) {
+  const i = THEME_CYCLE.indexOf(mode);
+  return THEME_CYCLE[(i + 1) % THEME_CYCLE.length];
 }

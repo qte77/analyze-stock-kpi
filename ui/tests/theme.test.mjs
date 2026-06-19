@@ -2,7 +2,7 @@
 // precedence. Non-trivial cases only: invalid values fall through,
 // URL beats localStorage, default is "system".
 import { describe, it, expect } from "vitest";
-import { resolveTheme, isThemeMode } from "../lib/theme.js";
+import { resolveTheme, isThemeMode, nextTheme } from "../lib/theme.js";
 
 describe("isThemeMode", () => {
   it("accepts only the three valid mode strings", () => {
@@ -39,5 +39,16 @@ describe("resolveTheme", () => {
 
   it("falls through to the system default when both URL and localStorage are invalid", () => {
     expect(resolveTheme("BOGUS", "ALSO_BOGUS")).toBe("system");
+  });
+});
+
+describe("nextTheme", () => {
+  it("advances system → light → dark", () => {
+    expect(nextTheme("system")).toBe("light");
+    expect(nextTheme("light")).toBe("dark");
+  });
+
+  it("wraps dark back to system", () => {
+    expect(nextTheme("dark")).toBe("system");
   });
 });
