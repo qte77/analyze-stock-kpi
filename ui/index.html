@@ -68,18 +68,11 @@
         >CNN F&amp;G rolling</button>
         <button
           type="button"
-          id="fg-tab-monthly"
+          id="fg-tab-longterm"
           role="tab"
           aria-selected="false"
-          aria-controls="lt-fg-chart-wrap"
-        >CNN F&amp;G long-term</button>
-        <button
-          type="button"
-          id="fg-tab-yield-curve"
-          role="tab"
-          aria-selected="false"
-          aria-controls="yc-chart-wrap"
-        >5s10s slope</button>
+          aria-controls="lt-combined-wrap"
+        >Long-term context</button>
         <button
           type="button"
           id="fg-tab-why"
@@ -93,28 +86,9 @@
         <canvas id="fg-chart"></canvas>
       </div>
       <div
-        id="lt-fg-chart-wrap"
+        id="lt-combined-wrap"
         role="tabpanel"
-        aria-labelledby="fg-tab-monthly"
-        hidden
-      >
-        <div class="window-chips" role="group" aria-label="Time window">
-          <button type="button" data-window="1y" aria-pressed="false">1y</button>
-          <button type="button" data-window="5y" aria-pressed="false">5y</button>
-          <button type="button" data-window="10y" aria-pressed="false">10y</button>
-          <button type="button" data-window="all" aria-pressed="true">all</button>
-        </div>
-        <div class="chart-canvas">
-          <canvas
-            id="lt-fg-chart"
-            aria-label="Monthly Fear and Greed median and average"
-          ></canvas>
-        </div>
-      </div>
-      <div
-        id="yc-chart-wrap"
-        role="tabpanel"
-        aria-labelledby="fg-tab-yield-curve"
+        aria-labelledby="fg-tab-longterm"
         hidden
       >
         <div id="yc-header" hidden>
@@ -127,11 +101,11 @@
           <button type="button" data-window="10y" aria-pressed="false">10y</button>
           <button type="button" data-window="all" aria-pressed="true">all</button>
         </div>
-        <div class="yc-empty">loading…</div>
+        <div class="lt-combined-empty">loading…</div>
         <div class="chart-canvas">
           <canvas
-            id="yc-chart"
-            aria-label="US Treasury 5s10s slope (10y minus 5y yield, percentage points)"
+            id="lt-combined-chart"
+            aria-label="Long-term context: CNN Fear and Greed (monthly median), 5s10s slope (normalized), and SPY indexed return"
           ></canvas>
         </div>
       </div>

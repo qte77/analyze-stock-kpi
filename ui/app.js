@@ -148,6 +148,10 @@ const loadFearGreedYears = () =>
 const loadYieldCurveYears = () =>
   loadYearsFromBranch(DATA_BASE_URL, "results/series/yield_curve", "date");
 
+/** @type {() => Promise<Array<{date: string, ret_indexed: number}>>} */
+const loadEquitySpyYears = () =>
+  loadYearsFromBranch(DATA_BASE_URL, "results/series/equity_spy", "date");
+
 // ───────────────────────── View-mode + URL state ───────────────────────────
 
 function applyViewMode() {
@@ -608,11 +612,15 @@ async function init() {
   await loadActiveUniverse();
   applyDateFromUrl(parsed.date, dateSelector);
 
-  const [fgEntries, ycEntries] = await Promise.all([loadFearGreedYears(), loadYieldCurveYears()]);
+  const [fgEntries, ycEntries, spyEntries] = await Promise.all([
+    loadFearGreedYears(),
+    loadYieldCurveYears(),
+    loadEquitySpyYears(),
+  ]);
   renderFearGreedHeader(fgEntries);
   renderFearGreedChart(fgEntries);
   renderYieldCurveHeader(ycEntries);
-  bindLongTermTabs(fgEntries, ycEntries);
+  bindLongTermTabs(fgEntries, ycEntries, spyEntries);
   bindWindowChips();
   bindThemeObserver();
 }
