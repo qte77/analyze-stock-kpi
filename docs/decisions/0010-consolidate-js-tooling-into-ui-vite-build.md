@@ -1,6 +1,6 @@
 # ADR-0010 — Consolidate JS tooling into `ui/` with a Vite build
 
-**Status:** Proposed (2026-06-19)
+**Status:** Accepted (2026-06-19)
 
 **Relates to:**
 [ADR-0007](0007-package-vs-infrastructure-boundary.md) — the JS lint/test
@@ -43,9 +43,8 @@ build pipeline. That tradeoff is the decision this ADR exists to make.
 
 ## Decision
 
-> This ADR is **Proposed** and gated on explicit owner sign-off. No migration
-> code lands until it is **Accepted**. If **Rejected**, issue #289 is closed and
-> the tooling stays at the root.
+> **Accepted** 2026-06-19 by owner sign-off (PR #316). The migration lands as a
+> follow-up PR; this record captures the decision and its rationale.
 
 Adopt **Vite** as a dev-only build tool so `ui/` becomes self-contained source
 that compiles to a deployable `ui/dist/`:
