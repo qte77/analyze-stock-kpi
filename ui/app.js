@@ -13,7 +13,7 @@ import { fetchJson, loadYearsFromBranch } from "./lib/fetch.js";
 import { nested } from "./lib/format.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
 import { parseState, resolveViewMode, serializeState } from "./lib/state.js";
-import { resolveTheme } from "./lib/theme.js";
+import { resolveTheme, nextTheme } from "./lib/theme.js";
 import { bindDetailDismiss, showDetail } from "./detail_panel.js";
 import { ALL_COLUMNS, renderUniverseTable } from "./table.js";
 import {
@@ -174,23 +174,32 @@ function applyViewMode() {
 /** @type {"system" | "light" | "dark"} */
 let activeTheme = "system";
 
+/** Icon + word shown on the cycler button per mode. */
+const THEME_LABELS = {
+  system: { icon: "⏿", word: "System" },
+  light: { icon: "☀", word: "Light" },
+  dark: { icon: "🌙", word: "Dark" },
+};
+
 /**
- * Apply the active theme to `<body>` and sync the segmented toggle's
- * aria-pressed state. The three theme-* classes are mutually exclusive
+ * Apply the active theme to `<body>` and sync the cycler button's label
+ * + accessible name. The three theme-* classes are mutually exclusive
  * (only one is set at any time); CSS picks the right palette via
  * `body.theme-dark` (forced) or `body.theme-system` + media query.
+ * Idempotent — safe to call on load without announcing (the
+ * `#theme-status` live region is written only on user-driven changes).
  */
 function applyTheme() {
   const body = document.body;
   body.classList.toggle("theme-system", activeTheme === "system");
   body.classList.toggle("theme-light", activeTheme === "light");
   body.classList.toggle("theme-dark", activeTheme === "dark");
-  const toggle = document.getElementById("theme-toggle");
-  if (!toggle) return;
-  for (const btn of toggle.querySelectorAll("button[data-theme]")) {
-    if (!(btn instanceof HTMLButtonElement)) continue;
-    btn.setAttribute("aria-pressed", btn.dataset.theme === activeTheme ? "true" : "false");
-  }
+  const btn = document.getElementById("theme-toggle");
+  if (!btn) return;
+  const { icon, word } = THEME_LABELS[activeTheme];
+  btn.textContent = `${icon} ${word}`;
+  btn.setAttribute("aria-label", `Theme: ${word} (activate to change)`);
+  btn.title = `Theme: ${word}`;
 }
 
 function persistStateFromCurrent() {
@@ -400,13 +409,14 @@ function setupTheme() {
   const lsTheme = window.localStorage?.getItem(THEME_STORAGE_KEY) ?? null;
   activeTheme = resolveTheme(themeUrl, lsTheme);
   applyTheme();
-  document.getElementById("theme-toggle")?.addEventListener("click", (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLButtonElement)) return;
-    const next = target.dataset.theme;
-    if (next !== "system" && next !== "light" && next !== "dark") return;
-    activeTheme = next;
+  document.getElementById("theme-toggle")?.addEventListener("click", () => {
+    activeTheme = nextTheme(activeTheme);
     applyTheme();
+    // Announce the new mode for screen readers (the "aria-glance"):
+    // focus stays on the button, so the changed label alone wouldn't
+    // be re-read — the polite live region carries the update.
+    const status = document.getElementById("theme-status");
+    if (status) status.textContent = `Theme set to ${THEME_LABELS[activeTheme].word}`;
     window.localStorage?.setItem(THEME_STORAGE_KEY, activeTheme);
     const url = new URL(window.location.href);
     if (activeTheme === "system") url.searchParams.delete("theme");

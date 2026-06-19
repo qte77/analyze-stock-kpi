@@ -11,21 +11,37 @@
   <script src="app.js" type="module"></script>
 </head>
 <body class="view-simple theme-system">
+  <script>
+    // Anti-FOUC: resolve + apply the theme before first paint so an explicit
+    // light/dark override doesn't flash the "system" default. Mirrors
+    // lib/theme.js resolveTheme precedence (URL ?theme= > localStorage >
+    // "system"); kept inline + dependency-free because app.js is a deferred
+    // module that runs only after parse. Storage key matches THEME_STORAGE_KEY.
+    (function () {
+      try {
+        var ok = { system: 1, light: 1, dark: 1 };
+        var url = new URLSearchParams(location.search).get("theme");
+        var ls = localStorage.getItem("demo-theme");
+        var mode = ok[url] ? url : ok[ls] ? ls : "system";
+        var cl = document.body.classList;
+        cl.remove("theme-system", "theme-light", "theme-dark");
+        cl.add("theme-" + mode);
+      } catch (e) {}
+    })();
+  </script>
   <header>
     <h1>
       <a href="https://github.com/qte77/analyze-stock-kpi">analyze-stock-kpi</a>
       · KPI demo dashboard
     </h1>
     <div class="header-meta">
-      <div
+      <button
         id="theme-toggle"
-        role="group"
-        aria-label="Theme: system, light, or dark"
-      >
-        <button type="button" data-theme="system" aria-pressed="true" title="Follow system preference">⏿</button>
-        <button type="button" data-theme="light" aria-pressed="false" title="Force light theme">☀</button>
-        <button type="button" data-theme="dark" aria-pressed="false" title="Force dark theme">🌙</button>
-      </div>
+        type="button"
+        aria-label="Theme: System (activate to change)"
+        title="Theme: System"
+      >⏿ System</button>
+      <span id="theme-status" class="sr-only" role="status" aria-live="polite"></span>
       <a
         id="report-issue"
         href="https://github.com/qte77/analyze-stock-kpi/issues/new"
