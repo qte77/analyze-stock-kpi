@@ -3,32 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Anti-FOUC theme guard (mirrors qte77.github.io). MUST be the first script,
+       before any stylesheet, so the scheme applies before first paint. Keep the
+       storage key + modes in sync with ui/theme.js. -->
+  <script>
+    (function () {
+      try {
+        var modes = { system: 1, light: 1, dark: 1 };
+        var p = new URLSearchParams(location.search).get("theme");
+        var s = localStorage.getItem("qte77-theme");
+        var m = modes[p] ? p : modes[s] ? s : "system";
+        if (m === "light" || m === "dark") {
+          document.documentElement.setAttribute("data-theme", m);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <title>analyze-stock-kpi · demo dashboard</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="stylesheet" href="style.css" />
   <script src="/vendor/chart.umd.min.js" defer></script>
   <script src="/vendor/fuse.min.js" defer></script>
+  <!-- EyeRest theme cycler (repo-local; mirrors qte77.github.io + the sibling
+       dashboards): owns #theme-toggle, sets html[data-theme], persists qte77-theme,
+       dispatches "themechange" (charts.js listens). -->
+  <script type="module" src="theme.js"></script>
   <script src="app.js" type="module"></script>
 </head>
-<body class="view-simple theme-system">
-  <script>
-    // Anti-FOUC: resolve + apply the theme before first paint so an explicit
-    // light/dark override doesn't flash the "system" default. Mirrors
-    // lib/theme.js resolveTheme precedence (URL ?theme= > localStorage >
-    // "system"); kept inline + dependency-free because app.js is a deferred
-    // module that runs only after parse. Storage key matches THEME_STORAGE_KEY.
-    (function () {
-      try {
-        var ok = { system: 1, light: 1, dark: 1 };
-        var url = new URLSearchParams(location.search).get("theme");
-        var ls = localStorage.getItem("demo-theme");
-        var mode = ok[url] ? url : ok[ls] ? ls : "system";
-        var cl = document.body.classList;
-        cl.remove("theme-system", "theme-light", "theme-dark");
-        cl.add("theme-" + mode);
-      } catch (e) {}
-    })();
-  </script>
+<body class="view-simple">
   <header>
     <h1>
       <a href="https://github.com/qte77/analyze-stock-kpi">analyze-stock-kpi</a>
@@ -38,9 +40,9 @@
       <button
         id="theme-toggle"
         type="button"
-        aria-label="Theme: System (activate to change)"
-        title="Theme: System"
-      >⏿ System</button>
+        aria-label="Color theme: System (click to change)"
+        title="Color theme: System (click to change)"
+      >◐ System</button>
       <span id="theme-status" class="sr-only" role="status" aria-live="polite"></span>
       <a
         id="report-issue"

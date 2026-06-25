@@ -73,10 +73,10 @@ export function renderSectorDonut() {
     return;
   }
   const backgroundColor = labels.map(sectorColor);
-  // Seam color follows --panel so slice borders blend cleanly with the
+  // Seam color follows --surface so slice borders blend cleanly with the
   // section background in both light and dark themes. Scriptable so it
   // re-resolves on theme flip via bindThemeObserver → chart.update().
-  const borderColor = () => cssVar("--panel", "#e2dec8");
+  const borderColor = () => cssVar("--surface", "#e2dec8");
   // Pull the active sector's slice outward so the user has visual
   // confirmation of which slice the table is filtered by.
   const offset = labels.map((l) => (l === ctx.sectorFilter ? 12 : 0));
@@ -244,8 +244,8 @@ export function renderRadar(
           data: axes.map(
             (a) => /** @type {Record<string, number | null | undefined>} */ (scores)[a] ?? 0,
           ),
-          borderColor: () => cssVar("--accent", "#7a6010"),
-          backgroundColor: () => `${cssVar("--accent", "#7a6010")}26`,
+          borderColor: () => cssVar("--primary", "#7a6010"),
+          backgroundColor: () => `${cssVar("--primary", "#7a6010")}26`,
         },
       ],
     },
@@ -352,7 +352,7 @@ export async function renderTimeSeriesPane(pane, row) {
         {
           label: "qte77 Score",
           data: series.score,
-          borderColor: () => cssVar("--accent", "#7a6010"),
+          borderColor: () => cssVar("--primary", "#7a6010"),
         },
         {
           label: "Quality",
@@ -531,8 +531,8 @@ function renderCombinedLongTerm(fgEntries, ycEntries, spyEntries) {
           label: "5s10s slope (norm.)",
           data: series.slopeNorm,
           yAxisID: "y",
-          borderColor: () => cssVar("--accent", "#7a6010"),
-          backgroundColor: () => `${cssVar("--accent", "#7a6010")}14`,
+          borderColor: () => cssVar("--primary", "#7a6010"),
+          backgroundColor: () => `${cssVar("--primary", "#7a6010")}14`,
           fill: false,
           pointRadius: 0,
           borderWidth: 1.5,
@@ -544,8 +544,8 @@ function renderCombinedLongTerm(fgEntries, ycEntries, spyEntries) {
           label: "SPY (indexed)",
           data: series.spyIndexed,
           yAxisID: "spy",
-          borderColor: () => cssVar("--muted", "#686040"),
-          backgroundColor: () => `${cssVar("--muted", "#686040")}14`,
+          borderColor: () => cssVar("--text-muted", "#686040"),
+          backgroundColor: () => `${cssVar("--text-muted", "#686040")}14`,
           fill: false,
           pointRadius: 0,
           borderWidth: 1.5,
@@ -688,15 +688,14 @@ export function renderYieldCurveHeader(entries) {
 }
 
 /**
- * Watches body class flips (theme-system / theme-light / theme-dark) and
- * pings every live Chart.js instance so its scriptable color closures
- * re-resolve `--text` / `--accent` / etc. against the new palette. Without
- * this, the F&G + monthly-F&G lines stay near-invisible after a dark-mode
- * toggle until the next hover triggers a redraw.
+ * Re-render every live Chart.js instance when the theme flips, so each
+ * scriptable color closure re-resolves `--text` / `--primary` / etc. against
+ * the new palette. The repo-local theme.js cycler dispatches a `themechange`
+ * event on the document after applying `html[data-theme]`; without this, the
+ * F&G lines stay near-invisible after a toggle until the next hover redraws.
  */
 export function bindThemeObserver() {
-  const obs = new MutationObserver(() => {
+  document.addEventListener("themechange", () => {
     for (const chart of liveCharts) chart.update("none");
   });
-  obs.observe(document.body, { attributes: true, attributeFilter: ["class"] });
 }

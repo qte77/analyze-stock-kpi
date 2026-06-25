@@ -31,22 +31,28 @@
   src: url("fonts/JetBrainsMono-Bold.ttf") format("truetype");
 }
 
-:root {
+/* EyeRest brand theme tokens (qte77 DESIGN.md — zero-blue, warm amber; never a
+   blue accent). Inlined per the estate convention (cf. the paperverse + agentic-
+   job-offer-to-application-kit dashboards). theme.js sets `data-theme` on <html>
+   for an explicit light/dark choice and removes it for "system" (the media query
+   then follows the OS). Forced light/dark win over the media query via the
+   attribute selector's specificity. */
+:root,
+:root[data-theme="light"] {
   --bg: #ece8d8;
-  --panel: #e2dec8;
-  --text: #2c2818;
-  --muted: #686040;
+  --surface: #e2dec8;
   --border: #c8c4b0;
-  --accent: #7a6010;
-  /* EyeRest zero-blue data arc (qte77 brand DESIGN.md). Fixed across
-     themes: drives rating chips (white text) + chart lines + KPI tints. */
+  --text: #2c2818;
+  --text-muted: #686040;
+  --primary: #7a6010;
+  --primary-on: #ece8d8;
+  /* Zero-blue data arc — re-toned per theme so lines/chips stay legible. */
   --data-positive: #4a6818;
   --data-caution: #787010;
   --data-negative: #983828;
   --data-alt: #587818;
-  /* Theme-flipping chart reference lines (time-series Quality/Growth/Sortino):
-     light = data arc, dark = the brand dark variants so lines stay legible on
-     the dark panel. Distinct from the fixed-saturated rating chips. */
+  /* Chart reference lines (time-series Quality/Growth/Sortino) track the data
+     arc, which re-tones per theme so the lines stay legible on light + dark. */
   --chart-quality: var(--data-alt);
   --chart-growth: var(--data-caution);
   --chart-sortino: var(--data-negative);
@@ -57,15 +63,13 @@
   --rating-neutral: var(--border);
   --rating-greed: var(--data-alt);
   --rating-extreme-greed: var(--data-positive);
-  /* KPI heatmap (light): data-arc tinted toward the panel for pastels. */
-  --kpi-good: color-mix(in oklab, var(--data-positive), var(--panel) 78%);
-  --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--panel) 78%);
-  --kpi-bad: color-mix(in oklab, var(--data-negative), var(--panel) 78%);
-  /* Score-cell ramp — fixed light pastels anchored on the EyeRest parchment
-     (#ece8d8, frozen so the forced dark text stays readable in both themes).
-     Diverging 3-stop (rust → amber → green) at a lower anchor so worst / mid /
-     best read by distinct hue; table.js mixes lo↔mid over 0–50, mid↔hi over
-     50–100. */
+  /* KPI heatmap (light): data-arc tinted toward the surface for pastels. */
+  --kpi-good: color-mix(in oklab, var(--data-positive), var(--surface) 78%);
+  --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--surface) 78%);
+  --kpi-bad: color-mix(in oklab, var(--data-negative), var(--surface) 78%);
+  /* Score-cell ramp — light pastels anchored on the EyeRest parchment
+     (#ece8d8) so the forced dark text stays readable in both themes. table.js
+     mixes lo↔mid over 0–50, mid↔hi over 50–100. */
   --score-lo: color-mix(in oklab, var(--data-negative), #ece8d8 50%);
   --score-mid: color-mix(in oklab, var(--data-caution), #ece8d8 50%);
   --score-hi: color-mix(in oklab, var(--data-positive), #ece8d8 50%);
@@ -108,10 +112,10 @@ header h1 a {
   text-decoration: none;
 }
 
-header h1 a:hover { color: var(--accent); }
+header h1 a:hover { color: var(--primary); }
 
 .updated {
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.875rem;
 }
 
@@ -122,7 +126,7 @@ main {
 }
 
 section {
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
@@ -133,7 +137,7 @@ h2 {
   font-size: 0.8125rem;
   font-weight: 600;
   margin: 0 0 1rem;
-  color: var(--muted);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -166,7 +170,7 @@ h2 {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: white;
+  color: var(--primary-on);
   background: var(--rating-neutral);
 }
 
@@ -177,7 +181,7 @@ h2 {
 .chip.rating-extreme-greed { background: var(--rating-extreme-greed); }
 
 #fg-deltas {
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.8125rem;
 }
 
@@ -221,7 +225,7 @@ h2 {
 
 /* Explainer-tab content: a tight definition list of timeframe choices
    per tab. dt's font-weight separates the label from the rationale
-   below; --muted on dd matches the other secondary text in the demo. */
+   below; --text-muted on dd matches the other secondary text in the demo. */
 .why-list {
   margin: 0;
   font-size: 0.875rem;
@@ -238,10 +242,10 @@ h2 {
 
 .why-list dd {
   margin: 0.25rem 0 0;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
-.why-list a { color: var(--accent); }
+.why-list a { color: var(--primary); }
 .why-list code { font-size: 0.8125rem; }
 
 #yc-header:not([hidden]) {
@@ -265,7 +269,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--muted);
+  color: var(--text-muted);
   font-style: italic;
   font-size: 0.875rem;
 }
@@ -326,7 +330,7 @@ h2 {
 }
 
 #universe-size {
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.875rem;
 }
 
@@ -347,7 +351,7 @@ h2 {
 }
 
 /* Form controls in the universe header. Background uses --bg (the page
-   background) rather than --panel so the controls sit inset against the
+   background) rather than --surface so the controls sit inset against the
    section panel — in both themes that's a one-step contrast that keeps
    the border visible without raising visual weight. */
 #universe-picker,
@@ -395,10 +399,10 @@ thead th {
   padding: 0.5rem 0.75rem;
   border-bottom: 2px solid var(--border);
   font-weight: 500;
-  color: var(--muted);
+  color: var(--text-muted);
   user-select: none;
   white-space: nowrap;
-  background: var(--panel);
+  background: var(--surface);
   position: sticky;
   top: 0;
   z-index: 3;
@@ -410,7 +414,7 @@ thead th {
 #universe-table tbody td:nth-child(1) {
   position: sticky;
   left: 0;
-  background: var(--panel);
+  background: var(--surface);
   z-index: 2;
 }
 
@@ -418,7 +422,7 @@ thead th {
 #universe-table tbody td:nth-child(2) {
   position: sticky;
   left: 4.5rem;
-  background: var(--panel);
+  background: var(--surface);
   z-index: 1;
 }
 
@@ -434,8 +438,8 @@ thead th {
 }
 
 thead th:hover { color: var(--text); }
-thead th.sort-asc::after { content: " ↑"; color: var(--accent); }
-thead th.sort-desc::after { content: " ↓"; color: var(--accent); }
+thead th.sort-asc::after { content: " ↑"; color: var(--primary); }
+thead th.sort-desc::after { content: " ↓"; color: var(--primary); }
 
 .num {
   text-align: center;
@@ -478,7 +482,7 @@ tbody td.score-cell {
   bottom: 0;
   width: 400px;
   max-width: 100vw;
-  background: var(--panel);
+  background: var(--surface);
   border-left: 1px solid var(--border);
   padding: 1.5rem;
   overflow-y: auto;
@@ -494,7 +498,7 @@ tbody td.score-cell {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: var(--muted);
+  color: var(--text-muted);
   line-height: 1;
   min-width: 44px;
   min-height: 44px;
@@ -513,7 +517,7 @@ tbody td.score-cell {
   font-size: 0.875rem;
 }
 
-#row-detail dt { color: var(--muted); }
+#row-detail dt { color: var(--text-muted); }
 
 #row-detail dt[tabindex="0"] {
   cursor: help;
@@ -522,7 +526,7 @@ tbody td.score-cell {
 }
 
 #row-detail dt[tabindex="0"]:focus {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
   color: var(--text);
 }
@@ -539,13 +543,13 @@ tbody td.score-cell {
 footer {
   padding: 1rem 1.5rem;
   border-top: 1px solid var(--border);
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.875rem;
   text-align: center;
 }
 
 footer a {
-  color: var(--accent);
+  color: var(--primary);
   text-decoration: none;
 }
 
@@ -604,12 +608,12 @@ footer a:hover { text-decoration: underline; }
   font-weight: 500;
 }
 
-#view-toggle:hover { border-color: var(--accent); color: var(--accent); }
+#view-toggle:hover { border-color: var(--primary); color: var(--primary); }
 
 .view-toggle-label { font-weight: 500; }
 .view-toggle-label::after { content: ": "; }
-.view-toggle-desc { color: var(--muted); }
-#view-toggle:hover .view-toggle-desc { color: var(--accent); }
+.view-toggle-desc { color: var(--text-muted); }
+#view-toggle:hover .view-toggle-desc { color: var(--primary); }
 
 /* GitHub mark + "File feature request or bug" link next to the theme
    picker. Visual weight matches the theme-picker text (muted) rather
@@ -621,12 +625,12 @@ footer a:hover { text-decoration: underline; }
   align-items: center;
   gap: 0.35rem;
   font-size: 0.8125rem;
-  color: var(--muted);
+  color: var(--text-muted);
   text-decoration: none;
   padding: 0.3rem 0.5rem;
 }
 
-#report-issue:hover { color: var(--accent); }
+#report-issue:hover { color: var(--primary); }
 
 #export-csv {
   background: var(--bg);
@@ -636,10 +640,10 @@ footer a:hover { text-decoration: underline; }
   font: inherit;
   font-size: 0.8125rem;
   cursor: pointer;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
-#export-csv:hover { color: var(--accent); border-color: var(--accent); }
+#export-csv:hover { color: var(--primary); border-color: var(--primary); }
 
 /* Simple-mode hides detail-only elements; detailed-mode shows them. */
 body.view-simple .detail-only { display: none !important; }
@@ -660,7 +664,7 @@ body.view-simple .detail-only { display: none !important; }
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--muted);
+  color: var(--text-muted);
   font-style: italic;
   font-size: 0.875rem;
 }
@@ -684,7 +688,7 @@ body.view-simple .detail-only { display: none !important; }
 }
 
 .detail-links a {
-  color: var(--accent);
+  color: var(--primary);
   text-decoration: none;
   font-size: 0.8125rem;
 }
@@ -708,7 +712,7 @@ tbody tr:hover td.kpi-bad {
    that the "—" carries a `title` explaining why the value is missing
    (structural reason, not data lag). */
 tbody td[data-empty-reason] {
-  text-decoration: underline dotted var(--muted);
+  text-decoration: underline dotted var(--text-muted);
   text-underline-offset: 4px;
   cursor: help;
 }
@@ -716,60 +720,60 @@ tbody td[data-empty-reason] {
 /* A5 — empty-state row spans the table width. */
 tbody td.empty-state {
   text-align: center;
-  color: var(--muted);
+  color: var(--text-muted);
   padding: 2rem 1rem;
   font-style: italic;
   cursor: default;
 }
 
-tbody tr:hover td.empty-state { background: var(--panel); }
+tbody tr:hover td.empty-state { background: var(--surface); }
 
-/* Dark-palette overrides. Applied by `body.theme-dark` (forced) OR by
-   `body.theme-system` when the OS prefers dark (media query). Both
-   selectors set the same custom-property values so the downstream
-   rules don't need to know which path triggered. */
-body.theme-dark {
-  --bg: #1c1a14;
-  --panel: #242018;
-  --text: #d8d0b8;
-  --muted: #a89878;
-  --border: #383428;
-  --accent: #c8a858;
-  --kpi-good: color-mix(in oklab, var(--data-positive), var(--panel) 58%);
-  --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--panel) 58%);
-  --kpi-bad: color-mix(in oklab, var(--data-negative), var(--panel) 58%);
-  --chart-quality: #a8b870;
-  --chart-growth: #c8b868;
-  --chart-sortino: #c08060;
-  /* Opt native widgets (select chevron, scrollbars, focus rings) into
-     their dark variant — no per-widget CSS needed. */
-  color-scheme: dark;
-}
-
+/* Auto (no data-theme) follows the OS; explicit light above out-specifies this,
+   explicit dark below reinforces it. The data arc re-tones for the dark surface;
+   the KPI heatmap uses a denser tint (58% vs the light 78%). */
 @media (prefers-color-scheme: dark) {
-  body.theme-system {
+  :root {
     --bg: #1c1a14;
-    --panel: #242018;
-    --text: #d8d0b8;
-    --muted: #a89878;
+    --surface: #242018;
     --border: #383428;
-    --accent: #c8a858;
-    --kpi-good: color-mix(in oklab, var(--data-positive), var(--panel) 58%);
-    --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--panel) 58%);
-    --kpi-bad: color-mix(in oklab, var(--data-negative), var(--panel) 58%);
-    --chart-quality: #a8b870;
-    --chart-growth: #c8b868;
-    --chart-sortino: #c08060;
+    --text: #d8d0b8;
+    --text-muted: #a89878;
+    --primary: #c8a858;
+    --primary-on: #1c1a14;
+    --data-positive: #8aa860;
+    --data-caution: #c8b868;
+    --data-negative: #c08060;
+    --data-alt: #a8b870;
+    --kpi-good: color-mix(in oklab, var(--data-positive), var(--surface) 58%);
+    --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--surface) 58%);
+    --kpi-bad: color-mix(in oklab, var(--data-negative), var(--surface) 58%);
     color-scheme: dark;
   }
 }
 
-/* Theme toggle UI — single pill button cycling system → light → dark.
-   The visible "<icon> <word>" label keeps the active mode glanceable
-   for sighted users; the #theme-status live region carries it to
+:root[data-theme="dark"] {
+  --bg: #1c1a14;
+  --surface: #242018;
+  --border: #383428;
+  --text: #d8d0b8;
+  --text-muted: #a89878;
+  --primary: #c8a858;
+  --primary-on: #1c1a14;
+  --data-positive: #8aa860;
+  --data-caution: #c8b868;
+  --data-negative: #c08060;
+  --data-alt: #a8b870;
+  --kpi-good: color-mix(in oklab, var(--data-positive), var(--surface) 58%);
+  --kpi-neutral: color-mix(in oklab, var(--data-caution), var(--surface) 58%);
+  --kpi-bad: color-mix(in oklab, var(--data-negative), var(--surface) 58%);
+  color-scheme: dark;
+}
+
+/* Theme toggle — single pill button cycling system → light → dark (wired by the
+   repo-local theme.js, sibling-aligned). #theme-status carries the change to
    screen readers. */
 #theme-toggle {
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 0.3rem 0.7rem;
@@ -777,25 +781,33 @@ body.theme-dark {
   font-size: 0.8125rem;
   line-height: 1;
   cursor: pointer;
-  color: var(--muted);
+  color: var(--text-muted);
   text-align: center;
   white-space: nowrap;
 }
 
-/* Reserve the widest label ("⏿ System") so the pill doesn't resize as
-   it cycles through the shorter Light / Dark labels — same sizer trick
-   as #view-toggle above. */
+/* Reserve the widest label ("◐ System") so the pill doesn't resize as it cycles
+   through the shorter Light / Dark labels. */
 #theme-toggle::before {
-  content: "⏿ System";
+  content: "◐ System";
   display: block;
   height: 0;
   overflow: hidden;
   visibility: hidden;
 }
 
-#theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+#theme-toggle:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
 
-/* Visually hidden but exposed to assistive tech (the aria-live status). */
+/* Visible focus — never rely on color alone. */
+#theme-toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Screen-reader-only: the aria-live status text is hidden but read aloud. */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -803,9 +815,22 @@ body.theme-dark {
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
+}
+
+/* Honor reduced-motion globally. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Narrow-viewport tweaks. The detailed view is allowed on mobile —
@@ -836,7 +861,7 @@ body.theme-dark {
   padding: 0.15rem 0.5rem 0.15rem 0.65rem;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: var(--panel);
+  background: var(--surface);
   font-size: 0.8125rem;
   color: var(--text);
 }
@@ -844,21 +869,21 @@ body.theme-dark {
 .universe-chip button {
   background: none;
   border: 0;
-  color: var(--muted);
+  color: var(--text-muted);
   cursor: pointer;
   padding: 0 0.25rem;
   font-size: 1rem;
   line-height: 1;
 }
 
-.universe-chip button:hover { color: var(--accent); }
+.universe-chip button:hover { color: var(--primary); }
 
 /* Sector filter chip — same shape as a universe overlay chip; the
    accent border signals that it's an active filter rather than an
    overlay membership marker. */
 .sector-chip {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 /* "Universe" column in the table is hidden by default; renderTable adds
@@ -888,7 +913,7 @@ body.overlay-active td.universe-col {
   padding: 0.4rem 0.75rem;
   font: inherit;
   font-size: 0.8125rem;
-  color: var(--muted);
+  color: var(--text-muted);
   cursor: pointer;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
@@ -896,7 +921,7 @@ body.overlay-active td.universe-col {
 
 .detail-tabs button[aria-selected="true"] {
   color: var(--text);
-  border-bottom-color: var(--accent);
+  border-bottom-color: var(--primary);
 }
 
 .timeseries-wrap {
@@ -907,7 +932,7 @@ body.overlay-active td.universe-col {
 
 .timeseries-hint {
   font-size: 0.8125rem;
-  color: var(--muted);
+  color: var(--text-muted);
   font-style: italic;
   text-align: center;
   padding: 0.5rem;
@@ -928,16 +953,16 @@ body.overlay-active td.universe-col {
   padding: 0.15rem 0.65rem;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: var(--panel);
-  color: var(--muted);
+  background: var(--surface);
+  color: var(--text-muted);
   font: inherit;
   font-size: 0.8125rem;
   cursor: pointer;
 }
 
 .window-chips button[aria-pressed="true"] {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 /* "Why these universes?" collapsible above the universe picker. Mirrors
@@ -949,18 +974,18 @@ body.overlay-active td.universe-col {
 
 #universe-help summary {
   cursor: pointer;
-  color: var(--muted);
+  color: var(--text-muted);
   padding: 0.15rem 0;
 }
 
 #universe-help summary:hover {
-  color: var(--accent);
+  color: var(--primary);
 }
 
 #universe-help dl.why-list {
   margin: 0.5rem 0 0;
   padding: 0.5rem 0.75rem;
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;
   /* Cap the width so the long explainer lines wrap instead of stretching the
@@ -979,6 +1004,6 @@ body.overlay-active td.universe-col {
 
 #universe-help dl.why-list dd {
   margin: 0.15rem 0 0;
-  color: var(--muted);
+  color: var(--text-muted);
   line-height: 1.45;
 }
