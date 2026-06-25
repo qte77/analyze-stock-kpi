@@ -9,6 +9,7 @@
 
 import { buildAuditMap, loadAudit } from "./lib/audit.js";
 import { exportCsv } from "./lib/csv.js";
+import { defaultDataBase } from "./lib/data.js";
 import { fetchJson, loadYearsFromBranch } from "./lib/fetch.js";
 import { nested } from "./lib/format.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
@@ -32,7 +33,7 @@ import {
 
 const DATA_BASE_URL = (
   new URLSearchParams(window.location.search).get("base") ??
-  "https://raw.githubusercontent.com/qte77/analyze-stock-kpi/data"
+  defaultDataBase(window.location.hostname, window.location.pathname)
 ).replace(/\/$/, "");
 
 const VIEW_MODE_STORAGE_KEY = "demo-view-mode";
