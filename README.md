@@ -1,5 +1,7 @@
 # analyze-stock-kpi
 
+> Library-based stock KPI CLI: per-ticker fundamentals via yfinance plus a daily CNN Fear & Greed sentiment snapshot — no API keys, no scraping.
+
 [![version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/qte77/analyze-stock-kpi/blob/main/CHANGELOG.md)
 [![validate](https://github.com/qte77/analyze-stock-kpi/actions/workflows/validate.yaml/badge.svg)](https://github.com/qte77/analyze-stock-kpi/actions/workflows/validate.yaml)
 [![Lint MD and Links](https://github.com/qte77/analyze-stock-kpi/actions/workflows/lint-md-links.yml/badge.svg)](https://github.com/qte77/analyze-stock-kpi/actions/workflows/lint-md-links.yml)
@@ -8,10 +10,19 @@
 [![SBOM](https://github.com/qte77/analyze-stock-kpi/actions/workflows/sbom.yaml/badge.svg)](https://github.com/qte77/analyze-stock-kpi/actions/workflows/sbom.yaml)
 [![gh-pages](https://github.com/qte77/analyze-stock-kpi/actions/workflows/gh-pages.yaml/badge.svg)](https://qte77.github.io/analyze-stock-kpi/)
 
-Library-based stock KPI CLI: per-ticker fundamentals via yfinance plus a
-daily CNN Fear & Greed sentiment snapshot. No API keys, no scraping.
+## What
 
-**Live demo**: [qte77.github.io/analyze-stock-kpi/](https://qte77.github.io/analyze-stock-kpi/) — weekly `qte77-watchlist` snapshot plus a tabbed F&G panel (rolling history ↔ long-term monthly median + average).
+- Per-ticker **fundamentals** from yfinance — ~35 fields plus computed enrichments and
+  seven 0–100 composite "qte77 Score" proxies — persisted to `results/fundamentals/<UTC>.json`.
+- A daily **CNN Fear & Greed** sentiment snapshot (headline + subindicators) at
+  `results/series/cnn_fg/YYYY.json`, refreshed by a GitHub Actions cron.
+- 11 bundled **universes** — watchlists, regional lists, screener long/short, aggregated
+  best/worst — driven by an inline list, a file, or a preset.
+- A 13-column **rich CLI table** (P/E, PEG, Beta, ROE/ROA, Current, Sortino, Score, …)
+  with an optional composite-score breakdown.
+- A static **[live dashboard](https://qte77.github.io/analyze-stock-kpi/)** (deployed to
+  GitHub Pages): tabbed F&G panel + sortable universe table + row-click KPI detail.
+- **No API keys, no scraping** — keyless public sources only.
 
 <details>
 <summary>Dashboard screenshot · click to expand</summary>
@@ -20,79 +31,39 @@ daily CNN Fear & Greed sentiment snapshot. No API keys, no scraping.
 
 </details>
 
-## Quickstart
+## How
 
 ```bash
-make setup_dev                              # uv sync (default groups: dev + test)
-make run UNIVERSE=qte77-watchlist           # fetch fundamentals -> results/fundamentals/<UTC>.json
-make run TICKERS=AAPL,MSFT                  # ad-hoc ticker list
-make run TICKERS=AAPL SHOW_SCORES=1         # also append composite-score columns
+make setup_dev                              # uv sync (dev + test groups)
+make run UNIVERSE=qte77-watchlist           # fundamentals -> results/fundamentals/<UTC>.json
+make run TICKERS=AAPL,MSFT                  # ad-hoc tickers (SHOW_SCORES=1 appends score columns)
 make help                                   # list available recipes
 make validate                               # lint + types + complexity + md + tests
 ```
 
-CLI args double as env vars with the `SSK_` prefix
-(e.g. `SSK_TICKERS=AAPL,MSFT`).
+CLI args double as env vars with the `SSK_` prefix (e.g. `SSK_TICKERS=AAPL,MSFT`).
+See [`docs/architecture.md`](docs/architecture.md) for the module map, the persisted
+`FundamentalsSnapshot` fields, the composite-score formulas, and the universe presets.
 
-## What it produces
+## Why
 
-* **Fundamentals** — `results/fundamentals/<UTC>.json`: one
-  `FundamentalsSnapshot` per resolved ticker (~35 yfinance fields,
-  including the computed `roi`, `rd_to_revenue`, `fcf_margin`,
-  `sortino_ratio` enrichments plus the lightweight
-  `analyst_recommendation` bucket)
-  plus seven 0-100 composite proxy scores (Quality / Dividend /
-  Growth / Big Call / AAQS / HGI / Screener — shown as **qte77
-  Score** in the dashboard). Sparse fields for non-equities (FX,
-  futures, crypto) are valid by design.
-* **Sentiment** — `results/series/cnn_fg/YYYY.json`: per-year date-sorted
-  array of CNN Fear & Greed snapshots (headline + 9 subindicators).
-  Updated daily by a GitHub Actions cron at 21:30 UTC.
+Fundamentals-plus-sentiment dashboards usually sit behind a paid data terminal or a
+fragile scraping layer. analyze-stock-kpi fills the gap between a raw `yfinance` REPL and
+a paid feed: a reproducible, **keyless** CLI + dashboard over public sources, versioned to
+a `data` branch so the demo and the numbers stay auditable. See
+[`docs/UserStory.md`](docs/UserStory.md) for product intent and non-goals.
 
-## Sample output
+## References
 
-`make run TICKERS=AAPL` prints a CNN Fear & Greed banner, then a
-13-column rich summary table:
-
-> Ticker · Name · Sector · P/E (fwd) · PEG · Beta · R&D/Rev % ·
-> Op M % · ROE % · ROA % · Current · Sortino · Score
-
-With `--show-scores`, three legacy composite columns (Quality · Div ·
-Growth) are appended. The [live demo dashboard][demo] renders the same
-column set with row-click → KPI detail panel + sortable headers — see
-the screenshot near the top of this README.
-
-[demo]: https://qte77.github.io/analyze-stock-kpi/
-
-The persisted JSON `results/fundamentals/<UTC>.json` carries one
-`FundamentalsSnapshot` per ticker with a nested `composite_scores`
-block. Field list lives in
-[`src/analyze_stock_kpi/data_sources/fundamentals.py`](src/analyze_stock_kpi/data_sources/fundamentals.py);
-composite formulas in
-[`src/analyze_stock_kpi/domain/composite_scores.py`](src/analyze_stock_kpi/domain/composite_scores.py).
-
-## Universe sources
-
-In priority order:
-
-| Source | Example |
-|---|---|
-| Inline list | `TICKERS=AAPL,MSFT` |
-| File (one symbol per line) | `TICKERS_FILE=path/to/list.txt` |
-| Preset | `UNIVERSE=qte77-watchlist` (see [`src/analyze_stock_kpi/assets/universes/`](src/analyze_stock_kpi/assets/universes) for all 11 available presets, including `aggregated-scores-best` / `-worst` and `enhanced-kpi-screener-longs` / `-shorts`) |
-
-## Documentation
-
-* [`docs/architecture.md`](docs/architecture.md) — module map + data flow
-* [`docs/UserStory.md`](docs/UserStory.md) — product intent + non-goals
-* [`docs/roadmap.md`](docs/roadmap.md) — milestones + tracked issues
-* [`ui/`](ui) — static dashboard sources (deployed to GitHub Pages); preview locally with `make preview` (serves on `:8000`, data fetched cross-origin from the `data` branch)
-* [`docs/decisions/`](docs/decisions) — [MADR](https://adr.github.io/madr/) ADRs (Traderfox removal,
-  `financetoolkit` deferral, simplified composites, RS hedging deferral)
-* [`docs/cnn-fg-api.md`](docs/cnn-fg-api.md) — CNN F&G endpoint schema
-* [`CHANGELOG.md`](CHANGELOG.md) — release history + known issues
-* [`CONTRIBUTING.md`](CONTRIBUTING.md) — shared dev workflow (tests, commits, GHA, changelog fragments, release flow)
-* [`AGENTS.md`](AGENTS.md) — AI-agent-specific behavioural rules
+- [`docs/architecture.md`](docs/architecture.md) — module map + data flow
+- [`docs/UserStory.md`](docs/UserStory.md) — product intent + non-goals
+- [`docs/roadmap.md`](docs/roadmap.md) — milestones + tracked issues
+- [`ui/`](ui) — static dashboard sources (deployed to GitHub Pages); preview with `make preview`
+- [`docs/decisions/`](docs/decisions) — [MADR](https://adr.github.io/madr/) ADRs
+- [`docs/cnn-fg-api.md`](docs/cnn-fg-api.md) — CNN F&G endpoint schema
+- [`CHANGELOG.md`](CHANGELOG.md) — release history + known issues
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — dev workflow (tests, commits, GHA, changelog, release)
+- [`AGENTS.md`](AGENTS.md) — AI-agent-specific behavioural rules
 
 ## License
 
