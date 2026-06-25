@@ -53,6 +53,6 @@ describe("logRightAxis", () => {
     const axis = logRightAxis(cssVarFn, "Custom");
     expect(axis.title.text).toBe("Custom");
     expect(cssVarFn).not.toHaveBeenCalled();
-    expect(axis.ticks.color()).toBe("--muted:#686040");
+    expect(axis.ticks.color()).toBe("--text-muted:#686040");
   });
 });

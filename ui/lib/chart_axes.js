@@ -54,7 +54,7 @@ export function logRightAxis(cssVarFn, title = "SPY (indexed)") {
     type: "logarithmic",
     position: "right",
     grid: { drawOnChartArea: false, color: () => cssVarFn("--border", "#c8c4b0") },
-    ticks: { color: () => cssVarFn("--muted", "#686040") },
-    title: { display: true, text: title, color: () => cssVarFn("--muted", "#686040") },
+    ticks: { color: () => cssVarFn("--text-muted", "#686040") },
+    title: { display: true, text: title, color: () => cssVarFn("--text-muted", "#686040") },
   };
 }

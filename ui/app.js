@@ -14,7 +14,6 @@ import { fetchJson, loadYearsFromBranch } from "./lib/fetch.js";
 import { nested } from "./lib/format.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
 import { parseState, resolveViewMode, serializeState } from "./lib/state.js";
-import { resolveTheme, nextTheme } from "./lib/theme.js";
 import { bindDetailDismiss, showDetail } from "./detail_panel.js";
 import { ALL_COLUMNS, renderUniverseTable } from "./table.js";
 import {
@@ -37,7 +36,6 @@ const DATA_BASE_URL = (
 ).replace(/\/$/, "");
 
 const VIEW_MODE_STORAGE_KEY = "demo-view-mode";
-const THEME_STORAGE_KEY = "demo-theme";
 
 const FALLBACK_UNIVERSE_IDS = [
   "qte77-watchlist",
@@ -170,37 +168,6 @@ function applyViewMode() {
       desc.textContent = viewMode === "simple" ? "Show all KPI columns" : "Show essentials only";
     }
   }
-}
-
-/** @type {"system" | "light" | "dark"} */
-let activeTheme = "system";
-
-/** Icon + word shown on the cycler button per mode. */
-const THEME_LABELS = {
-  system: { icon: "⏿", word: "System" },
-  light: { icon: "☀", word: "Light" },
-  dark: { icon: "🌙", word: "Dark" },
-};
-
-/**
- * Apply the active theme to `<body>` and sync the cycler button's label
- * + accessible name. The three theme-* classes are mutually exclusive
- * (only one is set at any time); CSS picks the right palette via
- * `body.theme-dark` (forced) or `body.theme-system` + media query.
- * Idempotent — safe to call on load without announcing (the
- * `#theme-status` live region is written only on user-driven changes).
- */
-function applyTheme() {
-  const body = document.body;
-  body.classList.toggle("theme-system", activeTheme === "system");
-  body.classList.toggle("theme-light", activeTheme === "light");
-  body.classList.toggle("theme-dark", activeTheme === "dark");
-  const btn = document.getElementById("theme-toggle");
-  if (!btn) return;
-  const { icon, word } = THEME_LABELS[activeTheme];
-  btn.textContent = `${icon} ${word}`;
-  btn.setAttribute("aria-label", `Theme: ${word} (activate to change)`);
-  btn.title = `Theme: ${word}`;
 }
 
 function persistStateFromCurrent() {
@@ -404,28 +371,6 @@ function makeChip(universe, removable) {
   return chip;
 }
 
-function setupTheme() {
-  // Theme: URL `?theme=` beats localStorage beats the "system" default.
-  const themeUrl = new URLSearchParams(window.location.search).get("theme");
-  const lsTheme = window.localStorage?.getItem(THEME_STORAGE_KEY) ?? null;
-  activeTheme = resolveTheme(themeUrl, lsTheme);
-  applyTheme();
-  document.getElementById("theme-toggle")?.addEventListener("click", () => {
-    activeTheme = nextTheme(activeTheme);
-    applyTheme();
-    // Announce the new mode for screen readers (the "aria-glance"):
-    // focus stays on the button, so the changed label alone wouldn't
-    // be re-read — the polite live region carries the update.
-    const status = document.getElementById("theme-status");
-    if (status) status.textContent = `Theme set to ${THEME_LABELS[activeTheme].word}`;
-    window.localStorage?.setItem(THEME_STORAGE_KEY, activeTheme);
-    const url = new URL(window.location.href);
-    if (activeTheme === "system") url.searchParams.delete("theme");
-    else url.searchParams.set("theme", activeTheme);
-    window.history.replaceState({}, "", url);
-  });
-}
-
 function bindViewToggle() {
   document.getElementById("view-toggle")?.addEventListener("click", () => {
     viewMode = viewMode === "simple" ? "detailed" : "simple";
@@ -591,7 +536,6 @@ async function init() {
   viewMode = resolveViewMode(parsed.view, lsView);
   applyViewMode();
 
-  setupTheme();
   bindViewToggle();
 
   const picker = /** @type {HTMLSelectElement | null} */ (
