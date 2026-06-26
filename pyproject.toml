@@ -38,7 +38,9 @@ packages = ["src/analyze_stock_kpi"]
 default-groups = ["dev", "test"]
 # Cap dependency resolution to keep CI reproducible. Roll the date
 # forward when a needed security patch or feature sits above the cap.
-exclude-newer = "2026-05-31T00:00:00Z"
+# Rolled to 2026-06-20 for pydantic-settings 2.14.2 (GHSA-4xgf-cpjx-pc3j,
+# published 2026-06-19).
+exclude-newer = "2026-06-20T00:00:00Z"
 
 [tool.ruff]
 target-version = "py312"
