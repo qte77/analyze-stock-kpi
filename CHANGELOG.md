@@ -16,6 +16,246 @@ Types of changes:
 
 <!-- scriv-insert-here -->
 
+## [1.2.0] - 2026-06-26
+
+### Added
+
+- **Enhanced KPI long/short conjunctive-gate screener — Phase 2a (#192).** `src/orchestrators/enhanced_kpi_screener_longshort.py` ships 13 of 16 issue criteria — every gate that reads an existing `FundamentalsSnapshot` field plus criterion 14 via the new `analyst_recommendation` field (alias `recommendationKey`, already in the yfinance `info` payload — no new HTTP). Paired output (`enhanced-kpi-screener-longs` + `…-shorts`); a ticker lands in `longs` iff it passes ALL 14 long-side gates, in `shorts` iff it passes ALL 13 inverted short-side gates, otherwise `neither`. Long ∩ short empty by construction. Declarative `_NUMERIC_GATES` table keeps `_evaluate` cognitive complexity at 5. PR #228. Phase 2b owes criterion 12 (FCF margin, `Ticker.cashflow` fetch), criterion 15 (tech rating, blocked on #21), ADR amendments, and threshold tuning.
+- **Demo: `1y | 5y | 10y | all` time-window chips above the long-term F&G + 5s10s charts (#206).** Click filters the entries array client-side before passing to Chart.js (per the issue's option 1 — no zoom plugin, no brush slider). New URL params `?ltFgWindow=` / `?ycWindow=` (omitted at default). Existing lazy-render guard preserved: chip click while a pane is hidden flips the rendered flag back so the next tab activation picks up the new window. PR #227.
+- **Demo: score-cell tooltip surfaces `mean_composite` on aggregator universes (#218).** On `aggregated-scores-best` / `…-worst`, hovering the Score cell shows the mean-of-7-composites — the metric the aggregator actually ranks on. Closes the user-confusion gap surfaced by #202 (PRSO in worst-25 with visible `screener_score` 64, mean 16.5). PR #231.
+
+- **FCF margin enrichment for the long/short screener (#192 Phase 2b).** `src/data_sources/fundamentals.py` gains `_fetch_fcf_margin` mirroring `_fetch_rd_to_revenue`: gated on `info["quoteType"] == "EQUITY"`, reads "Free Cash Flow" from `Ticker.cashflow` and "Total Revenue" from `Ticker.income_stmt` via the shared `_find_row` helper, returns `None` on any missing data / zero revenue / network error. New `fcf_margin: float | None` field on `FundamentalsSnapshot` attached post-validate via `model_copy`. `src/orchestrators/enhanced_kpi_screener_longshort.py` adds the gate to `_NUMERIC_GATES` (long > 0.10, short < 0), bringing the conjunctive-gate screener to 15 of 16 criteria. Criterion 15 (tech rating) stays deferred behind #21. ADR-0002 amended to note the new enrichment field. Closes #192.
+
+- **Radar-hexagon favicon for the demo dashboard (`docs/demo/favicon.svg`).** A dependency-free inline SVG echoing the composite-score radar chart, theme-aware via `prefers-color-scheme` so it stays legible on light and dark browser tabs. Linked from `index.html` as `type="image/svg+xml"`.
+
+- Self-hosted brand typography for the demo dashboard — **Inter** (UI/prose)
+  and **JetBrains Mono** (numeric table cells + `<code>`), per the qte77
+  EyeRest design tokens (#295). Latin TTF subsets ship in `ui/fonts/` (SIL OFL 1.1,
+  `ui/fonts/OFL.txt`) with `font-display: swap` and the prior system stack as
+  fallback — no third-party font CDN request.
+- Adopted the qte77 brand mark (`logo-mark.paths.dejavu.svg`) as the demo
+  dashboard favicon, replacing the bespoke radar SVG (#295).
+
+- Deep history for the demo's long-term charts: CNN Fear & Greed back to
+  **2011** and the 5s10s yield-curve slope back to **2011** (committed to the
+  `data` branch). New `scripts/backfill_yield_curve.py` forces a full
+  `period="max"` yfinance fetch — the daily cron only deepens on a first run
+  (#287).
+
+- **`equity-spy.yaml` daily cron (#288).** Recomputes the SPY indexed-return
+  series and commits changed `results/series/equity_spy/YYYY.json` to the `data`
+  branch via the shared verified-commit helper. Runs 23:00 UTC, staggered 30min
+  after the yield-curve cron so the data-branch writers don't race the same ref.
+  Mirrors `yield-curve.yaml` (same pinned action SHAs).
+
+- **`equity_spy` data source — SPY indexed-return series (#288).** New
+  `analyze_stock_kpi.data_sources.equity_spy` fetches SPY (the SPDR S&P 500 ETF)
+  via yfinance and emits a **derived rebased index** (`ret_indexed = close /
+  epoch_close * 100`, epoch = first close ≥ 2011) — never the raw close and never
+  the S&P 500 index level (ADR-0011). Same per-year `results/series/<kind>/`
+  shape + wrap-degrade boundary as `yield_curve`. Backend only here; the
+  data-branch backfill, the cron, and the merged-chart UI follow separately.
+
+- **Governance for the #288 equity-macro overlay (ADR-0011).** Records the
+  decision to source the equity line from **SPY** (an ETF security, not the S&P
+  Dow Jones index) and commit only a **derived indexed-return** series — never
+  raw index levels — keeping it at the same redistribution tier as the existing
+  `yield_curve` slope. Adds a `docs/data-sources.md` guardrail row and a repo
+  `NOTICE` recording the non-commercial/educational, derived-data posture, the
+  upstream ToS, and attribution for the bundled third-party libs (Chart.js MIT,
+  Fuse.js Apache-2.0). (#288)
+
+- **Forks that enable Pages now self-host their own `data` branch.** The dashboard
+  derives `DATA_BASE_URL` from the Pages origin (`<owner>.github.io/<repo>` →
+  that owner/repo's `data` branch) via a new pure `ui/lib/data.js`; `?base=` still
+  overrides, and the canonical qte77 deploy is unchanged. Prior art: the sibling
+  `agentic-job-offer-to-application-kit` dashboard.
+
+### Changed
+
+- **Aggregator derives composite-field list from `CompositeScores.model_fields`.** `src/orchestrators/aggregated_scores_best_and_worst.py` previously hardcoded the 7-field tuple in two places (the model definition and the orchestrator constant); adding a new composite would have been silently omitted from cross-universe ranking. Now the tuple is `tuple(CompositeScores.model_fields)` — single source of truth, zero hidden coupling. Regression guard added in `tests/test_aggregated_scores_best_and_worst.py`.
+
+- **Demo: `screener_score` displays as "qte77 Score" (#203).** Display-only rename across `KPI_GLOSSARY` / detail-panel / time-series chart / radar chart. Internal field name `composite_scores.screener_score` is unchanged so JSON snapshots on the `data` branch keep validating. Table column header stays `Score` for column-width parity. PR #221.
+- **Demo: F&G rolling chart trimmed to a strict 12-month TTM window (#207).** `renderFearGreedChart` now applies `trimToRollingWindow(entries, 365)` before render so the rendered window is always 12 months regardless of when in the year the dashboard opens (was drifting between ~8 and ~24 months as the loader consumes this-year + last-year files). PR #222.
+- **Demo: `Op M %` column hidden in simple view.** Marks the `<th>` and the cellSpec as `detail-only` so simple view keeps the 4 headline columns (Ticker / Name / Sector / Score). PR #229.
+- **CI: dependabot updates grouped per ecosystem.** `groups: { python-deps / github-actions: { patterns: ["*"] } }` on the `uv` + `github-actions` ecosystems — collapses N per-dependency PRs into one grouped PR per weekly run per ecosystem. PR #219.
+- **CI: `demo-snapshot.yaml` fan-out reads `docs/demo/universes.json` instead of a hardcoded JSON literal.** Adding a new universe is now a one-file change (the JSON). Empty-input dispatch re-builds every universe the dashboard knows about regardless of preset `.txt` state — emitting a zero-row snapshot for an unpopulated universe is the right rebuild behavior. PR #232.
+
+- **Typed contracts in `src/orchestrators/_shared.py`: `AuditRowBase` + `DedupedSnapshot`.** Closes assessment gaps #2 (3 divergent `AuditRow` models) and #3 (`dedup_by_ticker` returned `dict[str, dict[str, Any]]`). `AuditRowBase` extracts the 5-field decision-trail prefix (`ticker`, `source_universes`, `snapshot_dates`, `eligible`, `excluded_reason`) shared by the aggregator + longshort `AuditRow` subclasses; federal_contractors stays distinct (different domain — per-recipient match audit). `DedupedSnapshot(BaseModel)` replaces the untyped dict return of `dedup_by_ticker`; consumers switch from `info["snapshot"]` string-key indexing to `info.snapshot` attribute access. Rule-of-three pre-application for Phase 2b's FCF orchestrator (#192) which becomes the 3rd consumer of both shapes. JSON shape change is safe: the aggregator + longshort audit JSONs are written but never read back (JS dashboard only consumes federal_contractors audit). Matches the AGENTS.md "every structured payload is a BaseModel" rule.
+
+- **Extracted shared snapshot-loader + paired-output writer from build scripts.** `scripts/build_aggregated_scores_best_and_worst.py` and `scripts/build_enhanced_kpi_screener_longshort.py` were ~80% identical (same `SOURCE_UNIVERSES`, same `_load_snapshots`, same main-loop dict-builder, same paired-preset+audit-write pattern); CodeFactor flagged the duplicated block as its sole remaining issue on `main`. Moved to a new `scripts/_demo_snapshot_loader.py` exposing `load_snapshots` / `load_all_snapshots` / `write_paired_universe_and_audit`. Each build script collapses from ~100 LOC to ~50 LOC of orchestrator-import + thin `main()`; Phase 2b's FCF orchestrator (#192) becomes a drop-in 3rd consumer. `build_federal_contractors.py` left alone (different input shape — no snapshot loading, single preset). Leading-underscore module name signals scripts/-internal per ADR-0007.
+
+- **`fear-greed.yaml` + `yield-curve.yaml` now route through `scripts/data-branch-commit.cjs`.** Both daily crons carried byte-identical 36-line inline `github-script` blocks (getRef → getCommit → mkBlob → createTree → createCommit → updateRef) — the same verified-commit logic that `demo-snapshot.yaml` + `universe-builder.yaml` already delegate to the CJS helper. Migrating eliminates ~52 LOC of duplicated workflow YAML, ends the convention drift between the two stale crons and the two updated ones, and **adds 422-race retry** the inline blocks lacked (8 attempts with jittered backoff). Future verified-commit fixes propagate to all 4 workflows from a single file. Surfaced by today's scripts+workflows duplication sweep.
+
+- **README / UserStory / roadmap / architecture sync after #248.** Surface the `fcf_margin` enrichment field in README's sample-output blurb; mark Phase 2b shipped in `docs/UserStory.md` and `docs/roadmap.md` (criterion 15 / tech rating stays deferred behind #21); record the new gate count (15 long + 14 short) and the `_fetch_fcf_margin` boundary in `docs/architecture.md`. No behaviour change — pure doc drift cleanup so the long/short screener's documented state matches the merged code on `main`.
+
+- **`docs/demo/app.js`: extract `destroyChart`, `scoreYAxis`/`themedXAxis`, and `toggleHistoryHint` to collapse repeated chart + empty-hint boilerplate.** The chart-teardown idiom (`liveCharts.delete` + `.destroy()`) is now one helper across all six chart renderers; the 0–100 score y-axis and themed x-axis configs (each repeated 3×) become builder functions; the two byte-for-byte-identical empty-hint functions (sector-donut + long-term F&G) share one `toggleHistoryHint`, while the rolling + yield-curve variants that intentionally overwrite text stay separate. Behaviour-preserving, in-file only (no new modules/tests); `node --check` + `tsc` clean. First slice of the app.js size/repetition reduction.
+
+- **`src/data_sources/fundamentals.py`: single-source duplicated structure via `_safe_ratio`, `_extract_two_rows`, `_equity_ratio`.** CodeFactor reported "0 duplication" but missed near-identical structure where only literals differ: the None/zero-denominator ratio guard (`_compute_roi` + both EQUITY-gated fetchers), the two-row extract-with-empty/missing-row/NaN guards (`_read_rd_revenue` / `_read_fcf_revenue`, one-frame vs two-frame), and the EQUITY-gate + try/except + safe-divide fetchers (`_fetch_rd_to_revenue` / `_fetch_fcf_margin`). Behaviour-preserving — the full regression suite stays green; per-method cognitive complexity drops (both readers and both fetchers to 0) and `_read_rd_revenue` gains the direct unit coverage it previously lacked. The `fetch` thunk in `_equity_ratio` keeps the yfinance property access inside the `try` and short-circuits the EQUITY gate before any fetch.
+
+- **`docs/demo/lib/detail_rows.js`: extract the pure detail-panel data (`KPI_GLOSSARY`, `auditDetailRows`, `externalLinkRows`) out of `app.js`.** The KPI-glossary text and the row-tuple builders for the federal-contracts audit block + external links move to a tested lib module; `app.js` imports them. Adds `tests/demo/detail_rows.test.mjs` (7 cases for the two builders; the glossary is static data, no test). The DOM rendering (`showDetail` / `renderRadar` / `renderTimeSeriesPane`) intentionally stays in `app.js` — extracting it would require exporting the shared mutable `liveCharts` Set across modules or a god-object deps argument, both worse than co-location (AHA). Behaviour-preserving.
+
+- **`docs/demo/lib/format.js`: extract the pure value formatters + comparator (`nested`, `fmtNum`, `fmtPct`, `compareValues`) out of `app.js` into a unit-tested module.** Adds `tests/demo/format.test.mjs` covering dotted-key access (incl. missing segments / nullish root), `fmtNum` null/NaN/precision, `fmtPct` null plus its intentional no-NaN-guard behaviour, and `compareValues` nulls-last-regardless-of-direction + string/number ordering. `td()` stays in `app.js` (DOM glue). Behaviour-preserving; prerequisite for the upcoming `table.js` / `detail.js` concern splits.
+
+- **`docs/demo/lib/window.js`: extract the pure time-window helpers (`WINDOW_DAYS`, `filterByWindow`, `findClosestScore`) out of `app.js` into a unit-tested module.** Adds `tests/demo/window.test.mjs` covering the non-trivial branches (empty input, `"all"` passthrough, unparseable-latest fallback, inclusive cutoff boundary, arbitrary iso field; closest-score nearest-match + equidistant tie-break). Also deletes the redundant `trimToRollingWindow` — it was equivalent to `filterByWindow(entries, "1y", "timestamp")` — and rewrites its sole call site in `renderFearGreedChart`. Behaviour-preserving; the window math is now testable without a DOM.
+
+- **`docs/demo/table.js`: split the universe-table rendering concern out of `app.js`.** Moves `ALL_COLUMNS`, the DOM builders (`renderUniverseTable`, `renderRow`, `td`, `annotateEmpty`) and the pure helpers (`buildRowTitle`, `coverageCount`, `meanComposite`, `totalCompositeScore`, `emptyTableMessage`) into a new sibling module. Module state (active universe, sort key/dir, filter query, row-click handler) is now passed in via an `opts` object instead of read from `app.js` globals, so `table.js` holds no mutable app state. `app.js` keeps a thin `renderTable()` adapter, so its 7 call sites are unchanged. Adds `tests/demo/table.test.mjs` (18 cases for the pure helpers) and widens `tsconfig` `include` to top-level `*.js`. Behaviour-preserving; `app.js` drops ~225 lines.
+
+- **`docs/demo/app.js`: prune verified-dead code.** Removes two obsolete historical comments (the removed mobile auto-simple guard; the removed simple-mode external-link behaviour in `onRowClick`), the inert `radarCanvas.className = "radar-canvas"` assignment (no matching CSS/HTML selector — Chart.js gets the canvas node by reference), and the never-passed `text` parameter of `renderRollingEmptyHint` (its sole call site always resolves to `EMPTY_HISTORY`). Each removal was cross-checked against `index.html` / `style.css` / tests to confirm zero live references. Behaviour-preserving.
+
+- **`docs/demo/detail_panel.js`: extract the `#row-detail` side-panel lifecycle out of `app.js`.** `showDetail` / `bindDetailDismiss` (plus the private `dl` / `closeDetail` helpers) move to a new sibling DOM module that mirrors `table.js`: it owns the detail aside but takes the row's audit record and the two chart renderers (`renderRadar`, `renderTimeSeriesPane`) via a context object instead of reading `app.js` globals, so it stays free of `app.js` mutable state and chart slots. `app.js` keeps a one-line `onRowClick` adapter and drops its now-unused `detail_rows` import + `fmtPct`. Net −163 LOC in `app.js`. Behaviour-preserving (logic moved verbatim); the consumed pure builders stay covered by `tests/demo/detail_rows.test.mjs`.
+
+- **`docs/demo/lib/fetch.js`: extract the data-branch fetch helpers out of `app.js`.** `fetchJson` (fetch + throw-on-non-2xx + parse) and `loadYearsFromBranch` (this-year + last-year concat with per-leg silent-fail and ascending sort) move to a pure, DOM-free lib module; `app.js` imports them and keeps the thin state-closing wrappers (`loadManifest`, `loadSnapshot`, `loadFearGreedYears`, …). `loadYearsFromBranch` now takes the base URL as a parameter (`loadYearsFromBranch(baseUrl, pathPrefix, sortKey)`) instead of closing over `DATA_BASE_URL`, which is what makes it pure and testable. Adds `tests/demo/fetch.test.mjs` (5 cases: 2xx parse, non-2xx throw, two-leg concat+sort, per-leg silent-fail, non-array-leg skip). Net −31 LOC in `app.js`. Behaviour-preserving.
+
+- **`docs/demo/lib/chart_axes.js`: extract the themed Chart.js axis factories out of `app.js`.** `scoreYAxis` (0–100, stepSize 25) and `themedXAxis` (tick-capped x) move to a pure, DOM-free lib module. To keep `lib/` DOM-free they take an injected `cssVarFn(token, fallback)` instead of closing over `app.js`'s `cssVar`: `scoreYAxis(cssVar)` / `themedXAxis(cssVar)` at the four call sites (`renderTimeSeriesPane`, `renderFearGreedChart`, `renderMonthlyFearGreedChart`, `renderYieldCurveChart`). The returned objects still carry deferred color closures (Chart.js resolves them lazily on theme flip), now documented as a caller-owns-lifetime contract. Adds `tests/demo/chart_axes.test.mjs` (4 cases: static shape + deferred-injection for both factories). Net −19 LOC in `app.js`. Behaviour-preserving.
+
+- **`docs/demo/app.js`: dedup the chart empty-hint helpers onto a single `toggleHistoryHint`.** `renderRollingEmptyHint` and `renderYieldCurveEmptyHint` were 14-line near-twins re-implementing the create/update/remove logic; both collapse to one-line delegations (matching the existing `renderDonutEmptyHint` / `renderLongTermEmptyHint` wrappers). `toggleHistoryHint` gains an optional `text` param and switches from skip-if-existing to update-if-existing — which is what preserves the "loading… → no history yet" overwrite of the static placeholders shipped in `#fg-chart-wrap` / `#yc-chart-wrap`. Verified safe for the donut + long-term callers: they have no static placeholder and only ever store `EMPTY_HISTORY`, so the update path is a no-op for them. Net −24 LOC in `app.js`. Behaviour-preserving.
+
+- **`ui/charts.js`: extract the Chart.js rendering layer out of `app.js` (closes #268).** All chart builders (sector donut, radar, F&G rolling/monthly, yield curve, detail-panel time-series) plus the shared chart infra (`liveCharts`/`cssVar`/`destroyChart`/`bindThemeObserver`/`toggleHistoryHint`) and the long-term-tab + window-chip wiring move verbatim into a sibling module. The only app↔chart coupling is wired through a single injected context object — `initCharts(ctx)` with live getters/setters for `snapshot`/`sectorFilter`/`ltFgWindow`/`ycWindow`/`manifest`/… and `afterSectorToggle`/`afterWindowChange` callbacks — mirroring the `table.js` / `detail_panel.js` opts-object precedent. Net `app.js` −722 LOC (1278 → ~615); behaviour-preserving (147 vitest pass; headless render verified: donut click-filter, tabs, window chips, detail radar + time-series all functional, 0 console errors).
+
+- **Import package renamed `src` → `analyze_stock_kpi` (src-layout; [ADR-0009](docs/decisions/0009-rename-package-to-analyze-stock-kpi.md), resolving the ADR-0007 refactor candidate).** The package now lives at `src/analyze_stock_kpi/` and is imported as `analyze_stock_kpi` (e.g. `from analyze_stock_kpi.domain.universe import resolve_universe`); the CLI entry is `python -m analyze_stock_kpi`. **Breaking for any code importing `src.*`** — switch to `analyze_stock_kpi.*`. The PyPI distribution name (`analyze-stock-kpi`), CLI behaviour, and public API are otherwise unchanged.
+
+- **Dashboard re-themed to the qte77 EyeRest brand (zero-blue, warm).** The `ui/` dashboard moves from its cool-gray Apple-system palette to EyeRest's umber/parchment tones (`DESIGN.md`). Blue/teal accents → the amber accent + the brand's zero-blue data arc across rating chips, KPI heatmap, the score-cell ramp, the sector donut, and the favicon (#278); the neutral surfaces → warm parchment (light) / umber (dark) (#282). Both light + dark, system-theme default kept, WCAG AA on the brand pairs. Fully token-driven (CSS custom properties), so scheme/variant flips re-resolve every value.
+
+- **Data-branch `results/` layout grouped by kind.** Per-year series moved to
+  `results/series/{cnn_fg,yield_curve}/`; every per-universe audit JSON moved
+  under `results/audit/<universe>/` (federal-contractors, aggregated-scores,
+  enhanced-kpi-screener). Demo snapshots (`results/demo/`) and the universe
+  audit (`results/audit/universes-*.json`) are unchanged. Config, the snapshot
+  workflows, the demo loader, and docs all route through the new paths; the
+  `data` branch is migrated in lockstep so the live demo never 404s. Plan:
+  `docs/plans/restructure-results.md`.
+
+- **Demo header constrained to the content-column width.** `header` now shares
+  `main`'s `max-width: 1400px; margin: 0 auto`, so on wide viewports the title and
+  the theme / report-issue / updated meta align with the cards instead of
+  stretching edge-to-edge. No effect below 1400px.
+
+- **Merged long-term-context chart (#288).** The "CNN F&G long-term" and "5s10s
+  slope" tabs collapse into one "Long-term context" chart: the F&G monthly median
+  and the 5s10s monthly mean (normalized to 0-100) share the left axis, and the
+  **SPY indexed return** sits on a **logarithmic right axis**. All three reconcile
+  onto one monthly grid via the new pure `ui/lib/combined.js`
+  (`normalizeSlope` / `aggregateMonthly` / `buildCombinedSeries`) +
+  `logRightAxis` in `ui/lib/chart_axes.js`. SPY is the derived `equity_spy` series
+  on the `data` branch (ADR-0011, never raw index levels).
+
+- **`NOTICE` expanded to the full third-party-attribution convention (matches the
+  paperverse sibling).** Now opens with the project's Apache-2.0 license header
+  and reproduces/points to the verbatim license texts of every bundled,
+  redistributed component shipped in the built UI: Chart.js (MIT), Fuse.js
+  (Apache-2.0), and the **Inter + JetBrains Mono fonts** (SIL OFL 1.1) — the
+  fonts were previously omitted. Non-redistributed Python/JS dependencies are
+  explicitly excluded. Also corrects a stale "MIT" reference in
+  `docs/data-sources.md` (the repo is Apache-2.0).
+
+- **qte77 watchlist expanded to 100 symbols (+27).** Added Allianz (`ALV.DE`),
+  Deckers (`DECK`), Enel (`ENEL.MI`), Comfort Systems (`FIX`), Intl Container
+  Terminal Services (`ICTEF`), InterDigital (`IDCC`), Louisiana-Pacific (`LPX`),
+  Moody's (`MCO`), Meta (`META`), Monster Beverage (`MNST`), Monolithic Power
+  (`MPWR`), NetEase (`NTES`), Qualcomm (`QCOM`), REA Group (`REA.AX`), Sezzle
+  (`SEZL`), Sterling Infrastructure (`STRL`), TSMC (`TSM`), Clear Secure (`YOU`),
+  SK hynix (`000660.KS`), Zhejiang NHU (`002001.SZ`), kakaku.com (`2371.T`),
+  Realtek (`2379.TW`), MediaTek (`2454.TW`), Evergreen Marine (`2603.TW`), Yutong
+  Bus (`600066.SS`), Organo (`6368.T`) and Advantest (`6857.T`). Each symbol was
+  verified against the yfinance KPI surfaces the screener reads
+  (`.info` / `.income_stmt` / `.cashflow`); inline `# Name` comments document the
+  cryptic international codes. SK hynix is the lone partial — Yahoo omits a ROIC
+  input so that one composite stays `None`; all other KPIs populate.
+
+- **Theme toggle is now a single cycler button instead of the 3-button
+  segmented control.** One click advances system → light → dark → system;
+  the button shows the active mode as an `<icon> <word>` label so it stays
+  glanceable. "System" (follow OS) remains a reachable state, and the
+  `?theme=` URL + `localStorage` persistence is unchanged. A visually
+  hidden `aria-live="polite"` status region announces each change to
+  screen readers, since focus stays on the button after a click.
+
+- **JS tooling + tests consolidated under `ui/` with a Vite build (ADR-0010,
+  #289).** `package.json`, the eslint/prettier/vitest configs, and `tests/demo/`
+  moved from the repo root into `ui/` (`ui/tests/`), so the root is Python-only.
+  `ui/` is now Vite *source* → `ui/dist/` is the deployable; `gh-pages.yaml`
+  builds (`npm run build`) and uploads `ui/dist` instead of raw-copying `ui/`.
+  Vendored Chart.js/Fuse.js, `favicon.svg`, and `universes.json` moved to
+  `ui/public/` (served verbatim under the project base path). The dashboard's
+  data still loads at runtime from the `data` branch — never bundled. `Makefile`
+  + `validate.yaml` JS steps now run from `ui/`; `validate` also builds the UI to
+  catch breakage on PRs.
+
+- **5s10s slope chart de-noised to a weekly mean on the wide windows.** The
+  yield-curve tab now aggregates the daily 10y−5y slope to an ISO-week mean for
+  the 5y / 10y / all windows (1y stays daily), mirroring the F&G long-term
+  monthly view so multi-year context reads as trend rather than noise. New pure
+  `ui/lib/weekly.js` (`aggregateWeekly`); client-side only — no change to the
+  `data`-branch `results/series/yield_curve/` files. (#308)
+
+- **Refreshed the "Why these charts?" copy for the merged long-term chart
+  (#288).** The pane described the F&G long-term and 5s10s charts as separate
+  tabs; it now describes the single combined chart — F&G monthly median + the
+  normalized 5s10s on the 0–100 axis and the SPY-derived equity index on the log
+  axis.
+
+- **Dashboard adopts the qte77 EyeRest brand theming, aligned with the sibling
+  paperverse + agentic-job-offer-to-application-kit dashboards.** CSS tokens are
+  renamed to the brand-canonical names (`--surface` / `--text-muted` / `--primary`,
+  plus a new `--primary-on`) and the light/dark cascade moves to `html[data-theme]`,
+  set by a new repo-local `ui/theme.js` that mirrors `qte77.github.io/assets/theme.js`:
+  one cycling `◐/○/●` button, `localStorage["qte77-theme"]`, a `themechange` event that
+  recolours the charts, a dynamic `aria-label` + `#theme-status` live region,
+  `prefers-reduced-motion`, and a `<head>` anti-FOUC guard. The data arc re-tones per
+  theme, so rating-chip text uses `--primary-on` to keep contrast in both modes. The old
+  `lib/theme.js` + its test are removed (the toggle logic now lives in `ui/theme.js`).
+- **Theme toggle no longer writes `?theme=` to the URL on click** — it reads `?theme=`
+  on load (deep-links still work) and persists the choice to `localStorage`.
+
+- **README restructured to the qte77 doc-structure canon.** Hero tagline under the H1,
+  then **What → How → Why → References → License**: the one-line pitch moves to a hero
+  blockquote, a new **Why** section states the keyless-vs-paid-feed gap, **What** is
+  trimmed to ≤7 reader-value bullets (field lists / composite formulas / preset details
+  now link out to `docs/architecture.md`), and the non-canon `Sample output` /
+  `Universe sources` sections fold into What/How. Orientation only; depth lives in `docs/`.
+
+### Fixed
+
+- **CodeFactor E241: collapse multi-space alignment in `enhanced_kpi_screener_longshort` + its test.** Three fixture dicts and a parametrize tuple table in `tests/test_enhanced_kpi_screener_longshort.py` plus the `_NUMERIC_GATES` table in `src/orchestrators/enhanced_kpi_screener_longshort.py` used column-aligned spacing after `:` / `,`. CodeFactor's pycodestyle (which ignores the repo's ruff config) flagged ~57 E241 hits, tanking the two files to F / D grades. Collapsed to single-space; no semantic change. Preferred over a new `setup.cfg [pycodestyle]` override because no sibling qte77 repo uses one and `pyproject.toml` ruff stays the single lint source of truth. Inline-comment `,  # ...` sites (PEP 8 standard) untouched — CodeFactor isn't flagging those.
+
+- **Demo: dark-mode chart grid + axis labels visibility (#205).** Chart.js scale defaults were theme-blind (rgba(0,0,0,0.1) grid lines, near-black tick labels) — vanished against the dark panel. Add scriptable `() => cssVar()` closures for `scales[].grid.color` + `scales[].ticks.color` across `fearGreedChart`, `monthlyFearGreedChart`, `yieldCurveChart`, `timeSeriesChart`, `radarChart`. `sectorChart`'s static `--panel` slice-seam color converts to a scriptable closure too; `radarChart` + `sectorChart` register in `liveCharts` so `bindThemeObserver` re-evaluates their scriptable colors on theme flip. PR #220.
+- **CI: `sam.gov` added to lychee's exclude list.** `https://sam.gov/about/terms-of-use` (referenced in `docs/data-sources.md`) returns 403 to lychee's UA, breaking the `linkChecker` job on every unrelated PR. Same pattern as the existing `sec.gov` / `aaii.com` / `naaim.org` exclusions. PR #223.
+- **CI: include long/short universes in `demo-snapshot.yaml` fan-out.** PR #228 added `enhanced-kpi-screener-{longs,shorts}` to `universe-builder.yaml` and `docs/demo/universes.json` but missed `demo-snapshot.yaml` — picker showed them, selection painted "no history yet" forever because no snapshot ever landed at `results/demo/enhanced-kpi-screener-*/…`. PR #230.
+- **Demo: dedupe the `"no history yet"` empty-hint string.** Extracted into one module-level `EMPTY_HISTORY` const; replaced 5 hardcoded copies + 1 near-duplicate. AHA-warranted (5 of one literal); context-specific strings (`"first cron run pending"`, `"loading manifest…"`) stay inline. PR #224.
+
+- **`docs/demo/types.d.ts`: declare `Row.composite_scores` as nullable.** `src/data_sources/fundamentals.py:FundamentalsSnapshot.composite_scores` is `CompositeScores | None`, which serializes to `null`. The TS declaration was `composite_scores?: CompositeScores;` — optional but not nullable; type narrowing on a literal `null` value would have failed. Now `composite_scores?: CompositeScores | null;`, matching the convention every other nullable field already uses (`?: T | null`). One-line drift fix surfaced by today's contracts audit; the remaining 11 `FundamentalsSnapshot` fields absent from `Row` are intentional per the file's "subset the dashboard reads" header policy and confirmed unused in `docs/demo/`.
+
+- Sector donut legend now reappears after browser zoom-out using ResizeObserver-based auto-hide (#152).
+
+- **`docs/demo/tsconfig.json`: bump `moduleResolution` `node` → `bundler` (and `module` `ES2020` → `ESNext`).** The legacy `node` (node10) resolver is deprecated on the TypeScript 7.0 track and fails `make lint_js` / `make validate` with TS5107. `bundler` is the correct resolver for this browser-native ES-module demo (relative `./lib/*.js` imports with explicit extensions, no Node package semantics). Dev-tooling only; no runtime or behaviour change.
+
+- F&G backfill is now a strict **gap-fill** — it no longer clobbers a
+  CNN-direct row's `subindicators` / `previous_*` fields when a whit3rabbit row
+  shares the same midnight-UTC date key. The prior `_upsert(force=False)` path
+  replaced same-timestamp rows on any content difference; the test meant to
+  guard this used an unrealistic intraday timestamp and so missed it (#287).
+
+- Demo dashboard now shows the **full** long-term history. The data loader only
+  fetched the last two years, so the CNN F&G long-term + 5s10s slope charts
+  stopped at ~2025 even after the data branch was backfilled to 2011 (#287).
+  `loadYearsFromBranch` now fetches every year from the series floor (2011)
+  through the current year, so the 5y / 10y / all window chips paint the whole
+  range.
+
+- **`sp500` universe: `BRK.B` → `BRK-B`.** Yahoo / yfinance uses a hyphen for
+  Berkshire Hathaway's Class B share-class symbol; the dotted `BRK.B` resolves to
+  all-null KPI rows (verified `0/3` on retry-probe vs `BRK-B` `3/3`). The qte77
+  watchlist already used `BRK-B`; this aligns `sp500.txt`. The other empty-data
+  symbols from the same audit (`MMC`, latam `.SA` lines and their ADRs `ERJ` /
+  `EBR`) are an upstream yfinance `quoteSummary` issue, not symbol errors —
+  tracked in #312.
+
+- **No more flash-of-wrong-theme on load for an explicit light/dark
+  override.** An inline guard in `<body>` resolves the theme (URL >
+  `localStorage` > system) and sets the body class before first paint,
+  instead of waiting for the deferred `app.js` module.
+
 ## [1.1.0] - 2026-05-31
 
 ### Security
