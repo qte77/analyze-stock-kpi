@@ -1,34 +1,43 @@
 /* Self-hosted brand typography (qte77 EyeRest DESIGN.md): Inter for UI/prose,
-   JetBrains Mono for numeric tables + code. Latin TTF subsets in ui/fonts/
-   (SIL OFL 1.1 — see ui/fonts/OFL.txt). font-display: swap paints the system
-   fallback immediately, then swaps the brand face in once loaded — no FOIT. */
+   JetBrains Mono for numeric tables + code. WOFF2 (Brotli, ~64% smaller) with a
+   TTF fallback; Latin subsets in ui/fonts/ (SIL OFL 1.1 — see ui/fonts/OFL.txt).
+   font-display: swap paints the system fallback immediately, then swaps the brand
+   face in once loaded — no FOIT. */
 @font-face {
   font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("fonts/Inter-Regular.ttf") format("truetype");
+  src:
+    url("fonts/Inter-Regular.woff2") format("woff2"),
+    url("fonts/Inter-Regular.ttf") format("truetype");
 }
 @font-face {
   font-family: "Inter";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("fonts/Inter-Bold.ttf") format("truetype");
+  src:
+    url("fonts/Inter-Bold.woff2") format("woff2"),
+    url("fonts/Inter-Bold.ttf") format("truetype");
 }
 @font-face {
   font-family: "JetBrains Mono";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("fonts/JetBrainsMono-Regular.ttf") format("truetype");
+  src:
+    url("fonts/JetBrainsMono-Regular.woff2") format("woff2"),
+    url("fonts/JetBrainsMono-Regular.ttf") format("truetype");
 }
 @font-face {
   font-family: "JetBrains Mono";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("fonts/JetBrainsMono-Bold.ttf") format("truetype");
+  src:
+    url("fonts/JetBrainsMono-Bold.woff2") format("woff2"),
+    url("fonts/JetBrainsMono-Bold.ttf") format("truetype");
 }
 
 /* EyeRest brand theme tokens (qte77 DESIGN.md — zero-blue, warm amber; never a
