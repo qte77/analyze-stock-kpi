@@ -1,3 +1,0 @@
-### Changed
-
-- **`docs/demo/lib/window.js`: extract the pure time-window helpers (`WINDOW_DAYS`, `filterByWindow`, `findClosestScore`) out of `app.js` into a unit-tested module.** Adds `tests/demo/window.test.mjs` covering the non-trivial branches (empty input, `"all"` passthrough, unparseable-latest fallback, inclusive cutoff boundary, arbitrary iso field; closest-score nearest-match + equidistant tie-break). Also deletes the redundant `trimToRollingWindow` — it was equivalent to `filterByWindow(entries, "1y", "timestamp")` — and rewrites its sole call site in `renderFearGreedChart`. Behaviour-preserving; the window math is now testable without a DOM.

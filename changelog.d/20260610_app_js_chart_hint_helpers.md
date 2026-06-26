@@ -1,3 +1,0 @@
-### Changed
-
-- **`docs/demo/app.js`: extract `destroyChart`, `scoreYAxis`/`themedXAxis`, and `toggleHistoryHint` to collapse repeated chart + empty-hint boilerplate.** The chart-teardown idiom (`liveCharts.delete` + `.destroy()`) is now one helper across all six chart renderers; the 0–100 score y-axis and themed x-axis configs (each repeated 3×) become builder functions; the two byte-for-byte-identical empty-hint functions (sector-donut + long-term F&G) share one `toggleHistoryHint`, while the rolling + yield-curve variants that intentionally overwrite text stay separate. Behaviour-preserving, in-file only (no new modules/tests); `node --check` + `tsc` clean. First slice of the app.js size/repetition reduction.

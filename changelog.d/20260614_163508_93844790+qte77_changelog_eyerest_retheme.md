@@ -1,3 +1,0 @@
-### Changed
-
-- **Dashboard re-themed to the qte77 EyeRest brand (zero-blue, warm).** The `ui/` dashboard moves from its cool-gray Apple-system palette to EyeRest's umber/parchment tones (`DESIGN.md`). Blue/teal accents → the amber accent + the brand's zero-blue data arc across rating chips, KPI heatmap, the score-cell ramp, the sector donut, and the favicon (#278); the neutral surfaces → warm parchment (light) / umber (dark) (#282). Both light + dark, system-theme default kept, WCAG AA on the brand pairs. Fully token-driven (CSS custom properties), so scheme/variant flips re-resolve every value.

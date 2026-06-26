@@ -2,7 +2,7 @@
 
 > Library-based stock KPI CLI: per-ticker fundamentals via yfinance plus a daily CNN Fear & Greed sentiment snapshot — no API keys, no scraping.
 
-[![version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/qte77/analyze-stock-kpi/blob/main/CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/qte77/analyze-stock-kpi/blob/main/CHANGELOG.md)
 [![validate](https://github.com/qte77/analyze-stock-kpi/actions/workflows/validate.yaml/badge.svg)](https://github.com/qte77/analyze-stock-kpi/actions/workflows/validate.yaml)
 [![Lint MD and Links](https://github.com/qte77/analyze-stock-kpi/actions/workflows/lint-md-links.yml/badge.svg)](https://github.com/qte77/analyze-stock-kpi/actions/workflows/lint-md-links.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/qte77/analyze-stock-kpi/badge)](https://www.codefactor.io/repository/github/qte77/analyze-stock-kpi)
