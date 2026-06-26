@@ -178,9 +178,9 @@ Types of changes:
   builds (`npm run build`) and uploads `ui/dist` instead of raw-copying `ui/`.
   Vendored Chart.js/Fuse.js, `favicon.svg`, and `universes.json` moved to
   `ui/public/` (served verbatim under the project base path). The dashboard's
-  data still loads at runtime from the `data` branch — never bundled. `Makefile`
-  + `validate.yaml` JS steps now run from `ui/`; `validate` also builds the UI to
-  catch breakage on PRs.
+  data still loads at runtime from the `data` branch — never bundled. The
+  `Makefile` + `validate.yaml` JS steps now run from `ui/`; `validate` also builds
+  the UI to catch breakage on PRs.
 
 - **5s10s slope chart de-noised to a weekly mean on the wide windows.** The
   yield-curve tab now aggregates the daily 10y−5y slope to an ISO-week mean for
