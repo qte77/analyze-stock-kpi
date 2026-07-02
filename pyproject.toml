@@ -10,7 +10,7 @@ dependencies = [
     "pydantic>=2.10",
     "pydantic-settings>=2.6",
     "rich>=15.0",
-    "tqdm>=4.67",
+    "tqdm>=4.68.3",
     "yfinance>=1.4.1",
 ]
 
@@ -19,11 +19,11 @@ dev = [
     "ruff>=0.15.15",
     "pyright>=1.1.400",
     "complexipy>=5.5.0",
-    "bump-my-version>=0.29",
+    "bump-my-version>=1.4.1",
     "scriv[toml]>=1.8",
 ]
 test = [
-    "pytest>=9.0",
+    "pytest>=9.1.1",
     "pytest-cov>=7.1",
 ]
 
