@@ -1,8 +1,9 @@
 // @ts-check
 // Universe-table rendering for the demo dashboard. DOM-coupled glue split
 // out of app.js (#…) to shrink the entry file; the pure row helpers
-// (buildRowTitle, coverageCount, meanComposite, totalCompositeScore,
-// emptyTableMessage) are exported for unit testing. Module-level state
+// (buildRowTitle, coverageCount, meanComposite, effectiveScore,
+// totalCompositeScore, emptyTableMessage) are exported for unit testing.
+// Module-level state
 // (active universe, sort, filter, row-click handler) is passed in by the
 // caller rather than read from globals, so this file stays free of app.js
 // mutable state. Tested by tests/demo/table.test.mjs.
@@ -78,10 +79,11 @@ function annotateEmpty(cell, row, col) {
 
 /**
  * Mean of populated composite scores — the metric the aggregator preset
- * (best-and-worst / longs / shorts) ranks on. Closes #218: the Score
- * column shows screener_score, but on aggregator universes the ranking is
- * mean-of-7. Surfacing the mean as a tooltip explains why e.g. PRSO sits
- * in worst-25 with a visible screener_score of 64.
+ * (best-and-worst / longs / shorts) ranks on. Closes #218: the Score column
+ * used to always show screener_score even on aggregator universes, so a
+ * ticker's displayed score didn't match the metric that actually placed it
+ * in best-25/worst-25. {@link effectiveScore} uses this as the Score value
+ * (and sort key) on aggregator universes instead.
  *
  * @param {any} row
  * @returns {number | null}
@@ -102,6 +104,25 @@ export function meanComposite(row) {
 
 function isAggregatorUniverse(/** @type {string} */ slug) {
   return slug.startsWith("aggregated-scores-");
+}
+
+/**
+ * The Score value a row actually earns for the active universe. On
+ * aggregator universes (best/worst) the ranking — and therefore the Score
+ * column and its default sort — is mean-of-7-composites, not
+ * screener_score; showing screener_score there was misleading (#218: a
+ * ticker can rank in worst-25 by mean while showing a comparatively high
+ * screener_score, or vice versa). Every other universe keeps
+ * screener_score.
+ *
+ * @param {any} row
+ * @param {string} activeUniverse
+ * @returns {number | null}
+ */
+export function effectiveScore(row, activeUniverse) {
+  return isAggregatorUniverse(activeUniverse)
+    ? meanComposite(row)
+    : nested(row, "composite_scores.screener_score");
 }
 
 /**
@@ -156,7 +177,7 @@ export function buildRowTitle(score, totalScore, coverage) {
  */
 function renderRow(row, totalScore, activeUniverse, onRowClick) {
   const tr = document.createElement("tr");
-  const score = nested(row, "composite_scores.screener_score");
+  const score = effectiveScore(row, activeUniverse);
   tr.title = buildRowTitle(score, totalScore, coverageCount(row));
   const scoreCell = td(fmtNum(score, 0), "num score-cell");
   if (score != null) {
@@ -166,13 +187,8 @@ function renderRow(row, totalScore, activeUniverse, onRowClick) {
         ? `color-mix(in oklab, var(--score-lo), var(--score-mid) ${s * 2}%)`
         : `color-mix(in oklab, var(--score-mid), var(--score-hi) ${(s - 50) * 2}%)`;
   }
-  if (isAggregatorUniverse(activeUniverse)) {
-    const mean = meanComposite(row);
-    if (mean != null) {
-      scoreCell.title =
-        `Aggregator ranks on mean of 7 composites = ${mean.toFixed(1)}. ` +
-        `Score shown here is screener_score (one of the 7).`;
-    }
+  if (isAggregatorUniverse(activeUniverse) && score != null) {
+    scoreCell.title = `Aggregator rank score — mean of 7 composites = ${score.toFixed(1)}.`;
   }
   const universeCell = td(/** @type {any} */ (row)._universe ?? activeUniverse);
   universeCell.classList.add("universe-col");
@@ -206,15 +222,18 @@ function renderRow(row, totalScore, activeUniverse, onRowClick) {
 }
 
 /**
- * Reduce all visible rows' composite scores to a single normalisation
- * denominator for the `buildRowTitle` weight calculation.
+ * Reduce all visible rows' effective scores (see {@link effectiveScore}) to
+ * a single normalisation denominator for the `buildRowTitle` weight
+ * calculation. `activeUniverse` defaults to `""` (never an aggregator
+ * universe) so existing screener_score-based callers are unaffected.
  *
  * @param {any[]} rows
+ * @param {string} [activeUniverse]
  * @returns {number}
  */
-export function totalCompositeScore(rows) {
+export function totalCompositeScore(rows, activeUniverse = "") {
   return rows.reduce((acc, row) => {
-    const s = nested(row, "composite_scores.screener_score");
+    const s = effectiveScore(row, activeUniverse);
     return acc + (s == null ? 0 : Number(s));
   }, 0);
 }
@@ -269,10 +288,15 @@ export function renderUniverseTable(rows, opts) {
     tbody.appendChild(tr);
     return;
   }
-  const sorted = [...rows].sort((a, b) =>
-    compareValues(nested(a, opts.sortKey), nested(b, opts.sortKey), opts.sortDir),
-  );
-  const totalScore = totalCompositeScore(rows);
+  // The Score column's sort key resolves through effectiveScore too, so an
+  // aggregator universe's default sort follows the same mean-of-7 value
+  // shown in the cell rather than the screener_score it silently replaces.
+  const sortValue = (/** @type {any} */ row) =>
+    opts.sortKey === "composite_scores.screener_score"
+      ? effectiveScore(row, opts.activeUniverse)
+      : nested(row, opts.sortKey);
+  const sorted = [...rows].sort((a, b) => compareValues(sortValue(a), sortValue(b), opts.sortDir));
+  const totalScore = totalCompositeScore(rows, opts.activeUniverse);
   for (const row of sorted) {
     tbody.appendChild(renderRow(row, totalScore, opts.activeUniverse, opts.onRowClick));
   }
