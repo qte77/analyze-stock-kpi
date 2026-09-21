@@ -1,6 +1,9 @@
 # Plan — Merge long-term charts + SP500 overlay
 
-Issue [#288](https://github.com/qte77/analyze-stock-kpi/issues/288) · status: proposed · depends on [backfill-history](backfill-history.md) (**shipped** — F&G + 5s10s now reach 2011 on the `data` branch, #287 / PR #297).
+Issue [#288](https://github.com/qte77/analyze-stock-kpi/issues/288) · status: proposed ·
+**unblocked** (dependency shipped), not yet started · depends on
+[backfill-history](001-backfill-history.md) (**shipped** — F&G + 5s10s now reach 2011 on
+the `data` branch, #287 / PR #297).
 
 ## Context
 
@@ -80,7 +83,7 @@ Chart.js chart replacing the two long-term panes.
 ## References
 
 - [#288](https://github.com/qte77/analyze-stock-kpi/issues/288); depends on
-  [backfill-history](backfill-history.md) (**shipped**, #287).
+  [backfill-history](001-backfill-history.md) (**shipped**, #287).
 - `ui/charts.js` (`renderMonthlyFearGreedChart` ~491, `renderYieldCurveChart` ~696,
   `bindLongTermTabs` ~555, `bindThemeObserver` ~746); `ui/lib/fetch.js`
   (`loadYearsFromBranch`); `ui/lib/chart_axes.js` (`scoreYAxis`, `themedXAxis`);

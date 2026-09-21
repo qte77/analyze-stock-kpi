@@ -68,12 +68,13 @@ scripts, workflow YAML, or DOM-glue path strings.
 
 ## Deferred / open questions / out of scope
 
-- **Deferred — rename `results/demo/` → `results/snapshots/`**: de-"demo" the
-  production snapshot dir. Fold into [#289](https://github.com/qte77/analyze-stock-kpi/issues/289)
-  (consolidate-ui-tooling), which already reworks the demo/UI layer — rename the
-  path *and* the subsystem (`demo-snapshot.yaml`, `demo_dir`, docs) together, not
-  as a standalone migration. `universes/` was rejected: ambiguous vs
-  `universes.json` / `audit/universes-*.json`, and `audit/` is also per-universe.
+- **Deferred — rename `results/demo/` → `results/snapshots/`**: originally folded
+  into [#289](https://github.com/qte77/analyze-stock-kpi/issues/289)
+  (consolidate-ui-tooling), but #289 has since shipped its own scope without this
+  rename — the tail is now orphaned. Tracked fresh in
+  [#368](https://github.com/qte77/analyze-stock-kpi/issues/368). `universes/` was
+  rejected: ambiguous vs `universes.json` / `audit/universes-*.json`, and `audit/`
+  is also per-universe.
 - **Naming mismatch** — universe id `federal-contractors` (hyphen) vs path
   `federal_contractors` (underscore) is pre-existing; normalizing would
   balloon the data move → out of scope.
@@ -89,5 +90,5 @@ scripts, workflow YAML, or DOM-glue path strings.
   [#300](https://github.com/qte77/analyze-stock-kpi/pull/300),
   [#303](https://github.com/qte77/analyze-stock-kpi/pull/303),
   [#304](https://github.com/qte77/analyze-stock-kpi/pull/304).
-- Adjacent plans: [merge-longterm-charts](merge-longterm-charts.md) (#288),
-  [consolidate-ui-tooling](consolidate-ui-tooling.md) (#289).
+- Adjacent plans: [merge-longterm-charts](003-merge-longterm-charts.md) (#288),
+  [consolidate-ui-tooling](002-consolidate-ui-tooling.md) (#289).
