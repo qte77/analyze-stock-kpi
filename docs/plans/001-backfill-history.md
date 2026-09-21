@@ -7,7 +7,7 @@ Issue [#287](https://github.com/qte77/analyze-stock-kpi/issues/287) · status: *
 **Shipped.** History was shallow — CNN F&G long-term went back only to 2025-05, the
 5s10s slope to 2025-02. Both per-year series now reach **2011** on the `data` branch,
 and the demo loader fetches the full range so the long-term-context + slope charts (and
-the future merged chart, [merge-longterm-charts](merge-longterm-charts.md)) paint it.
+the future merged chart, [merge-longterm-charts](003-merge-longterm-charts.md)) paint it.
 
 ## Approach
 
@@ -30,5 +30,5 @@ exposes, using the existing backfill paths — no schema change.
 
 ## References
 
-- [#287](https://github.com/qte77/analyze-stock-kpi/issues/287); unblocks [merge-longterm-charts](merge-longterm-charts.md).
+- [#287](https://github.com/qte77/analyze-stock-kpi/issues/287); unblocks [merge-longterm-charts](003-merge-longterm-charts.md).
 - `src/analyze_stock_kpi/data_sources/{sentiment_backfill,yield_curve}.py`; `.github/workflows/{fear-greed,yield-curve}.yaml`.

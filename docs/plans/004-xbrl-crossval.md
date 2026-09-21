@@ -1,6 +1,10 @@
 # Plan — XBRL cross-validation of yfinance financials
 
-Issue [#101](https://github.com/qte77/analyze-stock-kpi/issues/101) · status: deferred-but-tracked (roadmap "Open research").
+Issue [#101](https://github.com/qte77/analyze-stock-kpi/issues/101) · status: **ready to
+implement** — see [006-agent-ready-backlog.md § 1.2](006-agent-ready-backlog.md) for the
+current, source-verified design (supersedes this file's original companyfacts/3–5-concept
+draft below). Owner promoted this out of `deferred` 2026-06-08: prerequisites (CIK resolver,
+submissions API) have shipped, no new deps needed.
 
 ## Context
 
