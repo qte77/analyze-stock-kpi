@@ -25,6 +25,9 @@ class AppSettings(BaseSettings):
 
     edgar_tickers_url: str = "https://www.sec.gov/files/company_tickers_exchange.json"
     edgar_submissions_url_template: str = "https://data.sec.gov/submissions/CIK{cik}.json"
+    edgar_xbrl_url_template: str = (
+        "https://data.sec.gov/api/xbrl/companyconcept/CIK{cik}/us-gaap/{concept}.json"
+    )
     edgar_cache_dir: Path = Path("results/edgar")
     sec_referer: str = "https://www.sec.gov/"
     sec_user_agent: str = "opensource-research-client contact@example.com"

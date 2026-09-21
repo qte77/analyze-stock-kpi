@@ -89,6 +89,12 @@ class FundamentalsSnapshot(BaseModel):
     revenue_growth: float | None = Field(default=None, alias="revenueGrowth")
     earnings_growth: float | None = Field(default=None, alias="earningsGrowth")
 
+    # -- income statement (raw) --
+    # Promoted from `info` — `_compute_roi` already reads these two keys;
+    # cross-validated against SEC XBRL in `sec.xbrl.enrich_snapshot_xbrl`.
+    total_revenue: float | None = Field(default=None, alias="totalRevenue")
+    net_income_to_common: float | None = Field(default=None, alias="netIncomeToCommon")
+
     # -- dividends --
     dividend_yield: float | None = Field(default=None, alias="dividendYield")
     payout_ratio: float | None = Field(default=None, alias="payoutRatio")
@@ -123,6 +129,9 @@ class FundamentalsSnapshot(BaseModel):
     sec_last_10k_date: date | None = None
     sec_last_10q_date: date | None = None
     sec_last_8k_date: date | None = None
+    sec_revenue_delta_pct: float | None = None
+    sec_net_income_delta_pct: float | None = None
+    sec_eps_delta_pct: float | None = None
 
 
 def _normalize_yfinance_info(info: dict[str, Any]) -> dict[str, Any]:
