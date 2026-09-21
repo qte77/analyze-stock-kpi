@@ -7,6 +7,7 @@ import {
   buildRowTitle,
   coverageCount,
   meanComposite,
+  effectiveScore,
   totalCompositeScore,
   emptyTableMessage,
 } from "../table.js";
@@ -75,8 +76,32 @@ describe("meanComposite", () => {
   });
 });
 
+describe("effectiveScore", () => {
+  const row = {
+    composite_scores: {
+      quality: 88,
+      dividend: 48,
+      growth: 83,
+      big_call: 75,
+      aaqs: 69,
+      hgi: 93,
+      screener_score: 47,
+    },
+  };
+  it("uses screener_score on a non-aggregator universe", () => {
+    expect(effectiveScore(row, "sp500")).toBe(47);
+  });
+  it("uses meanComposite on an aggregated-scores universe", () => {
+    expect(effectiveScore(row, "aggregated-scores-best")).toBe(meanComposite(row));
+    expect(effectiveScore(row, "aggregated-scores-worst")).toBe(meanComposite(row));
+  });
+  it("does not switch metrics for a non-aggregator universe with a similar name", () => {
+    expect(effectiveScore(row, "enhanced-kpi-screener-longs")).toBe(47);
+  });
+});
+
 describe("totalCompositeScore", () => {
-  it("sums each row's composite_scores.screener_score", () => {
+  it("sums each row's composite_scores.screener_score by default", () => {
     const rows = [
       { composite_scores: { screener_score: 60 } },
       { composite_scores: { screener_score: 40 } },
@@ -93,6 +118,13 @@ describe("totalCompositeScore", () => {
   });
   it("returns 0 for an empty list", () => {
     expect(totalCompositeScore([])).toBe(0);
+  });
+  it("sums meanComposite instead, on an aggregator universe", () => {
+    const rows = [
+      { composite_scores: { quality: 80, growth: 40 } }, // mean of the 2 populated = 60
+      { composite_scores: { screener_score: 40 } }, // mean of the 1 populated = 40
+    ];
+    expect(totalCompositeScore(rows, "aggregated-scores-best")).toBe(100);
   });
 });
 
