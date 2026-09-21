@@ -81,17 +81,27 @@ Only the three categories currently in use are configured (`Added`,
 
 ## Release flow
 
-1. **Collect fragments.**
-   `make changelog_release VERSION=X.Y.Z` — runs `scriv collect`,
-   prepends `## [X.Y.Z] - YYYY-MM-DD` section to `CHANGELOG.md`,
-   deletes consumed fragments.
-2. **Bump version + tag.**
-   `uv run bump-my-version bump [major|minor|patch]` — updates
-   `pyproject.toml` version, README badge, creates the bump commit
-   and `v{X.Y.Z}` git tag.
-3. **Push tags.** `git push --tags`.
+Semi-automated: bump is a manual dispatch, tag + publish are automatic /
+on-demand `workflow_call` callers to `qte77/.github`'s reusable workflows.
 
-`bump-my-version` no longer touches `CHANGELOG.md` (scriv owns it).
+1. **Bump** — trigger `bump-my-version.yaml` via `workflow_dispatch` (choose
+   `major`/`minor`/`patch`). It bumps `pyproject.toml` + the README version
+   badge, collects `changelog.d/` fragments via `scriv`, and opens a release
+   PR — review and merge it like any other PR.
+2. **Tag** — merging that PR to `main` (a `pyproject.toml` version change)
+   triggers `tag-release.yaml`, which calls `qte77/.github`'s reusable
+   `tag-release.yml` to create the annotated `v{X.Y.Z}` tag automatically.
+   Idempotent — aborts rather than overwrites if the tag already exists.
+3. **Publish (optional)** — trigger `publish-release.yaml` via
+   `workflow_dispatch` to call the reusable `publish-release.yml`, which
+   creates a GitHub Release from the tag using the `CHANGELOG.md`
+   `## [X.Y.Z]` block. Also idempotent — aborts if a Release already exists.
+
+Neither tag nor publish ever deletes a tag/Release on failure — release
+immutability means a deleted tag name is unusable forever (`qte77/.github#23`).
+`bump-my-version.yaml` stays a local, repo-owned workflow rather than a
+`qte77/.github` reusable call by design — see `qte77/qte77#126` ("no
+reusable-bump"; human-merge-triggers-tag is the intended flow estate-wide).
 
 ## Documentation pointers
 
