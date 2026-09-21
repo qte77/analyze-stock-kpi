@@ -1,0 +1,7300 @@
+[
+  {
+    "ticker": "ABT",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 47.72504133333334,
+      "dividend": 51.84142457142856,
+      "growth": 20.071428571428573,
+      "big_call": 40.66387247619048,
+      "aaqs": 58.68752066666667,
+      "hgi": 30.071428571428573,
+      "screener_score": 36.35086071448553
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ACN",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500",
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12",
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 74.51729166666667,
+      "dividend": 83.54857142857142,
+      "growth": 39.00000000000001,
+      "big_call": 66.5714880952381,
+      "aaqs": 59.20864583333333,
+      "hgi": 49.00000000000001,
+      "screener_score": 44.55502996031746
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ADBE",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 92.319625,
+      "dividend": 0.0,
+      "growth": 43.28571428571429,
+      "big_call": 49.91356428571429,
+      "aaqs": 60.3348125,
+      "hgi": 53.28571428571429,
+      "screener_score": 49.27607718453808
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "AMT",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 58.145,
+      "dividend": 47.31142857142857,
+      "growth": 69.14285714285714,
+      "big_call": 58.19428571428571,
+      "aaqs": 56.3475,
+      "hgi": 79.14285714285714,
+      "screener_score": 36.862359285714284
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "AMZN",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500",
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12",
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 60.93333333333334,
+      "dividend": 0.0,
+      "growth": 76.14285714285714,
+      "big_call": 47.21619047619048,
+      "aaqs": 43.94166666666666,
+      "hgi": 86.14285714285714,
+      "screener_score": 38.33186542515948
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ASML",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 98.376375,
+      "dividend": 29.32,
+      "growth": 51.71428571428572,
+      "big_call": 63.66083571428571,
+      "aaqs": 64.3381875,
+      "hgi": 61.71428571428572,
+      "screener_score": 57.02284955391609
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BESIY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 77.69604166666667,
+      "dividend": 4.5,
+      "growth": 84.5,
+      "big_call": 57.778416666666665,
+      "aaqs": 54.47302083333334,
+      "hgi": 94.5,
+      "screener_score": 69.81185813759143
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BIP",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 32.12500166666667,
+      "dividend": 34.5,
+      "growth": 52.714285714285715,
+      "big_call": 39.014286380952385,
+      "aaqs": 40.08750083333334,
+      "hgi": 62.714285714285715,
+      "screener_score": 46.36344254149482
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BLK",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 62.986458666666664,
+      "dividend": 62.31142857142857,
+      "growth": 80.64285714285715,
+      "big_call": 68.08086918095239,
+      "aaqs": 45.41822933333333,
+      "hgi": 90.64285714285715,
+      "screener_score": 41.67055229862231
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BRK-B",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 52.490542000000005,
+      "dividend": 0.0,
+      "growth": 67.42857142857143,
+      "big_call": 41.22478822857143,
+      "aaqs": 61.070271000000005,
+      "hgi": 77.42857142857143,
+      "screener_score": 48.17159966341693
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CCI",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 63.49333333333334,
+      "dividend": 39.57142857142857,
+      "growth": 21.71428571428572,
+      "big_call": 43.78304761904762,
+      "aaqs": 57.44666666666667,
+      "hgi": 31.71428571428572,
+      "screener_score": 33.8333075
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CHD",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 62.31158416666667,
+      "dividend": 48.44428571428571,
+      "growth": 30.285714285714285,
+      "big_call": 48.543633666666665,
+      "aaqs": 69.48079208333333,
+      "hgi": 40.285714285714285,
+      "screener_score": 33.606868756074576
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CL",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 67.43666666666667,
+      "dividend": 36.022857142857134,
+      "growth": 30.357142857142865,
+      "big_call": 46.888666666666666,
+      "aaqs": 75.74333333333334,
+      "hgi": 40.35714285714286,
+      "screener_score": 51.92155586065635
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CLPBY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 51.11149833333334,
+      "dividend": 42.07142857142856,
+      "growth": 31.714285714285715,
+      "big_call": 42.580313619047615,
+      "aaqs": 62.20574916666666,
+      "hgi": 41.714285714285715,
+      "screener_score": 44.56423400963216
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CPRT",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 83.43345833333333,
+      "dividend": 0.0,
+      "growth": 31.714285714285715,
+      "big_call": 42.88766904761905,
+      "aaqs": 66.14172916666666,
+      "hgi": 41.714285714285715,
+      "screener_score": 46.5748148015873
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CVX",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 39.39304166666667,
+      "dividend": 28.857142857142854,
+      "growth": 15.92857142857143,
+      "big_call": 29.192930952380955,
+      "aaqs": 57.496520833333335,
+      "hgi": 15.92857142857143,
+      "screener_score": 46.99843997111667
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CWEN",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 10.454208333333336,
+      "dividend": 38.71428571428571,
+      "growth": 55.42857142857144,
+      "big_call": 32.42454047619048,
+      "aaqs": 32.95210416666667,
+      "hgi": 55.42857142857144,
+      "screener_score": 37.26737561786814
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DANOY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 42.780167166666665,
+      "dividend": 47.035714285714285,
+      "growth": 26.42857142857143,
+      "big_call": 39.15135258095238,
+      "aaqs": 66.56508358333333,
+      "hgi": 36.42857142857143,
+      "screener_score": 37.80576898329675
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DBOEY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 58.91608326666667,
+      "dividend": 47.65571228571429,
+      "growth": 43.35714285714286,
+      "big_call": 50.870289849523814,
+      "aaqs": 72.05804163333333,
+      "hgi": 53.35714285714286,
+      "screener_score": 32.51294120793651
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DHR",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 52.35125,
+      "dividend": 32.21714285714285,
+      "growth": 38.21428571428572,
+      "big_call": 42.069928571428576,
+      "aaqs": 55.600625,
+      "hgi": 48.21428571428572,
+      "screener_score": 40.39975412531476
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DKILY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 43.11116666666667,
+      "dividend": 44.93571428571428,
+      "growth": 41.92857142857143,
+      "big_call": 43.30375238095238,
+      "aaqs": 56.70558333333334,
+      "hgi": 41.92857142857143,
+      "screener_score": 32.54344934410124
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DLR",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 36.5835,
+      "dividend": 19.28571428571429,
+      "growth": 76.21428571428572,
+      "big_call": 43.28340000000001,
+      "aaqs": 41.966750000000005,
+      "hgi": 86.21428571428572,
+      "screener_score": 21.09586590225069
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DSDVY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 34.51212433333333,
+      "dividend": 26.31142857142857,
+      "growth": 50.0,
+      "big_call": 36.69827830476191,
+      "aaqs": 42.83106216666667,
+      "hgi": 50.0,
+      "screener_score": 32.30290598797126
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DTEGY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 43.4707495,
+      "dividend": 27.999999999999996,
+      "growth": 14.571428571428575,
+      "big_call": 30.15972837142857,
+      "aaqs": 63.98537475,
+      "hgi": 24.571428571428577,
+      "screener_score": 42.81822388095238
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "EVVTY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 92.1171675,
+      "dividend": 79.77142857142856,
+      "growth": 28.71428571428572,
+      "big_call": 69.39258128571427,
+      "aaqs": 78.45858375,
+      "hgi": 38.71428571428572,
+      "screener_score": 56.35493583333333
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "FDS",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 81.33116833333334,
+      "dividend": 42.808571428571426,
+      "growth": 26.28571428571429,
+      "big_call": 53.26075304761905,
+      "aaqs": 72.79058416666666,
+      "hgi": 36.28571428571429,
+      "screener_score": 47.751196468253966
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "FTNT",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 90.479585,
+      "dividend": 0.0,
+      "growth": 63.35714285714286,
+      "big_call": 55.19897685714285,
+      "aaqs": 67.9897925,
+      "hgi": 73.35714285714286,
+      "screener_score": 44.589085065344634
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "FUPBY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 64.97774933333334,
+      "dividend": 70.40285514285713,
+      "growth": 30.14285714285715,
+      "big_call": 56.15481341904762,
+      "aaqs": 63.138874666666666,
+      "hgi": 40.14285714285715,
+      "screener_score": 44.67120889381607
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "GD",
+    "source_universes": [
+      "qte77-watchlist",
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 54.05820916666667,
+      "dividend": 50.47285714285714,
+      "growth": 44.5,
+      "big_call": 50.11514080952381,
+      "aaqs": 68.57910458333333,
+      "hgi": 54.5,
+      "screener_score": 51.5657606819012
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "GOOGL",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 96.89841666666666,
+      "dividend": 8.195714285714285,
+      "growth": 79.85714285714286,
+      "big_call": 65.17522380952381,
+      "aaqs": 67.27420833333332,
+      "hgi": 89.85714285714286,
+      "screener_score": 70.97947623461326
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "HII",
+    "source_universes": [
+      "qte77-watchlist",
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 40.33924991666667,
+      "dividend": 49.26571428571428,
+      "growth": 38.14285714285715,
+      "big_call": 42.3582713952381,
+      "aaqs": 63.96962495833333,
+      "hgi": 38.14285714285715,
+      "screener_score": 44.420650698441754
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "HOCPY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 93.10070833333333,
+      "dividend": 47.37142657142857,
+      "growth": 44.71428571428572,
+      "big_call": 64.86599701904763,
+      "aaqs": 81.47535416666666,
+      "hgi": 54.71428571428572,
+      "screener_score": 60.57468516708483
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "HRL",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 46.179499666666665,
+      "dividend": 33.785714285714285,
+      "growth": 22.85714285714286,
+      "big_call": 35.46465700952381,
+      "aaqs": 64.88974983333333,
+      "hgi": 32.85714285714286,
+      "screener_score": 37.473290484126984
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "JNJ",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 75.42708333333333,
+      "dividend": 54.535714285714285,
+      "growth": 21.35714285714286,
+      "big_call": 52.93869047619047,
+      "aaqs": 81.83854166666666,
+      "hgi": 31.35714285714286,
+      "screener_score": 62.86045344222829
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "KDP",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 41.38020866666667,
+      "dividend": 52.56428571428572,
+      "growth": 21.000000000000004,
+      "big_call": 38.621369180952385,
+      "aaqs": 60.51510433333334,
+      "hgi": 31.000000000000004,
+      "screener_score": 46.13924401111372
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "KLAC",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 86.825,
+      "dividend": 24.377142857142857,
+      "growth": 45.21428571428572,
+      "big_call": 55.60742857142858,
+      "aaqs": 58.2375,
+      "hgi": 55.21428571428572,
+      "screener_score": 64.24139349797822
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "KMB",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 58.314165,
+      "dividend": 34.62999599999999,
+      "growth": 43.28571428571429,
+      "big_call": 46.70037908571429,
+      "aaqs": 72.1820825,
+      "hgi": 53.28571428571429,
+      "screener_score": 42.216432380952384
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "KR",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 23.787500833333333,
+      "dividend": 36.879997,
+      "growth": 39.57142857142858,
+      "big_call": 32.4504280047619,
+      "aaqs": 51.01875041666666,
+      "hgi": 39.57142857142858,
+      "screener_score": 38.15161396825397
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "LIN",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 67.77308500000001,
+      "dividend": 49.09285714285714,
+      "growth": 44.00000000000001,
+      "big_call": 55.03709114285715,
+      "aaqs": 65.8115425,
+      "hgi": 54.00000000000001,
+      "screener_score": 41.723521992324486
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "LOW",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 61.08500000000001,
+      "dividend": 57.427142857142854,
+      "growth": 35.42857142857143,
+      "big_call": 52.29071428571429,
+      "aaqs": 59.292500000000004,
+      "hgi": 45.42857142857143,
+      "screener_score": 42.793413827287026
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "LRCX",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 95.58975000000001,
+      "dividend": 21.23285714285714,
+      "growth": 74.71428571428572,
+      "big_call": 67.02004285714287,
+      "aaqs": 52.669875000000005,
+      "hgi": 84.71428571428572,
+      "screener_score": 62.197732904385866
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "LSCC",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 43.75612541666667,
+      "dividend": 0.0,
+      "growth": 94.42857142857143,
+      "big_call": 45.8310215952381,
+      "aaqs": 27.378062708333335,
+      "hgi": 100.0,
+      "screener_score": 49.98250010416667
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "LVMUY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 62.138085000000004,
+      "dividend": 59.99856842857143,
+      "growth": 24.214285714285715,
+      "big_call": 50.11909024285715,
+      "aaqs": 60.06904250000001,
+      "hgi": 34.214285714285715,
+      "screener_score": 40.70643737533244
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MELI",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 43.022875,
+      "dividend": 0.0,
+      "growth": 52.42857142857143,
+      "big_call": 32.93772142857143,
+      "aaqs": 37.8864375,
+      "hgi": 52.42857142857143,
+      "screener_score": 28.065154187902657
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MKKGY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 50.12100183333333,
+      "dividend": 49.18,
+      "growth": 19.357142857142858,
+      "big_call": 40.60954359047619,
+      "aaqs": 54.43550091666667,
+      "hgi": 29.357142857142858,
+      "screener_score": 44.53469724268045
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MO",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 100.0,
+      "dividend": 54.605714285714285,
+      "growth": 68.07142857142857,
+      "big_call": 76.80314285714286,
+      "aaqs": 87.65,
+      "hgi": 78.07142857142857,
+      "screener_score": 68.97234119720983
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MRK",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 73.38300000000001,
+      "dividend": 26.12285714285714,
+      "growth": 35.57142857142858,
+      "big_call": 47.86148571428572,
+      "aaqs": 81.5665,
+      "hgi": 45.57142857142858,
+      "screener_score": 69.17734716242188
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MSCI",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 100.0,
+      "dividend": 52.26428571428571,
+      "growth": 73.71428571428572,
+      "big_call": 77.79357142857143,
+      "aaqs": 68.975,
+      "hgi": 83.71428571428572,
+      "screener_score": 39.59167638722612
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MSFT",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500",
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12",
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 95.906125,
+      "dividend": 27.515713285714284,
+      "growth": 58.35714285714286,
+      "big_call": 64.12430684285714,
+      "aaqs": 69.7030625,
+      "hgi": 68.35714285714286,
+      "screener_score": 44.21736623950087
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "NA.TO",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 50.52333333333333,
+      "dividend": 59.615716285714285,
+      "growth": 70.92857142857143,
+      "big_call": 59.37261964761905,
+      "aaqs": 45.51166666666667,
+      "hgi": 80.92857142857143,
+      "screener_score": 62.75180523809524
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "NEE",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 43.03841666666666,
+      "dividend": 61.26428571428571,
+      "growth": 69.5,
+      "big_call": 56.44465238095238,
+      "aaqs": 54.84420833333333,
+      "hgi": 79.5,
+      "screener_score": 46.32760113783453
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "NET",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 0.0,
+      "dividend": 0.0,
+      "growth": 76.42857142857143,
+      "big_call": 22.928571428571427,
+      "aaqs": 8.225,
+      "hgi": 76.42857142857143,
+      "screener_score": 26.463189692802935
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "NVDA",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 99.18062499999999,
+      "dividend": 4.110000030000002,
+      "growth": 100.0,
+      "big_call": 70.905250009,
+      "aaqs": 49.590312499999996,
+      "hgi": 100.0,
+      "screener_score": 65.92145478356684
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "NVO",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 90.98925,
+      "dividend": 68.59,
+      "growth": 81.42857142857143,
+      "big_call": 81.40127142857142,
+      "aaqs": 86.494625,
+      "hgi": 91.42857142857143,
+      "screener_score": 43.10546118085575
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "O",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 47.030791666666666,
+      "dividend": 36.71428571428571,
+      "growth": 49.92857142857143,
+      "big_call": 44.80517380952381,
+      "aaqs": 55.290395833333335,
+      "hgi": 59.92857142857143,
+      "screener_score": 38.25535064269033
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ODFL",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 89.1422075,
+      "dividend": 27.232857142857142,
+      "growth": 23.500000000000004,
+      "big_call": 50.876740142857145,
+      "aaqs": 64.97110375,
+      "hgi": 33.5,
+      "screener_score": 44.16902341687024
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ORLY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 76.78666666666668,
+      "dividend": 0.0,
+      "growth": 47.35714285714286,
+      "big_call": 44.92180952380953,
+      "aaqs": 75.56833333333334,
+      "hgi": 57.35714285714286,
+      "screener_score": 45.01763725478962
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "PANW",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 31.01691625,
+      "dividend": 0.0,
+      "growth": 73.00000000000001,
+      "big_call": 34.3067665,
+      "aaqs": 42.808458125,
+      "hgi": 73.00000000000001,
+      "screener_score": 35.16821640664888
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "PG",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 78.95945666666667,
+      "dividend": 58.91428571428571,
+      "growth": 38.0,
+      "big_call": 60.65806838095238,
+      "aaqs": 79.97972833333333,
+      "hgi": 48.0,
+      "screener_score": 38.09464719787644
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "REGN",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 63.47183416666667,
+      "dividend": 12.811428571428575,
+      "growth": 37.0,
+      "big_call": 40.332162238095236,
+      "aaqs": 75.83591708333333,
+      "hgi": 47.0,
+      "screener_score": 66.79930611115203
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "RHHBY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 85.59870833333333,
+      "dividend": 60.32714285714286,
+      "growth": 64.0,
+      "big_call": 71.53762619047619,
+      "aaqs": 84.19935416666667,
+      "hgi": 74.0,
+      "screener_score": 69.34039555274043
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "RICK",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 30.627875000000003,
+      "dividend": 31.331429571428565,
+      "growth": 34.714285714285715,
+      "big_call": 32.06486458571429,
+      "aaqs": 46.3889375,
+      "hgi": 44.714285714285715,
+      "screener_score": 38.62671821428572
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "RY.TO",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 53.458888888888886,
+      "dividend": 58.20714085714285,
+      "growth": 59.71428571428572,
+      "big_call": 56.75998352698413,
+      "aaqs": 53.42944444444444,
+      "hgi": 69.71428571428572,
+      "screener_score": 62.67525365079365
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SAP",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 76.5952925,
+      "dividend": 50.435716285714285,
+      "growth": 39.50000000000001,
+      "big_call": 57.618831885714286,
+      "aaqs": 69.72264625,
+      "hgi": 49.50000000000001,
+      "screener_score": 42.601446561853
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SNPS",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 34.8824165,
+      "dividend": 0.0,
+      "growth": 44.214285714285715,
+      "big_call": 27.217252314285716,
+      "aaqs": 36.89120825,
+      "hgi": 54.214285714285715,
+      "screener_score": 25.01174519642857
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SZU.DE",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 22.313041666666667,
+      "dividend": 14.214285714285712,
+      "growth": 22.285714285714292,
+      "big_call": 19.875216666666667,
+      "aaqs": 61.15652083333333,
+      "hgi": 22.285714285714292,
+      "screener_score": 45.02729420120033
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "3382.T",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 24.920291750000004,
+      "dividend": 63.30428571428571,
+      "growth": 14.357142857142861,
+      "big_call": 33.266545271428576,
+      "aaqs": 60.285145875000005,
+      "hgi": 14.357142857142861,
+      "screener_score": 25.378151181298627
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SWKS",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 39.8785,
+      "dividend": 33.57142857142857,
+      "growth": 13.571428571428573,
+      "big_call": 30.094257142857145,
+      "aaqs": 32.51425,
+      "hgi": 13.571428571428573,
+      "screener_score": 39.275882973743634
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "TMO",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 49.144625,
+      "dividend": 12.251428571428571,
+      "growth": 41.07142857142857,
+      "big_call": 35.65470714285714,
+      "aaqs": 52.87231250000001,
+      "hgi": 51.07142857142857,
+      "screener_score": 44.895367090174815
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "TMRAY",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 36.38987466666667,
+      "dividend": 49.06,
+      "growth": 41.71428571428572,
+      "big_call": 41.78823558095239,
+      "aaqs": 39.26993733333333,
+      "hgi": 41.71428571428572,
+      "screener_score": 41.92624988888889
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "TMUS",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 44.804165833333336,
+      "dividend": 55.88,
+      "growth": 27.571428571428573,
+      "big_call": 42.9570949047619,
+      "aaqs": 64.42708291666666,
+      "hgi": 37.57142857142857,
+      "screener_score": 44.896211587301586
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "UL",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 5,
+    "composite_breakdown": {
+      "quality": 60.656375000000004,
+      "dividend": 47.75714285714285,
+      "growth": null,
+      "big_call": 55.12813265306123,
+      "aaqs": 69.1531875,
+      "hgi": null,
+      "screener_score": 36.92581464285715
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "UNH",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 38.90974933333334,
+      "dividend": 48.78714285714286,
+      "growth": 30.500000000000007,
+      "big_call": 39.35004259047619,
+      "aaqs": 53.629874666666666,
+      "hgi": 30.500000000000007,
+      "screener_score": 43.2321054993105
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ALV.DE",
+    "source_universes": [
+      "qte77-watchlist",
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 44.768887777777785,
+      "dividend": 78.66857342857142,
+      "growth": 70.57142857142857,
+      "big_call": 62.67955571111111,
+      "aaqs": 55.884443888888896,
+      "hgi": 80.57142857142857,
+      "screener_score": 61.49589588238242
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DECK",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 84.79208333333334,
+      "dividend": 0.0,
+      "growth": 32.00000000000001,
+      "big_call": 43.51683333333334,
+      "aaqs": 63.221041666666665,
+      "hgi": 42.00000000000001,
+      "screener_score": 56.27392601477448
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ENEL.MI",
+    "source_universes": [
+      "qte77-watchlist",
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 40.279875000000004,
+      "dividend": 36.71428571428571,
+      "growth": 20.000000000000004,
+      "big_call": 33.12623571428572,
+      "aaqs": 47.6649375,
+      "hgi": 30.000000000000004,
+      "screener_score": 57.13019048388092
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "FIX",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 75.88470833333334,
+      "dividend": 7.571428571428571,
+      "growth": 57.00000000000001,
+      "big_call": 49.72531190476191,
+      "aaqs": 46.44235416666667,
+      "hgi": 57.00000000000001,
+      "screener_score": 59.192499325396824
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ICTEF",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 73.28666833333334,
+      "dividend": 57.412857142857135,
+      "growth": 65.85714285714286,
+      "big_call": 66.29566733333333,
+      "aaqs": 67.16833416666667,
+      "hgi": 75.85714285714286,
+      "screener_score": 39.62763944444445
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "IDCC",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 92.28520833333334,
+      "dividend": 32.290001000000004,
+      "growth": 12.571428571428573,
+      "big_call": 50.37251220476191,
+      "aaqs": 60.91760416666667,
+      "hgi": 22.571428571428573,
+      "screener_score": 50.5258406794498
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "LPX",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 38.8979165,
+      "dividend": 14.27428171428571,
+      "growth": 0.0,
+      "big_call": 19.841451114285714,
+      "aaqs": 29.64895825,
+      "hgi": 0.0,
+      "screener_score": 35.15441264285714
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MCO",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 74.69666666666667,
+      "dividend": 33.691428571428574,
+      "growth": 39.92857142857143,
+      "big_call": 51.96466666666667,
+      "aaqs": 53.973333333333336,
+      "hgi": 49.92857142857143,
+      "screener_score": 40.668041720351084
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "META",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 95.549,
+      "dividend": 9.854285714285716,
+      "growth": 87.92857142857143,
+      "big_call": 67.55445714285715,
+      "aaqs": 66.62450000000001,
+      "hgi": 97.92857142857143,
+      "screener_score": 54.79616078314771
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MNST",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 97.07641666666667,
+      "dividend": 0.0,
+      "growth": 68.42857142857143,
+      "big_call": 59.359138095238094,
+      "aaqs": 85.36320833333333,
+      "hgi": 78.42857142857143,
+      "screener_score": 71.83151367816816
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MPWR",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 86.449624,
+      "dividend": 52.034285714285716,
+      "growth": 75.42857142857144,
+      "big_call": 72.81870674285715,
+      "aaqs": 50.474812,
+      "hgi": 85.42857142857144,
+      "screener_score": 55.03843278528522
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "NTES",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 85.96970916666666,
+      "dividend": 56.51714285714286,
+      "growth": 35.142857142857146,
+      "big_call": 61.885883666666665,
+      "aaqs": 73.23485458333333,
+      "hgi": 45.142857142857146,
+      "screener_score": 57.229101355271496
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "QCOM",
+    "source_universes": [
+      "qte77-watchlist",
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 82.53845833333334,
+      "dividend": 52.20856942857142,
+      "growth": 61.785714285714285,
+      "big_call": 67.21366844761906,
+      "aaqs": 50.31922916666667,
+      "hgi": 71.78571428571428,
+      "screener_score": 58.25234316645897
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "REA.AX",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 98.10070833333333,
+      "dividend": 54.647142857142846,
+      "growth": 18.642857142857146,
+      "big_call": 61.22728333333333,
+      "aaqs": 82.72535416666666,
+      "hgi": 28.642857142857146,
+      "screener_score": 53.4526803968254
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SEZL",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 90.77612500000001,
+      "dividend": 0.0,
+      "growth": 83.0,
+      "big_call": 61.21045,
+      "aaqs": 45.388062500000004,
+      "hgi": 93.0,
+      "screener_score": 63.77691878625243
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "STRL",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 82.24066666666667,
+      "dividend": 0.0,
+      "growth": 100.0,
+      "big_call": 62.89626666666667,
+      "aaqs": 45.39533333333333,
+      "hgi": 100.0,
+      "screener_score": 58.641506393648235
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "TSM",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 97.694125,
+      "dividend": 34.144285714285715,
+      "growth": 89.35714285714286,
+      "big_call": 76.12807857142857,
+      "aaqs": 67.6970625,
+      "hgi": 99.35714285714286,
+      "screener_score": 71.73297173020023
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "YOU",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 81.26795916666667,
+      "dividend": 49.785714285714285,
+      "growth": 76.42857142857143,
+      "big_call": 70.37146938095238,
+      "aaqs": 64.20897958333333,
+      "hgi": 86.42857142857143,
+      "screener_score": 59.832616172067375
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "000660.KS",
+    "source_universes": [
+      "qte77-watchlist",
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12",
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 98.33975,
+      "dividend": 3.8399997999999984,
+      "growth": 100.0,
+      "big_call": 70.48789994,
+      "aaqs": 49.169875,
+      "hgi": 100.0,
+      "screener_score": 68.50443996507086
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "002001.SZ",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 82.11341666666667,
+      "dividend": 56.817142857142855,
+      "growth": 37.42857142857143,
+      "big_call": 61.119080952380955,
+      "aaqs": 82.83170833333332,
+      "hgi": 47.42857142857143,
+      "screener_score": 68.43823879871572
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "2371.T",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 94.4782925,
+      "dividend": 57.23714285714286,
+      "growth": 32.71428571428572,
+      "big_call": 64.77674557142858,
+      "aaqs": 81.03914624999999,
+      "hgi": 42.71428571428572,
+      "screener_score": 68.03324674904307
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "2379.TW",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 67.40054166666667,
+      "dividend": 30.834290714285707,
+      "growth": 24.85714285714286,
+      "big_call": 43.667646738095236,
+      "aaqs": 67.15027083333334,
+      "hgi": 34.85714285714286,
+      "screener_score": 54.566558287008434
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "2454.TW",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 71.92745833333333,
+      "dividend": 27.934285714285714,
+      "growth": 14.000000000000004,
+      "big_call": 41.35126904761905,
+      "aaqs": 38.51372916666667,
+      "hgi": 24.000000000000004,
+      "screener_score": 52.81657607142857
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "2603.TW",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 42.1954995,
+      "dividend": 50.0,
+      "growth": 0.0,
+      "big_call": 31.8781998,
+      "aaqs": 53.622749750000004,
+      "hgi": 10.0,
+      "screener_score": 40.2678195952381
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "600066.SS",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 79.21904166666667,
+      "dividend": 89.27000000000001,
+      "growth": 14.500000000000004,
+      "big_call": 62.81861666666667,
+      "aaqs": 83.23452083333333,
+      "hgi": 24.500000000000004,
+      "screener_score": 56.97743480747043
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "6368.T",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 77.87616666666668,
+      "dividend": 38.308571428571426,
+      "growth": 33.57142857142858,
+      "big_call": 52.714466666666674,
+      "aaqs": 57.26308333333334,
+      "hgi": 43.57142857142858,
+      "screener_score": 54.91493885449526
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "6857.T",
+    "source_universes": [
+      "qte77-watchlist"
+    ],
+    "snapshot_dates": {
+      "qte77-watchlist": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 99.68275,
+      "dividend": 12.878571428571428,
+      "growth": 93.71428571428572,
+      "big_call": 71.85095714285714,
+      "aaqs": 70.191375,
+      "hgi": 100.0,
+      "screener_score": 65.8331346660038
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "AAPL",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 90.0565,
+      "dividend": 15.01857142857143,
+      "growth": 56.00000000000001,
+      "big_call": 57.32817142857144,
+      "aaqs": 67.60325,
+      "hgi": 66.0,
+      "screener_score": 55.87593190691561
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ABBV",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 83.44,
+      "dividend": 19.92857142857143,
+      "growth": 23.142857142857146,
+      "big_call": 46.29742857142857,
+      "aaqs": 84.64500000000001,
+      "hgi": 33.142857142857146,
+      "screener_score": 66.81794768437085
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ADI",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 63.956249666666665,
+      "dividend": 47.43,
+      "growth": 90.85714285714286,
+      "big_call": 67.06864272380952,
+      "aaqs": 52.27812483333334,
+      "hgi": 100.0,
+      "screener_score": 59.988475360538516
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ADP",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 76.257625,
+      "dividend": 59.62142857142857,
+      "growth": 41.07142857142857,
+      "big_call": 60.710907142857145,
+      "aaqs": 67.1038125,
+      "hgi": 51.07142857142857,
+      "screener_score": 37.76615416666667
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "AMAT",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 95.96345833333334,
+      "dividend": 19.88142857142857,
+      "growth": 60.642857142857146,
+      "big_call": 62.54266904761905,
+      "aaqs": 58.80672916666667,
+      "hgi": 70.64285714285714,
+      "screener_score": 67.28090966884216
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "AMD",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 49.04354166666667,
+      "dividend": 0.0,
+      "growth": 91.28571428571429,
+      "big_call": 47.00313095238096,
+      "aaqs": 24.521770833333335,
+      "hgi": 100.0,
+      "screener_score": 55.161458333333336
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "AMGN",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 63.913331666666664,
+      "dividend": 52.565714285714286,
+      "growth": 35.85714285714286,
+      "big_call": 52.09218980952381,
+      "aaqs": 71.88166583333333,
+      "hgi": 45.85714285714286,
+      "screener_score": 60.67024903528708
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ANET",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 98.57555555555557,
+      "dividend": 0.0,
+      "growth": 71.5,
+      "big_call": 60.88022222222223,
+      "aaqs": 59.262777777777785,
+      "hgi": 81.5,
+      "screener_score": 55.345294362010186
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "AVGO",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 85.946084,
+      "dividend": 45.90285514285714,
+      "growth": 98.5,
+      "big_call": 77.69929014285714,
+      "aaqs": 56.423042,
+      "hgi": 100.0,
+      "screener_score": 64.81050068093519
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "AXP",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 51.79995916666667,
+      "dividend": 29.00428671428572,
+      "growth": 49.42857142857143,
+      "big_call": 44.249841109523814,
+      "aaqs": 49.774979583333334,
+      "hgi": 59.42857142857143,
+      "screener_score": 45.56883946226768
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BAC",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 47.22,
+      "dividend": 40.72857142857143,
+      "growth": 51.78571428571429,
+      "big_call": 46.64228571428572,
+      "aaqs": 44.235,
+      "hgi": 61.78571428571429,
+      "screener_score": 56.35092194225616
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BKNG",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 91.72666333333333,
+      "dividend": 27.30142757142857,
+      "growth": 75.85714285714286,
+      "big_call": 67.63823646190477,
+      "aaqs": 68.98833166666667,
+      "hgi": 85.85714285714286,
+      "screener_score": 47.465491666666665
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BMY",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 67.815,
+      "dividend": 61.25571428571428,
+      "growth": 37.00000000000001,
+      "big_call": 56.602714285714285,
+      "aaqs": 78.0325,
+      "hgi": 47.00000000000001,
+      "screener_score": 68.2382086357957
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BSX",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 59.23041683333334,
+      "dividend": 0.0,
+      "growth": 72.57142857142857,
+      "big_call": 45.46359530476191,
+      "aaqs": 65.19020841666668,
+      "hgi": 82.57142857142857,
+      "screener_score": 47.75562148175501
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BX",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 87.32141833333334,
+      "dividend": 28.857142857142854,
+      "growth": 35.42857142857143,
+      "big_call": 54.214281619047625,
+      "aaqs": 54.16070916666667,
+      "hgi": 45.42857142857143,
+      "screener_score": 41.276495873015875
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "C",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 43.18555562222222,
+      "dividend": 41.31285714285714,
+      "growth": 75.64285714285714,
+      "big_call": 52.36093653460317,
+      "aaqs": 44.24277781111111,
+      "hgi": 85.64285714285714,
+      "screener_score": 66.88164188174603
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CAT",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 54.350001500000005,
+      "dividend": 34.43714285714286,
+      "growth": 66.00000000000001,
+      "big_call": 51.871143457142864,
+      "aaqs": 38.05000075,
+      "hgi": 76.00000000000001,
+      "screener_score": 50.78333642401368
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CB",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 56.73608333333333,
+      "dividend": 22.077142857142853,
+      "growth": 71.57142857142857,
+      "big_call": 50.78900476190476,
+      "aaqs": 68.21804166666666,
+      "hgi": 81.57142857142857,
+      "screener_score": 50.05860956398114
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CI",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 41.99187358333334,
+      "dividend": 41.034285714285716,
+      "growth": 52.642857142857146,
+      "big_call": 44.89989229047619,
+      "aaqs": 63.420936791666676,
+      "hgi": 52.642857142857146,
+      "screener_score": 40.76444471594233
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CME",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 64.09179166666667,
+      "dividend": 19.868575428571425,
+      "growth": 54.07142857142858,
+      "big_call": 47.81871786666667,
+      "aaqs": 75.14589583333333,
+      "hgi": 64.07142857142858,
+      "screener_score": 32.137949603174604
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CMCSA",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 47.58691666666667,
+      "dividend": 66.23714285714286,
+      "growth": 18.071428571428573,
+      "big_call": 44.3273380952381,
+      "aaqs": 57.418458333333334,
+      "hgi": 28.071428571428573,
+      "screener_score": 32.40297531746032
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "COP",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 58.036292,
+      "dividend": 67.08,
+      "growth": 10.500000000000002,
+      "big_call": 46.4885168,
+      "aaqs": 75.968146,
+      "hgi": 20.5,
+      "screener_score": 53.124401875011905
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "COST",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 59.26537608333333,
+      "dividend": 31.581428571428575,
+      "growth": 76.42857142857144,
+      "big_call": 56.10915043333334,
+      "aaqs": 57.83268804166667,
+      "hgi": 76.42857142857144,
+      "screener_score": 21.43250036111111
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CRM",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 51.226416666666665,
+      "dividend": 27.274284714285713,
+      "growth": 73.78571428571429,
+      "big_call": 50.80856636666667,
+      "aaqs": 46.16320833333333,
+      "hgi": 83.78571428571429,
+      "screener_score": 39.866908215145784
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CSCO",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 70.6365425,
+      "dividend": 54.85714285714285,
+      "growth": 63.64285714285714,
+      "big_call": 63.80461699999999,
+      "aaqs": 60.143271250000005,
+      "hgi": 73.64285714285714,
+      "screener_score": 60.55698382146031
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DE",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 36.2366675,
+      "dividend": 44.567142857142855,
+      "growth": 14.571428571428573,
+      "big_call": 32.236238428571426,
+      "aaqs": 45.69333375,
+      "hgi": 24.571428571428573,
+      "screener_score": 45.340591476588834
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DIS",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 49.38304166666667,
+      "dividend": 31.214285714285715,
+      "growth": 18.92857142857143,
+      "big_call": 34.79607380952381,
+      "aaqs": 39.74152083333334,
+      "hgi": 28.92857142857143,
+      "screener_score": 26.561079841269844
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DUK",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 38.756458333333335,
+      "dividend": 58.98427971428572,
+      "growth": 45.214285714285715,
+      "big_call": 46.76215296190476,
+      "aaqs": 60.05322916666667,
+      "hgi": 55.214285714285715,
+      "screener_score": 40.40260330776702
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ELV",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 37.085125,
+      "dividend": 40.815714285714286,
+      "growth": 18.42857142857143,
+      "big_call": 32.60733571428572,
+      "aaqs": 51.4675625,
+      "hgi": 18.42857142857143,
+      "screener_score": 42.225509935181144
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ETN",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 53.68712333333333,
+      "dividend": 49.004285714285714,
+      "growth": 33.857142857142854,
+      "big_call": 46.33327790476191,
+      "aaqs": 47.31856166666667,
+      "hgi": 43.857142857142854,
+      "screener_score": 29.353713854453183
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "FISV",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 0,
+    "composite_breakdown": {
+      "quality": null,
+      "dividend": null,
+      "growth": null,
+      "big_call": null,
+      "aaqs": null,
+      "hgi": null,
+      "screener_score": null
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "GE",
+    "source_universes": [
+      "sp500",
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12",
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 60.35995966666667,
+      "dividend": 22.964285714285715,
+      "growth": 44.92857142857144,
+      "big_call": 44.51184100952381,
+      "aaqs": 46.47997983333333,
+      "hgi": 54.92857142857144,
+      "screener_score": 33.090582349313216
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "GILD",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 85.32395833333334,
+      "dividend": 61.47143057142857,
+      "growth": 67.42857142857143,
+      "big_call": 72.79958393333334,
+      "aaqs": 84.08697916666667,
+      "hgi": 77.42857142857143,
+      "screener_score": 65.21015648400763
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "GOOG",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 96.89841666666666,
+      "dividend": 8.195714285714285,
+      "growth": 79.85714285714286,
+      "big_call": 65.17522380952381,
+      "aaqs": 67.27420833333332,
+      "hgi": 89.85714285714286,
+      "screener_score": 71.0671733774704
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "GS",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 38.696666666666665,
+      "dividend": 40.52428571428572,
+      "growth": 56.214285714285715,
+      "big_call": 44.500238095238096,
+      "aaqs": 37.04833333333333,
+      "hgi": 66.21428571428572,
+      "screener_score": 55.45354549737135
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "HD",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 55.803333333333335,
+      "dividend": 53.807137857142855,
+      "growth": 28.92857142857143,
+      "big_call": 47.14204611904762,
+      "aaqs": 54.126666666666665,
+      "hgi": 38.92857142857143,
+      "screener_score": 36.54072492063492
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "HON",
+    "source_universes": [
+      "sp500",
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12",
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 47.641666666666666,
+      "dividend": 55.879997,
+      "growth": 16.0,
+      "big_call": 40.62066576666667,
+      "aaqs": 50.570833333333326,
+      "hgi": 26.0,
+      "screener_score": 30.31625528358323
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "IBM",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 45.45583333333333,
+      "dividend": 57.31571028571429,
+      "growth": 45.5,
+      "big_call": 49.02704641904762,
+      "aaqs": 55.852916666666665,
+      "hgi": 55.5,
+      "screener_score": 35.071432765798846
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ICE",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 56.187583333333336,
+      "dividend": 39.530001999999996,
+      "growth": 78.85714285714286,
+      "big_call": 57.99117679047619,
+      "aaqs": 54.39379166666667,
+      "hgi": 88.85714285714286,
+      "screener_score": 32.65731956349207
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "INTU",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 80.34066666666666,
+      "dividend": 40.81,
+      "growth": 43.642857142857146,
+      "big_call": 57.47212380952381,
+      "aaqs": 65.27033333333333,
+      "hgi": 53.642857142857146,
+      "screener_score": 49.06358003315202
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ISRG",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 75.24110888888889,
+      "dividend": 0.0,
+      "growth": 58.428571428571445,
+      "big_call": 47.62501498412699,
+      "aaqs": 51.120554444444444,
+      "hgi": 68.42857142857144,
+      "screener_score": 39.65074962747275
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "JPM",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 54.45444555555556,
+      "dividend": 41.02571428571428,
+      "growth": 49.92857142857143,
+      "big_call": 49.06806393650794,
+      "aaqs": 52.67722277777778,
+      "hgi": 59.92857142857143,
+      "screener_score": 51.616990664877775
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "KO",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 75.232125,
+      "dividend": 53.362860142857144,
+      "growth": 50.214285714285715,
+      "big_call": 61.16599375714286,
+      "aaqs": 78.8910625,
+      "hgi": 60.214285714285715,
+      "screener_score": 58.18819484219186
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "LLY",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 82.623125,
+      "dividend": 26.20142757142857,
+      "growth": 100.0,
+      "big_call": 70.90967827142858,
+      "aaqs": 78.6615625,
+      "hgi": 100.0,
+      "screener_score": 64.40445158284828
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "LMT",
+    "source_universes": [
+      "sp500",
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12",
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 46.21333283333334,
+      "dividend": 53.620005,
+      "growth": 20.571428571428573,
+      "big_call": 40.74276320476191,
+      "aaqs": 70.28166641666667,
+      "hgi": 30.571428571428573,
+      "screener_score": 51.87716989652225
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MA",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 75.0,
+      "dividend": 22.944285714285712,
+      "growth": 55.0,
+      "big_call": 53.38328571428571,
+      "aaqs": 69.275,
+      "hgi": 65.0,
+      "screener_score": 44.72387369047619
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MCD",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 95.20333333333335,
+      "dividend": 59.364285714285714,
+      "growth": 40.21428571428572,
+      "big_call": 67.95490476190477,
+      "aaqs": 87.15166666666667,
+      "hgi": 50.21428571428572,
+      "screener_score": 43.92805333333334
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MDLZ",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 36.45837491666667,
+      "dividend": 26.765720285714288,
+      "growth": 63.92857142857144,
+      "big_call": 41.79163748095239,
+      "aaqs": 58.02918745833334,
+      "hgi": 63.92857142857144,
+      "screener_score": 33.79154878174603
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MDT",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 52.48991625,
+      "dividend": 48.36,
+      "growth": 48.71428571428572,
+      "big_call": 50.11825221428572,
+      "aaqs": 61.66995812500001,
+      "hgi": 58.71428571428572,
+      "screener_score": 42.26642100980791
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MMC",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 0,
+    "composite_breakdown": {
+      "quality": null,
+      "dividend": null,
+      "growth": null,
+      "big_call": null,
+      "aaqs": null,
+      "hgi": null,
+      "screener_score": null
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MS",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 40.77333333333333,
+      "dividend": 48.40714085714286,
+      "growth": 63.0,
+      "big_call": 49.731475590476194,
+      "aaqs": 39.93666666666667,
+      "hgi": 73.0,
+      "screener_score": 58.139432199803785
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "NFLX",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 93.2765,
+      "dividend": 0.0,
+      "growth": 75.85714285714286,
+      "big_call": 60.06774285714286,
+      "aaqs": 58.71325,
+      "hgi": 85.85714285714286,
+      "screener_score": 40.61868811561075
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "NKE",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 54.67654291666666,
+      "dividend": 48.808565428571434,
+      "growth": 63.5,
+      "big_call": 55.563186795238096,
+      "aaqs": 49.138271458333335,
+      "hgi": 73.5,
+      "screener_score": 37.50224954365079
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "NOW",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 56.345667000000006,
+      "dividend": 0.0,
+      "growth": 46.00000000000001,
+      "big_call": 36.33826680000001,
+      "aaqs": 54.1978335,
+      "hgi": 56.00000000000001,
+      "screener_score": 36.017065083333335
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ORCL",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 60.84166666666667,
+      "dividend": 44.23857142857143,
+      "growth": 58.92857142857143,
+      "big_call": 55.286809523809524,
+      "aaqs": 37.62083333333334,
+      "hgi": 68.92857142857143,
+      "screener_score": 41.36985399831442
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "PEP",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 54.286665,
+      "dividend": 40.322857142857146,
+      "growth": 54.50000000000001,
+      "big_call": 50.16152314285715,
+      "aaqs": 67.9433325,
+      "hgi": 64.5,
+      "screener_score": 48.08875005170759
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "PFE",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 57.45308383333333,
+      "dividend": 50.0,
+      "growth": 25.214285714285715,
+      "big_call": 45.54551924761905,
+      "aaqs": 71.05154191666666,
+      "hgi": 35.214285714285715,
+      "screener_score": 41.611397680768455
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "PGR",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 73.61408333333333,
+      "dividend": 72.58571828571428,
+      "growth": 41.78571428571429,
+      "big_call": 63.757063104761905,
+      "aaqs": 80.65704166666666,
+      "hgi": 51.78571428571429,
+      "screener_score": 39.07661646503686
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "PLD",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 52.22325033333333,
+      "dividend": 21.71428571428571,
+      "growth": 70.21428571428572,
+      "big_call": 48.467871561904765,
+      "aaqs": 42.61162516666666,
+      "hgi": 80.21428571428572,
+      "screener_score": 34.29430278766472
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "PM",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 100.0,
+      "dividend": 42.12428571428572,
+      "growth": 28.428571428571438,
+      "big_call": 61.16585714285715,
+      "aaqs": 89.875,
+      "hgi": 38.42857142857144,
+      "screener_score": 47.54989851502638
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "RTX",
+    "source_universes": [
+      "sp500",
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12",
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 45.225543,
+      "dividend": 59.61285714285714,
+      "growth": 58.000000000000014,
+      "big_call": 53.37407434285714,
+      "aaqs": 65.16277149999999,
+      "hgi": 68.00000000000001,
+      "screener_score": 42.74779179969335
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SBUX",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 38.620000833333336,
+      "dividend": 16.714285714285708,
+      "growth": 58.14285714285715,
+      "big_call": 37.905143190476196,
+      "aaqs": 45.085000416666674,
+      "hgi": 58.14285714285715,
+      "screener_score": 32.41960996687961
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SCHW",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 54.09174983333333,
+      "dividend": 31.32714185714285,
+      "growth": 67.42857142857144,
+      "big_call": 51.26341391904762,
+      "aaqs": 57.995874916666665,
+      "hgi": 77.42857142857144,
+      "screener_score": 46.15869745670482
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SO",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 37.26612533333333,
+      "dividend": 47.01428871428572,
+      "growth": 33.71428571428572,
+      "big_call": 39.12502246190476,
+      "aaqs": 60.33306266666666,
+      "hgi": 43.71428571428572,
+      "screener_score": 37.260831086004224
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SPGI",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 68.3493325,
+      "dividend": 30.77857242857143,
+      "growth": 59.21428571428572,
+      "big_call": 54.33759044285715,
+      "aaqs": 57.19966625000001,
+      "hgi": 69.21428571428572,
+      "screener_score": 33.5591475
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SYK",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 57.093125,
+      "dividend": 47.45285914285714,
+      "growth": 40.57142857142857,
+      "big_call": 49.24453631428571,
+      "aaqs": 59.096562500000005,
+      "hgi": 50.57142857142857,
+      "screener_score": 39.90208888596911
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "T",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 50.200042833333335,
+      "dividend": 74.86999999999999,
+      "growth": 22.571428571428573,
+      "big_call": 49.3124457047619,
+      "aaqs": 64.55002141666667,
+      "hgi": 32.57142857142857,
+      "screener_score": 41.24298677777778
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "TJX",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 65.89079,
+      "dividend": 42.14142857142857,
+      "growth": 56.07142857142858,
+      "big_call": 55.82017314285714,
+      "aaqs": 67.370395,
+      "hgi": 66.07142857142858,
+      "screener_score": 48.9653210744084
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "TSLA",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 33.966083499999996,
+      "dividend": 0.0,
+      "growth": 45.78571428571429,
+      "big_call": 27.322147685714285,
+      "aaqs": 21.933041749999997,
+      "hgi": 45.78571428571429,
+      "screener_score": 22.705500117216992
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "TXN",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 84.80070833333333,
+      "dividend": 18.10285714285714,
+      "growth": 64.21428571428572,
+      "big_call": 58.61542619047619,
+      "aaqs": 59.650354166666666,
+      "hgi": 74.21428571428572,
+      "screener_score": 61.3749266143579
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "UBER",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 67.69504166666667,
+      "dividend": 0.0,
+      "growth": 24.642857142857142,
+      "big_call": 34.47087380952381,
+      "aaqs": 56.02252083333333,
+      "hgi": 34.64285714285714,
+      "screener_score": 28.4727282255801
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "USB",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 49.58222255555555,
+      "dividend": 67.19,
+      "growth": 42.42857142857143,
+      "big_call": 52.71846045079365,
+      "aaqs": 50.31611127777778,
+      "hgi": 52.42857142857143,
+      "screener_score": 57.77440484546473
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "V",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 91.595875,
+      "dividend": 27.47,
+      "growth": 66.14285714285714,
+      "big_call": 64.72220714285714,
+      "aaqs": 76.9479375,
+      "hgi": 76.14285714285714,
+      "screener_score": 47.34324619399201
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "VRTX",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 89.11833333333334,
+      "dividend": 0.0,
+      "growth": 69.85714285714286,
+      "big_call": 56.60447619047619,
+      "aaqs": 87.25916666666666,
+      "hgi": 79.85714285714286,
+      "screener_score": 60.240956860909996
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "WFC",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 48.41888888888889,
+      "dividend": 41.83571428571429,
+      "growth": 43.42857142857143,
+      "big_call": 44.94684126984127,
+      "aaqs": 51.284444444444446,
+      "hgi": 53.42857142857143,
+      "screener_score": 46.88020339551869
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "WMT",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 50.66216683333333,
+      "dividend": 39.75428771428572,
+      "growth": 47.64285714285715,
+      "big_call": 46.4840101904762,
+      "aaqs": 60.25608341666666,
+      "hgi": 47.64285714285715,
+      "screener_score": 33.86093472793232
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "XOM",
+    "source_universes": [
+      "sp500"
+    ],
+    "snapshot_dates": {
+      "sp500": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 43.275708333333334,
+      "dividend": 53.2042857142857,
+      "growth": 16.142857142857146,
+      "big_call": 38.11442619047619,
+      "aaqs": 67.58785416666667,
+      "hgi": 16.142857142857146,
+      "screener_score": 47.794170573956805
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ADYEN.AS",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 77.872292,
+      "dividend": 0.0,
+      "growth": 49.142857142857146,
+      "big_call": 45.89177394285714,
+      "aaqs": 42.186146,
+      "hgi": 59.142857142857146,
+      "screener_score": 38.64663923809524
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "AD.AS",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 32.08437416666667,
+      "dividend": 75.97285714285714,
+      "growth": 27.85714285714286,
+      "big_call": 43.98274966666666,
+      "aaqs": 57.41718708333333,
+      "hgi": 27.85714285714286,
+      "screener_score": 34.960009639871465
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "AI.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 56.53454166666667,
+      "dividend": 59.57714285714286,
+      "growth": 29.92857142857143,
+      "big_call": 49.46553095238095,
+      "aaqs": 61.992270833333336,
+      "hgi": 39.92857142857143,
+      "screener_score": 32.81955011150922
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "AIR.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 39.868125416666665,
+      "dividend": 43.24285714285714,
+      "growth": 9.571428571428573,
+      "big_call": 31.79153588095238,
+      "aaqs": 47.934062708333336,
+      "hgi": 9.571428571428573,
+      "screener_score": 31.681527382929104
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ASML.AS",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 98.376375,
+      "dividend": 30.608571428571423,
+      "growth": 51.71428571428572,
+      "big_call": 64.04740714285714,
+      "aaqs": 64.3381875,
+      "hgi": 61.71428571428572,
+      "screener_score": 57.12898479201132
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CS.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 32.453583333333334,
+      "dividend": 74.55857142857143,
+      "growth": 66.57142857142857,
+      "big_call": 55.320433333333334,
+      "aaqs": 51.42679166666666,
+      "hgi": 76.57142857142857,
+      "screener_score": 50.84813664484755
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SAN.MC",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 49.375555644444454,
+      "dividend": 40.16428571428571,
+      "growth": 67.57142857142857,
+      "big_call": 52.07093654349207,
+      "aaqs": 51.33777782222222,
+      "hgi": 77.57142857142857,
+      "screener_score": 61.42263212539683
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BAS.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 29.601999666666668,
+      "dividend": 33.785714285714285,
+      "growth": 38.28571428571429,
+      "big_call": 33.46222843809524,
+      "aaqs": 46.40099983333334,
+      "hgi": 38.28571428571429,
+      "screener_score": 42.321220550525005
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BAYN.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 36.210541666666664,
+      "dividend": 1.5714285714285716,
+      "growth": 62.57142857142857,
+      "big_call": 33.72707380952381,
+      "aaqs": 47.355270833333336,
+      "hgi": 72.57142857142857,
+      "screener_score": 62.07131750155852
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BBVA.MC",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 57.53888800000001,
+      "dividend": 69.32428571428571,
+      "growth": 46.57142857142858,
+      "big_call": 57.78426948571429,
+      "aaqs": 56.694444000000004,
+      "hgi": 56.57142857142858,
+      "screener_score": 67.17712652380952
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BMW.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 25.706999833333334,
+      "dividend": 88.43,
+      "growth": 17.0,
+      "big_call": 41.911799933333334,
+      "aaqs": 43.90349991666667,
+      "hgi": 17.0,
+      "screener_score": 35.475594349206354
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BNP.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 44.98555555555556,
+      "dividend": 80.38999999999999,
+      "growth": 43.78571428571429,
+      "big_call": 55.2469365079365,
+      "aaqs": 46.51777777777778,
+      "hgi": 53.78571428571429,
+      "screener_score": 50.41868000868615
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DB1.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 58.91608326666667,
+      "dividend": 47.57857442857143,
+      "growth": 43.35714285714286,
+      "big_call": 50.84714849238095,
+      "aaqs": 72.05804163333333,
+      "hgi": 53.35714285714286,
+      "screener_score": 32.307057993650794
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DHL.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 36.59962458333333,
+      "dividend": 64.05857142857143,
+      "growth": 32.35714285714286,
+      "big_call": 43.56456411904762,
+      "aaqs": 39.99981229166667,
+      "hgi": 32.35714285714286,
+      "screener_score": 45.271617155148206
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DTE.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 43.4707495,
+      "dividend": 28.214285714285715,
+      "growth": 14.571428571428575,
+      "big_call": 30.224014085714284,
+      "aaqs": 63.98537475,
+      "hgi": 24.571428571428577,
+      "screener_score": 42.93873852380952
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ENI.MI",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 28.826207833333335,
+      "dividend": 36.357142857142854,
+      "growth": 20.28571428571429,
+      "big_call": 28.523340276190478,
+      "aaqs": 58.613103916666674,
+      "hgi": 20.28571428571429,
+      "screener_score": 59.54815535991745
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "EL.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 39.64287525,
+      "dividend": 37.322857142857146,
+      "growth": 29.785714285714292,
+      "big_call": 35.98972152857143,
+      "aaqs": 55.971437625,
+      "hgi": 39.78571428571429,
+      "screener_score": 26.944841536988186
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "G.MI",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 5,
+    "composite_breakdown": {
+      "quality": 32.815916666666666,
+      "dividend": 74.66714285714285,
+      "growth": null,
+      "big_call": 50.752156462585035,
+      "aaqs": 49.982958333333336,
+      "hgi": null,
+      "screener_score": 58.28964222222223
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "IBE.MC",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 45.41854166666667,
+      "dividend": 40.41428571428571,
+      "growth": 12.071428571428573,
+      "big_call": 33.91313095238095,
+      "aaqs": 58.50927083333333,
+      "hgi": 22.071428571428573,
+      "screener_score": 52.076885436507936
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "IFX.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 5,
+    "composite_breakdown": {
+      "quality": 57.471041666666665,
+      "dividend": 46.10857142857143,
+      "growth": null,
+      "big_call": 52.60141156462585,
+      "aaqs": 29.16052083333333,
+      "hgi": null,
+      "screener_score": 53.70751464314857
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "INGA.AS",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 53.481112222222215,
+      "dividend": 75.68571728571429,
+      "growth": 40.42857142857143,
+      "big_call": 56.226731503174605,
+      "aaqs": 54.26555611111111,
+      "hgi": 50.42857142857143,
+      "screener_score": 65.43909516649015
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ISP.MI",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 51.11222222222222,
+      "dividend": 77.25714285714285,
+      "growth": 37.642857142857146,
+      "big_call": 54.91488888888889,
+      "aaqs": 54.63111111111111,
+      "hgi": 47.642857142857146,
+      "screener_score": 59.35887432201233
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ITX.MC",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 86.59729333333334,
+      "dividend": 50.668571428571425,
+      "growth": 36.5,
+      "big_call": 60.789488761904764,
+      "aaqs": 70.69864666666668,
+      "hgi": 46.5,
+      "screener_score": 51.95102658471161
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "KER.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 5,
+    "composite_breakdown": {
+      "quality": 23.533500416666666,
+      "dividend": 8.714285714285714,
+      "growth": null,
+      "big_call": 17.182408401360547,
+      "aaqs": 37.29175020833333,
+      "hgi": null,
+      "screener_score": 34.656319853346076
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MBG.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 24.084291666666665,
+      "dividend": 65.519994,
+      "growth": 14.714285714285719,
+      "big_call": 33.70400058095238,
+      "aaqs": 45.34214583333333,
+      "hgi": 14.714285714285719,
+      "screener_score": 37.648646363150796
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MC.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 62.138085000000004,
+      "dividend": 59.42857142857142,
+      "growth": 24.214285714285715,
+      "big_call": 49.948091142857145,
+      "aaqs": 60.06904250000001,
+      "hgi": 34.214285714285715,
+      "screener_score": 39.039428213221925
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MUV2.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 55.49358333333333,
+      "dividend": 72.37142857142857,
+      "growth": 60.0,
+      "big_call": 61.908861904761906,
+      "aaqs": 69.59679166666666,
+      "hgi": 70.0,
+      "screener_score": 36.407558968253966
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "OR.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 67.40641583333334,
+      "dividend": 52.31,
+      "growth": 29.571428571428577,
+      "big_call": 51.52699490476191,
+      "aaqs": 61.35320791666667,
+      "hgi": 39.57142857142858,
+      "screener_score": 31.85624164765337
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "PRX.AS",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 5,
+    "composite_breakdown": {
+      "quality": 41.04741666666667,
+      "dividend": 9.50142827142857,
+      "growth": null,
+      "big_call": 27.527707354421775,
+      "aaqs": 50.92370833333334,
+      "hgi": null,
+      "screener_score": 34.36728138888889
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "RACE.MI",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 87.34008333333334,
+      "dividend": 40.995714285714286,
+      "growth": 31.785714285714292,
+      "big_call": 56.7704619047619,
+      "aaqs": 78.89504166666667,
+      "hgi": 41.78571428571429,
+      "screener_score": 43.69762192411322
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "RI.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 53.7760005,
+      "dividend": 66.010004,
+      "growth": 5.071428571428574,
+      "big_call": 42.83482997142857,
+      "aaqs": 65.21300025,
+      "hgi": 15.071428571428573,
+      "screener_score": 45.43963552380952
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "RMS.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 94.47233333333334,
+      "dividend": 45.007144857142855,
+      "growth": 32.642857142857146,
+      "big_call": 61.08393393333334,
+      "aaqs": 72.13616666666667,
+      "hgi": 42.642857142857146,
+      "screener_score": 45.272775396825395
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SAF.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 64.85233333333333,
+      "dividend": 24.032857142857143,
+      "growth": 46.42857142857144,
+      "big_call": 47.07936190476191,
+      "aaqs": 58.40116666666667,
+      "hgi": 56.42857142857144,
+      "screener_score": 39.0367791744571
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SAN.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 51.503501666666665,
+      "dividend": 39.581428571428575,
+      "growth": 24.500000000000004,
+      "big_call": 39.82582923809524,
+      "aaqs": 68.80175083333333,
+      "hgi": 34.5,
+      "screener_score": 34.80166414900676
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SAP.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 76.5952925,
+      "dividend": 50.66,
+      "growth": 39.50000000000001,
+      "big_call": 57.686117,
+      "aaqs": 69.72264625,
+      "hgi": 49.50000000000001,
+      "screener_score": 42.59913858566252
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SIE.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 42.4576675,
+      "dividend": 58.67,
+      "growth": 22.42857142857143,
+      "big_call": 41.31263842857143,
+      "aaqs": 38.95383375,
+      "hgi": 32.42857142857143,
+      "screener_score": 32.24883603953025
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "STLAM.MI",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 17.438708333333334,
+      "dividend": 65.760005,
+      "growth": 37.85714285714286,
+      "big_call": 38.060627690476196,
+      "aaqs": 33.89435416666667,
+      "hgi": 37.85714285714286,
+      "screener_score": 29.728606646993423
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SU.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 53.82279166666667,
+      "dividend": 60.03285714285714,
+      "growth": 27.142857142857146,
+      "big_call": 47.68183095238095,
+      "aaqs": 48.03639583333333,
+      "hgi": 37.142857142857146,
+      "screener_score": 37.06085819524564
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "TTE.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 54.127834166666666,
+      "dividend": 78.73142857142857,
+      "growth": 66.71428571428572,
+      "big_call": 65.28484795238094,
+      "aaqs": 75.81391708333334,
+      "hgi": 76.71428571428572,
+      "screener_score": 62.93879350156787
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DG.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 41.154625833333334,
+      "dividend": 75.01857142857142,
+      "growth": 37.14285714285715,
+      "big_call": 50.110278904761905,
+      "aaqs": 51.90231291666667,
+      "hgi": 47.14285714285715,
+      "screener_score": 31.114002371935214
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "VNA.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 46.44191766666667,
+      "dividend": 72.37285714285714,
+      "growth": 0.0,
+      "big_call": 40.28862420952381,
+      "aaqs": 36.095958833333334,
+      "hgi": 10.0,
+      "screener_score": 33.353850243051056
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "VOW3.DE",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 16.278374916666667,
+      "dividend": 97.91,
+      "growth": 12.500000000000004,
+      "big_call": 39.63434996666667,
+      "aaqs": 33.61418745833333,
+      "hgi": 12.500000000000004,
+      "screener_score": 31.893333305555554
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BN.PA",
+    "source_universes": [
+      "eurostoxx"
+    ],
+    "snapshot_dates": {
+      "eurostoxx": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 42.780167166666665,
+      "dividend": 45.97428571428571,
+      "growth": 26.42857142857143,
+      "big_call": 38.83292400952381,
+      "aaqs": 66.56508358333333,
+      "hgi": 36.42857142857143,
+      "screener_score": 38.76078570559096
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BA",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 26.429166666666667,
+      "dividend": 0.0,
+      "growth": 48.57142857142858,
+      "big_call": 25.143095238095242,
+      "aaqs": 33.08958333333334,
+      "hgi": 48.57142857142858,
+      "screener_score": 15.126882834377257
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BAESY",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 46.53816716666667,
+      "dividend": 63.35714285714286,
+      "growth": 39.57142857142858,
+      "big_call": 49.4938382952381,
+      "aaqs": 73.26908358333333,
+      "hgi": 49.57142857142858,
+      "screener_score": 31.764368866152665
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BAH",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 48.71333266666667,
+      "dividend": 59.317140857142846,
+      "growth": 31.285714285714292,
+      "big_call": 46.66618960952381,
+      "aaqs": 65.33166633333335,
+      "hgi": 31.285714285714292,
+      "screener_score": 53.426541126984134
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CACI",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 37.032624500000004,
+      "dividend": 0.0,
+      "growth": 47.21428571428572,
+      "big_call": 28.97733551428572,
+      "aaqs": 54.99131225000001,
+      "hgi": 47.21428571428572,
+      "screener_score": 42.373328413837775
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "DELL",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 38.10833433333334,
+      "dividend": 21.71285714285714,
+      "growth": 100.0,
+      "big_call": 51.75719087619048,
+      "aaqs": 34.654167166666674,
+      "hgi": 100.0,
+      "screener_score": 52.99096524364949
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "FLR",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 28.921708333333335,
+      "dividend": 0.0,
+      "growth": 17.142857142857146,
+      "big_call": 16.71154047619048,
+      "aaqs": 33.61085416666667,
+      "hgi": 17.142857142857146,
+      "screener_score": 31.46090398058029
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ICFI",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 38.591875,
+      "dividend": 17.314286714285714,
+      "growth": 6.92857142857143,
+      "big_call": 22.709607442857145,
+      "aaqs": 56.020937499999995,
+      "hgi": 6.92857142857143,
+      "screener_score": 40.55661476190477
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "J",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 22.7288325,
+      "dividend": 47.082855142857134,
+      "growth": 67.14285714285715,
+      "big_call": 43.35924668571428,
+      "aaqs": 44.564416249999994,
+      "hgi": 67.14285714285715,
+      "screener_score": 35.70789011904762
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "KBR",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 41.07283283333334,
+      "dividend": 32.755713285714286,
+      "growth": 19.000000000000004,
+      "big_call": 31.95584711904762,
+      "aaqs": 59.26141641666667,
+      "hgi": 19.000000000000004,
+      "screener_score": 44.86273534920635
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "LDOS",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 58.435208333333335,
+      "dividend": 26.690000000000005,
+      "growth": 25.785714285714292,
+      "big_call": 39.116797619047624,
+      "aaqs": 65.54260416666666,
+      "hgi": 35.78571428571429,
+      "screener_score": 51.18507861111111
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "LHX",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 57.56816733333333,
+      "dividend": 59.62571428571429,
+      "growth": 59.92857142857143,
+      "big_call": 58.893552647619046,
+      "aaqs": 60.13408366666667,
+      "hgi": 59.92857142857143,
+      "screener_score": 41.21710760968294
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MCK",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 20.321666833333335,
+      "dividend": 11.188571928571424,
+      "growth": 59.42857142857143,
+      "big_call": 29.31380974047619,
+      "aaqs": 52.28583341666667,
+      "hgi": 59.42857142857143,
+      "screener_score": 37.96389483957567
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MMS",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 55.372290166666666,
+      "dividend": 35.11285714285714,
+      "growth": 30.285714285714292,
+      "big_call": 41.7684874952381,
+      "aaqs": 62.73614508333334,
+      "hgi": 40.28571428571429,
+      "screener_score": 54.576809103174604
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "NOC",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 57.93558166666667,
+      "dividend": 41.39857142857143,
+      "growth": 67.42857142857143,
+      "big_call": 55.82237552380953,
+      "aaqs": 78.96779083333334,
+      "hgi": 77.42857142857143,
+      "screener_score": 41.2407428111304
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "OSK",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 44.95037566666667,
+      "dividend": 34.53285714285714,
+      "growth": 14.428571428571429,
+      "big_call": 32.668578838095236,
+      "aaqs": 41.70018783333333,
+      "hgi": 14.428571428571429,
+      "screener_score": 45.28351204728909
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "PLTR",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 99.19370833333333,
+      "dividend": 0.0,
+      "growth": 100.0,
+      "big_call": 69.67748333333333,
+      "aaqs": 60.54685416666666,
+      "hgi": 100.0,
+      "screener_score": 43.08423884721263
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "PRSO",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 24.56825,
+      "dividend": 0.0,
+      "growth": 0.0,
+      "big_call": 9.827300000000001,
+      "aaqs": 44.409125,
+      "hgi": 0.0,
+      "screener_score": 51.84732211770404
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SAIC",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 43.390458333333335,
+      "dividend": 26.007142857142856,
+      "growth": 65.35714285714286,
+      "big_call": 44.76546904761905,
+      "aaqs": 64.62022916666668,
+      "hgi": 65.35714285714286,
+      "screener_score": 49.61635836014765
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SPCX",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 5,
+    "composite_breakdown": {
+      "quality": 31.60075,
+      "dividend": 0.0,
+      "growth": 50.57142857142857,
+      "big_call": 27.811728571428574,
+      "aaqs": null,
+      "hgi": 50.57142857142857,
+      "screener_score": null
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "TXT",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 42.89825,
+      "dividend": 2.172857142857141,
+      "growth": 44.57142857142858,
+      "big_call": 31.18258571428571,
+      "aaqs": 48.824124999999995,
+      "hgi": 44.57142857142858,
+      "screener_score": 41.30689574786451
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "WTF",
+    "source_universes": [
+      "federal-contractors"
+    ],
+    "snapshot_dates": {
+      "federal-contractors": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 6,
+    "composite_breakdown": {
+      "quality": 24.1855,
+      "dividend": 0.0,
+      "growth": 100.0,
+      "big_call": 39.6742,
+      "aaqs": null,
+      "hgi": 100.0,
+      "screener_score": 11.676967235090595
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "7203.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 27.896541666666668,
+      "dividend": 57.465714285714284,
+      "growth": 46.50000000000001,
+      "big_call": 42.348330952380955,
+      "aaqs": 55.92327083333333,
+      "hgi": 46.50000000000001,
+      "screener_score": 49.021938297398115
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "6758.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 48.3625425,
+      "dividend": 22.00857142857143,
+      "growth": 20.21428571428572,
+      "big_call": 32.011874142857145,
+      "aaqs": 55.58127125,
+      "hgi": 30.21428571428572,
+      "screener_score": 29.888834166666665
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "9984.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 34.485625,
+      "dividend": 2.474285714285714,
+      "growth": 69.35714285714286,
+      "big_call": 35.34367857142857,
+      "aaqs": 42.017812500000005,
+      "hgi": 69.35714285714286,
+      "screener_score": 41.14268918078869
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "9432.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 21.079208666666666,
+      "dividend": 68.17285514285714,
+      "growth": 20.785714285714292,
+      "big_call": 35.1192542952381,
+      "aaqs": 60.53960433333333,
+      "hgi": 20.785714285714292,
+      "screener_score": 29.63992935451027
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "9433.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 43.0615825,
+      "dividend": 65.080002,
+      "growth": 64.92857142857143,
+      "big_call": 56.227205028571426,
+      "aaqs": 71.53079125,
+      "hgi": 74.92857142857143,
+      "screener_score": 37.62889335679408
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "6861.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 72.14555555555556,
+      "dividend": 35.03142857142857,
+      "growth": 59.500000000000014,
+      "big_call": 57.2176507936508,
+      "aaqs": 60.82277777777778,
+      "hgi": 69.50000000000001,
+      "screener_score": 52.61945472797837
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "8035.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 96.26,
+      "dividend": 56.87142557142857,
+      "growth": 70.42857142857143,
+      "big_call": 76.6939991,
+      "aaqs": 63.855000000000004,
+      "hgi": 80.42857142857143,
+      "screener_score": 63.705255875406635
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "9983.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 70.48854166666666,
+      "dividend": 42.79142857142857,
+      "growth": 60.42857142857143,
+      "big_call": 59.16141666666667,
+      "aaqs": 73.59427083333333,
+      "hgi": 70.42857142857143,
+      "screener_score": 63.30888888888889
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "4063.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 62.82083375,
+      "dividend": 52.337140857142856,
+      "growth": 25.071428571428577,
+      "big_call": 48.35090432857143,
+      "aaqs": 54.360416875,
+      "hgi": 35.07142857142858,
+      "screener_score": 59.16685456587385
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "8306.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 5,
+    "composite_breakdown": {
+      "quality": 44.782222222222224,
+      "dividend": 60.285714285714285,
+      "growth": null,
+      "big_call": 51.426575963718825,
+      "aaqs": 64.5911111111111,
+      "hgi": null,
+      "screener_score": 68.1237307936508
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "8316.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 5,
+    "composite_breakdown": {
+      "quality": 41.85111166666667,
+      "dividend": 52.262857142857136,
+      "growth": null,
+      "big_call": 46.31328829931973,
+      "aaqs": 61.32555583333334,
+      "hgi": null,
+      "screener_score": 65.72242684523809
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "8411.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 42.40555555555556,
+      "dividend": 41.75857142857143,
+      "growth": 96.35714285714286,
+      "big_call": 58.39693650793651,
+      "aaqs": 61.777777777777786,
+      "hgi": 100.0,
+      "screener_score": 66.38474186507936
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "6501.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 56.837625,
+      "dividend": 36.667142857142856,
+      "growth": 29.35714285714286,
+      "big_call": 42.54233571428571,
+      "aaqs": 65.4688125,
+      "hgi": 39.35714285714286,
+      "screener_score": 38.114103420543344
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "7267.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 10.804,
+      "dividend": 78.1285714285714,
+      "growth": 40.85714285714286,
+      "big_call": 40.01731428571428,
+      "aaqs": 48.027,
+      "hgi": 40.85714285714286,
+      "screener_score": 42.93894612962962
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "6367.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 43.11116666666667,
+      "dividend": 46.41428771428571,
+      "growth": 41.92857142857143,
+      "big_call": 43.74732440952381,
+      "aaqs": 56.70558333333334,
+      "hgi": 41.92857142857143,
+      "screener_score": 43.10570877470052
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "6981.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 64.69850000000001,
+      "dividend": 54.15142857142857,
+      "growth": 72.71428571428572,
+      "big_call": 63.93911428571429,
+      "aaqs": 51.099250000000005,
+      "hgi": 82.71428571428572,
+      "screener_score": 57.95125891022196
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "6594.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 35.259417,
+      "dividend": 32.78428571428571,
+      "growth": 66.35714285714286,
+      "big_call": 43.84619537142857,
+      "aaqs": 41.3547085,
+      "hgi": 66.35714285714286,
+      "screener_score": 34.67774945551421
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "6098.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 88.60724916666666,
+      "dividend": 8.690000000000001,
+      "growth": 72.5,
+      "big_call": 59.79989966666667,
+      "aaqs": 71.62862458333333,
+      "hgi": 82.5,
+      "screener_score": 47.86269203227243
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "7974.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 46.77444444444444,
+      "dividend": 62.20571028571429,
+      "growth": 100.0,
+      "big_call": 67.37149086349206,
+      "aaqs": 70.21222222222222,
+      "hgi": 100.0,
+      "screener_score": 42.808281825396826
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "8058.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 28.045665666666668,
+      "dividend": 67.84571428571428,
+      "growth": 72.85714285714286,
+      "big_call": 53.42912340952381,
+      "aaqs": 51.24783283333333,
+      "hgi": 72.85714285714286,
+      "screener_score": 48.86602267485085
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "8001.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 36.716833333333334,
+      "dividend": 49.52428871428571,
+      "growth": 29.35714285714286,
+      "big_call": 38.351162804761906,
+      "aaqs": 54.65841666666667,
+      "hgi": 29.35714285714286,
+      "screener_score": 46.75808990718165
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "8053.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 32.116083583333335,
+      "dividend": 48.43714285714286,
+      "growth": 52.07142857142857,
+      "big_call": 42.999004861904766,
+      "aaqs": 51.00804179166667,
+      "hgi": 52.07142857142857,
+      "screener_score": 67.59486119444445
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "4661.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 54.89666666666667,
+      "dividend": 24.537142857142857,
+      "growth": 14.35714285714286,
+      "big_call": 33.62695238095238,
+      "aaqs": 70.12333333333333,
+      "hgi": 24.35714285714286,
+      "screener_score": 37.97794734126984
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "4502.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 29.2975,
+      "dividend": 27.21428571428571,
+      "growth": 34.142857142857146,
+      "big_call": 30.12614285714286,
+      "aaqs": 62.44875,
+      "hgi": 44.142857142857146,
+      "screener_score": 48.899577216298866
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "6902.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 45.104708333333335,
+      "dividend": 53.33714285714285,
+      "growth": 70.78571428571429,
+      "big_call": 55.27874047619048,
+      "aaqs": 57.15235416666666,
+      "hgi": 70.78571428571429,
+      "screener_score": 39.22060019708741
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "7741.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 93.10070833333333,
+      "dividend": 48.08857142857143,
+      "growth": 44.71428571428572,
+      "big_call": 65.08114047619047,
+      "aaqs": 81.47535416666666,
+      "hgi": 54.71428571428572,
+      "screener_score": 61.92384749855242
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "4452.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 51.77574966666667,
+      "dividend": 50.88571128571429,
+      "growth": 60.92857142857143,
+      "big_call": 54.254584680952384,
+      "aaqs": 71.36287483333334,
+      "hgi": 70.92857142857143,
+      "screener_score": 37.24876103323326
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "4519.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 93.00777888888888,
+      "dividend": 59.04571428571428,
+      "growth": 50.142857142857146,
+      "big_call": 69.95968298412699,
+      "aaqs": 82.45388944444443,
+      "hgi": 60.142857142857146,
+      "screener_score": 54.92551469672135
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "4543.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 53.845665833333335,
+      "dividend": 44.28428471428572,
+      "growth": 69.57142857142858,
+      "big_call": 55.69498031904762,
+      "aaqs": 71.24783291666667,
+      "hgi": 79.57142857142858,
+      "screener_score": 38.73684361111111
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "4901.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 43.682291666666664,
+      "dividend": 45.43857142857142,
+      "growth": 36.85714285714286,
+      "big_call": 42.16163095238095,
+      "aaqs": 62.21614583333333,
+      "hgi": 46.85714285714286,
+      "screener_score": 48.87289252202351
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "6273.T",
+    "source_universes": [
+      "japan"
+    ],
+    "snapshot_dates": {
+      "japan": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 59.84820783333333,
+      "dividend": 47.308571428571426,
+      "growth": 59.714285714285715,
+      "big_call": 56.04614027619048,
+      "aaqs": 58.599103916666664,
+      "hgi": 69.71428571428572,
+      "screener_score": 58.62192266683146
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "VALE3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 60.63758616666667,
+      "dividend": 50.0,
+      "growth": 46.21428571428572,
+      "big_call": 53.119320180952386,
+      "aaqs": 62.06879308333333,
+      "hgi": 56.21428571428572,
+      "screener_score": 68.01565792434324
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "PETR4.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 74.643875,
+      "dividend": 81.17,
+      "growth": 23.71428571428572,
+      "big_call": 61.322835714285716,
+      "aaqs": 87.32193749999999,
+      "hgi": 33.71428571428572,
+      "screener_score": 56.02069321154856
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "PETR3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 74.643875,
+      "dividend": 81.17,
+      "growth": 23.71428571428572,
+      "big_call": 61.322835714285716,
+      "aaqs": 87.32193749999999,
+      "hgi": 33.71428571428572,
+      "screener_score": 54.69669262976983
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ITUB4.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 61.071111111111115,
+      "dividend": 31.249999999999996,
+      "growth": 35.21428571428572,
+      "big_call": 44.36773015873016,
+      "aaqs": 76.68555555555557,
+      "hgi": 45.21428571428572,
+      "screener_score": 78.11589649218043
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BBDC4.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 50.508889,
+      "dividend": 37.300005,
+      "growth": 30.714285714285715,
+      "big_call": 40.60784281428572,
+      "aaqs": 68.95444450000001,
+      "hgi": 40.714285714285715,
+      "screener_score": 66.22100876532582
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ABEV3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 77.1125,
+      "dividend": 32.43285714285714,
+      "growth": 30.214285714285715,
+      "big_call": 49.63914285714286,
+      "aaqs": 81.93125,
+      "hgi": 40.214285714285715,
+      "screener_score": 57.27951325668984
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BBAS3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 28.02,
+      "dividend": 20.825714285714284,
+      "growth": 0.0,
+      "big_call": 17.455714285714286,
+      "aaqs": 57.835,
+      "hgi": 10.0,
+      "screener_score": 56.436358131092504
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "B3SA3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 77.03383333333333,
+      "dividend": 74.879995,
+      "growth": 70.85714285714286,
+      "big_call": 74.5346746904762,
+      "aaqs": 84.54191666666667,
+      "hgi": 80.85714285714286,
+      "screener_score": 66.63733881323974
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "JBSS3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 0,
+    "composite_breakdown": {
+      "quality": null,
+      "dividend": null,
+      "growth": null,
+      "big_call": null,
+      "aaqs": null,
+      "hgi": null,
+      "screener_score": null
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "WEGE3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 82.17462566666667,
+      "dividend": 6.42857142857143,
+      "growth": 20.071428571428577,
+      "big_call": 40.81985026666667,
+      "aaqs": 91.08731283333333,
+      "hgi": 30.071428571428577,
+      "screener_score": 58.10819200584754
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "SUZB3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 41.979167000000004,
+      "dividend": 31.43571328571429,
+      "growth": 10.642857142857146,
+      "big_call": 29.415237928571432,
+      "aaqs": 68.5145835,
+      "hgi": 20.642857142857146,
+      "screener_score": 62.8387920952381
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CSNA3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 6.129166666666666,
+      "dividend": 0.0,
+      "growth": 24.571428571428573,
+      "big_call": 9.823095238095238,
+      "aaqs": 19.68958333333333,
+      "hgi": 24.571428571428573,
+      "screener_score": 8.580075532245262
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "EMBR3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 0,
+    "composite_breakdown": {
+      "quality": null,
+      "dividend": null,
+      "growth": null,
+      "big_call": null,
+      "aaqs": null,
+      "hgi": null,
+      "screener_score": null
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "ELET3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 0,
+    "composite_breakdown": {
+      "quality": null,
+      "dividend": null,
+      "growth": null,
+      "big_call": null,
+      "aaqs": null,
+      "hgi": null,
+      "screener_score": null
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "CMIG4.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 50.844291999999996,
+      "dividend": 51.03,
+      "growth": 28.928571428571434,
+      "big_call": 44.32528822857143,
+      "aaqs": 73.222146,
+      "hgi": 38.92857142857143,
+      "screener_score": 57.21179577500085
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "BPAC11.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 66.46444444444445,
+      "dividend": 35.85714285714285,
+      "growth": 79.28571428571429,
+      "big_call": 61.12863492063492,
+      "aaqs": 74.70722222222223,
+      "hgi": 89.28571428571429,
+      "screener_score": 78.67301633360411
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "RENT3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 38.40470833333334,
+      "dividend": 37.724285714285706,
+      "growth": 71.85714285714286,
+      "big_call": 48.236311904761905,
+      "aaqs": 63.77735416666667,
+      "hgi": 81.85714285714286,
+      "screener_score": 54.43596913643878
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "LREN3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 51.448165833333334,
+      "dividend": 85.96571428571428,
+      "growth": 47.50000000000001,
+      "big_call": 60.618980619047626,
+      "aaqs": 66.62408291666668,
+      "hgi": 47.50000000000001,
+      "screener_score": 47.683456944444444
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "KLBN11.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 14.035833166666666,
+      "dividend": 100.0,
+      "growth": 31.142857142857146,
+      "big_call": 44.95719040952381,
+      "aaqs": 55.14291658333333,
+      "hgi": 31.142857142857146,
+      "screener_score": 45.213345857411426
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "MGLU3.SA",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 6,
+    "composite_breakdown": {
+      "quality": 22.513791666666666,
+      "dividend": 3.571428571428571,
+      "growth": 25.71428571428572,
+      "big_call": 17.791230952380953,
+      "aaqs": null,
+      "hgi": 25.71428571428572,
+      "screener_score": 27.94581722222222
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "AMXB.MX",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 50.0915,
+      "dividend": 52.860002,
+      "growth": 48.5,
+      "big_call": 50.4446006,
+      "aaqs": 69.47075,
+      "hgi": 58.5,
+      "screener_score": 63.764636123508105
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "WALMEX.MX",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 60.7577485,
+      "dividend": 70.66571428571427,
+      "growth": 30.785714285714292,
+      "big_call": 54.73852797142857,
+      "aaqs": 79.67887424999999,
+      "hgi": 30.785714285714292,
+      "screener_score": 44.15511021428571
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "GMEXICOB.MX",
+    "source_universes": [
+      "south-america"
+    ],
+    "snapshot_dates": {
+      "south-america": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 91.15766500000001,
+      "dividend": 65.94428371428572,
+      "growth": 87.57142857142858,
+      "big_call": 82.51777968571429,
+      "aaqs": 69.0538325,
+      "hgi": 97.57142857142858,
+      "screener_score": 79.27235535690659
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "005930.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 82.04975,
+      "dividend": 17.15428571428571,
+      "growth": 100.0,
+      "big_call": 67.96618571428571,
+      "aaqs": 54.049875,
+      "hgi": 100.0,
+      "screener_score": 80.01922888957864
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "373220.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 15.873666666666665,
+      "dividend": 0.0,
+      "growth": 25.000000000000007,
+      "big_call": 13.849466666666668,
+      "aaqs": 33.23683333333334,
+      "hgi": 25.000000000000007,
+      "screener_score": 13.185733236973856
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "207940.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 79.035375,
+      "dividend": 0.0,
+      "growth": 64.92857142857143,
+      "big_call": 51.09272142857143,
+      "aaqs": 84.5426875,
+      "hgi": 74.92857142857143,
+      "screener_score": 37.66657019718663
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "005380.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 21.369458333333334,
+      "dividend": 46.03285714285714,
+      "growth": 16.71428571428572,
+      "big_call": 27.37192619047619,
+      "aaqs": 18.78472916666667,
+      "hgi": 16.71428571428572,
+      "screener_score": 52.29065719633048
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "005490.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 24.983041583333335,
+      "dividend": 33.25285714285714,
+      "growth": 66.07142857142857,
+      "big_call": 39.79050234761905,
+      "aaqs": 23.141520791666665,
+      "hgi": 66.07142857142857,
+      "screener_score": 34.72113639409325
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "105560.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 46.11666675555555,
+      "dividend": 45.08571428571429,
+      "growth": 51.42857142857143,
+      "big_call": 47.400952416507934,
+      "aaqs": 56.20833337777778,
+      "hgi": 61.42857142857143,
+      "screener_score": 68.25401423234753
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "035420.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 47.1015,
+      "dividend": 31.655714285714286,
+      "growth": 25.928571428571427,
+      "big_call": 36.11588571428572,
+      "aaqs": 44.67575,
+      "hgi": 35.92857142857143,
+      "screener_score": 24.252088571428573
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "035720.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 37.82779166666667,
+      "dividend": 7.959999999999999,
+      "growth": 36.28571428571429,
+      "big_call": 28.404830952380955,
+      "aaqs": 39.36389583333334,
+      "hgi": 46.28571428571429,
+      "screener_score": 25.389370793650794
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "051910.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 15.724125,
+      "dividend": 5.428571428571428,
+      "growth": 24.85714285714286,
+      "big_call": 15.375364285714287,
+      "aaqs": 23.062062500000003,
+      "hgi": 24.85714285714286,
+      "screener_score": 28.66193693680895
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "068270.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 58.072250000000004,
+      "dividend": 15.928571428571427,
+      "growth": 90.0,
+      "big_call": 55.00747142857143,
+      "aaqs": 70.211125,
+      "hgi": 100.0,
+      "screener_score": 38.39005558789124
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "006400.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 19.062125,
+      "dividend": 0.0,
+      "growth": 46.57142857142858,
+      "big_call": 21.596278571428574,
+      "aaqs": 20.031062499999997,
+      "hgi": 46.57142857142858,
+      "screener_score": 35.54400413878212
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "012330.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 39.329708833333335,
+      "dividend": 26.030001,
+      "growth": 22.857142857142858,
+      "big_call": 30.39802669047619,
+      "aaqs": 35.43985441666667,
+      "hgi": 22.857142857142858,
+      "screener_score": 53.233224301026716
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "055550.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 44.41222213333333,
+      "dividend": 43.41142857142857,
+      "growth": 43.28571428571429,
+      "big_call": 43.774031710476194,
+      "aaqs": 55.88111106666666,
+      "hgi": 53.28571428571429,
+      "screener_score": 70.11950798769288
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "086790.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 44.821111111111115,
+      "dividend": 53.93857142857143,
+      "growth": 55.07142857142858,
+      "big_call": 50.63144444444445,
+      "aaqs": 54.18555555555555,
+      "hgi": 65.07142857142858,
+      "screener_score": 64.67590141302942
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "033780.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 61.782875000000004,
+      "dividend": 72.56428571428572,
+      "growth": 74.5,
+      "big_call": 68.83243571428571,
+      "aaqs": 75.3164375,
+      "hgi": 84.5,
+      "screener_score": 61.01566368427332
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "032830.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 30.17200008333333,
+      "dividend": 44.29285914285714,
+      "growth": 100.0,
+      "big_call": 55.356657776190474,
+      "aaqs": 39.68600004166667,
+      "hgi": 100.0,
+      "screener_score": 65.12566217063493
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "017670.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 31.324333333333335,
+      "dividend": 20.07142857142857,
+      "growth": 19.28571428571429,
+      "big_call": 24.33687619047619,
+      "aaqs": 48.68716666666667,
+      "hgi": 29.28571428571429,
+      "screener_score": 51.46865686252532
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "028260.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 40.177874833333334,
+      "dividend": 23.102856142857142,
+      "growth": 44.07142857142857,
+      "big_call": 36.223435347619045,
+      "aaqs": 40.66393741666667,
+      "hgi": 44.07142857142857,
+      "screener_score": 46.02836731452601
+    },
+    "mean_composite": null,
+    "rank": null
+  },
+  {
+    "ticker": "015760.KS",
+    "source_universes": [
+      "south-korea"
+    ],
+    "snapshot_dates": {
+      "south-korea": "2026-07-12"
+    },
+    "eligible": false,
+    "excluded_reason": "stale",
+    "populated_composites": 7,
+    "composite_breakdown": {
+      "quality": 34.12833333333334,
+      "dividend": 41.79857142857143,
+      "growth": 34.142857142857146,
+      "big_call": 36.43376190476191,
+      "aaqs": 47.38916666666667,
+      "hgi": 44.142857142857146,
+      "screener_score": 44.60426722396499
+    },
+    "mean_composite": null,
+    "rank": null
+  }
+]
