@@ -14,5 +14,12 @@ permissions:
 
 jobs:
   lint:
-    uses: qte77/.github/.github/workflows/lint-md-links.yml@5dfff1f73ac7241ef37b6103e04d2a8373ff68a4  # 2026-04-27
+    # Pinned SHA (2026-04-27) referenced an invalid actions/github-script
+    # commit in its conditional `notify` job — GitHub resolves every
+    # `uses:` in a reusable workflow's full job graph at startup, even for
+    # jobs an `if:` would skip at runtime, so that one bad pin failed this
+    # entire workflow with startup_failure on every run. No release tag
+    # exists on qte77/.github; pinned to current main HEAD (2026-09-21) —
+    # re-pin by hand once a tag exists to track.
+    uses: qte77/.github/.github/workflows/lint-md-links.yml@4801217a20922cd54187fc7e4c98c7ea78c0ec9a
 ...
