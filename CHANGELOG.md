@@ -16,6 +16,49 @@ Types of changes:
 
 <!-- scriv-insert-here -->
 
+## [1.3.0] - 2026-09-21
+
+### Added
+
+- **Relocated `llms.txt` under `ui/public/` and added `ui/public/robots.txt`
+  with a `Content-Signal: ai-input=yes, ai-train=no` line (#361).** The
+  GitHub Pages build only copies `ui/public/*` into the deployed site, so
+  `docs/llms.txt` 404'd live even though it existed in source. The
+  `qte77/gha-llms-txt-action` auto-generation step in
+  `.github/workflows/llms-txt.yaml` now writes directly to
+  `ui/public/llms.txt` via the action's `output_path` input, keeping the
+  file a single generated source of truth rather than a hand-maintained
+  duplicate.
+
+- **SEC XBRL cross-validation of yfinance fundamentals.** New
+  `src/analyze_stock_kpi/data_sources/sec/xbrl.py` fetches SEC XBRL `companyconcept` revenue,
+  net-income, and basic-EPS facts and cross-validates them against the matching yfinance
+  values, attaching `sec_revenue_delta_pct` / `sec_net_income_delta_pct` / `sec_eps_delta_pct`
+  to every `FundamentalsSnapshot`. `total_revenue` / `net_income_to_common` are promoted to
+  permanent snapshot fields; foreign filers and non-SEC-registered symbols skip gracefully
+  (all three delta fields stay `None`). Closes #101.
+
+### Changed
+
+- **Dashboard fonts now ship WOFF2 (with a TTF fallback).** Inter + JetBrains Mono are
+  served as WOFF2 (Brotli, ~64% smaller) first, falling back to the existing TTFs — matching
+  the sibling dashboards and the brand `ui-kit/fonts.css`. The four WOFF2 faces are vendored
+  from the brand Fontsource pipeline (`install_fonts.py`); SIL OFL 1.1.
+
+- `tag-release.yaml` now calls `qte77/.github`'s reusable `tag-release.yml`
+  workflow (SHA-pinned) instead of an inline copy; `CONTRIBUTING.md`'s
+  "Release flow" section is rewritten to match the current
+  bump/tag/publish flow (#340).
+
+### Security
+
+- **Bump `pydantic-settings` 2.14.1 → 2.14.2 (GHSA-4xgf-cpjx-pc3j).** Patches a
+  path-traversal / symlink-following issue in `NestedSecretsSettingsSource`
+  (`secrets_nested_subdir=True`). Practical exposure here was nil — the app uses
+  `BaseSettings(cli_parse_args=True)`, not the nested-secrets source — but the patch is
+  trivial to ship. `[tool.uv].exclude-newer` rolled 2026-05-31 → 2026-06-20 so the patched
+  release (2026-06-19) is reachable; no other package moved.
+
 ## [1.2.0] - 2026-06-26
 
 ### Added
