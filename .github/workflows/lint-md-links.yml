@@ -8,6 +8,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  issues: write  # required at workflow startup by reusable notify job (even when unused)
+
 jobs:
   lint:
     # Pinned SHA (2026-04-27) referenced an invalid actions/github-script
@@ -17,14 +21,5 @@ jobs:
     # entire workflow with startup_failure on every run. No release tag
     # exists on qte77/.github; pinned to current main HEAD (2026-09-21) —
     # re-pin by hand once a tag exists to track.
-    #
-    # Permissions set at job level (not workflow top level) — matching
-    # tag-release.yaml/publish-release.yaml's working qte77/.github caller
-    # shape, since a top-level-only permissions block reproducibly caused
-    # startup_failure for this specific multi-job reusable workflow even
-    # after the pin fix above.
-    permissions:
-      contents: read
-      issues: write  # required at workflow startup by reusable notify job (even when unused)
     uses: qte77/.github/.github/workflows/lint-md-links.yml@4801217a20922cd54187fc7e4c98c7ea78c0ec9a
 ...
