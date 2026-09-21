@@ -1,11 +1,4 @@
----
-name: publish-release
-
-# Manually publishes a GitHub Release for an existing tag, with notes
-# extracted from the CHANGELOG.md ## [version] block. Decoupled from
-# tag-release.yaml so the default flow stays "tag only" — the operator
-# opts into a Release object via this dispatch when ready.
-
+name: Publish Release
 on:
   workflow_dispatch:
     inputs:
@@ -13,46 +6,10 @@ on:
         description: "Tag to release (defaults to the latest v* tag)"
         required: false
         type: string
-
-permissions:
-  contents: write
-
 jobs:
   publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
-        with:
-          fetch-depth: 0
-
-      - name: Resolve tag, extract notes, publish
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_INPUT: ${{ inputs.tag }}
-        run: |
-          set -euo pipefail
-          if [ -n "$TAG_INPUT" ]; then
-            TAG="$TAG_INPUT"
-          else
-            TAG=$(git tag --list 'v*' --sort=-v:refname | head -1)
-          fi
-          if [ -z "$TAG" ]; then
-            echo "no v* tag found"; exit 1
-          fi
-          if ! git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
-            echo "tag $TAG does not exist locally"; exit 1
-          fi
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "release $TAG already exists; aborting"; exit 1
-          fi
-          VERSION="${TAG#v}"
-          NOTES=$(awk -v v="$VERSION" '
-            $0 ~ "^## \\[" v "\\]" { in_block = 1; next }
-            in_block && /^## \[/ { exit }
-            in_block { print }
-          ' CHANGELOG.md)
-          if [ -z "${NOTES// }" ]; then
-            gh release create "$TAG" --title "$TAG" --generate-notes
-          else
-            gh release create "$TAG" --title "$TAG" --notes "$NOTES"
-          fi
+    permissions:
+      contents: write
+    uses: qte77/.github/.github/workflows/publish-release.yml@4801217a20922cd54187fc7e4c98c7ea78c0ec9a
+    with:
+      tag: ${{ inputs.tag }}

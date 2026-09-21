@@ -9,6 +9,12 @@
 #   .github/workflows/ up to date with new tags. Repo rule requires
 #   full commit SHA pins, which dependabot will keep current.
 #
+# Each ecosystem has two groups: the routine version-update bucket
+# (weekly, default `applies-to: version-updates`) and a dedicated
+# security-update bucket (`applies-to: security-updates`, undefined
+# defaults to version-updates only — so security fixes need their own
+# group to land grouped instead of one PR per alert).
+#
 # Complements sbom.yaml (which snapshots the resulting dependency graph
 # after updates land — see .github/workflows/sbom.yaml).
 version: 2
@@ -24,6 +30,10 @@ updates:
       - "python"
     groups:
       python-deps:
+        applies-to: "version-updates"
+        patterns: ["*"]
+      python-security:
+        applies-to: "security-updates"
         patterns: ["*"]
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -36,5 +46,9 @@ updates:
       - "github-actions"
     groups:
       github-actions:
+        applies-to: "version-updates"
+        patterns: ["*"]
+      github-actions-security:
+        applies-to: "security-updates"
         patterns: ["*"]
 ...

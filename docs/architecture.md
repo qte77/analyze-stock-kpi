@@ -87,7 +87,7 @@ A separate daily GitHub Actions cron (`.github/workflows/fear-greed.yaml`) runs 
 
 A second cron (`.github/workflows/demo-snapshot.yaml`, Sunday 06:15 UTC) runs `make run UNIVERSE=qte77-watchlist`, renames the timestamped output to `results/demo/qte77-watchlist/YYYY-MM-DD.json`, rebuilds the manifest via `scripts/build_demo_manifest.py`, and commits both files to the `data` branch through the same verified-commit mechanism.
 
-A third workflow (`.github/workflows/gh-pages.yaml`) deploys the static dashboard at `ui/{index.html, app.js, style.css}` to GitHub Pages via `actions/upload-pages-artifact` + `actions/deploy-pages` whenever those files change. The dashboard fetches data files at runtime cross-origin from `raw.githubusercontent.com/qte77/analyze-stock-kpi/data/results/…`; this decouples data-update cadence from page deploys.
+A third workflow (`.github/workflows/gh-pages.yaml`) builds `ui/` with Vite (`npm run build` → `ui/dist`) and deploys it to GitHub Pages via `actions/upload-pages-artifact` + `actions/deploy-pages` whenever `ui/**` changes. The dashboard fetches data files at runtime cross-origin from `raw.githubusercontent.com/qte77/analyze-stock-kpi/data/results/…`; this decouples data-update cadence from page deploys.
 
 v1.1.0 attaches a `CompositeScores` object to every `FundamentalsSnapshot` after fetch via `model_copy(update={"composite_scores": compute_scores(snap)})`. The rich summary table appends Quality / Div / Growth columns only when `--show-scores` is passed; persistence carries the composites unconditionally.
 
