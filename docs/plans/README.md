@@ -26,6 +26,6 @@ tracker) stays issue-only — no plan file.
 | [Backfill F&G + 5s10s history](001-backfill-history.md) | [#287](https://github.com/qte77/analyze-stock-kpi/issues/287) |
 | [Consolidate UI tooling into ui/](002-consolidate-ui-tooling.md) | [#289](https://github.com/qte77/analyze-stock-kpi/issues/289) |
 | [Merge long-term charts + SP500](003-merge-longterm-charts.md) | [#288](https://github.com/qte77/analyze-stock-kpi/issues/288) |
-| [XBRL cross-validation](004-xbrl-crossval.md) | [#101](https://github.com/qte77/analyze-stock-kpi/issues/101) |
+| [XBRL cross-validation](004-xbrl-crossval.md) (shipped) | [#101](https://github.com/qte77/analyze-stock-kpi/issues/101) |
 | [Restructure data-branch results/ layout](005-restructure-results.md) | none — pre-issue design |
 | [Agent-ready backlog: llms.txt, XBRL, release workflows](006-agent-ready-backlog.md) | [#361](https://github.com/qte77/analyze-stock-kpi/issues/361) + [#101](https://github.com/qte77/analyze-stock-kpi/issues/101) + [#340](https://github.com/qte77/analyze-stock-kpi/issues/340) |

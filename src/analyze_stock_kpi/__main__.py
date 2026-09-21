@@ -20,6 +20,7 @@ from .data_sources.fundamentals import (
     fetch_universe_fundamentals,
 )
 from .data_sources.sec.submissions import enrich_snapshot_sec
+from .data_sources.sec.xbrl import enrich_snapshot_xbrl
 from .data_sources.sentiment import FearGreedSnapshot, fetch_fear_greed
 from .domain.composite_scores import CompositeScores, compute_scores
 from .domain.universe import resolve_universe
@@ -187,6 +188,7 @@ def main() -> None:
             update={
                 "composite_scores": compute_scores(snap),
                 **enrich_snapshot_sec(snap.symbol),
+                **enrich_snapshot_xbrl(snap),
             }
         )
         for snap in raw_snapshots
