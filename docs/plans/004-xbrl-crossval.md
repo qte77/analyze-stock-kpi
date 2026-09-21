@@ -1,7 +1,8 @@
 # Plan — XBRL cross-validation of yfinance financials
 
 Issue [#101](https://github.com/qte77/analyze-stock-kpi/issues/101) · status: **shipped**
-(PR #TBD) — implemented per the source-verified design in
+(PR [#373](https://github.com/qte77/analyze-stock-kpi/pull/373)) — implemented per the
+source-verified design in
 [006-agent-ready-backlog.md § 2](006-agent-ready-backlog.md) (supersedes this file's original
 companyfacts/3–5-concept draft below). `src/analyze_stock_kpi/data_sources/sec/xbrl.py`
 cross-validates yfinance revenue / net-income / EPS against SEC XBRL `companyconcept` data via
