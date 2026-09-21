@@ -14,7 +14,7 @@ from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
 from analyze_stock_kpi.data_sources.sec import xbrl
 from analyze_stock_kpi.data_sources.sec.xbrl import (
     _delta_pct,
-    _extract_latest_value,
+    _extract_latest_annual_fact,
     enrich_snapshot_xbrl,
     fetch_eps,
     fetch_revenue,
@@ -36,17 +36,55 @@ def aapl_xbrl_eps_fixture() -> dict:
     return json.loads((_FIXTURES_DIR / "aapl_xbrl_eps.json").read_text())
 
 
-def test_extract_latest_value_picks_latest_end_date(aapl_xbrl_fixture: dict) -> None:
-    """Latest fact is picked by ``(end, filed)``, not array order."""
-    value = _extract_latest_value(aapl_xbrl_fixture, "USD")
+def test_extract_latest_annual_fact_picks_latest_end_date(aapl_xbrl_fixture: dict) -> None:
+    """Latest annual (10-K, FY) fact is picked by ``(end, filed)``, not array order."""
+    fact = _extract_latest_annual_fact(aapl_xbrl_fixture, "USD")
 
-    assert value == 93736000000.0
+    assert fact == ("2024-09-28", 93736000000.0)
 
 
-def test_extract_latest_value_empty_units_returns_none() -> None:
+def test_extract_latest_annual_fact_skips_newer_non_annual_facts(aapl_xbrl_fixture: dict) -> None:
+    """A later-dated 10-Q/quarterly fact must NOT beat an older annual (10-K/FY) one.
+
+    Regression test: SEC's companyconcept API mixes quarterly, year-to-date,
+    and annual facts for a concept in the same array. Picking by end-date
+    alone (ignoring form/fp) previously returned a 9-month year-to-date
+    figure from the newest 10-Q instead of the last full fiscal year.
+    """
+    payload = json.loads(json.dumps(aapl_xbrl_fixture))  # deep copy
+    payload["units"]["USD"].append(
+        {
+            "end": "2025-06-28",
+            "val": 999999999999,
+            "fy": 2025,
+            "fp": "Q3",
+            "form": "10-Q",
+            "filed": "2025-08-01",
+        }
+    )
+
+    fact = _extract_latest_annual_fact(payload, "USD")
+
+    assert fact == ("2024-09-28", 93736000000.0)
+
+
+def test_extract_latest_annual_fact_empty_units_returns_none() -> None:
     """No facts for the requested unit -> ``None``."""
-    assert _extract_latest_value({"units": {"USD": []}}, "USD") is None
-    assert _extract_latest_value({"units": {}}, "USD") is None
+    assert _extract_latest_annual_fact({"units": {"USD": []}}, "USD") is None
+    assert _extract_latest_annual_fact({"units": {}}, "USD") is None
+
+
+def test_extract_latest_annual_fact_no_annual_facts_returns_none() -> None:
+    """Only quarterly/YTD facts on record (no 10-K/FY yet) -> ``None``, not a bogus quarter."""
+    payload = {
+        "units": {
+            "USD": [
+                {"end": "2024-03-30", "val": 1.0, "fp": "Q2", "form": "10-Q", "filed": "x"},
+            ]
+        }
+    }
+
+    assert _extract_latest_annual_fact(payload, "USD") is None
 
 
 def test_fetch_xbrl_concept_sends_correct_url_and_headers(
@@ -124,27 +162,38 @@ def test_fetch_xbrl_concept_non_404_http_error_propagates(
         fetch_xbrl_concept("0000320193", "Revenues")
 
 
-def test_fetch_revenue_fallback_chain_short_circuits_at_first_hit(
+def test_fetch_revenue_picks_most_recent_fact_across_all_concepts(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """First concept that returns a value wins; later concepts are never fetched."""
-    calls: list[str] = []
+    """Compares every fallback concept's latest annual fact; the most recent wins.
 
-    def fake_fetch(_cik: str, concept: str, unit: str = "USD") -> float | None:
-        calls.append(concept)
-        return None if concept == "Revenues" else 100.0
+    Regression test: a discontinued tag (e.g. ``Revenues``, last used ~2018
+    before ASC 606) can still have *some* annual data. Stopping at the first
+    concept with any value would silently return that stale figure instead
+    of the current tag's up-to-date one.
+    """
+    facts_by_concept = {
+        "Revenues": ("2018-09-29", 265595000000.0),  # discontinued tag, stale
+        "SalesRevenueNet": None,  # even more stale, no annual fact at all
+        "RevenueFromContractWithCustomerExcludingAssessedTax": (
+            "2025-09-27",
+            416161000000.0,
+        ),  # current tag
+    }
 
-    monkeypatch.setattr(xbrl, "fetch_xbrl_concept", fake_fetch)
+    def fake_fetch(_cik: str, concept: str, _unit: str) -> tuple[str, float] | None:
+        return facts_by_concept[concept]
+
+    monkeypatch.setattr(xbrl, "_fetch_latest_annual_fact", fake_fetch)
 
     value = fetch_revenue("0000320193")
 
-    assert value == 100.0
-    assert calls == ["Revenues", "SalesRevenueNet"]
+    assert value == 416161000000.0
 
 
 def test_fetch_revenue_all_concepts_miss_returns_none(monkeypatch: pytest.MonkeyPatch) -> None:
     """Foreign filer / no revenue reported under any known tag -> ``None``."""
-    monkeypatch.setattr(xbrl, "fetch_xbrl_concept", lambda _cik, _concept, unit="USD": None)
+    monkeypatch.setattr(xbrl, "_fetch_latest_annual_fact", lambda _cik, _concept, _unit: None)
 
     assert fetch_revenue("0000320193") is None
 
