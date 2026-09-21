@@ -9,6 +9,7 @@
 
 import { KPI_GLOSSARY, auditDetailRows, externalLinkRows } from "./lib/detail_rows.js";
 import { fmtNum, fmtPct } from "./lib/format.js";
+import { effectiveScore } from "./table.js";
 
 /**
  * Build a `<dt>/<dd>` fragment from `[label, value, sectionHeader?, tooltip?]`
@@ -75,12 +76,20 @@ export function bindDetailDismiss() {
  * @param {Row} row
  * @param {{
  *   auditByTicker: Map<string, AuditRow> | null,
+ *   activeUniverse: string,
  *   renderRadar: (canvas: HTMLCanvasElement, scores: CompositeScores) => void,
  *   renderTimeSeriesPane: (pane: HTMLElement, row: Row) => void | Promise<void>,
  * }} ctx
  */
 export function showDetail(row, ctx) {
   const cs = row.composite_scores ?? {};
+  // On aggregator universes the ranking is mean-of-7, not screener_score —
+  // same fix as table.js's Score column (#218), applied here too so the
+  // "qte77 Score" row matches what actually placed this ticker in best/worst.
+  const qte77Score = effectiveScore(row, ctx.activeUniverse);
+  const qte77ScoreTooltip = ctx.activeUniverse.startsWith("aggregated-scores-")
+    ? "qte77 Score — on this universe, the mean of the 7 composites above (the aggregator's actual ranking metric)."
+    : KPI_GLOSSARY.screener_score;
   const mcap = row.market_cap ? `$${(row.market_cap / 1e9).toFixed(2)} B` : "—";
   const audit = row.symbol ? (ctx.auditByTicker?.get(row.symbol) ?? null) : null;
 
@@ -201,7 +210,7 @@ export function showDetail(row, ctx) {
       ["Big Call", fmtNum(cs.big_call, 0), false, KPI_GLOSSARY.big_call],
       ["AAQS", fmtNum(cs.aaqs, 0), false, KPI_GLOSSARY.aaqs],
       ["HGI", fmtNum(cs.hgi, 0), false, KPI_GLOSSARY.hgi],
-      ["qte77 Score", fmtNum(cs.screener_score, 0), false, KPI_GLOSSARY.screener_score],
+      ["qte77 Score", fmtNum(qte77Score, 0), false, qte77ScoreTooltip],
       ...auditDetailRows(audit),
     ]),
   );
