@@ -5,8 +5,18 @@
 # work, replacing the two pre-existing per-universe workflows
 # (federal-contractors-refresh.yaml + aggregated-scores-best-and-worst-refresh.yaml).
 #
-# Sunday 02:00 UTC. workflow_dispatch with `universe` empty -> fan out to all
-# universes in parallel via matrix; with `universe` set -> single-leg run.
+# Triggers on demo-snapshot's completion (not its own cron) — the
+# aggregated-scores/enhanced-kpi-screener legs read results/demo/<u>/
+# from the `data` branch, so this must run strictly *after* demo-snapshot
+# writes that week's snapshots, never concurrently with or ahead of it.
+# A prior independent `schedule: "0 2 * * 0"` fired 4h15m *before*
+# demo-snapshot's `06:15 UTC` Sunday cron, so it was always reading the
+# *previous* week's data by construction — not just during an outage.
+# The `matrix` job's `if:` guard skips the run entirely when triggered by
+# a failed/cancelled demo-snapshot, so a bad upstream run never feeds a
+# ranking off stale data either. workflow_dispatch with `universe` empty
+# -> fan out to all universes in parallel via matrix; with `universe` set
+# -> single-leg run (unaffected by the guard, always runs).
 #
 # Adding a new universe (e.g. #192 enhanced-kpi-screener-longshort) takes
 # three additions: one option line, one matrix-array entry, one case branch.
@@ -15,8 +25,9 @@
 name: universe-builder
 
 on:
-  schedule:
-    - cron: "0 2 * * 0"
+  workflow_run:
+    workflows: ["demo-snapshot"]
+    types: [completed]
   workflow_dispatch:
     inputs:
       universe:
@@ -41,12 +52,16 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Compute the matrix once. Cron + dispatch-without-input fan out across
-  # both bundled universes; dispatch with `universe` set collapses to a
-  # single leg so ad-hoc debug runs stay cheap.
+  # Compute the matrix once. workflow_run + dispatch-without-input fan out
+  # across every bundled universe; dispatch with `universe` set collapses
+  # to a single leg so ad-hoc debug runs stay cheap.
   matrix:
     name: build matrix
     runs-on: ubuntu-latest
+    # Only proceed on a successful demo-snapshot run; a failed/cancelled
+    # upstream run must not feed a ranking off stale data. Always runs for
+    # workflow_dispatch (no workflow_run context to check).
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     outputs:
       universes: ${{ steps.compute.outputs.universes }}
     steps:
