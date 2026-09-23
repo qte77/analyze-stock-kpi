@@ -10,8 +10,10 @@ pydantic settings model gives every field its precise type at the boundary
 and removes the type-narrowing burden from callers.
 """
 
+from datetime import date
 from pathlib import Path
 
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -79,3 +81,26 @@ class CliArgs(BaseSettings):
     when ``--refresh-universe federal-contractors`` is used and this is
     ``None``.
     """
+
+    sortino_from: date | None = None
+    """Start date (``YYYY-MM-DD``) for an operator-chosen "custom" Sortino
+    window, computed alongside the fixed 1y/3y/5y/10y/20y/30y windows.
+    ``None`` (the default) leaves the three ``sortino_custom*`` snapshot
+    fields unset.
+    """
+
+    sortino_to: date | None = None
+    """End date for the custom Sortino window. ``None`` (the default) means
+    each ticker's latest available close. Ignored unless ``sortino_from``
+    is also set. Must be after ``sortino_from`` when both are given.
+    """
+
+    @model_validator(mode="after")
+    def _validate_sortino_frame(self) -> "CliArgs":
+        if (
+            self.sortino_from is not None
+            and self.sortino_to is not None
+            and self.sortino_from >= self.sortino_to
+        ):
+            raise ValueError("--sortino-from must be before --sortino-to")
+        return self

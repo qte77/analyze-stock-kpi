@@ -12,11 +12,14 @@ returns sparse ``info`` for non-equities (FX ``EURUSD=X``, futures
 ``GC=F``, crypto ``BTC-USD``). Sparse snapshots are valid by design.
 
 Enrichment fields (``roi``, ``rd_to_revenue``, ``sortino_ratio`` and its
-``sortino_10y``/``sortino_20y``/``sortino_30y`` windows, ``composite_scores``)
-are attached post-validate via ``model_copy``. ``sortino_ratio`` (1y) is the
+``sortino_3y``/``sortino_5y``/``sortino_10y``/``sortino_20y``/``sortino_30y``
+windows plus an optional ``sortino_custom`` frame, ``composite_scores``) are
+attached post-validate via ``model_copy``. ``sortino_ratio`` (1y) is the
 first composite input derived from price history rather than
-``Ticker.info``; see ADR-0004 for the rationale. The 10y/20y/30y windows are
-informational only — composite scores keep using the 1y value.
+``Ticker.info``; see ADR-0004 for the rationale. The 3y/5y/10y/20y/30y
+windows and the operator-chosen custom frame (``--sortino-from``/
+``--sortino-to``) are informational only — composite scores keep using the
+1y value.
 """
 
 from __future__ import annotations
@@ -127,9 +130,14 @@ class FundamentalsSnapshot(BaseModel):
     rd_to_revenue: float | None = None
     fcf_margin: float | None = None
     sortino_ratio: float | None = None
+    sortino_3y: float | None = None
+    sortino_5y: float | None = None
     sortino_10y: float | None = None
     sortino_20y: float | None = None
     sortino_30y: float | None = None
+    sortino_custom: float | None = None
+    sortino_custom_from: date | None = None
+    sortino_custom_to: date | None = None
     sec_last_10k_date: date | None = None
     sec_last_10q_date: date | None = None
     sec_last_8k_date: date | None = None
@@ -242,18 +250,31 @@ def _compute_sortino(close_series: pd.Series, target_annual: float = 0.0) -> flo
     return mean_annual / downside_dev_annual
 
 
-_SORTINO_WINDOW_YEARS = {"sortino_10y": 10, "sortino_20y": 20, "sortino_30y": 30}
+_SORTINO_WINDOW_YEARS = {
+    "sortino_3y": 3,
+    "sortino_5y": 5,
+    "sortino_10y": 10,
+    "sortino_20y": 20,
+    "sortino_30y": 30,
+}
 _SORTINO_COVERAGE_GRACE_DAYS = 30
 _EMPTY_SORTINOS: dict[str, float | None] = {
     "sortino_ratio": None,
+    "sortino_3y": None,
+    "sortino_5y": None,
     "sortino_10y": None,
     "sortino_20y": None,
     "sortino_30y": None,
 }
+_EMPTY_CUSTOM_SORTINO: dict[str, float | date | None] = {
+    "sortino_custom": None,
+    "sortino_custom_from": None,
+    "sortino_custom_to": None,
+}
 
 
 def _windowed_sortinos(close: pd.Series) -> dict[str, float | None]:
-    """Sortino at 1y/10y/20y/30y windows from one ticker's full close history.
+    """Sortino at 1y/3y/5y/10y/20y/30y windows from one ticker's full close history.
 
     ``close`` may carry leading NaNs — the shape of a column pulled out of a
     multi-ticker ``yf.download`` batch where another ticker has longer
@@ -261,10 +282,10 @@ def _windowed_sortinos(close: pd.Series) -> dict[str, float | None]:
     remaining index entry; each window slices ``close`` back from ``as_of``.
 
     ``sortino_ratio`` (1y) is unconditional, matching the pre-existing
-    composite-score input byte-for-byte (D1). The 10y/20y/30y windows apply
-    a coverage gate (D2): a window is left ``None`` unless the series' first
-    valid close is within ``_SORTINO_COVERAGE_GRACE_DAYS`` days of that
-    window's start — otherwise a ticker with, say, 6y of history would
+    composite-score input byte-for-byte (D1). The 3y/5y/10y/20y/30y windows
+    apply a coverage gate (D2): a window is left ``None`` unless the series'
+    first valid close is within ``_SORTINO_COVERAGE_GRACE_DAYS`` days of
+    that window's start — otherwise a ticker with, say, 6y of history would
     silently report a "10y" Sortino computed over only 6y.
     """
     close = close.dropna()
@@ -296,6 +317,52 @@ def _close_since(close: pd.Series, cutoff: pd.Timestamp) -> pd.Series:
     pd.Series)`` call site. The runtime type is always a ``Series``.
     """
     return cast("pd.Series", close[close.index >= cutoff])
+
+
+def _close_between(close: pd.Series, start: pd.Timestamp, end: pd.Timestamp) -> pd.Series:
+    """Two-sided version of :func:`_close_since` — same cast rationale."""
+    since_start = _close_since(close, start)
+    return cast("pd.Series", since_start[since_start.index <= end])
+
+
+def _custom_sortino(
+    close: pd.Series, custom_from: date, custom_to: date | None
+) -> dict[str, float | date | None]:
+    """Sortino over an operator-chosen ``[--sortino-from, --sortino-to]`` frame.
+
+    Same D2-style coverage gate as the fixed windows: ``sortino_custom`` is
+    ``None`` unless the series' first valid close is within
+    ``_SORTINO_COVERAGE_GRACE_DAYS`` days of ``custom_from``
+    (``_compute_sortino`` itself still enforces ``_MIN_SORTINO_DATAPOINTS``,
+    so an over-narrow frame also comes back ``None``). A missing
+    ``custom_to`` means "the ticker's latest close" — ``sortino_custom_to``
+    always records the actual end date used, so the persisted JSON stays
+    self-describing even when the flag was left at its default.
+    """
+    close = close.dropna()
+    if close.empty:
+        return {
+            "sortino_custom": None,
+            "sortino_custom_from": custom_from,
+            "sortino_custom_to": custom_to,
+        }
+    # `cast`: pandas-stubs types `Timestamp(...)` as `Timestamp | NaTType` for
+    # every overload; a `date` argument is never NaT at runtime.
+    from_ts = cast("pd.Timestamp", pd.Timestamp(custom_from))
+    to_ts: pd.Timestamp = (
+        cast("pd.Timestamp", pd.Timestamp(custom_to))
+        if custom_to is not None
+        else cast("pd.Timestamp", close.index[-1])
+    )
+    first_valid: Any = close.index[0]
+    sortino = None
+    if first_valid <= from_ts + pd.Timedelta(days=_SORTINO_COVERAGE_GRACE_DAYS):
+        sortino = _compute_sortino(_close_between(close, from_ts, to_ts))
+    return {
+        "sortino_custom": sortino,
+        "sortino_custom_from": custom_from,
+        "sortino_custom_to": custom_to if custom_to is not None else to_ts.date(),
+    }
 
 
 def _find_row(latest: pd.Series, needle: str) -> float | None:
@@ -429,13 +496,17 @@ def _batch_close_prices(tickers: list[str]) -> dict[str, Any] | None:
     """One batched ``yf.download`` for the whole universe.
 
     ``period="max"`` (yfinance has no "30y" period) so the same download
-    covers every Sortino window (1y/10y/20y/30y — see ``_windowed_sortinos``)
-    without N HTTP roundtrips. ``None`` on any failure (network error, empty
-    result, unexpected DataFrame shape). Handles both single-ticker (flat
-    columns) and multi-ticker (multi-index columns) shapes that
-    ``yf.download`` produces. Returned values are pandas Series of close
-    prices; the loose ``Any`` annotation accommodates pyright's narrowing of
-    ``DataFrame[...]`` lookups.
+    covers every fixed Sortino window (1y/3y/5y/10y/20y/30y — see
+    ``_windowed_sortinos``) plus an optional operator-chosen custom frame
+    (see ``_custom_sortino``), all without N HTTP roundtrips. ``None`` on
+    any failure (network error, empty result, unexpected DataFrame shape).
+    Branches on the DataFrame's actual column shape rather than
+    ``len(tickers)``: current ``yf.download`` returns multi-index columns
+    (``("Close", "AAPL")``) even for a single-ticker request, not just for
+    multi-ticker ones — branching on ticker count alone fed a one-column
+    DataFrame into ``_compute_sortino`` instead of a ``Series``. Returned
+    values are pandas Series of close prices; the loose ``Any`` annotation
+    accommodates pyright's narrowing of ``DataFrame[...]`` lookups.
     """
     if not tickers:
         return None
@@ -445,7 +516,7 @@ def _batch_close_prices(tickers: list[str]) -> dict[str, Any] | None:
         return None
     if df is None or df.empty:
         return None
-    if len(tickers) == 1:
+    if not isinstance(df.columns, pd.MultiIndex):
         if "Close" in df.columns:
             return {tickers[0]: df["Close"]}
         return None
@@ -458,15 +529,24 @@ def _batch_close_prices(tickers: list[str]) -> dict[str, Any] | None:
 
 
 def fetch_universe_fundamentals(
-    tickers: list[str], *, show_progress: bool = True
+    tickers: list[str],
+    *,
+    show_progress: bool = True,
+    sortino_from: date | None = None,
+    sortino_to: date | None = None,
 ) -> list[FundamentalsSnapshot]:
     """Sequential fetch with tqdm. Per-ticker errors are logged and skipped.
 
     Adds a single batched ``yf.download`` at the start to fetch each
-    ticker's full close history; Sortino at the 1y/10y/20y/30y windows
-    (``_windowed_sortinos``) is then computed per-ticker from the matching
-    column and attached via ``model_copy``. The batch call is
+    ticker's full close history; Sortino at the 1y/3y/5y/10y/20y/30y
+    windows (``_windowed_sortinos``) is then computed per-ticker from the
+    matching column and attached via ``model_copy``. The batch call is
     fault-tolerant — failure simply leaves every Sortino field as ``None``.
+
+    When ``sortino_from`` is given, an additional operator-chosen custom
+    frame is computed per-ticker (``_custom_sortino``, ``sortino_to``
+    defaulting to each ticker's latest close). Left ``None``, the three
+    ``sortino_custom*`` fields stay ``None`` on every snapshot.
     """
     close_by_ticker = _batch_close_prices(tickers)
     iterable = tqdm(tickers, desc="fundamentals") if show_progress else tickers
@@ -477,10 +557,15 @@ def fetch_universe_fundamentals(
         except Exception as exc:
             logger.warning("Failed to fetch %s: %s", ticker, exc)
             continue
-        sortinos = (
-            _windowed_sortinos(close_by_ticker[ticker])
-            if close_by_ticker is not None and ticker in close_by_ticker
-            else _EMPTY_SORTINOS
+        close = close_by_ticker.get(ticker) if close_by_ticker is not None else None
+        sortinos: dict[str, float | date | None] = dict(
+            _windowed_sortinos(close) if close is not None else _EMPTY_SORTINOS
         )
+        if sortino_from is not None:
+            sortinos.update(
+                _custom_sortino(close, sortino_from, sortino_to)
+                if close is not None
+                else _EMPTY_CUSTOM_SORTINO
+            )
         snapshots.append(snap.model_copy(update=sortinos))
     return snapshots

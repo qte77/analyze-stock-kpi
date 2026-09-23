@@ -31,6 +31,10 @@ export const KPI_GLOSSARY = {
     "(Current assets - inventory) / current liabilities. Stricter liquidity than Current.",
   debt_to_equity: "Total debt / equity. Leverage (higher = more leveraged).",
   sortino_ratio: "Annualized Sortino over 1y (rf=0). Higher = better upside vs downside skew.",
+  sortino_3y:
+    "Annualized Sortino over the trailing 3y (rf=0), informational only — not a composite input. Blank unless price history reaches back far enough.",
+  sortino_5y:
+    "Annualized Sortino over the trailing 5y (rf=0), informational only — not a composite input. Blank unless price history reaches back far enough.",
   sortino_10y:
     "Annualized Sortino over the trailing 10y (rf=0), informational only — not a composite input. Blank unless price history reaches back far enough.",
   sortino_20y:

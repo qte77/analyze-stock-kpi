@@ -42,6 +42,14 @@ make validate                               # lint + types + complexity + md + t
 ```
 
 CLI args double as env vars with the `SSK_` prefix (e.g. `SSK_TICKERS=AAPL,MSFT`).
+Per-ticker Sortino is reported at fixed 1y/3y/5y/10y/20y/30y windows plus an
+optional operator-chosen frame via `--sortino-from YYYY-MM-DD [--sortino-to
+YYYY-MM-DD]` (`--sortino-to` defaults to each ticker's latest close), e.g.:
+
+```bash
+uv run python -m analyze_stock_kpi --tickers AAPL --sortino-from 2015-01-01 --sortino-to 2020-12-31
+```
+
 See [`docs/architecture.md`](docs/architecture.md) for the module map, the persisted
 `FundamentalsSnapshot` fields, the composite-score formulas, and the universe presets.
 
