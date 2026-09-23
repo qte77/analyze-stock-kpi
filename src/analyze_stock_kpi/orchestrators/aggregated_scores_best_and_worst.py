@@ -1,15 +1,16 @@
-"""Cross-universe composite-mean aggregator.
+"""Cross-universe qte77 Score aggregator.
 
 Reads the latest snapshot per bundled universe from the ``data`` branch,
-ranks tickers by the mean of their 7 composite scores
-(``quality / dividend / growth / big_call / aaqs / hgi / screener_score``),
-and emits a 50-ticker preset combining the top 25 + bottom 25.
+ranks tickers by their qte77 Score (``composite_scores.screener_score`` --
+the same composite the dashboard displays and sorts by on every other
+universe), and emits a 50-ticker preset combining the top 25 + bottom 25.
 
-The ranking primitive is composite-mean -- explicit signal that this is
-a meta-screening *starting point*, NOT a hedging primitive. Top-25 by
-composite-mean is not equivalent to "fundamentally strong long
-candidate"; the hedging-grade signal lives in
-:mod:`analyze_stock_kpi.orchestrators.enhanced_kpi_screener_longshort` (issue #192).
+Ranking previously used the mean of the 7 composite scores
+(``quality / dividend / growth / big_call / aaqs / hgi / screener_score``),
+which could disagree with the dashboard's displayed "qte77 Score"
+(``screener_score``) for the same ticker. Ranking by ``screener_score``
+directly keeps the aggregator's best/worst placement consistent with what
+the dashboard shows everywhere else.
 
 Mirrors :mod:`analyze_stock_kpi.orchestrators.federal_contractors` for orchestrator
 shape: returns ``(list[ticker], list[AuditRow])``; per-ticker decisions
@@ -35,7 +36,7 @@ if TYPE_CHECKING:
 
 
 # Derived from the model so adding a CompositeScores field flows through
-# to the cross-universe ranking without a separate edit here.
+# to the audit breakdown without a separate edit here.
 _COMPOSITE_FIELDS = tuple(CompositeScores.model_fields)
 
 
@@ -44,11 +45,13 @@ class AuditRow(AuditRowBase):
 
     Inherits ``ticker``, ``source_universes``, ``snapshot_dates``,
     ``eligible``, ``excluded_reason`` from :class:`AuditRowBase`.
+    ``composite_breakdown`` stays informational (all 7 composites, for
+    context); ``screener_score`` is the value actually used to rank.
     """
 
     populated_composites: int
     composite_breakdown: dict[str, float | None]
-    mean_composite: float | None = None
+    screener_score: float | None = None
     rank: int | None = None
 
 
@@ -60,22 +63,16 @@ def _extract_composites(snap: FundamentalsSnapshot) -> dict[str, float | None]:
     return {f: getattr(cs, f) for f in _COMPOSITE_FIELDS}
 
 
-def _mean_of_populated(values: dict[str, float | None]) -> float | None:
-    """Mean of non-None values; None if all are None."""
-    populated = [v for v in values.values() if v is not None]
-    return sum(populated) / len(populated) if populated else None
-
-
 def _classify(
     ticker: str,
     info: DedupedSnapshot,
     as_of: date,
     max_stale_days: int,
-    min_composites: int,
 ) -> tuple[AuditRow, float | None]:
-    """Build the AuditRow and return ``(row, mean_for_ranking)``.
+    """Build the AuditRow and return ``(row, screener_score_for_ranking)``.
 
-    ``mean_for_ranking`` is ``None`` for excluded tickers (won't be ranked).
+    ``screener_score_for_ranking`` is ``None`` for excluded tickers (won't
+    be ranked).
     """
     snap = info.snapshot
     source_universes = info.source_universes
@@ -92,13 +89,13 @@ def _classify(
     }
     if is_stale(first_date, as_of, max_stale_days):
         return AuditRow(**base, eligible=False, excluded_reason="stale"), None
-    if populated < min_composites:
+    score = composites["screener_score"]
+    if score is None:
         return (
-            AuditRow(**base, eligible=False, excluded_reason="insufficient_composites"),
+            AuditRow(**base, eligible=False, excluded_reason="no_screener_score"),
             None,
         )
-    mean = _mean_of_populated(composites)
-    return AuditRow(**base, mean_composite=mean, eligible=True), mean
+    return AuditRow(**base, screener_score=score, eligible=True), score
 
 
 def build_universe(
@@ -106,7 +103,6 @@ def build_universe(
     snapshot_dates_by_universe: dict[str, str],
     *,
     top_n: int = 25,
-    min_composites: int = 5,
     max_stale_days: int = 14,
     as_of: date | None = None,
 ) -> tuple[list[str], list[str], list[AuditRow]]:
@@ -119,20 +115,18 @@ def build_universe(
             snapshot date used for freshness gating.
         top_n: Each side of the ranking (default 25). Output is two
             lists, each up to ``top_n``.
-        min_composites: Minimum populated composites for eligibility
-            (default 5/7, mirrors :func:`composite_scores.screener_score`
-            L3 gate).
         max_stale_days: Snapshots older than this are excluded.
         as_of: Reference date for the freshness gate. Defaults to today
             UTC; injected for deterministic tests.
 
     Returns:
         ``(best_tickers, worst_tickers, audit_rows)``. ``best_tickers``
-        is the top-``top_n`` by composite-mean; ``worst_tickers`` is the
-        bottom-``top_n``. Both sorted ASCII ascending. Disjoint sets.
+        is the top-``top_n`` by ``screener_score``; ``worst_tickers`` is
+        the bottom-``top_n``. Both sorted ASCII ascending. Disjoint sets.
         ``audit_rows`` has one entry per ticker encountered (including
         excluded ones); rank is ``+1..+top_n`` for best, ``-top_n..-1``
-        for worst, ``None`` for excluded.
+        for worst, ``None`` for excluded. A ticker is eligible iff its
+        snapshot isn't stale and it has a non-``None`` ``screener_score``.
     """
     if as_of is None:
         as_of = datetime.now(UTC).date()
@@ -142,28 +136,28 @@ def build_universe(
     per_ticker = dedup_by_ticker(snapshots_by_universe, snapshot_dates_by_universe)
 
     rows_by_ticker: dict[str, AuditRow] = {}
-    eligible_with_mean: list[tuple[str, float]] = []
+    eligible_with_score: list[tuple[str, float]] = []
     for ticker, info in per_ticker.items():
-        row, mean = _classify(ticker, info, as_of, max_stale_days, min_composites)
+        row, score = _classify(ticker, info, as_of, max_stale_days)
         rows_by_ticker[ticker] = row
-        if mean is not None:
-            eligible_with_mean.append((ticker, mean))
+        if score is not None:
+            eligible_with_score.append((ticker, score))
 
-    eligible_with_mean.sort(key=lambda x: (-x[1], x[0]))
+    eligible_with_score.sort(key=lambda x: (-x[1], x[0]))
 
-    n = len(eligible_with_mean)
+    n = len(eligible_with_score)
     top_count = min(top_n, n)
     bottom_count = min(top_n, n - top_count)
     best_tickers: list[str] = []
     worst_tickers: list[str] = []
     for i in range(top_count):
-        ticker, _ = eligible_with_mean[i]
+        ticker, _ = eligible_with_score[i]
         rows_by_ticker[ticker] = rows_by_ticker[ticker].model_copy(
             update={"rank": i + 1},
         )
         best_tickers.append(ticker)
     for j in range(bottom_count):
-        ticker, _ = eligible_with_mean[n - 1 - j]
+        ticker, _ = eligible_with_score[n - 1 - j]
         rows_by_ticker[ticker] = rows_by_ticker[ticker].model_copy(
             update={"rank": -(j + 1)},
         )
