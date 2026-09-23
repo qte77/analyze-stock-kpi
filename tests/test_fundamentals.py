@@ -671,6 +671,47 @@ def test_windowed_sortinos_handles_leading_nans() -> None:
     assert _windowed_sortinos(padded) == _windowed_sortinos(close)
 
 
+def test_windowed_sortinos_handles_interior_nan_gaps() -> None:
+    """Root-cause regression: interior (not just leading) NaN gaps must not
+    change a ticker's Sortino.
+
+    A multi-ticker ``yf.download`` batch's index is the UNION of every
+    ticker's trading days, so a ticker whose exchange was closed on a
+    *different* ticker's trading day gets a NaN row scattered THROUGHOUT its
+    own column -- not only at the start. Cross-universe Sortino drift traced
+    to this: ``_compute_sortino`` used to run ``pct_change().dropna()``
+    directly on a close series carrying interior NaNs, which drops both the
+    return *into* and *out of* the gap instead of the one compound return
+    that should span it -- a different return sample per universe, so the
+    same ticker's ``sortino_ratio`` (and therefore ``screener_score``)
+    diverged depending on which other tickers shared its batch.
+    ``_windowed_sortinos``' ``close.dropna()`` (unlike ``leading``-only
+    padding) strips interior NaN rows too, before any window slicing, so the
+    padded and clean series must produce byte-identical results.
+    """
+    import pandas as pd
+
+    from analyze_stock_kpi.data_sources.fundamentals import _windowed_sortinos
+
+    idx = pd.bdate_range(end="2024-01-01", periods=3 * 252)
+    prices = [100.0]
+    for i in range(len(idx) - 1):
+        r = -0.004 if i % 5 == 0 else 0.001
+        prices.append(prices[-1] * (1 + r))
+    close = pd.Series(prices, index=idx)
+
+    # Distinct timestamps interleaved throughout the history (not clustered
+    # at the front) -- simulates foreign-only trading days from a batch-mate
+    # ticker in a different exchange/timezone.
+    interior_gap_dates = pd.DatetimeIndex(
+        [idx[i] + pd.Timedelta(hours=12) for i in range(100, len(idx) - 100, 150)]
+    )
+    padded = close.reindex(idx.union(interior_gap_dates).sort_values())
+
+    assert padded.isna().sum() == len(interior_gap_dates)
+    assert _windowed_sortinos(padded) == _windowed_sortinos(close)
+
+
 def test_custom_sortino_matches_compute_sortino_on_manual_slice() -> None:
     """``_custom_sortino`` over an explicit ``[from, to]`` equals a manual slice."""
     import pandas as pd
