@@ -6,7 +6,6 @@ import { describe, it, expect } from "vitest";
 import {
   buildRowTitle,
   coverageCount,
-  meanComposite,
   effectiveScore,
   totalCompositeScore,
   emptyTableMessage,
@@ -51,31 +50,6 @@ describe("coverageCount", () => {
   });
 });
 
-describe("meanComposite", () => {
-  it("returns null when composite_scores is absent or null", () => {
-    expect(meanComposite({})).toBeNull();
-    expect(meanComposite({ composite_scores: null })).toBeNull();
-  });
-  it("returns null when no composite field is populated", () => {
-    expect(meanComposite({ composite_scores: {} })).toBeNull();
-  });
-  it("averages only the populated composite fields", () => {
-    expect(meanComposite({ composite_scores: { quality: 80, growth: 40 } })).toBe(60);
-  });
-  it("averages all 7 when fully populated", () => {
-    const cs = {
-      quality: 10,
-      dividend: 10,
-      growth: 10,
-      big_call: 10,
-      aaqs: 10,
-      hgi: 10,
-      screener_score: 10,
-    };
-    expect(meanComposite({ composite_scores: cs })).toBe(10);
-  });
-});
-
 describe("effectiveScore", () => {
   const row = {
     composite_scores: {
@@ -88,20 +62,16 @@ describe("effectiveScore", () => {
       screener_score: 47,
     },
   };
-  it("uses screener_score on a non-aggregator universe", () => {
-    expect(effectiveScore(row, "sp500")).toBe(47);
+  it("is always composite_scores.screener_score, regardless of universe", () => {
+    expect(effectiveScore(row)).toBe(47);
   });
-  it("uses meanComposite on an aggregated-scores universe", () => {
-    expect(effectiveScore(row, "aggregated-scores-best")).toBe(meanComposite(row));
-    expect(effectiveScore(row, "aggregated-scores-worst")).toBe(meanComposite(row));
-  });
-  it("does not switch metrics for a non-aggregator universe with a similar name", () => {
-    expect(effectiveScore(row, "enhanced-kpi-screener-longs")).toBe(47);
+  it("returns null when composite_scores is absent", () => {
+    expect(effectiveScore({})).toBeNull();
   });
 });
 
 describe("totalCompositeScore", () => {
-  it("sums each row's composite_scores.screener_score by default", () => {
+  it("sums each row's composite_scores.screener_score", () => {
     const rows = [
       { composite_scores: { screener_score: 60 } },
       { composite_scores: { screener_score: 40 } },
@@ -119,13 +89,6 @@ describe("totalCompositeScore", () => {
   it("returns 0 for an empty list", () => {
     expect(totalCompositeScore([])).toBe(0);
   });
-  it("sums meanComposite instead, on an aggregator universe", () => {
-    const rows = [
-      { composite_scores: { quality: 80, growth: 40 } }, // mean of the 2 populated = 60
-      { composite_scores: { screener_score: 40 } }, // mean of the 1 populated = 40
-    ];
-    expect(totalCompositeScore(rows, "aggregated-scores-best")).toBe(100);
-  });
 });
 
 describe("emptyTableMessage", () => {
@@ -138,7 +101,7 @@ describe("emptyTableMessage", () => {
     );
   });
   it("explains the aggregator freshness gate", () => {
-    expect(emptyTableMessage("", "aggregated-scores-best")).toContain("min-composites gate");
+    expect(emptyTableMessage("", "aggregated-scores-best")).toContain("freshness gate");
   });
   it("falls back to the pending-cron message for a static universe", () => {
     expect(emptyTableMessage("", "sp500")).toContain("first cron run pending");
