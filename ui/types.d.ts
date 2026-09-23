@@ -84,5 +84,10 @@ interface Row {
   roi?: number | null;
   rd_to_revenue?: number | null;
   sortino_ratio?: number | null;
+  sortino_3y?: number | null;
+  sortino_5y?: number | null;
+  sortino_10y?: number | null;
+  sortino_20y?: number | null;
+  sortino_30y?: number | null;
   composite_scores?: CompositeScores | null;
 }

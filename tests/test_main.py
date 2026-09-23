@@ -94,6 +94,15 @@ def test_summary_row_sparse_snapshot_renders_dashes() -> None:
     assert all(cell == "-" for cell in row[1:])
 
 
+def test_summary_row_show_custom_sortino_appends_one_column() -> None:
+    """``--sortino-from`` appends a "Sortino (custom)" column, dashboard untouched."""
+    snap = _snap(sortino_custom=0.85)
+    base = _summary_row(snap, show_scores=False)
+    extended = _summary_row(snap, show_scores=False, show_custom_sortino=True)
+    assert len(extended) == len(base) + 1
+    assert extended[-1] == "0.85"
+
+
 def test_format_days_since_returns_dash_when_none() -> None:
     """Missing filing date renders as '-'."""
     assert _format_days_since(None) == "-"
