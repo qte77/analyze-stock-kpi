@@ -1,0 +1,272 @@
+{
+  "cadence": "monthly",
+  "objective": "min_variance",
+  "inception": "2026-09-23",
+  "as_of": "2026-09-23",
+  "last_rebalance": "2026-09-23",
+  "pool_as_of": "2026-09-23",
+  "lookback_days": 756,
+  "long": [
+    {
+      "ticker": "000660.KS",
+      "weight": 0.002024950134726744
+    },
+    {
+      "ticker": "005930.KS",
+      "weight": 0.01602618178784013
+    },
+    {
+      "ticker": "055550.KS",
+      "weight": 0.03730204219578231
+    },
+    {
+      "ticker": "086790.KS",
+      "weight": 0.026017194018300587
+    },
+    {
+      "ticker": "105560.KS",
+      "weight": 0.015448762341362221
+    },
+    {
+      "ticker": "6098.T",
+      "weight": 0.03513685570831658
+    },
+    {
+      "ticker": "AMAT",
+      "weight": 0.008830249729484882
+    },
+    {
+      "ticker": "B3SA3.SA",
+      "weight": 0.028534809092925727
+    },
+    {
+      "ticker": "BESIY",
+      "weight": 0.011755018933212418
+    },
+    {
+      "ticker": "BMY",
+      "weight": 0.0645134003509496
+    },
+    {
+      "ticker": "BPAC11.SA",
+      "weight": 0.030339432637084128
+    },
+    {
+      "ticker": "ENI.MI",
+      "weight": 0.06202036668577613
+    },
+    {
+      "ticker": "GMEXICOB.MX",
+      "weight": 0.041292214790642476
+    },
+    {
+      "ticker": "GOOG",
+      "weight": 0.050889184190420905
+    },
+    {
+      "ticker": "GOOGL",
+      "weight": 0.04730489388807893
+    },
+    {
+      "ticker": "ITUB4.SA",
+      "weight": 0.1
+    },
+    {
+      "ticker": "LLY",
+      "weight": 0.04014736113255389
+    },
+    {
+      "ticker": "PETR4.SA",
+      "weight": 0.03494499549220951
+    },
+    {
+      "ticker": "REGN",
+      "weight": 0.03688479776450658
+    },
+    {
+      "ticker": "RHHBY",
+      "weight": 0.08022872963345869
+    },
+    {
+      "ticker": "SEZL",
+      "weight": 0.009616361305839727
+    },
+    {
+      "ticker": "TSM",
+      "weight": 0.04151629616930039
+    },
+    {
+      "ticker": "TTE.PA",
+      "weight": 0.062218003853505774
+    },
+    {
+      "ticker": "TXN",
+      "weight": 0.04802346530527239
+    },
+    {
+      "ticker": "VRTX",
+      "weight": 0.06898443285844928
+    }
+  ],
+  "short": [
+    {
+      "ticker": "035420.KS",
+      "weight": 0.02903967097847237
+    },
+    {
+      "ticker": "035720.KS",
+      "weight": 0.015592202823640607
+    },
+    {
+      "ticker": "051910.KS",
+      "weight": 0.021555275018285292
+    },
+    {
+      "ticker": "3382.T",
+      "weight": 0.041540113467601364
+    },
+    {
+      "ticker": "373220.KS",
+      "weight": 0.015378450544433982
+    },
+    {
+      "ticker": "BA",
+      "weight": 0.039611479665284936
+    },
+    {
+      "ticker": "COST",
+      "weight": 0.08680753476168553
+    },
+    {
+      "ticker": "CSNA3.SA",
+      "weight": 0.04082481057425391
+    },
+    {
+      "ticker": "DIS",
+      "weight": 0.05915450050119031
+    },
+    {
+      "ticker": "DKILY",
+      "weight": 0.07560596424714291
+    },
+    {
+      "ticker": "DLR",
+      "weight": 0.06505902788961994
+    },
+    {
+      "ticker": "EL.PA",
+      "weight": 0.07664920735779886
+    },
+    {
+      "ticker": "GE",
+      "weight": 0.06271353687723746
+    },
+    {
+      "ticker": "MELI",
+      "weight": 0.02928526034961748
+    },
+    {
+      "ticker": "NET",
+      "weight": 0.009396573770875763
+    },
+    {
+      "ticker": "NOW",
+      "weight": 0.0
+    },
+    {
+      "ticker": "O",
+      "weight": 0.1
+    },
+    {
+      "ticker": "PLD",
+      "weight": 0.054174263540204846
+    },
+    {
+      "ticker": "SNPS",
+      "weight": 0.022743096031990467
+    },
+    {
+      "ticker": "STLAM.MI",
+      "weight": 0.031061042344534488
+    },
+    {
+      "ticker": "TSLA",
+      "weight": 0.013576314370257768
+    },
+    {
+      "ticker": "UBER",
+      "weight": 0.020446862190984537
+    },
+    {
+      "ticker": "VNA.DE",
+      "weight": 0.037251507389556966
+    },
+    {
+      "ticker": "WMT",
+      "weight": 0.05253330530533021
+    }
+  ],
+  "pool": {
+    "long": [
+      "000660.KS",
+      "005930.KS",
+      "055550.KS",
+      "086790.KS",
+      "105560.KS",
+      "6098.T",
+      "AMAT",
+      "B3SA3.SA",
+      "BESIY",
+      "BMY",
+      "BPAC11.SA",
+      "ENI.MI",
+      "GMEXICOB.MX",
+      "GOOG",
+      "GOOGL",
+      "ITUB4.SA",
+      "LLY",
+      "PETR4.SA",
+      "REGN",
+      "RHHBY",
+      "SEZL",
+      "TSM",
+      "TTE.PA",
+      "TXN",
+      "VRTX"
+    ],
+    "short": [
+      "035420.KS",
+      "035720.KS",
+      "051910.KS",
+      "3382.T",
+      "373220.KS",
+      "BA",
+      "COST",
+      "CSNA3.SA",
+      "DIS",
+      "DKILY",
+      "DLR",
+      "EL.PA",
+      "GE",
+      "MELI",
+      "NET",
+      "NOW",
+      "O",
+      "PLD",
+      "SNPS",
+      "STLAM.MI",
+      "TSLA",
+      "UBER",
+      "VNA.DE",
+      "WMT",
+      "WTF"
+    ]
+  },
+  "excluded": [
+    {
+      "ticker": "WTF",
+      "reason": "insufficient_coverage"
+    }
+  ],
+  "ex_ante_vol_annual": 0.1033814183909059
+}
