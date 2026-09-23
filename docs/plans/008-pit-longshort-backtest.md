@@ -265,7 +265,7 @@ Every run must:
 | ~~W0 land this plan + close plan 007 + open tracking issue + #294 comment~~ | agent → admin-merge on green | shipped — issue #401, plan on `main` |
 | PR C core engine + cron + removals + docs | agent → admin-merge on green | per PR C done-when |
 | Dispatch `portfolio.yaml` + verify data files + Pages e2e (migrated from 007) | agent (after C+D) | the three artifact kinds on `data`; the section renders on Pages without console errors |
-| PR D dashboard section | agent → admin-merge on green | per PR D done-when |
+| ~~PR D dashboard section~~ | agent → admin-merge on green | PR [#403](https://github.com/qte77/analyze-stock-kpi/pull/403) open, `make validate` + local e2e green, pending admin-merge |
 | Issue: `make preview` doesn't serve `ui/public/` | agent | issue filed |
 | Issue: `llms.txt` template missing ADR-0010..0013 + newer modules | agent | issue filed |
 | US-only SEC-XBRL extension to ~2017 (filed dates) | owner (deferred) | only if the owner wants a longer US series |

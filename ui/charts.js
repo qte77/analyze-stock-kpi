@@ -6,8 +6,14 @@
 import { logRightAxis, scoreYAxis, themedXAxis } from "./lib/chart_axes.js";
 import { buildCombinedSeries } from "./lib/combined.js";
 import { fetchJson } from "./lib/fetch.js";
-import { fmtNum } from "./lib/format.js";
-import { compound, holdingsRows } from "./lib/portfolio.js";
+import { fmtNum, fmtPct } from "./lib/format.js";
+import {
+  CADENCE_LABELS,
+  CADENCE_ORDER,
+  compound,
+  keyFacts,
+  metricsTableRows,
+} from "./lib/portfolio.js";
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
 import { buildTimeSeries } from "./lib/timeseries.js";
 import { filterByWindow, findClosestScore } from "./lib/window.js";
@@ -689,63 +695,87 @@ export function renderYieldCurveHeader(entries) {
 }
 
 /** @type {any} */
-let portfolioChart = null;
+let backtestChart = null;
 
-const PORTFOLIO_EMPTY = "Tracking starts after the first run";
+const BACKTEST_EMPTY = "Backtest runs Saturdays";
 
-function renderPortfolioChartEmptyHint(/** @type {boolean} */ show) {
-  toggleHistoryHint("portfolio-chart-wrap", "portfolio-chart-empty", show, PORTFOLIO_EMPTY);
+function renderBacktestChartEmptyHint(/** @type {boolean} */ show) {
+  toggleHistoryHint("backtest-chart-wrap", "backtest-chart-empty", show, BACKTEST_EMPTY);
 }
 
+/** Thin "foil" cadence line colors (everything but the primary, which uses
+ *  --primary for both its net/gross lines) — the zero-blue EyeRest data arc. */
+const FOIL_COLORS = ["--data-alt", "--data-caution", "--data-negative", "--text-muted"];
+
 /**
- * Render the hypothetical long/short model portfolio chart (ADR-0012): the
- * weekly- and monthly-cadence L/S index lines, each compounded client-side
- * from `ret_ls` (D11 — no stored NAV). A 404 before the first cron run
- * (both `weeklyRows`/`monthlyRows` empty) shows the empty hint and never
- * throws — the caller passes `[]` for a failed/missing fetch.
+ * Render the backtested long/short 25/25 index chart (ADR-0013): the primary
+ * cadence's net index (bold) + gross index (dashed), plus the other four
+ * cadences' net index as thin foil lines — all 100-based, compounded
+ * client-side via `compound()` (D5/D8 — no stored NAV). A 404 before the
+ * first Saturday cron run (every cadence's rows empty) shows the empty hint
+ * and never throws — the caller passes `{}`/`[]` for a failed/missing fetch.
  *
- * @param {Array<{date: string, ret_ls: number}>} weeklyRows
- * @param {Array<{date: string, ret_ls: number}>} monthlyRows
+ * @param {Record<string, import("./lib/portfolio.js").BacktestReturnRow[]>} seriesByCadence
+ * @param {string | null | undefined} primary
  */
-export function renderPortfolioChart(weeklyRows, monthlyRows) {
+export function renderBacktestChart(seriesByCadence, primary) {
   const canvas = /** @type {HTMLCanvasElement | null} */ (
-    document.getElementById("portfolio-chart")
+    document.getElementById("backtest-chart")
   );
   if (!canvas) return;
-  destroyChart(portfolioChart);
-  portfolioChart = null;
-  const weekly = compound(weeklyRows);
-  const monthly = compound(monthlyRows);
-  const hasData = weekly.dates.length > 0 || monthly.dates.length > 0;
-  renderPortfolioChartEmptyHint(!hasData);
+  destroyChart(backtestChart);
+  backtestChart = null;
+  const primaryLabel = (primary && CADENCE_LABELS[primary]) || "Primary";
+  const primaryRows = (primary && seriesByCadence[primary]) || [];
+  const primaryNet = compound(primaryRows, "ret_ls_net");
+  const primaryGross = compound(primaryRows, "ret_ls_gross");
+  const foils = CADENCE_ORDER.filter((key) => key !== primary).map((key, i) => ({
+    key,
+    label: CADENCE_LABELS[key] ?? key,
+    color: FOIL_COLORS[i % FOIL_COLORS.length],
+    ...compound(seriesByCadence[key] ?? [], "ret_ls_net"),
+  }));
+  const hasData = primaryNet.dates.length > 0 || foils.some((f) => f.dates.length > 0);
+  renderBacktestChartEmptyHint(!hasData);
   if (!hasData || typeof Chart === "undefined") return;
-  const labels = weekly.dates.length >= monthly.dates.length ? weekly.dates : monthly.dates;
-  portfolioChart = new Chart(canvas, {
+  const labels = [primaryNet, ...foils].reduce(
+    (longest, series) => (series.dates.length > longest.length ? series.dates : longest),
+    /** @type {string[]} */ ([]),
+  );
+  backtestChart = new Chart(canvas, {
     type: "line",
     data: {
       labels,
       datasets: [
         {
-          label: "Weekly rebalance (L/S)",
-          data: weekly.index,
-          borderColor: () => cssVar("--data-alt", "#587818"),
-          backgroundColor: () => `${cssVar("--data-alt", "#587818")}14`,
-          fill: false,
-          pointRadius: 0,
-          borderWidth: 1.5,
-          tension: 0.15,
-        },
-        {
-          label: "Monthly rebalance (L/S)",
-          data: monthly.index,
+          label: `${primaryLabel} (net)`,
+          data: primaryNet.index,
           borderColor: () => cssVar("--primary", "#7a6010"),
           backgroundColor: () => `${cssVar("--primary", "#7a6010")}14`,
           fill: false,
           pointRadius: 0,
-          borderWidth: 1.5,
-          tension: 0.15,
-          borderDash: [4, 3],
+          borderWidth: 2.5,
+          tension: 0.1,
         },
+        {
+          label: `${primaryLabel} (gross)`,
+          data: primaryGross.index,
+          borderColor: () => cssVar("--primary", "#7a6010"),
+          fill: false,
+          pointRadius: 0,
+          borderWidth: 1.5,
+          borderDash: [4, 3],
+          tension: 0.1,
+        },
+        ...foils.map((f) => ({
+          label: `${f.label} (net)`,
+          data: f.index,
+          borderColor: () => cssVar(f.color, "#686040"),
+          fill: false,
+          pointRadius: 0,
+          borderWidth: 1,
+          tension: 0.1,
+        })),
       ],
     },
     options: {
@@ -757,55 +787,157 @@ export function renderPortfolioChart(weeklyRows, monthlyRows) {
       },
     },
   });
-  liveCharts.add(portfolioChart);
+  liveCharts.add(backtestChart);
+}
+
+/** @type {import("./lib/portfolio.js").BacktestSummary | null} */
+let backtestSummaryCache = null;
+/** @type {"gross" | "net"} */
+let backtestMode = "net";
+
+function renderBacktestMetricsTable() {
+  const tbody = document.querySelector("#backtest-metrics-table tbody");
+  if (!tbody) return;
+  tbody.replaceChildren();
+  for (const row of metricsTableRows(backtestSummaryCache, backtestMode)) {
+    const tr = document.createElement("tr");
+    if (row.primary) tr.className = "backtest-primary-row";
+    const cells = [
+      row.label,
+      `${fmtPct(row.ann_return)} %`,
+      `${fmtPct(row.ann_vol)} %`,
+      `${fmtPct(row.max_drawdown)} %`,
+      `${fmtPct(row.ann_turnover)} %`,
+      `${fmtPct(row.long_ann_return)} %`,
+      `${fmtPct(row.short_ann_return)} %`,
+      fmtNum(row.beta, 2),
+      `${fmtPct(row.hit_rate)} %`,
+      `${fmtPct(row.mean_monthly_return)} % [${fmtPct(row.ci90?.[0])}, ${fmtPct(row.ci90?.[1])}]`,
+      fmtNum(row.t_stat, 2),
+      row.rebalances != null ? String(row.rebalances) : "—",
+    ];
+    cells.forEach((text, i) => {
+      const td = document.createElement("td");
+      if (i > 0) td.className = "num";
+      td.textContent = text;
+      tr.append(td);
+    });
+    tbody.append(tr);
+  }
+}
+
+function renderBacktestKeyFacts() {
+  const el = document.getElementById("backtest-key-facts");
+  if (!el) return;
+  const facts = keyFacts(backtestSummaryCache);
+  el.textContent = facts.start
+    ? `Start ${facts.start} · Realized beta to SPY ${fmtNum(facts.beta, 2)} · ` +
+      `Null percentile ${fmtNum(facts.nullPercentile, 0)}th · Fidelity median ρ ${fmtNum(facts.fidelityRho, 2)}`
+    : "";
+}
+
+function renderBacktestCaveats() {
+  const el = document.getElementById("backtest-caveats");
+  if (!el) return;
+  el.replaceChildren();
+  for (const caveat of backtestSummaryCache?.caveats ?? []) {
+    const li = document.createElement("li");
+    li.textContent = caveat;
+    el.append(li);
+  }
 }
 
 /**
- * Render the weekly-cadence state's current long/short target weights as a
- * holdings table, and the inception date into `#portfolio-inception`. A
- * missing/404 `state` (before the first cron run) renders the same empty
- * hint as the chart and never throws.
+ * Render the backtest summary block: the metrics table (D9, one gross/net
+ * mode at a time — default net), the key-facts line, and the caveats
+ * (rendered verbatim from `summary.caveats`). A missing/404 `summary`
+ * (before the first Saturday cron run) renders an empty table + blank
+ * key-facts line and never throws.
  *
- * @param {import("./lib/portfolio.js").PortfolioStateShape & {inception?: string} | null} state
+ * @param {import("./lib/portfolio.js").BacktestSummary | null} summary
  */
-export function renderPortfolioHoldings(state) {
-  const wrap = document.getElementById("portfolio-holdings");
-  const inceptionEl = document.getElementById("portfolio-inception");
-  if (inceptionEl) inceptionEl.textContent = state?.inception ?? "—";
-  if (!wrap) return;
-  wrap.replaceChildren();
-  const rows = holdingsRows(state);
-  if (rows.length === 0) {
+export function renderBacktestSummary(summary) {
+  backtestSummaryCache = summary;
+  renderBacktestMetricsTable();
+  renderBacktestKeyFacts();
+  renderBacktestCaveats();
+}
+
+let backtestModeToggleBound = false;
+
+/** Wire the metrics table's gross/net switch once; idempotent. Re-renders
+ *  just the metrics table (not the whole section) on click. */
+export function bindBacktestModeToggle() {
+  if (backtestModeToggleBound) return;
+  const row = document.getElementById("backtest-mode-toggle");
+  if (!row) return;
+  backtestModeToggleBound = true;
+  row.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLButtonElement)) return;
+    const mode = target.dataset.mode;
+    if (mode !== "gross" && mode !== "net") return;
+    backtestMode = mode;
+    for (const btn of row.querySelectorAll("button[data-mode]")) {
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-mode") === mode ? "true" : "false");
+    }
+    renderBacktestMetricsTable();
+  });
+}
+
+/**
+ * @param {string} title
+ * @param {Array<{ticker: string, score: number}>} rows
+ * @returns {HTMLDivElement}
+ */
+function buildRankList(title, rows) {
+  const wrap = document.createElement("div");
+  wrap.className = "backtest-rank-list";
+  const h = document.createElement("h3");
+  h.textContent = title;
+  wrap.append(h);
+  const ol = document.createElement("ol");
+  for (const row of rows) {
+    const li = document.createElement("li");
+    const ticker = document.createElement("span");
+    ticker.textContent = row.ticker;
+    const score = document.createElement("span");
+    score.className = "num";
+    score.textContent = fmtNum(row.score, 1);
+    li.append(ticker, score);
+    ol.append(li);
+  }
+  wrap.append(ol);
+  return wrap;
+}
+
+/**
+ * Render the latest best/worst 25 collapsible from the most recent
+ * `results/backtest/lists/YYYY.json` entry. A missing/empty `entry` (before
+ * the first Saturday cron run) renders the empty hint and never throws.
+ *
+ * @param {{date: string, eligible: number, best: Array<{ticker: string, score: number}>, worst: Array<{ticker: string, score: number}>} | null} entry
+ */
+export function renderBacktestLists(entry) {
+  const summaryEl = document.querySelector("#backtest-lists summary");
+  const body = document.getElementById("backtest-lists-body");
+  if (!body) return;
+  body.replaceChildren();
+  if (!entry) {
+    if (summaryEl) summaryEl.textContent = "Latest best/worst 25";
     const hint = document.createElement("p");
-    hint.className = "portfolio-holdings-empty";
-    hint.textContent = PORTFOLIO_EMPTY;
-    wrap.append(hint);
+    hint.className = "backtest-lists-empty";
+    hint.textContent = BACKTEST_EMPTY;
+    body.append(hint);
     return;
   }
-  const table = document.createElement("table");
-  const thead = document.createElement("thead");
-  const headRow = document.createElement("tr");
-  for (const label of ["Side", "Ticker", "Weight"]) {
-    const th = document.createElement("th");
-    th.textContent = label;
-    headRow.append(th);
+  if (summaryEl) {
+    summaryEl.textContent = `Latest best/worst 25 (${entry.date} · ${entry.eligible} eligible)`;
   }
-  thead.append(headRow);
-  const tbody = document.createElement("tbody");
-  for (const row of rows) {
-    const tr = document.createElement("tr");
-    const sideCell = document.createElement("td");
-    sideCell.textContent = row.side;
-    const tickerCell = document.createElement("td");
-    tickerCell.textContent = row.ticker;
-    const weightCell = document.createElement("td");
-    weightCell.className = "num";
-    weightCell.textContent = `${fmtNum(row.weight * 100, 1)}%`;
-    tr.append(sideCell, tickerCell, weightCell);
-    tbody.append(tr);
-  }
-  table.append(thead, tbody);
-  wrap.append(table);
+  body.append(
+    buildRankList("Best 25", entry.best ?? []),
+    buildRankList("Worst 25", entry.worst ?? []),
+  );
 }
 
 /**

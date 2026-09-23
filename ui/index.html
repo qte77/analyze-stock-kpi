@@ -138,32 +138,65 @@
           <dd>Trimmed to a strict 12-month trailing window before render, so the span stays consistent regardless of when the dashboard is opened.</dd>
           <dt>Long-term context (merged)</dt>
           <dd>One chart for multi-year regime context. On the 0–100 left axis: the <a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank" rel="noopener noreferrer">CNN F&amp;G</a> monthly median (history backfilled via the <a href="https://github.com/whit3rabbit/fear-greed-data" target="_blank" rel="noopener noreferrer">whit3rabbit/fear-greed-data</a> mirror) and the <strong>5s10s slope</strong> (10y − 5y curve-steepness from yfinance <code>^TNX</code>/<code>^FVX</code>, normalized onto the same 0–100 scale). On a logarithmic right axis: a <strong>broad-equity index</strong> — the <code>SPY</code> ETF's return rebased to 100, a derived series (never the S&amp;P 500 index level). All three are aggregated to a shared monthly grid.</dd>
-          <dt>Hypothetical model portfolio</dt>
-          <dd>Below: a forward-only, hypothetical long/short line — long the <code>aggregated-scores-best</code> pool, short <code>aggregated-scores-worst</code>, weighted by a joint Min Variance optimizer (<a href="https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0012-longshort-model-portfolio.md" target="_blank" rel="noopener noreferrer">ADR-0012</a>). Two lines: weekly-rebalanced and monthly-rebalanced, each a 100-based index compounded client-side from weekly return marks — no stored NAV. It is <strong>not investment advice</strong> and publishes <strong>no backtest</strong>: the line starts flat at inception and only gains meaning as data accrues. Costs, FX, and financing are not modelled.</dd>
+          <dt>Backtested long/short 25/25 (hypothetical)</dt>
+          <dd>Below: a point-in-time backtested long/short book — long the top 25 / short the bottom 25 of <strong>all base universes</strong>, ranked by a reduced point-in-time qte77 Score (<code>score_bt</code>, ADR-0013) computed only from what was knowable on each historical rank date — no forward-looking valuation or beta inputs, so no look-ahead bias. Equal-weighted 1/25 per leg (gross 200&nbsp;%, net 0), marked daily from closing prices, and rebalanced on five cadences (monthly is primary). Costed at 10&nbsp;bp one-way turnover and published both gross and net. It is <strong>hypothetical and not investment advice</strong>: survivorship and a "today's index membership" size bias are disclosed in the caveats under the chart. Extended forward every Saturday under identical rules.</dd>
         </dl>
       </div>
     </section>
 
-    <section id="portfolio-section">
-      <h2>Hypothetical long/short model portfolio</h2>
-      <div id="portfolio-chart-wrap">
-        <div class="portfolio-chart-empty">loading…</div>
+    <section id="backtest-section">
+      <h2>Backtested long/short 25/25 (hypothetical)</h2>
+      <div id="backtest-chart-wrap">
+        <div class="backtest-chart-empty">loading…</div>
         <canvas
-          id="portfolio-chart"
-          aria-label="Hypothetical long/short model portfolio: weekly and monthly rebalance index lines"
+          id="backtest-chart"
+          aria-label="Backtested long/short 25/25: primary cadence net (bold) and gross (dashed) index, plus foil cadences"
         ></canvas>
       </div>
-      <div id="portfolio-holdings" aria-label="Current weekly-rebalance target weights"></div>
-      <p class="portfolio-disclaimer">
-        Hypothetical model portfolio — not investment advice. Long the
-        <code>aggregated-scores-best</code> list, short <code>aggregated-scores-worst</code>,
-        weighted by a joint Min Variance optimizer (<a
-          href="https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0012-longshort-model-portfolio.md"
-          target="_blank"
-          rel="noopener noreferrer"
-        >ADR-0012</a>). Costs, FX, financing, and borrow are not modelled; returns are in local
-        currency; weights reset to target every week (no intra-month drift); inception
-        <span id="portfolio-inception">—</span>.
+      <div
+        id="backtest-mode-toggle"
+        class="window-chips"
+        role="group"
+        aria-label="Metrics table: gross vs net"
+      >
+        <button type="button" data-mode="net" aria-pressed="true">Net</button>
+        <button type="button" data-mode="gross" aria-pressed="false">Gross</button>
+      </div>
+      <div id="backtest-metrics-wrap" class="table-wrap">
+        <table id="backtest-metrics-table">
+          <thead>
+            <tr>
+              <th>Cadence</th>
+              <th class="num">Ann. return</th>
+              <th class="num">Ann. vol</th>
+              <th class="num">Max drawdown</th>
+              <th class="num">Ann. turnover</th>
+              <th class="num">Long leg</th>
+              <th class="num">Short leg</th>
+              <th class="num">Beta (SPY)</th>
+              <th class="num">Hit rate</th>
+              <th class="num">Mean monthly (90% CI)</th>
+              <th class="num">t-stat</th>
+              <th class="num">Rebalances</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="backtest-key-facts" class="key-facts"></p>
+      <details id="backtest-lists">
+        <summary>Latest best/worst 25</summary>
+        <div id="backtest-lists-body"></div>
+      </details>
+      <ul id="backtest-caveats" class="caveats-list"></ul>
+      <p class="backtest-disclaimer">
+        Hypothetical, point-in-time backtest — not investment advice. Long the top 25 / short
+        the bottom 25 of all base universes, ranked by a reduced point-in-time qte77 Score
+        (<code>score_bt</code>, ADR-0013) computed only from what was knowable on each
+        historical rank date. Equal-weighted 1/25 per leg (gross 200&nbsp;%, net 0), marked
+        daily from closing prices, costed at 10&nbsp;bp one-way turnover, published gross and
+        net. Returns are in local currency; survivorship and a "today's index membership" size
+        bias are disclosed in the caveats above. Extended forward every Saturday.
       </p>
     </section>
 
@@ -178,7 +211,7 @@
               <dt>federal-contractors</dt>
               <dd>Orchestrator-driven: chains <code>usaspending.gov</code> → SEC EDGAR → yfinance to assemble the DoD Top-25 + curated seed. Rebuilt weekly.</dd>
               <dt>aggregated-scores-best / -worst</dt>
-              <dd>Cross-universe ranking by the <strong>qte77 Score</strong> (<code>screener_score</code>) — the same score shown in the Score column and detail panel on every universe. Top 25 + bottom 25 of the merged ticker pool. These two lists also double as the candidate pool for the hypothetical model portfolio above (best → long leg, worst → short leg; the optimizer, not the list order, sets the weights — see the "Why these charts?" tab and <a href="https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0012-longshort-model-portfolio.md" target="_blank" rel="noopener noreferrer">ADR-0012</a>).</dd>
+              <dd>Cross-universe ranking by the <strong>qte77 Score</strong> (<code>screener_score</code>) — the same score shown in the Score column and detail panel on every universe. Top 25 + bottom 25 of the merged ticker pool, using today's fundamentals only. These are <strong>no longer</strong> the backtested long/short book's candidate pool above: the backtest ranks <strong>all base universes</strong> itself, with its own point-in-time score (<code>score_bt</code>) computed from each ticker's fundamentals as they stood on each historical rank date — see the "Why these charts?" tab.</dd>
               <dt>enhanced-kpi-screener-longs / -shorts</dt>
               <dd>Conjunctive gate over 15 long-side / 14 short-side criteria (Phases 2a+2b of #192). A ticker is in <code>longs</code> iff it passes <em>every</em> long-side gate (market cap ≥ 2B, P/E ≤ 25, PEG &lt; 1, growth &gt; 10%, beta &gt; 1, ROE / ROA / ROI &gt; 10%, current / quick &gt; 1, FCF margin &gt; 10%, profit margin &gt; 10%, buy rating, R&amp;D &gt; 5%) and in <code>shorts</code> iff it passes the inverted set (no R&amp;D gate on the short side). Counts vary — can legitimately be 0 each side when the source data is too benign or too sparse.</dd>
             </dl>
