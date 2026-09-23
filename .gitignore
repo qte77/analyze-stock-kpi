@@ -109,6 +109,10 @@ results/series/cnn_fg/*.json
 # src/sec/cik_map.py. Refreshed on If-Modified-Since hit; never committed
 # (the file is ~13 MB and changes daily).
 results/edgar/
+# Raw daily closes for the long/short model portfolio (ADR-0012 D8) — same
+# posture as results/edgar/ above. Never committed and never sent to the
+# `data` branch; only derived weekly returns + target weights are.
+results/prices/
 
 # Claude Code sandbox bwrap phantom files
 # https://github.com/anthropics/claude-code/issues/17727

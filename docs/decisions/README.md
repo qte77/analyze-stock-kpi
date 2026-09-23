@@ -17,6 +17,7 @@ numbers assigned sequentially and never reused.
 | [0009](0009-rename-package-to-analyze-stock-kpi.md) | Rename import package `src` → `analyze_stock_kpi` | Accepted 2026-06-14 |
 | [0010](0010-consolidate-js-tooling-into-ui-vite-build.md) | Consolidate JS tooling into `ui/` with a Vite build | Accepted 2026-06-19 |
 | [0011](0011-equity-macro-overlay-via-spy-indexed-returns.md) | Equity-macro overlay via SPY indexed returns | Accepted 2026-06-19 |
+| [0012](0012-longshort-model-portfolio.md) | Hypothetical long/short model portfolio over the aggregated best/worst lists | Accepted 2026-09-22 |
 
 New ADR: copy the most recent file, increment the number, fill in
 **Status / Context / Decision / Consequences**. Supersedes / amendments
