@@ -229,6 +229,12 @@ of composite-mean ranking.
 
 ### NOT a hedging primitive
 
+**Amended by [ADR-0012](0012-longshort-model-portfolio.md)** (2026-09-22): the
+best/worst lists are now also consumed as the **candidate pool** for a hypothetical
+long/short model portfolio. The limitation below still holds — the *lists* remain a
+meta-screening starting point, not a ranked long/short signal — ADR-0012's optimizer,
+not the list order, sets the actual positions and weights.
+
 Composite-mean ranking blends growth / value / quality signals. The
 top-25 by mean is a **meta-screening starting point** ("what should I
 look at first?"), not a long-candidate set. The hedging-grade

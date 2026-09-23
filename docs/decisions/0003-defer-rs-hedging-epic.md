@@ -1,6 +1,8 @@
 # ADR-0003 — Defer the v0.6.0 RS hedging epic
 
-**Status:** Accepted (2026-05-11)
+**Status:** Accepted (2026-05-11). **Superseded by [ADR-0012](0012-longshort-model-portfolio.md)
+for the portfolio-tracking scope** (2026-09-22) — the RS-signal survey below stays the
+reference for any future relative-strength work.
 
 **Defers (without abandoning):**
 [#4](https://github.com/qte77/analyze-stock-kpi/issues/4) RS hedging

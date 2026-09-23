@@ -28,6 +28,7 @@ Every external boundary carries one of three failure policies. Logged via `logge
 | yfinance `Ticker.info` (audit) | `universe_audit.classify_ticker` | wrap-degrade — `FAIL` entry | exception → `AuditEntry(classification="FAIL", note=str(exc))`; one ticker can't abort the audit sweep |
 | whit3rabbit CSV fetch (backfill) | `scripts/backfill_fear_greed_whitrabbit._fetch_csv` | fail-loud | operator-only one-shot; CSV unavailability is a configuration error (wrong SHA, network down), not a degradable state — abort + retry rather than write partial data |
 | yfinance `Ticker.history` (yield curve) | `yield_curve._fetch_close` | wrap-degrade — `None` per leg | per-leg `try/except`; both legs failing → `fetch_yield_curve_snapshot` returns `None` and the cron skips today's write rather than persisting an empty row |
+| yfinance batch `download` (long/short portfolio) | `longshort_portfolio.fetch_closes` | wrap-degrade — `{}` on failure | network / shape error → returns `{}`; the cron skips today's mark (no state update, no return row) rather than aborting (ADR-0012) |
 | Filesystem write (snapshots) | `__main__._persist_snapshots` | fail-loud | disk full / permission denied → abort |
 | Filesystem write (CNN cache) | `sentiment._write_year` | fail-loud | same rationale |
 | Filesystem read (universe preset) | `universe.resolve_universe` (preset mode) | wrap-degrade — empty preset returns `[]` | orchestrator-driven case (#192 Phase 2a): the longshort presets start as 0-byte placeholders; the conjunctive gate can also yield zero candidates legitimately. Missing-file path still fail-loud — config error |
@@ -44,7 +45,8 @@ src/
 ├── config.py                         AppSettings(BaseSettings) — every URL/path/timeout/HTTP-shape constant; env-overridable via SSK_*
 ├── domain/
 │   ├── universe.py                   resolve_universe(args) -> list[ticker]; presets in src/analyze_stock_kpi/assets/universes/*.txt
-│   └── composite_scores.py           quality/dividend/growth/big_call/aaqs/hgi/screener 0-100 proxies; `compute_scores(snap) -> CompositeScores`
+│   ├── composite_scores.py           quality/dividend/growth/big_call/aaqs/hgi/screener 0-100 proxies; `compute_scores(snap) -> CompositeScores`
+│   └── portfolio_optimizer.py        shrunk_covariance/min_variance_longshort/ex_ante_vol — joint dollar-neutral Min Variance (scipy SLSQP; optional `portfolio` extra; ADR-0012 D4)
 ├── data_sources/
 │   ├── fundamentals.py               fetch_fundamentals / fetch_price_history / fetch_universe_fundamentals — yfinance
 │   ├── sentiment.py                  fetch_fear_greed() -> FearGreedSnapshot; `python -m analyze_stock_kpi.data_sources.sentiment` merges into per-year files results/series/cnn_fg/YYYY.json
@@ -59,6 +61,7 @@ src/
 │   ├── aggregated_scores_best_and_worst.py  build_universe(snapshots_by_universe, snapshot_dates_by_universe, *, top_n=25, ...) -> tuple[list[str], list[str], list[AuditRow]]; cross-universe composite-mean ranking, returns (best, worst, audit) — paired presets `aggregated-scores-best` + `aggregated-scores-worst` (#184; NOT a hedging primitive, see ADR-0005 amendment)
 │   ├── enhanced_kpi_screener_longshort.py   build_universe(snapshots_by_universe, snapshot_dates_by_universe, *, min_criteria=10, ...) -> tuple[list[str], list[str], list[AuditRow]]; 15 long-side + 14 short-side conjunctive gates (a ticker lands in `longs` iff it passes ALL long gates, in `shorts` iff it passes ALL inverted short gates, otherwise neither). Phases 2a + 2b of #192; criterion 15 (tech rating) still deferred behind #21. Paired presets `enhanced-kpi-screener-longs` + `enhanced-kpi-screener-shorts`. Long ∩ short empty by construction. Declarative `_NUMERIC_GATES` table keeps `_evaluate` cognitive complexity at 5
 │   ├── federal_contractors.py        build_universe(*, fy=None, top_n=100) -> tuple[list[str], list[AuditRow]]; chains usaspending → EDGAR → yfinance
+│   ├── longshort_portfolio.py        load_pool/fetch_closes/step/main — hypothetical dollar-neutral long/short model portfolio (ADR-0012); weekly + monthly cadence over the aggregated-scores-best/-worst pool, Min Variance via domain/portfolio_optimizer.py (optional `portfolio` extra)
 │   └── universe_audit.py             classify_ticker / audit_universes -> UniverseAuditReport; operator triage for stale-US-ticker rot (#168)
 ├── assets/
 │   └── universes/                    preset *.txt ticker lists (one per universe name)
