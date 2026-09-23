@@ -598,6 +598,59 @@ def test_compute_sortino_empty_series_returns_none() -> None:
     assert _compute_sortino(pd.Series([], dtype=float)) is None
 
 
+def test_windowed_sortinos_twelve_year_series() -> None:
+    """A ~12y series sets 1y and 10y; 20y/30y need more history than exists.
+
+    The 1y value must exactly match ``_compute_sortino`` on the manual
+    last-year slice — that's the field composite scores still read, so
+    windowing must never change it (D1: the new windows are informational
+    only).
+    """
+    import pandas as pd
+
+    from analyze_stock_kpi.data_sources.fundamentals import _compute_sortino, _windowed_sortinos
+
+    idx = pd.bdate_range(end="2024-01-01", periods=12 * 252)
+    prices = [100.0]
+    for i in range(len(idx) - 1):
+        r = -0.004 if i % 5 == 0 else 0.001
+        prices.append(prices[-1] * (1 + r))
+    close = pd.Series(prices, index=idx)
+
+    result = _windowed_sortinos(close)
+
+    as_of = close.index[-1]
+    one_year = close[close.index >= as_of - pd.DateOffset(years=1)]
+    assert result["sortino_ratio"] == _compute_sortino(one_year)
+    assert result["sortino_10y"] is not None
+    assert result["sortino_20y"] is None
+    assert result["sortino_30y"] is None
+
+
+def test_windowed_sortinos_handles_leading_nans() -> None:
+    """Multi-ticker downloads carry leading NaNs for shorter-history tickers.
+
+    ``_windowed_sortinos`` must ``dropna()`` before computing ``as_of`` and
+    the window boundaries, so padding the front with NaN rows must not
+    change the result.
+    """
+    import pandas as pd
+
+    from analyze_stock_kpi.data_sources.fundamentals import _windowed_sortinos
+
+    idx = pd.bdate_range(end="2024-01-01", periods=12 * 252)
+    prices = [100.0]
+    for i in range(len(idx) - 1):
+        r = -0.004 if i % 5 == 0 else 0.001
+        prices.append(prices[-1] * (1 + r))
+    close = pd.Series(prices, index=idx)
+
+    padded_index = pd.bdate_range(end=idx[0] - pd.Timedelta(days=1), periods=5).append(idx)
+    padded = pd.Series([float("nan")] * 5 + prices, index=padded_index)
+
+    assert _windowed_sortinos(padded) == _windowed_sortinos(close)
+
+
 def test_snapshot_handles_sparse_info() -> None:
     info = load_fundamentals_fixture("GC=F")
     snap = FundamentalsSnapshot.model_validate(info)
@@ -659,10 +712,12 @@ def test_fetch_universe_continues_on_error(caplog: pytest.LogCaptureFixture) -> 
 def test_fetch_universe_fundamentals_attaches_sortino_via_batch() -> None:
     """Batched ``yf.download`` at universe level feeds per-ticker Sortino.
 
-    The orchestrator calls ``yf.download(tickers, period="1y", ...)``
-    once before the per-ticker loop. Each snapshot's ``sortino_ratio``
-    is attached via ``model_copy`` from the matching column of the
-    batched close-price DataFrame.
+    The orchestrator calls ``yf.download(tickers, period="max", ...)`` once
+    before the per-ticker loop. Each snapshot's Sortino fields are attached
+    via ``model_copy`` from the matching column of the batched close-price
+    DataFrame. Only ~31 days of fixture history means the 10y/20y/30y
+    coverage gate (D2) leaves those windows ``None`` — only ``sortino_ratio``
+    (1y) is populated here.
     """
     import pandas as pd
 
@@ -672,11 +727,13 @@ def test_fetch_universe_fundamentals_attaches_sortino_via_batch() -> None:
         prices_mixed.append(prices_mixed[-1] * (1 + r))
     prices_uptrend = [100.0 * (1.001**i) for i in range(31)]
 
+    idx = pd.bdate_range(end="2024-01-01", periods=31)
     close_df = pd.DataFrame(
         {
             ("Close", "AAPL"): prices_mixed,
             ("Close", "MSFT"): prices_uptrend,
-        }
+        },
+        index=idx,
     )
     close_df.columns = pd.MultiIndex.from_tuples(close_df.columns)
 
@@ -701,16 +758,17 @@ def test_fetch_universe_fundamentals_attaches_sortino_via_batch() -> None:
     mock_dl.assert_called_once()
     call_args = mock_dl.call_args
     assert call_args.args[0] == ["AAPL", "MSFT"]
-    assert call_args.kwargs.get("period") == "1y"
+    assert call_args.kwargs.get("period") == "max"
 
     by_symbol = {s.symbol: s for s in snapshots}
     assert by_symbol["AAPL"].sortino_ratio == pytest.approx(5.51, rel=1e-2)
+    assert by_symbol["AAPL"].sortino_10y is None
     # MSFT had only positive returns -> downside_dev = 0 -> Sortino is None
     assert by_symbol["MSFT"].sortino_ratio is None
 
 
 def test_fetch_universe_fundamentals_batch_failure_gives_none_sortino() -> None:
-    """``yf.download`` raising -> all snapshots get ``sortino_ratio=None``."""
+    """``yf.download`` raising -> all snapshots get every Sortino field ``None``."""
 
     class _FakeTicker:
         info: ClassVar[dict[str, object]] = {
@@ -730,6 +788,9 @@ def test_fetch_universe_fundamentals_batch_failure_gives_none_sortino() -> None:
 
     assert len(snapshots) == 1
     assert snapshots[0].sortino_ratio is None
+    assert snapshots[0].sortino_10y is None
+    assert snapshots[0].sortino_20y is None
+    assert snapshots[0].sortino_30y is None
 
 
 @pytest.mark.network
