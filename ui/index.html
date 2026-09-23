@@ -144,26 +144,59 @@
       </div>
     </section>
 
-    <section id="portfolio-section">
-      <h2>Hypothetical long/short model portfolio</h2>
-      <div id="portfolio-chart-wrap">
-        <div class="portfolio-chart-empty">loading…</div>
+    <section id="backtest-section">
+      <h2>Backtested long/short 25/25 (hypothetical)</h2>
+      <div id="backtest-chart-wrap">
+        <div class="backtest-chart-empty">loading…</div>
         <canvas
-          id="portfolio-chart"
-          aria-label="Hypothetical long/short model portfolio: weekly and monthly rebalance index lines"
+          id="backtest-chart"
+          aria-label="Backtested long/short 25/25: primary cadence net (bold) and gross (dashed) index, plus foil cadences"
         ></canvas>
       </div>
-      <div id="portfolio-holdings" aria-label="Current weekly-rebalance target weights"></div>
-      <p class="portfolio-disclaimer">
-        Hypothetical model portfolio — not investment advice. Long the
-        <code>aggregated-scores-best</code> list, short <code>aggregated-scores-worst</code>,
-        weighted by a joint Min Variance optimizer (<a
-          href="https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0012-longshort-model-portfolio.md"
-          target="_blank"
-          rel="noopener noreferrer"
-        >ADR-0012</a>). Costs, FX, financing, and borrow are not modelled; returns are in local
-        currency; weights reset to target every week (no intra-month drift); inception
-        <span id="portfolio-inception">—</span>.
+      <div
+        id="backtest-mode-toggle"
+        class="window-chips"
+        role="group"
+        aria-label="Metrics table: gross vs net"
+      >
+        <button type="button" data-mode="net" aria-pressed="true">Net</button>
+        <button type="button" data-mode="gross" aria-pressed="false">Gross</button>
+      </div>
+      <div id="backtest-metrics-wrap" class="table-wrap">
+        <table id="backtest-metrics-table">
+          <thead>
+            <tr>
+              <th>Cadence</th>
+              <th class="num">Ann. return</th>
+              <th class="num">Ann. vol</th>
+              <th class="num">Max drawdown</th>
+              <th class="num">Ann. turnover</th>
+              <th class="num">Long leg</th>
+              <th class="num">Short leg</th>
+              <th class="num">Beta (SPY)</th>
+              <th class="num">Hit rate</th>
+              <th class="num">Mean monthly (90% CI)</th>
+              <th class="num">t-stat</th>
+              <th class="num">Rebalances</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="backtest-key-facts" class="key-facts"></p>
+      <details id="backtest-lists">
+        <summary>Latest best/worst 25</summary>
+        <div id="backtest-lists-body"></div>
+      </details>
+      <ul id="backtest-caveats" class="caveats-list"></ul>
+      <p class="backtest-disclaimer">
+        Hypothetical, point-in-time backtest — not investment advice. Long the top 25 / short
+        the bottom 25 of all base universes, ranked by a reduced point-in-time qte77 Score
+        (<code>score_bt</code>, ADR-0013) computed only from what was knowable on each
+        historical rank date. Equal-weighted 1/25 per leg (gross 200&nbsp;%, net 0), marked
+        daily from closing prices, costed at 10&nbsp;bp one-way turnover, published gross and
+        net. Returns are in local currency; survivorship and a "today's index membership" size
+        bias are disclosed in the caveats above. Extended forward every Saturday.
       </p>
     </section>
 

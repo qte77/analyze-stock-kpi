@@ -24,8 +24,10 @@ import {
   renderFearGreedHeader,
   renderFearGreedChart,
   renderYieldCurveHeader,
-  renderPortfolioChart,
-  renderPortfolioHoldings,
+  renderBacktestChart,
+  renderBacktestSummary,
+  renderBacktestLists,
+  bindBacktestModeToggle,
   bindLongTermTabs,
   bindWindowChips,
   bindThemeObserver,
@@ -153,19 +155,35 @@ const loadYieldCurveYears = () =>
 const loadEquitySpyYears = () =>
   loadYearsFromBranch(DATA_BASE_URL, "results/series/equity_spy", "date");
 
-/** @type {() => Promise<Array<{date: string, ret_long: number, ret_short: number, ret_ls: number}>>} */
-const loadPortfolioWeeklySeries = () =>
-  loadYearsFromBranch(DATA_BASE_URL, "results/series/portfolio_weekly", "date");
+/** The backtest's rank grid starts ≈ 2021–22 (D6) — no point fetching
+ *  earlier per-year files that can only 404. */
+const BACKTEST_START_YEAR = 2021;
+const BACKTEST_CADENCES = ["monthly", "quarterly_filings", "monthly_buffer", "weekly", "buy_hold"];
 
-/** @type {() => Promise<Array<{date: string, ret_long: number, ret_short: number, ret_ls: number}>>} */
-const loadPortfolioMonthlySeries = () =>
-  loadYearsFromBranch(DATA_BASE_URL, "results/series/portfolio_monthly", "date");
+/** @type {(cadence: string) => Promise<import("./lib/portfolio.js").BacktestReturnRow[]>} */
+const loadBacktestSeries = (cadence) =>
+  loadYearsFromBranch(
+    DATA_BASE_URL,
+    `results/series/backtest/${cadence}`,
+    "date",
+    BACKTEST_START_YEAR,
+  );
 
-/** A 404 before the first cron run is expected (ADR-0012) — resolve to
- *  `null` rather than letting the rejection propagate. */
-const loadPortfolioWeeklyState = async () => {
+/** Fetch every cadence's series in parallel and key the results by cadence. */
+const loadBacktestSeriesByCadence = async () => {
+  const results = await Promise.all(BACKTEST_CADENCES.map((c) => loadBacktestSeries(c)));
+  return Object.fromEntries(BACKTEST_CADENCES.map((c, i) => [c, results[i]]));
+};
+
+/** @type {() => Promise<Array<{date: string, eligible: number, best: Array<{ticker: string, score: number}>, worst: Array<{ticker: string, score: number}>}>>} */
+const loadBacktestLists = () =>
+  loadYearsFromBranch(DATA_BASE_URL, "results/backtest/lists", "date", BACKTEST_START_YEAR);
+
+/** A 404 before the first Saturday cron run is expected (ADR-0013) —
+ *  resolve to `null` rather than letting the rejection propagate. */
+const loadBacktestSummary = async () => {
   try {
-    return await fetchJson(`${DATA_BASE_URL}/results/portfolio/weekly/state.json`);
+    return await fetchJson(`${DATA_BASE_URL}/results/backtest/summary.json`);
   } catch {
     return null;
   }
@@ -587,21 +605,30 @@ async function init() {
   await loadActiveUniverse();
   applyDateFromUrl(parsed.date, dateSelector);
 
-  const [fgEntries, ycEntries, spyEntries, plWeekly, plMonthly, plState] = await Promise.all([
+  const [
+    fgEntries,
+    ycEntries,
+    spyEntries,
+    backtestSeriesByCadence,
+    backtestLists,
+    backtestSummary,
+  ] = await Promise.all([
     loadFearGreedYears(),
     loadYieldCurveYears(),
     loadEquitySpyYears(),
-    loadPortfolioWeeklySeries(),
-    loadPortfolioMonthlySeries(),
-    loadPortfolioWeeklyState(),
+    loadBacktestSeriesByCadence(),
+    loadBacktestLists(),
+    loadBacktestSummary(),
   ]);
   renderFearGreedHeader(fgEntries);
   renderFearGreedChart(fgEntries);
   renderYieldCurveHeader(ycEntries);
   bindLongTermTabs(fgEntries, ycEntries, spyEntries);
   bindWindowChips();
-  renderPortfolioChart(plWeekly, plMonthly);
-  renderPortfolioHoldings(plState);
+  renderBacktestChart(backtestSeriesByCadence, backtestSummary?.primary);
+  renderBacktestSummary(backtestSummary);
+  renderBacktestLists(backtestLists.length ? backtestLists[backtestLists.length - 1] : null);
+  bindBacktestModeToggle();
   bindThemeObserver();
 }
 
