@@ -80,7 +80,9 @@ def _score_columns(snap: FundamentalsSnapshot) -> list[str]:
     ]
 
 
-def _summary_row(snap: FundamentalsSnapshot, show_scores: bool) -> list[str]:
+def _summary_row(
+    snap: FundamentalsSnapshot, show_scores: bool, show_custom_sortino: bool = False
+) -> list[str]:
     scores = snap.composite_scores or CompositeScores()
     row = [
         snap.symbol,
@@ -98,6 +100,8 @@ def _summary_row(snap: FundamentalsSnapshot, show_scores: bool) -> list[str]:
         _format_score(scores.screener_score),
         _format_days_since(snap.sec_last_10q_date),
     ]
+    if show_custom_sortino:
+        row.append(_format_ratio(snap.sortino_custom))
     if show_scores:
         row += _score_columns(snap)
     return row
@@ -108,12 +112,14 @@ def _print_summary_table(
     snapshots: list[FundamentalsSnapshot],
     *,
     show_scores: bool = False,
+    show_custom_sortino: bool = False,
 ) -> None:
     """Mirrors the demo dashboard's 13-column default view (`ui/`).
 
     With ``--show-scores`` (env ``SSK_SHOW_SCORES=1``) three legacy
     composite columns (Quality / Dividend / Growth) are appended for
-    backwards compatibility.
+    backwards compatibility. With ``--sortino-from`` set, a "Sortino
+    (custom)" column is appended showing ``sortino_custom``.
     """
     table = Table(title="Fundamentals (equities & ETFs)")
     table.add_column("Ticker", style="bold")
@@ -130,6 +136,8 @@ def _print_summary_table(
     table.add_column("Sortino", justify="right")
     table.add_column("Score", justify="right")
     table.add_column("Days 10-Q", justify="right")
+    if show_custom_sortino:
+        table.add_column("Sortino (custom)", justify="right")
     if show_scores:
         table.add_column("Quality", justify="right")
         table.add_column("Div", justify="right")
@@ -138,7 +146,7 @@ def _print_summary_table(
     for snap in snapshots:
         if snap.quote_type not in _TABLE_QUOTE_TYPES:
             continue
-        table.add_row(*_summary_row(snap, show_scores))
+        table.add_row(*_summary_row(snap, show_scores, show_custom_sortino))
     console.print(table)
 
 
@@ -182,7 +190,9 @@ def main() -> None:
         logger.warning("Failed to fetch CNN Fear & Greed: %s", exc)
     tickers = resolve_universe(args)
     console.print(f"[green]analyze-stock-kpi[/green] resolving [bold]{len(tickers)}[/bold] tickers")
-    raw_snapshots = fetch_universe_fundamentals(tickers)
+    raw_snapshots = fetch_universe_fundamentals(
+        tickers, sortino_from=args.sortino_from, sortino_to=args.sortino_to
+    )
     snapshots = [
         snap.model_copy(
             update={
@@ -193,7 +203,12 @@ def main() -> None:
         )
         for snap in raw_snapshots
     ]
-    _print_summary_table(console, snapshots, show_scores=args.show_scores)
+    _print_summary_table(
+        console,
+        snapshots,
+        show_scores=args.show_scores,
+        show_custom_sortino=args.sortino_from is not None,
+    )
     out_path = _persist_snapshots(snapshots)
     console.print(f"[green]Wrote[/green] {out_path}")
 

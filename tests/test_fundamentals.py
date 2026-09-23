@@ -598,6 +598,188 @@ def test_compute_sortino_empty_series_returns_none() -> None:
     assert _compute_sortino(pd.Series([], dtype=float)) is None
 
 
+def test_windowed_sortinos_twelve_year_series() -> None:
+    """A ~12y series sets 1y and 10y; 20y/30y need more history than exists.
+
+    The 1y value must exactly match ``_compute_sortino`` on the manual
+    last-year slice — that's the field composite scores still read, so
+    windowing must never change it (D1: the new windows are informational
+    only).
+    """
+    import pandas as pd
+
+    from analyze_stock_kpi.data_sources.fundamentals import _compute_sortino, _windowed_sortinos
+
+    idx = pd.bdate_range(end="2024-01-01", periods=12 * 252)
+    prices = [100.0]
+    for i in range(len(idx) - 1):
+        r = -0.004 if i % 5 == 0 else 0.001
+        prices.append(prices[-1] * (1 + r))
+    close = pd.Series(prices, index=idx)
+
+    result = _windowed_sortinos(close)
+
+    as_of = close.index[-1]
+    one_year = close[close.index >= as_of - pd.DateOffset(years=1)]
+    assert result["sortino_ratio"] == _compute_sortino(one_year)
+    assert result["sortino_3y"] is not None
+    assert result["sortino_5y"] is not None
+    assert result["sortino_10y"] is not None
+    assert result["sortino_20y"] is None
+    assert result["sortino_30y"] is None
+
+
+def test_windowed_sortinos_four_year_series_sets_3y_not_5y() -> None:
+    """D2 boundary case: a ~4y series covers the 3y window but not the 5y one."""
+    import pandas as pd
+
+    from analyze_stock_kpi.data_sources.fundamentals import _windowed_sortinos
+
+    idx = pd.bdate_range(end="2024-01-01", periods=4 * 252)
+    prices = [100.0]
+    for i in range(len(idx) - 1):
+        r = -0.004 if i % 5 == 0 else 0.001
+        prices.append(prices[-1] * (1 + r))
+    close = pd.Series(prices, index=idx)
+
+    result = _windowed_sortinos(close)
+    assert result["sortino_3y"] is not None
+    assert result["sortino_5y"] is None
+
+
+def test_windowed_sortinos_handles_leading_nans() -> None:
+    """Multi-ticker downloads carry leading NaNs for shorter-history tickers.
+
+    ``_windowed_sortinos`` must ``dropna()`` before computing ``as_of`` and
+    the window boundaries, so padding the front with NaN rows must not
+    change the result.
+    """
+    import pandas as pd
+
+    from analyze_stock_kpi.data_sources.fundamentals import _windowed_sortinos
+
+    idx = pd.bdate_range(end="2024-01-01", periods=12 * 252)
+    prices = [100.0]
+    for i in range(len(idx) - 1):
+        r = -0.004 if i % 5 == 0 else 0.001
+        prices.append(prices[-1] * (1 + r))
+    close = pd.Series(prices, index=idx)
+
+    padded_index = pd.bdate_range(end=idx[0] - pd.Timedelta(days=1), periods=5).append(idx)
+    padded = pd.Series([float("nan")] * 5 + prices, index=padded_index)
+
+    assert _windowed_sortinos(padded) == _windowed_sortinos(close)
+
+
+def test_custom_sortino_matches_compute_sortino_on_manual_slice() -> None:
+    """``_custom_sortino`` over an explicit ``[from, to]`` equals a manual slice."""
+    import pandas as pd
+
+    from analyze_stock_kpi.data_sources.fundamentals import _compute_sortino, _custom_sortino
+
+    idx = pd.bdate_range(end="2024-01-01", periods=8 * 252)
+    prices = [100.0]
+    for i in range(len(idx) - 1):
+        r = -0.004 if i % 5 == 0 else 0.001
+        prices.append(prices[-1] * (1 + r))
+    close = pd.Series(prices, index=idx)
+
+    custom_from = date(2018, 1, 1)
+    custom_to = date(2019, 12, 31)
+    manual = close[
+        (close.index >= pd.Timestamp(custom_from)) & (close.index <= pd.Timestamp(custom_to))
+    ]
+
+    result = _custom_sortino(close, custom_from, custom_to)
+    assert result["sortino_custom"] == _compute_sortino(manual)
+    assert result["sortino_custom_from"] == custom_from
+    assert result["sortino_custom_to"] == custom_to
+
+
+def test_custom_sortino_none_when_ticker_starts_after_from() -> None:
+    """``custom_from`` predating the ticker's history (+30d grace) -> ``None``.
+
+    Also covers the "``custom_to`` defaults to the ticker's latest close"
+    behaviour: with no explicit ``to``, ``sortino_custom_to`` must record
+    the series' actual last date.
+    """
+    import pandas as pd
+
+    from analyze_stock_kpi.data_sources.fundamentals import _custom_sortino
+
+    idx = pd.bdate_range(end="2024-01-01", periods=3 * 252)
+    prices = [100.0]
+    for i in range(len(idx) - 1):
+        r = -0.004 if i % 5 == 0 else 0.001
+        prices.append(prices[-1] * (1 + r))
+    close = pd.Series(prices, index=idx)
+
+    custom_from = date(2015, 1, 1)
+    result = _custom_sortino(close, custom_from, None)
+
+    assert result["sortino_custom"] is None
+    assert result["sortino_custom_from"] == custom_from
+    assert result["sortino_custom_to"] == close.index[-1].date()
+
+
+def test_fetch_universe_fundamentals_computes_custom_sortino_when_flag_set() -> None:
+    """``sortino_from``/``sortino_to`` kwargs wire ``_custom_sortino`` per ticker."""
+    import pandas as pd
+
+    idx = pd.bdate_range(end="2024-01-01", periods=3 * 252)
+    prices = [100.0]
+    for i in range(len(idx) - 1):
+        r = -0.004 if i % 5 == 0 else 0.001
+        prices.append(prices[-1] * (1 + r))
+    # Flat columns: real single-ticker `yf.download` output (unlike the
+    # multi-index shape used for the 2-ticker fixture elsewhere in this file).
+    close_df = pd.DataFrame({"Close": prices}, index=idx)
+
+    class _FakeTicker:
+        info: ClassVar[dict[str, object]] = {
+            "symbol": "AAPL",
+            "shortName": "Apple",
+            "quoteType": "EQUITY",
+        }
+
+    custom_from = idx[100].date()
+    with (
+        patch("analyze_stock_kpi.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()),
+        patch("analyze_stock_kpi.data_sources.fundamentals.yf.download", return_value=close_df),
+    ):
+        snapshots = fetch_universe_fundamentals(
+            ["AAPL"], show_progress=False, sortino_from=custom_from
+        )
+
+    assert snapshots[0].sortino_custom is not None
+    assert snapshots[0].sortino_custom_from == custom_from
+    assert snapshots[0].sortino_custom_to == idx[-1].date()
+
+
+def test_fetch_universe_fundamentals_custom_sortino_none_without_flag() -> None:
+    """Without ``sortino_from``, the three custom fields stay ``None``."""
+
+    class _FakeTicker:
+        info: ClassVar[dict[str, object]] = {
+            "symbol": "AAPL",
+            "shortName": "Apple",
+            "quoteType": "EQUITY",
+        }
+
+    with (
+        patch("analyze_stock_kpi.data_sources.fundamentals.yf.Ticker", return_value=_FakeTicker()),
+        patch(
+            "analyze_stock_kpi.data_sources.fundamentals.yf.download",
+            side_effect=RuntimeError("batch skipped in unit test"),
+        ),
+    ):
+        snapshots = fetch_universe_fundamentals(["AAPL"], show_progress=False)
+
+    assert snapshots[0].sortino_custom is None
+    assert snapshots[0].sortino_custom_from is None
+    assert snapshots[0].sortino_custom_to is None
+
+
 def test_snapshot_handles_sparse_info() -> None:
     info = load_fundamentals_fixture("GC=F")
     snap = FundamentalsSnapshot.model_validate(info)
@@ -656,13 +838,40 @@ def test_fetch_universe_continues_on_error(caplog: pytest.LogCaptureFixture) -> 
     assert any("BROKEN" in rec.message for rec in caplog.records)
 
 
+def test_batch_close_prices_handles_multiindex_columns_for_single_ticker() -> None:
+    """Live ``yf.download`` returns multi-index columns even for one ticker.
+
+    Discovered via the live ``--sortino-from`` sanity check: a single-symbol
+    ``yf.download`` call no longer returns flat columns on current yfinance,
+    so branching on ``len(tickers) == 1`` (rather than the DataFrame's
+    actual column shape) fed a one-column DataFrame into ``_compute_sortino``
+    instead of a ``Series``, crashing every single-ticker run.
+    """
+    import pandas as pd
+
+    from analyze_stock_kpi.data_sources.fundamentals import _batch_close_prices
+
+    idx = pd.bdate_range(end="2024-01-01", periods=40)
+    close_df = pd.DataFrame({("Close", "AAPL"): list(range(40))}, index=idx)
+    close_df.columns = pd.MultiIndex.from_tuples(close_df.columns)
+
+    with patch("analyze_stock_kpi.data_sources.fundamentals.yf.download", return_value=close_df):
+        result = _batch_close_prices(["AAPL"])
+
+    assert result is not None
+    assert isinstance(result["AAPL"], pd.Series)
+    assert len(result["AAPL"]) == 40
+
+
 def test_fetch_universe_fundamentals_attaches_sortino_via_batch() -> None:
     """Batched ``yf.download`` at universe level feeds per-ticker Sortino.
 
-    The orchestrator calls ``yf.download(tickers, period="1y", ...)``
-    once before the per-ticker loop. Each snapshot's ``sortino_ratio``
-    is attached via ``model_copy`` from the matching column of the
-    batched close-price DataFrame.
+    The orchestrator calls ``yf.download(tickers, period="max", ...)`` once
+    before the per-ticker loop. Each snapshot's Sortino fields are attached
+    via ``model_copy`` from the matching column of the batched close-price
+    DataFrame. Only ~31 days of fixture history means the 10y/20y/30y
+    coverage gate (D2) leaves those windows ``None`` — only ``sortino_ratio``
+    (1y) is populated here.
     """
     import pandas as pd
 
@@ -672,11 +881,13 @@ def test_fetch_universe_fundamentals_attaches_sortino_via_batch() -> None:
         prices_mixed.append(prices_mixed[-1] * (1 + r))
     prices_uptrend = [100.0 * (1.001**i) for i in range(31)]
 
+    idx = pd.bdate_range(end="2024-01-01", periods=31)
     close_df = pd.DataFrame(
         {
             ("Close", "AAPL"): prices_mixed,
             ("Close", "MSFT"): prices_uptrend,
-        }
+        },
+        index=idx,
     )
     close_df.columns = pd.MultiIndex.from_tuples(close_df.columns)
 
@@ -701,16 +912,17 @@ def test_fetch_universe_fundamentals_attaches_sortino_via_batch() -> None:
     mock_dl.assert_called_once()
     call_args = mock_dl.call_args
     assert call_args.args[0] == ["AAPL", "MSFT"]
-    assert call_args.kwargs.get("period") == "1y"
+    assert call_args.kwargs.get("period") == "max"
 
     by_symbol = {s.symbol: s for s in snapshots}
     assert by_symbol["AAPL"].sortino_ratio == pytest.approx(5.51, rel=1e-2)
+    assert by_symbol["AAPL"].sortino_10y is None
     # MSFT had only positive returns -> downside_dev = 0 -> Sortino is None
     assert by_symbol["MSFT"].sortino_ratio is None
 
 
 def test_fetch_universe_fundamentals_batch_failure_gives_none_sortino() -> None:
-    """``yf.download`` raising -> all snapshots get ``sortino_ratio=None``."""
+    """``yf.download`` raising -> all snapshots get every Sortino field ``None``."""
 
     class _FakeTicker:
         info: ClassVar[dict[str, object]] = {
@@ -730,6 +942,9 @@ def test_fetch_universe_fundamentals_batch_failure_gives_none_sortino() -> None:
 
     assert len(snapshots) == 1
     assert snapshots[0].sortino_ratio is None
+    assert snapshots[0].sortino_10y is None
+    assert snapshots[0].sortino_20y is None
+    assert snapshots[0].sortino_30y is None
 
 
 @pytest.mark.network

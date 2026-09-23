@@ -7,6 +7,7 @@ import { logRightAxis, scoreYAxis, themedXAxis } from "./lib/chart_axes.js";
 import { buildCombinedSeries } from "./lib/combined.js";
 import { fetchJson } from "./lib/fetch.js";
 import { fmtNum } from "./lib/format.js";
+import { compound, holdingsRows } from "./lib/portfolio.js";
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
 import { buildTimeSeries } from "./lib/timeseries.js";
 import { filterByWindow, findClosestScore } from "./lib/window.js";
@@ -685,6 +686,126 @@ export function renderYieldCurveHeader(entries) {
   const tnx = latest.tnx_yield != null ? `${latest.tnx_yield.toFixed(2)} %` : "—";
   const fvx = latest.fvx_yield != null ? `${latest.fvx_yield.toFixed(2)} %` : "—";
   legs.textContent = `10y ${tnx} − 5y ${fvx} · ${latest.date}`;
+}
+
+/** @type {any} */
+let portfolioChart = null;
+
+const PORTFOLIO_EMPTY = "Tracking starts after the first run";
+
+function renderPortfolioChartEmptyHint(/** @type {boolean} */ show) {
+  toggleHistoryHint("portfolio-chart-wrap", "portfolio-chart-empty", show, PORTFOLIO_EMPTY);
+}
+
+/**
+ * Render the hypothetical long/short model portfolio chart (ADR-0012): the
+ * weekly- and monthly-cadence L/S index lines, each compounded client-side
+ * from `ret_ls` (D11 — no stored NAV). A 404 before the first cron run
+ * (both `weeklyRows`/`monthlyRows` empty) shows the empty hint and never
+ * throws — the caller passes `[]` for a failed/missing fetch.
+ *
+ * @param {Array<{date: string, ret_ls: number}>} weeklyRows
+ * @param {Array<{date: string, ret_ls: number}>} monthlyRows
+ */
+export function renderPortfolioChart(weeklyRows, monthlyRows) {
+  const canvas = /** @type {HTMLCanvasElement | null} */ (
+    document.getElementById("portfolio-chart")
+  );
+  if (!canvas) return;
+  destroyChart(portfolioChart);
+  portfolioChart = null;
+  const weekly = compound(weeklyRows);
+  const monthly = compound(monthlyRows);
+  const hasData = weekly.dates.length > 0 || monthly.dates.length > 0;
+  renderPortfolioChartEmptyHint(!hasData);
+  if (!hasData || typeof Chart === "undefined") return;
+  const labels = weekly.dates.length >= monthly.dates.length ? weekly.dates : monthly.dates;
+  portfolioChart = new Chart(canvas, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "Weekly rebalance (L/S)",
+          data: weekly.index,
+          borderColor: () => cssVar("--data-alt", "#587818"),
+          backgroundColor: () => `${cssVar("--data-alt", "#587818")}14`,
+          fill: false,
+          pointRadius: 0,
+          borderWidth: 1.5,
+          tension: 0.15,
+        },
+        {
+          label: "Monthly rebalance (L/S)",
+          data: monthly.index,
+          borderColor: () => cssVar("--primary", "#7a6010"),
+          backgroundColor: () => `${cssVar("--primary", "#7a6010")}14`,
+          fill: false,
+          pointRadius: 0,
+          borderWidth: 1.5,
+          tension: 0.15,
+          borderDash: [4, 3],
+        },
+      ],
+    },
+    options: {
+      ...BASE_ANIMATED_OPTS,
+      plugins: { legend: { display: true, position: "bottom" } },
+      scales: {
+        y: { ticks: { color: () => cssVar("--text", "#2c2818") } },
+        x: themedXAxis(cssVar),
+      },
+    },
+  });
+  liveCharts.add(portfolioChart);
+}
+
+/**
+ * Render the weekly-cadence state's current long/short target weights as a
+ * holdings table, and the inception date into `#portfolio-inception`. A
+ * missing/404 `state` (before the first cron run) renders the same empty
+ * hint as the chart and never throws.
+ *
+ * @param {import("./lib/portfolio.js").PortfolioStateShape & {inception?: string} | null} state
+ */
+export function renderPortfolioHoldings(state) {
+  const wrap = document.getElementById("portfolio-holdings");
+  const inceptionEl = document.getElementById("portfolio-inception");
+  if (inceptionEl) inceptionEl.textContent = state?.inception ?? "—";
+  if (!wrap) return;
+  wrap.replaceChildren();
+  const rows = holdingsRows(state);
+  if (rows.length === 0) {
+    const hint = document.createElement("p");
+    hint.className = "portfolio-holdings-empty";
+    hint.textContent = PORTFOLIO_EMPTY;
+    wrap.append(hint);
+    return;
+  }
+  const table = document.createElement("table");
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  for (const label of ["Side", "Ticker", "Weight"]) {
+    const th = document.createElement("th");
+    th.textContent = label;
+    headRow.append(th);
+  }
+  thead.append(headRow);
+  const tbody = document.createElement("tbody");
+  for (const row of rows) {
+    const tr = document.createElement("tr");
+    const sideCell = document.createElement("td");
+    sideCell.textContent = row.side;
+    const tickerCell = document.createElement("td");
+    tickerCell.textContent = row.ticker;
+    const weightCell = document.createElement("td");
+    weightCell.className = "num";
+    weightCell.textContent = `${fmtNum(row.weight * 100, 1)}%`;
+    tr.append(sideCell, tickerCell, weightCell);
+    tbody.append(tr);
+  }
+  table.append(thead, tbody);
+  wrap.append(table);
 }
 
 /**
