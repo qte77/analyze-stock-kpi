@@ -2,6 +2,13 @@
 
 Issues: none yet — owner request 2026-09-21/22.
 
+> **Arc closed 2026-09-23.** PR A (#394) and PR B (#395) shipped. The forward
+> Min-Variance tracker is superseded by
+> [plan 008](008-pit-longshort-backtest.md) (point-in-time backtest,
+> equal-weight 25/25, issue
+> [#401](https://github.com/qte77/analyze-stock-kpi/issues/401)), and its open rows
+> migrated there. The body below is kept as the historical record.
+
 ## Context
 
 The owner wants two separate features:
@@ -212,12 +219,12 @@ run (`state.as_of`); `r_i = P_i,today / P_i,prev − 1`.
 |---|---|---|
 | ~~Merge #392, then rebase + merge #393~~ | owner | shipped — presets on `main` refreshed (2026-09-22/23) |
 | ~~PR A multi-window Sortino ([#394](https://github.com/qte77/analyze-stock-kpi/pull/394))~~ | agent → owner merge | shipped — merged to `main` 2026-09-23 |
-| First `portfolio.yaml` dispatch + Pages e2e | owner → agent | data files on `data`; the section renders on Pages with no console errors |
+| ~~First `portfolio.yaml` dispatch + Pages e2e~~ | owner → agent | migrated to [plan 008](008-pit-longshort-backtest.md) (dispatch row); never dispatched here |
 | ~~PR B long/short model portfolio ([#395](https://github.com/qte77/analyze-stock-kpi/pull/395))~~ | agent → owner merge | shipped — merged to `main` 2026-09-23 |
-| Dedupe `fetch_closes` vs `_batch_close_prices` | agent (after A+B) | one shared batched-close helper |
+| ~~Dedupe `fetch_closes` vs `_batch_close_prices`~~ | agent (after A+B) | migrated to [plan 008](008-pit-longshort-backtest.md) D12/D13: `fetch_closes` is deleted and the backtest reuses `_batch_close_prices` |
 
 Further objectives (Max Sharpe with composite-rank μ, Min CVaR, Min Drawdown) are
-**deferred** until the owner asks. `state.objective` leaves room for them.
+**superseded**: plan 008 replaces the optimizer with equal weight 1/25.
 
 ## Verification
 
