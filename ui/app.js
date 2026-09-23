@@ -227,7 +227,7 @@ function renderTable() {
 }
 
 function onRowClick(/** @type {Row} */ row) {
-  showDetail(row, { auditByTicker, activeUniverse, renderRadar, renderTimeSeriesPane });
+  showDetail(row, { auditByTicker, renderRadar, renderTimeSeriesPane });
 }
 
 function bindTableSort() {

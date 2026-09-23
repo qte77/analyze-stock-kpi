@@ -235,6 +235,17 @@ long/short model portfolio. The limitation below still holds — the *lists* rem
 meta-screening starting point, not a ranked long/short signal — ADR-0012's optimizer,
 not the list order, sets the actual positions and weights.
 
+**Amended (2026-09-23):** the ranking metric changed from composite-mean to
+`screener_score` ("qte77 Score") so the aggregator's best/worst placement
+agrees with the qte77 Score the dashboard displays and sorts by on every
+other universe — previously the aggregator ranked by the mean of all 7
+composites while the Score column kept showing `screener_score`, so the
+same ticker's displayed score and its aggregator rank could disagree.
+Eligibility is now "not stale AND has a `screener_score`" (dropping the
+previous "not stale AND >= 5 of 7 composites populated" gate). The
+"NOT a hedging primitive" framing below is unaffected: the ranking
+primitive changed, the meta-screening-starting-point limitation did not.
+
 Composite-mean ranking blends growth / value / quality signals. The
 top-25 by mean is a **meta-screening starting point** ("what should I
 look at first?"), not a long-candidate set. The hedging-grade

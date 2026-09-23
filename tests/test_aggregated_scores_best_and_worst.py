@@ -57,11 +57,13 @@ def test_composite_breakdown_covers_every_composite_scores_field() -> None:
     assert set(audit[0].composite_breakdown) == set(CompositeScores.model_fields)
 
 
-def test_ineligible_lt_min_composites_excluded() -> None:
-    """< min_composites populated -> excluded, reason 'insufficient_composites'.
+def test_ineligible_missing_screener_score_excluded() -> None:
+    """No `screener_score` -> excluded, reason 'no_screener_score'.
 
-    Mirrors the L3 gate in `composite_scores.screener_score` so non-equities
-    (FX / futures / sparse ADRs) don't rank alongside fully-populated equities.
+    Ranking is by `screener_score` (the same "qte77 Score" the dashboard
+    shows on every universe); a snapshot without it -- e.g. an
+    informationally-thin non-equity (FX / futures / sparse ADR) that fails
+    `composite_scores.screener_score`'s own L3 gate -- can't be ranked.
     """
     snap = _snap("BTC-USD", quality=50, dividend=10, growth=20, big_call=30)
 
@@ -76,10 +78,10 @@ def test_ineligible_lt_min_composites_excluded() -> None:
     assert len(audit) == 1
     row = audit[0]
     assert row.eligible is False
-    assert row.excluded_reason == "insufficient_composites"
+    assert row.excluded_reason == "no_screener_score"
     assert row.populated_composites == 4
     assert row.rank is None
-    assert row.mean_composite is None
+    assert row.screener_score is None
 
 
 def test_stale_snapshot_excluded() -> None:
@@ -154,8 +156,8 @@ def test_dedup_ticker_across_universes_first_seen_wins() -> None:
         "sp500": "2026-05-31",
         "qte77-watchlist": "2026-05-31",
     }
-    # First-seen snapshot's values (sp500) used for the mean, not watchlist's.
-    assert row.mean_composite == sum([80, 20, 70, 60, 75, 65, 70]) / 7
+    # First-seen snapshot's screener_score (sp500) used for ranking, not watchlist's.
+    assert row.screener_score == 70
 
 
 @pytest.mark.parametrize(
@@ -175,20 +177,20 @@ def test_ranking_boundaries(
 ) -> None:
     """Best/worst selection handles the four count regimes around 2*top_n.
 
-    Distinct means (descending) so sort order is unambiguous. Boundary
-    behaviour matters: an off-by-one here would silently drop tickers from
-    a preset or over-select past the intended count.
+    Distinct screener_scores (descending) so sort order is unambiguous.
+    Boundary behaviour matters: an off-by-one here would silently drop
+    tickers from a preset or over-select past the intended count.
     """
     snapshots = [
         _snap(
             f"T{i:03d}",
-            quality=float(100 - i),
+            quality=50.0,
             dividend=50.0,
             growth=50.0,
             big_call=50.0,
             aaqs=50.0,
             hgi=50.0,
-            screener_score=50.0,
+            screener_score=float(100 - i),
         )
         for i in range(n)
     ]
@@ -246,6 +248,50 @@ def test_ties_sort_ascii_ascending_by_ticker() -> None:
     assert ranks["AAPL"] == 1
     assert ranks["GOOG"] == 2
     assert ranks["MSFT"] == -1
+
+
+def test_ranks_by_screener_score_not_mean_of_composites() -> None:
+    """Regression guard: ranking uses `screener_score`, not the mean of all 7.
+
+    A ticker with a high mean-of-7 but a comparatively low `screener_score`
+    must NOT outrank a ticker with the opposite shape -- otherwise the
+    aggregator's best/worst placement disagrees with the "qte77 Score" the
+    dashboard displays for the same ticker on every other universe (the
+    dashboard-consistency bug this aggregator is being fixed for).
+    """
+    high_mean_low_screener = _snap(
+        "HIGH_MEAN",
+        quality=95,
+        dividend=95,
+        growth=95,
+        big_call=95,
+        aaqs=95,
+        hgi=95,
+        screener_score=40,
+    )
+    low_mean_high_screener = _snap(
+        "LOW_MEAN",
+        quality=10,
+        dividend=10,
+        growth=10,
+        big_call=10,
+        aaqs=10,
+        hgi=10,
+        screener_score=90,
+    )
+
+    best, worst, audit = build_universe(
+        {"sp500": [high_mean_low_screener, low_mean_high_screener]},
+        {"sp500": "2026-05-31"},
+        as_of=date(2026, 5, 31),
+        top_n=1,
+    )
+
+    assert best == ["LOW_MEAN"]
+    assert worst == ["HIGH_MEAN"]
+    ranks = {row.ticker: row.screener_score for row in audit}
+    assert ranks["LOW_MEAN"] == 90
+    assert ranks["HIGH_MEAN"] == 40
 
 
 def test_integration_multiple_universes_mixed_eligibility() -> None:
@@ -307,7 +353,7 @@ def test_integration_multiple_universes_mixed_eligibility() -> None:
         top_n=2,
     )
 
-    # Means desc: AAPL ≈ 72.86, MSFT ≈ 67.86, ASML ≈ 64.86, XOM ≈ 34.29
+    # screener_score desc: AAPL 80, MSFT 75, ASML 72, XOM 30
     # top_n=2: best = [AAPL(1), MSFT(2)]; worst = [XOM(-1), ASML(-2)]
     assert best == ["AAPL", "MSFT"]
     assert worst == ["ASML", "XOM"]
@@ -319,4 +365,4 @@ def test_integration_multiple_universes_mixed_eligibility() -> None:
     assert ranks["ASML"] == -2
     assert ranks["BTC"] is None
     btc_row = next(r for r in audit if r.ticker == "BTC")
-    assert btc_row.excluded_reason == "insufficient_composites"
+    assert btc_row.excluded_reason == "no_screener_score"
