@@ -24,6 +24,8 @@ import {
   renderFearGreedHeader,
   renderFearGreedChart,
   renderYieldCurveHeader,
+  renderPortfolioChart,
+  renderPortfolioHoldings,
   bindLongTermTabs,
   bindWindowChips,
   bindThemeObserver,
@@ -150,6 +152,24 @@ const loadYieldCurveYears = () =>
 /** @type {() => Promise<Array<{date: string, ret_indexed: number}>>} */
 const loadEquitySpyYears = () =>
   loadYearsFromBranch(DATA_BASE_URL, "results/series/equity_spy", "date");
+
+/** @type {() => Promise<Array<{date: string, ret_long: number, ret_short: number, ret_ls: number}>>} */
+const loadPortfolioWeeklySeries = () =>
+  loadYearsFromBranch(DATA_BASE_URL, "results/series/portfolio_weekly", "date");
+
+/** @type {() => Promise<Array<{date: string, ret_long: number, ret_short: number, ret_ls: number}>>} */
+const loadPortfolioMonthlySeries = () =>
+  loadYearsFromBranch(DATA_BASE_URL, "results/series/portfolio_monthly", "date");
+
+/** A 404 before the first cron run is expected (ADR-0012) — resolve to
+ *  `null` rather than letting the rejection propagate. */
+const loadPortfolioWeeklyState = async () => {
+  try {
+    return await fetchJson(`${DATA_BASE_URL}/results/portfolio/weekly/state.json`);
+  } catch {
+    return null;
+  }
+};
 
 // ───────────────────────── View-mode + URL state ───────────────────────────
 
@@ -567,16 +587,21 @@ async function init() {
   await loadActiveUniverse();
   applyDateFromUrl(parsed.date, dateSelector);
 
-  const [fgEntries, ycEntries, spyEntries] = await Promise.all([
+  const [fgEntries, ycEntries, spyEntries, plWeekly, plMonthly, plState] = await Promise.all([
     loadFearGreedYears(),
     loadYieldCurveYears(),
     loadEquitySpyYears(),
+    loadPortfolioWeeklySeries(),
+    loadPortfolioMonthlySeries(),
+    loadPortfolioWeeklyState(),
   ]);
   renderFearGreedHeader(fgEntries);
   renderFearGreedChart(fgEntries);
   renderYieldCurveHeader(ycEntries);
   bindLongTermTabs(fgEntries, ycEntries, spyEntries);
   bindWindowChips();
+  renderPortfolioChart(plWeekly, plMonthly);
+  renderPortfolioHoldings(plState);
   bindThemeObserver();
 }
 

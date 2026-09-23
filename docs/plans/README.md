@@ -29,3 +29,4 @@ tracker) stays issue-only — no plan file.
 | [XBRL cross-validation](004-xbrl-crossval.md) (shipped) | [#101](https://github.com/qte77/analyze-stock-kpi/issues/101) |
 | [Restructure data-branch results/ layout](005-restructure-results.md) | none — pre-issue design |
 | [Agent-ready backlog: llms.txt, XBRL, release workflows](006-agent-ready-backlog.md) | [#361](https://github.com/qte77/analyze-stock-kpi/issues/361) + [#101](https://github.com/qte77/analyze-stock-kpi/issues/101) + [#340](https://github.com/qte77/analyze-stock-kpi/issues/340) |
+| [Long/short model portfolio + multi-window Sortino](007-longshort-portfolio-and-multiwindow-sortino.md) | none — owner request 2026-09-21/22 |
