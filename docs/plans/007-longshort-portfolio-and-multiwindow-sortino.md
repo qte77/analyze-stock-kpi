@@ -24,12 +24,13 @@ KISS pass agreed with the owner 2026-09-22:
 
 ## Status / how to run this plan (read first)
 
-- **PR B (long/short model portfolio) is implemented and open for review** —
+- **PR B (long/short model portfolio) is implemented and open for review as
+  [#395](https://github.com/qte77/analyze-stock-kpi/pull/395)** —
   ADR-0012 committed (scipy-only shrinkage, no transaction costs, gitignored price
   cache, weekly returns not a stored NAV), `domain/portfolio_optimizer.py` +
   `orchestrators/longshort_portfolio.py` + `.github/workflows/portfolio.yaml` +
-  the `#portfolio-section` UI shipped with tests, `make validate` green. See the
-  remaining-work table below for its PR number. **Nothing merged yet.**
+  the `#portfolio-section` UI shipped with tests, `make validate` green. **Nothing
+  merged yet** — merge is owner-gated.
 - **Owner gate — PRs #392/#393** (candidate refresh; CodeFactor green; blocked only
   by unsigned bot commits; the classifier denied `--admin`): the owner runs
   `gh pr merge 392 --squash --admin`, then rebases #393 and merges it the same way.
@@ -211,7 +212,7 @@ run (`state.as_of`); `r_i = P_i,today / P_i,prev − 1`.
 | Merge #392, then rebase + merge #393 | owner | presets on main refreshed |
 | PR A multi-window Sortino (PR #394) | agent → owner merge | per PR A done-when |
 | First `portfolio.yaml` dispatch + Pages e2e | owner → agent | data files on `data`; the section renders on Pages with no console errors |
-| PR B long/short model portfolio — see the PR opened from `feat/longshort-portfolio` | agent → owner merge | per PR B done-when (shipped, pending owner merge) |
+| PR B long/short model portfolio ([#395](https://github.com/qte77/analyze-stock-kpi/pull/395)) | agent → owner merge | per PR B done-when (shipped, pending owner merge) |
 | Dedupe `fetch_closes` vs `_batch_close_prices` | agent (after A+B) | one shared batched-close helper |
 
 Further objectives (Max Sharpe with composite-rank μ, Min CVaR, Min Drawdown) are
