@@ -1,11 +1,12 @@
 """Long/short conjunctive-gate screener (Phase 2a of issue #192).
 
-The aggregator (``aggregated_scores_best_and_worst``) ranks by mean of
-composites — useful as a meta-screening starting point, but mean-of-
-composites blends signals and can paper over real weaknesses. The
-hedging-grade signal is a conjunctive-gate filter: a long candidate must
-pass *every* long-side criterion, a short candidate must pass *every*
-short-side criterion. Sets are disjoint by construction.
+The aggregator (``aggregated_scores_best_and_worst``) ranks by the qte77
+Score (``composite_scores.screener_score``, the same score the dashboard
+shows on every universe) — useful as a meta-screening starting point, but
+a single blended score can paper over real weaknesses. The hedging-grade
+signal is a conjunctive-gate filter: a long candidate must pass *every*
+long-side criterion, a short candidate must pass *every* short-side
+criterion. Sets are disjoint by construction.
 
 Phase 2b adds criterion 12 (FCF margin from ``Ticker.cashflow``) so 14
 of the issue's 16 numeric / categorical gates now run. Still deferred:
@@ -185,7 +186,9 @@ def build_universe(
         snapshot_dates_by_universe: Per-universe ISO ``YYYY-MM-DD``
             snapshot date used for the freshness gate.
         min_criteria: Minimum populated criteria for eligibility (10 of 15
-            evaluable; matches the aggregator's 5-of-7 ratio).
+            evaluable) -- same spirit as the aggregator's own sparse-snapshot
+            gate (``composite_scores._SCREENER_MIN_TERMS``, 5 of 9 KPI terms
+            populated before ``screener_score`` returns a value at all).
         max_stale_days: Snapshots older than this are excluded.
         as_of: Reference date for the freshness gate. Defaults to today
             UTC; injected for deterministic tests.
