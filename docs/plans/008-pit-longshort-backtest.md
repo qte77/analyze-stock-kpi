@@ -267,6 +267,17 @@ Every run must:
   - Add series A per D16. Reuse `build_universe` from `orchestrators/aggregated_scores_best_and_worst.py`, plus the existing `simulate`, `metrics` and `rebalance_dates`, generalized from the weekly grid to any date grid.
   - Add the D17 append-only persistence for both series: load the existing years, skip dates ≤ the last stored date, write only new entries, and recompute the summary from the stored rows.
   - Add the D18 suffix-based lag, and bump `method_version`.
+  - **Fix the start-trim bug (found 2026-09-24 in #404's first run):** the B return series starts at
+    **1962-01-02**, the union-calendar start, instead of `summary.start`, which is 2023-03-31.
+    - The published year files hold ~15.7k pre-start zero-return days.
+    - Every metric is diluted by them: the published ann. vol is 4.96 % and the hit rate 2.8 %. Over the
+      real 907-day window the figures are ann. vol ≈ 21.2 %, ann. return ≈ 14.3 %, total +61.8 % and
+      max DD −23.4 %.
+    - The fix: emit rows only from the first trade date, compute metrics over that window only, and
+      **delete the pre-start year files on `data`**. Verify that `scripts/data-branch-commit.cjs` can
+      delete paths, or extend it.
+    - Also investigate the 2026-03-18 short-basket move of −13.3 % in one day (a bad price or split?)
+      and filter bad ticks if confirmed.
 - `.github/workflows/portfolio.yaml`:
   - also check out `results/series/backtest_genuine/` and `results/backtest_genuine/` from `data`;
   - extend the commit regex to the A paths.
@@ -315,11 +326,10 @@ Every run must:
 |---|---|---|
 | ~~W0 land this plan + close plan 007 + open tracking issue + #294 comment~~ | agent → admin-merge on green | shipped — issue #401, plan on `main` |
 | ~~PR C core engine + cron + removals + docs~~ | agent → admin-merge on green | shipped — [#404](https://github.com/qte77/analyze-stock-kpi/pull/404) merged 2026-09-24 |
-| PR E series A + freeze + lag (D15–D19) | agent → admin-merge on green | per PR E done-when |
+| PR E series A + freeze + lag (D15–D19) + B start-trim fix | agent → admin-merge on green | per PR E done-when; B's published metrics match its real window |
 | ~~PR D dashboard section~~ | agent → admin-merge on green | shipped — [#403](https://github.com/qte77/analyze-stock-kpi/pull/403) merged 2026-09-23 |
 | Dispatch `portfolio.yaml` + verify data files + Pages e2e (migrated from 007) | agent (after E+F) | A + B artifacts on `data`; the section renders on Pages without console errors; the e2e defects list is triaged |
 | PR F dashboard A headline + B secondary | agent → admin-merge on green | per PR F done-when |
-| Sanity-check B's first-run numbers (ann. vol ≈ 5 % vs max DD −23 % looks inconsistent; look for single-day jumps / bad prices) | agent | root cause found and fixed, or explained in the summary caveats |
 | Private repo cache for `results/prices/` (statements + prices; first-seen merge) | owner (create repo + fine-grained PAT secret) → agent | cron pulls before + pushes after each run; history no longer ages out |
 | Issue: `make preview` doesn't serve `ui/public/` | agent | issue filed |
 | Issue: `llms.txt` template missing ADR-0010..0013 + newer modules | agent | issue filed |
