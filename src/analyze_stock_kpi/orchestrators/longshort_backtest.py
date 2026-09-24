@@ -62,6 +62,7 @@ import bisect
 import itertools
 import json
 import logging
+import math
 import random
 import re
 import statistics
@@ -203,11 +204,24 @@ _CAVEATS: tuple[str, ...] = (
     "A ticker with no price on a given day is treated as flat (0% return) "
     "that day; a name that stops trading entirely after entry is held at its "
     "last known close rather than dropped.",
+    "A new holding enters/exits at the shared UNION-calendar next trading "
+    "day, not necessarily its OWN next trading day (e.g. a US market "
+    "holiday while a European one is open) — found 2026-09-24, affects "
+    "roughly 6.6% of monthly fills; a documented approximation, not yet "
+    "fixed to each ticker's own next close.",
+    "Non-US filing-lag classification (D18) is suffix-based plus a small "
+    "disclosed exception list for known no-suffix foreign issuers and an "
+    "OTC-ADR ticker-shape heuristic — not a full country lookup, so some "
+    "no-suffix foreign names may still be misclassified as US.",
     "Returns are local-currency, gross of FX, financing and borrow costs; "
     "only the 10 bp one-way-turnover trading cost is modelled.",
     "The `yearly` cadence rebalances once a year; nothing is annualized from "
     "fewer than 12 months of monthly returns (D9), so its metrics stay "
     "`null` far longer than the other cadences'.",
+    "The null benchmark's random draws also enter at the shared trade date "
+    "rather than each ticker's own next close (same approximation as "
+    "above), and annualize by calendar days, not the primary series' own "
+    "trading-day count.",
     "This is a hypothetical, backward-looking construction — not a live "
     "track record and not investment advice.",
 )
@@ -225,6 +239,10 @@ _CAVEATS_GENUINE: tuple[str, ...] = (
     "A ticker with no price on a given day is treated as flat (0% return) "
     "that day; a name that stops trading entirely after entry is held at its "
     "last known close rather than dropped.",
+    "A new holding enters/exits at the shared UNION-calendar next trading "
+    "day, not necessarily its OWN next trading day — found 2026-09-24, a "
+    "documented approximation, not yet fixed to each ticker's own next "
+    "close (same limitation as series B).",
     "Returns are local-currency, gross of FX, financing and borrow costs; "
     "only the 10 bp one-way-turnover trading cost is modelled.",
     "The `monthly_buffer` cadence has no buffer effect here: the live "
@@ -427,9 +445,39 @@ class BacktestSummary(BaseModel):
 # ----- D2/D3/D4: point-in-time fundamentals + score -----
 
 
+_KNOWN_NON_US_NO_SUFFIX: frozenset[str] = frozenset(
+    {"ASML", "TSM", "NVO", "SAP", "UL", "NTES", "BIP"}
+)
+"""D18/finding-#8 (2026-09-24): well-known non-US issuers that trade on a US exchange
+without an exchange suffix (ADRs/ordinaries), so the plain suffix rule misclassifies
+them as US (90d lag). Not exhaustive — a `FundamentalsSnapshot.country`-based
+classification is a documented follow-up (would need a new fetch this module doesn't
+otherwise make); this is a disclosed, bounded interim fix for the audit's named
+examples not already covered by `_is_otc_adr_shaped`."""
+
+
+def _is_otc_adr_shaped(ticker: str) -> bool:
+    """A 5-letter, all-alpha, `Y`-ending ticker — the conventional OTC ADR shape.
+
+    E.g. `DANOY`, `RHHBY`, `LVMUY`. Verified against this repo's actual
+    universe 2026-09-24: every no-suffix 5-letter `Y`-ender in it is a
+    genuine foreign ADR; 4-letter US tickers ending in `Y` (e.g. `ORLY`)
+    are excluded by the length check.
+    """
+    return len(ticker) == 5 and ticker.isalpha() and ticker.endswith("Y")
+
+
 def _filing_lag_days(ticker: str) -> int:
-    """D18: 90 days for a US ticker (no exchange suffix), 120 for non-US (any `.XX` suffix)."""
-    return _NON_US_FILING_LAG_DAYS if "." in ticker else _US_FILING_LAG_DAYS
+    """D18: 90 days for a US ticker, 120 for non-US.
+
+    Non-US = any `.XX` exchange suffix, a known no-suffix foreign issuer
+    (`_KNOWN_NON_US_NO_SUFFIX`), or an OTC-ADR-shaped ticker
+    (`_is_otc_adr_shaped`) — both interim fixes for finding #8 (2026-09-24),
+    since yfinance exposes no per-ticker filing dates or country field here.
+    """
+    if "." in ticker or ticker in _KNOWN_NON_US_NO_SUFFIX or _is_otc_adr_shaped(ticker):
+        return _NON_US_FILING_LAG_DAYS
+    return _US_FILING_LAG_DAYS
 
 
 def _usable_column(frame: pd.DataFrame | None, as_of: date, lag_days: int) -> pd.Timestamp | None:
@@ -488,7 +536,11 @@ def pit_fundamentals(frames: Frames, as_of: date, ticker: str) -> dict[str, floa
         out["return_on_assets"] = _safe_ratio(net_income, total_assets)
         out["current_ratio"] = _safe_ratio(current_assets, current_liabilities)
 
-    return out
+    # Found 2026-09-24: `_find_row`/`_safe_ratio` can hand back `NaN` (a missing yfinance
+    # row cast to float), which `screener_score`'s `_normalize_term` used to silently score
+    # 100/0 instead of excluding — defense in depth alongside that fix, at this PIT
+    # reconstruction's own boundary.
+    return {k: (v if v is not None and math.isfinite(v) else None) for k, v in out.items()}
 
 
 def _closes_as_of(closes: pd.Series, as_of: date) -> pd.Series:
@@ -499,12 +551,18 @@ def _closes_as_of(closes: pd.Series, as_of: date) -> pd.Series:
     single gate between raw yfinance data and a `score_at`/`pit_fundamentals`
     result, so an auditor only has two functions to check for a look-ahead
     leak. Returns `closes` with every observation dated strictly after
-    `as_of` dropped; `test_poisoning_data_after_rank_date_does_not_change_
-    the_ranked_list` corrupts everything after `as_of` and asserts the
-    rank-date-`as_of` result is unchanged.
+    `as_of` dropped, THEN `dropna()`-ed (found 2026-09-24: a batch-download
+    column can carry interior `NaN` gaps — e.g. a non-US market closed on a
+    US holiday the batch's calendar assumes is a trading day — and leaving
+    them in means `pct_change()` compares across the gap as if it were one
+    day, distorting the Sortino ratio; `fundamentals._windowed_sortinos`
+    already applies the same `dropna()` for the same reason). Also matches
+    `test_poisoning_data_after_rank_date_does_not_change_the_ranked_list`'s
+    "byte-identical" guarantee.
     """
     as_of_ts = cast("pd.Timestamp", pd.Timestamp(as_of))
-    return cast("pd.Series", closes[closes.index <= as_of_ts])
+    sliced = cast("pd.Series", closes[closes.index <= as_of_ts])
+    return cast("pd.Series", sliced.dropna())
 
 
 def score_at(fund: dict[str, float | None], closes: pd.Series, as_of: date) -> float | None:
@@ -871,18 +929,27 @@ def metrics(
 
 
 def _price_asof(series: pd.Series, d: date) -> float | None:
-    """Last available close at or before `d` (drives the D5 held-at-last-close rule)."""
+    """Last available close at or before `d` (drives the D5 held-at-last-close rule).
+
+    `None` when `d` is before `series`' first observation — found 2026-09-24:
+    `.asof()` then returns `NaT`, which the previous `isinstance(idx, float)`
+    check never caught (`NaT` is not a `float`), so `series.loc[NaT]` raised
+    an unhandled `KeyError` for any ticker whose history starts after `d`
+    (a newer listing evaluated at an early null-benchmark draw date) — or
+    when the located value itself is `NaN`. `pd.isna` covers both `NaT` and
+    `NaN` uniformly.
+    """
     idx = series.index.asof(pd.Timestamp(d))
-    if idx is None or (isinstance(idx, float) and idx != idx):
+    if bool(pd.isna(idx)):
         return None
     value = series.loc[idx]
-    return None if value != value else float(value)
+    return None if bool(pd.isna(value)) else float(value)
 
 
 def _ticker_period_return(series: pd.Series, start: date, end: date) -> float:
     """Total return of one ticker between two dates, via `_price_asof`."""
     p0, p1 = _price_asof(series, start), _price_asof(series, end)
-    if not p0 or p1 is None:
+    if p0 is None or p1 is None or p0 == 0:
         return 0.0
     return p1 / p0 - 1.0
 
@@ -1209,10 +1276,59 @@ def _reindex_returns(
     return out
 
 
+_BAD_TICK_RETURN_THRESHOLD = 0.5
+"""Foresight-audit finding #3 (2026-09-24): a single-day |return| this large is a data
+glitch, not a real move — `_drop_bad_tickers` already excludes a ticker with any
+non-positive close (e.g. `ICTEF`), but a still-positive bad print elsewhere would slip
+through that check alone."""
+
+
+def _filter_bad_ticks(
+    returns_by_ticker: dict[str, dict[date, float]],
+) -> dict[str, dict[date, float]]:
+    """Zero out any single-day |return| over `_BAD_TICK_RETURN_THRESHOLD` (a glitch).
+
+    Same "flat 0%" semantics D5 already uses for a missing price. Logs each
+    filtered `(ticker, date, return)` for visibility.
+    """
+    out: dict[str, dict[date, float]] = {}
+    for ticker, series in returns_by_ticker.items():
+        cleaned = dict(series)
+        for d, r in series.items():
+            if abs(r) > _BAD_TICK_RETURN_THRESHOLD:
+                logger.warning("bad tick filtered: %s %s %.1f%%", ticker, d, r * 100)
+                cleaned[d] = 0.0
+        out[ticker] = cleaned
+    return out
+
+
 def _next_trading_day(calendar: list[date], t: date) -> date | None:
     """First calendar date strictly after `t` (the D5 trade-at-t+1 rule)."""
     idx = bisect.bisect_right(calendar, t)
     return calendar[idx] if idx < len(calendar) else None
+
+
+_ONE_YEAR_COVERAGE_GRACE_DAYS = 30
+"""Mirrors `fundamentals._SORTINO_COVERAGE_GRACE_DAYS` — D6/finding-#7 (2026-09-24)."""
+
+
+def _has_one_year_of_closes(closes: pd.Series, as_of: date) -> bool:
+    """D6's documented `>= 1y of closes` eligibility gate, enforced explicitly.
+
+    `score_at`'s own `_compute_sortino` call only requires
+    `fundamentals._MIN_SORTINO_DATAPOINTS` (30) observations, which a
+    ticker with a few months of trading history already satisfies —
+    silently admitting it to the ranked pool despite D6's documented
+    `>= 1y of closes` threshold (found 2026-09-24: e.g. `SEZL` was
+    ranked/shorted with only ~4 months of price history).
+    """
+    guarded = _closes_as_of(closes, as_of)
+    if guarded.empty:
+        return False
+    as_of_ts = cast("pd.Timestamp", pd.Timestamp(as_of))
+    cutoff = as_of_ts - pd.DateOffset(years=1) + pd.Timedelta(days=_ONE_YEAR_COVERAGE_GRACE_DAYS)
+    first_valid = cast("pd.Timestamp", guarded.index[0])
+    return bool(first_valid <= cutoff)
 
 
 def _eligible_count(
@@ -1221,11 +1337,11 @@ def _eligible_count(
     closes: dict[str, pd.Series],
     threshold: int,
 ) -> int:
-    """Count of D1 tickers eligible (`score_at` not `None`) at `d`, capped at `threshold`."""
+    """Count of D1 tickers eligible (`>= 1y closes` + `score_at` not `None`) at `d`."""
     count = 0
     for ticker, frames in frames_by_ticker.items():
         close = closes.get(ticker)
-        if close is None:
+        if close is None or not _has_one_year_of_closes(close, d):
             continue
         if score_at(pit_fundamentals(frames, d, ticker), close, d) is None:
             continue
@@ -1252,11 +1368,11 @@ def _find_start_date(
 def _score_all_tickers(
     d: date, frames_by_ticker: dict[str, Frames], closes: dict[str, pd.Series]
 ) -> list[tuple[str, float]]:
-    """Every ticker's `score_at` at `d`, sorted best-to-worst."""
+    """Every ticker's `score_at` at `d`, sorted best-to-worst (D6: needs `>= 1y closes`)."""
     scored: list[tuple[str, float]] = []
     for ticker, frames in frames_by_ticker.items():
         close = closes.get(ticker)
-        if close is None:
+        if close is None or not _has_one_year_of_closes(close, d):
             continue
         score = score_at(pit_fundamentals(frames, d, ticker), close, d)
         if score is not None:
@@ -1948,6 +2064,18 @@ def _maybe_rebuild_series_b() -> None:
     _reset_year_files(settings.backtest_dir / "lists")
 
 
+def _freeze_eligible(dates: list[date], run_date: date) -> list[date]:
+    """Only freeze rank dates strictly BEFORE the run date (finding #5, 2026-09-24).
+
+    A rank date equal to `run_date` (the day this run's price fetch
+    actually happened) can be computed from intraday-partial data — e.g.
+    mid-session European bars fetched before US markets even open — so it
+    is excluded from ranking/persistence THIS run. It becomes eligible on
+    a LATER run, once a full trading day's data is behind it.
+    """
+    return [d for d in dates if d < run_date]
+
+
 def _run_series_b(
     frames_by_ticker: dict[str, Frames],
     closes: dict[str, pd.Series],
@@ -1961,7 +2089,7 @@ def _run_series_b(
     if start is None:
         logger.warning("no grid date reaches the %d-eligible threshold", _MIN_ELIGIBLE_START)
         return
-    active_grid = [d for d in grid if d >= start]
+    active_grid = _freeze_eligible([d for d in grid if d >= start], calendar[-1])
     _maybe_rebuild_series_b()
 
     ranked_by_date, lists_entries = _rank_all_dates(active_grid, frames_by_ticker, closes)
@@ -2014,7 +2142,7 @@ def _run_series_a(
     spy_returns: dict[date, float],
 ) -> None:
     """D15/D16: append-only recompute of series A (the genuine decisions)."""
-    genuine_grid = _genuine_rank_dates()
+    genuine_grid = _freeze_eligible(_genuine_rank_dates(), calendar[-1])
     if not genuine_grid:
         logger.warning("no genuine snapshot dates on/after %s; skipping series A", _GENUINE_START)
         return
@@ -2081,7 +2209,7 @@ def main() -> None:
         logger.warning("no price data fetched; nothing to compute")
         return
 
-    returns_by_ticker = _reindex_returns(closes, calendar)
+    returns_by_ticker = _filter_bad_ticks(_reindex_returns(closes, calendar))
     spy_returns = _pct_change_map(_fetch_history_closes("SPY", "max"))
 
     _run_series_b(frames_by_ticker, closes, calendar, returns_by_ticker, spy_returns)

@@ -42,15 +42,20 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     _cost,
     _drift_leg,
     _drop_bad_tickers,
+    _filter_bad_ticks,
     _find_start_date,
+    _freeze_eligible,
     _genuine_trade_log_for_cadence,
     _genuine_weights_for_cadence,
+    _has_one_year_of_closes,
     _leg_diff,
+    _price_asof,
     _rank_genuine,
     _rebalance_reason,
     _reindex_returns,
     _reset_year_files,
     _score_all_tickers,
+    _ticker_period_return,
     _trade_log_for_cadence,
     _trim_to_first_trade,
     _turnover,
@@ -158,6 +163,54 @@ def test_pit_fundamentals_non_us_ticker_lag_is_120_days() -> None:
         is None
     )
     assert pit_fundamentals(frames, boundary_120, "SAP.DE")["return_on_equity"] is not None
+
+
+def test_filing_lag_known_non_us_no_suffix_ticker_is_120_days() -> None:
+    """Finding #8 (2026-09-24): ASML/TSM/... trade on a US exchange with no suffix."""
+    period_end = pd.Timestamp("2023-12-31")
+    frames = _toy_frames(period_end)
+    boundary_90 = period_end.date() + timedelta(days=90)
+
+    assert pit_fundamentals(frames, boundary_90, "ASML")["return_on_equity"] is None
+
+
+def test_filing_lag_otc_adr_shaped_ticker_is_120_days() -> None:
+    period_end = pd.Timestamp("2023-12-31")
+    frames = _toy_frames(period_end)
+    boundary_90 = period_end.date() + timedelta(days=90)
+
+    assert pit_fundamentals(frames, boundary_90, "DANOY")["return_on_equity"] is None
+
+
+def test_filing_lag_four_letter_y_ticker_stays_us_90_days() -> None:
+    """`ORLY` (O'Reilly Automotive) is a genuine 4-letter US ticker, not an ADR — the
+    5-letter length check must not misclassify it."""
+    period_end = pd.Timestamp("2023-12-31")
+    frames = _toy_frames(period_end)
+    boundary_90 = period_end.date() + timedelta(days=90)
+
+    assert pit_fundamentals(frames, boundary_90, "ORLY")["return_on_equity"] is not None
+
+
+def test_pit_fundamentals_nan_row_becomes_none_not_nan() -> None:
+    """Found 2026-09-24: a NaN statement row must exclude that ratio, not propagate NaN
+    (which `_normalize_term` used to silently score as a perfect/zero 100/0)."""
+    period_end = pd.Timestamp("2023-12-31")
+    income_stmt = pd.DataFrame(
+        {period_end: [float("nan"), 1000.0, 150.0, 50.0]},
+        index=["Net Income", "Total Revenue", "Operating Income", "Research And Development"],
+    )
+    balance_sheet = pd.DataFrame(
+        {period_end: [500.0, 2000.0, 300.0, 100.0]},
+        index=["Stockholders Equity", "Total Assets", "Current Assets", "Current Liabilities"],
+    )
+    boundary = period_end.date() + timedelta(days=90)
+
+    result = pit_fundamentals((income_stmt, balance_sheet), boundary, "AAPL")
+
+    assert result["return_on_equity"] is None
+    assert result["return_on_assets"] is None
+    assert result["current_ratio"] == pytest.approx(300.0 / 100.0)  # unaffected ratio survives
 
 
 # ----- score_at: D2/D4 reuses screener_score unchanged -----
@@ -488,6 +541,17 @@ def test_closes_as_of_drops_everything_strictly_after_as_of() -> None:
     assert list(guarded.index.date) == [date(2026, 1, 1), date(2026, 1, 2)]
 
 
+def test_closes_as_of_drops_interior_nan_gaps_too() -> None:
+    """Found 2026-09-24: an unfiltered interior NaN would make `pct_change()` compute a
+    return across the gap as if it were one trading day, distorting Sortino."""
+    closes = pd.Series([1.0, float("nan"), 3.0], index=pd.date_range("2026-01-01", periods=3))
+
+    guarded = _closes_as_of(closes, date(2026, 1, 3))
+
+    assert list(guarded.index.date) == [date(2026, 1, 1), date(2026, 1, 3)]
+    assert list(guarded.to_numpy()) == [1.0, 3.0]
+
+
 def test_poisoning_data_after_rank_date_does_not_change_the_ranked_list() -> None:
     """D22 foresight audit: corrupting every statement period and closing price
     dated strictly after rank date t must never change t's ranked list — the
@@ -609,6 +673,22 @@ def test_drop_bad_tickers_prevents_the_negative_to_positive_return_spike() -> No
         assert abs(r) < 1.0
 
 
+# ----- _filter_bad_ticks: a >50% single-day move is a glitch, not a real one (finding #3) -----
+
+
+def test_filter_bad_ticks_zeroes_a_move_over_50_percent() -> None:
+    returns_by_ticker = {
+        "GLITCH": {date(2026, 1, 5): 0.02, date(2026, 1, 6): 0.75, date(2026, 1, 7): -0.01},
+        "NORMAL": {date(2026, 1, 5): 0.02, date(2026, 1, 6): 0.03, date(2026, 1, 7): -0.01},
+    }
+
+    cleaned = _filter_bad_ticks(returns_by_ticker)
+
+    assert cleaned["GLITCH"][date(2026, 1, 6)] == 0.0
+    assert cleaned["GLITCH"][date(2026, 1, 5)] == pytest.approx(0.02)
+    assert cleaned["NORMAL"] == returns_by_ticker["NORMAL"]
+
+
 # ----- rebalance_dates: quarterly-after-filings date rule -----
 
 
@@ -640,14 +720,35 @@ def test_yearly_dates_picks_first_grid_date_of_each_calendar_year() -> None:
     assert result == [date(2024, 1, 5), date(2025, 1, 3)]
 
 
+# ----- _freeze_eligible: freeze only rank dates strictly before run date (finding #5) -----
+
+
+def test_freeze_eligible_excludes_the_run_date_itself() -> None:
+    dates = [date(2026, 9, 21), date(2026, 9, 22), date(2026, 9, 24)]
+
+    result = _freeze_eligible(dates, date(2026, 9, 24))
+
+    assert result == [date(2026, 9, 21), date(2026, 9, 22)]
+
+
 # ----- _find_start_date: D6 start-date rule with a small threshold param -----
+
+
+def _year_plus_of_closes(end: date) -> pd.Series:
+    """A close series with well over a year of history up to `end` (D6 eligibility)."""
+    return pd.Series(
+        [10.0] * 400, index=pd.date_range(end=pd.Timestamp(end), periods=400, freq="D")
+    )
 
 
 def test_find_start_date_reaches_threshold_at_first_qualifying_date() -> None:
     period_end = pd.Timestamp("2023-01-01")
     frames_by_ticker = {"A": _toy_frames(period_end), "B": _toy_frames(period_end)}
-    closes = {"A": _empty_close_series(), "B": _empty_close_series()}
     boundary = period_end.date() + timedelta(days=90)
+    closes = {
+        "A": _year_plus_of_closes(boundary + timedelta(days=5)),
+        "B": _year_plus_of_closes(boundary + timedelta(days=5)),
+    }
     grid = [boundary - timedelta(days=1), boundary, boundary + timedelta(days=5)]
 
     start = _find_start_date(grid, frames_by_ticker, closes, threshold=2)
@@ -664,6 +765,51 @@ def test_find_start_date_returns_none_below_threshold() -> None:
     start = _find_start_date([boundary], frames_by_ticker, closes, threshold=2)
 
     assert start is None
+
+
+# ----- _has_one_year_of_closes: D6/finding-#7 (found 2026-09-24) -----
+
+
+def test_has_one_year_of_closes_false_with_four_months_of_history() -> None:
+    as_of = date(2026, 1, 1)
+    closes = pd.Series(
+        [10.0] * 90, index=pd.date_range(as_of - timedelta(days=120), periods=90, freq="D")
+    )
+
+    assert _has_one_year_of_closes(closes, as_of) is False
+
+
+def test_has_one_year_of_closes_true_with_a_full_year() -> None:
+    as_of = date(2026, 1, 1)
+    closes = pd.Series(
+        [10.0] * 400, index=pd.date_range(as_of - timedelta(days=400), periods=400, freq="D")
+    )
+
+    assert _has_one_year_of_closes(closes, as_of) is True
+
+
+# ----- _price_asof: NaT/NaN safety (found 2026-09-24) -----
+
+
+def test_price_asof_before_series_start_returns_none_not_a_crash() -> None:
+    """A newer listing's series doesn't start until after `d` -- `.asof()` then returns
+    `NaT`, which used to slip past the old `isinstance(idx, float)` check and raise
+    `KeyError` on `series.loc[NaT]`."""
+    series = pd.Series([1.0, 2.0, 3.0], index=pd.date_range("2026-01-05", periods=3))
+
+    assert _price_asof(series, date(2026, 1, 1)) is None
+
+
+def test_price_asof_nan_value_returns_none() -> None:
+    series = pd.Series([1.0, float("nan"), 3.0], index=pd.date_range("2026-01-01", periods=3))
+
+    assert _price_asof(series, date(2026, 1, 2)) is None
+
+
+def test_ticker_period_return_zero_denominator_is_flat_not_error() -> None:
+    series = pd.Series([0.0, 5.0], index=pd.date_range("2026-01-01", periods=2))
+
+    assert _ticker_period_return(series, date(2026, 1, 1), date(2026, 1, 2)) == pytest.approx(0.0)
 
 
 # ----- null_percentile: D10 seeded null is deterministic -----
