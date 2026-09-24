@@ -346,6 +346,25 @@ Every run must:
 | E | `src/**`, Python `tests/**`, `.github/workflows/portfolio.yaml`, `docs/**` (except this plan's other rows), own changelog |
 | F | `ui/**` only, own changelog, plus its own row here |
 
+## Foresight audit 2026-09-24 (independent falsify-then-verify review of PR E)
+
+A separate audit agent probed the point-in-time engine for look-ahead. Its own poison test — corrupt
+every statement period and closing price dated after rank date t, assert t's ranked list is
+unchanged — **passed**: strict look-ahead is refuted. It also found 8 real, narrower defects the
+`method_version` rebuild would otherwise have frozen into published history. Fixed in PR E, each
+with its own RED test: a NaN input silently scoring 100 (#1, also patched at the shared
+`composite_scores` boundary); an unfiltered interior NaN gap distorting Sortino (#2); a >50%
+single-day return glitch beyond the already-excluded `ICTEF` (#3); today's intraday-partial rank
+date not being excluded from the freeze (#5); a `KeyError` crash risk + an asymmetric zero-check in
+the null benchmark's price lookups (#6, partial — see below); the documented ≥1y-of-closes
+eligibility threshold not actually being enforced (#7); and the D18 non-US filing lag missing
+several no-suffix foreign issuers (#8). **Deferred, disclosed in `summary.caveats`, not silently
+shipped:** each leg entering/exiting at the shared union-calendar trade date instead of its own next
+close (#4), and the null benchmark's matching timing approximation + calendar-day annualization
+(the remainder of #6) — both need a genuine `simulate()`/`_random_book_net_ann` architecture change
+that a rushed fix under time pressure risked getting subtly wrong in the most heavily-relied-on
+function in this module.
+
 ## Remaining work (the ONLY list of open items)
 
 | Item | Gate | Done-when |
@@ -356,10 +375,12 @@ Every run must:
 | ~~PR D dashboard section~~ | agent → admin-merge on green | shipped — [#403](https://github.com/qte77/analyze-stock-kpi/pull/403) merged 2026-09-23 |
 | Dispatch `portfolio.yaml` + verify data files + Pages e2e (migrated from 007) | agent (after E+F) | A + B artifacts on `data`; the section renders on Pages without console errors; the e2e defects list is triaged |
 | ~~PR F dashboard A headline + B secondary~~ | agent → admin-merge on green | shipped — [#410](https://github.com/qte77/analyze-stock-kpi/pull/410) (also: URL state-clear fix, D20 yearly cadence, D21 rebalance log) |
+| Own-close fills (audit finding #4 + the matching null-benchmark #6 remainder, deferred 2026-09-24) | agent | each leg's entry/exit uses its own next trading day, not the shared union-calendar date; null benchmark matches + annualizes by actual trading days |
 | Private repo cache for `results/prices/` (statements + prices; first-seen merge) | owner (create repo + fine-grained PAT secret) → agent | cron pulls before + pushes after each run; history no longer ages out |
 | Issue: `make preview` doesn't serve `ui/public/` | agent | issue filed |
 | Issue: `llms.txt` template missing ADR-0010..0013 + newer modules | agent | issue filed |
 | US-only SEC-XBRL extension to ~2017 (filed dates) | owner (deferred) | only if the owner wants a longer US series |
+| D18 lag: country-based classification (audit finding #8 remainder, deferred 2026-09-24) | agent | a `FundamentalsSnapshot.country`-based lookup replaces the interim known-issuer list + OTC-ADR heuristic |
 
 ## Verification
 
