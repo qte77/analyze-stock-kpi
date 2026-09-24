@@ -27,6 +27,7 @@ import {
   renderBacktestChart,
   renderBacktestSummary,
   renderBacktestLists,
+  renderBacktestTrades,
   bindBacktestModeToggle,
   bindLongTermTabs,
   bindWindowChips,
@@ -155,23 +156,54 @@ const loadYieldCurveYears = () =>
 const loadEquitySpyYears = () =>
   loadYearsFromBranch(DATA_BASE_URL, "results/series/equity_spy", "date");
 
-/** The backtest's rank grid starts ≈ 2021–22 (D6) — no point fetching
- *  earlier per-year files that can only 404. */
-const BACKTEST_START_YEAR = 2021;
-const BACKTEST_CADENCES = ["monthly", "quarterly_filings", "monthly_buffer", "weekly", "buy_hold"];
+/**
+ * Two series, never spliced (D15, plan 008): Series A ("a") ranks genuine
+ * `data`-branch snapshot dates with the live qte77 Score; Series B ("b") is
+ * the reconstructed weekly-grid backfill (`score_bt`). Same contract shape —
+ * only the path prefixes + start year differ, so the loaders below are
+ * parameterized by this config rather than duplicated per series (DRY).
+ * Series A's genuine grid starts 2026-05-31 (D16); Series B's ≈ 2021–22
+ * (D6). Both floors skip per-year files that can only 404.
+ * @type {Record<"a" | "b", {seriesPrefix: string, listsPrefix: string, summaryPath: string, tradesPrefix: string, startYear: number}>}
+ */
+const BACKTEST_SERIES = {
+  a: {
+    seriesPrefix: "results/series/backtest_genuine",
+    listsPrefix: "results/backtest_genuine/lists",
+    summaryPath: "results/backtest_genuine/summary.json",
+    tradesPrefix: "results/backtest_genuine/trades",
+    startYear: 2026,
+  },
+  b: {
+    seriesPrefix: "results/series/backtest",
+    listsPrefix: "results/backtest/lists",
+    summaryPath: "results/backtest/summary.json",
+    tradesPrefix: "results/backtest/trades",
+    startYear: 2021,
+  },
+};
+const BACKTEST_CADENCES = [
+  "monthly",
+  "quarterly_filings",
+  "monthly_buffer",
+  "weekly",
+  "yearly",
+  "buy_hold",
+];
 
-/** @type {(cadence: string) => Promise<import("./lib/portfolio.js").BacktestReturnRow[]>} */
-const loadBacktestSeries = (cadence) =>
+/** @type {(kind: "a" | "b", cadence: string) => Promise<import("./lib/portfolio.js").BacktestReturnRow[]>} */
+const loadBacktestSeries = (kind, cadence) =>
   loadYearsFromBranch(
     DATA_BASE_URL,
-    `results/series/backtest/${cadence}`,
+    `${BACKTEST_SERIES[kind].seriesPrefix}/${cadence}`,
     "date",
-    BACKTEST_START_YEAR,
+    BACKTEST_SERIES[kind].startYear,
   );
 
-/** Fetch every cadence's series in parallel and key the results by cadence. */
-const loadBacktestSeriesByCadence = async () => {
-  const results = await Promise.all(BACKTEST_CADENCES.map((c) => loadBacktestSeries(c)));
+/** Fetch one series' every cadence in parallel and key the results by cadence. */
+/** @type {(kind: "a" | "b") => Promise<Record<string, import("./lib/portfolio.js").BacktestReturnRow[]>>} */
+const loadBacktestSeriesByCadence = async (kind) => {
+  const results = await Promise.all(BACKTEST_CADENCES.map((c) => loadBacktestSeries(kind, c)));
   return Object.fromEntries(BACKTEST_CADENCES.map((c, i) => [c, results[i]]));
 };
 
@@ -194,15 +226,18 @@ const toRankRows = (rows) =>
     .sort((a, b) => b.score - a.score);
 
 /**
- * The backtest section's "current candidates" panel: the SAME
+ * Series A's "Current candidates" panel (#408/ADR-0014): the SAME
  * aggregated-scores-best / aggregated-scores-worst demo snapshots the
  * universe picker can show, reshaped into `renderBacktestLists`'s input
  * shape. Owner requirement (2026-09-24): today's long/short candidates
  * must carry the identical qte77 Score as their source list, not a
- * separately-scored pick -- so this reads the aggregated lists directly
- * rather than `results/backtest/lists/*.json`'s latest entry, which stays
- * a purely historical, point-in-time-scored (`score_bt`) backfill (see
- * ADR-0014) never displayed as "today's" book.
+ * separately-scored pick — so Series A reads the aggregated lists
+ * directly (build_universe's own live output, the same construction D16
+ * has Series A reuse) rather than waiting on `results/backtest_genuine/
+ * lists/*.json`'s latest entry, which can lag the live aggregated
+ * snapshot until PR E's engine next runs. Series B's own lists stay
+ * `results/backtest/lists/*.json` (score_bt, historical, ADR-0014) via
+ * `loadBacktestLists("b")` below — deliberately a different, older list.
  * @returns {Promise<{date: string, eligible: number, best: Array<{ticker: string, score: number}>, worst: Array<{ticker: string, score: number}>} | null>}
  */
 const loadCurrentAggregatedCandidates = async () => {
@@ -227,15 +262,49 @@ const loadCurrentAggregatedCandidates = async () => {
   }
 };
 
-/** A 404 before the first Saturday cron run is expected (ADR-0013) —
- *  resolve to `null` rather than letting the rejection propagate. */
-const loadBacktestSummary = async () => {
+/** Series B's own historical, score_bt-ranked "Latest best/worst 25" (D15,
+ *  unchanged from #403/#404) — kept separate from Series A's live "Current
+ *  candidates" above (#408/ADR-0014).
+ *  @type {(kind: "a" | "b") => Promise<Array<{date: string, eligible: number, best: Array<{ticker: string, score: number}>, worst: Array<{ticker: string, score: number}>}>>} */
+const loadBacktestLists = (kind) =>
+  loadYearsFromBranch(
+    DATA_BASE_URL,
+    BACKTEST_SERIES[kind].listsPrefix,
+    "date",
+    BACKTEST_SERIES[kind].startYear,
+  );
+
+/** A 404 before this series' first cron run is expected (ADR-0013; Series A
+ *  additionally 404s until PR E ships, D15) — resolve to `null` rather than
+ *  letting the rejection propagate. Same path for both series; no
+ *  special-casing which one is currently missing.
+ *  @type {(kind: "a" | "b") => Promise<import("./lib/portfolio.js").BacktestSummary | null>} */
+const loadBacktestSummary = async (kind) => {
   try {
-    return await fetchJson(`${DATA_BASE_URL}/results/backtest/summary.json`);
+    return await fetchJson(`${DATA_BASE_URL}/${BACKTEST_SERIES[kind].summaryPath}`);
   } catch {
     return null;
   }
 };
+
+/**
+ * D21 rebalance log for one series' primary cadence — fetched only once
+ * `primaryCadence` is known (after `loadBacktestSummary` resolves), since
+ * the trades/ path is per-cadence. `primaryCadence` null/undefined (no
+ * summary yet) resolves to `[]` without a network call; a 404 on the
+ * `trades/` paths themselves (not yet produced, D21) is tolerated the same
+ * way every other backtest loader tolerates a missing series/path.
+ * @type {(kind: "a" | "b", primaryCadence: string | null | undefined) => Promise<import("./lib/portfolio.js").TradeLogEntry[]>}
+ */
+const loadBacktestTrades = (kind, primaryCadence) =>
+  primaryCadence
+    ? loadYearsFromBranch(
+        DATA_BASE_URL,
+        `${BACKTEST_SERIES[kind].tradesPrefix}/${primaryCadence}`,
+        "trade_date",
+        BACKTEST_SERIES[kind].startYear,
+      )
+    : Promise.resolve([]);
 
 // ───────────────────────── View-mode + URL state ───────────────────────────
 
@@ -657,26 +726,64 @@ async function init() {
     fgEntries,
     ycEntries,
     spyEntries,
-    backtestSeriesByCadence,
+    backtestASeriesByCadence,
     currentCandidates,
-    backtestSummary,
+    backtestASummary,
+    backtestBSeriesByCadence,
+    backtestBLists,
+    backtestBSummary,
   ] = await Promise.all([
     loadFearGreedYears(),
     loadYieldCurveYears(),
     loadEquitySpyYears(),
-    loadBacktestSeriesByCadence(),
+    loadBacktestSeriesByCadence("a"),
     loadCurrentAggregatedCandidates(),
-    loadBacktestSummary(),
+    loadBacktestSummary("a"),
+    loadBacktestSeriesByCadence("b"),
+    loadBacktestLists("b"),
+    loadBacktestSummary("b"),
   ]);
   renderFearGreedHeader(fgEntries);
   renderFearGreedChart(fgEntries);
   renderYieldCurveHeader(ycEntries);
   bindLongTermTabs(fgEntries, ycEntries, spyEntries);
   bindWindowChips();
-  renderBacktestChart(backtestSeriesByCadence, backtestSummary?.primary);
-  renderBacktestSummary(backtestSummary);
-  renderBacktestLists(currentCandidates);
-  bindBacktestModeToggle();
+
+  // D21's rebalance log is per-cadence, so it can only be fetched once each
+  // series' primary cadence is known (above).
+  const [backtestATrades, backtestBTrades] = await Promise.all([
+    loadBacktestTrades("a", backtestASummary?.primary),
+    loadBacktestTrades("b", backtestBSummary?.primary),
+  ]);
+
+  // Series A (genuine decisions, the section headline) and Series B (the
+  // reconstructed backfill, collapsible) render independently — never
+  // spliced onto one chart/axis (D15). Series A's "list" panel is #408's
+  // live "Current candidates" (aggregated-scores-best/-worst, ADR-0014),
+  // not results/backtest_genuine/lists — see loadCurrentAggregatedCandidates.
+  renderBacktestChart(
+    "a",
+    backtestASeriesByCadence,
+    backtestASummary?.primary,
+    backtestATrades.map((t) => t.trade_date),
+  );
+  renderBacktestSummary("a", backtestASummary);
+  renderBacktestLists("a", currentCandidates);
+  renderBacktestTrades("a", backtestATrades);
+  bindBacktestModeToggle("a");
+  renderBacktestChart(
+    "b",
+    backtestBSeriesByCadence,
+    backtestBSummary?.primary,
+    backtestBTrades.map((t) => t.trade_date),
+  );
+  renderBacktestSummary("b", backtestBSummary);
+  renderBacktestLists(
+    "b",
+    backtestBLists.length ? backtestBLists[backtestBLists.length - 1] : null,
+  );
+  renderBacktestTrades("b", backtestBTrades);
+  bindBacktestModeToggle("b");
   bindThemeObserver();
 }
 

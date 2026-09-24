@@ -1017,10 +1017,19 @@ body.overlay-active td.universe-col {
   line-height: 1.45;
 }
 
-/* ───────────────── Backtested long/short 25/25 (ADR-0013, plan 008) —
-                     index-line chart + metrics table + lists ─────────── */
+/* ───────────────── Backtested long/short 25/25 — two series, never
+                     spliced (ADR-0013 + D15–D19, plan 008): Series A
+                     (genuine decisions, the section headline) + Series B
+                     (reconstructed backfill, collapsible below it). Each
+                     series has its own chart/table/facts/lists — the shared
+                     selectors below cover both by id ─────────── */
 
-#backtest-chart-wrap {
+#backtest-a-headline {
+  margin-top: 2rem;
+}
+
+#backtest-a-chart-wrap,
+#backtest-b-chart-wrap {
   position: relative;
   min-height: 260px;
   height: 260px;
@@ -1037,24 +1046,29 @@ body.overlay-active td.universe-col {
   font-size: 0.875rem;
 }
 
-#backtest-mode-toggle {
+#backtest-a-mode-toggle,
+#backtest-b-mode-toggle {
   margin: 0.75rem 0 0;
 }
 
-#backtest-metrics-wrap {
+#backtest-a-metrics-wrap,
+#backtest-b-metrics-wrap {
   margin: 0.75rem 0 0;
   max-height: none;
 }
 
-#backtest-metrics-table {
+#backtest-a-metrics-table,
+#backtest-b-metrics-table {
   min-width: 52rem;
 }
 
-#backtest-metrics-table thead th {
+#backtest-a-metrics-table thead th,
+#backtest-b-metrics-table thead th {
   cursor: default;
 }
 
-#backtest-metrics-table tr.backtest-primary-row td {
+#backtest-a-metrics-table tr.backtest-primary-row td,
+#backtest-b-metrics-table tr.backtest-primary-row td {
   font-weight: 600;
   background: var(--surface);
 }
@@ -1065,22 +1079,32 @@ body.overlay-active td.universe-col {
   color: var(--text-muted);
 }
 
-#backtest-lists {
+#backtest-a-lists,
+#backtest-b-lists,
+#backtest-a-trades,
+#backtest-b-trades {
   margin: 0.75rem 0 0;
   font-size: 0.8125rem;
 }
 
-#backtest-lists summary {
+#backtest-a-lists summary,
+#backtest-b-lists summary,
+#backtest-a-trades summary,
+#backtest-b-trades summary {
   cursor: pointer;
   color: var(--text-muted);
   padding: 0.15rem 0;
 }
 
-#backtest-lists summary:hover {
+#backtest-a-lists summary:hover,
+#backtest-b-lists summary:hover,
+#backtest-a-trades summary:hover,
+#backtest-b-trades summary:hover {
   color: var(--primary);
 }
 
-#backtest-lists-body {
+#backtest-a-lists-body,
+#backtest-b-lists-body {
   display: flex;
   gap: 1.5rem;
   flex-wrap: wrap;
@@ -1089,6 +1113,83 @@ body.overlay-active td.universe-col {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;
+}
+
+/* D21 rebalance log: newest-first table, one row per rebalance. */
+#backtest-a-trades-body,
+#backtest-b-trades-body {
+  margin: 0.5rem 0 0;
+}
+
+.backtest-trades-table {
+  min-width: 44rem;
+}
+
+.trade-leg-cell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.trade-leg-empty {
+  color: var(--text-muted);
+}
+
+/* Entered/exited chips — color-coded (no blue), never the sole signal since
+   the leading +/− glyph in the chip's own text also distinguishes them. */
+.trade-chip {
+  display: inline-block;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-family: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  white-space: nowrap;
+}
+
+.trade-chip.trade-entered {
+  color: var(--data-positive);
+  background: color-mix(in oklab, var(--data-positive), var(--surface) 82%);
+}
+
+.trade-chip.trade-exited {
+  color: var(--data-negative);
+  background: color-mix(in oklab, var(--data-negative), var(--surface) 82%);
+}
+
+/* Series B collapsible (D15: never spliced onto Series A's chart/axis).
+   Mirrors the #universe-help / #backtest-*-lists <details> pattern, with a
+   heavier top-level summary since it gates a whole sub-section. */
+#backtest-b-collapsible {
+  margin: 2rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+#backtest-b-collapsible > summary {
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  padding: 0.15rem 0;
+}
+
+#backtest-b-collapsible > summary:hover {
+  color: var(--primary);
+}
+
+#backtest-b-body {
+  margin: 0.75rem 0 0;
+}
+
+.backtest-caveat-not-live {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  font-style: italic;
 }
 
 .backtest-rank-list {

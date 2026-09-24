@@ -5,7 +5,15 @@
 // `results/backtest/summary.json` into the metrics-table rows and key-facts
 // line.
 import { describe, it, expect } from "vitest";
-import { compound, metricsTableRows, keyFacts } from "../lib/portfolio.js";
+import {
+  compound,
+  metricsTableRows,
+  keyFacts,
+  sinceLabel,
+  tradeLogRows,
+  rebalanceMarkers,
+  REBALANCE_REASON_LABELS,
+} from "../lib/portfolio.js";
 
 describe("compound", () => {
   it("returns empty arrays for an empty input list", () => {
@@ -141,5 +149,104 @@ describe("keyFacts", () => {
   it("tolerates a summary whose primary cadence is absent from cadences", () => {
     const broken = { ...sampleSummary, primary: "buy_hold" };
     expect(keyFacts(broken).beta).toBeNull();
+  });
+
+  it("resolves null/fidelity to null (D16: Series A may not have either yet)", () => {
+    const sparse = { ...sampleSummary, null: null, fidelity: null };
+    expect(keyFacts(sparse)).toEqual({
+      start: "2021-11-01",
+      beta: 0.4,
+      nullPercentile: null,
+      fidelityRho: null,
+    });
+  });
+});
+
+describe("sinceLabel", () => {
+  it("appends the start date once known", () => {
+    expect(sinceLabel("Genuine decisions", "2026-05-31")).toBe(
+      "Genuine decisions since 2026-05-31",
+    );
+  });
+
+  it("falls back to the plain base text when start is null or undefined", () => {
+    expect(sinceLabel("Genuine decisions", null)).toBe("Genuine decisions");
+    expect(sinceLabel("Genuine decisions", undefined)).toBe("Genuine decisions");
+  });
+
+  it("falls back to the plain base text for an empty-string start", () => {
+    expect(sinceLabel("Genuine decisions", "")).toBe("Genuine decisions");
+  });
+});
+
+/** @type {import("../lib/portfolio.js").TradeLogEntry[]} */
+const sampleTrades = [
+  {
+    rank_date: "2026-06-01",
+    trade_date: "2026-06-02",
+    reason: "scheduled_monthly",
+    long: { entered: [{ ticker: "AAPL", rank: 1, score: 91.2 }], exited: [] },
+    short: { entered: [], exited: [{ ticker: "XYZ", rank: null, score: null }] },
+    turnover: 0.12,
+  },
+  {
+    rank_date: "2026-05-31",
+    trade_date: "2026-06-01",
+    reason: "initial",
+    long: { entered: [{ ticker: "MSFT", rank: 2, score: 88.4 }], exited: [] },
+    short: { entered: [{ ticker: "XYZ", rank: 25, score: 4.1 }], exited: [] },
+    turnover: 1,
+  },
+];
+
+describe("tradeLogRows", () => {
+  it("returns an empty array for null/undefined trades", () => {
+    expect(tradeLogRows(null)).toEqual([]);
+    expect(tradeLogRows(undefined)).toEqual([]);
+  });
+
+  it("sorts newest trade_date first without mutating the input", () => {
+    const rows = tradeLogRows(sampleTrades);
+    expect(rows.map((r) => r.trade_date)).toEqual(["2026-06-02", "2026-06-01"]);
+    expect(sampleTrades[0].trade_date).toBe("2026-06-02"); // unchanged order
+  });
+
+  it("attaches each row's human reason label", () => {
+    const rows = tradeLogRows(sampleTrades);
+    expect(rows[0].reasonLabel).toBe(REBALANCE_REASON_LABELS.scheduled_monthly);
+    expect(rows[1].reasonLabel).toBe(REBALANCE_REASON_LABELS.initial);
+  });
+
+  it("falls back to the raw reason string for an unrecognized value", () => {
+    const rows = tradeLogRows([{ ...sampleTrades[0], reason: "future_reason" }]);
+    expect(rows[0].reasonLabel).toBe("future_reason");
+  });
+
+  it("passes through nullable rank/score on exited legs unchanged (Series A limitation)", () => {
+    const rows = tradeLogRows(sampleTrades);
+    expect(rows[0].short.exited[0]).toEqual({ ticker: "XYZ", rank: null, score: null });
+  });
+});
+
+describe("rebalanceMarkers", () => {
+  it("places the index value only at rebalance trade dates, null elsewhere", () => {
+    const dates = ["2026-06-01", "2026-06-02", "2026-06-03"];
+    const indexValues = [100, 101.5, 99.8];
+    const markers = rebalanceMarkers(dates, indexValues, ["2026-06-02"]);
+    expect(markers).toEqual([null, 101.5, null]);
+  });
+
+  it("returns null for a trade date not present on the chart's date axis", () => {
+    const markers = rebalanceMarkers(["2026-06-01"], [100], ["2026-06-09"]);
+    expect(markers).toEqual([null]);
+  });
+
+  it("returns null when the aligned index value is missing/non-numeric", () => {
+    const markers = rebalanceMarkers(["2026-06-01"], [null], ["2026-06-01"]);
+    expect(markers).toEqual([null]);
+  });
+
+  it("returns an all-null array for no trade dates", () => {
+    expect(rebalanceMarkers(["2026-06-01", "2026-06-02"], [100, 101], [])).toEqual([null, null]);
   });
 });

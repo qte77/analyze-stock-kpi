@@ -1,11 +1,19 @@
 // @ts-check
 // Pure helpers for the point-in-time backtested long/short 25/25 dashboard
-// section (ADR-0013, plan 008). `compound` turns one cadence's daily return
-// rows (`results/series/backtest/<cadence>/YYYY.json`) into a 100-based
+// section (ADR-0013, plan 008). Shared by both series (D15): Series A
+// (genuine decisions, the headline) and Series B (the reconstructed
+// backfill, a collapsible below it) have the same contract shape, so every
+// helper here is parameterized by the caller's data rather than duplicated
+// per series — only the path prefix (ui/app.js) and DOM id prefix
+// (ui/charts.js) differ. `compound` turns one cadence's daily return rows
+// (`results/series/backtest[_genuine]/<cadence>/YYYY.json`) into a 100-based
 // index line client-side — no stored NAV (D5/D8). `metricsTableRows` and
-// `keyFacts` project `results/backtest/summary.json` into the shapes the
-// metrics table and key-facts line render. DOM rendering lives in
-// ui/charts.js.
+// `keyFacts` project a `results/backtest[_genuine]/summary.json` into the
+// shapes the metrics table and key-facts line render. `sinceLabel` composes
+// each series' headline once its start date is known. `tradeLogRows` and
+// `rebalanceMarkers` project a `results/backtest[_genuine]/trades/<cadence>/
+// YYYY.json` rebalance log (D21) into the log table's rows and the chart's
+// sparse marker overlay. DOM rendering lives in ui/charts.js.
 
 /**
  * @typedef {object} BacktestReturnRow
@@ -53,6 +61,7 @@ export const CADENCE_ORDER = [
   "quarterly_filings",
   "monthly_buffer",
   "weekly",
+  "yearly",
   "buy_hold",
 ];
 
@@ -62,6 +71,7 @@ export const CADENCE_LABELS = {
   quarterly_filings: "Quarterly (after filings)",
   monthly_buffer: "Monthly + buffer",
   weekly: "Weekly",
+  yearly: "Yearly",
   buy_hold: "Buy & hold",
 };
 
@@ -90,8 +100,8 @@ export const CADENCE_LABELS = {
  * @property {number} cost_bps
  * @property {string} primary
  * @property {Record<string, {gross: CadenceMetrics, net: CadenceMetrics, rebalances: number}>} cadences
- * @property {{n: number, percentile: number, median_net_ann: number}} null
- * @property {{per_date: Array<{date: string, rho: number, n: number}>, median_rho: number}} fidelity
+ * @property {{n: number, percentile: number, median_net_ann: number} | null} null
+ * @property {{per_date: Array<{date: string, rho: number, n: number}>, median_rho: number} | null} fidelity
  * @property {string[]} caveats
  */
 
@@ -142,4 +152,93 @@ export function keyFacts(summary) {
     nullPercentile: summary?.null?.percentile ?? null,
     fidelityRho: summary?.fidelity?.median_rho ?? null,
   };
+}
+
+/**
+ * Compose a two-series section heading/label with its start date once known
+ * (D16/D18: Series A's genuine-snapshot start, Series B's post-start-trim
+ * start), else the plain `base` text — never a dangling "since null"/"since
+ * —" before the first successful summary load. Shared by Series A's section
+ * headline and Series B's collapsible `<summary>` label.
+ *
+ * @param {string} base
+ * @param {string | null | undefined} start
+ * @returns {string}
+ */
+export function sinceLabel(base, start) {
+  return start ? `${base} since ${start}` : base;
+}
+
+/**
+ * @typedef {object} RankedTicker
+ * @property {string} ticker
+ * @property {number | null} rank
+ * @property {number | null} score
+ */
+
+/**
+ * @typedef {object} LegChange
+ * @property {RankedTicker[]} entered
+ * @property {RankedTicker[]} exited
+ */
+
+/**
+ * @typedef {"initial" | "scheduled_weekly" | "scheduled_monthly" | "quarterly_after_filings" | "scheduled_yearly" | "buffer_exit" | "buy_hold_initial"} RebalanceReason
+ */
+
+/**
+ * @typedef {object} TradeLogEntry
+ * @property {string} rank_date
+ * @property {string} trade_date
+ * @property {RebalanceReason} reason
+ * @property {LegChange} long
+ * @property {LegChange} short
+ * @property {number} turnover
+ */
+
+/** D21 rebalance reasons, human-readable. A reason absent from this map
+ *  falls back to its raw value in `tradeLogRows` rather than throwing — the
+ *  enum may grow ahead of this file. */
+export const REBALANCE_REASON_LABELS = {
+  initial: "Initial",
+  scheduled_weekly: "Scheduled (weekly)",
+  scheduled_monthly: "Scheduled (monthly)",
+  quarterly_after_filings: "Quarterly (after filings)",
+  scheduled_yearly: "Scheduled (yearly)",
+  buffer_exit: "Buffer exit",
+  buy_hold_initial: "Buy & hold (initial)",
+};
+
+/**
+ * Sort one series' rebalance log (D21) newest-first and attach each entry's
+ * human-readable reason label, for the "Rebalance log" collapsible table.
+ *
+ * @param {TradeLogEntry[] | null | undefined} trades
+ * @returns {Array<TradeLogEntry & {reasonLabel: string}>}
+ */
+export function tradeLogRows(trades) {
+  return [...(trades ?? [])]
+    .sort((a, b) => b.trade_date.localeCompare(a.trade_date))
+    .map((t) => ({ ...t, reasonLabel: REBALANCE_REASON_LABELS[t.reason] ?? t.reason }));
+}
+
+/**
+ * Build a sparse marker overlay aligned to a chart's x-axis `dates`/
+ * `indexValues` (the primary cadence's compounded index, D21's "mark the
+ * rebalance trade dates on the chart"): `indexValues[i]` at each date that
+ * is a rebalance trade date, else `null` — so a Chart.js dataset with
+ * `showLine:false` draws a point only on rebalance days, without a second
+ * lookup/rescale pass over the trade log at render time.
+ *
+ * @param {string[]} dates
+ * @param {Array<number | null | undefined>} indexValues
+ * @param {string[]} tradeDates
+ * @returns {Array<number | null>}
+ */
+export function rebalanceMarkers(dates, indexValues, tradeDates) {
+  const tradeDateSet = new Set(tradeDates);
+  return dates.map((d, i) => {
+    const v = indexValues[i];
+    return tradeDateSet.has(d) && typeof v === "number" ? v : null;
+  });
 }
