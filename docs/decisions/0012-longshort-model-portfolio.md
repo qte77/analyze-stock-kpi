@@ -1,6 +1,8 @@
 # ADR-0012 — Hypothetical long/short model portfolio over the aggregated best/worst lists
 
-**Status:** Accepted (2026-09-22) · **Supersedes** [ADR-0003](0003-defer-rs-hedging-epic.md)
+**Status:** Accepted (2026-09-22) · **Superseded in part by [ADR-0013](0013-point-in-time-backtest.md)**
+(its "no backtest", Min-Variance-weighting, weekly/monthly-tracker and "no costs" decisions) ·
+**Supersedes** [ADR-0003](0003-defer-rs-hedging-epic.md)
 (for the portfolio-tracking scope only — ADR-0003's RS-signal survey stays the
 reference for any future relative-strength work) · **Amends**
 [ADR-0005](0005-sentiment-risk-sources.md) §"NOT a hedging primitive"
