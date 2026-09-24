@@ -14,13 +14,6 @@ dependencies = [
     "yfinance>=1.4.1",
 ]
 
-# Heavy optional deps go behind extras so the core CLI's install stays light.
-# `portfolio` backs the long/short model-portfolio optimizer (ADR-0012 D9) —
-# scipy only; the shrinkage estimator is plain numpy (already transitive via
-# pandas/yfinance), so no scikit-learn dependency is added.
-[project.optional-dependencies]
-portfolio = ["scipy>=1.14"]
-
 [dependency-groups]
 dev = [
     "ruff>=0.15.15",

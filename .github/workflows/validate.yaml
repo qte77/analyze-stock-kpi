@@ -26,8 +26,8 @@ jobs:
       - name: Set up Python
         run: uv python install 3.12
 
-      - name: Install dev + test dependencies (incl. the `portfolio` extra)
-        run: uv sync --all-extras --group dev --group test
+      - name: Install dev + test dependencies
+        run: uv sync --group dev --group test
 
       - name: Ruff lint
         run: uv run ruff check .

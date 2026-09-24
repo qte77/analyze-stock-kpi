@@ -33,8 +33,8 @@ setup_uv:  ## Install uv (if missing)
 		echo "NOTE: restart your shell or run 'source $$HOME/.local/bin/env'"
 	fi
 
-setup_dev: setup_uv  ## uv sync (default groups: dev + test, incl. the `portfolio` extra)
-	uv sync --all-extras
+setup_dev: setup_uv  ## uv sync (default groups: dev + test)
+	uv sync
 
 setup_lychee:  ## Install lychee link checker (override LYCHEE_URL / LYCHEE_BIN to customize)
 	tmp=$$(mktemp -d)
