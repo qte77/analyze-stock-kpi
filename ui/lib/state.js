@@ -88,30 +88,51 @@ export function parseState(search, knownUniverses) {
 }
 
 /**
- * Build a URL string carrying only non-default state values, so the
- * search portion stays empty when nothing diverges from the defaults.
+ * Set `key` to `value` in `params` when `shouldSet` is true, else remove any
+ * stale value already there. `baseUrl` in `serializeState` is the *current*
+ * `location.href` (not a blank slate), so a bare `URLSearchParams.set()` per
+ * field — the previous approach — only ever added/overwrote params for
+ * non-default values and never removed one that reverted to its default
+ * (e.g. a filter/sector cleared back to `""`/`null`). That let a stale
+ * `filter=`/`sector=`/etc. carried over from a shared or bookmarked URL
+ * survive every subsequent `history.replaceState()` call.
+ *
+ * @param {URLSearchParams} params
+ * @param {string} key
+ * @param {string} value
+ * @param {boolean} shouldSet
+ */
+function setOrDelete(params, key, value, shouldSet) {
+  if (shouldSet) {
+    params.set(key, value);
+  } else {
+    params.delete(key);
+  }
+}
+
+/**
+ * Build a URL string carrying only non-default state values — every
+ * default-valued field is explicitly removed (via `setOrDelete`) rather
+ * than merely left unset, so the search portion always exactly reflects
+ * `state`, never a stale param carried over from `baseUrl`.
  *
  * @param {State} state
- * @param {string} baseUrl  Origin + path (e.g., `https://example.com/demo/`)
+ * @param {string} baseUrl  Origin + path (e.g., `https://example.com/demo/`) —
+ *   may itself already carry query params (typically the current `location.href`).
  * @returns {string}
  */
 export function serializeState(state, baseUrl) {
   const url = new URL(baseUrl);
-  if (state.view !== "simple") url.searchParams.set("view", state.view);
-  if (state.universes.length > 0) {
-    url.searchParams.set("universe", state.universes.join(","));
-  }
-  if (state.sortKey) url.searchParams.set("sort", state.sortKey);
-  if (state.sortDir !== -1) {
-    url.searchParams.set("sortDir", String(state.sortDir));
-  }
-  if (state.filter) url.searchParams.set("filter", state.filter);
-  if (state.date) url.searchParams.set("date", state.date);
-  if (state.sector) url.searchParams.set("sector", state.sector);
-  if (state.ltFgWindow !== "all") {
-    url.searchParams.set("ltFgWindow", state.ltFgWindow);
-  }
-  if (state.ycWindow !== "all") url.searchParams.set("ycWindow", state.ycWindow);
+  const p = url.searchParams;
+  setOrDelete(p, "view", state.view, state.view !== "simple");
+  setOrDelete(p, "universe", state.universes.join(","), state.universes.length > 0);
+  setOrDelete(p, "sort", state.sortKey ?? "", Boolean(state.sortKey));
+  setOrDelete(p, "sortDir", String(state.sortDir), state.sortDir !== -1);
+  setOrDelete(p, "filter", state.filter, Boolean(state.filter));
+  setOrDelete(p, "date", state.date ?? "", Boolean(state.date));
+  setOrDelete(p, "sector", state.sector ?? "", Boolean(state.sector));
+  setOrDelete(p, "ltFgWindow", state.ltFgWindow, state.ltFgWindow !== "all");
+  setOrDelete(p, "ycWindow", state.ycWindow, state.ycWindow !== "all");
   return url.toString();
 }
 

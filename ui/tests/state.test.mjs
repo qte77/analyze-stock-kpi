@@ -54,6 +54,14 @@ describe("parseState", () => {
     expect(parseState("?sort=foo&sortDir=abc", KNOWN).sortDir).toBe(-1);
   });
 
+  it("treats filter=clear as ordinary literal filter text, not a special sentinel", () => {
+    // Confirmed deliberate: `filter` has no "clear"/"none" sentinel value anywhere
+    // in this contract — a stale `?filter=clear` URL applies "clear" as a genuine
+    // text filter (matching how a real search for the word "clear" must behave).
+    // The bug this URL exposed was in serializeState (see below), not here.
+    expect(parseState("?filter=clear", KNOWN).filter).toBe("clear");
+  });
+
   it("rejects malformed dates and accepts ISO yyyy-mm-dd only", () => {
     expect(parseState("?date=2024-05-15", KNOWN).date).toBe("2024-05-15");
     expect(parseState("?date=2024/05/15", KNOWN).date).toBeNull();
@@ -94,6 +102,57 @@ describe("serializeState ↔ parseState round-trip", () => {
     };
     const url = serializeState(minimal, "https://example.com/demo/");
     expect(new URL(url).search).toBe("");
+  });
+
+  it("removes stale filter/sector/sortDir params already on baseUrl once state reverts to default (regression: cleared filters used to survive forever)", () => {
+    // `baseUrl` is the *current* location.href, exactly as `persistStateFromCurrent`
+    // passes it — e.g. a shared/bookmarked URL that already has `filter`/`sector`/etc.
+    // set. `serializeState` must clear a param it no longer holds, not just skip
+    // adding it: a bare `.set()`-per-truthy-field approach silently leaves the old
+    // value in place because it never calls `.delete()`.
+    const staleUrl =
+      "https://example.com/demo/?universe=qte77-watchlist" +
+      "&sort=composite_scores.screener_score&sortDir=1" +
+      "&date=2026-09-22&sector=Industrials&view=detailed&filter=clear";
+    const cleared = {
+      view: /** @type {"simple" | "detailed"} */ ("simple"),
+      universes: [],
+      sortKey: null,
+      sortDir: /** @type {1 | -1} */ (-1),
+      filter: "",
+      date: null,
+      sector: null,
+      ltFgWindow: /** @type {import("../lib/state.js").WindowKey} */ ("all"),
+      ycWindow: /** @type {import("../lib/state.js").WindowKey} */ ("all"),
+    };
+    const url = new URL(serializeState(cleared, staleUrl));
+    expect(url.searchParams.has("filter")).toBe(false);
+    expect(url.searchParams.has("sector")).toBe(false);
+    expect(url.searchParams.has("sortDir")).toBe(false);
+    expect(url.searchParams.has("sort")).toBe(false);
+    expect(url.searchParams.has("date")).toBe(false);
+    expect(url.searchParams.has("view")).toBe(false);
+    expect(url.searchParams.has("universe")).toBe(false);
+    expect(url.search).toBe("");
+  });
+
+  it("clears only the fields that reverted, keeping ones still non-default", () => {
+    const staleUrl = "https://example.com/demo/?sector=Industrials&filter=clear&view=detailed";
+    const partiallyCleared = {
+      view: /** @type {"simple" | "detailed"} */ ("detailed"),
+      universes: [],
+      sortKey: null,
+      sortDir: /** @type {1 | -1} */ (-1),
+      filter: "",
+      date: null,
+      sector: null,
+      ltFgWindow: /** @type {import("../lib/state.js").WindowKey} */ ("all"),
+      ycWindow: /** @type {import("../lib/state.js").WindowKey} */ ("all"),
+    };
+    const url = new URL(serializeState(partiallyCleared, staleUrl));
+    expect(url.searchParams.get("view")).toBe("detailed");
+    expect(url.searchParams.has("filter")).toBe(false);
+    expect(url.searchParams.has("sector")).toBe(false);
   });
 });
 
