@@ -17,8 +17,9 @@ migrated here (see the table).
 
 **Your loop:**
 
-1. **W0 — done** (this plan landed on `main` with plan 007 closed, tracking issue #401 open, and a #294
-   comment). Next is step 2.
+1. **W0, C (#404) and D (#403) — done.** `portfolio.yaml` was first dispatched on 2026-09-24. **Current
+   step:** PR E + PR F in parallel (D15–D19; owner 2026-09-24), with the same spawn/verify/merge loop as
+   step 2 below, using the E/F branch names in their sections.
 2. **Parallel (one message, two `Agent` calls, each `isolation: "worktree"`, base `main`):**
    - **PR C** — branch `feat/pit-backtest-core`. Prompt: "Implement §PR C of
      `docs/plans/008-pit-longshort-backtest.md` exactly, following §Decisions, §Frozen data contract and
@@ -161,6 +162,11 @@ Every run must:
 | D12 | **Drop Min-Variance + scipy:** delete `domain/portfolio_optimizer.py`, `orchestrators/longshort_portfolio.py`, their tests, the `portfolio` optional extra (`pyproject.toml:17-22`), and the config fields `config.py:50-56` (replace them with backtest paths). Revert `validate.yaml:30` → `uv sync --group dev --group test` and `Makefile:37` → `uv sync`. Keep `.gitignore` `results/prices/` (the local price/statement cache). |
 | D13 | **Cron** *(default)*: `portfolio.yaml` runs `python -m analyze_stock_kpi.orchestrators.longshort_backtest`. It does a **full deterministic recompute** each run (stateless, idempotent), cron `0 12 * * 6` (Sat 12:00 UTC; no other data-branch writer then). Reuse `_batch_close_prices` (`fundamentals.py:495`) for prices; this resolves the 007 dedupe row. |
 | D14 | **ADR-0013** supersedes ADR-0012's "no backtest", Min-Variance, weekly/monthly-tracker and "no costs" decisions (point-in-time KPIs remove the look-ahead that justified "no backtest"). ADR-0012's status line gets "Superseded in part by ADR-0013". |
+| D15 | **Two series, never spliced** (owner 2026-09-24). **Series A = headline:** genuine decisions. Series B = the reconstructed backfill (D1–D14, the as-built #404), labelled an approximation. |
+| D16 | **Series A (genuine decisions):** each rank date = a genuine `data`-branch snapshot date (`results/demo/<base-universe>/<date>.json`, from 2026-05-31). Rank with the **full live qte77 Score** (all 9 inputs, as stored in the snapshot) by reusing `aggregated_scores_best_and_worst.build_universe(..., as_of=d)` unchanged (DRY; the same dedup + 14-day staleness gate as the live lists), giving the top/bottom 25. Trade at the close of the first trading day **strictly after** d, which is conservative, since snapshots are fetched ~06:15 UTC, after Asian closes. The same book rules (D5), costs (D8), metrics (D9) and cadences (D7) apply, on the snapshot grid instead of the weekly grid. Across a snapshot gap (e.g. 07-12 → 09-21) the book is held; this is disclosed. No null/fidelity for A until it has ≥ 12 monthly rebalances (the D9 rule). |
+| D17 | **Freeze, append-only, both series** (owner 2026-09-24). Once a date's list or a day's return row is written, it is never recomputed. Each run only appends lists for new rank dates and rows for new days; the summary/metrics are recomputed from the frozen rows. A **`method_version` bump** is the only way to rebuild history. It is explicit, is logged in the summary's `caveats`, and is used exactly once for D18. This supersedes D13's "full deterministic recompute". |
+| D18 | **Filing lag (series B):** 90 days for US tickers (no exchange suffix), **120 days for non-US** (any `.XX` suffix, e.g. `.DE`, `.SA`, `.T`, `.KS`), because 20-F and foreign filers publish later. It ships with a `method_version` bump, so B's history is rebuilt once and then frozen. |
+| D19 | **Sortino stays** in both series' score. It is part of the qte77 Score (ADR-0004), and it's reconstructable from closes up to d only. |
 
 ## Frozen data contract (`data` branch, derived only)
 
@@ -178,6 +184,10 @@ Every run must:
   - `null{n, percentile, median_net_ann}`;
   - `fidelity{per_date:[{date, rho, n}], median_rho}`;
   - `caveats[]` (strings the UI renders verbatim).
+- **Series A (D16), a parallel set with the same shapes:** `results/series/backtest_genuine/<cadence>/YYYY.json`,
+  `results/backtest_genuine/lists/YYYY.json` (one entry per genuine snapshot date; `score` = the live
+  qte77 Score) and `results/backtest_genuine/summary.json`. The same model, except `null` and `fidelity` may
+  be `null` (D16). Series B keeps the paths above unchanged, so #403's UI keeps working.
 
 ## Source map
 
@@ -251,21 +261,76 @@ Every run must:
 - **Done-when:** `make validate` green + local §UI e2e passes (screenshots + ≥ 1 video per orientation,
   no app console errors).
 
+## PR E — series A + freeze + lag (worktree agent, branch `feat/pit-backtest-genuine`)
+
+- `src/analyze_stock_kpi/orchestrators/longshort_backtest.py` (#404):
+  - Add series A per D16. Reuse `build_universe` from `orchestrators/aggregated_scores_best_and_worst.py`, plus the existing `simulate`, `metrics` and `rebalance_dates`, generalized from the weekly grid to any date grid.
+  - Add the D17 append-only persistence for both series: load the existing years, skip dates ≤ the last stored date, write only new entries, and recompute the summary from the stored rows.
+  - Add the D18 suffix-based lag, and bump `method_version`.
+  - **Fix the start-trim bug (found 2026-09-24 in #404's first run):** the B return series starts at
+    **1962-01-02**, the union-calendar start, instead of `summary.start`, which is 2023-03-31.
+    - The published year files hold ~15.7k pre-start zero-return days.
+    - Every metric is diluted by them: the published ann. vol is 4.96 % and the hit rate 2.8 %. Over the
+      real 907-day window the figures are ann. vol ≈ 21.2 %, ann. return ≈ 14.3 %, total +61.8 % and
+      max DD −23.4 %.
+    - The fix: emit rows only from the first trade date, compute metrics over that window only, and
+      **delete the pre-start year files on `data`**. Verify that `scripts/data-branch-commit.cjs` can
+      delete paths, or extend it.
+    - Also investigate the 2026-03-18 short-basket move of −13.3 % in one day (a bad price or split?)
+      and filter bad ticks if confirmed.
+- `.github/workflows/portfolio.yaml`:
+  - also check out `results/series/backtest_genuine/` and `results/backtest_genuine/` from `data`;
+  - extend the commit regex to the A paths.
+- Docs:
+  - ADR-0013 amendment (dated) for D15–D19;
+  - the `architecture.md` + `data-sources.md` paths;
+  - the changelog fragment (`### Changed`).
+- **Tests (RED first, no network):**
+  - A ranks via `build_universe` on a hand-built 2-universe snapshot set;
+  - the trade date is strictly after the snapshot date;
+  - holdings persist across a snapshot gap;
+  - an append-only re-run with no new dates leaves every file byte-identical;
+  - a run with 1 new date appends exactly its rows and keeps earlier rows unchanged;
+  - a `method_version` bump rebuilds once;
+  - the lag is 90 days for `AAPL` and 120 days for `SAP.DE`, at the boundary day.
+- **Done-when:**
+  - `make validate` is green;
+  - a local run writes both A and B artifacts;
+  - A's start date is 2026-05-31 or later;
+  - the PR body reports A's monthly net index and rebalance count.
+
+## PR F — dashboard: A headline, B secondary (worktree agent, branch `feat/pit-backtest-ui-genuine`)
+
+- `ui/**` only:
+  - The section headline becomes **Series A** ("Genuine decisions since 2026-05-31"): its chart, metrics table, key facts and latest best/worst 25.
+  - **Series B** moves into a collapsible "Reconstructed backfill since 2023 (approximation)" block, with its fidelity ρ and null percentile, and a caveat saying it is **not** the live qte77 Score (6 of 9 inputs).
+  - Neither series is ever drawn on the same axis as a continuation of the other.
+  - A's empty state must be clean if the A paths 404.
+- Reuse the `ui/lib/portfolio.js` helpers, parameterized by path prefix.
+- vitest for the helpers.
+- The full §UI e2e locally (a fixture for A under `/tmp`, outside the repo).
+- A changelog fragment.
+
 ## Parallelism
 
 | PR | Files |
 |---|---|
 | C | `src/**`, `tests/**` (Python), `pyproject.toml`, `uv.lock`, `Makefile`, `.github/workflows/{portfolio,validate}.yaml`, `docs/**`, `README.md`, own changelog |
 | D | `ui/**` only, own changelog |
+| E | `src/**`, Python `tests/**`, `.github/workflows/portfolio.yaml`, `docs/**` (except this plan's other rows), own changelog |
+| F | `ui/**` only, own changelog, plus its own row here |
 
 ## Remaining work (the ONLY list of open items)
 
 | Item | Gate | Done-when |
 |---|---|---|
 | ~~W0 land this plan + close plan 007 + open tracking issue + #294 comment~~ | agent → admin-merge on green | shipped — issue #401, plan on `main` |
-| ~~PR C core engine + cron + removals + docs~~ | agent → admin-merge on green | PR [#404](https://github.com/qte77/analyze-stock-kpi/pull/404) open, `make validate` + full local run green, pending admin-merge |
-| Dispatch `portfolio.yaml` + verify data files + Pages e2e (migrated from 007) | agent (after C+D) | the three artifact kinds on `data`; the section renders on Pages without console errors |
-| ~~PR D dashboard section~~ | agent → admin-merge on green | PR [#403](https://github.com/qte77/analyze-stock-kpi/pull/403) open, `make validate` + local e2e green, pending admin-merge |
+| ~~PR C core engine + cron + removals + docs~~ | agent → admin-merge on green | shipped — [#404](https://github.com/qte77/analyze-stock-kpi/pull/404) merged 2026-09-24 |
+| PR E series A + freeze + lag (D15–D19) + B start-trim fix | agent → admin-merge on green | per PR E done-when; B's published metrics match its real window |
+| ~~PR D dashboard section~~ | agent → admin-merge on green | shipped — [#403](https://github.com/qte77/analyze-stock-kpi/pull/403) merged 2026-09-23 |
+| Dispatch `portfolio.yaml` + verify data files + Pages e2e (migrated from 007) | agent (after E+F) | A + B artifacts on `data`; the section renders on Pages without console errors; the e2e defects list is triaged |
+| PR F dashboard A headline + B secondary | agent → admin-merge on green | per PR F done-when |
+| Private repo cache for `results/prices/` (statements + prices; first-seen merge) | owner (create repo + fine-grained PAT secret) → agent | cron pulls before + pushes after each run; history no longer ages out |
 | Issue: `make preview` doesn't serve `ui/public/` | agent | issue filed |
 | Issue: `llms.txt` template missing ADR-0010..0013 + newer modules | agent | issue filed |
 | US-only SEC-XBRL extension to ~2017 (filed dates) | owner (deferred) | only if the owner wants a longer US series |
