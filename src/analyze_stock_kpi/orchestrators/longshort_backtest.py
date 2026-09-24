@@ -1,0 +1,1313 @@
+"""Point-in-time backfilled best/worst 25 + backtested long/short 25/25 (ADR-0013).
+
+Two related outputs, both ranked by a point-in-time-only reduction of the
+qte77 Score (D2, ``score_at``):
+
+1. **Backfill** — the aggregated best/worst 25 tickers at the close of every
+   weekly rank date since inception, ranked by the KPIs as they actually
+   were on that date (no look-ahead).
+2. **Backtest** — a hypothetical long best-25 / short worst-25, equal-weight
+   1/25, book marked daily from closing prices, across five cadences
+   (D7), extended forward by the weekly cron under identical rules.
+
+Public API (pure, individually testable — see the plan's PR C test list):
+
+- :func:`pit_fundamentals` — D2/D3 point-in-time statement ratios.
+- :func:`score_at` — D2/D4 point-in-time ``screener_score``.
+- :func:`rank_dates` — D6 weekly rank grid.
+- :func:`rebalance_dates` — D7 per-cadence rebalance dates.
+- :func:`select` — the D7 monthly-buffer selection rule.
+- :func:`simulate` — D5/D8 daily-marked drift + cost simulation.
+- :func:`metrics` — D9 per-cadence gross/net metrics.
+- :func:`null_percentile` — D10 seeded random-book benchmark.
+- :func:`fidelity` — D11 Spearman check against genuine live snapshots.
+
+I/O layer: :func:`fetch_frames` (yfinance statements, one immutable file
+per ticker per fetch date under the gitignored
+``results/prices/statements/<ticker>/<fetch-date>.json``, merged
+first-fetch-wins per period — a layout a future PR can sync to a private
+repo so history outgrows yfinance's ~4-5 FY window), :func:`write_closes_cache`
+(``results/prices/closes/<ticker>.csv``, same sync-target posture), the
+``write_*``/``read_*`` contract persistence helpers, and :func:`main`
+(cron entrypoint — full deterministic recompute, D13).
+
+Never commits raw prices or statement line items — only returns, scores,
+ranks, weights and metrics reach the ``data`` branch (see
+``docs/data-sources.md`` guardrails).
+"""
+
+from __future__ import annotations
+
+import bisect
+import itertools
+import json
+import logging
+import random
+import re
+import statistics
+from datetime import date, timedelta
+from typing import TYPE_CHECKING, Literal, cast
+
+import numpy as np
+import pandas as pd
+import yfinance as yf
+from pydantic import BaseModel, ConfigDict
+from tqdm import tqdm
+
+from analyze_stock_kpi.config import settings
+from analyze_stock_kpi.data_sources.equity_spy import _fetch_history_closes
+from analyze_stock_kpi.data_sources.fundamentals import (
+    FundamentalsSnapshot,
+    _batch_close_prices,
+    _close_between,
+    _compute_sortino,
+    _find_row,
+    _read_rd_revenue,
+    _safe_ratio,
+)
+from analyze_stock_kpi.domain.composite_scores import screener_score
+from analyze_stock_kpi.domain.universe import PRESET_DIR, _read_symbol_file
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+    from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
+Frames = tuple["pd.DataFrame | None", "pd.DataFrame | None"]
+"""One ticker's ``(income_stmt, balance_sheet)`` as yfinance returns them."""
+
+Cadence = Literal["monthly", "quarterly_filings", "monthly_buffer", "weekly", "buy_hold"]
+CADENCES: tuple[Cadence, ...] = (
+    "monthly",
+    "quarterly_filings",
+    "monthly_buffer",
+    "weekly",
+    "buy_hold",
+)
+PRIMARY_CADENCE: Cadence = "monthly"
+
+_BOOK_SIZE = 25
+"""Long/short leg size (D5)."""
+
+_BUFFER_RANK = 40
+"""D7 monthly-buffer: a held name is kept while its rank stays inside this band."""
+
+_FILING_LAG_DAYS = 90
+"""D3: a statement column is usable at ``as_of`` iff ``period_end + 90d <= as_of``."""
+
+_COST_BPS = 10.0
+"""D8: one-way-turnover trading cost, in basis points."""
+
+_TRADING_DAYS = 252
+_MIN_MONTHS_FOR_METRICS = 12
+"""D9: nothing is annualized from fewer than 12 months of monthly returns."""
+
+_CI90_Z = 1.645
+"""Two-sided 90% normal critical value, used for the D9 mean-monthly-return CI."""
+
+_MIN_ELIGIBLE_START = 200
+"""D6: the backfill starts at the first grid date with at least this many
+eligible tickers (`score_bt` not `None` and >= 1y of closes)."""
+
+_NULL_DRAWS = 1000
+"""D10: number of seeded random 25/25 books in the null benchmark."""
+
+_NULL_SEED = 42
+
+_SORTINO_LOOKBACK_YEARS = 1
+
+_BACKTEST_SYMBOL = "_backtest_"
+"""Placeholder `FundamentalsSnapshot.symbol` for `score_at` — the score
+formula never reads `symbol`, so any constant value is equivalent."""
+
+_SCORE_INPUT_FIELDS: tuple[str, ...] = (
+    "return_on_equity",
+    "return_on_assets",
+    "operating_margins",
+    "rd_to_revenue",
+    "current_ratio",
+    "sortino_ratio",
+)
+"""D2: the only point-in-time-reconstructable inputs `score_at` feeds into
+`screener_score` — `forward_pe`/`trailing_peg_ratio`/`beta` are always `None`."""
+
+_DERIVED_UNIVERSE_PREFIXES = ("aggregated-scores-", "enhanced-kpi-screener-", "crypto-")
+
+_CAVEATS: tuple[str, ...] = (
+    "Survivorship bias: the universe is each preset's CURRENT membership, not "
+    "the historical constituent list, so delisted/removed names never appear "
+    "in the backfill.",
+    "The `sp500` preset is today's top-100-by-cap tickers, not the S&P 500's "
+    "actual historical membership — a size look-ahead.",
+    "Point-in-time fundamentals use yfinance's LATEST-RESTATED annual figures, "
+    "not the as-originally-reported values a contemporaneous investor would "
+    "have seen.",
+    "No SEC filing dates are available from yfinance; a statement column is "
+    "treated as usable 90 days after its period end, an approximation of the "
+    "real filing lag.",
+    "A ticker with no price on a given day is treated as flat (0% return) "
+    "that day; a name that stops trading entirely after entry is held at its "
+    "last known close rather than dropped.",
+    "Returns are local-currency, gross of FX, financing and borrow costs; "
+    "only the 10 bp one-way-turnover trading cost is modelled.",
+    "This is a hypothetical, backward-looking construction — not a live "
+    "track record and not investment advice.",
+)
+
+
+# ----- Frozen data contract (pydantic) -----
+
+
+class BacktestDailyRow(BaseModel):
+    """One trading day's marked return + turnover for one cadence (D5/D8)."""
+
+    model_config = ConfigDict(frozen=True)
+
+    date: date
+    ret_long: float
+    ret_short: float
+    ret_ls_gross: float
+    ret_ls_net: float
+    turnover: float
+
+
+class RankEntry(BaseModel):
+    """One ticker's point-in-time score at a rank date."""
+
+    model_config = ConfigDict(frozen=True)
+
+    ticker: str
+    score: float
+
+
+class BacktestListEntry(BaseModel):
+    """One weekly rank date's backfilled best/worst 25 (D6)."""
+
+    model_config = ConfigDict(frozen=True)
+
+    date: date
+    eligible: int
+    best: list[RankEntry]
+    worst: list[RankEntry]
+
+
+class MetricsBlock(BaseModel):
+    """D9 metrics for one gross/net leg of one cadence.
+
+    Every field is `None` when fewer than `_MIN_MONTHS_FOR_METRICS` months
+    of returns are available (nothing is annualized from a too-short run).
+    """
+
+    model_config = ConfigDict(frozen=True)
+
+    ann_return: float | None = None
+    ann_vol: float | None = None
+    max_drawdown: float | None = None
+    ann_turnover: float | None = None
+    long_ann_return: float | None = None
+    short_ann_return: float | None = None
+    beta: float | None = None
+    hit_rate: float | None = None
+    mean_monthly_return: float | None = None
+    ci90: tuple[float, float] | None = None
+    t_stat: float | None = None
+
+
+class CadenceMetrics(BaseModel):
+    """One cadence's gross + net `MetricsBlock` plus its rebalance count."""
+
+    model_config = ConfigDict(frozen=True)
+
+    gross: MetricsBlock
+    net: MetricsBlock
+    rebalances: int
+
+
+class NullBenchmark(BaseModel):
+    """D10: the seeded random-book null benchmark result."""
+
+    model_config = ConfigDict(frozen=True)
+
+    n: int
+    percentile: float
+    median_net_ann: float
+
+
+class FidelityDate(BaseModel):
+    """One genuine-snapshot date's Spearman rho (D11)."""
+
+    model_config = ConfigDict(frozen=True)
+
+    date: date
+    rho: float | None
+    n: int
+
+
+class Fidelity(BaseModel):
+    """D11: per-date fidelity checks + their median."""
+
+    model_config = ConfigDict(frozen=True)
+
+    per_date: list[FidelityDate]
+    median_rho: float | None
+
+
+class BacktestSummary(BaseModel):
+    """`results/backtest/summary.json` — the full frozen-contract summary."""
+
+    model_config = ConfigDict(frozen=True)
+
+    method_version: str
+    as_of: date
+    start: date
+    universes: list[str]
+    score_inputs: list[str]
+    cost_bps: float
+    primary: str
+    cadences: dict[str, CadenceMetrics]
+    null: NullBenchmark
+    fidelity: Fidelity
+    caveats: list[str]
+
+
+# ----- D2/D3/D4: point-in-time fundamentals + score -----
+
+
+def _usable_column(frame: pd.DataFrame | None, as_of: date) -> pd.Timestamp | None:
+    """Latest column whose ``period_end + 90d <= as_of``, or `None` (D3)."""
+    if frame is None or frame.empty:
+        return None
+    usable = [
+        c
+        for c in frame.columns
+        if isinstance(c, pd.Timestamp) and (c.date() + timedelta(days=_FILING_LAG_DAYS)) <= as_of
+    ]
+    return max(usable) if usable else None
+
+
+def pit_fundamentals(frames: Frames, as_of: date) -> dict[str, float | None]:
+    """Point-in-time D2 ratios usable at ``as_of`` (D3).
+
+    ``frames`` is ``(income_stmt, balance_sheet)`` as yfinance returns them
+    (columns = period-end Timestamps). A column is usable at ``as_of`` iff
+    ``period_end + 90 days <= as_of`` (no filing dates in yfinance) — the
+    latest usable column of each frame is picked independently. Missing
+    rows/frames yield `None` per field rather than raising.
+    ``rd_to_revenue`` reuses ``fundamentals._read_rd_revenue`` unchanged
+    (DRY); the other four ratios reuse ``fundamentals._find_row``.
+    """
+    income_stmt, balance_sheet = frames
+    ic_col = _usable_column(income_stmt, as_of)
+    bs_col = _usable_column(balance_sheet, as_of)
+    out: dict[str, float | None] = dict.fromkeys(_SCORE_INPUT_FIELDS[:-1])
+
+    net_income: float | None = None
+    if ic_col is not None and income_stmt is not None:
+        latest_ic = cast("pd.Series", income_stmt[ic_col])
+        net_income = _find_row(latest_ic, "net income")
+        total_revenue = _find_row(latest_ic, "total revenue")
+        operating_income = _find_row(latest_ic, "operating income")
+        out["operating_margins"] = _safe_ratio(operating_income, total_revenue)
+        ic_single_col = cast("pd.DataFrame", income_stmt[[ic_col]])
+        out["rd_to_revenue"] = _safe_ratio(*_read_rd_revenue(ic_single_col))
+
+    if bs_col is not None and balance_sheet is not None:
+        latest_bs = cast("pd.Series", balance_sheet[bs_col])
+        stockholders_equity = _find_row(latest_bs, "stockholders equity")
+        total_assets = _find_row(latest_bs, "total assets")
+        current_assets = _find_row(latest_bs, "current assets")
+        current_liabilities = _find_row(latest_bs, "current liabilities")
+        out["return_on_equity"] = _safe_ratio(net_income, stockholders_equity)
+        out["return_on_assets"] = _safe_ratio(net_income, total_assets)
+        out["current_ratio"] = _safe_ratio(current_assets, current_liabilities)
+
+    return out
+
+
+def score_at(fund: dict[str, float | None], closes: pd.Series, as_of: date) -> float | None:
+    """D2/D4: `screener_score` on a point-in-time-only snapshot.
+
+    Builds a `FundamentalsSnapshot` from `fund`'s five D3 ratios plus a 1y
+    trailing Sortino sliced from `closes` up to `as_of`
+    (`fundamentals._compute_sortino`, unchanged). `forward_pe`,
+    `trailing_peg_ratio` and `beta` stay `None` forever (D2), so Valuation
+    always drops from `screener_score` and Risk degrades to the current
+    ratio alone. Reuses `screener_score` unchanged (DRY) — no seam, because
+    the input set never changes.
+    """
+    as_of_ts = cast("pd.Timestamp", pd.Timestamp(as_of))
+    cutoff = as_of_ts - pd.DateOffset(years=_SORTINO_LOOKBACK_YEARS)
+    window = _close_between(closes, cutoff, as_of_ts)
+    snap = FundamentalsSnapshot.model_validate(
+        {
+            "symbol": _BACKTEST_SYMBOL,
+            "return_on_equity": fund.get("return_on_equity"),
+            "return_on_assets": fund.get("return_on_assets"),
+            "operating_margins": fund.get("operating_margins"),
+            "rd_to_revenue": fund.get("rd_to_revenue"),
+            "current_ratio": fund.get("current_ratio"),
+            "sortino_ratio": _compute_sortino(window),
+        }
+    )
+    return screener_score(snap)
+
+
+# ----- D6/D7: rank grid + cadence rebalance dates -----
+
+
+def rank_dates(calendar: list[date]) -> list[date]:
+    """D6: the last trading day of each ISO week present in `calendar`."""
+    by_week: dict[tuple[int, int], date] = {}
+    for d in calendar:
+        key = d.isocalendar()[:2]
+        if key not in by_week or d > by_week[key]:
+            by_week[key] = d
+    return sorted(by_week.values())
+
+
+def _monthly_dates(grid: list[date]) -> list[date]:
+    """First grid date of each calendar month."""
+    out: list[date] = []
+    seen: set[tuple[int, int]] = set()
+    for d in grid:
+        key = (d.year, d.month)
+        if key not in seen:
+            seen.add(key)
+            out.append(d)
+    return out
+
+
+_QUARTERLY_TRIGGER_MD: tuple[tuple[int, int], ...] = ((2, 15), (5, 15), (8, 15), (11, 15))
+
+
+def _quarterly_filing_dates(grid: list[date]) -> list[date]:
+    """First grid date on/after each Feb/May/Aug/Nov 15 spanned by `grid`."""
+    if not grid:
+        return []
+    years = range(grid[0].year, grid[-1].year + 1)
+    triggers = sorted(date(y, m, d) for y in years for m, d in _QUARTERLY_TRIGGER_MD)
+    out: list[date] = []
+    for trig in triggers:
+        candidates = [d for d in grid if d >= trig]
+        if candidates:
+            out.append(min(candidates))
+    return sorted(set(out))
+
+
+def rebalance_dates(cadence: str, grid: list[date]) -> list[date]:
+    """D7: the subset of `grid` (D6's weekly rank dates) each cadence trades on."""
+    if not grid:
+        return []
+    if cadence in ("weekly",):
+        return list(grid)
+    if cadence in ("monthly", "monthly_buffer"):
+        return _monthly_dates(grid)
+    if cadence == "quarterly_filings":
+        return _quarterly_filing_dates(grid)
+    if cadence == "buy_hold":
+        return [grid[0]]
+    raise ValueError(f"unknown cadence: {cadence}")
+
+
+def _buffer_leg(ranks: list[str], prev: list[str], book_size: int, buffer: int) -> list[str]:
+    """One leg's D7 buffer rule: keep-if-in-band, refill-from-the-top."""
+    rank_of = {t: i + 1 for i, t in enumerate(ranks)}
+    kept = [t for t in prev if rank_of.get(t, len(ranks) + 1) <= buffer]
+    for t in ranks:
+        if len(kept) >= book_size:
+            break
+        if t not in kept:
+            kept.append(t)
+    return kept[:book_size]
+
+
+def select(
+    ranks: list[str],
+    cadence: str,
+    prev_holdings: tuple[list[str], list[str]] | None,
+    *,
+    book_size: int = _BOOK_SIZE,
+    buffer: int = _BUFFER_RANK,
+) -> tuple[list[str], list[str]]:
+    """The D7 selection rule for one rank date: `(long_tickers, short_tickers)`.
+
+    `ranks` is every eligible ticker for the rank date, sorted best-to-worst
+    by `score_at`. Every cadence except `"monthly_buffer"` takes a fresh
+    top/bottom `book_size`. `"monthly_buffer"` keeps a `prev_holdings` name
+    while its rank stays within `buffer` of its own end, refilling openings
+    from the best-ranked names (worst-ranked for the short leg) not already
+    held. Callers only invoke this once `len(ranks) >= 2 * book_size`, so
+    the top/bottom slices never overlap.
+    """
+    if cadence != "monthly_buffer" or prev_holdings is None:
+        return ranks[:book_size], list(reversed(ranks[-book_size:]))
+    prev_long, prev_short = prev_holdings
+    long_names = _buffer_leg(ranks, prev_long, book_size, buffer)
+    short_names = _buffer_leg(list(reversed(ranks)), prev_short, book_size, buffer)
+    return long_names, short_names
+
+
+# ----- D5/D8: simulate -----
+
+
+def _drift_leg(weights: dict[str, float], day_returns: dict[str, float]) -> dict[str, float]:
+    """One day's weight drift within a self-financing leg (D5).
+
+    ``new_w_i = old_w_i * (1 + r_i) / (1 + leg_return)`` where
+    ``leg_return = sum(old_w_i * r_i)`` keeps the leg summing to 1 after any
+    price move. An empty leg (no holdings yet) stays empty.
+    """
+    if not weights:
+        return {}
+    leg_return = sum(w * day_returns.get(t, 0.0) for t, w in weights.items())
+    denom = 1.0 + leg_return
+    if denom == 0:
+        return dict(weights)
+    return {t: w * (1.0 + day_returns.get(t, 0.0)) / denom for t, w in weights.items()}
+
+
+def _turnover(
+    target_long: dict[str, float],
+    target_short: dict[str, float],
+    drifted_long: dict[str, float],
+    drifted_short: dict[str, float],
+) -> float:
+    """D8: one-way turnover, ``0.5 * sum(|w_new - w_drifted|)`` over both legs."""
+    long_diff = sum(
+        abs(target_long.get(t, 0.0) - drifted_long.get(t, 0.0))
+        for t in set(target_long) | set(drifted_long)
+    )
+    short_diff = sum(
+        abs(target_short.get(t, 0.0) - drifted_short.get(t, 0.0))
+        for t in set(target_short) | set(drifted_short)
+    )
+    return 0.5 * (long_diff + short_diff)
+
+
+def _cost(turnover: float) -> float:
+    """D8: ``10 bp * one-way turnover``."""
+    return (_COST_BPS / 10_000.0) * turnover
+
+
+def simulate(
+    weights_by_trade_date: dict[date, tuple[dict[str, float], dict[str, float]]],
+    returns: dict[str, dict[date, float]],
+) -> list[BacktestDailyRow]:
+    """Daily-marked equal-weight long/short simulation with drift + costs (D5/D8).
+
+    `weights_by_trade_date` maps each TRADE date — already the trading day
+    after its rank date, so there is no same-close look-ahead — to that
+    rebalance's `(long, short)` target weights, each leg summing to 1.
+    `returns` is every ticker's per-calendar-day simple return (0.0 on a
+    day it didn't trade — D5's union-calendar rule). The full calendar is
+    the sorted union of every ticker's return dates.
+
+    Weights drift day to day between rebalances (`_drift_leg`) and reset to
+    the new target at each trade date; that day's own `ret_long`/`ret_short`
+    still use the PRE-swap (drifted) weights — the swap happens at the
+    day's close. One-way turnover (`_turnover`) and its cost (`_cost`) are
+    charged on the trade date and only reduce `ret_ls_net`.
+    """
+    calendar = sorted({d for series in returns.values() for d in series})
+    rows: list[BacktestDailyRow] = []
+    current_long: dict[str, float] = {}
+    current_short: dict[str, float] = {}
+    for day in calendar:
+        day_returns = {t: series.get(day, 0.0) for t, series in returns.items()}
+        ret_long = sum(w * day_returns.get(t, 0.0) for t, w in current_long.items())
+        ret_short = sum(w * day_returns.get(t, 0.0) for t, w in current_short.items())
+        drifted_long = _drift_leg(current_long, day_returns)
+        drifted_short = _drift_leg(current_short, day_returns)
+        if day in weights_by_trade_date:
+            target_long, target_short = weights_by_trade_date[day]
+            turnover = _turnover(target_long, target_short, drifted_long, drifted_short)
+            current_long, current_short = dict(target_long), dict(target_short)
+        else:
+            turnover = 0.0
+            current_long, current_short = drifted_long, drifted_short
+        ret_ls_gross = ret_long - ret_short
+        rows.append(
+            BacktestDailyRow(
+                date=day,
+                ret_long=ret_long,
+                ret_short=ret_short,
+                ret_ls_gross=ret_ls_gross,
+                ret_ls_net=ret_ls_gross - _cost(turnover),
+                turnover=turnover,
+            )
+        )
+    return rows
+
+
+# ----- D9: metrics -----
+
+
+def _monthly_returns(dates: list[date], daily: list[float]) -> dict[tuple[int, int], float]:
+    """Compound `daily` returns within each calendar month."""
+    out: dict[tuple[int, int], float] = {}
+    for d, r in zip(dates, daily, strict=True):
+        key = (d.year, d.month)
+        out[key] = (1.0 + out[key]) * (1.0 + r) - 1.0 if key in out else r
+    return out
+
+
+def _max_drawdown(daily: list[float]) -> float:
+    """Peak-to-trough drawdown of the cumulative index built from `daily`."""
+    peak = 1.0
+    value = 1.0
+    max_dd = 0.0
+    for r in daily:
+        value *= 1.0 + r
+        peak = max(peak, value)
+        max_dd = min(max_dd, value / peak - 1.0)
+    return max_dd
+
+
+def _annualize_total(daily: list[float]) -> float:
+    """Compound `daily` returns then annualize by trading-day count."""
+    total = 1.0
+    for r in daily:
+        total *= 1.0 + r
+    years = len(daily) / _TRADING_DAYS
+    return total ** (1.0 / years) - 1.0 if years > 0 else 0.0
+
+
+_BETA_MIN_VARIANCE = 1e-12
+"""Below this, SPY's variance is floating-point noise, not signal — `cov/var`
+on two near-constant series is numerically meaningless even when it happens
+to compute a determinate-looking ratio."""
+
+
+def _beta(daily: list[float], dates: list[date], spy_returns: dict[date, float]) -> float | None:
+    """Realized beta: `cov(daily, spy) / var(spy)` over overlapping dates."""
+    paired = [(r, spy_returns[d]) for d, r in zip(dates, daily, strict=True) if d in spy_returns]
+    if len(paired) < 2:
+        return None
+    ys = np.array([p[0] for p in paired])
+    xs = np.array([p[1] for p in paired])
+    var = xs.var()
+    if var < _BETA_MIN_VARIANCE:
+        return None
+    return float(np.cov(ys, xs, bias=True)[0, 1] / var)
+
+
+def _metrics_block(
+    dates: list[date],
+    daily: list[float],
+    daily_long: list[float],
+    daily_short: list[float],
+    turnover: list[float],
+    spy_returns: dict[date, float],
+) -> MetricsBlock:
+    """D9 metrics for one gross-or-net daily return series."""
+    monthly = _monthly_returns(dates, daily)
+    if len(monthly) < _MIN_MONTHS_FOR_METRICS:
+        return MetricsBlock()
+    monthly_values = list(monthly.values())
+    n = len(monthly_values)
+    mean_m = float(np.mean(monthly_values))
+    std_m = float(np.std(monthly_values, ddof=1)) if n > 1 else 0.0
+    se = std_m / (n**0.5) if n > 0 else 0.0
+    return MetricsBlock(
+        ann_return=_annualize_total(daily),
+        ann_vol=float(np.std(daily, ddof=1) * (_TRADING_DAYS**0.5)) if len(daily) > 1 else None,
+        max_drawdown=_max_drawdown(daily),
+        ann_turnover=sum(turnover) * (_TRADING_DAYS / len(dates)) if dates else None,
+        long_ann_return=_annualize_total(daily_long),
+        short_ann_return=_annualize_total(daily_short),
+        beta=_beta(daily, dates, spy_returns),
+        hit_rate=sum(1 for v in monthly_values if v > 0) / n,
+        mean_monthly_return=mean_m,
+        ci90=(mean_m - _CI90_Z * se, mean_m + _CI90_Z * se),
+        t_stat=(mean_m / se) if se > 0 else None,
+    )
+
+
+def metrics(
+    rows: list[BacktestDailyRow], spy_returns: dict[date, float]
+) -> tuple[MetricsBlock, MetricsBlock]:
+    """D9: `(gross, net)` metrics for one cadence's daily rows."""
+    dates = [r.date for r in rows]
+    daily_long = [r.ret_long for r in rows]
+    daily_short = [r.ret_short for r in rows]
+    turnover = [r.turnover for r in rows]
+    gross = _metrics_block(
+        dates, [r.ret_ls_gross for r in rows], daily_long, daily_short, turnover, spy_returns
+    )
+    net = _metrics_block(
+        dates, [r.ret_ls_net for r in rows], daily_long, daily_short, turnover, spy_returns
+    )
+    return gross, net
+
+
+# ----- D10: null benchmark -----
+
+
+def _price_asof(series: pd.Series, d: date) -> float | None:
+    """Last available close at or before `d` (drives the D5 held-at-last-close rule)."""
+    idx = series.index.asof(pd.Timestamp(d))
+    if idx is None or (isinstance(idx, float) and idx != idx):
+        return None
+    value = series.loc[idx]
+    return None if value != value else float(value)
+
+
+def _ticker_period_return(series: pd.Series, start: date, end: date) -> float:
+    """Total return of one ticker between two dates, via `_price_asof`."""
+    p0, p1 = _price_asof(series, start), _price_asof(series, end)
+    if not p0 or p1 is None:
+        return 0.0
+    return p1 / p0 - 1.0
+
+
+def _leg_period_return(
+    weights: dict[str, float], closes: dict[str, pd.Series], start: date, end: date
+) -> float:
+    """An equal-weight leg's period return.
+
+    Equals the mean of its holdings' own period returns — exact for a
+    static, no-interim-rebalance leg.
+    """
+    if not weights:
+        return 0.0
+    return sum(
+        w * _ticker_period_return(closes[t], start, end) for t, w in weights.items() if t in closes
+    )
+
+
+def _drift_to_end(
+    weights: dict[str, float], closes: dict[str, pd.Series], start: date, end: date
+) -> dict[str, float]:
+    """A leg's weights at `end`, drifted from `start` with no interim trades."""
+    if not weights:
+        return {}
+    leg_ret = _leg_period_return(weights, closes, start, end)
+    denom = 1.0 + leg_ret
+    if denom == 0:
+        return dict(weights)
+    return {
+        t: w * (1.0 + _ticker_period_return(closes[t], start, end)) / denom
+        for t, w in weights.items()
+        if t in closes
+    }
+
+
+def _random_book_net_ann(
+    rng: random.Random,
+    rebal_dates: list[date],
+    eligible_by_date: dict[date, list[str]],
+    closes: dict[str, pd.Series],
+    cost_bps: float,
+    book_size: int,
+) -> float | None:
+    """One null draw's net annualized return via the period-return shortcut.
+
+    Uses the exact period-total-return identity for a static equal-weight
+    leg (no interim rebalancing) instead of a full daily simulation, so
+    `_NULL_DRAWS` draws stay fast — this is a summary-only benchmark, not
+    part of the persisted daily contract.
+    """
+    prev_long: dict[str, float] = {}
+    prev_short: dict[str, float] = {}
+    total = 1.0
+    years = 0.0
+    for i, t in enumerate(rebal_dates):
+        pool = eligible_by_date.get(t, [])
+        if len(pool) < 2 * book_size:
+            continue
+        sample = rng.sample(pool, 2 * book_size)
+        target_long = dict.fromkeys(sample[:book_size], 1.0 / book_size)
+        target_short = dict.fromkeys(sample[book_size:], 1.0 / book_size)
+        period_end = rebal_dates[i + 1] if i + 1 < len(rebal_dates) else None
+        if period_end is None:
+            break
+        period_ret = _leg_period_return(prev_long, closes, t, period_end) - _leg_period_return(
+            prev_short, closes, t, period_end
+        )
+        drifted_long = _drift_to_end(prev_long, closes, t, period_end)
+        drifted_short = _drift_to_end(prev_short, closes, t, period_end)
+        cost = _cost(_turnover(target_long, target_short, drifted_long, drifted_short))
+        total *= 1.0 + period_ret - cost
+        years += (period_end - t).days / 365.25
+        prev_long, prev_short = target_long, target_short
+    if years <= 0:
+        return None
+    return total ** (1.0 / years) - 1.0
+
+
+def null_percentile(
+    strategy_net_ann: float,
+    rebal_dates: list[date],
+    eligible_by_date: dict[date, list[str]],
+    closes: dict[str, pd.Series],
+    *,
+    n: int = _NULL_DRAWS,
+    seed: int = _NULL_SEED,
+    cost_bps: float = _COST_BPS,
+    book_size: int = _BOOK_SIZE,
+) -> tuple[float, float]:
+    """D10: `n` seeded random 25/25 books on the primary cadence's rank dates.
+
+    Returns `(percentile, median_net_ann)` — `percentile` is the share (out
+    of 100) of the `n` draws at or below `strategy_net_ann`. Deterministic
+    for a fixed `seed`.
+    """
+    rng = random.Random(seed)  # noqa: S311 -- deterministic benchmark draw, not security-sensitive
+    draws = [
+        d
+        for d in (
+            _random_book_net_ann(rng, rebal_dates, eligible_by_date, closes, cost_bps, book_size)
+            for _ in range(n)
+        )
+        if d is not None
+    ]
+    if not draws:
+        return 0.0, 0.0
+    percentile = sum(1 for d in draws if d <= strategy_net_ann) / len(draws) * 100
+    return percentile, float(statistics.median(draws))
+
+
+# ----- D11: fidelity -----
+
+
+def _spearman(a: list[float], b: list[float]) -> float | None:
+    """Spearman rho, with a scipy-free rank+Pearson fallback (D11)."""
+    if len(a) < 2:
+        return None
+    s1, s2 = pd.Series(a), pd.Series(b)
+    try:
+        rho = s1.corr(s2, method="spearman")
+    except ImportError:
+        rho = s1.rank().corr(s2.rank(), method="pearson")
+    return None if rho is None or rho != rho else float(rho)
+
+
+def fidelity(
+    score_bt_by_date: dict[date, dict[str, float]],
+    live_score_by_date: dict[date, dict[str, float]],
+) -> Fidelity:
+    """D11: per-date fidelity check + its median.
+
+    Spearman rho between `score_bt` and the live `screener_score`, per
+    genuine data-branch snapshot date.
+    """
+    per_date: list[FidelityDate] = []
+    rhos: list[float] = []
+    for d in sorted(set(score_bt_by_date) & set(live_score_by_date)):
+        bt, live = score_bt_by_date[d], live_score_by_date[d]
+        common = sorted(set(bt) & set(live))
+        rho = _spearman([bt[t] for t in common], [live[t] for t in common])
+        per_date.append(FidelityDate(date=d, rho=rho, n=len(common)))
+        if rho is not None:
+            rhos.append(rho)
+    median_rho = float(statistics.median(rhos)) if rhos else None
+    return Fidelity(per_date=per_date, median_rho=median_rho)
+
+
+# ----- I/O layer -----
+
+
+def _base_universe_ids() -> list[str]:
+    """D1 scope: every bundled preset except the derived aggregated/screener/crypto ones."""
+    return sorted(
+        p.stem
+        for p in PRESET_DIR.glob("*.txt")
+        if not p.stem.startswith(_DERIVED_UNIVERSE_PREFIXES)
+    )
+
+
+def _universe_tickers() -> list[str]:
+    """The union of every D1 base-universe ticker (~320)."""
+    tickers: set[str] = set()
+    for universe_id in _base_universe_ids():
+        tickers.update(_read_symbol_file(PRESET_DIR / f"{universe_id}.txt"))
+    return sorted(tickers)
+
+
+def _statement_fetch_dir(ticker: str) -> Path:
+    return settings.backtest_prices_cache_dir / "statements" / ticker
+
+
+def _statement_fetch_path(ticker: str, fetch_date: date) -> Path:
+    return _statement_fetch_dir(ticker) / f"{fetch_date.isoformat()}.json"
+
+
+def _closes_cache_path(ticker: str) -> Path:
+    return settings.backtest_prices_cache_dir / "closes" / f"{ticker}.csv"
+
+
+def _frame_to_cache(frame: pd.DataFrame | None) -> dict | None:
+    if frame is None or frame.empty:
+        return None
+    out: dict[str, dict[str, float | None]] = {}
+    for col in frame.columns:
+        column = cast("pd.Series", frame[col])
+        out[col.isoformat()] = {
+            str(idx): (None if v != v else float(v)) for idx, v in column.items()
+        }
+    return out
+
+
+def _cache_to_frame(data: dict | None) -> pd.DataFrame | None:
+    if not data:
+        return None
+    return pd.DataFrame({pd.Timestamp(col): pd.Series(rows) for col, rows in data.items()})
+
+
+def _merge_first_seen(frames: list[pd.DataFrame]) -> pd.DataFrame | None:
+    """Union of `frames`' period-end columns, EARLIEST frame's value wins per period.
+
+    `frames` must already be ordered earliest-fetch-first. Reduces
+    restatement bias (D3 caveat): a later fetch can only ADD periods this
+    ticker didn't have before, never overwrite an already-cached one.
+    """
+    if not frames:
+        return None
+    merged = frames[0]
+    for frame in frames[1:]:
+        new_cols = [c for c in frame.columns if c not in merged.columns]
+        if new_cols:
+            merged = pd.concat([merged, frame[new_cols]], axis=1)
+    return merged.reindex(sorted(merged.columns), axis=1)
+
+
+def _merged_cached_frames(ticker: str) -> Frames:
+    """Every cached fetch for `ticker`, merged first-seen-wins per period (D3)."""
+    fetch_dir = _statement_fetch_dir(ticker)
+    if not fetch_dir.is_dir():
+        return None, None
+    income_frames: list[pd.DataFrame] = []
+    balance_frames: list[pd.DataFrame] = []
+    for path in sorted(fetch_dir.glob("*.json")):  # filename = fetch date -> earliest first
+        raw = json.loads(path.read_text())
+        income = _cache_to_frame(raw.get("income_stmt"))
+        balance = _cache_to_frame(raw.get("balance_sheet"))
+        if income is not None:
+            income_frames.append(income)
+        if balance is not None:
+            balance_frames.append(balance)
+    return _merge_first_seen(income_frames), _merge_first_seen(balance_frames)
+
+
+def fetch_frames(ticker: str, *, today: date | None = None) -> Frames:
+    """Fetch + cache one ticker's annual `income_stmt` + `balance_sheet` (D3).
+
+    Caches ONE IMMUTABLE file per ticker per fetch date under
+    `results/prices/statements/<ticker>/<fetch-date>.json` (gitignored,
+    never committed, never sent to `data`) — a sync-friendly layout so a
+    future PR can mirror this directory to a private repo and statements
+    accumulate beyond yfinance's ~4-5 FY window. A same-day re-run reuses
+    today's file rather than re-fetching (idempotent). The columns
+    returned are the union of every cached fetch, earliest-fetch-wins per
+    period end (`_merge_first_seen`) — wrap-degrades to `(None, None)`
+    when nothing has ever been cached and today's yfinance call fails.
+    """
+    today = today or date.today()
+    fetch_path = _statement_fetch_path(ticker, today)
+    if not fetch_path.exists():
+        try:
+            yf_ticker = yf.Ticker(ticker)
+            income_stmt = yf_ticker.income_stmt
+            balance_sheet = yf_ticker.balance_sheet
+        except Exception as exc:
+            logger.warning("fetch_frames(%s) failed: %s", ticker, exc)
+            income_stmt, balance_sheet = None, None
+        fetch_path.parent.mkdir(parents=True, exist_ok=True)
+        fetch_path.write_text(
+            json.dumps(
+                {
+                    "income_stmt": _frame_to_cache(income_stmt),
+                    "balance_sheet": _frame_to_cache(balance_sheet),
+                }
+            )
+        )
+    return _merged_cached_frames(ticker)
+
+
+def write_closes_cache(closes: dict[str, pd.Series]) -> None:
+    """Write each ticker's raw daily closes to a sync-friendly per-ticker CSV.
+
+    `results/prices/closes/<ticker>.csv` (gitignored, never committed,
+    never sent to `data`) — same sync-target posture as the statement
+    fetch files above.
+    """
+    root = settings.backtest_prices_cache_dir / "closes"
+    root.mkdir(parents=True, exist_ok=True)
+    for ticker, series in closes.items():
+        series.to_csv(_closes_cache_path(ticker))
+
+
+def _union_calendar(closes: dict[str, pd.Series]) -> list[date]:
+    """Sorted union of every ticker's close-history trading dates (D5)."""
+    all_dates: set[date] = set()
+    for series in closes.values():
+        all_dates.update(ts.date() for ts in series.dropna().index if isinstance(ts, pd.Timestamp))
+    return sorted(all_dates)
+
+
+def _reindex_returns(
+    closes: dict[str, pd.Series], calendar: list[date]
+) -> dict[str, dict[date, float]]:
+    """Per-ticker daily simple returns on the union `calendar`.
+
+    Forward-fills each ticker onto `calendar` first, so a non-trading day
+    (or a delisted-name gap) contributes a 0% return (D5) via the
+    unmoved forward-filled price, rather than a missing observation.
+    """
+    index = pd.DatetimeIndex([pd.Timestamp(d) for d in calendar])
+    out: dict[str, dict[date, float]] = {}
+    for ticker, series in closes.items():
+        reindexed = series.reindex(index).ffill()
+        pct = reindexed.pct_change().fillna(0.0)
+        out[ticker] = dict(zip(calendar, (float(v) for v in pct.to_numpy()), strict=True))
+    return out
+
+
+def _next_trading_day(calendar: list[date], t: date) -> date | None:
+    """First calendar date strictly after `t` (the D5 trade-at-t+1 rule)."""
+    idx = bisect.bisect_right(calendar, t)
+    return calendar[idx] if idx < len(calendar) else None
+
+
+def _eligible_count(
+    d: date,
+    frames_by_ticker: dict[str, Frames],
+    closes: dict[str, pd.Series],
+    threshold: int,
+) -> int:
+    """Count of D1 tickers eligible (`score_at` not `None`) at `d`, capped at `threshold`."""
+    count = 0
+    for ticker, frames in frames_by_ticker.items():
+        close = closes.get(ticker)
+        if close is None:
+            continue
+        if score_at(pit_fundamentals(frames, d), close, d) is None:
+            continue
+        count += 1
+        if count >= threshold:
+            break
+    return count
+
+
+def _find_start_date(
+    grid: list[date],
+    frames_by_ticker: dict[str, Frames],
+    closes: dict[str, pd.Series],
+    *,
+    threshold: int = _MIN_ELIGIBLE_START,
+) -> date | None:
+    """D6: the first `grid` date with `>= threshold` eligible tickers."""
+    for d in grid:
+        if _eligible_count(d, frames_by_ticker, closes, threshold) >= threshold:
+            return d
+    return None
+
+
+def _score_all_tickers(
+    d: date, frames_by_ticker: dict[str, Frames], closes: dict[str, pd.Series]
+) -> list[tuple[str, float]]:
+    """Every ticker's `score_at` at `d`, sorted best-to-worst."""
+    scored: list[tuple[str, float]] = []
+    for ticker, frames in frames_by_ticker.items():
+        close = closes.get(ticker)
+        if close is None:
+            continue
+        score = score_at(pit_fundamentals(frames, d), close, d)
+        if score is not None:
+            scored.append((ticker, score))
+    scored.sort(key=lambda x: (-x[1], x[0]))
+    return scored
+
+
+def _list_entry(d: date, scored: list[tuple[str, float]]) -> BacktestListEntry:
+    """One rank date's `BacktestListEntry` — disjoint top/bottom `_BOOK_SIZE`."""
+    n = len(scored)
+    top_count = min(_BOOK_SIZE, n)
+    bottom_count = min(_BOOK_SIZE, n - top_count)
+    best = scored[:top_count]
+    worst = list(reversed(scored[n - bottom_count :])) if bottom_count else []
+    return BacktestListEntry(
+        date=d,
+        eligible=n,
+        best=[RankEntry(ticker=t, score=round(s, 1)) for t, s in best],
+        worst=[RankEntry(ticker=t, score=round(s, 1)) for t, s in worst],
+    )
+
+
+def _rank_all_dates(
+    grid: list[date],
+    frames_by_ticker: dict[str, Frames],
+    closes: dict[str, pd.Series],
+) -> tuple[dict[date, list[tuple[str, float]]], list[BacktestListEntry]]:
+    """Every grid date's full ranked-eligible list + its best/worst-25 entry."""
+    ranked_by_date: dict[date, list[tuple[str, float]]] = {}
+    entries: list[BacktestListEntry] = []
+    for d in grid:
+        scored = _score_all_tickers(d, frames_by_ticker, closes)
+        ranked_by_date[d] = scored
+        entries.append(_list_entry(d, scored))
+    return ranked_by_date, entries
+
+
+def _weights_for_cadence(
+    cadence: str,
+    rebal_dates: list[date],
+    ranked_by_date: dict[date, list[tuple[str, float]]],
+    calendar: list[date],
+) -> dict[date, tuple[dict[str, float], dict[str, float]]]:
+    """Every cadence rebalance date's target weights, keyed by TRADE date."""
+    out: dict[date, tuple[dict[str, float], dict[str, float]]] = {}
+    prev_holdings: tuple[list[str], list[str]] | None = None
+    for t in rebal_dates:
+        ranks = [ticker for ticker, _ in ranked_by_date.get(t, [])]
+        if len(ranks) < 2 * _BOOK_SIZE:
+            continue
+        long_names, short_names = select(ranks, cadence, prev_holdings)
+        trade_date = _next_trading_day(calendar, t)
+        if trade_date is None:
+            continue
+        out[trade_date] = (
+            dict.fromkeys(long_names, 1.0 / len(long_names)),
+            dict.fromkeys(short_names, 1.0 / len(short_names)),
+        )
+        prev_holdings = (long_names, short_names)
+    return out
+
+
+def _pct_change_map(closes: dict[date, float]) -> dict[date, float]:
+    """Day-over-day simple returns from a sorted `date -> close` map."""
+    dates = sorted(closes)
+    out: dict[date, float] = {}
+    for prev_d, cur_d in itertools.pairwise(dates):
+        prev_p = closes[prev_d]
+        if prev_p:
+            out[cur_d] = closes[cur_d] / prev_p - 1.0
+    return out
+
+
+_DATE_FILE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}\.json$")
+
+
+def _scores_from_snapshot_file(path: Path) -> dict[str, float]:
+    """One dated demo-snapshot file's `ticker -> live screener_score` map."""
+    raw = json.loads(path.read_text())
+    scores: dict[str, float] = {}
+    for item in raw:
+        snap = FundamentalsSnapshot.model_validate(item)
+        cs = snap.composite_scores
+        if cs is not None and cs.screener_score is not None:
+            scores[snap.symbol] = cs.screener_score
+    return scores
+
+
+def _load_demo_snapshot_scores(universe_id: str) -> dict[date, dict[str, float]]:
+    """Every dated demo snapshot's `ticker -> live screener_score`, by date.
+
+    Reads whatever `results/demo/<universe_id>/*.json` is present locally
+    (the cron checks these out from `data` before running `main`; a local
+    run without that checkout simply yields nothing here — D11 is a
+    best-effort default, not a hard requirement).
+    """
+    base = settings.demo_dir / universe_id
+    if not base.is_dir():
+        return {}
+    out: dict[date, dict[str, float]] = {}
+    for path in base.glob("*.json"):
+        if not _DATE_FILE_RE.match(path.name):
+            continue
+        scores = _scores_from_snapshot_file(path)
+        if scores:
+            out[date.fromisoformat(path.stem)] = scores
+    return out
+
+
+def _live_scores_by_date() -> dict[date, dict[str, float]]:
+    """Every D1 base universe's genuine live `screener_score`, merged by date."""
+    live_by_date: dict[date, dict[str, float]] = {}
+    for universe_id in _base_universe_ids():
+        for d, scores in _load_demo_snapshot_scores(universe_id).items():
+            live_by_date.setdefault(d, {}).update(scores)
+    return live_by_date
+
+
+def _score_bt_for_tickers(
+    d: date,
+    tickers: Iterable[str],
+    frames_by_ticker: dict[str, Frames],
+    closes: dict[str, pd.Series],
+) -> dict[str, float]:
+    """`score_at` at `d` for exactly the given `tickers`."""
+    out: dict[str, float] = {}
+    for ticker in tickers:
+        frames = frames_by_ticker.get(ticker)
+        close = closes.get(ticker)
+        if frames is None or close is None:
+            continue
+        score = score_at(pit_fundamentals(frames, d), close, d)
+        if score is not None:
+            out[ticker] = score
+    return out
+
+
+def _compute_fidelity(
+    frames_by_ticker: dict[str, Frames], closes: dict[str, pd.Series]
+) -> Fidelity:
+    """D11 fidelity, sourced from whatever genuine snapshots are checked out locally."""
+    live_by_date = _live_scores_by_date()
+    bt_by_date = {
+        d: _score_bt_for_tickers(d, live_scores, frames_by_ticker, closes)
+        for d, live_scores in live_by_date.items()
+    }
+    return fidelity(bt_by_date, live_by_date)
+
+
+# ----- Persistence (per-year files, mirrors `equity_spy.py`) -----
+
+
+def _year_path(root: Path, year: int) -> Path:
+    return root / f"{year}.json"
+
+
+def write_series_years(
+    cadence: str, rows: list[BacktestDailyRow], *, root: Path | None = None
+) -> list[Path]:
+    """Write one cadence's daily rows as date-sorted per-year files (D13 full recompute)."""
+    base = root if root is not None else settings.backtest_series_dir / cadence
+    by_year: dict[int, list[BacktestDailyRow]] = {}
+    for r in rows:
+        by_year.setdefault(r.date.year, []).append(r)
+    base.mkdir(parents=True, exist_ok=True)
+    paths = []
+    for year, yrows in sorted(by_year.items()):
+        path = _year_path(base, year)
+        payload = [r.model_dump(mode="json") for r in sorted(yrows, key=lambda r: r.date)]
+        path.write_text(json.dumps(payload, indent=2) + "\n")
+        logger.info("wrote %s (%d rows)", path, len(yrows))
+        paths.append(path)
+    return paths
+
+
+def read_series_year(
+    cadence: str, year: int, *, root: Path | None = None
+) -> list[BacktestDailyRow]:
+    """Load one cadence's per-year daily-row file, empty when missing."""
+    base = root if root is not None else settings.backtest_series_dir / cadence
+    path = _year_path(base, year)
+    if not path.exists():
+        return []
+    raw = json.loads(path.read_text())
+    return [BacktestDailyRow.model_validate(item) for item in raw]
+
+
+def write_lists_years(entries: list[BacktestListEntry], *, root: Path | None = None) -> list[Path]:
+    """Write the backfilled best/worst-25 entries as date-sorted per-year files."""
+    base = root if root is not None else settings.backtest_dir / "lists"
+    by_year: dict[int, list[BacktestListEntry]] = {}
+    for e in entries:
+        by_year.setdefault(e.date.year, []).append(e)
+    base.mkdir(parents=True, exist_ok=True)
+    paths = []
+    for year, yentries in sorted(by_year.items()):
+        path = _year_path(base, year)
+        payload = [e.model_dump(mode="json") for e in sorted(yentries, key=lambda e: e.date)]
+        path.write_text(json.dumps(payload, indent=2) + "\n")
+        paths.append(path)
+    return paths
+
+
+def read_lists_year(year: int, *, root: Path | None = None) -> list[BacktestListEntry]:
+    """Load one year's backfilled best/worst-25 file, empty when missing."""
+    base = root if root is not None else settings.backtest_dir / "lists"
+    path = _year_path(base, year)
+    if not path.exists():
+        return []
+    raw = json.loads(path.read_text())
+    return [BacktestListEntry.model_validate(item) for item in raw]
+
+
+def write_summary(summary: BacktestSummary, *, path: Path | None = None) -> Path:
+    """Write `results/backtest/summary.json`."""
+    target = path if path is not None else settings.backtest_dir / "summary.json"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(summary.model_dump_json(indent=2) + "\n")
+    return target
+
+
+def read_summary(*, path: Path | None = None) -> BacktestSummary | None:
+    """Load `results/backtest/summary.json`, `None` when missing."""
+    target = path if path is not None else settings.backtest_dir / "summary.json"
+    if not target.exists():
+        return None
+    return BacktestSummary.model_validate_json(target.read_text())
+
+
+# ----- main() -----
+
+
+def main() -> None:
+    """Cron entrypoint: full deterministic recompute of the backfill + backtest (D13)."""
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    tickers = _universe_tickers()
+    frames_by_ticker = {t: fetch_frames(t) for t in tqdm(tickers, desc="statements")}
+    closes = _batch_close_prices(tickers) or {}
+    write_closes_cache(closes)
+    calendar = _union_calendar(closes)
+    if not calendar:
+        logger.warning("no price data fetched; nothing to compute")
+        return
+
+    returns_by_ticker = _reindex_returns(closes, calendar)
+    grid = rank_dates(calendar)
+    start = _find_start_date(grid, frames_by_ticker, closes)
+    if start is None:
+        logger.warning("no grid date reaches the %d-eligible threshold", _MIN_ELIGIBLE_START)
+        return
+    active_grid = [d for d in grid if d >= start]
+
+    ranked_by_date, lists_entries = _rank_all_dates(active_grid, frames_by_ticker, closes)
+    spy_returns = _pct_change_map(_fetch_history_closes("SPY", "max"))
+
+    cadence_metrics: dict[str, CadenceMetrics] = {}
+    cadence_rows: dict[str, list[BacktestDailyRow]] = {}
+    for cadence in CADENCES:
+        rebal_dates = rebalance_dates(cadence, active_grid)
+        weights_by_trade_date = _weights_for_cadence(cadence, rebal_dates, ranked_by_date, calendar)
+        rows = simulate(weights_by_trade_date, returns_by_ticker)
+        gross, net = metrics(rows, spy_returns)
+        cadence_metrics[cadence] = CadenceMetrics(
+            gross=gross, net=net, rebalances=len(weights_by_trade_date)
+        )
+        cadence_rows[cadence] = rows
+
+    primary_rebal_dates = rebalance_dates(PRIMARY_CADENCE, active_grid)
+    eligible_by_date = {d: [t for t, _ in ranked_by_date.get(d, [])] for d in primary_rebal_dates}
+    strategy_net_ann = cadence_metrics[PRIMARY_CADENCE].net.ann_return or 0.0
+    percentile, median_net_ann = null_percentile(
+        strategy_net_ann, primary_rebal_dates, eligible_by_date, closes
+    )
+    fid = _compute_fidelity(frames_by_ticker, closes)
+
+    summary = BacktestSummary(
+        method_version="1",
+        as_of=calendar[-1],
+        start=start,
+        universes=_base_universe_ids(),
+        score_inputs=list(_SCORE_INPUT_FIELDS),
+        cost_bps=_COST_BPS,
+        primary=PRIMARY_CADENCE,
+        cadences=cadence_metrics,
+        null=NullBenchmark(n=_NULL_DRAWS, percentile=percentile, median_net_ann=median_net_ann),
+        fidelity=fid,
+        caveats=list(_CAVEATS),
+    )
+
+    for cadence, rows in cadence_rows.items():
+        write_series_years(cadence, rows)
+    for path in write_lists_years(lists_entries):
+        logger.info("wrote %s", path)
+    logger.info("wrote %s", write_summary(summary))
+
+
+if __name__ == "__main__":
+    main()
