@@ -9,10 +9,10 @@
 # series — already-written rows/lists are never recomputed; a method_version bump is the only
 # explicit full-rebuild path (used once, 2026-09-24, for the start-trim fix + the D18 filing
 # lag). Writes results/series/backtest{,_genuine}/<cadence>/YYYY.json,
-# results/backtest{,_genuine}/lists/YYYY.json and results/backtest{,_genuine}/summary.json,
-# then commits changed (and, on a rebuild, deleted) files as a single verified commit via the
-# REST Git Data API — scripts/data-branch-commit.cjs turns a locally-deleted path into a
-# `sha: null` tree entry.
+# results/backtest{,_genuine}/lists/YYYY.json, results/backtest{,_genuine}/trades/<cadence>/YYYY.json
+# (D21's per-cadence rebalance log) and results/backtest{,_genuine}/summary.json, then commits
+# changed (and, on a rebuild, deleted) files as a single verified commit via the REST Git Data
+# API — scripts/data-branch-commit.cjs turns a locally-deleted path into a `sha: null` tree entry.
 #
 # Raw prices and statement line items are NEVER committed (see docs/data-sources.md) —
 # `fetch_frames` / `fundamentals._batch_close_prices` write them only to the gitignored
@@ -102,7 +102,7 @@ jobs:
           FILES=$(git status --porcelain -uall \
               results/series/backtest/ results/backtest/ \
               results/series/backtest_genuine/ results/backtest_genuine/ \
-            | awk '$2 ~ /^results\/(series\/backtest(_genuine)?\/[a-z_]+\/[0-9]{4}\.json|backtest(_genuine)?\/(lists\/[0-9]{4}\.json|summary\.json))$/ {print $2}' \
+            | awk '$2 ~ /^results\/(series\/backtest(_genuine)?\/[a-z_]+\/[0-9]{4}\.json|backtest(_genuine)?\/(lists\/[0-9]{4}\.json|trades\/[a-z_]+\/[0-9]{4}\.json|summary\.json))$/ {print $2}' \
             | paste -sd ',' -)
           echo "files=$FILES" >> "$GITHUB_OUTPUT"
           if [ -z "$FILES" ]; then
