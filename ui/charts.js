@@ -13,6 +13,9 @@ import {
   compound,
   keyFacts,
   metricsTableRows,
+  rebalanceMarkers,
+  sinceLabel,
+  tradeLogRows,
 } from "./lib/portfolio.js";
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
 import { buildTimeSeries } from "./lib/timeseries.js";
@@ -694,37 +697,65 @@ export function renderYieldCurveHeader(entries) {
   legs.textContent = `10y ${tnx} − 5y ${fvx} · ${latest.date}`;
 }
 
-/** @type {any} */
-let backtestChart = null;
+/**
+ * Two series, never spliced (D15): Series A ("a", genuine decisions, the
+ * section headline) and Series B ("b", the reconstructed backfill, a
+ * collapsible below it) share this contract shape and DOM structure, so
+ * every render function below is parameterized by `kind` — DOM ids are
+ * derived as `backtest-${kind}-*` — rather than duplicated per series. Each
+ * series keeps its own Chart.js instance, summary cache, and gross/net mode,
+ * keyed by `kind`; the two are never drawn on one axis.
+ * @typedef {"a" | "b"} BacktestKind
+ */
+
+/** @type {Record<BacktestKind, any>} */
+const backtestChart = { a: null, b: null };
 
 const BACKTEST_EMPTY = "Backtest runs Saturdays";
 
-function renderBacktestChartEmptyHint(/** @type {boolean} */ show) {
-  toggleHistoryHint("backtest-chart-wrap", "backtest-chart-empty", show, BACKTEST_EMPTY);
+/** @param {BacktestKind} kind */
+function renderBacktestChartEmptyHint(kind, /** @type {boolean} */ show) {
+  toggleHistoryHint(`backtest-${kind}-chart-wrap`, "backtest-chart-empty", show, BACKTEST_EMPTY);
 }
 
 /** Thin "foil" cadence line colors (everything but the primary, which uses
- *  --primary for both its net/gross lines) — the zero-blue EyeRest data arc. */
-const FOIL_COLORS = ["--data-alt", "--data-caution", "--data-negative", "--text-muted"];
+ *  --primary for both its net/gross lines) — the zero-blue EyeRest data arc.
+ *  Five entries for D7's five non-primary cadences (D20 added `yearly`). */
+const FOIL_COLORS = [
+  "--data-alt",
+  "--data-caution",
+  "--data-negative",
+  "--text-muted",
+  "--data-positive",
+];
 
 /**
- * Render the backtested long/short 25/25 index chart (ADR-0013): the primary
- * cadence's net index (bold) + gross index (dashed), plus the other four
- * cadences' net index as thin foil lines — all 100-based, compounded
- * client-side via `compound()` (D5/D8 — no stored NAV). A 404 before the
- * first Saturday cron run (every cadence's rows empty) shows the empty hint
- * and never throws — the caller passes `{}`/`[]` for a failed/missing fetch.
+ * Render one series' backtested long/short 25/25 index chart (ADR-0013,
+ * D15): the primary cadence's net index (bold) + gross index (dashed), plus
+ * the other four cadences' net index as thin foil lines — all 100-based,
+ * compounded client-side via `compound()` (D5/D8 — no stored NAV). A 404
+ * before the first cron run for this series (every cadence's rows empty)
+ * shows the empty hint and never throws — the caller passes `{}`/`[]` for a
+ * failed/missing fetch; this is the same path whether the series has simply
+ * never run yet or is a series whose paths don't exist at all (e.g. Series A
+ * before PR E ships) — no special-casing. `tradeDates` (D21, the primary
+ * cadence's rebalance log trade dates) draws a marker point on each
+ * rebalance day, aligned to the chart's own label axis rather than the
+ * primary series' own dates — a foil cadence can have a longer history, in
+ * which case the x-axis (`labels`) is longer than `primaryNet.dates`.
  *
+ * @param {BacktestKind} kind
  * @param {Record<string, import("./lib/portfolio.js").BacktestReturnRow[]>} seriesByCadence
  * @param {string | null | undefined} primary
+ * @param {string[]} [tradeDates]
  */
-export function renderBacktestChart(seriesByCadence, primary) {
+export function renderBacktestChart(kind, seriesByCadence, primary, tradeDates = []) {
   const canvas = /** @type {HTMLCanvasElement | null} */ (
-    document.getElementById("backtest-chart")
+    document.getElementById(`backtest-${kind}-chart`)
   );
   if (!canvas) return;
-  destroyChart(backtestChart);
-  backtestChart = null;
+  destroyChart(backtestChart[kind]);
+  backtestChart[kind] = null;
   const primaryLabel = (primary && CADENCE_LABELS[primary]) || "Primary";
   const primaryRows = (primary && seriesByCadence[primary]) || [];
   const primaryNet = compound(primaryRows, "ret_ls_net");
@@ -736,13 +767,19 @@ export function renderBacktestChart(seriesByCadence, primary) {
     ...compound(seriesByCadence[key] ?? [], "ret_ls_net"),
   }));
   const hasData = primaryNet.dates.length > 0 || foils.some((f) => f.dates.length > 0);
-  renderBacktestChartEmptyHint(!hasData);
+  renderBacktestChartEmptyHint(kind, !hasData);
   if (!hasData || typeof Chart === "undefined") return;
   const labels = [primaryNet, ...foils].reduce(
     (longest, series) => (series.dates.length > longest.length ? series.dates : longest),
     /** @type {string[]} */ ([]),
   );
-  backtestChart = new Chart(canvas, {
+  const primaryNetByDate = new Map(primaryNet.dates.map((d, i) => [d, primaryNet.index[i]]));
+  const markers = rebalanceMarkers(
+    labels,
+    labels.map((d) => primaryNetByDate.get(d) ?? null),
+    tradeDates,
+  );
+  backtestChart[kind] = new Chart(canvas, {
     type: "line",
     data: {
       labels,
@@ -776,6 +813,18 @@ export function renderBacktestChart(seriesByCadence, primary) {
           borderWidth: 1,
           tension: 0.1,
         })),
+        {
+          // D21: rebalance-day markers for the primary cadence — a sparse
+          // point-only dataset (no connecting line), drawn on top.
+          label: "Rebalance",
+          data: markers,
+          showLine: false,
+          pointStyle: "triangle",
+          pointRadius: 5,
+          pointBackgroundColor: () => cssVar("--data-caution", "#787010"),
+          pointBorderColor: () => cssVar("--data-caution", "#787010"),
+          order: 0,
+        },
       ],
     },
     options: {
@@ -787,19 +836,20 @@ export function renderBacktestChart(seriesByCadence, primary) {
       },
     },
   });
-  liveCharts.add(backtestChart);
+  liveCharts.add(backtestChart[kind]);
 }
 
-/** @type {import("./lib/portfolio.js").BacktestSummary | null} */
-let backtestSummaryCache = null;
-/** @type {"gross" | "net"} */
-let backtestMode = "net";
+/** @type {Record<BacktestKind, import("./lib/portfolio.js").BacktestSummary | null>} */
+const backtestSummaryCache = { a: null, b: null };
+/** @type {Record<BacktestKind, "gross" | "net">} */
+const backtestMode = { a: "net", b: "net" };
 
-function renderBacktestMetricsTable() {
-  const tbody = document.querySelector("#backtest-metrics-table tbody");
+/** @param {BacktestKind} kind */
+function renderBacktestMetricsTable(kind) {
+  const tbody = document.querySelector(`#backtest-${kind}-metrics-table tbody`);
   if (!tbody) return;
   tbody.replaceChildren();
-  for (const row of metricsTableRows(backtestSummaryCache, backtestMode)) {
+  for (const row of metricsTableRows(backtestSummaryCache[kind], backtestMode[kind])) {
     const tr = document.createElement("tr");
     if (row.primary) tr.className = "backtest-primary-row";
     const cells = [
@@ -826,62 +876,88 @@ function renderBacktestMetricsTable() {
   }
 }
 
-function renderBacktestKeyFacts() {
-  const el = document.getElementById("backtest-key-facts");
+/** @param {BacktestKind} kind */
+function renderBacktestKeyFacts(kind) {
+  const el = document.getElementById(`backtest-${kind}-key-facts`);
   if (!el) return;
-  const facts = keyFacts(backtestSummaryCache);
+  const facts = keyFacts(backtestSummaryCache[kind]);
   el.textContent = facts.start
     ? `Start ${facts.start} · Realized beta to SPY ${fmtNum(facts.beta, 2)} · ` +
       `Null percentile ${fmtNum(facts.nullPercentile, 0)}th · Fidelity median ρ ${fmtNum(facts.fidelityRho, 2)}`
     : "";
 }
 
-function renderBacktestCaveats() {
-  const el = document.getElementById("backtest-caveats");
+/** @param {BacktestKind} kind */
+function renderBacktestCaveats(kind) {
+  const el = document.getElementById(`backtest-${kind}-caveats`);
   if (!el) return;
   el.replaceChildren();
-  for (const caveat of backtestSummaryCache?.caveats ?? []) {
+  for (const caveat of backtestSummaryCache[kind]?.caveats ?? []) {
     const li = document.createElement("li");
     li.textContent = caveat;
     el.append(li);
   }
 }
 
+const BACKTEST_HEADLINE_BASE = { a: "Genuine decisions", b: "Reconstructed backfill" };
+
 /**
- * Render the backtest summary block: the metrics table (D9, one gross/net
- * mode at a time — default net), the key-facts line, and the caveats
- * (rendered verbatim from `summary.caveats`). A missing/404 `summary`
- * (before the first Saturday cron run) renders an empty table + blank
- * key-facts line and never throws.
- *
+ * Update Series A's section `<h2>` / Series B's collapsible `<summary>`
+ * label with its start date once known (D16/D18), via `sinceLabel` — never a
+ * dangling "since null" before the first successful summary load.
+ * @param {BacktestKind} kind
  * @param {import("./lib/portfolio.js").BacktestSummary | null} summary
  */
-export function renderBacktestSummary(summary) {
-  backtestSummaryCache = summary;
-  renderBacktestMetricsTable();
-  renderBacktestKeyFacts();
-  renderBacktestCaveats();
+function renderBacktestHeadline(kind, summary) {
+  const el = document.getElementById(
+    kind === "a" ? "backtest-a-headline" : "backtest-b-summary-label",
+  );
+  if (!el) return;
+  const label = sinceLabel(BACKTEST_HEADLINE_BASE[kind], summary?.start);
+  el.textContent = kind === "b" ? `${label} (approximation)` : label;
 }
 
-let backtestModeToggleBound = false;
+/**
+ * Render one series' backtest summary block: the section headline/label
+ * (with its start date once known), the metrics table (D9, one gross/net
+ * mode at a time — default net), the key-facts line, and the caveats
+ * (rendered verbatim from `summary.caveats`). A missing/404 `summary`
+ * (before this series' first cron run) renders an empty table + blank
+ * key-facts line and never throws.
+ *
+ * @param {BacktestKind} kind
+ * @param {import("./lib/portfolio.js").BacktestSummary | null} summary
+ */
+export function renderBacktestSummary(kind, summary) {
+  backtestSummaryCache[kind] = summary;
+  renderBacktestHeadline(kind, summary);
+  renderBacktestMetricsTable(kind);
+  renderBacktestKeyFacts(kind);
+  renderBacktestCaveats(kind);
+}
 
-/** Wire the metrics table's gross/net switch once; idempotent. Re-renders
- *  just the metrics table (not the whole section) on click. */
-export function bindBacktestModeToggle() {
-  if (backtestModeToggleBound) return;
-  const row = document.getElementById("backtest-mode-toggle");
+/** @type {Record<BacktestKind, boolean>} */
+const backtestModeToggleBound = { a: false, b: false };
+
+/** Wire one series' metrics-table gross/net switch once; idempotent.
+ *  Re-renders just that series' metrics table (not the whole section) on
+ *  click.
+ *  @param {BacktestKind} kind */
+export function bindBacktestModeToggle(kind) {
+  if (backtestModeToggleBound[kind]) return;
+  const row = document.getElementById(`backtest-${kind}-mode-toggle`);
   if (!row) return;
-  backtestModeToggleBound = true;
+  backtestModeToggleBound[kind] = true;
   row.addEventListener("click", (event) => {
     const target = event.target;
     if (!(target instanceof HTMLButtonElement)) return;
     const mode = target.dataset.mode;
     if (mode !== "gross" && mode !== "net") return;
-    backtestMode = mode;
+    backtestMode[kind] = mode;
     for (const btn of row.querySelectorAll("button[data-mode]")) {
       btn.setAttribute("aria-pressed", btn.getAttribute("data-mode") === mode ? "true" : "false");
     }
-    renderBacktestMetricsTable();
+    renderBacktestMetricsTable(kind);
   });
 }
 
@@ -912,19 +988,22 @@ function buildRankList(title, rows) {
 }
 
 /**
- * Render the current best/worst 25 collapsible from the SAME
- * `aggregated-scores-best` / `aggregated-scores-worst` demo snapshots the
- * universe picker can show (`app.js`'s `loadCurrentAggregatedCandidates`)
- * -- not `results/backtest/lists/YYYY.json`, which stays a purely
- * historical, point-in-time-scored backfill (ADR-0014). A missing/empty
- * `entry` (before the first universe-builder run) renders the empty hint
- * and never throws.
+ * Render one series' best/worst 25 collapsible. Series A ("a") is the
+ * "Current candidates" panel: the SAME `aggregated-scores-best` /
+ * `aggregated-scores-worst` demo snapshots the universe picker can show
+ * (`app.js`'s `loadCurrentAggregatedCandidates`, #408/ADR-0014) — live,
+ * always-current, full qte77 Score. Series B ("b") is the historical
+ * "Latest best/worst 25" from the most recent `results/backtest/lists/
+ * YYYY.json` entry (score_bt, unchanged from #403/#404). A missing/empty
+ * `entry` (before this panel's data exists yet) renders the empty hint and
+ * never throws, for either series.
  *
+ * @param {BacktestKind} kind
  * @param {{date: string, eligible: number, best: Array<{ticker: string, score: number}>, worst: Array<{ticker: string, score: number}>} | null} entry
  */
-export function renderBacktestLists(entry) {
-  const summaryEl = document.querySelector("#backtest-lists summary");
-  const body = document.getElementById("backtest-lists-body");
+export function renderBacktestLists(kind, entry) {
+  const summaryEl = document.querySelector(`#backtest-${kind}-lists summary`);
+  const body = document.getElementById(`backtest-${kind}-lists-body`);
   if (!body) return;
   body.replaceChildren();
   if (!entry) {
@@ -942,6 +1021,114 @@ export function renderBacktestLists(entry) {
     buildRankList("Best 25", entry.best ?? []),
     buildRankList("Worst 25", entry.worst ?? []),
   );
+}
+
+/**
+ * @param {import("./lib/portfolio.js").RankedTicker} ticker
+ * @param {"entered" | "exited"} direction
+ * @returns {HTMLSpanElement}
+ */
+function buildTradeChip(ticker, direction) {
+  const span = document.createElement("span");
+  span.className = `trade-chip trade-${direction}`;
+  span.textContent = `${direction === "entered" ? "+" : "−"}${ticker.ticker}`;
+  const details = [];
+  if (ticker.rank != null) details.push(`rank ${ticker.rank}`);
+  if (ticker.score != null) details.push(`score ${fmtNum(ticker.score, 1)}`);
+  if (details.length > 0) span.title = details.join(", ");
+  return span;
+}
+
+/**
+ * One leg's (long or short) entered + exited chips for a rebalance-log row.
+ * `rank`/`score` are nullable per ticker (Series A's `exited` legs always
+ * are — `build_universe` has no full-pool lookup to resolve a name that
+ * dropped out of the top/bottom 25, a disclosed limitation, not a bug).
+ *
+ * @param {import("./lib/portfolio.js").LegChange} leg
+ * @returns {HTMLDivElement}
+ */
+function buildTradeLegCell(leg) {
+  const wrap = document.createElement("div");
+  wrap.className = "trade-leg-cell";
+  const entered = leg?.entered ?? [];
+  const exited = leg?.exited ?? [];
+  for (const t of entered) wrap.append(buildTradeChip(t, "entered"));
+  for (const t of exited) wrap.append(buildTradeChip(t, "exited"));
+  if (entered.length === 0 && exited.length === 0) {
+    const span = document.createElement("span");
+    span.className = "trade-leg-empty";
+    span.textContent = "—";
+    wrap.append(span);
+  }
+  return wrap;
+}
+
+/**
+ * @param {import("./lib/portfolio.js").TradeLogEntry & {reasonLabel: string}} row
+ * @returns {HTMLTableRowElement}
+ */
+function buildTradeRow(row) {
+  const tr = document.createElement("tr");
+  const dateTd = document.createElement("td");
+  dateTd.textContent = row.trade_date;
+  const reasonTd = document.createElement("td");
+  reasonTd.textContent = row.reasonLabel;
+  const longTd = document.createElement("td");
+  longTd.append(buildTradeLegCell(row.long));
+  const shortTd = document.createElement("td");
+  shortTd.append(buildTradeLegCell(row.short));
+  const turnoverTd = document.createElement("td");
+  turnoverTd.className = "num";
+  turnoverTd.textContent = `${fmtPct(row.turnover)} %`;
+  tr.append(dateTd, reasonTd, longTd, shortTd, turnoverTd);
+  return tr;
+}
+
+/**
+ * Render one series' "Rebalance log" collapsible (D21): newest-first, one
+ * row per rebalance with its trade date, human reason label, and long/short
+ * entered + exited tickers (color-coded, no blue) plus turnover. A
+ * missing/404 `trades` array (the `trades/` paths don't exist yet, or this
+ * series/cadence hasn't rebalanced) renders the empty hint and never throws
+ * — same path as the lists/summary/chart empty states, no special-casing.
+ *
+ * @param {BacktestKind} kind
+ * @param {import("./lib/portfolio.js").TradeLogEntry[] | null | undefined} trades
+ */
+export function renderBacktestTrades(kind, trades) {
+  const summaryEl = document.querySelector(`#backtest-${kind}-trades summary`);
+  const body = document.getElementById(`backtest-${kind}-trades-body`);
+  if (!body) return;
+  body.replaceChildren();
+  const rows = tradeLogRows(trades);
+  if (rows.length === 0) {
+    if (summaryEl) summaryEl.textContent = "Rebalance log";
+    const hint = document.createElement("p");
+    hint.className = "backtest-lists-empty";
+    hint.textContent = BACKTEST_EMPTY;
+    body.append(hint);
+    return;
+  }
+  if (summaryEl) summaryEl.textContent = `Rebalance log (${rows.length})`;
+  const wrap = document.createElement("div");
+  wrap.className = "table-wrap";
+  const table = document.createElement("table");
+  table.className = "backtest-trades-table";
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  for (const label of ["Trade date", "Reason", "Long", "Short", "Turnover"]) {
+    const th = document.createElement("th");
+    if (label === "Turnover") th.className = "num";
+    th.textContent = label;
+    headRow.append(th);
+  }
+  thead.append(headRow);
+  const tbody = document.createElement("tbody");
+  for (const row of rows) tbody.append(buildTradeRow(row));
+  table.append(thead, tbody);
+  wrap.append(table);
+  body.append(wrap);
 }
 
 /**

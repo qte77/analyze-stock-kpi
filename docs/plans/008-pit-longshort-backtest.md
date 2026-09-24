@@ -329,7 +329,7 @@ Every run must:
 | PR E series A + freeze + lag (D15–D19) + B start-trim fix | agent → admin-merge on green | per PR E done-when; B's published metrics match its real window |
 | ~~PR D dashboard section~~ | agent → admin-merge on green | shipped — [#403](https://github.com/qte77/analyze-stock-kpi/pull/403) merged 2026-09-23 |
 | Dispatch `portfolio.yaml` + verify data files + Pages e2e (migrated from 007) | agent (after E+F) | A + B artifacts on `data`; the section renders on Pages without console errors; the e2e defects list is triaged |
-| PR F dashboard A headline + B secondary | agent → admin-merge on green | per PR F done-when |
+| ~~PR F dashboard A headline + B secondary~~ | agent → admin-merge on green | shipped — [#410](https://github.com/qte77/analyze-stock-kpi/pull/410) (also: URL state-clear fix, D20 yearly cadence, D21 rebalance log) |
 | Private repo cache for `results/prices/` (statements + prices; first-seen merge) | owner (create repo + fine-grained PAT secret) → agent | cron pulls before + pushes after each run; history no longer ages out |
 | Issue: `make preview` doesn't serve `ui/public/` | agent | issue filed |
 | Issue: `llms.txt` template missing ADR-0010..0013 + newer modules | agent | issue filed |
