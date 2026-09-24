@@ -1,0 +1,2098 @@
+[
+  {
+    "date": "2004-01-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-01-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-02-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-03-31",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-04-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-05-31",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-06-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-07-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-08-31",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-09-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-10-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-11-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "2004-12-31",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  }
+]

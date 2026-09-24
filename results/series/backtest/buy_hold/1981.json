@@ -1,0 +1,2026 @@
+[
+  {
+    "date": "1981-01-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-01-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-02-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-03-31",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-04-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-05-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-06-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-07-31",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-08-31",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-09-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-26",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-10-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-05",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-06",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-12",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-13",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-19",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-20",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-25",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-27",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-11-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-01",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-02",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-03",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-04",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-07",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-08",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-09",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-10",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-11",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-14",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-15",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-16",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-17",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-18",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-21",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-22",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-23",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-24",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-28",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-29",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-30",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  },
+  {
+    "date": "1981-12-31",
+    "ret_long": 0.0,
+    "ret_short": 0.0,
+    "ret_ls_gross": 0.0,
+    "ret_ls_net": 0.0,
+    "turnover": 0.0
+  }
+]
