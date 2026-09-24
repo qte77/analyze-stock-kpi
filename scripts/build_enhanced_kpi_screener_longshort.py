@@ -26,11 +26,14 @@ from _demo_snapshot_loader import (
     write_paired_universe_and_audit,
 )
 
-from analyze_stock_kpi.orchestrators.enhanced_kpi_screener_longshort import build_universe
+from analyze_stock_kpi.orchestrators.enhanced_kpi_screener_longshort import (
+    build_universe,
+    ranked_snapshots,
+)
 
 
 def main() -> None:
-    """Build long + short presets + audit."""
+    """Build long + short presets + audit + demo-display snapshots."""
     snapshots_by_universe, snapshot_dates_by_universe = load_all_snapshots()
     longs, shorts, audit_rows = build_universe(
         snapshots_by_universe,
@@ -40,6 +43,11 @@ def main() -> None:
         longs,
         shorts,
         audit_rows,
+        # Same records that were classified -- no second, independent
+        # fetch (owner requirement: candidates must be computed from the
+        # same original data as their source list for the same snapshot).
+        snapshots_a=ranked_snapshots(snapshots_by_universe, snapshot_dates_by_universe, longs),
+        snapshots_b=ranked_snapshots(snapshots_by_universe, snapshot_dates_by_universe, shorts),
         preset_a_name="enhanced-kpi-screener-longs",
         preset_b_name="enhanced-kpi-screener-shorts",
         audit_dir="enhanced_kpi_screener_longshort",

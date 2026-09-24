@@ -43,6 +43,8 @@ from typing import TYPE_CHECKING, Literal
 from ._shared import AuditRowBase, dedup_by_ticker, is_stale
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
 
     from ._shared import DedupedSnapshot
@@ -217,3 +219,21 @@ def build_universe(
             shorts.append(ticker)
 
     return sorted(longs), sorted(shorts), audit
+
+
+def ranked_snapshots(
+    snapshots_by_universe: dict[str, list[FundamentalsSnapshot]],
+    snapshot_dates_by_universe: dict[str, str],
+    tickers: Iterable[str],
+) -> list[FundamentalsSnapshot]:
+    """Return the exact per-ticker snapshot objects :func:`build_universe` classified.
+
+    Same dedup as :func:`build_universe` (first-seen universe wins). The
+    build script uses this to emit the demo-display JSON for ``tickers``
+    (``longs + shorts``) from the SAME records that were classified --
+    never a second, independent fetch. Tickers absent from the dedup
+    (shouldn't happen for a ``tickers`` list returned by ``build_universe``
+    on the same inputs) are silently skipped.
+    """
+    per_ticker = dedup_by_ticker(snapshots_by_universe, snapshot_dates_by_universe)
+    return [per_ticker[t].snapshot for t in tickers if t in per_ticker]

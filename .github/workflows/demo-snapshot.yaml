@@ -2,21 +2,29 @@
 # Weekly fundamentals snapshot for the demo dashboard (#59, #130).
 #
 # Runs Sundays at 06:15 UTC (staggers from sbom 00:00 Sun). Fans out
-# across every bundled universe in src/analyze_stock_kpi/assets/universes/*.txt as
-# independent matrix legs (fail-fast: false). Each leg fetches its
-# universe via `make run`, renames the timestamped output to
-# results/demo/<UNIVERSE>/<YYYY-MM-DD>.json, rebuilds the manifest,
-# and commits both files as a single verified commit via the REST Git
-# Data API (Blob -> Tree -> Commit -> Ref).
+# across every NON-derived bundled universe in
+# src/analyze_stock_kpi/assets/universes/*.txt as independent matrix legs
+# (fail-fast: false). Each leg fetches its universe via `make run`,
+# renames the timestamped output to results/demo/<UNIVERSE>/<YYYY-MM-DD>.json,
+# rebuilds the manifest, and commits both files as a single verified
+# commit via the REST Git Data API (Blob -> Tree -> Commit -> Ref).
+#
+# The four DERIVED universes (aggregated-scores-{best,worst},
+# enhanced-kpi-screener-{longs,shorts}) are NOT fetched here: fetching
+# them independently would recompute a fresh qte77 Score from live
+# yfinance data, disagreeing with the score universe-builder.yaml ranked
+# or classified them by. universe-builder.yaml writes their demo-display
+# snapshot directly from the SAME source-universe records instead — see
+# its "Commit audit JSON + demo snapshot" step.
 #
 # `workflow_dispatch` still accepts a `universe` input; when set, the
 # matrix collapses to that single universe so ad-hoc dispatch stays
 # cheap. Unset (scheduled or dispatched without input) reads
-# `ui/public/universes.json` (the dashboard picker's source of truth)
-# and fans out across every universe the dashboard knows about —
+# `ui/public/universes.json` (the dashboard picker's source of truth),
+# filters to non-derived entries, and fans out across the rest —
 # regardless of whether the preset .txt exists or is empty. Adding a
-# new universe is a single edit to that JSON. The dispatch dropdown
-# still lists choices explicitly because `type: choice` requires
+# new (non-derived) universe is a single edit to that JSON. The dispatch
+# dropdown still lists choices explicitly because `type: choice` requires
 # static options.
 #
 # Target branch is `data` (not `main`). The repo's default-branch
@@ -38,7 +46,7 @@ on:
   workflow_dispatch:
     inputs:
       universe:
-        description: "Single universe (omit for full 11-universe fan-out)"
+        description: "Single universe (omit for full 7-universe fan-out)"
         required: false
         type: choice
         default: ""
@@ -51,10 +59,13 @@ on:
           - japan
           - south-america
           - south-korea
-          - aggregated-scores-best
-          - aggregated-scores-worst
-          - enhanced-kpi-screener-longs
-          - enhanced-kpi-screener-shorts
+          # aggregated-scores-{best,worst} and enhanced-kpi-screener-{longs,shorts}
+          # are intentionally NOT dispatchable here: they are `"derived": true`
+          # in ui/public/universes.json and get their demo-display snapshot
+          # written directly by universe-builder.yaml from the source-universe
+          # records it ranked/classified, never fetched by this workflow (owner
+          # requirement: identical qte77 Score in the aggregated list and its
+          # source list for the same snapshot).
 
 permissions:
   contents: write
@@ -89,14 +100,19 @@ jobs:
             # preset name; quoting is safe.
             echo "universes=[\"$INPUT_UNIVERSE\"]" >> "$GITHUB_OUTPUT"
           else
-            # Source of truth: ui/public/universes.json — every universe
-            # the dashboard picker can show. (Re-)build all of them
-            # regardless of whether the underlying preset .txt exists,
-            # is missing, or is empty; emitting a zero-row snapshot
-            # for an unpopulated universe is the right rebuild
+            # Source of truth: ui/public/universes.json — every NON-derived
+            # universe the dashboard picker can show. (Re-)build all of
+            # them regardless of whether the underlying preset .txt
+            # exists, is missing, or is empty; emitting a zero-row
+            # snapshot for an unpopulated universe is the right rebuild
             # behaviour. The preset itself is the orchestrator's
             # contract (universe-builder.yaml), not demo-snapshot's.
-            UNIVERSES=$(jq -c '[.universes[].id]' ui/public/universes.json)
+            # `"derived": true` entries (aggregated-scores-*,
+            # enhanced-kpi-screener-*) are EXCLUDED here: universe-builder.yaml
+            # writes their demo-display snapshot directly from the
+            # source-universe records it ranked/classified, so re-fetching
+            # them here would diverge from the qte77 Score it ranked on.
+            UNIVERSES=$(jq -c '[.universes[] | select(.derived != true) | .id]' ui/public/universes.json)
             echo "universes=$UNIVERSES" >> "$GITHUB_OUTPUT"
           fi
 
