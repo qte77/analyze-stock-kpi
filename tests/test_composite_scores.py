@@ -10,6 +10,7 @@ from __future__ import annotations
 from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
 from analyze_stock_kpi.domain.composite_scores import (
     CompositeScores,
+    _normalize_term,
     aaqs,
     big_call,
     compute_scores,
@@ -366,3 +367,19 @@ def test_composite_scores_model_is_frozen() -> None:
     except Exception:
         return
     raise AssertionError("CompositeScores should be frozen")
+
+
+# ----- _normalize_term: NaN must exclude a term, never score 100/0 (found 2026-09-24) -----
+
+
+def test_normalize_term_nan_is_excluded_not_scored_100() -> None:
+    assert _normalize_term(float("nan"), 0.0, 0.3) is None
+
+
+def test_normalize_term_nan_inverted_is_excluded_not_scored_0() -> None:
+    assert _normalize_term(float("nan"), 0.0, 0.3, invert=True) is None
+
+
+def test_normalize_term_infinite_is_excluded() -> None:
+    assert _normalize_term(float("inf"), 0.0, 0.3) is None
+    assert _normalize_term(float("-inf"), 0.0, 0.3) is None
