@@ -904,6 +904,38 @@ def test_batch_close_prices_handles_multiindex_columns_for_single_ticker() -> No
     assert len(result["AAPL"]) == 40
 
 
+def test_batch_close_prices_retries_tickers_missing_from_the_batch() -> None:
+    """A ticker the batch returned all-NaN is re-downloaded once.
+
+    yfinance silently NaN-fills a ticker whose part of a batch failed. Left
+    as-is, its Sortino is ``None`` and the qte77 Score drops the momentum
+    factor, so the same ticker scored differently per universe (UBER, AVGO
+    on 2026-09-24).
+    """
+    import pandas as pd
+
+    from analyze_stock_kpi.data_sources.fundamentals import _batch_close_prices
+
+    idx = pd.bdate_range(end="2024-01-01", periods=40)
+    batch = pd.DataFrame(
+        {("Close", "AAPL"): list(range(1, 41)), ("Close", "UBER"): [float("nan")] * 40},
+        index=idx,
+    )
+    batch.columns = pd.MultiIndex.from_tuples(batch.columns)
+    retry = pd.DataFrame({("Close", "UBER"): list(range(41, 81))}, index=idx)
+    retry.columns = pd.MultiIndex.from_tuples(retry.columns)
+
+    with patch(
+        "analyze_stock_kpi.data_sources.fundamentals.yf.download", side_effect=[batch, retry]
+    ) as download:
+        result = _batch_close_prices(["AAPL", "UBER"])
+
+    assert result is not None
+    assert download.call_args_list[1].args[0] == ["UBER"]
+    assert result["UBER"].dropna().iloc[-1] == 80
+    assert result["AAPL"].dropna().iloc[-1] == 40
+
+
 def test_fetch_universe_fundamentals_attaches_sortino_via_batch() -> None:
     """Batched ``yf.download`` at universe level feeds per-ticker Sortino.
 
