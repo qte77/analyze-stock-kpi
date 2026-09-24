@@ -23,6 +23,12 @@
 // updated` because the ref moved between getRef and updateRef. Blobs
 // are content-addressed and persist across retries; only the tree +
 // commit + ref-update are recomputed.
+//
+// `paths` entries that no longer exist locally (e.g. plan 008 PR E's
+// `method_version`-triggered one-time rebuild deleting obsolete
+// pre-start year files, ADR-0013 amendment 2026-09-24) become a
+// `sha: null` tree entry, which the Git Trees API treats as a path
+// deletion — no separate "deletions" list needed.
 
 "use strict";
 
@@ -42,14 +48,19 @@ const MAX_ATTEMPTS = 8;
 async function run({ github, context, core, paths, message, branch = "data" }) {
   const { owner, repo } = context.repo;
 
-  const mkBlob = async (path) => {
+  const mkTreeEntry = async (path) => {
+    if (!fs.existsSync(path)) {
+      // Deleted locally since the branch was checked out — a `sha: null`
+      // tree entry removes the path from the new tree (deletion).
+      return { path, mode: "100644", type: "blob", sha: null };
+    }
     const content = fs.readFileSync(path).toString("base64");
     const blob = await github.rest.git.createBlob({
       owner, repo, content, encoding: "base64",
     });
     return { path, mode: "100644", type: "blob", sha: blob.data.sha };
   };
-  const tree = await Promise.all(paths.map(mkBlob));
+  const tree = await Promise.all(paths.map(mkTreeEntry));
 
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     try {
