@@ -17,7 +17,10 @@ import pytest
 
 from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
 from analyze_stock_kpi.domain.composite_scores import CompositeScores
-from analyze_stock_kpi.orchestrators.aggregated_scores_best_and_worst import build_universe
+from analyze_stock_kpi.orchestrators.aggregated_scores_best_and_worst import (
+    build_universe,
+    ranked_snapshots,
+)
 
 
 def _snap(
@@ -366,3 +369,61 @@ def test_integration_multiple_universes_mixed_eligibility() -> None:
     assert ranks["BTC"] is None
     btc_row = next(r for r in audit if r.ticker == "BTC")
     assert btc_row.excluded_reason == "no_screener_score"
+
+
+def test_ranked_snapshots_returns_identical_records_used_for_ranking() -> None:
+    """``ranked_snapshots`` returns the exact objects ``build_universe`` ranked.
+
+    Owner requirement: the aggregated best/worst lists must carry the
+    identical per-ticker qte77 Score (``screener_score``) and KPI record as
+    the source-universe snapshot they were ranked from -- never a second,
+    independent fetch. The build script uses this accessor to emit the
+    demo-display JSON, so it must hand back the SAME objects, not
+    recomputed ones.
+    """
+    best_snap = _snap(
+        "AAPL", quality=90, dividend=30, growth=80, big_call=70, aaqs=85, hgi=75, screener_score=80
+    )
+    worst_snap = _snap(
+        "XOM", quality=40, dividend=60, growth=20, big_call=30, aaqs=35, hgi=25, screener_score=30
+    )
+    snapshots_by_universe = {"sp500": [best_snap, worst_snap]}
+    snapshot_dates = {"sp500": "2026-05-31"}
+
+    best, worst, _ = build_universe(
+        snapshots_by_universe, snapshot_dates, as_of=date(2026, 5, 31), top_n=1
+    )
+    resolved = ranked_snapshots(snapshots_by_universe, snapshot_dates, best + worst)
+
+    assert best == ["AAPL"]
+    assert worst == ["XOM"]
+    assert resolved == [best_snap, worst_snap]
+
+
+def test_best_min_score_gte_worst_max_score() -> None:
+    """Owner acceptance criterion: best-list minimum score >= worst-list maximum.
+
+    Guards the aggregated display invariant end to end -- a re-fetch that
+    reintroduced divergent data could let a worst-list ticker outscore a
+    best-list one (the BAYN.DE/YOU regression this fix addresses).
+    """
+    snapshots = [
+        _snap(
+            f"T{i:03d}",
+            quality=50.0,
+            dividend=50.0,
+            growth=50.0,
+            big_call=50.0,
+            aaqs=50.0,
+            hgi=50.0,
+            screener_score=float(100 - i),
+        )
+        for i in range(50)
+    ]
+
+    best, worst, audit = build_universe(
+        {"sp500": snapshots}, {"sp500": "2026-05-31"}, as_of=date(2026, 5, 31), top_n=25
+    )
+
+    scores = {row.ticker: row.screener_score for row in audit}
+    assert min(scores[t] for t in best) >= max(scores[t] for t in worst)
