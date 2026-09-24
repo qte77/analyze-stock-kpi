@@ -22,8 +22,9 @@
   with an optional composite-score breakdown.
 - A static **[live dashboard](https://qte77.github.io/analyze-stock-kpi/)** (deployed to
   GitHub Pages): tabbed F&G panel + sortable universe table + row-click KPI detail +
-  a hypothetical long/short **model portfolio** chart (forward-only, no backtest — see
-  [ADR-0012](docs/decisions/0012-longshort-model-portfolio.md)).
+  a hypothetical, point-in-time backtested long/short **25/25 book** (backfilled best/worst 25,
+  equal-weight, gross/net of a 10 bp turnover cost — see
+  [ADR-0013](docs/decisions/0013-point-in-time-backtest.md)).
 - **No API keys, no scraping** — keyless public sources only.
 
 <details>
@@ -36,7 +37,7 @@
 ## How
 
 ```bash
-make setup_dev                              # uv sync (dev + test groups, incl. optional `portfolio` extra)
+make setup_dev                              # uv sync (dev + test groups)
 make run UNIVERSE=qte77-watchlist           # fundamentals -> results/fundamentals/<UTC>.json
 make run TICKERS=AAPL,MSFT                  # ad-hoc tickers (SHOW_SCORES=1 appends score columns)
 make help                                   # list available recipes

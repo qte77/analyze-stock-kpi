@@ -263,7 +263,7 @@ Every run must:
 | Item | Gate | Done-when |
 |---|---|---|
 | ~~W0 land this plan + close plan 007 + open tracking issue + #294 comment~~ | agent → admin-merge on green | shipped — issue #401, plan on `main` |
-| PR C core engine + cron + removals + docs | agent → admin-merge on green | per PR C done-when |
+| ~~PR C core engine + cron + removals + docs~~ | agent → admin-merge on green | PR [#404](https://github.com/qte77/analyze-stock-kpi/pull/404) open, `make validate` + full local run green, pending admin-merge |
 | Dispatch `portfolio.yaml` + verify data files + Pages e2e (migrated from 007) | agent (after C+D) | the three artifact kinds on `data`; the section renders on Pages without console errors |
 | ~~PR D dashboard section~~ | agent → admin-merge on green | PR [#403](https://github.com/qte77/analyze-stock-kpi/pull/403) open, `make validate` + local e2e green, pending admin-merge |
 | Issue: `make preview` doesn't serve `ui/public/` | agent | issue filed |

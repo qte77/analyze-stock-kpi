@@ -47,13 +47,14 @@ class AppSettings(BaseSettings):
     cnn_fg_cache_dir: Path = Path("results/series/cnn_fg")
     yield_curve_cache_dir: Path = Path("results/series/yield_curve")
     equity_spy_cache_dir: Path = Path("results/series/equity_spy")
-    portfolio_weekly_series_dir: Path = Path("results/series/portfolio_weekly")
-    portfolio_monthly_series_dir: Path = Path("results/series/portfolio_monthly")
-    portfolio_state_dir: Path = Path("results/portfolio")
-    portfolio_prices_cache_dir: Path = Path("results/prices")
-    """Gitignored local cache for raw daily closes (ADR-0012 D8) — same
-    posture as ``edgar_cache_dir``: never committed, never sent to the
-    ``data`` branch."""
+    backtest_series_dir: Path = Path("results/series/backtest")
+    """Per-cadence daily return rows for the point-in-time backtest (ADR-0013)."""
+    backtest_dir: Path = Path("results/backtest")
+    """Backfilled best/worst-25 lists (``lists/YYYY.json``) + ``summary.json``."""
+    backtest_prices_cache_dir: Path = Path("results/prices")
+    """Gitignored local cache for raw daily closes + statement frames
+    (ADR-0013) — same posture as ``edgar_cache_dir``: never committed,
+    never sent to the ``data`` branch."""
     demo_dir: Path = Path("results/demo")
     audit_dir: Path = Path("results/audit")
     user_agents: tuple[str, ...] = (

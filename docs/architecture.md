@@ -28,7 +28,8 @@ Every external boundary carries one of three failure policies. Logged via `logge
 | yfinance `Ticker.info` (audit) | `universe_audit.classify_ticker` | wrap-degrade — `FAIL` entry | exception → `AuditEntry(classification="FAIL", note=str(exc))`; one ticker can't abort the audit sweep |
 | whit3rabbit CSV fetch (backfill) | `scripts/backfill_fear_greed_whitrabbit._fetch_csv` | fail-loud | operator-only one-shot; CSV unavailability is a configuration error (wrong SHA, network down), not a degradable state — abort + retry rather than write partial data |
 | yfinance `Ticker.history` (yield curve) | `yield_curve._fetch_close` | wrap-degrade — `None` per leg | per-leg `try/except`; both legs failing → `fetch_yield_curve_snapshot` returns `None` and the cron skips today's write rather than persisting an empty row |
-| yfinance batch `download` (long/short portfolio) | `longshort_portfolio.fetch_closes` | wrap-degrade — `{}` on failure | network / shape error → returns `{}`; the cron skips today's mark (no state update, no return row) rather than aborting (ADR-0012) |
+| yfinance statements (point-in-time backtest) | `longshort_backtest.fetch_frames` | wrap-degrade — `(None, None)` on failure | per-ticker `try/except`; a ticker with no usable statement column is simply excluded from that rank date's ranking, not the whole run (ADR-0013) |
+| yfinance batch `download` (point-in-time backtest) | `longshort_backtest` via `fundamentals._batch_close_prices` | wrap-degrade — `{}` on failure | network / shape error → the run has no calendar to compute over, so `main()` logs a warning and skips the commit entirely (ADR-0013) |
 | Filesystem write (snapshots) | `__main__._persist_snapshots` | fail-loud | disk full / permission denied → abort |
 | Filesystem write (CNN cache) | `sentiment._write_year` | fail-loud | same rationale |
 | Filesystem read (universe preset) | `universe.resolve_universe` (preset mode) | wrap-degrade — empty preset returns `[]` | orchestrator-driven case (#192 Phase 2a): the longshort presets start as 0-byte placeholders; the conjunctive gate can also yield zero candidates legitimately. Missing-file path still fail-loud — config error |
@@ -45,8 +46,7 @@ src/
 ├── config.py                         AppSettings(BaseSettings) — every URL/path/timeout/HTTP-shape constant; env-overridable via SSK_*
 ├── domain/
 │   ├── universe.py                   resolve_universe(args) -> list[ticker]; presets in src/analyze_stock_kpi/assets/universes/*.txt
-│   ├── composite_scores.py           quality/dividend/growth/big_call/aaqs/hgi/screener 0-100 proxies; `compute_scores(snap) -> CompositeScores`
-│   └── portfolio_optimizer.py        shrunk_covariance/min_variance_longshort/ex_ante_vol — joint dollar-neutral Min Variance (scipy SLSQP; optional `portfolio` extra; ADR-0012 D4)
+│   └── composite_scores.py           quality/dividend/growth/big_call/aaqs/hgi/screener 0-100 proxies; `compute_scores(snap) -> CompositeScores`
 ├── data_sources/
 │   ├── fundamentals.py               fetch_fundamentals / fetch_price_history / fetch_universe_fundamentals — yfinance
 │   ├── sentiment.py                  fetch_fear_greed() -> FearGreedSnapshot; `python -m analyze_stock_kpi.data_sources.sentiment` merges into per-year files results/series/cnn_fg/YYYY.json
@@ -61,7 +61,7 @@ src/
 │   ├── aggregated_scores_best_and_worst.py  build_universe(snapshots_by_universe, snapshot_dates_by_universe, *, top_n=25, ...) -> tuple[list[str], list[str], list[AuditRow]]; cross-universe qte77 Score (`screener_score`) ranking, returns (best, worst, audit) — paired presets `aggregated-scores-best` + `aggregated-scores-worst` (#184; NOT a hedging primitive, see ADR-0005 amendment)
 │   ├── enhanced_kpi_screener_longshort.py   build_universe(snapshots_by_universe, snapshot_dates_by_universe, *, min_criteria=10, ...) -> tuple[list[str], list[str], list[AuditRow]]; 15 long-side + 14 short-side conjunctive gates (a ticker lands in `longs` iff it passes ALL long gates, in `shorts` iff it passes ALL inverted short gates, otherwise neither). Phases 2a + 2b of #192; criterion 15 (tech rating) still deferred behind #21. Paired presets `enhanced-kpi-screener-longs` + `enhanced-kpi-screener-shorts`. Long ∩ short empty by construction. Declarative `_NUMERIC_GATES` table keeps `_evaluate` cognitive complexity at 5
 │   ├── federal_contractors.py        build_universe(*, fy=None, top_n=100) -> tuple[list[str], list[AuditRow]]; chains usaspending → EDGAR → yfinance
-│   ├── longshort_portfolio.py        load_pool/fetch_closes/step/main — hypothetical dollar-neutral long/short model portfolio (ADR-0012); weekly + monthly cadence over the aggregated-scores-best/-worst pool, Min Variance via domain/portfolio_optimizer.py (optional `portfolio` extra)
+│   ├── longshort_backtest.py         pit_fundamentals/score_at/rank_dates/rebalance_dates/select/simulate/metrics/null_percentile/fidelity + fetch_frames/main — point-in-time backfilled best/worst 25 + backtested equal-weight long/short 25/25 across five cadences (ADR-0013)
 │   └── universe_audit.py             classify_ticker / audit_universes -> UniverseAuditReport; operator triage for stale-US-ticker rot (#168)
 ├── assets/
 │   └── universes/                    preset *.txt ticker lists (one per universe name)
@@ -94,6 +94,8 @@ A second cron (`.github/workflows/demo-snapshot.yaml`, Sunday 06:15 UTC) runs `m
 
 A third workflow (`.github/workflows/gh-pages.yaml`) builds `ui/` with Vite (`npm run build` → `ui/dist`) and deploys it to GitHub Pages via `actions/upload-pages-artifact` + `actions/deploy-pages` whenever `ui/**` changes. The dashboard fetches data files at runtime cross-origin from `raw.githubusercontent.com/qte77/analyze-stock-kpi/data/results/…`; this decouples data-update cadence from page deploys.
 
+A fourth cron (`.github/workflows/portfolio.yaml`, Saturdays 12:00 UTC — no other data-branch writer runs then) runs `python -m analyze_stock_kpi.orchestrators.longshort_backtest`. Every run is a **full deterministic recompute** (stateless, idempotent — ADR-0013 D13): it re-ranks every D1 base universe by `score_at` at each weekly rank date since inception, simulates all five cadences, and rewrites `results/series/backtest/<cadence>/YYYY.json`, `results/backtest/lists/YYYY.json` and `results/backtest/summary.json` on the `data` branch through the same verified-commit mechanism. Raw prices and statement line items never leave the run — `fetch_frames` and `write_closes_cache` cache them only under the gitignored `results/prices/` (never checked out from `data`, never matched by the commit filter).
+
 v1.1.0 attaches a `CompositeScores` object to every `FundamentalsSnapshot` after fetch via `model_copy(update={"composite_scores": compute_scores(snap)})`. The rich summary table appends Quality / Div / Growth columns only when `--show-scores` is passed; persistence carries the composites unconditionally.
 
 ## Public types (`pydantic.BaseModel`)
@@ -104,7 +106,7 @@ v1.1.0 attaches a `CompositeScores` object to every `FundamentalsSnapshot` after
 | `FundamentalsSnapshot` | `fundamentals.py` | Per-ticker fundamentals — ~35 aliased fields including the post-fetch enrichments `roi`, `rd_to_revenue`, `fcf_margin` (#192 Phase 2b; `Ticker.cashflow` + `Ticker.income_stmt`, EQUITY-gated), `sortino_ratio` plus its informational `sortino_3y/5y/10y/20y/30y` windows and an optional CLI-only `sortino_custom` frame (see [ADR-0004](decisions/0004-price-history-composite-input.md) and plan [007](plans/007-longshort-portfolio-and-multiwindow-sortino.md)) and the analyst-rating bucket `analyst_recommendation` (#192 Phase 2a; alias `recommendationKey`, already in the yfinance `info` payload — no extra HTTP); sparse for non-equities |
 | `FearGreedSnapshot` | `sentiment.py` | CNN F&G headline (score, rating, timestamp, prev close/1w/1m/1y) + optional `subindicators` map of 9 named `SubindicatorReading` entries (score, rating, raw_value); see [`cnn-fg-api.md`](cnn-fg-api.md) for what's backfillable vs daily-only |
 | `CompositeScores` | `composite_scores.py` | Quality/dividend/growth/big_call/aaqs/hgi/screener 0-100 proxies derived from `FundamentalsSnapshot`; simplified formulas per [`decisions/0002-simplified-composites.md`](decisions/0002-simplified-composites.md) amended by [`decisions/0004-price-history-composite-input.md`](decisions/0004-price-history-composite-input.md) |
-| `WeeklyReturn` / `PortfolioState` | `orchestrators/longshort_portfolio.py` | Frozen data contract for the hypothetical long/short model portfolio ([ADR-0012](decisions/0012-longshort-model-portfolio.md)) — weekly return marks (`ret_long`/`ret_short`/`ret_ls`) and per-cadence target weights/pool persisted to the `data` branch; raw closes are never persisted |
+| `BacktestDailyRow` / `BacktestListEntry` / `BacktestSummary` | `orchestrators/longshort_backtest.py` | Frozen data contract for the point-in-time backfill + backtest ([ADR-0013](decisions/0013-point-in-time-backtest.md)) — daily-marked gross/net long/short returns per cadence, the backfilled best/worst-25 per weekly rank date, and the summary metrics/null-benchmark/fidelity block; raw prices and statement line items are never persisted |
 
 ## External boundaries
 
