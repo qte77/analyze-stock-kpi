@@ -326,7 +326,7 @@ Every run must:
 |---|---|---|
 | ~~W0 land this plan + close plan 007 + open tracking issue + #294 comment~~ | agent → admin-merge on green | shipped — issue #401, plan on `main` |
 | ~~PR C core engine + cron + removals + docs~~ | agent → admin-merge on green | shipped — [#404](https://github.com/qte77/analyze-stock-kpi/pull/404) merged 2026-09-24 |
-| PR E series A + freeze + lag (D15–D19) + B start-trim fix | agent → admin-merge on green | per PR E done-when; B's published metrics match its real window |
+| ~~PR E series A + freeze + lag (D15–D19) + B start-trim fix~~ | agent → admin-merge on green | shipped — [#PR_NUMBER_PLACEHOLDER](https://github.com/qte77/analyze-stock-kpi/pull/PR_NUMBER_PLACEHOLDER) |
 | ~~PR D dashboard section~~ | agent → admin-merge on green | shipped — [#403](https://github.com/qte77/analyze-stock-kpi/pull/403) merged 2026-09-23 |
 | Dispatch `portfolio.yaml` + verify data files + Pages e2e (migrated from 007) | agent (after E+F) | A + B artifacts on `data`; the section renders on Pages without console errors; the e2e defects list is triaged |
 | ~~PR F dashboard A headline + B secondary~~ | agent → admin-merge on green | shipped — [#410](https://github.com/qte77/analyze-stock-kpi/pull/410) (also: URL state-clear fix, D20 yearly cadence, D21 rebalance log) |
