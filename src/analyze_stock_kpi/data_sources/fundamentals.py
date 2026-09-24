@@ -493,7 +493,26 @@ def fetch_price_history(ticker: str, period: str = "5y") -> pd.DataFrame:
 
 
 def _batch_close_prices(tickers: list[str]) -> dict[str, Any] | None:
-    """One batched ``yf.download`` for the whole universe.
+    """Batched closes for the whole universe, retrying tickers the batch missed.
+
+    yfinance NaN-fills a ticker whose part of a batch failed transiently; left
+    unretried, its Sortino is ``None`` and the qte77 Score silently drops the
+    momentum factor, so the same ticker scored differently per universe. One
+    second batch covers only the missing tickers; any still missing are logged.
+    """
+    result = dict(_download_closes(tickers) or {})
+    missing = [t for t in tickers if t not in result or result[t].dropna().empty]
+    if missing:
+        retried = _download_closes(missing) or {}
+        result.update({t: s for t, s in retried.items() if not s.dropna().empty})
+        still_missing = [t for t in missing if t not in result or result[t].dropna().empty]
+        if still_missing:
+            logger.warning("No close prices after retry for: %s", ", ".join(still_missing))
+    return result or None
+
+
+def _download_closes(tickers: list[str]) -> dict[str, Any] | None:
+    """One batched ``yf.download`` for ``tickers``.
 
     ``period="max"`` (yfinance has no "30y" period) so the same download
     covers every fixed Sortino window (1y/3y/5y/10y/20y/30y — see
