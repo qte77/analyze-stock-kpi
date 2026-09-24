@@ -1,61 +1,68 @@
 ---
-# Hypothetical long/short model portfolio (ADR-0012, plan 007).
+# Point-in-time backfilled best/worst 25 + backtested long/short 25/25 (ADR-0013, plan 008).
 #
-# Runs weekly at Fri 23:30 UTC — 30min after equity-spy.yaml (23:00) so the
-# data-branch-writing crons don't race the same ref. Advances both the
-# weekly- and monthly-rebalanced portfolios (weekly always re-optimizes;
-# monthly only on the first run of a calendar month — D5), appends this
-# run's return row to results/series/portfolio_{weekly,monthly}/YYYY.json,
-# and persists each cadence's target weights to
-# results/portfolio/{weekly,monthly}/state.json. Commits changed files as a
-# single verified commit via the REST Git Data API.
+# Runs Saturdays at 12:00 UTC — no other data-branch writer runs at that time. Does a FULL
+# deterministic recompute every run (stateless, idempotent — D13): ranks every D1 base
+# universe by score_at (D2, point-in-time-only qte77 Score) at each weekly rank date since
+# inception, then simulates five cadences' equal-weight 25/25 long/short books. Writes
+# results/series/backtest/<cadence>/YYYY.json, results/backtest/lists/YYYY.json and
+# results/backtest/summary.json, then commits changed files as a single verified commit via
+# the REST Git Data API.
 #
-# Raw closes are NEVER committed (D8) — `fetch_closes` writes them only to
-# the gitignored `results/prices/` local cache, which this workflow never
-# checks out from `data` and the commit filter below never matches.
+# Raw prices and statement line items are NEVER committed (see docs/data-sources.md) —
+# `fetch_frames` / `fundamentals._batch_close_prices` write them only to the gitignored
+# `results/prices/` local cache, which this workflow never checks out from `data` and the
+# commit filter below never matches.
 #
-# Same verified-commit pattern + data-branch rationale as equity-spy.yaml
-# (the default-branch ruleset rejects direct ref updates on main even from
-# verified API commits — `data` is unrestricted).
+# Same verified-commit pattern + data-branch rationale as equity-spy.yaml (the default-branch
+# ruleset rejects direct ref updates on main even from verified API commits — `data` is
+# unrestricted).
 
-name: longshort-portfolio-snapshot
+name: pit-longshort-backtest
 
 on:
   schedule:
-    # 23:30 UTC every Friday — 30min after the daily equity-spy cron
-    - cron: "30 23 * * 5"
+    # 12:00 UTC every Saturday
+    - cron: "0 12 * * 6"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: longshort-portfolio-snapshot
+  group: pit-longshort-backtest
   cancel-in-progress: false
 
 jobs:
   snapshot:
-    name: advance + commit long/short model portfolio
+    name: recompute + commit point-in-time backfill/backtest
     runs-on: ubuntu-latest
     steps:
       # Check out the workflow ref (main) for the current src/ layout —
-      # `analyze_stock_kpi.orchestrators.longshort_portfolio` lives on main
-      # only. The `data` branch carries data only.
+      # `analyze_stock_kpi.orchestrators.longshort_backtest` lives on main only. The `data`
+      # branch carries data only.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # Pull the accumulated return history + prior state from the data
-      # branch so `step()` sees the prior state rather than starting fresh.
-      - name: Fetch existing portfolio history + state from data branch
+      # Pull the prior contract artifacts from the data branch. This is a full recompute
+      # (D13) so overwriting is fine — the checkout only lets the "changed files" diff below
+      # detect a genuinely-empty diff (e.g. a same-day re-run) rather than always committing.
+      - name: Fetch existing backfill/backtest artifacts from data branch
         run: |
           set -euo pipefail
           git fetch origin data --depth=1
-          rm -rf results/series/portfolio_weekly results/series/portfolio_monthly results/portfolio
-          git checkout origin/data -- results/series/portfolio_weekly/ || \
-            echo "no existing results/series/portfolio_weekly/ on data — first run"
-          git checkout origin/data -- results/series/portfolio_monthly/ || \
-            echo "no existing results/series/portfolio_monthly/ on data — first run"
-          git checkout origin/data -- results/portfolio/ || \
-            echo "no existing results/portfolio/ on data — first run"
+          rm -rf results/series/backtest results/backtest
+          git checkout origin/data -- results/series/backtest/ || \
+            echo "no existing results/series/backtest/ on data — first run"
+          git checkout origin/data -- results/backtest/ || \
+            echo "no existing results/backtest/ on data — first run"
+
+      # Pull the genuine per-universe demo snapshots (read-only input for the D11 fidelity
+      # check) — never part of the commit filter below, never written back.
+      - name: Fetch genuine demo snapshots from data branch (D11 fidelity input)
+        run: |
+          set -euo pipefail
+          git checkout origin/data -- results/demo/ || \
+            echo "no existing results/demo/ on data — fidelity will be empty this run"
 
       - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4  # v10.1.0
         with:
@@ -65,39 +72,39 @@ jobs:
       - name: Set up Python
         run: uv python install 3.12
 
-      - name: Install runtime dependencies (incl. the `portfolio` extra)
-        run: uv sync --extra portfolio
+      - name: Install runtime dependencies
+        run: uv sync
 
-      - name: Advance the long/short model portfolio
-        run: uv run python -m analyze_stock_kpi.orchestrators.longshort_portfolio
+      - name: Recompute the point-in-time backfill + backtest
+        run: uv run python -m analyze_stock_kpi.orchestrators.longshort_backtest
 
-      - name: Detect changed history + state files
+      - name: Detect changed contract files
         id: changed
         run: |
           set -euo pipefail
-          # -uall enumerates files inside untracked directories — without it
-          # the first run (no prior data on `data`) shows the dirs summarised
-          # and awk finds nothing, silently skipping the commit.
+          # -uall enumerates files inside untracked directories — without it the first run
+          # (no prior data on `data`) shows the dirs summarised and awk finds nothing,
+          # silently skipping the commit.
           FILES=$(git status --porcelain -uall \
-              results/series/portfolio_weekly/ results/series/portfolio_monthly/ results/portfolio/ \
-            | awk '$2 ~ /^results\/(series\/portfolio_(weekly|monthly)\/[0-9]{4}\.json|portfolio\/(weekly|monthly)\/state\.json)$/ {print $2}' \
+              results/series/backtest/ results/backtest/ \
+            | awk '$2 ~ /^results\/(series\/backtest\/[a-z_]+\/[0-9]{4}\.json|backtest\/(lists\/[0-9]{4}\.json|summary\.json))$/ {print $2}' \
             | paste -sd ',' -)
           echo "files=$FILES" >> "$GITHUB_OUTPUT"
           if [ -z "$FILES" ]; then
-            echo "no portfolio changes; skipping commit"
+            echo "no backfill/backtest changes; skipping commit"
           else
             echo "changed: $FILES"
           fi
 
-      - name: Commit history + state file(s) as a single verified commit
+      - name: Commit changed contract file(s) as a single verified commit
         if: steps.changed.outputs.files != ''
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
         env:
           FILES: ${{ steps.changed.outputs.files }}
         with:
-          # Retry-aware verified-commit lives in scripts/data-branch-commit.cjs
-          # so it is reused across every data-branch-writing workflow and
-          # survives the 422 race the matrix legs occasionally hit.
+          # Retry-aware verified-commit lives in scripts/data-branch-commit.cjs so it is
+          # reused across every data-branch-writing workflow and survives the 422 race the
+          # matrix legs occasionally hit.
           script: |
             const { FILES } = process.env;
             const paths = FILES.split(',').filter(Boolean);
@@ -105,5 +112,5 @@ jobs:
             return run({
               github, context, core,
               paths,
-              message: 'chore(portfolio): weekly long/short model portfolio snapshot',
+              message: 'chore(backtest): weekly point-in-time backfill + backtest recompute',
             });
