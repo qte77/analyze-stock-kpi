@@ -98,12 +98,15 @@ logger = logging.getLogger(__name__)
 Frames = tuple["pd.DataFrame | None", "pd.DataFrame | None"]
 """One ticker's ``(income_stmt, balance_sheet)`` as yfinance returns them."""
 
-Cadence = Literal["monthly", "quarterly_filings", "monthly_buffer", "weekly", "buy_hold"]
+Cadence = Literal[
+    "monthly", "quarterly_filings", "monthly_buffer", "weekly", "yearly", "buy_hold"
+]
 CADENCES: tuple[Cadence, ...] = (
     "monthly",
     "quarterly_filings",
     "monthly_buffer",
     "weekly",
+    "yearly",
     "buy_hold",
 )
 PRIMARY_CADENCE: Cadence = "monthly"
@@ -197,13 +200,16 @@ _CAVEATS: tuple[str, ...] = (
     "not the as-originally-reported values a contemporaneous investor would "
     "have seen.",
     "No SEC filing dates are available from yfinance; a statement column is "
-    "treated as usable 90 days after its period end, an approximation of the "
-    "real filing lag.",
+    "treated as usable 90 days after its period end for a US ticker, 120 "
+    "days for non-US (D18) — both an approximation of the real filing lag.",
     "A ticker with no price on a given day is treated as flat (0% return) "
     "that day; a name that stops trading entirely after entry is held at its "
     "last known close rather than dropped.",
     "Returns are local-currency, gross of FX, financing and borrow costs; "
     "only the 10 bp one-way-turnover trading cost is modelled.",
+    "The `yearly` cadence rebalances once a year; nothing is annualized from "
+    "fewer than 12 months of monthly returns (D9), so its metrics stay "
+    "`null` far longer than the other cadences'.",
     "This is a hypothetical, backward-looking construction — not a live "
     "track record and not investment advice.",
 )
@@ -230,6 +236,9 @@ _CAVEATS_GENUINE: tuple[str, ...] = (
     "Null benchmark and fidelity are not yet published for series A (fewer "
     "than 12 monthly rebalances so far) — both stay `null` until enough "
     "history accumulates.",
+    "The `yearly` cadence rebalances once a year; nothing is annualized from "
+    "fewer than 12 months of monthly returns (D9), so its metrics stay "
+    "`null` far longer than the other cadences'.",
     "This is a hypothetical, backward-looking construction — not a live "
     "track record and not investment advice.",
 )
@@ -269,6 +278,67 @@ class BacktestListEntry(BaseModel):
     eligible: int
     best: list[RankEntry]
     worst: list[RankEntry]
+
+
+TradeReason = Literal[
+    "initial",
+    "scheduled_weekly",
+    "scheduled_monthly",
+    "quarterly_after_filings",
+    "scheduled_yearly",
+    "buffer_exit",
+    "buy_hold_initial",
+]
+"""D21: why a rebalance happened. `buffer_exit` is `monthly_buffer`-only, and only
+when this rebalance actually dropped a held name for exceeding the buffer rank;
+`initial` is every other cadence's first-ever rebalance; `buy_hold_initial` is
+`buy_hold`'s single (and only) rebalance."""
+
+
+class RankedTicker(BaseModel):
+    """One entered/exited ticker's rank + score AT THE RANK DATE (D21).
+
+    `rank` follows `aggregated_scores_best_and_worst.AuditRow`'s signed
+    convention: `+1` is the single best-ranked ticker, `-1` the single
+    worst-ranked. Both `rank` and `score` are `None` when not determinable —
+    series A has no full ranked pool to look an EXITED ticker's current
+    rank up in (D16), so its exits are always `(None, None)`; series B
+    always populates both.
+    """
+
+    model_config = ConfigDict(frozen=True)
+
+    ticker: str
+    rank: int | None
+    score: float | None
+
+
+class LegChange(BaseModel):
+    """One leg's (long or short) entered/exited tickers at a rebalance (D21)."""
+
+    model_config = ConfigDict(frozen=True)
+
+    entered: list[RankedTicker]
+    exited: list[RankedTicker]
+
+
+class TradeLogEntry(BaseModel):
+    """One rebalance's WHEN/WHY/WHAT (D21) — the rebalance log.
+
+    `turnover` here is the STATIC target-to-target one-way turnover (ignores
+    the intraperiod price drift `simulate`'s cost-bearing turnover factors
+    in) — a simpler, informational figure for the log, not the exact
+    cost-driving value in the daily series.
+    """
+
+    model_config = ConfigDict(frozen=True)
+
+    rank_date: date
+    trade_date: date
+    reason: TradeReason
+    long: LegChange
+    short: LegChange
+    turnover: float
 
 
 class MetricsBlock(BaseModel):
@@ -471,6 +541,17 @@ def _monthly_dates(grid: list[date]) -> list[date]:
     return out
 
 
+def _yearly_dates(grid: list[date]) -> list[date]:
+    """D20: first grid date of each calendar year."""
+    out: list[date] = []
+    seen: set[int] = set()
+    for d in grid:
+        if d.year not in seen:
+            seen.add(d.year)
+            out.append(d)
+    return out
+
+
 _QUARTERLY_TRIGGER_MD: tuple[tuple[int, int], ...] = ((2, 15), (5, 15), (8, 15), (11, 15))
 
 
@@ -489,13 +570,15 @@ def _quarterly_filing_dates(grid: list[date]) -> list[date]:
 
 
 def rebalance_dates(cadence: str, grid: list[date]) -> list[date]:
-    """D7: the subset of `grid` (D6's weekly rank dates) each cadence trades on."""
+    """D7/D20: the subset of `grid` (D6's weekly rank dates) each cadence trades on."""
     if not grid:
         return []
     if cadence in ("weekly",):
         return list(grid)
     if cadence in ("monthly", "monthly_buffer"):
         return _monthly_dates(grid)
+    if cadence == "yearly":
+        return _yearly_dates(grid)
     if cadence == "quarterly_filings":
         return _quarterly_filing_dates(grid)
     if cadence == "buy_hold":
@@ -539,6 +622,35 @@ def select(
     long_names = _buffer_leg(ranks, prev_long, book_size, buffer)
     short_names = _buffer_leg(list(reversed(ranks)), prev_short, book_size, buffer)
     return long_names, short_names
+
+
+# ----- D21: the rebalance log -----
+
+
+def _leg_diff(prev: list[str], new: list[str]) -> tuple[list[str], list[str]]:
+    """D21: `(entered, exited)` — tickers newly in `new`, and tickers dropped from `prev`."""
+    prev_set, new_set = set(prev), set(new)
+    entered = [t for t in new if t not in prev_set]
+    exited = [t for t in prev if t not in new_set]
+    return entered, exited
+
+
+def _rebalance_reason(cadence: str, *, is_first: bool, had_buffer_exit: bool) -> TradeReason:
+    """D21: WHY this rebalance happened."""
+    if cadence == "buy_hold":
+        return "buy_hold_initial"
+    if is_first:
+        return "initial"
+    if cadence == "monthly_buffer" and had_buffer_exit:
+        return "buffer_exit"
+    scheduled: dict[str, TradeReason] = {
+        "weekly": "scheduled_weekly",
+        "monthly": "scheduled_monthly",
+        "monthly_buffer": "scheduled_monthly",
+        "quarterly_filings": "quarterly_after_filings",
+        "yearly": "scheduled_yearly",
+    }
+    return scheduled[cadence]
 
 
 # ----- D5/D8: simulate -----
@@ -1187,6 +1299,87 @@ def _weights_for_cadence(
     return out
 
 
+def _ranked_ticker(
+    pos: dict[str, int], scores: dict[str, float], ticker: str, *, short: bool, n: int
+) -> RankedTicker:
+    """D21: one ticker's `RankedTicker`, from its position in the full ranked pool.
+
+    `pos` maps ticker -> its 0-based best-to-worst index. `short=True` uses
+    the worst-relative signed rank (`-1` = the single worst); otherwise the
+    best-relative rank (`+1` = the single best) — `aggregated_scores_best_
+    and_worst.AuditRow`'s convention. `None`/`None` when `ticker` isn't in
+    `pos` at all (fell out of the ranked/eligible pool entirely).
+    """
+    idx = pos.get(ticker)
+    if idx is None:
+        return RankedTicker(ticker=ticker, rank=None, score=None)
+    rank = -(n - idx) if short else idx + 1
+    return RankedTicker(ticker=ticker, rank=rank, score=scores.get(ticker))
+
+
+def _trade_log_for_cadence(
+    cadence: str,
+    rebal_dates: list[date],
+    ranked_by_date: dict[date, list[tuple[str, float]]],
+    calendar: list[date],
+    *,
+    book_size: int = _BOOK_SIZE,
+    buffer: int = _BUFFER_RANK,
+) -> list[TradeLogEntry]:
+    """D21: series B's WHEN/WHY/WHAT rebalance log for one cadence.
+
+    Mirrors `_weights_for_cadence`'s selection loop (same `select()` calls,
+    same `prev_holdings` tracking) so the log always agrees with the actual
+    simulated weights; kept as its own pass rather than folded into
+    `_weights_for_cadence` to keep that function's return shape untouched.
+    """
+    entries: list[TradeLogEntry] = []
+    prev_holdings: tuple[list[str], list[str]] | None = None
+    for t in rebal_dates:
+        scored = ranked_by_date.get(t, [])
+        ranks = [ticker for ticker, _ in scored]
+        if len(ranks) < 2 * book_size:
+            continue
+        long_names, short_names = select(ranks, cadence, prev_holdings, book_size=book_size, buffer=buffer)
+        trade_date = _next_trading_day(calendar, t)
+        if trade_date is None:
+            continue
+        prev_long, prev_short = prev_holdings if prev_holdings is not None else ([], [])
+        long_entered, long_exited = _leg_diff(prev_long, long_names)
+        short_entered, short_exited = _leg_diff(prev_short, short_names)
+        pos = {ticker: i for i, ticker in enumerate(ranks)}
+        scores = dict(scored)
+        n = len(ranks)
+        had_buffer_exit = prev_holdings is not None and any(
+            pos.get(ticker, n) >= buffer for ticker in long_exited + short_exited
+        )
+        entries.append(
+            TradeLogEntry(
+                rank_date=t,
+                trade_date=trade_date,
+                reason=_rebalance_reason(
+                    cadence, is_first=prev_holdings is None, had_buffer_exit=had_buffer_exit
+                ),
+                long=LegChange(
+                    entered=[_ranked_ticker(pos, scores, tk, short=False, n=n) for tk in long_entered],
+                    exited=[_ranked_ticker(pos, scores, tk, short=False, n=n) for tk in long_exited],
+                ),
+                short=LegChange(
+                    entered=[_ranked_ticker(pos, scores, tk, short=True, n=n) for tk in short_entered],
+                    exited=[_ranked_ticker(pos, scores, tk, short=True, n=n) for tk in short_exited],
+                ),
+                turnover=_turnover(
+                    dict.fromkeys(long_names, 1.0 / len(long_names)),
+                    dict.fromkeys(short_names, 1.0 / len(short_names)),
+                    dict.fromkeys(prev_long, 1.0 / len(prev_long)) if prev_long else {},
+                    dict.fromkeys(prev_short, 1.0 / len(prev_short)) if prev_short else {},
+                ),
+            )
+        )
+        prev_holdings = (long_names, short_names)
+    return entries
+
+
 def _trim_to_first_trade(
     rows: list[BacktestDailyRow],
     weights_by_trade_date: dict[date, tuple[dict[str, float], dict[str, float]]],
@@ -1416,6 +1609,78 @@ def _genuine_weights_for_cadence(
     return out
 
 
+def _genuine_ranked_ticker(scores: dict[str, float], rank: int, ticker: str) -> RankedTicker:
+    """D21: an ENTERED series-A ticker's `RankedTicker` — its rank in `best`/`worst`
+    (already signed the same way as `_ranked_ticker`) and its score from this rank
+    date's `BacktestListEntry`."""
+    return RankedTicker(ticker=ticker, rank=rank, score=scores.get(ticker))
+
+
+_EXITED_UNKNOWN = RankedTicker(ticker="", rank=None, score=None)
+"""Placeholder shape for a series-A EXITED ticker (D21) — `build_universe` exposes
+no full ranked pool to look an exited name's current rank/score up in, so this is
+copied with the real ticker symbol rather than reused directly."""
+
+
+def _genuine_trade_log_for_cadence(
+    cadence: str,
+    rebal_dates: list[date],
+    ranked_by_date: dict[date, tuple[list[str], list[str]]],
+    entries_by_date: dict[date, BacktestListEntry],
+    calendar: list[date],
+    *,
+    book_size: int = _BOOK_SIZE,
+) -> list[TradeLogEntry]:
+    """D21: series A's WHEN/WHY/WHAT rebalance log for one cadence.
+
+    Mirrors `_genuine_weights_for_cadence`'s loop. An exited ticker's rank/
+    score are always `None` (D16: no full ranked pool to look them up in);
+    an entered ticker's are looked up from `entries_by_date[t]`, the same
+    `BacktestListEntry` `_genuine_rank_all_dates` already computed for `t`.
+    """
+    entries: list[TradeLogEntry] = []
+    prev_long: list[str] = []
+    prev_short: list[str] = []
+    is_first = True
+    for t in rebal_dates:
+        long_names, short_names = ranked_by_date.get(t, ([], []))
+        if len(long_names) < book_size or len(short_names) < book_size:
+            continue
+        trade_date = _next_trading_day(calendar, t)
+        if trade_date is None:
+            continue
+        entry = entries_by_date.get(t)
+        scores = {r.ticker: r.score for r in (entry.best + entry.worst)} if entry is not None else {}
+        long_rank = {ticker: i + 1 for i, ticker in enumerate(long_names)}
+        short_rank = {ticker: -(i + 1) for i, ticker in enumerate(short_names)}
+        long_entered, long_exited = _leg_diff(prev_long, long_names)
+        short_entered, short_exited = _leg_diff(prev_short, short_names)
+        entries.append(
+            TradeLogEntry(
+                rank_date=t,
+                trade_date=trade_date,
+                reason=_rebalance_reason(cadence, is_first=is_first, had_buffer_exit=False),
+                long=LegChange(
+                    entered=[_genuine_ranked_ticker(scores, long_rank[tk], tk) for tk in long_entered],
+                    exited=[_EXITED_UNKNOWN.model_copy(update={"ticker": tk}) for tk in long_exited],
+                ),
+                short=LegChange(
+                    entered=[_genuine_ranked_ticker(scores, short_rank[tk], tk) for tk in short_entered],
+                    exited=[_EXITED_UNKNOWN.model_copy(update={"ticker": tk}) for tk in short_exited],
+                ),
+                turnover=_turnover(
+                    dict.fromkeys(long_names, 1.0 / len(long_names)),
+                    dict.fromkeys(short_names, 1.0 / len(short_names)),
+                    dict.fromkeys(prev_long, 1.0 / len(prev_long)) if prev_long else {},
+                    dict.fromkeys(prev_short, 1.0 / len(prev_short)) if prev_short else {},
+                ),
+            )
+        )
+        prev_long, prev_short = long_names, short_names
+        is_first = False
+    return entries
+
+
 # ----- Persistence (per-year files, mirrors `equity_spy.py`) -----
 
 
@@ -1556,6 +1821,53 @@ def read_lists_year(year: int, *, root: Path | None = None) -> list[BacktestList
     return [BacktestListEntry.model_validate(item) for item in raw]
 
 
+def write_trades_years(
+    cadence: str, entries: list[TradeLogEntry], *, root: Path | None = None
+) -> list[Path]:
+    """D21/D17: append-only write of one cadence's rebalance log as per-year files.
+
+    Same freeze guarantee as `write_series_years`/`write_lists_years`: an
+    already-stored rank date's entry is never rewritten. Keyed by
+    `rank_date` (not `trade_date`) for year bucketing + dedup, matching
+    `results/backtest/lists/YYYY.json`'s own per-rank-date grouping.
+    """
+    base = root if root is not None else settings.backtest_dir / "trades" / cadence
+    last_stored: date | None = None
+    for year in reversed(_existing_years(base)):
+        year_entries = read_trades_year(cadence, year, root=base)
+        if year_entries:
+            last_stored = year_entries[-1].rank_date
+            break
+    new_entries = entries if last_stored is None else [e for e in entries if e.rank_date > last_stored]
+    if not new_entries:
+        return []
+    by_year: dict[int, list[TradeLogEntry]] = {}
+    for e in new_entries:
+        by_year.setdefault(e.rank_date.year, []).append(e)
+    base.mkdir(parents=True, exist_ok=True)
+    paths = []
+    for year, yentries in sorted(by_year.items()):
+        existing = read_trades_year(cadence, year, root=base)
+        merged = sorted([*existing, *yentries], key=lambda e: e.rank_date)
+        path = _year_path(base, year)
+        payload = [e.model_dump(mode="json") for e in merged]
+        path.write_text(json.dumps(payload, indent=2) + "\n")
+        paths.append(path)
+    return paths
+
+
+def read_trades_year(
+    cadence: str, year: int, *, root: Path | None = None
+) -> list[TradeLogEntry]:
+    """Load one cadence's per-year rebalance-log file, empty when missing."""
+    base = root if root is not None else settings.backtest_dir / "trades" / cadence
+    path = _year_path(base, year)
+    if not path.exists():
+        return []
+    raw = json.loads(path.read_text())
+    return [TradeLogEntry.model_validate(item) for item in raw]
+
+
 def write_summary(summary: BacktestSummary, *, path: Path | None = None) -> Path:
     """Write `results/backtest/summary.json`."""
     target = path if path is not None else settings.backtest_dir / "summary.json"
@@ -1588,6 +1900,7 @@ def _maybe_rebuild_series_b() -> None:
     logger.info("method_version bump (-> %s): full one-time rebuild of series B", _METHOD_VERSION_B)
     for cadence in CADENCES:
         _reset_year_files(settings.backtest_series_dir / cadence)
+        _reset_year_files(settings.backtest_dir / "trades" / cadence)
     _reset_year_files(settings.backtest_dir / "lists")
 
 
@@ -1622,6 +1935,9 @@ def _run_series_b(
         gross, net = metrics(frozen_rows, spy_returns)
         cadence_metrics[cadence] = CadenceMetrics(
             gross=gross, net=net, rebalances=len(weights_by_trade_date)
+        )
+        write_trades_years(
+            cadence, _trade_log_for_cadence(cadence, rebal_dates, ranked_by_date, calendar)
         )
 
     primary_rebal_dates = rebalance_dates(PRIMARY_CADENCE, active_grid)
@@ -1661,6 +1977,7 @@ def _run_series_a(
 
     ranked_by_date, lists_entries = _genuine_rank_all_dates(genuine_grid)
     write_lists_years(lists_entries, root=settings.backtest_genuine_dir / "lists")
+    entries_by_date = {e.date: e for e in lists_entries}
 
     cadence_metrics: dict[str, CadenceMetrics] = {}
     for cadence in CADENCES:
@@ -1677,6 +1994,11 @@ def _run_series_a(
         gross, net = metrics(frozen_rows, spy_returns)
         cadence_metrics[cadence] = CadenceMetrics(
             gross=gross, net=net, rebalances=len(weights_by_trade_date)
+        )
+        write_trades_years(
+            cadence,
+            _genuine_trade_log_for_cadence(cadence, rebal_dates, ranked_by_date, entries_by_date, calendar),
+            root=settings.backtest_genuine_dir / "trades" / cadence,
         )
 
     summary = BacktestSummary(
