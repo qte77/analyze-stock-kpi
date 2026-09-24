@@ -98,9 +98,7 @@ logger = logging.getLogger(__name__)
 Frames = tuple["pd.DataFrame | None", "pd.DataFrame | None"]
 """One ticker's ``(income_stmt, balance_sheet)`` as yfinance returns them."""
 
-Cadence = Literal[
-    "monthly", "quarterly_filings", "monthly_buffer", "weekly", "yearly", "buy_hold"
-]
+Cadence = Literal["monthly", "quarterly_filings", "monthly_buffer", "weekly", "yearly", "buy_hold"]
 CADENCES: tuple[Cadence, ...] = (
     "monthly",
     "quarterly_filings",
@@ -435,7 +433,12 @@ def _filing_lag_days(ticker: str) -> int:
 
 
 def _usable_column(frame: pd.DataFrame | None, as_of: date, lag_days: int) -> pd.Timestamp | None:
-    """Latest column whose ``period_end + lag_days <= as_of``, or `None` (D3/D18)."""
+    """Latest column whose ``period_end + lag_days <= as_of``, or `None` (D3/D18).
+
+    D22 foresight guard, statement half: the ONLY function that may pick a
+    statement column for a rank-date ``as_of`` computation (paired with
+    ``_closes_as_of``, the price half).
+    """
     if frame is None or frame.empty:
         return None
     usable = [
@@ -488,6 +491,22 @@ def pit_fundamentals(frames: Frames, as_of: date, ticker: str) -> dict[str, floa
     return out
 
 
+def _closes_as_of(closes: pd.Series, as_of: date) -> pd.Series:
+    """D22 foresight guard: the ONLY function that may hand price data to `as_of`.
+
+    Paired with `_usable_column` (the statement-side half of the same guard,
+    D3/D18's `period_end + lag_days <= as_of` check) — together they are the
+    single gate between raw yfinance data and a `score_at`/`pit_fundamentals`
+    result, so an auditor only has two functions to check for a look-ahead
+    leak. Returns `closes` with every observation dated strictly after
+    `as_of` dropped; `test_poisoning_data_after_rank_date_does_not_change_
+    the_ranked_list` corrupts everything after `as_of` and asserts the
+    rank-date-`as_of` result is unchanged.
+    """
+    as_of_ts = cast("pd.Timestamp", pd.Timestamp(as_of))
+    return cast("pd.Series", closes[closes.index <= as_of_ts])
+
+
 def score_at(fund: dict[str, float | None], closes: pd.Series, as_of: date) -> float | None:
     """D2/D4: `screener_score` on a point-in-time-only snapshot.
 
@@ -497,11 +516,13 @@ def score_at(fund: dict[str, float | None], closes: pd.Series, as_of: date) -> f
     `trailing_peg_ratio` and `beta` stay `None` forever (D2), so Valuation
     always drops from `screener_score` and Risk degrades to the current
     ratio alone. Reuses `screener_score` unchanged (DRY) — no seam, because
-    the input set never changes.
+    the input set never changes. `closes` is routed through `_closes_as_of`
+    first (D22): nothing dated after `as_of` can reach the Sortino window.
     """
     as_of_ts = cast("pd.Timestamp", pd.Timestamp(as_of))
+    guarded = _closes_as_of(closes, as_of)
     cutoff = as_of_ts - pd.DateOffset(years=_SORTINO_LOOKBACK_YEARS)
-    window = _close_between(closes, cutoff, as_of_ts)
+    window = _close_between(guarded, cutoff, as_of_ts)
     snap = FundamentalsSnapshot.model_validate(
         {
             "symbol": _BACKTEST_SYMBOL,
@@ -1340,7 +1361,9 @@ def _trade_log_for_cadence(
         ranks = [ticker for ticker, _ in scored]
         if len(ranks) < 2 * book_size:
             continue
-        long_names, short_names = select(ranks, cadence, prev_holdings, book_size=book_size, buffer=buffer)
+        long_names, short_names = select(
+            ranks, cadence, prev_holdings, book_size=book_size, buffer=buffer
+        )
         trade_date = _next_trading_day(calendar, t)
         if trade_date is None:
             continue
@@ -1361,12 +1384,20 @@ def _trade_log_for_cadence(
                     cadence, is_first=prev_holdings is None, had_buffer_exit=had_buffer_exit
                 ),
                 long=LegChange(
-                    entered=[_ranked_ticker(pos, scores, tk, short=False, n=n) for tk in long_entered],
-                    exited=[_ranked_ticker(pos, scores, tk, short=False, n=n) for tk in long_exited],
+                    entered=[
+                        _ranked_ticker(pos, scores, tk, short=False, n=n) for tk in long_entered
+                    ],
+                    exited=[
+                        _ranked_ticker(pos, scores, tk, short=False, n=n) for tk in long_exited
+                    ],
                 ),
                 short=LegChange(
-                    entered=[_ranked_ticker(pos, scores, tk, short=True, n=n) for tk in short_entered],
-                    exited=[_ranked_ticker(pos, scores, tk, short=True, n=n) for tk in short_exited],
+                    entered=[
+                        _ranked_ticker(pos, scores, tk, short=True, n=n) for tk in short_entered
+                    ],
+                    exited=[
+                        _ranked_ticker(pos, scores, tk, short=True, n=n) for tk in short_exited
+                    ],
                 ),
                 turnover=_turnover(
                     dict.fromkeys(long_names, 1.0 / len(long_names)),
@@ -1610,9 +1641,12 @@ def _genuine_weights_for_cadence(
 
 
 def _genuine_ranked_ticker(scores: dict[str, float], rank: int, ticker: str) -> RankedTicker:
-    """D21: an ENTERED series-A ticker's `RankedTicker` — its rank in `best`/`worst`
-    (already signed the same way as `_ranked_ticker`) and its score from this rank
-    date's `BacktestListEntry`."""
+    """D21: an ENTERED series-A ticker's `RankedTicker` (rank + score at the rank date).
+
+    `rank` is already signed the same way as `_ranked_ticker` (best-relative
+    `+1..` or worst-relative `..-1`, computed by the caller); `score` comes
+    from this rank date's own `BacktestListEntry`.
+    """
     return RankedTicker(ticker=ticker, rank=rank, score=scores.get(ticker))
 
 
@@ -1650,7 +1684,9 @@ def _genuine_trade_log_for_cadence(
         if trade_date is None:
             continue
         entry = entries_by_date.get(t)
-        scores = {r.ticker: r.score for r in (entry.best + entry.worst)} if entry is not None else {}
+        scores = (
+            {r.ticker: r.score for r in (entry.best + entry.worst)} if entry is not None else {}
+        )
         long_rank = {ticker: i + 1 for i, ticker in enumerate(long_names)}
         short_rank = {ticker: -(i + 1) for i, ticker in enumerate(short_names)}
         long_entered, long_exited = _leg_diff(prev_long, long_names)
@@ -1661,12 +1697,20 @@ def _genuine_trade_log_for_cadence(
                 trade_date=trade_date,
                 reason=_rebalance_reason(cadence, is_first=is_first, had_buffer_exit=False),
                 long=LegChange(
-                    entered=[_genuine_ranked_ticker(scores, long_rank[tk], tk) for tk in long_entered],
-                    exited=[_EXITED_UNKNOWN.model_copy(update={"ticker": tk}) for tk in long_exited],
+                    entered=[
+                        _genuine_ranked_ticker(scores, long_rank[tk], tk) for tk in long_entered
+                    ],
+                    exited=[
+                        _EXITED_UNKNOWN.model_copy(update={"ticker": tk}) for tk in long_exited
+                    ],
                 ),
                 short=LegChange(
-                    entered=[_genuine_ranked_ticker(scores, short_rank[tk], tk) for tk in short_entered],
-                    exited=[_EXITED_UNKNOWN.model_copy(update={"ticker": tk}) for tk in short_exited],
+                    entered=[
+                        _genuine_ranked_ticker(scores, short_rank[tk], tk) for tk in short_entered
+                    ],
+                    exited=[
+                        _EXITED_UNKNOWN.model_copy(update={"ticker": tk}) for tk in short_exited
+                    ],
                 ),
                 turnover=_turnover(
                     dict.fromkeys(long_names, 1.0 / len(long_names)),
@@ -1838,7 +1882,9 @@ def write_trades_years(
         if year_entries:
             last_stored = year_entries[-1].rank_date
             break
-    new_entries = entries if last_stored is None else [e for e in entries if e.rank_date > last_stored]
+    new_entries = (
+        entries if last_stored is None else [e for e in entries if e.rank_date > last_stored]
+    )
     if not new_entries:
         return []
     by_year: dict[int, list[TradeLogEntry]] = {}
@@ -1856,9 +1902,7 @@ def write_trades_years(
     return paths
 
 
-def read_trades_year(
-    cadence: str, year: int, *, root: Path | None = None
-) -> list[TradeLogEntry]:
+def read_trades_year(cadence: str, year: int, *, root: Path | None = None) -> list[TradeLogEntry]:
     """Load one cadence's per-year rebalance-log file, empty when missing."""
     base = root if root is not None else settings.backtest_dir / "trades" / cadence
     path = _year_path(base, year)
@@ -1997,7 +2041,9 @@ def _run_series_a(
         )
         write_trades_years(
             cadence,
-            _genuine_trade_log_for_cadence(cadence, rebal_dates, ranked_by_date, entries_by_date, calendar),
+            _genuine_trade_log_for_cadence(
+                cadence, rebal_dates, ranked_by_date, entries_by_date, calendar
+            ),
             root=settings.backtest_genuine_dir / "trades" / cadence,
         )
 

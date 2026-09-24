@@ -31,18 +31,27 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     CadenceMetrics,
     Fidelity,
     FidelityDate,
+    LegChange,
     MetricsBlock,
     NullBenchmark,
+    RankedTicker,
     RankEntry,
+    TradeLogEntry,
     _beta,
+    _closes_as_of,
     _cost,
     _drift_leg,
     _drop_bad_tickers,
     _find_start_date,
+    _genuine_trade_log_for_cadence,
     _genuine_weights_for_cadence,
+    _leg_diff,
     _rank_genuine,
+    _rebalance_reason,
     _reindex_returns,
     _reset_year_files,
+    _score_all_tickers,
+    _trade_log_for_cadence,
     _trim_to_first_trade,
     _turnover,
     fidelity,
@@ -52,6 +61,7 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     read_lists_year,
     read_series_year,
     read_summary,
+    read_trades_year,
     rebalance_dates,
     score_at,
     select,
@@ -59,6 +69,7 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     write_lists_years,
     write_series_years,
     write_summary,
+    write_trades_years,
 )
 
 if TYPE_CHECKING:
@@ -316,6 +327,209 @@ def test_genuine_book_holds_across_a_snapshot_gap() -> None:
     assert by_date[later].ret_long == pytest.approx(0.10)
 
 
+# ----- D21: the rebalance log -----
+
+
+def test_leg_diff_reports_entered_and_exited() -> None:
+    entered, exited = _leg_diff(["A", "B", "C"], ["B", "C", "D"])
+
+    assert entered == ["D"]
+    assert exited == ["A"]
+
+
+def test_rebalance_reason_buy_hold_is_always_buy_hold_initial() -> None:
+    assert _rebalance_reason("buy_hold", is_first=True, had_buffer_exit=False) == "buy_hold_initial"
+    assert (
+        _rebalance_reason("buy_hold", is_first=False, had_buffer_exit=False) == "buy_hold_initial"
+    )
+
+
+def test_rebalance_reason_first_rebalance_of_any_other_cadence_is_initial() -> None:
+    assert _rebalance_reason("monthly", is_first=True, had_buffer_exit=False) == "initial"
+    assert _rebalance_reason("monthly_buffer", is_first=True, had_buffer_exit=True) == "initial"
+
+
+def test_rebalance_reason_scheduled_by_cadence() -> None:
+    assert _rebalance_reason("weekly", is_first=False, had_buffer_exit=False) == "scheduled_weekly"
+    assert (
+        _rebalance_reason("monthly", is_first=False, had_buffer_exit=False) == "scheduled_monthly"
+    )
+    assert (
+        _rebalance_reason("quarterly_filings", is_first=False, had_buffer_exit=False)
+        == "quarterly_after_filings"
+    )
+    assert _rebalance_reason("yearly", is_first=False, had_buffer_exit=False) == "scheduled_yearly"
+
+
+def test_rebalance_reason_monthly_buffer_exit_only_when_flagged() -> None:
+    assert (
+        _rebalance_reason("monthly_buffer", is_first=False, had_buffer_exit=True) == "buffer_exit"
+    )
+    assert (
+        _rebalance_reason("monthly_buffer", is_first=False, had_buffer_exit=False)
+        == "scheduled_monthly"
+    )
+
+
+def test_trade_log_for_cadence_records_entered_exited_rank_and_score() -> None:
+    d0 = date(2026, 1, 5)
+    d1 = date(2026, 2, 2)
+    calendar = [date(2026, 1, 6), date(2026, 2, 3)]
+    ranked_by_date = {
+        d0: [("A", 90.0), ("B", 10.0)],
+        d1: [("A", 85.0), ("C", 5.0)],  # B dropped, C entered
+    }
+
+    entries = _trade_log_for_cadence("monthly", [d0, d1], ranked_by_date, calendar, book_size=1)
+
+    assert len(entries) == 2
+    first, second = entries
+    assert first.reason == "initial"
+    assert first.long.entered[0].ticker == "A"
+    assert first.long.entered[0].rank == 1
+    assert first.long.entered[0].score == pytest.approx(90.0)
+    assert first.short.entered[0].ticker == "B"
+    assert first.short.entered[0].rank == -1
+    assert second.reason == "scheduled_monthly"
+    assert [rt.ticker for rt in second.short.exited] == ["B"]
+    assert [rt.ticker for rt in second.short.entered] == ["C"]
+
+
+def test_genuine_trade_log_for_cadence_exited_ticker_has_no_rank_or_score() -> None:
+    d0 = date(2026, 5, 31)
+    d1 = date(2026, 6, 5)
+    calendar = [date(2026, 6, 1), date(2026, 6, 6)]
+    ranked_by_date = {d0: (["A"], ["X"]), d1: (["B"], ["X"])}
+    entries_by_date = {
+        d0: BacktestListEntry(
+            date=d0,
+            eligible=2,
+            best=[RankEntry(ticker="A", score=90.0)],
+            worst=[RankEntry(ticker="X", score=5.0)],
+        ),
+        d1: BacktestListEntry(
+            date=d1,
+            eligible=2,
+            best=[RankEntry(ticker="B", score=80.0)],
+            worst=[RankEntry(ticker="X", score=5.0)],
+        ),
+    }
+
+    entries = _genuine_trade_log_for_cadence(
+        "monthly", [d0, d1], ranked_by_date, entries_by_date, calendar, book_size=1
+    )
+
+    assert len(entries) == 2
+    second = entries[1]
+    exited = second.long.exited[0]
+    assert exited.ticker == "A"
+    assert exited.rank is None
+    assert exited.score is None
+    entered = second.long.entered[0]
+    assert entered.ticker == "B"
+    assert entered.rank == 1
+    assert entered.score == pytest.approx(80.0)
+
+
+def test_trades_persistence_round_trip(tmp_path: Path) -> None:
+    entry = TradeLogEntry(
+        rank_date=date(2026, 1, 5),
+        trade_date=date(2026, 1, 6),
+        reason="initial",
+        long=LegChange(entered=[RankedTicker(ticker="A", rank=1, score=90.0)], exited=[]),
+        short=LegChange(entered=[RankedTicker(ticker="B", rank=-1, score=10.0)], exited=[]),
+        turnover=1.0,
+    )
+    root = tmp_path / "monthly"
+
+    write_trades_years("monthly", [entry], root=root)
+    loaded = read_trades_year("monthly", 2026, root=root)
+
+    assert loaded == [entry]
+
+
+def test_trades_persistence_freezes_existing_entries(tmp_path: Path) -> None:
+    """D17/D21: same freeze guarantee as the lists/series files."""
+    root = tmp_path / "monthly"
+    original = TradeLogEntry(
+        rank_date=date(2026, 1, 5),
+        trade_date=date(2026, 1, 6),
+        reason="initial",
+        long=LegChange(entered=[RankedTicker(ticker="A", rank=1, score=90.0)], exited=[]),
+        short=LegChange(entered=[], exited=[]),
+        turnover=1.0,
+    )
+    write_trades_years("monthly", [original], root=root)
+
+    drifted = original.model_copy(update={"turnover": 0.0})
+    new_entry = TradeLogEntry(
+        rank_date=date(2026, 2, 2),
+        trade_date=date(2026, 2, 3),
+        reason="scheduled_monthly",
+        long=LegChange(entered=[], exited=[]),
+        short=LegChange(entered=[], exited=[]),
+        turnover=0.1,
+    )
+    write_trades_years("monthly", [drifted, new_entry], root=root)
+
+    loaded = read_trades_year("monthly", 2026, root=root)
+
+    assert loaded == [original, new_entry]
+
+
+# ----- D22: the foresight audit guard -----
+
+
+def test_closes_as_of_drops_everything_strictly_after_as_of() -> None:
+    closes = pd.Series([1.0, 2.0, 3.0], index=pd.date_range("2026-01-01", periods=3))
+
+    guarded = _closes_as_of(closes, date(2026, 1, 2))
+
+    assert list(guarded.index.date) == [date(2026, 1, 1), date(2026, 1, 2)]
+
+
+def test_poisoning_data_after_rank_date_does_not_change_the_ranked_list() -> None:
+    """D22 foresight audit: corrupting every statement period and closing price
+    dated strictly after rank date t must never change t's ranked list — the
+    point-in-time guards (`_usable_column`'s lag check, `_closes_as_of`'s upper
+    bound) are the only gate between raw data and a score."""
+    period_end = pd.Timestamp("2023-01-01")
+    boundary = period_end.date() + timedelta(days=90)
+    rank_date = boundary + timedelta(days=30)
+    dates = pd.date_range("2021-01-01", periods=900, freq="D")
+
+    def _clean() -> tuple[dict[str, tuple[pd.DataFrame, pd.DataFrame]], dict[str, pd.Series]]:
+        frames = {
+            "A": _toy_frames(period_end, net_income=100.0),
+            "B": _toy_frames(period_end, net_income=50.0),
+        }
+        closes = {
+            "A": pd.Series([100.0 + 0.05 * i for i in range(900)], index=dates),
+            "B": pd.Series([50.0 + 0.02 * i for i in range(900)], index=dates),
+        }
+        return frames, closes
+
+    baseline = _score_all_tickers(rank_date, *_clean())
+
+    poisoned_frames, poisoned_closes = _clean()
+    future_end = pd.Timestamp(rank_date) + pd.Timedelta(days=400)
+    for ticker in list(poisoned_frames):
+        income, balance = poisoned_frames[ticker]
+        income2, balance2 = _toy_frames(future_end, net_income=1e9)
+        poisoned_frames[ticker] = (
+            pd.concat([income, income2], axis=1),
+            pd.concat([balance, balance2], axis=1),
+        )
+    for ticker, series in poisoned_closes.items():
+        poisoned = series.copy()
+        poisoned[[d.date() > rank_date for d in poisoned.index]] = 1e12
+        poisoned_closes[ticker] = poisoned
+
+    poisoned_result = _score_all_tickers(rank_date, poisoned_frames, poisoned_closes)
+
+    assert poisoned_result == baseline
+
+
 # ----- _trim_to_first_trade: the start-trim fix (found 2026-09-24) -----
 
 
@@ -407,6 +621,23 @@ def test_quarterly_filing_dates_picks_first_grid_date_on_or_after_trigger() -> N
     assert date(2026, 5, 15) in result  # an exact trigger-date match counts
     assert date(2026, 2, 13) not in result
     assert date(2026, 5, 22) not in result
+
+
+# ----- rebalance_dates: D20 yearly cadence -----
+
+
+def test_yearly_dates_picks_first_grid_date_of_each_calendar_year() -> None:
+    grid = [
+        date(2024, 1, 5),
+        date(2024, 6, 1),
+        date(2024, 12, 30),
+        date(2025, 1, 3),
+        date(2025, 7, 1),
+    ]
+
+    result = rebalance_dates("yearly", grid)
+
+    assert result == [date(2024, 1, 5), date(2025, 1, 3)]
 
 
 # ----- _find_start_date: D6 start-date rule with a small threshold param -----
