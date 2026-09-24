@@ -1,16 +1,36 @@
 """Point-in-time backfilled best/worst 25 + backtested long/short 25/25 (ADR-0013).
 
-Two related outputs, both ranked by a point-in-time-only reduction of the
-qte77 Score (D2, ``score_at``):
+**Two series, never spliced (D15, ADR-0013 amendment 2026-09-24):**
 
-1. **Backfill** — the aggregated best/worst 25 tickers at the close of every
-   weekly rank date since inception, ranked by the KPIs as they actually
-   were on that date (no look-ahead).
-2. **Backtest** — a hypothetical long best-25 / short worst-25, equal-weight
-   1/25, book marked daily from closing prices, across five cadences
-   (D7), extended forward by the weekly cron under identical rules.
+- **Series B** (the original PR C output) — the reconstructed backfill: every
+  base universe ranked by a point-in-time-only reduction of the qte77 Score
+  (D2, ``score_at``) at each weekly rank date since inception. Labelled an
+  approximation — 6 of the 9 live qte77 Score inputs are reconstructable;
+  `forward_pe`/`trailing_peg_ratio`/`beta` are always `None`.
+- **Series A** (D16) — the genuine decisions: each rank date is an actual
+  `data`-branch snapshot date, ranked with the **full live qte77 Score** by
+  reusing :func:`aggregated_scores_best_and_worst.build_universe` unchanged.
+  Sparse and irregular (weekly demo-cron dates); the book holds across a
+  snapshot gap. No look-ahead or reconstruction — these are the lists a real
+  viewer would have seen that day.
 
-Public API (pure, individually testable — see the plan's PR C test list):
+Both series apply the same book (D5), costs (D8), metrics (D9) and five
+cadences (D7) — D15 headline: "Series B" -> "Series A" in later PRs.
+
+**Freeze, append-only (D17):** once a date's list or a day's return row is
+written to either series, it is never recomputed on a later run — only new
+dates are appended, and the summary/metrics are recomputed from the frozen
+rows. A ``method_version`` bump is the only way to force a one-time full
+rebuild (used once, 2026-09-24, for the start-trim fix below + D18's lag).
+
+**Start-trim fix (found 2026-09-24):** `simulate` marks every day in the full
+union-of-price-history calendar (which can start decades before a book's
+first holding), so its raw output must be trimmed to the book's own first
+trade date (:func:`_trim_to_first_trade`) before it is persisted or fed to
+`metrics` — otherwise every metric is diluted by thousands of pre-inception
+zero-return days.
+
+Public API (pure, individually testable — see the plan's PR C/E test lists):
 
 - :func:`pit_fundamentals` — D2/D3 point-in-time statement ratios.
 - :func:`score_at` — D2/D4 point-in-time ``screener_score``.
@@ -67,6 +87,7 @@ from analyze_stock_kpi.data_sources.fundamentals import (
 )
 from analyze_stock_kpi.domain.composite_scores import screener_score
 from analyze_stock_kpi.domain.universe import PRESET_DIR, _read_symbol_file
+from analyze_stock_kpi.orchestrators.aggregated_scores_best_and_worst import build_universe
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -93,8 +114,26 @@ _BOOK_SIZE = 25
 _BUFFER_RANK = 40
 """D7 monthly-buffer: a held name is kept while its rank stays inside this band."""
 
-_FILING_LAG_DAYS = 90
-"""D3: a statement column is usable at ``as_of`` iff ``period_end + 90d <= as_of``."""
+_US_FILING_LAG_DAYS = 90
+"""D3/D18: a US ticker's (no exchange suffix) statement column is usable at
+``as_of`` iff ``period_end + 90d <= as_of``."""
+
+_NON_US_FILING_LAG_DAYS = 120
+"""D18: a non-US ticker (any ``.XX`` exchange suffix, e.g. ``.DE``/``.SA``/``.T``/``.KS``)
+files later (20-F etc.), so its statement columns need a longer lag."""
+
+_METHOD_VERSION_B = "2"
+"""D17/D18: series B's method version. Bumped once (2026-09-24) to apply the
+start-trim fix (:func:`_trim_to_first_trade`) and the D18 non-US filing lag —
+this single bump triggers series B's one-time full rebuild (:func:`_reset_year_files`)."""
+
+_METHOD_VERSION_A = "1"
+"""D16: series A's method version (its first-ever run)."""
+
+_GENUINE_START = date(2026, 5, 31)
+"""D16: the first date every D1 base universe has a genuine `data`-branch
+demo snapshot (verified via the committed `results/demo/<universe>/*.json`
+file set) — series A's rank dates start here."""
 
 _COST_BPS = 10.0
 """D8: one-way-turnover trading cost, in basis points."""
@@ -132,6 +171,20 @@ _SCORE_INPUT_FIELDS: tuple[str, ...] = (
 """D2: the only point-in-time-reconstructable inputs `score_at` feeds into
 `screener_score` — `forward_pe`/`trailing_peg_ratio`/`beta` are always `None`."""
 
+_LIVE_SCORE_INPUT_FIELDS: tuple[str, ...] = (
+    "return_on_equity",
+    "return_on_assets",
+    "operating_margins",
+    "rd_to_revenue",
+    "forward_pe",
+    "trailing_peg_ratio",
+    "beta",
+    "current_ratio",
+    "sortino_ratio",
+)
+"""D16: all 9 `screener_score` inputs series A ranks with (the full live qte77
+Score, as stored in the genuine snapshot — no inputs forced to `None`)."""
+
 _DERIVED_UNIVERSE_PREFIXES = ("aggregated-scores-", "enhanced-kpi-screener-", "crypto-")
 
 _CAVEATS: tuple[str, ...] = (
@@ -151,6 +204,32 @@ _CAVEATS: tuple[str, ...] = (
     "last known close rather than dropped.",
     "Returns are local-currency, gross of FX, financing and borrow costs; "
     "only the 10 bp one-way-turnover trading cost is modelled.",
+    "This is a hypothetical, backward-looking construction — not a live "
+    "track record and not investment advice.",
+)
+
+_CAVEATS_GENUINE: tuple[str, ...] = (
+    "Survivorship bias: the universe is each preset's CURRENT membership, not "
+    "the historical constituent list, so delisted/removed names never appear "
+    "in the ranking.",
+    "The `sp500` preset is today's top-100-by-cap tickers, not the S&P 500's "
+    "actual historical membership — a size look-ahead.",
+    "Rank dates are the irregular dates the live aggregator actually "
+    "snapshotted (the weekly demo cron), not a fixed grid; across a gap "
+    "between two snapshot dates (e.g. 2026-07-12 -> 2026-09-21) the book is "
+    "held unchanged.",
+    "A ticker with no price on a given day is treated as flat (0% return) "
+    "that day; a name that stops trading entirely after entry is held at its "
+    "last known close rather than dropped.",
+    "Returns are local-currency, gross of FX, financing and borrow costs; "
+    "only the 10 bp one-way-turnover trading cost is modelled.",
+    "The `monthly_buffer` cadence has no buffer effect here: the live "
+    "aggregator publishes only the top/bottom 25 each run, so every "
+    "rebalance is a fresh selection identical to the `monthly` cadence's "
+    "holdings.",
+    "Null benchmark and fidelity are not yet published for series A (fewer "
+    "than 12 monthly rebalances so far) — both stay `null` until enough "
+    "history accumulates.",
     "This is a hypothetical, backward-looking construction — not a live "
     "track record and not investment advice.",
 )
@@ -254,7 +333,13 @@ class Fidelity(BaseModel):
 
 
 class BacktestSummary(BaseModel):
-    """`results/backtest/summary.json` — the full frozen-contract summary."""
+    """The full frozen-contract summary, one per series.
+
+    Series B writes `results/backtest/summary.json`; series A writes
+    `results/backtest_genuine/summary.json`. `null`/`fidelity` are `None`
+    for series A until it has >= 12 monthly rebalances (D16) — series B
+    always populates both.
+    """
 
     model_config = ConfigDict(frozen=True)
 
@@ -266,40 +351,48 @@ class BacktestSummary(BaseModel):
     cost_bps: float
     primary: str
     cadences: dict[str, CadenceMetrics]
-    null: NullBenchmark
-    fidelity: Fidelity
+    null: NullBenchmark | None
+    fidelity: Fidelity | None
     caveats: list[str]
 
 
 # ----- D2/D3/D4: point-in-time fundamentals + score -----
 
 
-def _usable_column(frame: pd.DataFrame | None, as_of: date) -> pd.Timestamp | None:
-    """Latest column whose ``period_end + 90d <= as_of``, or `None` (D3)."""
+def _filing_lag_days(ticker: str) -> int:
+    """D18: 90 days for a US ticker (no exchange suffix), 120 for non-US (any `.XX` suffix)."""
+    return _NON_US_FILING_LAG_DAYS if "." in ticker else _US_FILING_LAG_DAYS
+
+
+def _usable_column(frame: pd.DataFrame | None, as_of: date, lag_days: int) -> pd.Timestamp | None:
+    """Latest column whose ``period_end + lag_days <= as_of``, or `None` (D3/D18)."""
     if frame is None or frame.empty:
         return None
     usable = [
         c
         for c in frame.columns
-        if isinstance(c, pd.Timestamp) and (c.date() + timedelta(days=_FILING_LAG_DAYS)) <= as_of
+        if isinstance(c, pd.Timestamp) and (c.date() + timedelta(days=lag_days)) <= as_of
     ]
     return max(usable) if usable else None
 
 
-def pit_fundamentals(frames: Frames, as_of: date) -> dict[str, float | None]:
-    """Point-in-time D2 ratios usable at ``as_of`` (D3).
+def pit_fundamentals(frames: Frames, as_of: date, ticker: str) -> dict[str, float | None]:
+    """Point-in-time D2 ratios usable at ``as_of`` (D3/D18).
 
     ``frames`` is ``(income_stmt, balance_sheet)`` as yfinance returns them
     (columns = period-end Timestamps). A column is usable at ``as_of`` iff
-    ``period_end + 90 days <= as_of`` (no filing dates in yfinance) — the
-    latest usable column of each frame is picked independently. Missing
+    ``period_end + lag_days <= as_of`` — 90 days for a US ``ticker`` (no
+    exchange suffix), 120 for non-US (D18; no filing dates in yfinance, so
+    this is a documented approximation of the real filing lag) — the latest
+    usable column of each frame is picked independently. Missing
     rows/frames yield `None` per field rather than raising.
     ``rd_to_revenue`` reuses ``fundamentals._read_rd_revenue`` unchanged
     (DRY); the other four ratios reuse ``fundamentals._find_row``.
     """
     income_stmt, balance_sheet = frames
-    ic_col = _usable_column(income_stmt, as_of)
-    bs_col = _usable_column(balance_sheet, as_of)
+    lag_days = _filing_lag_days(ticker)
+    ic_col = _usable_column(income_stmt, as_of, lag_days)
+    bs_col = _usable_column(balance_sheet, as_of, lag_days)
     out: dict[str, float | None] = dict.fromkeys(_SCORE_INPUT_FIELDS[:-1])
 
     net_income: float | None = None
@@ -938,6 +1031,25 @@ def write_closes_cache(closes: dict[str, pd.Series]) -> None:
         series.to_csv(_closes_cache_path(ticker))
 
 
+def _drop_bad_tickers(closes: dict[str, pd.Series]) -> dict[str, pd.Series]:
+    """Exclude any ticker whose close series ever reports a non-positive value.
+
+    Found 2026-09-24, `ICTEF`: its yfinance auto-adjusted closes are
+    negative across roughly half of its post-2023 history, not a single
+    isolated bad tick — patching just the negative points still leaves
+    large `ffill` gaps that manufacture their own multi-hundred-percent
+    "return" spikes once a positive price reappears (the 2026-09-24 bug:
+    the short basket showed a one-day -13.3% move driven almost entirely
+    by this one name reconnecting from a ~9-year negative run). A stock
+    price can never be <= 0, and this magnitude/duration rules out a
+    one-off split artefact (a split can never produce a negative price
+    either) — the whole series is untrustworthy, so the ticker is dropped
+    entirely (it simply won't be eligible for ranking, same as any other
+    ticker `closes` doesn't cover) rather than patched point-by-point.
+    """
+    return {ticker: series for ticker, series in closes.items() if (series.dropna() > 0).all()}
+
+
 def _union_calendar(closes: dict[str, pd.Series]) -> list[date]:
     """Sorted union of every ticker's close-history trading dates (D5)."""
     all_dates: set[date] = set()
@@ -982,7 +1094,7 @@ def _eligible_count(
         close = closes.get(ticker)
         if close is None:
             continue
-        if score_at(pit_fundamentals(frames, d), close, d) is None:
+        if score_at(pit_fundamentals(frames, d, ticker), close, d) is None:
             continue
         count += 1
         if count >= threshold:
@@ -1013,7 +1125,7 @@ def _score_all_tickers(
         close = closes.get(ticker)
         if close is None:
             continue
-        score = score_at(pit_fundamentals(frames, d), close, d)
+        score = score_at(pit_fundamentals(frames, d, ticker), close, d)
         if score is not None:
             scored.append((ticker, score))
     scored.sort(key=lambda x: (-x[1], x[0]))
@@ -1075,6 +1187,27 @@ def _weights_for_cadence(
     return out
 
 
+def _trim_to_first_trade(
+    rows: list[BacktestDailyRow],
+    weights_by_trade_date: dict[date, tuple[dict[str, float], dict[str, float]]],
+) -> list[BacktestDailyRow]:
+    """The start-trim fix (found 2026-09-24): drop pre-first-trade zero-return days.
+
+    `simulate` marks every day in the full price-history union calendar, which
+    can start decades before this cadence's book had any holding — before its
+    first trade date, `ret_long`/`ret_short` are always 0 (`current_long`/
+    `current_short` start empty). Persisted rows and `metrics` should only
+    ever cover the window the book actually existed, or every metric is
+    diluted by the padding (the 2026-09-24 bug: 4.96% published ann. vol vs.
+    ~21.2% over the real window). Empty `weights_by_trade_date` (the book
+    never actually traded) yields no rows at all.
+    """
+    if not weights_by_trade_date:
+        return []
+    first_trade = min(weights_by_trade_date)
+    return [r for r in rows if r.date >= first_trade]
+
+
 def _pct_change_map(closes: dict[date, float]) -> dict[date, float]:
     """Day-over-day simple returns from a sorted `date -> close` map."""
     dates = sorted(closes)
@@ -1089,12 +1222,16 @@ def _pct_change_map(closes: dict[date, float]) -> dict[date, float]:
 _DATE_FILE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}\.json$")
 
 
+def _load_snapshot_list(path: Path) -> list[FundamentalsSnapshot]:
+    """One dated demo-snapshot file's full `FundamentalsSnapshot` list."""
+    raw = json.loads(path.read_text())
+    return [FundamentalsSnapshot.model_validate(item) for item in raw]
+
+
 def _scores_from_snapshot_file(path: Path) -> dict[str, float]:
     """One dated demo-snapshot file's `ticker -> live screener_score` map."""
-    raw = json.loads(path.read_text())
     scores: dict[str, float] = {}
-    for item in raw:
-        snap = FundamentalsSnapshot.model_validate(item)
+    for snap in _load_snapshot_list(path):
         cs = snap.composite_scores
         if cs is not None and cs.screener_score is not None:
             scores[snap.symbol] = cs.screener_score
@@ -1144,7 +1281,7 @@ def _score_bt_for_tickers(
         close = closes.get(ticker)
         if frames is None or close is None:
             continue
-        score = score_at(pit_fundamentals(frames, d), close, d)
+        score = score_at(pit_fundamentals(frames, d, ticker), close, d)
         if score is not None:
             out[ticker] = score
     return out
@@ -1162,6 +1299,123 @@ def _compute_fidelity(
     return fidelity(bt_by_date, live_by_date)
 
 
+# ----- D16: series A (genuine decisions) -----
+
+
+def _rank_genuine(
+    snapshots_by_universe: dict[str, list[FundamentalsSnapshot]],
+    snapshot_dates_by_universe: dict[str, str],
+    d: date,
+    *,
+    top_n: int = _BOOK_SIZE,
+) -> BacktestListEntry:
+    """D16: one genuine rank date's already-selected best/worst `top_n` via `build_universe`.
+
+    Reuses `aggregated_scores_best_and_worst.build_universe` UNCHANGED (DRY) —
+    the same dedup + 14-day staleness gate the live aggregated lists use.
+    Pure: takes the per-universe snapshots directly, no file I/O.
+    """
+    best, worst, audit_rows = build_universe(
+        snapshots_by_universe, snapshot_dates_by_universe, top_n=top_n, as_of=d
+    )
+    score_by_ticker = {
+        row.ticker: row.screener_score for row in audit_rows if row.screener_score is not None
+    }
+    eligible = sum(1 for row in audit_rows if row.eligible)
+    return BacktestListEntry(
+        date=d,
+        eligible=eligible,
+        best=[RankEntry(ticker=t, score=round(score_by_ticker[t], 1)) for t in best],
+        worst=[RankEntry(ticker=t, score=round(score_by_ticker[t], 1)) for t in worst],
+    )
+
+
+def _genuine_rank_dates() -> list[date]:
+    """D16: dates every D1 base universe has a genuine `data`-branch demo snapshot.
+
+    Intersection (not union) of `results/demo/<universe>/*.json` dates across
+    every base universe, from `_GENUINE_START` — matches the dates the real
+    live aggregator actually ran (verified: this set equals the committed
+    `results/demo/aggregated-scores-best/*.json` date list). An empty/missing
+    universe directory yields no genuine dates at all (best-effort: the cron
+    checks `results/demo/` out from `data` before running `main`).
+    """
+    universe_ids = _base_universe_ids()
+    date_sets: list[set[date]] = []
+    for universe_id in universe_ids:
+        base = settings.demo_dir / universe_id
+        if not base.is_dir():
+            return []
+        date_sets.append(
+            {date.fromisoformat(p.stem) for p in base.glob("*.json") if _DATE_FILE_RE.match(p.name)}
+        )
+    if not date_sets:
+        return []
+    common = set.intersection(*date_sets)
+    return sorted(d for d in common if d >= _GENUINE_START)
+
+
+def _genuine_snapshots_at(
+    d: date,
+) -> tuple[dict[str, list[FundamentalsSnapshot]], dict[str, str]]:
+    """D16: every base universe's exact `<d>.json` demo snapshot, for one genuine rank date."""
+    snapshots_by_universe: dict[str, list[FundamentalsSnapshot]] = {}
+    snapshot_dates_by_universe: dict[str, str] = {}
+    for universe_id in _base_universe_ids():
+        path = settings.demo_dir / universe_id / f"{d.isoformat()}.json"
+        if not path.exists():
+            continue
+        snapshots_by_universe[universe_id] = _load_snapshot_list(path)
+        snapshot_dates_by_universe[universe_id] = d.isoformat()
+    return snapshots_by_universe, snapshot_dates_by_universe
+
+
+def _genuine_rank_all_dates(
+    grid: list[date],
+) -> tuple[dict[date, tuple[list[str], list[str]]], list[BacktestListEntry]]:
+    """D16: every genuine grid date's `(long_tickers, short_tickers)` + its list entry."""
+    ranked_by_date: dict[date, tuple[list[str], list[str]]] = {}
+    entries: list[BacktestListEntry] = []
+    for d in grid:
+        snapshots_by_universe, snapshot_dates_by_universe = _genuine_snapshots_at(d)
+        entry = _rank_genuine(snapshots_by_universe, snapshot_dates_by_universe, d)
+        ranked_by_date[d] = ([r.ticker for r in entry.best], [r.ticker for r in entry.worst])
+        entries.append(entry)
+    return ranked_by_date, entries
+
+
+def _genuine_weights_for_cadence(
+    cadence: str,
+    rebal_dates: list[date],
+    ranked_by_date: dict[date, tuple[list[str], list[str]]],
+    calendar: list[date],
+    *,
+    book_size: int = _BOOK_SIZE,
+) -> dict[date, tuple[dict[str, float], dict[str, float]]]:
+    """D16: every series-A cadence rebalance date's target weights, keyed by TRADE date.
+
+    Unlike series B's `_weights_for_cadence`, there is no buffer retention:
+    `build_universe` already returns only the top/bottom `book_size` (the
+    genuine decisions), so every rebalance — including `monthly_buffer` — is
+    a fresh selection identical to `monthly`'s holdings (disclosed in
+    `_CAVEATS_GENUINE`). Trade date is the first trading day strictly after
+    the rank date (`_next_trading_day`, D5/D16) — no same-close look-ahead.
+    """
+    out: dict[date, tuple[dict[str, float], dict[str, float]]] = {}
+    for t in rebal_dates:
+        long_names, short_names = ranked_by_date.get(t, ([], []))
+        if len(long_names) < book_size or len(short_names) < book_size:
+            continue
+        trade_date = _next_trading_day(calendar, t)
+        if trade_date is None:
+            continue
+        out[trade_date] = (
+            dict.fromkeys(long_names, 1.0 / len(long_names)),
+            dict.fromkeys(short_names, 1.0 / len(short_names)),
+        )
+    return out
+
+
 # ----- Persistence (per-year files, mirrors `equity_spy.py`) -----
 
 
@@ -1169,21 +1423,67 @@ def _year_path(root: Path, year: int) -> Path:
     return root / f"{year}.json"
 
 
+def _existing_years(root: Path) -> list[int]:
+    """Sorted year numbers already persisted under `root` (a cadence or lists dir)."""
+    if not root.is_dir():
+        return []
+    return sorted(int(p.stem) for p in root.glob("*.json") if p.stem.isdigit())
+
+
+def _reset_year_files(root: Path) -> list[Path]:
+    """D17/D18: delete every existing `YYYY.json` year file under `root`.
+
+    The one explicit full-rebuild mechanism D17 allows, triggered exactly
+    once by a `method_version` bump — normal runs never call this; they only
+    append. Returns the deleted paths (the workflow reports them as `data`-
+    branch deletions via `scripts/data-branch-commit.cjs`'s `sha: null`
+    tree-entry support).
+    """
+    if not root.is_dir():
+        return []
+    removed = []
+    for path in sorted(root.glob("*.json")):
+        if path.stem.isdigit():
+            path.unlink()
+            removed.append(path)
+    return removed
+
+
 def write_series_years(
     cadence: str, rows: list[BacktestDailyRow], *, root: Path | None = None
 ) -> list[Path]:
-    """Write one cadence's daily rows as date-sorted per-year files (D13 full recompute)."""
+    """D17: append-only write of one cadence's daily rows as per-year files.
+
+    Loads each affected year's ALREADY-STORED rows from disk and keeps them
+    verbatim; only rows with a date after the last stored date are appended
+    on top. A re-run with no new dates touches nothing (byte-identical); a
+    stale/differently-recomputed value for an already-frozen date is always
+    discarded in favour of what's on disk. `rows` is the full freshly-
+    simulated series — the freeze happens here, at write time, not at
+    compute time (D13's full recompute stays the compute strategy).
+    """
     base = root if root is not None else settings.backtest_series_dir / cadence
+    last_stored: date | None = None
+    for year in reversed(_existing_years(base)):
+        year_rows = read_series_year(cadence, year, root=base)
+        if year_rows:
+            last_stored = year_rows[-1].date
+            break
+    new_rows = rows if last_stored is None else [r for r in rows if r.date > last_stored]
+    if not new_rows:
+        return []
     by_year: dict[int, list[BacktestDailyRow]] = {}
-    for r in rows:
+    for r in new_rows:
         by_year.setdefault(r.date.year, []).append(r)
     base.mkdir(parents=True, exist_ok=True)
     paths = []
     for year, yrows in sorted(by_year.items()):
+        existing = read_series_year(cadence, year, root=base)
+        merged = sorted([*existing, *yrows], key=lambda r: r.date)
         path = _year_path(base, year)
-        payload = [r.model_dump(mode="json") for r in sorted(yrows, key=lambda r: r.date)]
+        payload = [r.model_dump(mode="json") for r in merged]
         path.write_text(json.dumps(payload, indent=2) + "\n")
-        logger.info("wrote %s (%d rows)", path, len(yrows))
+        logger.info("wrote %s (%d new rows, %d total)", path, len(yrows), len(merged))
         paths.append(path)
     return paths
 
@@ -1200,17 +1500,47 @@ def read_series_year(
     return [BacktestDailyRow.model_validate(item) for item in raw]
 
 
+def _read_all_series_years(cadence: str, *, root: Path | None = None) -> list[BacktestDailyRow]:
+    """D17: every year's FROZEN (on-disk) rows for `cadence`, concatenated in date order.
+
+    `metrics` must be computed from what's actually persisted, not from the
+    ephemeral in-memory recompute — statement restatement drift means an old
+    date's freshly-recomputed value can differ from its frozen one.
+    """
+    base = root if root is not None else settings.backtest_series_dir / cadence
+    rows: list[BacktestDailyRow] = []
+    for year in _existing_years(base):
+        rows.extend(read_series_year(cadence, year, root=base))
+    return rows
+
+
 def write_lists_years(entries: list[BacktestListEntry], *, root: Path | None = None) -> list[Path]:
-    """Write the backfilled best/worst-25 entries as date-sorted per-year files."""
+    """D17: append-only write of the backfilled best/worst-25 entries as per-year files.
+
+    Same freeze guarantee as `write_series_years`: an already-stored rank
+    date's entry is never rewritten, even if this run recomputes it
+    differently.
+    """
     base = root if root is not None else settings.backtest_dir / "lists"
+    last_stored: date | None = None
+    for year in reversed(_existing_years(base)):
+        year_entries = read_lists_year(year, root=base)
+        if year_entries:
+            last_stored = year_entries[-1].date
+            break
+    new_entries = entries if last_stored is None else [e for e in entries if e.date > last_stored]
+    if not new_entries:
+        return []
     by_year: dict[int, list[BacktestListEntry]] = {}
-    for e in entries:
+    for e in new_entries:
         by_year.setdefault(e.date.year, []).append(e)
     base.mkdir(parents=True, exist_ok=True)
     paths = []
     for year, yentries in sorted(by_year.items()):
+        existing = read_lists_year(year, root=base)
+        merged = sorted([*existing, *yentries], key=lambda e: e.date)
         path = _year_path(base, year)
-        payload = [e.model_dump(mode="json") for e in sorted(yentries, key=lambda e: e.date)]
+        payload = [e.model_dump(mode="json") for e in merged]
         path.write_text(json.dumps(payload, indent=2) + "\n")
         paths.append(path)
     return paths
@@ -1245,40 +1575,54 @@ def read_summary(*, path: Path | None = None) -> BacktestSummary | None:
 # ----- main() -----
 
 
-def main() -> None:
-    """Cron entrypoint: full deterministic recompute of the backfill + backtest (D13)."""
-    logging.basicConfig(level=logging.INFO, format="%(message)s")
-    tickers = _universe_tickers()
-    frames_by_ticker = {t: fetch_frames(t) for t in tqdm(tickers, desc="statements")}
-    closes = _batch_close_prices(tickers) or {}
-    write_closes_cache(closes)
-    calendar = _union_calendar(closes)
-    if not calendar:
-        logger.warning("no price data fetched; nothing to compute")
-        return
+def _maybe_rebuild_series_b() -> None:
+    """D17/D18: on a `method_version` mismatch, wipe series B for its one-time full rebuild.
 
-    returns_by_ticker = _reindex_returns(closes, calendar)
+    Covers both the start-trim fix (pre-`start` daily rows) and the D18 lag
+    (which can shift rankings/scores at any historical date, so the lists
+    need rebuilding too) — a single bump handles both.
+    """
+    existing = read_summary()
+    if existing is not None and existing.method_version == _METHOD_VERSION_B:
+        return
+    logger.info("method_version bump (-> %s): full one-time rebuild of series B", _METHOD_VERSION_B)
+    for cadence in CADENCES:
+        _reset_year_files(settings.backtest_series_dir / cadence)
+    _reset_year_files(settings.backtest_dir / "lists")
+
+
+def _run_series_b(
+    frames_by_ticker: dict[str, Frames],
+    closes: dict[str, pd.Series],
+    calendar: list[date],
+    returns_by_ticker: dict[str, dict[date, float]],
+    spy_returns: dict[date, float],
+) -> None:
+    """D17/D18: append-only recompute of series B (the reconstructed backfill)."""
     grid = rank_dates(calendar)
     start = _find_start_date(grid, frames_by_ticker, closes)
     if start is None:
         logger.warning("no grid date reaches the %d-eligible threshold", _MIN_ELIGIBLE_START)
         return
     active_grid = [d for d in grid if d >= start]
+    _maybe_rebuild_series_b()
 
     ranked_by_date, lists_entries = _rank_all_dates(active_grid, frames_by_ticker, closes)
-    spy_returns = _pct_change_map(_fetch_history_closes("SPY", "max"))
+    write_lists_years(lists_entries)
 
     cadence_metrics: dict[str, CadenceMetrics] = {}
-    cadence_rows: dict[str, list[BacktestDailyRow]] = {}
     for cadence in CADENCES:
         rebal_dates = rebalance_dates(cadence, active_grid)
         weights_by_trade_date = _weights_for_cadence(cadence, rebal_dates, ranked_by_date, calendar)
-        rows = simulate(weights_by_trade_date, returns_by_ticker)
-        gross, net = metrics(rows, spy_returns)
+        rows = _trim_to_first_trade(
+            simulate(weights_by_trade_date, returns_by_ticker), weights_by_trade_date
+        )
+        write_series_years(cadence, rows)
+        frozen_rows = _read_all_series_years(cadence)
+        gross, net = metrics(frozen_rows, spy_returns)
         cadence_metrics[cadence] = CadenceMetrics(
             gross=gross, net=net, rebalances=len(weights_by_trade_date)
         )
-        cadence_rows[cadence] = rows
 
     primary_rebal_dates = rebalance_dates(PRIMARY_CADENCE, active_grid)
     eligible_by_date = {d: [t for t, _ in ranked_by_date.get(d, [])] for d in primary_rebal_dates}
@@ -1289,7 +1633,7 @@ def main() -> None:
     fid = _compute_fidelity(frames_by_ticker, closes)
 
     summary = BacktestSummary(
-        method_version="1",
+        method_version=_METHOD_VERSION_B,
         as_of=calendar[-1],
         start=start,
         universes=_base_universe_ids(),
@@ -1301,12 +1645,79 @@ def main() -> None:
         fidelity=fid,
         caveats=list(_CAVEATS),
     )
-
-    for cadence, rows in cadence_rows.items():
-        write_series_years(cadence, rows)
-    for path in write_lists_years(lists_entries):
-        logger.info("wrote %s", path)
     logger.info("wrote %s", write_summary(summary))
+
+
+def _run_series_a(
+    calendar: list[date],
+    returns_by_ticker: dict[str, dict[date, float]],
+    spy_returns: dict[date, float],
+) -> None:
+    """D15/D16: append-only recompute of series A (the genuine decisions)."""
+    genuine_grid = _genuine_rank_dates()
+    if not genuine_grid:
+        logger.warning("no genuine snapshot dates on/after %s; skipping series A", _GENUINE_START)
+        return
+
+    ranked_by_date, lists_entries = _genuine_rank_all_dates(genuine_grid)
+    write_lists_years(lists_entries, root=settings.backtest_genuine_dir / "lists")
+
+    cadence_metrics: dict[str, CadenceMetrics] = {}
+    for cadence in CADENCES:
+        rebal_dates = rebalance_dates(cadence, genuine_grid)
+        weights_by_trade_date = _genuine_weights_for_cadence(
+            cadence, rebal_dates, ranked_by_date, calendar
+        )
+        rows = _trim_to_first_trade(
+            simulate(weights_by_trade_date, returns_by_ticker), weights_by_trade_date
+        )
+        series_root = settings.backtest_series_genuine_dir / cadence
+        write_series_years(cadence, rows, root=series_root)
+        frozen_rows = _read_all_series_years(cadence, root=series_root)
+        gross, net = metrics(frozen_rows, spy_returns)
+        cadence_metrics[cadence] = CadenceMetrics(
+            gross=gross, net=net, rebalances=len(weights_by_trade_date)
+        )
+
+    summary = BacktestSummary(
+        method_version=_METHOD_VERSION_A,
+        as_of=calendar[-1],
+        start=min(genuine_grid),
+        universes=_base_universe_ids(),
+        score_inputs=list(_LIVE_SCORE_INPUT_FIELDS),
+        cost_bps=_COST_BPS,
+        primary=PRIMARY_CADENCE,
+        cadences=cadence_metrics,
+        null=None,
+        fidelity=None,
+        caveats=list(_CAVEATS_GENUINE),
+    )
+    logger.info(
+        "wrote %s", write_summary(summary, path=settings.backtest_genuine_dir / "summary.json")
+    )
+
+
+def main() -> None:
+    """Cron entrypoint: append-only recompute of both series (D15-D19).
+
+    Statement/price fetches are shared across series A and B (same D1
+    universe, same union calendar) — one network round-trip, two rankings.
+    """
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    tickers = _universe_tickers()
+    frames_by_ticker = {t: fetch_frames(t) for t in tqdm(tickers, desc="statements")}
+    closes = _drop_bad_tickers(_batch_close_prices(tickers) or {})
+    write_closes_cache(closes)
+    calendar = _union_calendar(closes)
+    if not calendar:
+        logger.warning("no price data fetched; nothing to compute")
+        return
+
+    returns_by_ticker = _reindex_returns(closes, calendar)
+    spy_returns = _pct_change_map(_fetch_history_closes("SPY", "max"))
+
+    _run_series_b(frames_by_ticker, closes, calendar, returns_by_ticker, spy_returns)
+    _run_series_a(calendar, returns_by_ticker, spy_returns)
 
 
 if __name__ == "__main__":

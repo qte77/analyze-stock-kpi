@@ -23,7 +23,7 @@ from analyze_stock_kpi.data_sources.fundamentals import (
     _close_between,
     _compute_sortino,
 )
-from analyze_stock_kpi.domain.composite_scores import screener_score
+from analyze_stock_kpi.domain.composite_scores import CompositeScores, screener_score
 from analyze_stock_kpi.orchestrators.longshort_backtest import (
     BacktestDailyRow,
     BacktestListEntry,
@@ -37,7 +37,13 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     _beta,
     _cost,
     _drift_leg,
+    _drop_bad_tickers,
     _find_start_date,
+    _genuine_weights_for_cadence,
+    _rank_genuine,
+    _reindex_returns,
+    _reset_year_files,
+    _trim_to_first_trade,
     _turnover,
     fidelity,
     metrics,
@@ -86,7 +92,7 @@ def test_pit_fundamentals_not_usable_at_day_89() -> None:
     frames = _toy_frames(period_end)
     boundary = period_end.date() + timedelta(days=90)
 
-    result = pit_fundamentals(frames, boundary - timedelta(days=1))
+    result = pit_fundamentals(frames, boundary - timedelta(days=1), "AAPL")
 
     assert result == dict.fromkeys(
         (
@@ -104,13 +110,43 @@ def test_pit_fundamentals_usable_at_day_90() -> None:
     frames = _toy_frames(period_end)
     boundary = period_end.date() + timedelta(days=90)
 
-    result = pit_fundamentals(frames, boundary)
+    result = pit_fundamentals(frames, boundary, "AAPL")
 
     assert result["return_on_equity"] == pytest.approx(100.0 / 500.0)
     assert result["return_on_assets"] == pytest.approx(100.0 / 2000.0)
     assert result["operating_margins"] == pytest.approx(150.0 / 1000.0)
     assert result["current_ratio"] == pytest.approx(300.0 / 100.0)
     assert result["rd_to_revenue"] == pytest.approx(50.0 / 1000.0)
+
+
+# ----- pit_fundamentals: D18 US 90d / non-US 120d filing lag -----
+
+
+def test_pit_fundamentals_us_ticker_lag_is_90_days() -> None:
+    period_end = pd.Timestamp("2023-12-31")
+    frames = _toy_frames(period_end)
+    boundary = period_end.date() + timedelta(days=90)
+
+    assert (
+        pit_fundamentals(frames, boundary - timedelta(days=1), "AAPL")["return_on_equity"] is None
+    )
+    assert pit_fundamentals(frames, boundary, "AAPL")["return_on_equity"] is not None
+
+
+def test_pit_fundamentals_non_us_ticker_lag_is_120_days() -> None:
+    period_end = pd.Timestamp("2023-12-31")
+    frames = _toy_frames(period_end)
+    boundary_90 = period_end.date() + timedelta(days=90)
+    boundary_120 = period_end.date() + timedelta(days=120)
+
+    # Still not usable at the US 90d boundary...
+    assert pit_fundamentals(frames, boundary_90, "SAP.DE")["return_on_equity"] is None
+    # ...but is at 120d - 1 is not, exactly 120d is.
+    assert (
+        pit_fundamentals(frames, boundary_120 - timedelta(days=1), "SAP.DE")["return_on_equity"]
+        is None
+    )
+    assert pit_fundamentals(frames, boundary_120, "SAP.DE")["return_on_equity"] is not None
 
 
 # ----- score_at: D2/D4 reuses screener_score unchanged -----
@@ -215,6 +251,148 @@ def test_select_monthly_buffer_keeps_rank_30_drops_rank_41() -> None:
     assert "T30" in long_names  # rank 30 <= buffer(40) -> kept
     assert "T41" not in long_names  # rank 41 > buffer(40) -> dropped
     assert len(long_names) == 25
+
+
+# ----- _rank_genuine: D16 series A ranks via build_universe (pure) -----
+
+
+def _snap_with_score(symbol: str, score: float) -> FundamentalsSnapshot:
+    return FundamentalsSnapshot(
+        symbol=symbol, composite_scores=CompositeScores(screener_score=score)
+    )
+
+
+def test_rank_genuine_ranks_via_build_universe_across_two_universes() -> None:
+    snapshots_by_universe = {
+        "u1": [_snap_with_score("AAPL", 90.0), _snap_with_score("XOM", 10.0)],
+        "u2": [_snap_with_score("MSFT", 80.0), _snap_with_score("F", 20.0)],
+    }
+    snapshot_dates_by_universe = {"u1": "2026-05-31", "u2": "2026-05-31"}
+
+    entry = _rank_genuine(
+        snapshots_by_universe, snapshot_dates_by_universe, date(2026, 5, 31), top_n=2
+    )
+
+    assert [r.ticker for r in entry.best] == ["AAPL", "MSFT"]
+    assert [r.ticker for r in entry.worst] == ["F", "XOM"]
+    assert entry.eligible == 4
+    assert entry.date == date(2026, 5, 31)
+    best_by_ticker = {r.ticker: r.score for r in entry.best}
+    assert best_by_ticker["AAPL"] == pytest.approx(90.0)
+
+
+# ----- _genuine_weights_for_cadence: D16 trade-at-t+1, holds across a gap -----
+
+
+def test_genuine_weights_trade_date_is_strictly_after_the_rank_date() -> None:
+    d0 = date(2026, 5, 29)
+    d1 = date(2026, 6, 1)
+    calendar = [d0, d1]
+    ranked_by_date = {d0: (["A"], ["B"])}
+
+    weights = _genuine_weights_for_cadence("weekly", [d0], ranked_by_date, calendar, book_size=1)
+
+    assert d0 not in weights
+    assert weights[d1] == ({"A": 1.0}, {"B": 1.0})
+
+
+def test_genuine_book_holds_across_a_snapshot_gap() -> None:
+    d0 = date(2026, 5, 31)
+    trade0 = date(2026, 6, 1)
+    later = date(2026, 9, 21)
+    calendar = [trade0, date(2026, 6, 2), later]
+    ranked_by_date = {d0: (["A"], ["B"])}
+    weights = _genuine_weights_for_cadence("monthly", [d0], ranked_by_date, calendar, book_size=1)
+    returns = {
+        "A": {trade0: 0.0, date(2026, 6, 2): 0.05, later: 0.10},
+        "B": {trade0: 0.0, date(2026, 6, 2): 0.0, later: 0.0},
+    }
+
+    rows = simulate(weights, returns)
+    by_date = {r.date: r for r in rows}
+
+    # No rebalance between trade0 and `later` (the 07-12 -> 09-21 style snapshot
+    # gap) -- the book is still holding "A" / "B" from the first rebalance.
+    assert by_date[later].ret_long == pytest.approx(0.10)
+
+
+# ----- _trim_to_first_trade: the start-trim fix (found 2026-09-24) -----
+
+
+def test_trim_to_first_trade_drops_rows_before_the_first_trade_date() -> None:
+    weights_by_trade_date = {date(2026, 4, 3): ({}, {})}
+    rows = [
+        BacktestDailyRow(
+            date=date(2026, 1, 1),
+            ret_long=0.0,
+            ret_short=0.0,
+            ret_ls_gross=0.0,
+            ret_ls_net=0.0,
+            turnover=0.0,
+        ),
+        BacktestDailyRow(
+            date=date(2026, 4, 3),
+            ret_long=0.01,
+            ret_short=0.0,
+            ret_ls_gross=0.01,
+            ret_ls_net=0.01,
+            turnover=0.1,
+        ),
+    ]
+
+    trimmed = _trim_to_first_trade(rows, weights_by_trade_date)
+
+    assert trimmed == rows[1:]
+
+
+def test_trim_to_first_trade_empty_weights_yields_no_rows() -> None:
+    rows = [
+        BacktestDailyRow(
+            date=date(2026, 1, 1),
+            ret_long=0.0,
+            ret_short=0.0,
+            ret_ls_gross=0.0,
+            ret_ls_net=0.0,
+            turnover=0.0,
+        )
+    ]
+
+    assert _trim_to_first_trade(rows, {}) == []
+
+
+# ----- _drop_bad_tickers: the 2026-03-18 ICTEF bad-tick fix (found 2026-09-24) -----
+
+
+def test_drop_bad_tickers_excludes_a_ticker_with_any_non_positive_close() -> None:
+    closes = {
+        "GOOD": pd.Series([10.0, 11.0, 12.0], index=pd.date_range("2026-01-01", periods=3)),
+        # ICTEF's actual shape: negative "closes" scattered through most of its history.
+        "ICTEF": pd.Series([-5.9, -6.1, 11.9], index=pd.date_range("2026-03-16", periods=3)),
+        "ZERO": pd.Series([1.0, 0.0, 2.0], index=pd.date_range("2026-02-01", periods=3)),
+    }
+
+    cleaned = _drop_bad_tickers(closes)
+
+    assert set(cleaned) == {"GOOD"}
+    assert list(cleaned["GOOD"]) == [10.0, 11.0, 12.0]
+
+
+def test_drop_bad_tickers_prevents_the_negative_to_positive_return_spike() -> None:
+    """Patching just the negative points (instead of dropping the ticker) would still
+    manufacture a huge `ffill`-gap "return" once a positive price reappears; dropping the
+    whole ticker means it never reaches `_reindex_returns` at all."""
+    closes = {
+        "ICTEF": pd.Series([10.0, -5.9, -6.1, 11.9], index=pd.date_range("2026-03-15", periods=4)),
+        "GOOD": pd.Series([10.0, 10.1, 10.2, 10.3], index=pd.date_range("2026-03-15", periods=4)),
+    }
+    calendar = [d.date() for d in pd.date_range("2026-03-15", periods=4)]
+
+    cleaned = _drop_bad_tickers(closes)
+    returns = _reindex_returns(cleaned, calendar)
+
+    assert "ICTEF" not in returns
+    for r in returns["GOOD"].values():
+        assert abs(r) < 1.0
 
 
 # ----- rebalance_dates: quarterly-after-filings date rule -----
@@ -388,6 +566,7 @@ def test_series_persistence_round_trip(tmp_path: Path) -> None:
 
 
 def test_series_persistence_same_run_is_idempotent(tmp_path: Path) -> None:
+    """D17: a re-run with no new dates writes nothing and leaves the file byte-identical."""
     rows = [
         BacktestDailyRow(
             date=date(2026, 3, 1),
@@ -403,9 +582,101 @@ def test_series_persistence_same_run_is_idempotent(tmp_path: Path) -> None:
     paths_1 = write_series_years("weekly", rows, root=root)
     content_1 = paths_1[0].read_text()
     paths_2 = write_series_years("weekly", rows, root=root)
-    content_2 = paths_2[0].read_text()
+    content_2 = (root / "2026.json").read_text()
 
+    assert paths_2 == []  # nothing new to append
     assert content_1 == content_2
+
+
+def test_series_persistence_freezes_existing_rows_even_if_recompute_differs(tmp_path: Path) -> None:
+    """D17: an already-frozen date is never overwritten, even if a re-run recomputes it."""
+    root = tmp_path / "monthly"
+    original = BacktestDailyRow(
+        date=date(2026, 1, 5),
+        ret_long=0.01,
+        ret_short=0.0,
+        ret_ls_gross=0.01,
+        ret_ls_net=0.009,
+        turnover=0.05,
+    )
+    write_series_years("monthly", [original], root=root)
+
+    drifted = BacktestDailyRow(
+        date=date(2026, 1, 5),
+        ret_long=0.99,
+        ret_short=0.0,
+        ret_ls_gross=0.99,
+        ret_ls_net=0.98,
+        turnover=0.05,
+    )
+    new_row = BacktestDailyRow(
+        date=date(2026, 1, 6),
+        ret_long=0.02,
+        ret_short=0.0,
+        ret_ls_gross=0.02,
+        ret_ls_net=0.018,
+        turnover=0.0,
+    )
+    write_series_years("monthly", [drifted, new_row], root=root)
+
+    loaded = read_series_year("monthly", 2026, root=root)
+
+    assert loaded == [original, new_row]
+
+
+def test_lists_persistence_freezes_existing_entries_even_if_recompute_differs(
+    tmp_path: Path,
+) -> None:
+    """D17: same freeze guarantee for the backfilled best/worst-25 lists."""
+    root = tmp_path / "lists"
+    original = BacktestListEntry(
+        date=date(2026, 4, 3),
+        eligible=210,
+        best=[RankEntry(ticker="AAPL", score=88.5)],
+        worst=[RankEntry(ticker="XOM", score=12.1)],
+    )
+    write_lists_years([original], root=root)
+
+    drifted = BacktestListEntry(
+        date=date(2026, 4, 3), eligible=999, best=[RankEntry(ticker="ZZZ", score=1.0)], worst=[]
+    )
+    new_entry = BacktestListEntry(
+        date=date(2026, 4, 10),
+        eligible=211,
+        best=[RankEntry(ticker="MSFT", score=77.0)],
+        worst=[RankEntry(ticker="F", score=9.0)],
+    )
+    write_lists_years([drifted, new_entry], root=root)
+
+    loaded = read_lists_year(2026, root=root)
+
+    assert loaded == [original, new_entry]
+
+
+# ----- _reset_year_files: the D17/D18 explicit one-time rebuild mechanism -----
+
+
+def test_reset_year_files_deletes_every_year_file(tmp_path: Path) -> None:
+    root = tmp_path / "monthly"
+    row = BacktestDailyRow(
+        date=date(1962, 1, 2),
+        ret_long=0.0,
+        ret_short=0.0,
+        ret_ls_gross=0.0,
+        ret_ls_net=0.0,
+        turnover=0.0,
+    )
+    write_series_years("monthly", [row], root=root)
+    assert (root / "1962.json").exists()
+
+    removed = _reset_year_files(root)
+
+    assert removed == [root / "1962.json"]
+    assert not (root / "1962.json").exists()
+
+
+def test_reset_year_files_on_missing_dir_is_a_noop(tmp_path: Path) -> None:
+    assert _reset_year_files(tmp_path / "missing") == []
 
 
 def test_lists_persistence_round_trip(tmp_path: Path) -> None:
@@ -448,3 +719,30 @@ def test_summary_persistence_round_trip(tmp_path: Path) -> None:
     loaded = read_summary(path=path)
 
     assert loaded == summary
+
+
+def test_summary_persistence_round_trip_with_null_and_fidelity_absent(tmp_path: Path) -> None:
+    """D16: series A may publish `null`/`fidelity` as `None` until it has enough history."""
+    block = MetricsBlock()
+    summary = BacktestSummary(
+        method_version="1",
+        as_of=date(2026, 9, 24),
+        start=date(2026, 5, 31),
+        universes=["sp500"],
+        score_inputs=["screener_score"],
+        cost_bps=10.0,
+        primary="monthly",
+        cadences={"monthly": CadenceMetrics(gross=block, net=block, rebalances=1)},
+        null=None,
+        fidelity=None,
+        caveats=["genuine caveat"],
+    )
+    path = tmp_path / "summary_genuine.json"
+
+    write_summary(summary, path=path)
+    loaded = read_summary(path=path)
+
+    assert loaded == summary
+    assert loaded is not None
+    assert loaded.null is None
+    assert loaded.fidelity is None

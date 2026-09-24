@@ -51,6 +51,14 @@ class AppSettings(BaseSettings):
     """Per-cadence daily return rows for the point-in-time backtest (ADR-0013)."""
     backtest_dir: Path = Path("results/backtest")
     """Backfilled best/worst-25 lists (``lists/YYYY.json``) + ``summary.json``."""
+    backtest_series_genuine_dir: Path = Path("results/series/backtest_genuine")
+    """Series A (genuine decisions) per-cadence daily return rows (D16, ADR-0013
+    amendment 2026-09-24) — a parallel set to ``backtest_series_dir``, never spliced
+    with it (D15)."""
+    backtest_genuine_dir: Path = Path("results/backtest_genuine")
+    """Series A (genuine decisions) backfilled best/worst-25 lists + ``summary.json``
+    (D16) — ranked with the full live qte77 Score on genuine ``data``-branch snapshot
+    dates, not the point-in-time-reduced ``score_bt`` series B uses."""
     backtest_prices_cache_dir: Path = Path("results/prices")
     """Gitignored local cache for raw daily closes + statement frames
     (ADR-0013) — same posture as ``edgar_cache_dir``: never committed,
