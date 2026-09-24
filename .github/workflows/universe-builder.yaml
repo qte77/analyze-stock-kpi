@@ -110,21 +110,25 @@ jobs:
               echo "script=scripts/build_aggregated_scores_best_and_worst.py" >> "$GITHUB_OUTPUT"
               echo "preset=src/analyze_stock_kpi/assets/universes/aggregated-scores-best.txt" >> "$GITHUB_OUTPUT"
               echo "audit_dir=results/audit/aggregated_scores_best_and_worst" >> "$GITHUB_OUTPUT"
+              echo "demo_dir=results/demo/aggregated-scores-best"             >> "$GITHUB_OUTPUT"
               echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
             aggregated-scores-worst)
               echo "script=scripts/build_aggregated_scores_best_and_worst.py" >> "$GITHUB_OUTPUT"
               echo "preset=src/analyze_stock_kpi/assets/universes/aggregated-scores-worst.txt" >> "$GITHUB_OUTPUT"
               echo "audit_dir=results/audit/aggregated_scores_best_and_worst" >> "$GITHUB_OUTPUT"
+              echo "demo_dir=results/demo/aggregated-scores-worst"            >> "$GITHUB_OUTPUT"
               echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
             enhanced-kpi-screener-longs)
               echo "script=scripts/build_enhanced_kpi_screener_longshort.py"  >> "$GITHUB_OUTPUT"
               echo "preset=src/analyze_stock_kpi/assets/universes/enhanced-kpi-screener-longs.txt" >> "$GITHUB_OUTPUT"
               echo "audit_dir=results/audit/enhanced_kpi_screener_longshort"  >> "$GITHUB_OUTPUT"
+              echo "demo_dir=results/demo/enhanced-kpi-screener-longs"        >> "$GITHUB_OUTPUT"
               echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
             enhanced-kpi-screener-shorts)
               echo "script=scripts/build_enhanced_kpi_screener_longshort.py"  >> "$GITHUB_OUTPUT"
               echo "preset=src/analyze_stock_kpi/assets/universes/enhanced-kpi-screener-shorts.txt" >> "$GITHUB_OUTPUT"
               echo "audit_dir=results/audit/enhanced_kpi_screener_longshort"  >> "$GITHUB_OUTPUT"
+              echo "demo_dir=results/demo/enhanced-kpi-screener-shorts"       >> "$GITHUB_OUTPUT"
               echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
             *)
               echo "Unknown universe: $U" >&2
@@ -136,9 +140,14 @@ jobs:
       # results/demo/<u>/index.json + latest.json. Per-leg `git checkout
       # origin/data -- ...` is non-fatal so a fresh repo (no snapshots yet)
       # still progresses; the build script's per-universe load handles the
-      # missing-file case.
+      # missing-file case. Also pulls the leg's OWN existing demo dir (its
+      # prior weeks' dated snapshots) so the demo-display history it now
+      # writes directly (demo-snapshot.yaml no longer re-fetches this
+      # universe) accumulates instead of resetting to one date every run.
       - if: steps.cfg.outputs.needs_data_branch == 'true'
         name: Pull demo snapshots from data branch
+        env:
+          DEMO_DIR: ${{ steps.cfg.outputs.demo_dir }}
         run: |
           set -euo pipefail
           git fetch origin data
@@ -146,6 +155,8 @@ jobs:
             git checkout origin/data -- "results/demo/$u/" 2>/dev/null \
               || echo "No demo dir for $u on data branch; skipping leg."
           done
+          git checkout origin/data -- "$DEMO_DIR/" 2>/dev/null \
+            || echo "No existing $DEMO_DIR on data branch — first run."
 
       - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4  # v10.1.0
         with:
@@ -180,27 +191,38 @@ jobs:
             echo "changed=true"  >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Commit audit JSON to data branch as verified commit
+      - name: Commit audit JSON + demo snapshot to data branch as verified commit
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
         env:
           AUDIT_DIR: ${{ steps.cfg.outputs.audit_dir }}
+          DEMO_DIR:  ${{ steps.cfg.outputs.demo_dir }}
           UNIVERSE:  ${{ matrix.universe }}
         with:
           # Reuses scripts/data-branch-commit.cjs for the 422-retry shared
-          # with demo-snapshot's matrix race on the `data` branch ref.
+          # with demo-snapshot's matrix race on the `data` branch ref. The
+          # demo snapshot + its index.json manifest are this leg's own
+          # display data -- built by the build script directly from the
+          # SAME source-universe records it ranked/classified, so
+          # demo-snapshot.yaml no longer re-fetches this universe (owner
+          # requirement: identical qte77 Score in both places).
           script: |
             const fs = require("fs");
-            const { AUDIT_DIR, UNIVERSE } = process.env;
+            const { AUDIT_DIR, DEMO_DIR, UNIVERSE } = process.env;
             const today = new Date().toISOString().slice(0, 10);
-            const auditPath = `${AUDIT_DIR}/${today}.json`;
-            if (!fs.existsSync(auditPath)) {
-              core.info(`No audit JSON at ${auditPath}; skipping`);
+            const candidates = [
+              `${AUDIT_DIR}/${today}.json`,
+              `${DEMO_DIR}/${today}.json`,
+              `${DEMO_DIR}/index.json`,
+            ];
+            const paths = candidates.filter((p) => fs.existsSync(p));
+            if (paths.length === 0) {
+              core.info(`No audit/demo output for ${UNIVERSE}; skipping`);
               return;
             }
             const { run } = require("./scripts/data-branch-commit.cjs");
             return run({
               github, context, core,
-              paths: [auditPath],
+              paths,
               message: `chore(universe): weekly ${UNIVERSE} audit`,
             });
 

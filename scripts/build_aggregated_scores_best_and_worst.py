@@ -31,11 +31,14 @@ from _demo_snapshot_loader import (
     write_paired_universe_and_audit,
 )
 
-from analyze_stock_kpi.orchestrators.aggregated_scores_best_and_worst import build_universe
+from analyze_stock_kpi.orchestrators.aggregated_scores_best_and_worst import (
+    build_universe,
+    ranked_snapshots,
+)
 
 
 def main() -> None:
-    """Build the preset pair + audit."""
+    """Build the preset pair + audit + demo-display snapshots."""
     snapshots_by_universe, snapshot_dates_by_universe = load_all_snapshots()
     best, worst, audit_rows = build_universe(
         snapshots_by_universe,
@@ -45,6 +48,11 @@ def main() -> None:
         best,
         worst,
         audit_rows,
+        # Same records that were ranked -- no second, independent fetch
+        # (owner requirement: the aggregated list must show the identical
+        # qte77 Score as its source list for the same snapshot).
+        snapshots_a=ranked_snapshots(snapshots_by_universe, snapshot_dates_by_universe, best),
+        snapshots_b=ranked_snapshots(snapshots_by_universe, snapshot_dates_by_universe, worst),
         preset_a_name="aggregated-scores-best",
         preset_b_name="aggregated-scores-worst",
         audit_dir="aggregated_scores_best_and_worst",

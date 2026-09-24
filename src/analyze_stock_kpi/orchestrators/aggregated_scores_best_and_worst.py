@@ -30,6 +30,8 @@ from analyze_stock_kpi.domain.composite_scores import CompositeScores
 from ._shared import AuditRowBase, dedup_by_ticker, is_stale
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
 
     from ._shared import DedupedSnapshot
@@ -164,3 +166,23 @@ def build_universe(
         worst_tickers.append(ticker)
 
     return sorted(best_tickers), sorted(worst_tickers), list(rows_by_ticker.values())
+
+
+def ranked_snapshots(
+    snapshots_by_universe: dict[str, list[FundamentalsSnapshot]],
+    snapshot_dates_by_universe: dict[str, str],
+    tickers: Iterable[str],
+) -> list[FundamentalsSnapshot]:
+    """Return the exact per-ticker snapshot objects :func:`build_universe` ranked.
+
+    Same dedup as :func:`build_universe` (first-seen universe wins). The
+    build script uses this to emit the demo-display JSON for ``tickers``
+    (``best_tickers + worst_tickers``) from the SAME records that were
+    ranked -- never a second, independent fetch -- so a ticker shows the
+    identical qte77 Score in the aggregated list and its source list for
+    the same snapshot. Tickers absent from the dedup (shouldn't happen for
+    a ``tickers`` list returned by ``build_universe`` on the same inputs)
+    are silently skipped.
+    """
+    per_ticker = dedup_by_ticker(snapshots_by_universe, snapshot_dates_by_universe)
+    return [per_ticker[t].snapshot for t in tickers if t in per_ticker]

@@ -175,9 +175,57 @@ const loadBacktestSeriesByCadence = async () => {
   return Object.fromEntries(BACKTEST_CADENCES.map((c, i) => [c, results[i]]));
 };
 
-/** @type {() => Promise<Array<{date: string, eligible: number, best: Array<{ticker: string, score: number}>, worst: Array<{ticker: string, score: number}>}>>} */
-const loadBacktestLists = () =>
-  loadYearsFromBranch(DATA_BASE_URL, "results/backtest/lists", "date", BACKTEST_START_YEAR);
+/** `results/demo/<universe>/index.json` for any universe, not just the
+ *  active picker one (`loadManifest` above is closure-bound to that). */
+const loadUniverseManifest = (/** @type {string} */ universe) =>
+  fetchJson(`${DATA_BASE_URL}/results/demo/${universe}/index.json`);
+
+/** @type {(rows: Row[]) => Array<{ticker: string, score: number}>} */
+const toRankRows = (rows) =>
+  rows
+    .map((r) => ({
+      ticker: /** @type {string} */ (r.symbol),
+      score: r.composite_scores?.screener_score ?? null,
+    }))
+    .filter(
+      /** @type {(r: {ticker: string, score: number | null}) => r is {ticker: string, score: number}} */
+      (r) => r.score !== null,
+    )
+    .sort((a, b) => b.score - a.score);
+
+/**
+ * The backtest section's "current candidates" panel: the SAME
+ * aggregated-scores-best / aggregated-scores-worst demo snapshots the
+ * universe picker can show, reshaped into `renderBacktestLists`'s input
+ * shape. Owner requirement (2026-09-24): today's long/short candidates
+ * must carry the identical qte77 Score as their source list, not a
+ * separately-scored pick -- so this reads the aggregated lists directly
+ * rather than `results/backtest/lists/*.json`'s latest entry, which stays
+ * a purely historical, point-in-time-scored (`score_bt`) backfill (see
+ * ADR-0014) never displayed as "today's" book.
+ * @returns {Promise<{date: string, eligible: number, best: Array<{ticker: string, score: number}>, worst: Array<{ticker: string, score: number}>} | null>}
+ */
+const loadCurrentAggregatedCandidates = async () => {
+  try {
+    const [bestManifest, worstManifest] = await Promise.all([
+      loadUniverseManifest("aggregated-scores-best"),
+      loadUniverseManifest("aggregated-scores-worst"),
+    ]);
+    /** @type {[Row[], Row[]]} */
+    const [best, worst] = await Promise.all([
+      fetchJson(snapshotUrl("aggregated-scores-best", bestManifest.latest)),
+      fetchJson(snapshotUrl("aggregated-scores-worst", worstManifest.latest)),
+    ]);
+    return {
+      date: bestManifest.latest,
+      eligible: best.length + worst.length,
+      best: toRankRows(best),
+      worst: toRankRows(worst),
+    };
+  } catch {
+    return null;
+  }
+};
 
 /** A 404 before the first Saturday cron run is expected (ADR-0013) —
  *  resolve to `null` rather than letting the rejection propagate. */
@@ -610,14 +658,14 @@ async function init() {
     ycEntries,
     spyEntries,
     backtestSeriesByCadence,
-    backtestLists,
+    currentCandidates,
     backtestSummary,
   ] = await Promise.all([
     loadFearGreedYears(),
     loadYieldCurveYears(),
     loadEquitySpyYears(),
     loadBacktestSeriesByCadence(),
-    loadBacktestLists(),
+    loadCurrentAggregatedCandidates(),
     loadBacktestSummary(),
   ]);
   renderFearGreedHeader(fgEntries);
@@ -627,7 +675,7 @@ async function init() {
   bindWindowChips();
   renderBacktestChart(backtestSeriesByCadence, backtestSummary?.primary);
   renderBacktestSummary(backtestSummary);
-  renderBacktestLists(backtestLists.length ? backtestLists[backtestLists.length - 1] : null);
+  renderBacktestLists(currentCandidates);
   bindBacktestModeToggle();
   bindThemeObserver();
 }
