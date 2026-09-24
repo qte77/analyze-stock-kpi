@@ -15,7 +15,10 @@ from datetime import date
 import pytest
 
 from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
-from analyze_stock_kpi.orchestrators.enhanced_kpi_screener_longshort import build_universe
+from analyze_stock_kpi.orchestrators.enhanced_kpi_screener_longshort import (
+    build_universe,
+    ranked_snapshots,
+)
 
 _LONG_FIXTURE: dict[str, float | str | None] = {
     "market_cap": 5e9,
@@ -258,3 +261,26 @@ def test_criterion_14_recommendation_key_mapping(
     )
     assert audit[0].long_breakdown["analyst_recommendation"] is long_pass
     assert audit[0].short_breakdown["analyst_recommendation"] is short_pass
+
+
+def test_ranked_snapshots_returns_identical_records_used_for_classification() -> None:
+    """``ranked_snapshots`` returns the exact objects ``build_universe`` classified.
+
+    Owner requirement: the long/short candidate lists must be computed from
+    the same original per-universe data -- never a second, independent
+    fetch. The build script uses this accessor to emit the demo-display
+    JSON, so it must hand back the SAME objects, not recomputed ones.
+    """
+    long_snap = _snap("LONGCO", **_LONG_FIXTURE)
+    short_snap = _snap("SHORTCO", **_SHORT_FIXTURE)
+    snapshots_by_universe = {"sp500": [long_snap, short_snap]}
+    snapshot_dates = {"sp500": "2026-05-31"}
+
+    longs, shorts, _ = build_universe(
+        snapshots_by_universe, snapshot_dates, as_of=date(2026, 5, 31)
+    )
+    resolved = ranked_snapshots(snapshots_by_universe, snapshot_dates, longs + shorts)
+
+    assert longs == ["LONGCO"]
+    assert shorts == ["SHORTCO"]
+    assert resolved == [long_snap, short_snap]

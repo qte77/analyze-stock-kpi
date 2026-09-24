@@ -1,6 +1,8 @@
 # ADR-0013 — Point-in-time backfilled best/worst 25 + backtested long/short 25/25
 
-**Status:** Accepted (2026-09-23) · **Supersedes in part** [ADR-0012](0012-longshort-model-portfolio.md)
+**Status:** Accepted (2026-09-23) · **Amended in part by [ADR-0014](0014-current-candidates-use-live-score.md)**
+(D2's reduced score is no longer the dashboard's "current candidates" source — narrowed to the historical
+backfill + backtested returns simulation only) · **Supersedes in part** [ADR-0012](0012-longshort-model-portfolio.md)
 (its "no backtest", Min-Variance-weighting, weekly/monthly-tracker and "no costs" decisions — see
 "Supersession" below) · **Relates to:** [ADR-0004](0004-price-history-composite-input.md)
 (price-history-derived composite inputs), [ADR-0011](0011-equity-macro-overlay-via-spy-indexed-returns.md)

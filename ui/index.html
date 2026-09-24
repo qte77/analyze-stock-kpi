@@ -139,7 +139,7 @@
           <dt>Long-term context (merged)</dt>
           <dd>One chart for multi-year regime context. On the 0–100 left axis: the <a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank" rel="noopener noreferrer">CNN F&amp;G</a> monthly median (history backfilled via the <a href="https://github.com/whit3rabbit/fear-greed-data" target="_blank" rel="noopener noreferrer">whit3rabbit/fear-greed-data</a> mirror) and the <strong>5s10s slope</strong> (10y − 5y curve-steepness from yfinance <code>^TNX</code>/<code>^FVX</code>, normalized onto the same 0–100 scale). On a logarithmic right axis: a <strong>broad-equity index</strong> — the <code>SPY</code> ETF's return rebased to 100, a derived series (never the S&amp;P 500 index level). All three are aggregated to a shared monthly grid.</dd>
           <dt>Backtested long/short 25/25 (hypothetical)</dt>
-          <dd>Below: a point-in-time backtested long/short book — long the top 25 / short the bottom 25 of <strong>all base universes</strong>, ranked by a reduced point-in-time qte77 Score (<code>score_bt</code>, ADR-0013) computed only from what was knowable on each historical rank date — no forward-looking valuation or beta inputs, so no look-ahead bias. Equal-weighted 1/25 per leg (gross 200&nbsp;%, net 0), marked daily from closing prices, and rebalanced on five cadences (monthly is primary). Costed at 10&nbsp;bp one-way turnover and published both gross and net. It is <strong>hypothetical and not investment advice</strong>: survivorship and a "today's index membership" size bias are disclosed in the caveats under the chart. Extended forward every Saturday under identical rules.</dd>
+          <dd>Below: the chart + metrics table are a point-in-time backtested long/short book — long the top 25 / short the bottom 25 of <strong>all base universes</strong>, ranked by a reduced point-in-time qte77 Score (<code>score_bt</code>, ADR-0013) computed only from what was knowable on each historical rank date — no forward-looking valuation or beta inputs, so no look-ahead bias. Equal-weighted 1/25 per leg (gross 200&nbsp;%, net 0), marked daily from closing prices, and rebalanced on five cadences (monthly is primary). Costed at 10&nbsp;bp one-way turnover and published both gross and net. It is <strong>hypothetical and not investment advice</strong>: survivorship and a "today's index membership" size bias are disclosed in the caveats under the chart. Extended forward every Saturday under identical rules. The "Current candidates" list below the chart is a <strong>separate, non-historical</strong> display: it shows the live <code>aggregated-scores-best</code> / <code>-worst</code> lists (full qte77 Score, same data as the Universe section) rather than <code>score_bt</code>, so today's candidates always carry the identical qte77 Score as their source universe (ADR-0014).</dd>
         </dl>
       </div>
     </section>
@@ -185,18 +185,21 @@
       </div>
       <p id="backtest-key-facts" class="key-facts"></p>
       <details id="backtest-lists">
-        <summary>Latest best/worst 25</summary>
+        <summary>Current candidates (aggregated best/worst 25)</summary>
         <div id="backtest-lists-body"></div>
       </details>
       <ul id="backtest-caveats" class="caveats-list"></ul>
       <p class="backtest-disclaimer">
-        Hypothetical, point-in-time backtest — not investment advice. Long the top 25 / short
-        the bottom 25 of all base universes, ranked by a reduced point-in-time qte77 Score
-        (<code>score_bt</code>, ADR-0013) computed only from what was knowable on each
-        historical rank date. Equal-weighted 1/25 per leg (gross 200&nbsp;%, net 0), marked
-        daily from closing prices, costed at 10&nbsp;bp one-way turnover, published gross and
-        net. Returns are in local currency; survivorship and a "today's index membership" size
-        bias are disclosed in the caveats above. Extended forward every Saturday.
+        Hypothetical, point-in-time backtest — not investment advice. The chart and metrics
+        above simulate long the top 25 / short the bottom 25 of all base universes, ranked by
+        a reduced point-in-time qte77 Score (<code>score_bt</code>, ADR-0013) computed only
+        from what was knowable on each historical rank date. Equal-weighted 1/25 per leg
+        (gross 200&nbsp;%, net 0), marked daily from closing prices, costed at 10&nbsp;bp
+        one-way turnover, published gross and net. Returns are in local currency; survivorship
+        and a "today's index membership" size bias are disclosed in the caveats above.
+        Extended forward every Saturday. The "Current candidates" list above uses the full,
+        current qte77 Score (<code>aggregated-scores-best</code> / <code>-worst</code>) — see
+        ADR-0014 — never <code>score_bt</code>.
       </p>
     </section>
 
@@ -211,7 +214,7 @@
               <dt>federal-contractors</dt>
               <dd>Orchestrator-driven: chains <code>usaspending.gov</code> → SEC EDGAR → yfinance to assemble the DoD Top-25 + curated seed. Rebuilt weekly.</dd>
               <dt>aggregated-scores-best / -worst</dt>
-              <dd>Cross-universe ranking by the <strong>qte77 Score</strong> (<code>screener_score</code>) — the same score shown in the Score column and detail panel on every universe. Top 25 + bottom 25 of the merged ticker pool, using today's fundamentals only. These are <strong>no longer</strong> the backtested long/short book's candidate pool above: the backtest ranks <strong>all base universes</strong> itself, with its own point-in-time score (<code>score_bt</code>) computed from each ticker's fundamentals as they stood on each historical rank date — see the "Why these charts?" tab.</dd>
+              <dd>Cross-universe ranking by the <strong>qte77 Score</strong> (<code>screener_score</code>) — the same score shown in the Score column and detail panel on every universe. Top 25 + bottom 25 of the merged ticker pool, using today's fundamentals only — the same per-ticker records and score as their source universe's own snapshot for the same date (ADR-0014), never a second independent fetch. This is also the "Current candidates" list shown in the backtest section below: the backtested long/short book's <strong>historical performance simulation</strong> ranks all base universes itself with its own point-in-time score (<code>score_bt</code>) computed from each ticker's fundamentals as they stood on each historical rank date — see the "Why these charts?" tab.</dd>
               <dt>enhanced-kpi-screener-longs / -shorts</dt>
               <dd>Conjunctive gate over 15 long-side / 14 short-side criteria (Phases 2a+2b of #192). A ticker is in <code>longs</code> iff it passes <em>every</em> long-side gate (market cap ≥ 2B, P/E ≤ 25, PEG &lt; 1, growth &gt; 10%, beta &gt; 1, ROE / ROA / ROI &gt; 10%, current / quick &gt; 1, FCF margin &gt; 10%, profit margin &gt; 10%, buy rating, R&amp;D &gt; 5%) and in <code>shorts</code> iff it passes the inverted set (no R&amp;D gate on the short side). Counts vary — can legitimately be 0 each side when the source data is too benign or too sparse.</dd>
             </dl>

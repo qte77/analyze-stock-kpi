@@ -912,9 +912,13 @@ function buildRankList(title, rows) {
 }
 
 /**
- * Render the latest best/worst 25 collapsible from the most recent
- * `results/backtest/lists/YYYY.json` entry. A missing/empty `entry` (before
- * the first Saturday cron run) renders the empty hint and never throws.
+ * Render the current best/worst 25 collapsible from the SAME
+ * `aggregated-scores-best` / `aggregated-scores-worst` demo snapshots the
+ * universe picker can show (`app.js`'s `loadCurrentAggregatedCandidates`)
+ * -- not `results/backtest/lists/YYYY.json`, which stays a purely
+ * historical, point-in-time-scored backfill (ADR-0014). A missing/empty
+ * `entry` (before the first universe-builder run) renders the empty hint
+ * and never throws.
  *
  * @param {{date: string, eligible: number, best: Array<{ticker: string, score: number}>, worst: Array<{ticker: string, score: number}>} | null} entry
  */
