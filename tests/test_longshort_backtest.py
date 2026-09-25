@@ -49,6 +49,7 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     _genuine_weights_for_cadence,
     _has_one_year_of_closes,
     _leg_diff,
+    _own_dates,
     _price_asof,
     _rank_genuine,
     _rebalance_reason,
@@ -56,6 +57,7 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     _reset_year_files,
     _score_all_tickers,
     _ticker_period_return,
+    _trade_date,
     _trade_log_for_cadence,
     _trim_to_first_trade,
     _turnover,
@@ -838,7 +840,73 @@ def test_null_percentile_is_deterministic_for_a_fixed_seed() -> None:
     assert first == second
 
 
+def test_null_random_book_earns_its_own_period() -> None:
+    """A book drawn at t earns t→next, not the period after (the old off-by-one left 0)."""
+    d0, d1 = date(2026, 1, 5), date(2026, 1, 12)
+    idx = pd.to_datetime([d0, d1])
+    closes = {
+        "UP": pd.Series([100.0, 120.0], index=idx),
+        "FLAT": pd.Series([100.0, 100.0], index=idx),
+    }
+    eligible_by_date = {d0: ["UP", "FLAT"], d1: ["UP", "FLAT"]}
+
+    _pct, median = null_percentile(
+        0.0, [d0, d1], eligible_by_date, closes, n=5, seed=1, book_size=1
+    )
+
+    assert abs(median) > 0.05
+
+
+# ----- foresight-audit #4: every fill at the ticker's own close -----
+
+
+def test_trade_date_waits_for_a_day_every_book_name_trades() -> None:
+    """A name whose exchange is shut on the next union day must not fill at the rank-date close."""
+    mon, tue, wed = date(2026, 9, 7), date(2026, 9, 8), date(2026, 9, 9)
+    calendar = [mon, tue, wed]
+    idx = pd.to_datetime
+    own = _own_dates(
+        {
+            "US": pd.Series([1.0, 1.0], index=idx([mon, wed])),
+            "EU": pd.Series([1.0, 1.0, 1.0], index=idx([mon, tue, wed])),
+        }
+    )
+
+    assert _trade_date(calendar, mon, ["US", "EU"], own) == wed
+    assert _trade_date(calendar, mon, ["EU"], own) == tue
+
+
+def test_trade_date_ignores_a_name_with_no_close_after_the_rank_date() -> None:
+    """A delisted name is held at its last close; it must not block every later rebalance."""
+    mon, tue = date(2026, 9, 7), date(2026, 9, 8)
+    own = _own_dates(
+        {
+            "GONE": pd.Series([1.0], index=pd.to_datetime([mon])),
+            "LIVE": pd.Series([1.0, 1.0], index=pd.to_datetime([mon, tue])),
+        }
+    )
+
+    assert _trade_date([mon, tue], mon, ["GONE", "LIVE"], own) == tue
+
+
 # ----- metrics: D9 on a known series -----
+
+
+def test_metrics_annualize_by_calendar_span_not_252_rows() -> None:
+    """A union calendar has ~260 rows/year; two calendar years at 21 %/2y must read ~10 %/yr."""
+    dates_ts = pd.date_range("2024-01-01", periods=730, freq="D")
+    dates = [ts.date() for ts in dates_ts]
+    r = 1.21 ** (1 / 730) - 1
+    rows = [
+        BacktestDailyRow(
+            date=d, ret_long=r, ret_short=0.0, ret_ls_gross=r, ret_ls_net=r, turnover=0.0
+        )
+        for d in dates
+    ]
+
+    gross, _net = metrics(rows, {})
+
+    assert gross.ann_return == pytest.approx(0.10, abs=2e-3)
 
 
 def test_metrics_on_a_known_series() -> None:
@@ -860,10 +928,11 @@ def test_metrics_on_a_known_series() -> None:
 
     gross, _net = metrics(rows, spy_returns)
 
-    assert gross.ann_return == pytest.approx((1 + r) ** 252 - 1)
+    years = (dates[-1] - dates[0]).days * len(dates) / (len(dates) - 1) / 365.25
+    assert gross.ann_return == pytest.approx((1 + r) ** (252 / years) - 1)
     assert gross.ann_vol == pytest.approx(0.0, abs=1e-12)
     assert gross.max_drawdown == pytest.approx(0.0)
-    assert gross.ann_turnover == pytest.approx(0.02 * len(seen_months))
+    assert gross.ann_turnover == pytest.approx(0.02 * len(seen_months) / years)
     assert gross.hit_rate == pytest.approx(1.0)
     assert gross.beta is None
 

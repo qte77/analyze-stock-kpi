@@ -140,7 +140,6 @@ file set) — series A's rank dates start here."""
 _COST_BPS = 10.0
 """D8: one-way-turnover trading cost, in basis points."""
 
-_TRADING_DAYS = 252
 _MIN_MONTHS_FOR_METRICS = 12
 """D9: nothing is annualized from fewer than 12 months of monthly returns."""
 
@@ -204,11 +203,10 @@ _CAVEATS: tuple[str, ...] = (
     "A ticker with no price on a given day is treated as flat (0% return) "
     "that day; a name that stops trading entirely after entry is held at its "
     "last known close rather than dropped.",
-    "A new holding enters/exits at the shared UNION-calendar next trading "
-    "day, not necessarily its OWN next trading day (e.g. a US market "
-    "holiday while a European one is open) — found 2026-09-24, affects "
-    "roughly 6.6% of monthly fills; a documented approximation, not yet "
-    "fixed to each ticker's own next close.",
+    "A rebalance trades on the first day after its rank date on which every "
+    "name in the old and new books has its own close, so each fill is at the "
+    "ticker's own closing price; a rebalance can therefore wait a day or two "
+    "across mismatched exchange holidays.",
     "Non-US filing-lag classification (D18) is suffix-based plus a small "
     "disclosed exception list for known no-suffix foreign issuers and an "
     "OTC-ADR ticker-shape heuristic — not a full country lookup, so some "
@@ -218,10 +216,8 @@ _CAVEATS: tuple[str, ...] = (
     "The `yearly` cadence rebalances once a year; nothing is annualized from "
     "fewer than 12 months of monthly returns (D9), so its metrics stay "
     "`null` far longer than the other cadences'.",
-    "The null benchmark's random draws also enter at the shared trade date "
-    "rather than each ticker's own next close (same approximation as "
-    "above), and annualize by calendar days, not the primary series' own "
-    "trading-day count.",
+    "The null benchmark's random books use the same fill rule and are "
+    "annualized by calendar span, like the strategy's own metrics.",
     "This is a hypothetical, backward-looking construction — not a live "
     "track record and not investment advice.",
 )
@@ -239,10 +235,10 @@ _CAVEATS_GENUINE: tuple[str, ...] = (
     "A ticker with no price on a given day is treated as flat (0% return) "
     "that day; a name that stops trading entirely after entry is held at its "
     "last known close rather than dropped.",
-    "A new holding enters/exits at the shared UNION-calendar next trading "
-    "day, not necessarily its OWN next trading day — found 2026-09-24, a "
-    "documented approximation, not yet fixed to each ticker's own next "
-    "close (same limitation as series B).",
+    "A rebalance trades on the first day after its rank date on which every "
+    "name in the old and new books has its own close, so each fill is at the "
+    "ticker's own closing price; a rebalance can therefore wait a day or two "
+    "across mismatched exchange holidays.",
     "Returns are local-currency, gross of FX, financing and borrow costs; "
     "only the 10 bp one-way-turnover trading cost is modelled.",
     "The `monthly_buffer` cadence has no buffer effect here: the live "
@@ -848,12 +844,23 @@ def _max_drawdown(daily: list[float]) -> float:
     return max_dd
 
 
-def _annualize_total(daily: list[float]) -> float:
-    """Compound `daily` returns then annualize by trading-day count."""
+def _span_years(dates: list[date]) -> float:
+    """Calendar years covered by `dates` (each row is one period ending on its date).
+
+    The union calendar has ~260 rows/year, not 252, so annualizing by row
+    count would understate returns (foresight-audit #6).
+    """
+    n = len(dates)
+    if n < 2:
+        return 0.0
+    return (dates[-1] - dates[0]).days * n / (n - 1) / 365.25
+
+
+def _annualize_total(daily: list[float], years: float) -> float:
+    """Compound `daily` returns then annualize over `years` calendar years."""
     total = 1.0
     for r in daily:
         total *= 1.0 + r
-    years = len(daily) / _TRADING_DAYS
     return total ** (1.0 / years) - 1.0 if years > 0 else 0.0
 
 
@@ -893,13 +900,15 @@ def _metrics_block(
     mean_m = float(np.mean(monthly_values))
     std_m = float(np.std(monthly_values, ddof=1)) if n > 1 else 0.0
     se = std_m / (n**0.5) if n > 0 else 0.0
+    years = _span_years(dates)
+    periods_per_year = len(dates) / years if years > 0 else 0.0
     return MetricsBlock(
-        ann_return=_annualize_total(daily),
-        ann_vol=float(np.std(daily, ddof=1) * (_TRADING_DAYS**0.5)) if len(daily) > 1 else None,
+        ann_return=_annualize_total(daily, years),
+        ann_vol=float(np.std(daily, ddof=1) * (periods_per_year**0.5)) if len(daily) > 1 else None,
         max_drawdown=_max_drawdown(daily),
-        ann_turnover=sum(turnover) * (_TRADING_DAYS / len(dates)) if dates else None,
-        long_ann_return=_annualize_total(daily_long),
-        short_ann_return=_annualize_total(daily_short),
+        ann_turnover=sum(turnover) / years if years > 0 else None,
+        long_ann_return=_annualize_total(daily_long, years),
+        short_ann_return=_annualize_total(daily_short, years),
         beta=_beta(daily, dates, spy_returns),
         hit_rate=sum(1 for v in monthly_values if v > 0) / n,
         mean_monthly_return=mean_m,
@@ -993,37 +1002,48 @@ def _random_book_net_ann(
     closes: dict[str, pd.Series],
     cost_bps: float,
     book_size: int,
+    calendar: list[date] | None = None,
+    own_dates: dict[str, list[date]] | None = None,
 ) -> float | None:
     """One null draw's net annualized return via the period-return shortcut.
 
     Uses the exact period-total-return identity for a static equal-weight
     leg (no interim rebalancing) instead of a full daily simulation, so
     `_NULL_DRAWS` draws stay fast — this is a summary-only benchmark, not
-    part of the persisted daily contract.
+    part of the persisted daily contract. Each book is drawn at its rank date,
+    filled with the strategy's own `_trade_date` rule, and earns exactly the
+    span to the next book's fill (foresight-audit #6).
     """
-    prev_long: dict[str, float] = {}
-    prev_short: dict[str, float] = {}
-    total = 1.0
-    years = 0.0
-    for i, t in enumerate(rebal_dates):
+    books: list[tuple[date, dict[str, float], dict[str, float]]] = []
+    prev_names: list[str] = []
+    for t in rebal_dates:
         pool = eligible_by_date.get(t, [])
         if len(pool) < 2 * book_size:
             continue
         sample = rng.sample(pool, 2 * book_size)
-        target_long = dict.fromkeys(sample[:book_size], 1.0 / book_size)
-        target_short = dict.fromkeys(sample[book_size:], 1.0 / book_size)
-        period_end = rebal_dates[i + 1] if i + 1 < len(rebal_dates) else None
-        if period_end is None:
+        fill = _trade_date(calendar, t, sample + prev_names, own_dates) if calendar else t
+        if fill is None:
             break
-        period_ret = _leg_period_return(prev_long, closes, t, period_end) - _leg_period_return(
-            prev_short, closes, t, period_end
+        books.append(
+            (
+                fill,
+                dict.fromkeys(sample[:book_size], 1.0 / book_size),
+                dict.fromkeys(sample[book_size:], 1.0 / book_size),
+            )
         )
-        drifted_long = _drift_to_end(prev_long, closes, t, period_end)
-        drifted_short = _drift_to_end(prev_short, closes, t, period_end)
+        prev_names = sample
+    total = 1.0
+    drifted_long: dict[str, float] = {}
+    drifted_short: dict[str, float] = {}
+    for (start, target_long, target_short), (end, _, _) in itertools.pairwise(books):
         cost = _cost(_turnover(target_long, target_short, drifted_long, drifted_short))
+        period_ret = _leg_period_return(target_long, closes, start, end) - _leg_period_return(
+            target_short, closes, start, end
+        )
         total *= 1.0 + period_ret - cost
-        years += (period_end - t).days / 365.25
-        prev_long, prev_short = target_long, target_short
+        drifted_long = _drift_to_end(target_long, closes, start, end)
+        drifted_short = _drift_to_end(target_short, closes, start, end)
+    years = (books[-1][0] - books[0][0]).days / 365.25 if len(books) > 1 else 0.0
     if years <= 0:
         return None
     return total ** (1.0 / years) - 1.0
@@ -1039,6 +1059,8 @@ def null_percentile(
     seed: int = _NULL_SEED,
     cost_bps: float = _COST_BPS,
     book_size: int = _BOOK_SIZE,
+    calendar: list[date] | None = None,
+    own_dates: dict[str, list[date]] | None = None,
 ) -> tuple[float, float]:
     """D10: `n` seeded random 25/25 books on the primary cadence's rank dates.
 
@@ -1050,7 +1072,16 @@ def null_percentile(
     draws = [
         d
         for d in (
-            _random_book_net_ann(rng, rebal_dates, eligible_by_date, closes, cost_bps, book_size)
+            _random_book_net_ann(
+                rng,
+                rebal_dates,
+                eligible_by_date,
+                closes,
+                cost_bps,
+                book_size,
+                calendar=calendar,
+                own_dates=own_dates,
+            )
             for _ in range(n)
         )
         if d is not None
@@ -1308,6 +1339,41 @@ def _next_trading_day(calendar: list[date], t: date) -> date | None:
     return calendar[idx] if idx < len(calendar) else None
 
 
+def _own_dates(closes: dict[str, pd.Series]) -> dict[str, list[date]]:
+    """Each ticker's own sorted trading dates (the days it has a real close)."""
+    return {
+        ticker: sorted(ts.date() for ts in series.dropna().index if isinstance(ts, pd.Timestamp))
+        for ticker, series in closes.items()
+    }
+
+
+def _has_close(dates: list[date], d: date) -> bool:
+    i = bisect.bisect_left(dates, d)
+    return i < len(dates) and dates[i] == d
+
+
+def _trade_date(
+    calendar: list[date],
+    t: date,
+    tickers: list[str],
+    own_dates: dict[str, list[date]] | None,
+) -> date | None:
+    """First calendar date after `t` on which every still-trading name in `tickers` has a close.
+
+    Foresight-audit #4: on a union-calendar day a name's own exchange was shut,
+    its forward-filled price would fill it at the rank-date close it was picked
+    on. A name with no close after `t` (delisted) is held at its last close and
+    doesn't block. Without `own_dates` this is plain `_next_trading_day`.
+    """
+    if own_dates is None:
+        return _next_trading_day(calendar, t)
+    live = [own_dates[x] for x in tickers if own_dates.get(x) and own_dates[x][-1] > t]
+    for d in calendar[bisect.bisect_right(calendar, t) :]:
+        if all(_has_close(dates, d) for dates in live):
+            return d
+    return None
+
+
 _ONE_YEAR_COVERAGE_GRACE_DAYS = 30
 """Mirrors `fundamentals._SORTINO_COVERAGE_GRACE_DAYS` — D6/finding-#7 (2026-09-24)."""
 
@@ -1416,6 +1482,8 @@ def _weights_for_cadence(
     rebal_dates: list[date],
     ranked_by_date: dict[date, list[tuple[str, float]]],
     calendar: list[date],
+    *,
+    own_dates: dict[str, list[date]] | None = None,
 ) -> dict[date, tuple[dict[str, float], dict[str, float]]]:
     """Every cadence rebalance date's target weights, keyed by TRADE date."""
     out: dict[date, tuple[dict[str, float], dict[str, float]]] = {}
@@ -1425,7 +1493,10 @@ def _weights_for_cadence(
         if len(ranks) < 2 * _BOOK_SIZE:
             continue
         long_names, short_names = select(ranks, cadence, prev_holdings)
-        trade_date = _next_trading_day(calendar, t)
+        prev_long, prev_short = prev_holdings if prev_holdings is not None else ([], [])
+        trade_date = _trade_date(
+            calendar, t, long_names + short_names + prev_long + prev_short, own_dates
+        )
         if trade_date is None:
             continue
         out[trade_date] = (
@@ -1462,6 +1533,7 @@ def _trade_log_for_cadence(
     *,
     book_size: int = _BOOK_SIZE,
     buffer: int = _BUFFER_RANK,
+    own_dates: dict[str, list[date]] | None = None,
 ) -> list[TradeLogEntry]:
     """D21: series B's WHEN/WHY/WHAT rebalance log for one cadence.
 
@@ -1480,10 +1552,12 @@ def _trade_log_for_cadence(
         long_names, short_names = select(
             ranks, cadence, prev_holdings, book_size=book_size, buffer=buffer
         )
-        trade_date = _next_trading_day(calendar, t)
+        prev_long, prev_short = prev_holdings if prev_holdings is not None else ([], [])
+        trade_date = _trade_date(
+            calendar, t, long_names + short_names + prev_long + prev_short, own_dates
+        )
         if trade_date is None:
             continue
-        prev_long, prev_short = prev_holdings if prev_holdings is not None else ([], [])
         long_entered, long_exited = _leg_diff(prev_long, long_names)
         short_entered, short_exited = _leg_diff(prev_short, short_names)
         pos = {ticker: i for i, ticker in enumerate(ranks)}
@@ -1731,6 +1805,7 @@ def _genuine_weights_for_cadence(
     calendar: list[date],
     *,
     book_size: int = _BOOK_SIZE,
+    own_dates: dict[str, list[date]] | None = None,
 ) -> dict[date, tuple[dict[str, float], dict[str, float]]]:
     """D16: every series-A cadence rebalance date's target weights, keyed by TRADE date.
 
@@ -1742,17 +1817,19 @@ def _genuine_weights_for_cadence(
     the rank date (`_next_trading_day`, D5/D16) — no same-close look-ahead.
     """
     out: dict[date, tuple[dict[str, float], dict[str, float]]] = {}
+    prev: list[str] = []
     for t in rebal_dates:
         long_names, short_names = ranked_by_date.get(t, ([], []))
         if len(long_names) < book_size or len(short_names) < book_size:
             continue
-        trade_date = _next_trading_day(calendar, t)
+        trade_date = _trade_date(calendar, t, long_names + short_names + prev, own_dates)
         if trade_date is None:
             continue
         out[trade_date] = (
             dict.fromkeys(long_names, 1.0 / len(long_names)),
             dict.fromkeys(short_names, 1.0 / len(short_names)),
         )
+        prev = long_names + short_names
     return out
 
 
@@ -1780,6 +1857,7 @@ def _genuine_trade_log_for_cadence(
     calendar: list[date],
     *,
     book_size: int = _BOOK_SIZE,
+    own_dates: dict[str, list[date]] | None = None,
 ) -> list[TradeLogEntry]:
     """D21: series A's WHEN/WHY/WHAT rebalance log for one cadence.
 
@@ -1796,7 +1874,9 @@ def _genuine_trade_log_for_cadence(
         long_names, short_names = ranked_by_date.get(t, ([], []))
         if len(long_names) < book_size or len(short_names) < book_size:
             continue
-        trade_date = _next_trading_day(calendar, t)
+        trade_date = _trade_date(
+            calendar, t, long_names + short_names + prev_long + prev_short, own_dates
+        )
         if trade_date is None:
             continue
         entry = entries_by_date.get(t)
@@ -2082,6 +2162,7 @@ def _run_series_b(
     calendar: list[date],
     returns_by_ticker: dict[str, dict[date, float]],
     spy_returns: dict[date, float],
+    own_dates: dict[str, list[date]],
 ) -> None:
     """D17/D18: append-only recompute of series B (the reconstructed backfill)."""
     grid = rank_dates(calendar)
@@ -2098,7 +2179,9 @@ def _run_series_b(
     cadence_metrics: dict[str, CadenceMetrics] = {}
     for cadence in CADENCES:
         rebal_dates = rebalance_dates(cadence, active_grid)
-        weights_by_trade_date = _weights_for_cadence(cadence, rebal_dates, ranked_by_date, calendar)
+        weights_by_trade_date = _weights_for_cadence(
+            cadence, rebal_dates, ranked_by_date, calendar, own_dates=own_dates
+        )
         rows = _trim_to_first_trade(
             simulate(weights_by_trade_date, returns_by_ticker), weights_by_trade_date
         )
@@ -2109,14 +2192,22 @@ def _run_series_b(
             gross=gross, net=net, rebalances=len(weights_by_trade_date)
         )
         write_trades_years(
-            cadence, _trade_log_for_cadence(cadence, rebal_dates, ranked_by_date, calendar)
+            cadence,
+            _trade_log_for_cadence(
+                cadence, rebal_dates, ranked_by_date, calendar, own_dates=own_dates
+            ),
         )
 
     primary_rebal_dates = rebalance_dates(PRIMARY_CADENCE, active_grid)
     eligible_by_date = {d: [t for t, _ in ranked_by_date.get(d, [])] for d in primary_rebal_dates}
     strategy_net_ann = cadence_metrics[PRIMARY_CADENCE].net.ann_return or 0.0
     percentile, median_net_ann = null_percentile(
-        strategy_net_ann, primary_rebal_dates, eligible_by_date, closes
+        strategy_net_ann,
+        primary_rebal_dates,
+        eligible_by_date,
+        closes,
+        calendar=calendar,
+        own_dates=own_dates,
     )
     fid = _compute_fidelity(frames_by_ticker, closes)
 
@@ -2140,6 +2231,7 @@ def _run_series_a(
     calendar: list[date],
     returns_by_ticker: dict[str, dict[date, float]],
     spy_returns: dict[date, float],
+    own_dates: dict[str, list[date]],
 ) -> None:
     """D15/D16: append-only recompute of series A (the genuine decisions)."""
     genuine_grid = _freeze_eligible(_genuine_rank_dates(), calendar[-1])
@@ -2155,7 +2247,7 @@ def _run_series_a(
     for cadence in CADENCES:
         rebal_dates = rebalance_dates(cadence, genuine_grid)
         weights_by_trade_date = _genuine_weights_for_cadence(
-            cadence, rebal_dates, ranked_by_date, calendar
+            cadence, rebal_dates, ranked_by_date, calendar, own_dates=own_dates
         )
         rows = _trim_to_first_trade(
             simulate(weights_by_trade_date, returns_by_ticker), weights_by_trade_date
@@ -2170,7 +2262,12 @@ def _run_series_a(
         write_trades_years(
             cadence,
             _genuine_trade_log_for_cadence(
-                cadence, rebal_dates, ranked_by_date, entries_by_date, calendar
+                cadence,
+                rebal_dates,
+                ranked_by_date,
+                entries_by_date,
+                calendar,
+                own_dates=own_dates,
             ),
             root=settings.backtest_genuine_dir / "trades" / cadence,
         )
@@ -2212,8 +2309,9 @@ def main() -> None:
     returns_by_ticker = _filter_bad_ticks(_reindex_returns(closes, calendar))
     spy_returns = _pct_change_map(_fetch_history_closes("SPY", "max"))
 
-    _run_series_b(frames_by_ticker, closes, calendar, returns_by_ticker, spy_returns)
-    _run_series_a(calendar, returns_by_ticker, spy_returns)
+    own_dates = _own_dates(closes)
+    _run_series_b(frames_by_ticker, closes, calendar, returns_by_ticker, spy_returns, own_dates)
+    _run_series_a(calendar, returns_by_ticker, spy_returns, own_dates)
 
 
 if __name__ == "__main__":
