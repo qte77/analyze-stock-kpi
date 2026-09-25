@@ -1,0 +1,260 @@
+[
+  {
+    "rank_date": "2025-01-03",
+    "trade_date": "2025-01-06",
+    "reason": "scheduled_yearly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "WEGE3.SA",
+          "rank": 2,
+          "score": 92.9470567311332
+        },
+        {
+          "ticker": "TSM",
+          "rank": 3,
+          "score": 92.7431032642935
+        },
+        {
+          "ticker": "ISRG",
+          "rank": 4,
+          "score": 89.61925552594373
+        },
+        {
+          "ticker": "2371.T",
+          "rank": 5,
+          "score": 87.21467100099966
+        },
+        {
+          "ticker": "6098.T",
+          "rank": 10,
+          "score": 85.33271405429188
+        },
+        {
+          "ticker": "DECK",
+          "rank": 11,
+          "score": 84.33735170864519
+        },
+        {
+          "ticker": "NOW",
+          "rank": 14,
+          "score": 81.43485678990375
+        },
+        {
+          "ticker": "RMS.PA",
+          "rank": 15,
+          "score": 81.26307663698628
+        },
+        {
+          "ticker": "IDCC",
+          "rank": 16,
+          "score": 81.00826964649977
+        },
+        {
+          "ticker": "ANET",
+          "rank": 18,
+          "score": 78.65530912309913
+        },
+        {
+          "ticker": "600066.SS",
+          "rank": 20,
+          "score": 78.07122611267197
+        },
+        {
+          "ticker": "NVDA",
+          "rank": 22,
+          "score": 77.00679151993398
+        },
+        {
+          "ticker": "SAF.PA",
+          "rank": 24,
+          "score": 75.00386063420883
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "6857.T",
+          "rank": 51,
+          "score": 65.04910132703372
+        },
+        {
+          "ticker": "ADBE",
+          "rank": 46,
+          "score": 65.78906692771395
+        },
+        {
+          "ticker": "NVO",
+          "rank": 55,
+          "score": 64.15347389359384
+        },
+        {
+          "ticker": "4063.T",
+          "rank": 88,
+          "score": 56.31629439593805
+        },
+        {
+          "ticker": "VRTX",
+          "rank": 50,
+          "score": 65.29507934369978
+        },
+        {
+          "ticker": "8035.T",
+          "rank": 60,
+          "score": 63.837954332429966
+        },
+        {
+          "ticker": "2379.TW",
+          "rank": 47,
+          "score": 65.75700260840453
+        },
+        {
+          "ticker": "SNPS",
+          "rank": 63,
+          "score": 63.39194918262432
+        },
+        {
+          "ticker": "2603.TW",
+          "rank": 62,
+          "score": 63.54527234171497
+        },
+        {
+          "ticker": "TSLA",
+          "rank": 28,
+          "score": 73.3528269458666
+        },
+        {
+          "ticker": "MPWR",
+          "rank": 42,
+          "score": 67.25096865397343
+        },
+        {
+          "ticker": "ODFL",
+          "rank": 48,
+          "score": 65.58508167845939
+        },
+        {
+          "ticker": "INTU",
+          "rank": 70,
+          "score": 61.95541915706673
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "CSNA3.SA",
+          "rank": -1,
+          "score": 4.203368132766625
+        },
+        {
+          "ticker": "KBR",
+          "rank": -6,
+          "score": 17.03171107032529
+        },
+        {
+          "ticker": "TXT",
+          "rank": -8,
+          "score": 17.90561149667325
+        },
+        {
+          "ticker": "RICK",
+          "rank": -10,
+          "score": 19.26216428863759
+        },
+        {
+          "ticker": "MCK",
+          "rank": -11,
+          "score": 19.402009117304853
+        },
+        {
+          "ticker": "MRK",
+          "rank": -14,
+          "score": 20.934124668013784
+        },
+        {
+          "ticker": "ENI.MI",
+          "rank": -20,
+          "score": 23.27837781853493
+        },
+        {
+          "ticker": "NOC",
+          "rank": -21,
+          "score": 23.32702809701354
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -23,
+          "score": 23.66000057481918
+        },
+        {
+          "ticker": "CI",
+          "rank": -24,
+          "score": 24.943603925737467
+        },
+        {
+          "ticker": "CCI",
+          "rank": -25,
+          "score": 25.142549793652293
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "T",
+          "rank": -173,
+          "score": 55.54495282530399
+        },
+        {
+          "ticker": "9984.T",
+          "rank": -58,
+          "score": 32.73207704062356
+        },
+        {
+          "ticker": "LOW",
+          "rank": -50,
+          "score": 31.131512505890058
+        },
+        {
+          "ticker": "DUK",
+          "rank": -78,
+          "score": 36.36921353614817
+        },
+        {
+          "ticker": "MO",
+          "rank": -179,
+          "score": 56.77217180096071
+        },
+        {
+          "ticker": "PM",
+          "rank": -143,
+          "score": 49.53700633474028
+        },
+        {
+          "ticker": "OSK",
+          "rank": -44,
+          "score": 30.564128200295865
+        },
+        {
+          "ticker": "NEE",
+          "rank": -125,
+          "score": 45.64808013137724
+        },
+        {
+          "ticker": "HON",
+          "rank": -69,
+          "score": 34.53023260046344
+        },
+        {
+          "ticker": "LMT",
+          "rank": -76,
+          "score": 35.65772093873806
+        },
+        {
+          "ticker": "SO",
+          "rank": -95,
+          "score": 40.782174882398245
+        }
+      ]
+    },
+    "turnover": 0.96
+  }
+]

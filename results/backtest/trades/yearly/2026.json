@@ -1,0 +1,300 @@
+[
+  {
+    "rank_date": "2026-01-02",
+    "trade_date": "2026-01-05",
+    "reason": "scheduled_yearly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "NTES",
+          "rank": 1,
+          "score": 95.30065045199484
+        },
+        {
+          "ticker": "MNST",
+          "rank": 4,
+          "score": 94.0024598707052
+        },
+        {
+          "ticker": "6857.T",
+          "rank": 5,
+          "score": 91.99418125117778
+        },
+        {
+          "ticker": "MPWR",
+          "rank": 9,
+          "score": 81.71078258177646
+        },
+        {
+          "ticker": "005930.KS",
+          "rank": 10,
+          "score": 80.5494254936176
+        },
+        {
+          "ticker": "8035.T",
+          "rank": 11,
+          "score": 78.42747269197878
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 12,
+          "score": 78.31649045647613
+        },
+        {
+          "ticker": "GMEXICOB.MX",
+          "rank": 13,
+          "score": 76.90268648817813
+        },
+        {
+          "ticker": "ABEV3.SA",
+          "rank": 14,
+          "score": 75.25625948792378
+        },
+        {
+          "ticker": "PRX.AS",
+          "rank": 17,
+          "score": 73.9274921580518
+        },
+        {
+          "ticker": "033780.KS",
+          "rank": 18,
+          "score": 73.61801567570798
+        },
+        {
+          "ticker": "002001.SZ",
+          "rank": 19,
+          "score": 73.02807091379448
+        },
+        {
+          "ticker": "028260.KS",
+          "rank": 20,
+          "score": 72.93092625274197
+        },
+        {
+          "ticker": "AMD",
+          "rank": 22,
+          "score": 71.33838046608228
+        },
+        {
+          "ticker": "JNJ",
+          "rank": 25,
+          "score": 70.66221851715459
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "WEGE3.SA",
+          "rank": 58,
+          "score": 62.150152559870115
+        },
+        {
+          "ticker": "ISRG",
+          "rank": 46,
+          "score": 64.11108187168418
+        },
+        {
+          "ticker": "SAP",
+          "rank": 122,
+          "score": 50.50640927211784
+        },
+        {
+          "ticker": "SAP.DE",
+          "rank": 132,
+          "score": 49.31437764533276
+        },
+        {
+          "ticker": "COST",
+          "rank": 104,
+          "score": 52.79714937004156
+        },
+        {
+          "ticker": "6098.T",
+          "rank": 73,
+          "score": 58.70886752001511
+        },
+        {
+          "ticker": "DECK",
+          "rank": 90,
+          "score": 55.490198866686455
+        },
+        {
+          "ticker": "NOW",
+          "rank": 98,
+          "score": 53.119486043618984
+        },
+        {
+          "ticker": "RMS.PA",
+          "rank": 39,
+          "score": 65.39462068405335
+        },
+        {
+          "ticker": "CPRT",
+          "rank": 63,
+          "score": 61.81417148858977
+        },
+        {
+          "ticker": "ANET",
+          "rank": 124,
+          "score": 49.94790255768611
+        },
+        {
+          "ticker": "7974.T",
+          "rank": 51,
+          "score": 62.915173324009835
+        },
+        {
+          "ticker": "NVDA",
+          "rank": 49,
+          "score": 63.338468219748854
+        },
+        {
+          "ticker": "2454.TW",
+          "rank": 38,
+          "score": 65.7706829550367
+        },
+        {
+          "ticker": "SAF.PA",
+          "rank": 50,
+          "score": 62.957384542079616
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "KLBN11.SA",
+          "rank": -5,
+          "score": 13.236329242286649
+        },
+        {
+          "ticker": "SUZB3.SA",
+          "rank": -6,
+          "score": 13.359552558039788
+        },
+        {
+          "ticker": "BMY",
+          "rank": -7,
+          "score": 14.770508059389856
+        },
+        {
+          "ticker": "DELL",
+          "rank": -9,
+          "score": 18.032759988228605
+        },
+        {
+          "ticker": "MSCI",
+          "rank": -10,
+          "score": 18.981178364555088
+        },
+        {
+          "ticker": "LOW",
+          "rank": -11,
+          "score": 19.062477912529147
+        },
+        {
+          "ticker": "HON",
+          "rank": -12,
+          "score": 19.18238308487918
+        },
+        {
+          "ticker": "3382.T",
+          "rank": -16,
+          "score": 24.451850128039343
+        },
+        {
+          "ticker": "BAH",
+          "rank": -18,
+          "score": 24.818564614742055
+        },
+        {
+          "ticker": "KR",
+          "rank": -20,
+          "score": 25.666090256962377
+        },
+        {
+          "ticker": "DLR",
+          "rank": -23,
+          "score": 26.793421516438034
+        },
+        {
+          "ticker": "PETR4.SA",
+          "rank": -24,
+          "score": 27.022056824071655
+        },
+        {
+          "ticker": "PETR3.SA",
+          "rank": -25,
+          "score": 27.022056824071655
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "MGLU3.SA",
+          "rank": -62,
+          "score": 35.1653310361237
+        },
+        {
+          "ticker": "015760.KS",
+          "rank": -122,
+          "score": 48.07221852784957
+        },
+        {
+          "ticker": "BAYN.DE",
+          "rank": -134,
+          "score": 49.7443332178593
+        },
+        {
+          "ticker": "TXT",
+          "rank": -38,
+          "score": 30.0305014445925
+        },
+        {
+          "ticker": "MCK",
+          "rank": -82,
+          "score": 37.89143949591899
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -72,
+          "score": 36.72030416489584
+        },
+        {
+          "ticker": "VOW3.DE",
+          "rank": -70,
+          "score": 36.58509739435917
+        },
+        {
+          "ticker": "MRK",
+          "rank": -118,
+          "score": 47.503807121202215
+        },
+        {
+          "ticker": "FLR",
+          "rank": -83,
+          "score": 38.40149374013916
+        },
+        {
+          "ticker": "MBG.DE",
+          "rank": -63,
+          "score": 35.347208795583555
+        },
+        {
+          "ticker": "ENI.MI",
+          "rank": -96,
+          "score": 42.540505387578236
+        },
+        {
+          "ticker": "NOC",
+          "rank": -124,
+          "score": 48.704330926028625
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -77,
+          "score": 37.04743667562548
+        }
+      ]
+    },
+    "turnover": 1.12
+  }
+]

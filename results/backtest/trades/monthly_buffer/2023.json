@@ -1,0 +1,768 @@
+[
+  {
+    "rank_date": "2023-05-05",
+    "trade_date": "2023-05-08",
+    "reason": "initial",
+    "long": {
+      "entered": [
+        {
+          "ticker": "RMS.PA",
+          "rank": 1,
+          "score": 95.87612691060967
+        },
+        {
+          "ticker": "MNST",
+          "rank": 2,
+          "score": 88.16406488048274
+        },
+        {
+          "ticker": "CPRT",
+          "rank": 3,
+          "score": 86.89359931639318
+        },
+        {
+          "ticker": "NVO",
+          "rank": 4,
+          "score": 86.65945442985678
+        },
+        {
+          "ticker": "WEGE3.SA",
+          "rank": 5,
+          "score": 83.63286352428533
+        },
+        {
+          "ticker": "FIX",
+          "rank": 6,
+          "score": 83.27852658705856
+        },
+        {
+          "ticker": "VRTX",
+          "rank": 7,
+          "score": 81.07490817569173
+        },
+        {
+          "ticker": "EVVTY",
+          "rank": 8,
+          "score": 77.18507459144354
+        },
+        {
+          "ticker": "LSCC",
+          "rank": 9,
+          "score": 77.04812983985873
+        },
+        {
+          "ticker": "REGN",
+          "rank": 10,
+          "score": 76.44721692221735
+        },
+        {
+          "ticker": "SNPS",
+          "rank": 11,
+          "score": 76.09522612662387
+        },
+        {
+          "ticker": "MC.PA",
+          "rank": 12,
+          "score": 75.96586212632805
+        },
+        {
+          "ticker": "SAP",
+          "rank": 13,
+          "score": 75.40224518925184
+        },
+        {
+          "ticker": "SAP.DE",
+          "rank": 14,
+          "score": 74.57136231677562
+        },
+        {
+          "ticker": "ODFL",
+          "rank": 15,
+          "score": 74.22725965680635
+        },
+        {
+          "ticker": "600066.SS",
+          "rank": 16,
+          "score": 73.66751640371704
+        },
+        {
+          "ticker": "LVMUY",
+          "rank": 17,
+          "score": 73.03503409239498
+        },
+        {
+          "ticker": "OR.PA",
+          "rank": 18,
+          "score": 72.07126387561884
+        },
+        {
+          "ticker": "ISRG",
+          "rank": 19,
+          "score": 70.68001546965485
+        },
+        {
+          "ticker": "META",
+          "rank": 20,
+          "score": 68.54392293662396
+        },
+        {
+          "ticker": "MRK",
+          "rank": 21,
+          "score": 67.23375576059391
+        },
+        {
+          "ticker": "ABEV3.SA",
+          "rank": 22,
+          "score": 65.49889463170977
+        },
+        {
+          "ticker": "ADBE",
+          "rank": 23,
+          "score": 65.40241962967171
+        },
+        {
+          "ticker": "XOM",
+          "rank": 24,
+          "score": 64.89328699351061
+        },
+        {
+          "ticker": "MPWR",
+          "rank": 25,
+          "score": 64.68015531211346
+        }
+      ],
+      "exited": []
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "015760.KS",
+          "rank": -1,
+          "score": 6.414117177132969
+        },
+        {
+          "ticker": "NET",
+          "rank": -2,
+          "score": 8.333333333333334
+        },
+        {
+          "ticker": "CSNA3.SA",
+          "rank": -3,
+          "score": 8.844478302598578
+        },
+        {
+          "ticker": "T",
+          "rank": -4,
+          "score": 8.986233624590485
+        },
+        {
+          "ticker": "MGLU3.SA",
+          "rank": -5,
+          "score": 9.359762870181017
+        },
+        {
+          "ticker": "VNA.DE",
+          "rank": -6,
+          "score": 9.470042986213988
+        },
+        {
+          "ticker": "DELL",
+          "rank": -7,
+          "score": 9.652672112870022
+        },
+        {
+          "ticker": "FLR",
+          "rank": -8,
+          "score": 12.216849783102816
+        },
+        {
+          "ticker": "IBM",
+          "rank": -9,
+          "score": 13.074596470931004
+        },
+        {
+          "ticker": "OSK",
+          "rank": -10,
+          "score": 13.88251614282116
+        },
+        {
+          "ticker": "AMZN",
+          "rank": -11,
+          "score": 17.021627152350618
+        },
+        {
+          "ticker": "TXT",
+          "rank": -12,
+          "score": 17.078590535852378
+        },
+        {
+          "ticker": "DE",
+          "rank": -13,
+          "score": 17.673150396996498
+        },
+        {
+          "ticker": "LOW",
+          "rank": -14,
+          "score": 20.74023602711837
+        },
+        {
+          "ticker": "KLBN11.SA",
+          "rank": -15,
+          "score": 21.151796500584563
+        },
+        {
+          "ticker": "DUK",
+          "rank": -16,
+          "score": 21.18633902664686
+        },
+        {
+          "ticker": "PLTR",
+          "rank": -17,
+          "score": 21.49360696267289
+        },
+        {
+          "ticker": "MO",
+          "rank": -18,
+          "score": 22.222222222222225
+        },
+        {
+          "ticker": "CMCSA",
+          "rank": -19,
+          "score": 22.35608730527564
+        },
+        {
+          "ticker": "AIR.PA",
+          "rank": -20,
+          "score": 22.670112588738235
+        },
+        {
+          "ticker": "DB1.DE",
+          "rank": -21,
+          "score": 22.680486711490943
+        },
+        {
+          "ticker": "CAT",
+          "rank": -22,
+          "score": 23.14507254449207
+        },
+        {
+          "ticker": "KR",
+          "rank": -23,
+          "score": 23.52055441956882
+        },
+        {
+          "ticker": "BA",
+          "rank": -24,
+          "score": 23.817654310242514
+        },
+        {
+          "ticker": "DBOEY",
+          "rank": -25,
+          "score": 24.677094784078452
+        }
+      ],
+      "exited": []
+    },
+    "turnover": 1.0
+  },
+  {
+    "rank_date": "2023-06-02",
+    "trade_date": "2023-06-05",
+    "reason": "buffer_exit",
+    "long": {
+      "entered": [],
+      "exited": []
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "TMUS",
+          "rank": -10,
+          "score": 16.066849994335122
+        },
+        {
+          "ticker": "VOW3.DE",
+          "rank": -16,
+          "score": 20.037393742181237
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "PLTR",
+          "rank": -92,
+          "score": 39.6233139709447
+        },
+        {
+          "ticker": "BA",
+          "rank": -60,
+          "score": 30.982056556344528
+        }
+      ]
+    },
+    "turnover": 0.08
+  },
+  {
+    "rank_date": "2023-07-07",
+    "trade_date": "2023-07-10",
+    "reason": "buffer_exit",
+    "long": {
+      "entered": [
+        {
+          "ticker": "DECK",
+          "rank": 9,
+          "score": 82.01555329738477
+        },
+        {
+          "ticker": "LPX",
+          "rank": 18,
+          "score": 74.43805800632249
+        },
+        {
+          "ticker": "TSM",
+          "rank": 21,
+          "score": 72.55721419303579
+        },
+        {
+          "ticker": "2379.TW",
+          "rank": 22,
+          "score": 72.43577800988155
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "OR.PA",
+          "rank": 42,
+          "score": 66.69014567755474
+        },
+        {
+          "ticker": "MRK",
+          "rank": 77,
+          "score": 56.0702925679621
+        },
+        {
+          "ticker": "ABEV3.SA",
+          "rank": 45,
+          "score": 64.82657996725193
+        },
+        {
+          "ticker": "XOM",
+          "rank": 43,
+          "score": 66.40812453657351
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "J",
+          "rank": -17,
+          "score": 24.780091286149712
+        },
+        {
+          "ticker": "SO",
+          "rank": -19,
+          "score": 24.860860618500425
+        },
+        {
+          "ticker": "CL",
+          "rank": -21,
+          "score": 25.47992062624793
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -22,
+          "score": 25.60552934411959
+        },
+        {
+          "ticker": "NEE",
+          "rank": -23,
+          "score": 25.668985209878958
+        },
+        {
+          "ticker": "MSCI",
+          "rank": -24,
+          "score": 25.67335917034285
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "DE",
+          "rank": -65,
+          "score": 35.445650209820705
+        },
+        {
+          "ticker": "KLBN11.SA",
+          "rank": -60,
+          "score": 34.55720348217555
+        },
+        {
+          "ticker": "MO",
+          "rank": -84,
+          "score": 39.94009944397255
+        },
+        {
+          "ticker": "AIR.PA",
+          "rank": -74,
+          "score": 37.98588630672924
+        },
+        {
+          "ticker": "CAT",
+          "rank": -91,
+          "score": 41.23743652971593
+        },
+        {
+          "ticker": "VOW3.DE",
+          "rank": -54,
+          "score": 32.44061857161898
+        }
+      ]
+    },
+    "turnover": 0.4
+  },
+  {
+    "rank_date": "2023-08-04",
+    "trade_date": "2023-08-07",
+    "reason": "buffer_exit",
+    "long": {
+      "entered": [
+        {
+          "ticker": "6857.T",
+          "rank": 1,
+          "score": 99.97551760950317
+        },
+        {
+          "ticker": "4063.T",
+          "rank": 5,
+          "score": 86.62480512339489
+        },
+        {
+          "ticker": "8035.T",
+          "rank": 14,
+          "score": 79.04670844909224
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 19,
+          "score": 74.56465745249982
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "MC.PA",
+          "rank": 74,
+          "score": 57.80411133183895
+        },
+        {
+          "ticker": "LVMUY",
+          "rank": 59,
+          "score": 60.416661947819144
+        },
+        {
+          "ticker": "LPX",
+          "rank": 41,
+          "score": 65.96074690093398
+        },
+        {
+          "ticker": "TSM",
+          "rank": 42,
+          "score": 65.64876978246133
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "9984.T",
+          "rank": -11,
+          "score": 20.56997093149694
+        },
+        {
+          "ticker": "VOW3.DE",
+          "rank": -15,
+          "score": 23.694861880720754
+        },
+        {
+          "ticker": "FTNT",
+          "rank": -16,
+          "score": 24.347530910357786
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "TXT",
+          "rank": -64,
+          "score": 32.47978714269503
+        },
+        {
+          "ticker": "CMCSA",
+          "rank": -58,
+          "score": 31.628912637058008
+        },
+        {
+          "ticker": "KR",
+          "rank": -52,
+          "score": 30.665523088329348
+        }
+      ]
+    },
+    "turnover": 0.28
+  },
+  {
+    "rank_date": "2023-09-01",
+    "trade_date": "2023-09-05",
+    "reason": "buffer_exit",
+    "long": {
+      "entered": [],
+      "exited": []
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "MCK",
+          "rank": -10,
+          "score": 19.065466051818273
+        },
+        {
+          "ticker": "NKE",
+          "rank": -15,
+          "score": 22.971906472173448
+        },
+        {
+          "ticker": "KR",
+          "rank": -17,
+          "score": 23.52055441956882
+        },
+        {
+          "ticker": "HON",
+          "rank": -18,
+          "score": 25.40871309982504
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "DELL",
+          "rank": -90,
+          "score": 40.099308986519695
+        },
+        {
+          "ticker": "OSK",
+          "rank": -52,
+          "score": 32.325788904122284
+        },
+        {
+          "ticker": "J",
+          "rank": -57,
+          "score": 33.81460070709113
+        },
+        {
+          "ticker": "MSCI",
+          "rank": -43,
+          "score": 30.156712889807384
+        }
+      ]
+    },
+    "turnover": 0.16
+  },
+  {
+    "rank_date": "2023-10-06",
+    "trade_date": "2023-10-11",
+    "reason": "buffer_exit",
+    "long": {
+      "entered": [
+        {
+          "ticker": "2454.TW",
+          "rank": 13,
+          "score": 84.26935054912269
+        },
+        {
+          "ticker": "SAN.PA",
+          "rank": 18,
+          "score": 80.18640239271825
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "MNST",
+          "rank": 47,
+          "score": 67.90072967585847
+        },
+        {
+          "ticker": "WEGE3.SA",
+          "rank": 53,
+          "score": 66.59571424395945
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "SBUX",
+          "rank": -11,
+          "score": 19.74701732700817
+        },
+        {
+          "ticker": "DE",
+          "rank": -13,
+          "score": 21.266724614042033
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "IBM",
+          "rank": -56,
+          "score": 32.55411004965219
+        },
+        {
+          "ticker": "HON",
+          "rank": -46,
+          "score": 30.64122837838759
+        }
+      ]
+    },
+    "turnover": 0.16
+  },
+  {
+    "rank_date": "2023-11-03",
+    "trade_date": "2023-11-06",
+    "reason": "buffer_exit",
+    "long": {
+      "entered": [
+        {
+          "ticker": "4519.T",
+          "rank": 8,
+          "score": 92.31276024254574
+        },
+        {
+          "ticker": "NTES",
+          "rank": 11,
+          "score": 90.37837017309614
+        },
+        {
+          "ticker": "GOOG",
+          "rank": 14,
+          "score": 87.69268434405257
+        },
+        {
+          "ticker": "GOOGL",
+          "rank": 15,
+          "score": 87.37454127497607
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "EVVTY",
+          "rank": 42,
+          "score": 70.22060507402354
+        },
+        {
+          "ticker": "LSCC",
+          "rank": 67,
+          "score": 62.46378831188307
+        },
+        {
+          "ticker": "ISRG",
+          "rank": 54,
+          "score": 67.50645414304056
+        },
+        {
+          "ticker": "SAN.PA",
+          "rank": 96,
+          "score": 55.992902336038924
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "MCD",
+          "rank": -13,
+          "score": 21.625312553113933
+        },
+        {
+          "ticker": "OSK",
+          "rank": -14,
+          "score": 21.731769468818538
+        },
+        {
+          "ticker": "MO",
+          "rank": -15,
+          "score": 22.241614919429125
+        },
+        {
+          "ticker": "HON",
+          "rank": -16,
+          "score": 23.102119234459888
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -22,
+          "score": 24.69922438560781
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "AMZN",
+          "rank": -104,
+          "score": 41.71167797160157
+        },
+        {
+          "ticker": "SO",
+          "rank": -65,
+          "score": 32.8984365633852
+        },
+        {
+          "ticker": "CL",
+          "rank": -64,
+          "score": 32.40370676600275
+        },
+        {
+          "ticker": "NKE",
+          "rank": -78,
+          "score": 35.90619095660825
+        },
+        {
+          "ticker": "SBUX",
+          "rank": -59,
+          "score": 31.42362415578559
+        }
+      ]
+    },
+    "turnover": 0.36
+  },
+  {
+    "rank_date": "2023-12-01",
+    "trade_date": "2023-12-04",
+    "reason": "buffer_exit",
+    "long": {
+      "entered": [],
+      "exited": []
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "SBUX",
+          "rank": -5,
+          "score": 14.3414422203045
+        },
+        {
+          "ticker": "BAS.DE",
+          "rank": -15,
+          "score": 20.8169617605163
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "MCD",
+          "rank": -42,
+          "score": 28.971407306297056
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -62,
+          "score": 31.378225543680628
+        }
+      ]
+    },
+    "turnover": 0.08
+  }
+]

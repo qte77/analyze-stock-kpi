@@ -1,0 +1,1448 @@
+[
+  {
+    "rank_date": "2025-01-03",
+    "trade_date": "2025-01-06",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "4519.T",
+          "rank": 21,
+          "score": 77.95345864344033
+        },
+        {
+          "ticker": "2454.TW",
+          "rank": 23,
+          "score": 76.54323251398115
+        },
+        {
+          "ticker": "SAF.PA",
+          "rank": 24,
+          "score": 75.00386063420883
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "VRTX",
+          "rank": 50,
+          "score": 65.29507934369978
+        },
+        {
+          "ticker": "REA.AX",
+          "rank": 37,
+          "score": 69.68914090830931
+        },
+        {
+          "ticker": "PG",
+          "rank": 36,
+          "score": 69.85997875074807
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "RICK",
+          "rank": -10,
+          "score": 19.26216428863759
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -12,
+          "score": 20.35620542810874
+        },
+        {
+          "ticker": "DE",
+          "rank": -22,
+          "score": 23.527343558625322
+        },
+        {
+          "ticker": "CI",
+          "rank": -24,
+          "score": 24.943603925737467
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "MMS",
+          "rank": -66,
+          "score": 34.17824506999758
+        },
+        {
+          "ticker": "AIR.PA",
+          "rank": -26,
+          "score": 25.16398372825569
+        },
+        {
+          "ticker": "8053.T",
+          "rank": -35,
+          "score": 28.9601300284147
+        },
+        {
+          "ticker": "RI.PA",
+          "rank": -29,
+          "score": 26.59938948375817
+        }
+      ]
+    },
+    "turnover": 0.28
+  },
+  {
+    "rank_date": "2025-02-07",
+    "trade_date": "2025-02-10",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "TSLA",
+          "rank": 18,
+          "score": 77.44306050032459
+        },
+        {
+          "ticker": "LPX",
+          "rank": 20,
+          "score": 76.05672465884075
+        },
+        {
+          "ticker": "BSX",
+          "rank": 21,
+          "score": 74.88209700474196
+        },
+        {
+          "ticker": "EL.PA",
+          "rank": 22,
+          "score": 74.87754407051145
+        },
+        {
+          "ticker": "REA.AX",
+          "rank": 23,
+          "score": 74.79709017996373
+        },
+        {
+          "ticker": "002001.SZ",
+          "rank": 25,
+          "score": 74.56800658709403
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "DECK",
+          "rank": 57,
+          "score": 61.37046087336453
+        },
+        {
+          "ticker": "NOW",
+          "rank": 35,
+          "score": 69.26891024771984
+        },
+        {
+          "ticker": "ANET",
+          "rank": 37,
+          "score": 68.12496540057758
+        },
+        {
+          "ticker": "600066.SS",
+          "rank": 29,
+          "score": 72.95348562255806
+        },
+        {
+          "ticker": "NVDA",
+          "rank": 39,
+          "score": 66.70132566644769
+        },
+        {
+          "ticker": "MSFT",
+          "rank": 48,
+          "score": 64.30935936174689
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "MSCI",
+          "rank": -11,
+          "score": 20.32879901019655
+        },
+        {
+          "ticker": "BAH",
+          "rank": -14,
+          "score": 21.47213400378205
+        },
+        {
+          "ticker": "AIR.PA",
+          "rank": -15,
+          "score": 22.243525200705715
+        },
+        {
+          "ticker": "DELL",
+          "rank": -17,
+          "score": 22.669767006580518
+        },
+        {
+          "ticker": "8053.T",
+          "rank": -24,
+          "score": 25.164113384612673
+        },
+        {
+          "ticker": "RI.PA",
+          "rank": -25,
+          "score": 26.59938948375817
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "BAS.DE",
+          "rank": -31,
+          "score": 27.688448259078587
+        },
+        {
+          "ticker": "SBUX",
+          "rank": -29,
+          "score": 27.546021447341815
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -26,
+          "score": 26.753535401938773
+        },
+        {
+          "ticker": "ENI.MI",
+          "rank": -28,
+          "score": 27.38246728958082
+        },
+        {
+          "ticker": "NOC",
+          "rank": -33,
+          "score": 27.833991554660134
+        },
+        {
+          "ticker": "DE",
+          "rank": -51,
+          "score": 30.600243815163697
+        }
+      ]
+    },
+    "turnover": 0.48
+  },
+  {
+    "rank_date": "2025-03-07",
+    "trade_date": "2025-03-10",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "SAN.PA",
+          "rank": 10,
+          "score": 76.97763888251734
+        },
+        {
+          "ticker": "VRTX",
+          "rank": 11,
+          "score": 76.13427958392275
+        },
+        {
+          "ticker": "CSCO",
+          "rank": 14,
+          "score": 74.81601968236511
+        },
+        {
+          "ticker": "CME",
+          "rank": 17,
+          "score": 74.30869620667094
+        },
+        {
+          "ticker": "V",
+          "rank": 18,
+          "score": 73.29842487042184
+        },
+        {
+          "ticker": "PRX.AS",
+          "rank": 19,
+          "score": 72.74022426155003
+        },
+        {
+          "ticker": "GILD",
+          "rank": 20,
+          "score": 72.0595064676411
+        },
+        {
+          "ticker": "WMT",
+          "rank": 21,
+          "score": 71.75719789412783
+        },
+        {
+          "ticker": "207940.KS",
+          "rank": 24,
+          "score": 71.36984005217876
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "TSM",
+          "rank": 26,
+          "score": 69.71949304744915
+        },
+        {
+          "ticker": "2454.TW",
+          "rank": 32,
+          "score": 67.17075836500544
+        },
+        {
+          "ticker": "4519.T",
+          "rank": 27,
+          "score": 69.48745029421721
+        },
+        {
+          "ticker": "TSLA",
+          "rank": 28,
+          "score": 68.86433206613907
+        },
+        {
+          "ticker": "FIX",
+          "rank": 65,
+          "score": 57.79795792746637
+        },
+        {
+          "ticker": "LPX",
+          "rank": 69,
+          "score": 57.320146603501975
+        },
+        {
+          "ticker": "REA.AX",
+          "rank": 35,
+          "score": 66.3651043175995
+        },
+        {
+          "ticker": "CPRT",
+          "rank": 51,
+          "score": 62.26503833305577
+        },
+        {
+          "ticker": "002001.SZ",
+          "rank": 30,
+          "score": 68.19440061869518
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "9984.T",
+          "rank": -8,
+          "score": 14.429096422342901
+        },
+        {
+          "ticker": "KLBN11.SA",
+          "rank": -12,
+          "score": 18.33365837696864
+        },
+        {
+          "ticker": "LOW",
+          "rank": -14,
+          "score": 19.375457930410004
+        },
+        {
+          "ticker": "NET",
+          "rank": -17,
+          "score": 20.447086628926744
+        },
+        {
+          "ticker": "LDOS",
+          "rank": -18,
+          "score": 20.605042564563945
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "RENT3.SA",
+          "rank": -27,
+          "score": 23.66000057481918
+        },
+        {
+          "ticker": "CI",
+          "rank": -30,
+          "score": 24.943603925737467
+        },
+        {
+          "ticker": "CCI",
+          "rank": -32,
+          "score": 25.142549793652293
+        },
+        {
+          "ticker": "8053.T",
+          "rank": -26,
+          "score": 23.15175259875188
+        },
+        {
+          "ticker": "RI.PA",
+          "rank": -34,
+          "score": 26.59938948375817
+        }
+      ]
+    },
+    "turnover": 0.56
+  },
+  {
+    "rank_date": "2025-04-04",
+    "trade_date": "2025-04-07",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "4519.T",
+          "rank": 6,
+          "score": 73.93121174806521
+        },
+        {
+          "ticker": "ABEV3.SA",
+          "rank": 10,
+          "score": 71.59199998057107
+        },
+        {
+          "ticker": "002001.SZ",
+          "rank": 11,
+          "score": 70.29267043433516
+        },
+        {
+          "ticker": "ABT",
+          "rank": 13,
+          "score": 69.87783814852887
+        },
+        {
+          "ticker": "2454.TW",
+          "rank": 14,
+          "score": 69.10668999804125
+        },
+        {
+          "ticker": "NTES",
+          "rank": 15,
+          "score": 67.97331373478998
+        },
+        {
+          "ticker": "NFLX",
+          "rank": 19,
+          "score": 67.08409512686372
+        },
+        {
+          "ticker": "LPX",
+          "rank": 20,
+          "score": 66.9252754942971
+        },
+        {
+          "ticker": "MNST",
+          "rank": 21,
+          "score": 66.58824491311536
+        },
+        {
+          "ticker": "ADBE",
+          "rank": 24,
+          "score": 65.97496706192358
+        },
+        {
+          "ticker": "EVVTY",
+          "rank": 25,
+          "score": 65.45552532937133
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "GOOG",
+          "rank": 26,
+          "score": 65.21533175894017
+        },
+        {
+          "ticker": "GOOGL",
+          "rank": 28,
+          "score": 64.98905431660056
+        },
+        {
+          "ticker": "SAN.PA",
+          "rank": 40,
+          "score": 61.240283642869116
+        },
+        {
+          "ticker": "VRTX",
+          "rank": 76,
+          "score": 52.901557502556805
+        },
+        {
+          "ticker": "CSCO",
+          "rank": 56,
+          "score": 58.073584996077216
+        },
+        {
+          "ticker": "EL.PA",
+          "rank": 49,
+          "score": 59.46384892014952
+        },
+        {
+          "ticker": "V",
+          "rank": 32,
+          "score": 63.59713937737516
+        },
+        {
+          "ticker": "PRX.AS",
+          "rank": 65,
+          "score": 56.07870293394796
+        },
+        {
+          "ticker": "GILD",
+          "rank": 82,
+          "score": 51.66939151684011
+        },
+        {
+          "ticker": "6098.T",
+          "rank": 45,
+          "score": 60.147867259890035
+        },
+        {
+          "ticker": "SAF.PA",
+          "rank": 60,
+          "score": 57.04225014109323
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "SBUX",
+          "rank": -11,
+          "score": 16.19491516064583
+        },
+        {
+          "ticker": "BAS.DE",
+          "rank": -12,
+          "score": 16.62735919179794
+        },
+        {
+          "ticker": "CCI",
+          "rank": -17,
+          "score": 20.095308326017044
+        },
+        {
+          "ticker": "HON",
+          "rank": -19,
+          "score": 20.34048050558735
+        },
+        {
+          "ticker": "8053.T",
+          "rank": -20,
+          "score": 20.694946560859282
+        },
+        {
+          "ticker": "CI",
+          "rank": -22,
+          "score": 20.959766024084526
+        },
+        {
+          "ticker": "DE",
+          "rank": -23,
+          "score": 21.01699045372275
+        },
+        {
+          "ticker": "KLAC",
+          "rank": -25,
+          "score": 22.097723895454322
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "FLR",
+          "rank": -100,
+          "score": 38.40149374013916
+        },
+        {
+          "ticker": "KBR",
+          "rank": -32,
+          "score": 23.537632247364012
+        },
+        {
+          "ticker": "MCK",
+          "rank": -28,
+          "score": 22.802608904859515
+        },
+        {
+          "ticker": "LDOS",
+          "rank": -101,
+          "score": 38.460800170624886
+        },
+        {
+          "ticker": "MRK",
+          "rank": -105,
+          "score": 39.443833306600396
+        },
+        {
+          "ticker": "NKE",
+          "rank": -27,
+          "score": 22.354561667294476
+        },
+        {
+          "ticker": "MBG.DE",
+          "rank": -29,
+          "score": 22.87809432962328
+        },
+        {
+          "ticker": "SZU.DE",
+          "rank": -30,
+          "score": 23.06801064078441
+        }
+      ]
+    },
+    "turnover": 0.76
+  },
+  {
+    "rank_date": "2025-05-02",
+    "trade_date": "2025-05-07",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "TSM",
+          "rank": 14,
+          "score": 74.38265594026396
+        },
+        {
+          "ticker": "CPRT",
+          "rank": 17,
+          "score": 73.03656878247553
+        },
+        {
+          "ticker": "V",
+          "rank": 19,
+          "score": 73.01777351434443
+        },
+        {
+          "ticker": "MSFT",
+          "rank": 24,
+          "score": 71.38782489775242
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 31,
+          "score": 67.81418063995714
+        },
+        {
+          "ticker": "207940.KS",
+          "rank": 26,
+          "score": 70.72072436449771
+        },
+        {
+          "ticker": "ADBE",
+          "rank": 38,
+          "score": 65.97496706192358
+        },
+        {
+          "ticker": "EVVTY",
+          "rank": 35,
+          "score": 66.66666666666667
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "SUZB3.SA",
+          "rank": -4,
+          "score": 13.359552558039788
+        },
+        {
+          "ticker": "005380.KS",
+          "rank": -11,
+          "score": 18.194035734979668
+        },
+        {
+          "ticker": "MBG.DE",
+          "rank": -12,
+          "score": 18.367206917468902
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -16,
+          "score": 19.927966701054412
+        },
+        {
+          "ticker": "ENI.MI",
+          "rank": -20,
+          "score": 21.28964732972095
+        },
+        {
+          "ticker": "KER.PA",
+          "rank": -22,
+          "score": 21.71961324967535
+        },
+        {
+          "ticker": "NKE",
+          "rank": -24,
+          "score": 22.354561667294476
+        },
+        {
+          "ticker": "SZU.DE",
+          "rank": -25,
+          "score": 23.06801064078441
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "015760.KS",
+          "rank": -33,
+          "score": 26.847311107128988
+        },
+        {
+          "ticker": "NET",
+          "rank": -26,
+          "score": 23.11434391432466
+        },
+        {
+          "ticker": "SBUX",
+          "rank": -30,
+          "score": 25.355471116882928
+        },
+        {
+          "ticker": "MSCI",
+          "rank": -66,
+          "score": 32.759344452838924
+        },
+        {
+          "ticker": "CCI",
+          "rank": -37,
+          "score": 27.003988688572665
+        },
+        {
+          "ticker": "HON",
+          "rank": -47,
+          "score": 29.11373717473181
+        },
+        {
+          "ticker": "DE",
+          "rank": -52,
+          "score": 30.276290385831008
+        },
+        {
+          "ticker": "KLAC",
+          "rank": -34,
+          "score": 26.87867343500508
+        }
+      ]
+    },
+    "turnover": 0.48
+  },
+  {
+    "rank_date": "2025-06-06",
+    "trade_date": "2025-06-09",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "CSCO",
+          "rank": 13,
+          "score": 76.64146778904349
+        },
+        {
+          "ticker": "INTU",
+          "rank": 16,
+          "score": 75.73779965827627
+        },
+        {
+          "ticker": "FIX",
+          "rank": 18,
+          "score": 74.60510050550751
+        },
+        {
+          "ticker": "033780.KS",
+          "rank": 20,
+          "score": 73.36686819138181
+        },
+        {
+          "ticker": "NOW",
+          "rank": 21,
+          "score": 73.30868906863495
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "COST",
+          "rank": 27,
+          "score": 68.97902593097557
+        },
+        {
+          "ticker": "BSX",
+          "rank": 29,
+          "score": 68.05030898675028
+        },
+        {
+          "ticker": "2454.TW",
+          "rank": 45,
+          "score": 62.63564400002591
+        },
+        {
+          "ticker": "CPRT",
+          "rank": 47,
+          "score": 62.26503833305577
+        },
+        {
+          "ticker": "LPX",
+          "rank": 46,
+          "score": 62.4482087996347
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "CCI",
+          "rank": -10,
+          "score": 18.540688762381727
+        },
+        {
+          "ticker": "MCK",
+          "rank": -15,
+          "score": 19.736517347244472
+        },
+        {
+          "ticker": "KBR",
+          "rank": -25,
+          "score": 23.537632247364012
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "SUZB3.SA",
+          "rank": -31,
+          "score": 25.919292357828272
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -28,
+          "score": 24.24508469178095
+        },
+        {
+          "ticker": "ENI.MI",
+          "rank": -27,
+          "score": 24.086140604452172
+        }
+      ]
+    },
+    "turnover": 0.32
+  },
+  {
+    "rank_date": "2025-07-04",
+    "trade_date": "2025-07-07",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "035420.KS",
+          "rank": 20,
+          "score": 71.58535160098783
+        },
+        {
+          "ticker": "LPX",
+          "rank": 24,
+          "score": 69.80977639238664
+        },
+        {
+          "ticker": "STRL",
+          "rank": 25,
+          "score": 69.74393348338548
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "INTU",
+          "rank": 29,
+          "score": 67.80037428592081
+        },
+        {
+          "ticker": "NOW",
+          "rank": 28,
+          "score": 67.88609444676256
+        },
+        {
+          "ticker": "WEGE3.SA",
+          "rank": 33,
+          "score": 66.01466371150008
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "SUZB3.SA",
+          "rank": -5,
+          "score": 13.359552558039788
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -14,
+          "score": 20.579849771272468
+        },
+        {
+          "ticker": "ENI.MI",
+          "rank": -24,
+          "score": 24.397281207399306
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "AIR.PA",
+          "rank": -54,
+          "score": 31.85000761187527
+        },
+        {
+          "ticker": "BAH",
+          "rank": -26,
+          "score": 24.818564614742055
+        },
+        {
+          "ticker": "NKE",
+          "rank": -31,
+          "score": 27.116674328839945
+        }
+      ]
+    },
+    "turnover": 0.24
+  },
+  {
+    "rank_date": "2025-08-01",
+    "trade_date": "2025-08-04",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "6857.T",
+          "rank": 7,
+          "score": 81.75477877975771
+        },
+        {
+          "ticker": "PRX.AS",
+          "rank": 11,
+          "score": 78.47361204952266
+        },
+        {
+          "ticker": "GOOGL",
+          "rank": 17,
+          "score": 72.05877166499974
+        },
+        {
+          "ticker": "BSX",
+          "rank": 19,
+          "score": 71.89959602586757
+        },
+        {
+          "ticker": "GOOG",
+          "rank": 20,
+          "score": 71.77372196459797
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 23,
+          "score": 70.77801450149367
+        },
+        {
+          "ticker": "INTU",
+          "rank": 25,
+          "score": 70.20504467305001
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "ABT",
+          "rank": 27,
+          "score": 70.06197365245784
+        },
+        {
+          "ticker": "ABEV3.SA",
+          "rank": 40,
+          "score": 64.97549764432632
+        },
+        {
+          "ticker": "RMS.PA",
+          "rank": 26,
+          "score": 70.09000247756875
+        },
+        {
+          "ticker": "SAP.DE",
+          "rank": 32,
+          "score": 67.88069823950043
+        },
+        {
+          "ticker": "035420.KS",
+          "rank": 52,
+          "score": 62.04901676446335
+        },
+        {
+          "ticker": "ISRG",
+          "rank": 43,
+          "score": 63.938521297034065
+        },
+        {
+          "ticker": "LPX",
+          "rank": 60,
+          "score": 60.010653097631455
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "BMY",
+          "rank": -3,
+          "score": 12.746745963626237
+        },
+        {
+          "ticker": "MSCI",
+          "rank": -21,
+          "score": 22.49112084495796
+        },
+        {
+          "ticker": "LMT",
+          "rank": -25,
+          "score": 24.05278964171681
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "9984.T",
+          "rank": -81,
+          "score": 36.13161830677681
+        },
+        {
+          "ticker": "8053.T",
+          "rank": -42,
+          "score": 30.159031346535766
+        },
+        {
+          "ticker": "ENI.MI",
+          "rank": -34,
+          "score": 28.403936201814748
+        }
+      ]
+    },
+    "turnover": 0.4
+  },
+  {
+    "rank_date": "2025-09-05",
+    "trade_date": "2025-09-08",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "600066.SS",
+          "rank": 16,
+          "score": 76.23735031095133
+        },
+        {
+          "ticker": "002001.SZ",
+          "rank": 17,
+          "score": 76.15136612197801
+        },
+        {
+          "ticker": "2454.TW",
+          "rank": 19,
+          "score": 74.84438020181712
+        },
+        {
+          "ticker": "ABT",
+          "rank": 22,
+          "score": 71.33808124812374
+        },
+        {
+          "ticker": "RMS.PA",
+          "rank": 23,
+          "score": 70.98487144082887
+        },
+        {
+          "ticker": "SNPS",
+          "rank": 24,
+          "score": 70.81751923120382
+        },
+        {
+          "ticker": "012330.KS",
+          "rank": 25,
+          "score": 70.52434752402927
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "SAP",
+          "rank": 32,
+          "score": 66.86894960676538
+        },
+        {
+          "ticker": "4519.T",
+          "rank": 33,
+          "score": 66.7371499515907
+        },
+        {
+          "ticker": "BSX",
+          "rank": 31,
+          "score": 67.30967161299164
+        },
+        {
+          "ticker": "033780.KS",
+          "rank": 39,
+          "score": 65.61105347078627
+        },
+        {
+          "ticker": "WMT",
+          "rank": 40,
+          "score": 64.7595266403175
+        },
+        {
+          "ticker": "V",
+          "rank": 29,
+          "score": 68.23098670742215
+        },
+        {
+          "ticker": "INTU",
+          "rank": 46,
+          "score": 63.615438088018635
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "SBUX",
+          "rank": -8,
+          "score": 14.85491988500391
+        },
+        {
+          "ticker": "NKE",
+          "rank": -9,
+          "score": 16.54260849631853
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -21,
+          "score": 22.828993737558392
+        },
+        {
+          "ticker": "AMGN",
+          "rank": -24,
+          "score": 24.274173734225936
+        },
+        {
+          "ticker": "3382.T",
+          "rank": -25,
+          "score": 24.451850128039343
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "LOW",
+          "rank": -28,
+          "score": 25.81652833010554
+        },
+        {
+          "ticker": "MCK",
+          "rank": -54,
+          "score": 32.23612466884014
+        },
+        {
+          "ticker": "VOW3.DE",
+          "rank": -36,
+          "score": 27.68158876229249
+        },
+        {
+          "ticker": "KER.PA",
+          "rank": -27,
+          "score": 25.25067712187008
+        },
+        {
+          "ticker": "BA",
+          "rank": -40,
+          "score": 29.73223775443391
+        }
+      ]
+    },
+    "turnover": 0.48000000000000004
+  },
+  {
+    "rank_date": "2025-10-03",
+    "trade_date": "2025-10-14",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "GMEXICOB.MX",
+          "rank": 15,
+          "score": 76.76508436404727
+        },
+        {
+          "ticker": "005930.KS",
+          "rank": 17,
+          "score": 74.50823169748914
+        },
+        {
+          "ticker": "V",
+          "rank": 19,
+          "score": 70.67236266613263
+        },
+        {
+          "ticker": "8035.T",
+          "rank": 22,
+          "score": 70.03315219684002
+        },
+        {
+          "ticker": "035420.KS",
+          "rank": 23,
+          "score": 69.96141253989775
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "600066.SS",
+          "rank": 60,
+          "score": 58.97270134764773
+        },
+        {
+          "ticker": "002001.SZ",
+          "rank": 46,
+          "score": 62.754997792277756
+        },
+        {
+          "ticker": "2454.TW",
+          "rank": 32,
+          "score": 66.04578893231728
+        },
+        {
+          "ticker": "SNPS",
+          "rank": 51,
+          "score": 61.48057510336045
+        },
+        {
+          "ticker": "012330.KS",
+          "rank": 40,
+          "score": 64.45393740798501
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "DSDVY",
+          "rank": -9,
+          "score": 15.486354727186887
+        },
+        {
+          "ticker": "LOW",
+          "rank": -10,
+          "score": 15.743728526671854
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "AMGN",
+          "rank": -28,
+          "score": 24.631459834562776
+        },
+        {
+          "ticker": "3382.T",
+          "rank": -27,
+          "score": 24.618670049821223
+        }
+      ]
+    },
+    "turnover": 0.28
+  },
+  {
+    "rank_date": "2025-11-07",
+    "trade_date": "2025-11-10",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "600066.SS",
+          "rank": 16,
+          "score": 74.12317630588898
+        },
+        {
+          "ticker": "MPWR",
+          "rank": 17,
+          "score": 73.95009052734191
+        },
+        {
+          "ticker": "028260.KS",
+          "rank": 18,
+          "score": 72.93092625274197
+        },
+        {
+          "ticker": "033780.KS",
+          "rank": 22,
+          "score": 70.77218595321655
+        },
+        {
+          "ticker": "4519.T",
+          "rank": 24,
+          "score": 68.61152508082144
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "NFLX",
+          "rank": 28,
+          "score": 66.40084438435363
+        },
+        {
+          "ticker": "ABT",
+          "rank": 32,
+          "score": 66.11819107820605
+        },
+        {
+          "ticker": "V",
+          "rank": 53,
+          "score": 60.33431017778445
+        },
+        {
+          "ticker": "RMS.PA",
+          "rank": 35,
+          "score": 65.39462068405335
+        },
+        {
+          "ticker": "CSCO",
+          "rank": 50,
+          "score": 60.932072778352044
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "HON",
+          "rank": -13,
+          "score": 19.18238308487918
+        },
+        {
+          "ticker": "3382.T",
+          "rank": -24,
+          "score": 24.451850128039343
+        },
+        {
+          "ticker": "BAH",
+          "rank": -25,
+          "score": 24.818564614742055
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "005380.KS",
+          "rank": -86,
+          "score": 37.611941358547725
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -72,
+          "score": 35.185773554294364
+        },
+        {
+          "ticker": "MBG.DE",
+          "rank": -44,
+          "score": 30.429123971186858
+        }
+      ]
+    },
+    "turnover": 0.32
+  },
+  {
+    "rank_date": "2025-12-05",
+    "trade_date": "2025-12-08",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 18,
+          "score": 72.88575678836264
+        },
+        {
+          "ticker": "012330.KS",
+          "rank": 21,
+          "score": 69.98436536941932
+        },
+        {
+          "ticker": "LRCX",
+          "rank": 23,
+          "score": 67.55732229239605
+        },
+        {
+          "ticker": "RMS.PA",
+          "rank": 24,
+          "score": 67.43896169663061
+        },
+        {
+          "ticker": "ASML",
+          "rank": 25,
+          "score": 67.16392522566744
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "CME",
+          "rank": 43,
+          "score": 64.03768093478404
+        },
+        {
+          "ticker": "STRL",
+          "rank": 45,
+          "score": 63.56452830050147
+        },
+        {
+          "ticker": "2371.T",
+          "rank": 27,
+          "score": 66.66666666666667
+        },
+        {
+          "ticker": "033780.KS",
+          "rank": 36,
+          "score": 64.77959509971423
+        },
+        {
+          "ticker": "035420.KS",
+          "rank": 62,
+          "score": 59.887294988867815
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "DE",
+          "rank": -16,
+          "score": 21.16928937371854
+        },
+        {
+          "ticker": "BKNG",
+          "rank": -22,
+          "score": 24.082305278642448
+        },
+        {
+          "ticker": "BA",
+          "rank": -25,
+          "score": 25.352185051280486
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "MGLU3.SA",
+          "rank": -35,
+          "score": 28.689844456657323
+        },
+        {
+          "ticker": "BAYN.DE",
+          "rank": -112,
+          "score": 43.76291707593372
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -62,
+          "score": 33.116812102816695
+        }
+      ]
+    },
+    "turnover": 0.32
+  }
+]

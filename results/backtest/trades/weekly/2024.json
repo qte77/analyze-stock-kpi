@@ -1,0 +1,3526 @@
+[
+  {
+    "rank_date": "2024-01-05",
+    "trade_date": "2024-01-09",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "TSLA",
+          "rank": 17,
+          "score": 86.39618515090467
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "005930.KS",
+          "rank": 29,
+          "score": 80.80473026254676
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "BAS.DE",
+          "rank": -11,
+          "score": 20.93858212636845
+        },
+        {
+          "ticker": "BA",
+          "rank": -17,
+          "score": 24.123583411665937
+        },
+        {
+          "ticker": "OSK",
+          "rank": -18,
+          "score": 25.600689300795484
+        },
+        {
+          "ticker": "MBG.DE",
+          "rank": -23,
+          "score": 26.316627719818936
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "3382.T",
+          "rank": -34,
+          "score": 28.547155178029225
+        },
+        {
+          "ticker": "CI",
+          "rank": -54,
+          "score": 32.20022553049336
+        },
+        {
+          "ticker": "FTNT",
+          "rank": -35,
+          "score": 28.59916916901696
+        },
+        {
+          "ticker": "MCK",
+          "rank": -41,
+          "score": 30.67036984804115
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-01-12",
+    "trade_date": "2024-01-16",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "REGN",
+          "rank": 17,
+          "score": 84.74514756837993
+        },
+        {
+          "ticker": "4661.T",
+          "rank": 22,
+          "score": 83.69687135678375
+        },
+        {
+          "ticker": "6273.T",
+          "rank": 23,
+          "score": 83.44023226766119
+        },
+        {
+          "ticker": "ANET",
+          "rank": 25,
+          "score": 82.19291754354099
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "TSLA",
+          "rank": 30,
+          "score": 79.44488415068476
+        },
+        {
+          "ticker": "MPWR",
+          "rank": 27,
+          "score": 80.98156085284553
+        },
+        {
+          "ticker": "ODFL",
+          "rank": 29,
+          "score": 80.74553747963924
+        },
+        {
+          "ticker": "SAP",
+          "rank": 31,
+          "score": 79.26654861874648
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "CSNA3.SA",
+          "rank": -13,
+          "score": 20.795492365262017
+        },
+        {
+          "ticker": "TMUS",
+          "rank": -22,
+          "score": 24.49063855273111
+        },
+        {
+          "ticker": "MSCI",
+          "rank": -25,
+          "score": 25.797844792660687
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "BAYN.DE",
+          "rank": -26,
+          "score": 26.108240687000485
+        },
+        {
+          "ticker": "LMT",
+          "rank": -48,
+          "score": 30.783201663937334
+        },
+        {
+          "ticker": "SO",
+          "rank": -28,
+          "score": 27.195132257011256
+        }
+      ]
+    },
+    "turnover": 0.28
+  },
+  {
+    "rank_date": "2024-01-19",
+    "trade_date": "2024-01-22",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "MPWR",
+          "rank": 16,
+          "score": 85.97738325183961
+        },
+        {
+          "ticker": "ACN",
+          "rank": 21,
+          "score": 84.49380682271433
+        },
+        {
+          "ticker": "SAP",
+          "rank": 25,
+          "score": 82.36420212996703
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "4661.T",
+          "rank": 32,
+          "score": 80.4679607166394
+        },
+        {
+          "ticker": "6273.T",
+          "rank": 28,
+          "score": 81.86211203710064
+        },
+        {
+          "ticker": "ANET",
+          "rank": 26,
+          "score": 82.19291754354099
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "3382.T",
+          "rank": -20,
+          "score": 24.28957274161254
+        },
+        {
+          "ticker": "BAYN.DE",
+          "rank": -24,
+          "score": 26.108240687000485
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "TMUS",
+          "rank": -31,
+          "score": 28.612008725325353
+        },
+        {
+          "ticker": "MSCI",
+          "rank": -26,
+          "score": 27.59123909595959
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-01-26",
+    "trade_date": "2024-01-29",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "ISRG",
+          "rank": 24,
+          "score": 82.77153166176369
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "MPWR",
+          "rank": 29,
+          "score": 79.36248511019765
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "MSCI",
+          "rank": -23,
+          "score": 24.996537346494886
+        },
+        {
+          "ticker": "TMUS",
+          "rank": -24,
+          "score": 25.019053528870984
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "NEE",
+          "rank": -26,
+          "score": 25.668985209878958
+        },
+        {
+          "ticker": "BAYN.DE",
+          "rank": -28,
+          "score": 26.108240687000485
+        }
+      ]
+    },
+    "turnover": 0.12
+  },
+  {
+    "rank_date": "2024-02-02",
+    "trade_date": "2024-02-05",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "ANET",
+          "rank": 20,
+          "score": 82.19291754354099
+        },
+        {
+          "ticker": "DECK",
+          "rank": 21,
+          "score": 82.01555329738477
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 25,
+          "score": 79.26527417589547
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "GOOGL",
+          "rank": 26,
+          "score": 78.51966309078219
+        },
+        {
+          "ticker": "GOOG",
+          "rank": 27,
+          "score": 78.3663501998481
+        },
+        {
+          "ticker": "INTU",
+          "rank": 28,
+          "score": 78.25275780023911
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "NET",
+          "rank": -15,
+          "score": 20.46023796245924
+        },
+        {
+          "ticker": "DBOEY",
+          "rank": -23,
+          "score": 23.841322054998717
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -25,
+          "score": 24.69922438560781
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "3382.T",
+          "rank": -32,
+          "score": 26.273228545874847
+        },
+        {
+          "ticker": "TMUS",
+          "rank": -30,
+          "score": 25.97826820556389
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -27,
+          "score": 25.60552934411959
+        }
+      ]
+    },
+    "turnover": 0.24
+  },
+  {
+    "rank_date": "2024-02-09",
+    "trade_date": "2024-02-15",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "GOOG",
+          "rank": 12,
+          "score": 90.59239203215397
+        },
+        {
+          "ticker": "GOOGL",
+          "rank": 13,
+          "score": 90.51089756306358
+        },
+        {
+          "ticker": "INTU",
+          "rank": 16,
+          "score": 86.07825926808123
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "2379.TW",
+          "rank": 31,
+          "score": 79.47534710462207
+        },
+        {
+          "ticker": "DECK",
+          "rank": 26,
+          "score": 82.01555329738477
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 32,
+          "score": 79.26527417589547
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "MMS",
+          "rank": -23,
+          "score": 25.51005649396735
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -24,
+          "score": 25.60552934411959
+        },
+        {
+          "ticker": "NEE",
+          "rank": -25,
+          "score": 25.668985209878958
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "9984.T",
+          "rank": -32,
+          "score": 27.69449627093111
+        },
+        {
+          "ticker": "NET",
+          "rank": -47,
+          "score": 31.04135605136293
+        },
+        {
+          "ticker": "DBOEY",
+          "rank": -27,
+          "score": 25.883674223514067
+        }
+      ]
+    },
+    "turnover": 0.24
+  },
+  {
+    "rank_date": "2024-02-16",
+    "trade_date": "2024-02-20",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "TSM",
+          "rank": 25,
+          "score": 82.29226790257104
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "ANET",
+          "rank": 34,
+          "score": 77.77145264189552
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "NET",
+          "rank": -19,
+          "score": 23.726554301814303
+        },
+        {
+          "ticker": "KBR",
+          "rank": -20,
+          "score": 24.134646136376364
+        },
+        {
+          "ticker": "CMCSA",
+          "rank": -22,
+          "score": 24.705722559736575
+        },
+        {
+          "ticker": "FTNT",
+          "rank": -24,
+          "score": 25.14507964447012
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "OSK",
+          "rank": -34,
+          "score": 27.23215508880172
+        },
+        {
+          "ticker": "HON",
+          "rank": -27,
+          "score": 25.393250426933076
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -29,
+          "score": 25.60552934411959
+        },
+        {
+          "ticker": "NEE",
+          "rank": -31,
+          "score": 25.668985209878958
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-02-23",
+    "trade_date": "2024-02-26",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "2379.TW",
+          "rank": 19,
+          "score": 87.01214993687631
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "COST",
+          "rank": 26,
+          "score": 83.96218222790303
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "CWEN",
+          "rank": -17,
+          "score": 25.60552934411959
+        },
+        {
+          "ticker": "NEE",
+          "rank": -18,
+          "score": 25.668985209878958
+        },
+        {
+          "ticker": "BAYN.DE",
+          "rank": -20,
+          "score": 26.108240687000485
+        },
+        {
+          "ticker": "LMT",
+          "rank": -21,
+          "score": 26.328004989226784
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "LOW",
+          "rank": -32,
+          "score": 28.686859761876935
+        },
+        {
+          "ticker": "KBR",
+          "rank": -34,
+          "score": 28.803463631064
+        },
+        {
+          "ticker": "CMCSA",
+          "rank": -38,
+          "score": 29.669370308677582
+        },
+        {
+          "ticker": "MBG.DE",
+          "rank": -28,
+          "score": 28.28459094662303
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-03-01",
+    "trade_date": "2024-03-04",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "RMS.PA",
+          "rank": 24,
+          "score": 84.59733373454254
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "REGN",
+          "rank": 30,
+          "score": 83.10743130474891
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "CCI",
+          "rank": -23,
+          "score": 27.824761096925233
+        },
+        {
+          "ticker": "YOU",
+          "rank": -24,
+          "score": 27.891854064225782
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "NET",
+          "rank": -27,
+          "score": 28.753492288351737
+        },
+        {
+          "ticker": "015760.KS",
+          "rank": -44,
+          "score": 32.12800660390578
+        }
+      ]
+    },
+    "turnover": 0.12
+  },
+  {
+    "rank_date": "2024-03-08",
+    "trade_date": "2024-03-11",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "REGN",
+          "rank": 22,
+          "score": 85.02293551006159
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "RMS.PA",
+          "rank": 26,
+          "score": 83.99591109309912
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "DTE.DE",
+          "rank": -22,
+          "score": 27.37968972732393
+        },
+        {
+          "ticker": "MELI",
+          "rank": -23,
+          "score": 27.51323443528487
+        },
+        {
+          "ticker": "NET",
+          "rank": -24,
+          "score": 27.695277097850376
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "BAS.DE",
+          "rank": -26,
+          "score": 27.84283545625701
+        },
+        {
+          "ticker": "MMS",
+          "rank": -38,
+          "score": 30.492603017481173
+        },
+        {
+          "ticker": "YOU",
+          "rank": -27,
+          "score": 27.891854064225782
+        }
+      ]
+    },
+    "turnover": 0.16
+  },
+  {
+    "rank_date": "2024-03-15",
+    "trade_date": "2024-03-18",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "RMS.PA",
+          "rank": 16,
+          "score": 88.26233398146833
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "REGN",
+          "rank": 28,
+          "score": 83.1606366180441
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "DB1.DE",
+          "rank": -22,
+          "score": 27.424141930651558
+        },
+        {
+          "ticker": "SO",
+          "rank": -24,
+          "score": 27.826771998557287
+        },
+        {
+          "ticker": "YOU",
+          "rank": -25,
+          "score": 27.891854064225782
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "RENT3.SA",
+          "rank": -31,
+          "score": 28.875724081043163
+        },
+        {
+          "ticker": "MELI",
+          "rank": -34,
+          "score": 29.435171748404457
+        },
+        {
+          "ticker": "NET",
+          "rank": -26,
+          "score": 28.07537508151177
+        }
+      ]
+    },
+    "turnover": 0.16
+  },
+  {
+    "rank_date": "2024-03-22",
+    "trade_date": "2024-03-25",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "LPX",
+          "rank": 23,
+          "score": 84.71719342230763
+        },
+        {
+          "ticker": "ODFL",
+          "rank": 24,
+          "score": 84.44245218305996
+        },
+        {
+          "ticker": "REGN",
+          "rank": 25,
+          "score": 84.39179089422848
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "ACN",
+          "rank": 31,
+          "score": 81.16776962378505
+        },
+        {
+          "ticker": "ADBE",
+          "rank": 29,
+          "score": 83.08506817598742
+        },
+        {
+          "ticker": "MSFT",
+          "rank": 26,
+          "score": 84.36774815797965
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "DBOEY",
+          "rank": -8,
+          "score": 21.105916876420675
+        },
+        {
+          "ticker": "015760.KS",
+          "rank": -13,
+          "score": 24.890630279823185
+        },
+        {
+          "ticker": "DTEGY",
+          "rank": -21,
+          "score": 26.647451237973893
+        },
+        {
+          "ticker": "TMUS",
+          "rank": -24,
+          "score": 28.2057372527219
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "VNA.DE",
+          "rank": -44,
+          "score": 33.457675418126065
+        },
+        {
+          "ticker": "MO",
+          "rank": -27,
+          "score": 28.6912129415316
+        },
+        {
+          "ticker": "SO",
+          "rank": -34,
+          "score": 30.118291516979905
+        },
+        {
+          "ticker": "YOU",
+          "rank": -28,
+          "score": 29.110788777613305
+        }
+      ]
+    },
+    "turnover": 0.28
+  },
+  {
+    "rank_date": "2024-03-29",
+    "trade_date": "2024-04-02",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "MSFT",
+          "rank": 22,
+          "score": 84.36774815797965
+        },
+        {
+          "ticker": "COST",
+          "rank": 24,
+          "score": 83.96218222790303
+        },
+        {
+          "ticker": "6098.T",
+          "rank": 25,
+          "score": 83.68133816744884
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "INTU",
+          "rank": 26,
+          "score": 83.09030432404202
+        },
+        {
+          "ticker": "RMS.PA",
+          "rank": 27,
+          "score": 82.5760590230117
+        },
+        {
+          "ticker": "REGN",
+          "rank": 35,
+          "score": 77.32806533067718
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "MCD",
+          "rank": -14,
+          "score": 25.353478895130625
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "TMUS",
+          "rank": -33,
+          "score": 29.504678577159968
+        }
+      ]
+    },
+    "turnover": 0.16
+  },
+  {
+    "rank_date": "2024-04-05",
+    "trade_date": "2024-04-08",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "NOW",
+          "rank": 16,
+          "score": 86.95001978941902
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "LPX",
+          "rank": 59,
+          "score": 68.07629405461988
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "NOC",
+          "rank": -12,
+          "score": 22.063518918406373
+        },
+        {
+          "ticker": "KBR",
+          "rank": -17,
+          "score": 23.79743690471467
+        },
+        {
+          "ticker": "SO",
+          "rank": -22,
+          "score": 25.366278511723674
+        },
+        {
+          "ticker": "KMB",
+          "rank": -24,
+          "score": 25.59964779419988
+        },
+        {
+          "ticker": "O",
+          "rank": -25,
+          "score": 25.798840450785928
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "NEE",
+          "rank": -54,
+          "score": 33.05604798936371
+        },
+        {
+          "ticker": "BAYN.DE",
+          "rank": -26,
+          "score": 26.108240687000485
+        },
+        {
+          "ticker": "LMT",
+          "rank": -32,
+          "score": 27.43480282096873
+        },
+        {
+          "ticker": "VOW3.DE",
+          "rank": -34,
+          "score": 28.253166748066377
+        },
+        {
+          "ticker": "FLR",
+          "rank": -33,
+          "score": 28.13949200681638
+        }
+      ]
+    },
+    "turnover": 0.24000000000000002
+  },
+  {
+    "rank_date": "2024-04-12",
+    "trade_date": "2024-04-15",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "DECK",
+          "rank": 25,
+          "score": 82.01555329738477
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "VRTX",
+          "rank": 26,
+          "score": 81.55772099535481
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "ENEL.MI",
+          "rank": -21,
+          "score": 23.22647991139779
+        },
+        {
+          "ticker": "MMS",
+          "rank": -22,
+          "score": 23.4163392630402
+        },
+        {
+          "ticker": "FLR",
+          "rank": -23,
+          "score": 23.420928562252694
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "CCI",
+          "rank": -30,
+          "score": 25.142549793652293
+        },
+        {
+          "ticker": "KMB",
+          "rank": -31,
+          "score": 25.59964779419988
+        },
+        {
+          "ticker": "O",
+          "rank": -33,
+          "score": 25.798840450785928
+        }
+      ]
+    },
+    "turnover": 0.16
+  },
+  {
+    "rank_date": "2024-04-19",
+    "trade_date": "2024-04-22",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "VRTX",
+          "rank": 21,
+          "score": 80.69568831372614
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 25,
+          "score": 79.26527417589547
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "ISRG",
+          "rank": 39,
+          "score": 71.10025680936326
+        },
+        {
+          "ticker": "ODFL",
+          "rank": 26,
+          "score": 78.74616274064213
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "NET",
+          "rank": -16,
+          "score": 21.757594922670936
+        },
+        {
+          "ticker": "HON",
+          "rank": -22,
+          "score": 23.766271352147623
+        },
+        {
+          "ticker": "MO",
+          "rank": -23,
+          "score": 23.8208639841487
+        },
+        {
+          "ticker": "VOW3.DE",
+          "rank": -24,
+          "score": 24.14549290369565
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "SO",
+          "rank": -35,
+          "score": 26.60262644222078
+        },
+        {
+          "ticker": "ENEL.MI",
+          "rank": -44,
+          "score": 27.800327050931454
+        },
+        {
+          "ticker": "MMS",
+          "rank": -27,
+          "score": 25.131352375204187
+        },
+        {
+          "ticker": "DUK",
+          "rank": -43,
+          "score": 27.745116241589248
+        }
+      ]
+    },
+    "turnover": 0.24
+  },
+  {
+    "rank_date": "2024-04-26",
+    "trade_date": "2024-04-30",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "INTU",
+          "rank": 18,
+          "score": 85.2458113869421
+        },
+        {
+          "ticker": "ADBE",
+          "rank": 24,
+          "score": 80.83951339315955
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "MSFT",
+          "rank": 29,
+          "score": 79.0413648051139
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 28,
+          "score": 79.26527417589547
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "RENT3.SA",
+          "rank": -19,
+          "score": 24.69922438560781
+        },
+        {
+          "ticker": "MMS",
+          "rank": -21,
+          "score": 24.874915075024926
+        },
+        {
+          "ticker": "DANOY",
+          "rank": -22,
+          "score": 25.081734131827734
+        },
+        {
+          "ticker": "CCI",
+          "rank": -23,
+          "score": 25.142549793652293
+        },
+        {
+          "ticker": "KMB",
+          "rank": -24,
+          "score": 25.59964779419988
+        },
+        {
+          "ticker": "O",
+          "rank": -25,
+          "score": 25.798840450785928
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "FLR",
+          "rank": -33,
+          "score": 26.729960067917247
+        },
+        {
+          "ticker": "NOC",
+          "rank": -49,
+          "score": 30.530143305461063
+        },
+        {
+          "ticker": "HON",
+          "rank": -32,
+          "score": 26.709177016726347
+        },
+        {
+          "ticker": "MO",
+          "rank": -26,
+          "score": 25.984313634693745
+        },
+        {
+          "ticker": "VOW3.DE",
+          "rank": -30,
+          "score": 26.131654812071545
+        },
+        {
+          "ticker": "T",
+          "rank": -40,
+          "score": 29.193094547020753
+        }
+      ]
+    },
+    "turnover": 0.32
+  },
+  {
+    "rank_date": "2024-05-03",
+    "trade_date": "2024-05-07",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "SAF.PA",
+          "rank": 16,
+          "score": 84.59817398281939
+        },
+        {
+          "ticker": "MPWR",
+          "rank": 23,
+          "score": 81.1743755831017
+        },
+        {
+          "ticker": "IDCC",
+          "rank": 24,
+          "score": 81.00826964649977
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 25,
+          "score": 79.26527417589547
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "2379.TW",
+          "rank": 27,
+          "score": 78.70816639446416
+        },
+        {
+          "ticker": "2603.TW",
+          "rank": 37,
+          "score": 75.09380583516658
+        },
+        {
+          "ticker": "VRTX",
+          "rank": 30,
+          "score": 77.90605184767422
+        },
+        {
+          "ticker": "SAP",
+          "rank": 29,
+          "score": 77.91746206856128
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "BAYN.DE",
+          "rank": -6,
+          "score": 17.132928786041244
+        },
+        {
+          "ticker": "VOW3.DE",
+          "rank": -16,
+          "score": 22.369381252814957
+        },
+        {
+          "ticker": "HON",
+          "rank": -20,
+          "score": 24.38595077122562
+        },
+        {
+          "ticker": "FLR",
+          "rank": -21,
+          "score": 24.99625850410794
+        },
+        {
+          "ticker": "3382.T",
+          "rank": -25,
+          "score": 25.694796889549107
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "PM",
+          "rank": -35,
+          "score": 28.638806839863502
+        },
+        {
+          "ticker": "NET",
+          "rank": -52,
+          "score": 31.71132191842813
+        },
+        {
+          "ticker": "MMS",
+          "rank": -27,
+          "score": 26.020548542574762
+        },
+        {
+          "ticker": "DANOY",
+          "rank": -30,
+          "score": 26.70324737480046
+        },
+        {
+          "ticker": "O",
+          "rank": -26,
+          "score": 25.798840450785928
+        }
+      ]
+    },
+    "turnover": 0.36
+  },
+  {
+    "rank_date": "2024-05-10",
+    "trade_date": "2024-05-13",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "REGN",
+          "rank": 21,
+          "score": 83.9439356600385
+        },
+        {
+          "ticker": "VRTX",
+          "rank": 25,
+          "score": 81.35690343496968
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "IDCC",
+          "rank": 55,
+          "score": 67.43725511792242
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 27,
+          "score": 79.26527417589547
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "6758.T",
+          "rank": -18,
+          "score": 23.686390329410358
+        },
+        {
+          "ticker": "NET",
+          "rank": -21,
+          "score": 25.32405485850353
+        },
+        {
+          "ticker": "BAS.DE",
+          "rank": -22,
+          "score": 25.71022661548976
+        },
+        {
+          "ticker": "O",
+          "rank": -23,
+          "score": 25.798840450785928
+        },
+        {
+          "ticker": "ORLY",
+          "rank": -24,
+          "score": 25.810999938529594
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "DB1.DE",
+          "rank": -27,
+          "score": 25.852237454570243
+        },
+        {
+          "ticker": "HON",
+          "rank": -33,
+          "score": 28.050096104071216
+        },
+        {
+          "ticker": "FLR",
+          "rank": -28,
+          "score": 26.515356981415664
+        },
+        {
+          "ticker": "DTE.DE",
+          "rank": -30,
+          "score": 26.850914277116704
+        },
+        {
+          "ticker": "KMB",
+          "rank": -26,
+          "score": 25.848619222929667
+        }
+      ]
+    },
+    "turnover": 0.28
+  },
+  {
+    "rank_date": "2024-05-17",
+    "trade_date": "2024-05-20",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "SAP",
+          "rank": 23,
+          "score": 83.24729389598586
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "DECK",
+          "rank": 26,
+          "score": 82.01555329738477
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "FLR",
+          "rank": -17,
+          "score": 24.50876811852946
+        },
+        {
+          "ticker": "DTE.DE",
+          "rank": -18,
+          "score": 24.6311191297884
+        },
+        {
+          "ticker": "KMB",
+          "rank": -22,
+          "score": 25.59964779419988
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "MSCI",
+          "rank": -28,
+          "score": 26.87579746712015
+        },
+        {
+          "ticker": "DBOEY",
+          "rank": -29,
+          "score": 27.37439047336309
+        },
+        {
+          "ticker": "6758.T",
+          "rank": -30,
+          "score": 27.447798744779394
+        }
+      ]
+    },
+    "turnover": 0.16
+  },
+  {
+    "rank_date": "2024-05-24",
+    "trade_date": "2024-05-28",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "DECK",
+          "rank": 22,
+          "score": 82.01555329738477
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "NOW",
+          "rank": 26,
+          "score": 79.57507586686972
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "6758.T",
+          "rank": -17,
+          "score": 23.686390329410358
+        },
+        {
+          "ticker": "LOW",
+          "rank": -18,
+          "score": 23.857125412086912
+        },
+        {
+          "ticker": "KLBN11.SA",
+          "rank": -24,
+          "score": 25.609192396550736
+        },
+        {
+          "ticker": "MBG.DE",
+          "rank": -25,
+          "score": 25.771143913778342
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "FLR",
+          "rank": -42,
+          "score": 30.990551426686363
+        },
+        {
+          "ticker": "KMB",
+          "rank": -29,
+          "score": 26.36251311152175
+        },
+        {
+          "ticker": "O",
+          "rank": -26,
+          "score": 25.798840450785928
+        },
+        {
+          "ticker": "BAS.DE",
+          "rank": -27,
+          "score": 25.950184542109568
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-05-31",
+    "trade_date": "2024-06-03",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 18,
+          "score": 81.09023703063214
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 22,
+          "score": 79.26527417589547
+        },
+        {
+          "ticker": "2379.TW",
+          "rank": 23,
+          "score": 79.18355697333583
+        },
+        {
+          "ticker": "600066.SS",
+          "rank": 25,
+          "score": 78.07122611267197
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "SNPS",
+          "rank": 32,
+          "score": 75.59855119379962
+        },
+        {
+          "ticker": "6857.T",
+          "rank": 29,
+          "score": 76.61382954364537
+        },
+        {
+          "ticker": "INTU",
+          "rank": 28,
+          "score": 76.81315619496533
+        },
+        {
+          "ticker": "ADBE",
+          "rank": 46,
+          "score": 70.97360410642422
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "MSCI",
+          "rank": -17,
+          "score": 24.581952027793733
+        },
+        {
+          "ticker": "O",
+          "rank": -21,
+          "score": 25.798840450785928
+        },
+        {
+          "ticker": "PFE",
+          "rank": -23,
+          "score": 26.632745809043612
+        },
+        {
+          "ticker": "TMRAY",
+          "rank": -24,
+          "score": 26.93646287116375
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "VOW3.DE",
+          "rank": -26,
+          "score": 27.198039438749188
+        },
+        {
+          "ticker": "DTE.DE",
+          "rank": -37,
+          "score": 30.34742146538153
+        },
+        {
+          "ticker": "3382.T",
+          "rank": -35,
+          "score": 29.97342226114769
+        },
+        {
+          "ticker": "DTEGY",
+          "rank": -45,
+          "score": 32.92811466540788
+        }
+      ]
+    },
+    "turnover": 0.32
+  },
+  {
+    "rank_date": "2024-06-07",
+    "trade_date": "2024-06-11",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "SNPS",
+          "rank": 21,
+          "score": 79.56395962139835
+        },
+        {
+          "ticker": "RMS.PA",
+          "rank": 22,
+          "score": 79.32515990370756
+        },
+        {
+          "ticker": "ANET",
+          "rank": 24,
+          "score": 78.4858927798789
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 28,
+          "score": 77.55046770035528
+        },
+        {
+          "ticker": "4519.T",
+          "rank": 32,
+          "score": 76.63153765322619
+        },
+        {
+          "ticker": "2379.TW",
+          "rank": 37,
+          "score": 74.67557632346286
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "VOW3.DE",
+          "rank": -13,
+          "score": 20.884183665952992
+        },
+        {
+          "ticker": "NOC",
+          "rank": -18,
+          "score": 22.49658289390089
+        },
+        {
+          "ticker": "BAS.DE",
+          "rank": -21,
+          "score": 23.854303246926012
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "ORLY",
+          "rank": -32,
+          "score": 28.855355658526147
+        },
+        {
+          "ticker": "PFE",
+          "rank": -27,
+          "score": 26.632745809043612
+        },
+        {
+          "ticker": "TMRAY",
+          "rank": -29,
+          "score": 27.62679552810911
+        }
+      ]
+    },
+    "turnover": 0.24
+  },
+  {
+    "rank_date": "2024-06-14",
+    "trade_date": "2024-06-17",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "2379.TW",
+          "rank": 23,
+          "score": 78.12613750020499
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "RMS.PA",
+          "rank": 38,
+          "score": 73.32761479867189
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "DBOEY",
+          "rank": -24,
+          "score": 23.994459520040873
+        },
+        {
+          "ticker": "3382.T",
+          "rank": -25,
+          "score": 24.21108801304859
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "CCI",
+          "rank": -27,
+          "score": 25.142549793652293
+        },
+        {
+          "ticker": "O",
+          "rank": -28,
+          "score": 25.798840450785928
+        }
+      ]
+    },
+    "turnover": 0.12
+  },
+  {
+    "rank_date": "2024-06-21",
+    "trade_date": "2024-06-24",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 22,
+          "score": 80.01762726478724
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "600066.SS",
+          "rank": 27,
+          "score": 78.07122611267197
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "CCI",
+          "rank": -24,
+          "score": 25.142549793652293
+        },
+        {
+          "ticker": "O",
+          "rank": -25,
+          "score": 25.798840450785928
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "BAS.DE",
+          "rank": -31,
+          "score": 27.763019491376927
+        },
+        {
+          "ticker": "DBOEY",
+          "rank": -32,
+          "score": 27.938821664446824
+        }
+      ]
+    },
+    "turnover": 0.12
+  },
+  {
+    "rank_date": "2024-06-28",
+    "trade_date": "2024-07-01",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "4519.T",
+          "rank": 12,
+          "score": 86.0125445928195
+        },
+        {
+          "ticker": "6857.T",
+          "rank": 20,
+          "score": 82.39956850891794
+        },
+        {
+          "ticker": "INTU",
+          "rank": 23,
+          "score": 80.12517230142242
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 31,
+          "score": 76.52471621380052
+        },
+        {
+          "ticker": "2379.TW",
+          "rank": 28,
+          "score": 77.96033508382935
+        },
+        {
+          "ticker": "ANET",
+          "rank": 26,
+          "score": 79.15287074680019
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "AIR.PA",
+          "rank": -6,
+          "score": 13.945032012663113
+        },
+        {
+          "ticker": "BAS.DE",
+          "rank": -24,
+          "score": 25.2418484995522
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "KLBN11.SA",
+          "rank": -26,
+          "score": 25.803448967527512
+        },
+        {
+          "ticker": "6758.T",
+          "rank": -32,
+          "score": 28.67708258242686
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-07-05",
+    "trade_date": "2024-07-08",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "MSFT",
+          "rank": 24,
+          "score": 79.40845738944631
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "6368.T",
+          "rank": 27,
+          "score": 78.96513618062443
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "KLBN11.SA",
+          "rank": -18,
+          "score": 22.76728905351021
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "O",
+          "rank": -26,
+          "score": 25.798840450785928
+        }
+      ]
+    },
+    "turnover": 0.08
+  },
+  {
+    "rank_date": "2024-07-12",
+    "trade_date": "2024-07-16",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "WEGE3.SA",
+          "rank": 19,
+          "score": 82.9073979569326
+        },
+        {
+          "ticker": "002001.SZ",
+          "rank": 25,
+          "score": 79.67204979784556
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "INTU",
+          "rank": 33,
+          "score": 76.09975799857078
+        },
+        {
+          "ticker": "MSFT",
+          "rank": 31,
+          "score": 76.90407267196973
+        }
+      ]
+    },
+    "short": {
+      "entered": [],
+      "exited": []
+    },
+    "turnover": 0.08
+  },
+  {
+    "rank_date": "2024-07-19",
+    "trade_date": "2024-07-22",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "ANET",
+          "rank": 22,
+          "score": 77.65176098673747
+        },
+        {
+          "ticker": "NVDA",
+          "rank": 24,
+          "score": 77.00679151993398
+        },
+        {
+          "ticker": "600066.SS",
+          "rank": 25,
+          "score": 75.72297069876309
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "SNPS",
+          "rank": 30,
+          "score": 74.74752095956066
+        },
+        {
+          "ticker": "CPRT",
+          "rank": 32,
+          "score": 73.82316242242938
+        },
+        {
+          "ticker": "6857.T",
+          "rank": 31,
+          "score": 74.64148889782052
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "DBOEY",
+          "rank": -24,
+          "score": 25.993761051755353
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "KLBN11.SA",
+          "rank": -31,
+          "score": 28.91485516286525
+        }
+      ]
+    },
+    "turnover": 0.16
+  },
+  {
+    "rank_date": "2024-07-26",
+    "trade_date": "2024-07-29",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "ISRG",
+          "rank": 22,
+          "score": 77.18978551717235
+        },
+        {
+          "ticker": "RMS.PA",
+          "rank": 24,
+          "score": 76.92941200046847
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "WEGE3.SA",
+          "rank": 26,
+          "score": 76.10767576813065
+        },
+        {
+          "ticker": "002001.SZ",
+          "rank": 36,
+          "score": 72.32312932042814
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "HON",
+          "rank": -20,
+          "score": 22.91473127754328
+        },
+        {
+          "ticker": "KLBN11.SA",
+          "rank": -22,
+          "score": 23.336797831160563
+        },
+        {
+          "ticker": "9984.T",
+          "rank": -25,
+          "score": 23.76504836517394
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "NOC",
+          "rank": -33,
+          "score": 29.209316288301007
+        },
+        {
+          "ticker": "DBOEY",
+          "rank": -26,
+          "score": 25.221311982755434
+        },
+        {
+          "ticker": "CCI",
+          "rank": -31,
+          "score": 28.291798934688156
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-08-02",
+    "trade_date": "2024-08-05",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 13,
+          "score": 81.36667423707968
+        },
+        {
+          "ticker": "IDCC",
+          "rank": 14,
+          "score": 81.00826964649977
+        },
+        {
+          "ticker": "WEGE3.SA",
+          "rank": 18,
+          "score": 80.47626635275101
+        },
+        {
+          "ticker": "CPRT",
+          "rank": 22,
+          "score": 77.0877894450605
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 24,
+          "score": 76.84953422823125
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "4063.T",
+          "rank": 29,
+          "score": 74.07663372358535
+        },
+        {
+          "ticker": "ANET",
+          "rank": 26,
+          "score": 75.51888595430499
+        },
+        {
+          "ticker": "8035.T",
+          "rank": 31,
+          "score": 71.90471270089328
+        },
+        {
+          "ticker": "RMS.PA",
+          "rank": 37,
+          "score": 68.99886284664161
+        },
+        {
+          "ticker": "600066.SS",
+          "rank": 30,
+          "score": 73.2546376643105
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "6758.T",
+          "rank": -14,
+          "score": 20.894806820982197
+        },
+        {
+          "ticker": "DBOEY",
+          "rank": -25,
+          "score": 25.52404252553985
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "CWEN",
+          "rank": -26,
+          "score": 25.97132024807443
+        },
+        {
+          "ticker": "HON",
+          "rank": -37,
+          "score": 30.764520024029036
+        }
+      ]
+    },
+    "turnover": 0.28
+  },
+  {
+    "rank_date": "2024-08-09",
+    "trade_date": "2024-08-13",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "2371.T",
+          "rank": 13,
+          "score": 81.80633325960868
+        },
+        {
+          "ticker": "ANET",
+          "rank": 22,
+          "score": 77.71497564269792
+        },
+        {
+          "ticker": "NOW",
+          "rank": 24,
+          "score": 76.95362567793354
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 37,
+          "score": 70.59185673223149
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 28,
+          "score": 73.96403467829059
+        },
+        {
+          "ticker": "SAF.PA",
+          "rank": 26,
+          "score": 75.87988163140375
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "MCK",
+          "rank": -23,
+          "score": 23.967779943451223
+        },
+        {
+          "ticker": "FLR",
+          "rank": -24,
+          "score": 24.256229337910696
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "FTNT",
+          "rank": -41,
+          "score": 30.426439980113543
+        },
+        {
+          "ticker": "LOW",
+          "rank": -26,
+          "score": 24.484335387376717
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-08-16",
+    "trade_date": "2024-08-19",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "6368.T",
+          "rank": 19,
+          "score": 79.95117502231655
+        },
+        {
+          "ticker": "SAF.PA",
+          "rank": 22,
+          "score": 78.97836251637386
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "NVDA",
+          "rank": 27,
+          "score": 77.00679151993398
+        },
+        {
+          "ticker": "CPRT",
+          "rank": 26,
+          "score": 77.15984104558846
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "LOW",
+          "rank": -22,
+          "score": 25.237800973752957
+        },
+        {
+          "ticker": "PFE",
+          "rank": -24,
+          "score": 26.632745809043612
+        },
+        {
+          "ticker": "MRK",
+          "rank": -25,
+          "score": 27.72853199178847
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "6758.T",
+          "rank": -29,
+          "score": 29.860636911513257
+        },
+        {
+          "ticker": "9984.T",
+          "rank": -26,
+          "score": 27.798183168204023
+        },
+        {
+          "ticker": "DBOEY",
+          "rank": -39,
+          "score": 32.10511011189019
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-08-23",
+    "trade_date": "2024-08-26",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "RMS.PA",
+          "rank": 20,
+          "score": 79.1386169697938
+        },
+        {
+          "ticker": "NVDA",
+          "rank": 25,
+          "score": 77.00679151993398
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "6368.T",
+          "rank": 30,
+          "score": 75.18413044947947
+        },
+        {
+          "ticker": "NOW",
+          "rank": 27,
+          "score": 76.44481744587777
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "9984.T",
+          "rank": -22,
+          "score": 27.134099971001117
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "3382.T",
+          "rank": -26,
+          "score": 28.70584889778382
+        }
+      ]
+    },
+    "turnover": 0.12
+  },
+  {
+    "rank_date": "2024-08-30",
+    "trade_date": "2024-09-03",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "600066.SS",
+          "rank": 21,
+          "score": 78.07122611267197
+        },
+        {
+          "ticker": "CPRT",
+          "rank": 23,
+          "score": 77.87815706516909
+        },
+        {
+          "ticker": "SPGI",
+          "rank": 24,
+          "score": 77.34698318355889
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "GOOG",
+          "rank": 29,
+          "score": 75.24330177684891
+        },
+        {
+          "ticker": "GOOGL",
+          "rank": 30,
+          "score": 75.10259421237922
+        },
+        {
+          "ticker": "NVDA",
+          "rank": 26,
+          "score": 77.00679151993398
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "CWEN",
+          "rank": -25,
+          "score": 28.590965100016025
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "MRK",
+          "rank": -27,
+          "score": 29.867116765157807
+        }
+      ]
+    },
+    "turnover": 0.16
+  },
+  {
+    "rank_date": "2024-09-06",
+    "trade_date": "2024-09-09",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "NVDA",
+          "rank": 22,
+          "score": 75.03113674528369
+        },
+        {
+          "ticker": "BSX",
+          "rank": 23,
+          "score": 74.88209700474196
+        },
+        {
+          "ticker": "033780.KS",
+          "rank": 24,
+          "score": 74.27125165431026
+        },
+        {
+          "ticker": "PG",
+          "rank": 25,
+          "score": 73.85877544596123
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "ANET",
+          "rank": 38,
+          "score": 69.14887541902954
+        },
+        {
+          "ticker": "600066.SS",
+          "rank": 27,
+          "score": 73.60252399248368
+        },
+        {
+          "ticker": "CPRT",
+          "rank": 35,
+          "score": 70.96163344986302
+        },
+        {
+          "ticker": "RMS.PA",
+          "rank": 32,
+          "score": 71.26688904127005
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "ENI.MI",
+          "rank": -23,
+          "score": 25.27444873374462
+        },
+        {
+          "ticker": "6758.T",
+          "rank": -24,
+          "score": 25.912392040034703
+        },
+        {
+          "ticker": "8053.T",
+          "rank": -25,
+          "score": 26.57148359113854
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "PFE",
+          "rank": -26,
+          "score": 26.632745809043612
+        },
+        {
+          "ticker": "MCD",
+          "rank": -34,
+          "score": 30.345841602219185
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -30,
+          "score": 28.409795273047923
+        }
+      ]
+    },
+    "turnover": 0.28
+  },
+  {
+    "rank_date": "2024-09-13",
+    "trade_date": "2024-09-19",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "NOW",
+          "rank": 21,
+          "score": 77.50530671391414
+        },
+        {
+          "ticker": "ANET",
+          "rank": 22,
+          "score": 77.25371061656456
+        },
+        {
+          "ticker": "LPX",
+          "rank": 24,
+          "score": 76.05672465884075
+        },
+        {
+          "ticker": "207940.KS",
+          "rank": 25,
+          "score": 75.62888237501699
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "7974.T",
+          "rank": 26,
+          "score": 75.5695873201343
+        },
+        {
+          "ticker": "BSX",
+          "rank": 29,
+          "score": 74.88209700474196
+        },
+        {
+          "ticker": "033780.KS",
+          "rank": 36,
+          "score": 72.464576517549
+        },
+        {
+          "ticker": "PG",
+          "rank": 37,
+          "score": 72.14902819047596
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "PFE",
+          "rank": -25,
+          "score": 26.632745809043612
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "LOW",
+          "rank": -27,
+          "score": 27.314983696916084
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-09-20",
+    "trade_date": "2024-09-24",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "6368.T",
+          "rank": 23,
+          "score": 78.69625752216554
+        },
+        {
+          "ticker": "ADYEN.AS",
+          "rank": 24,
+          "score": 78.43007986899829
+        },
+        {
+          "ticker": "600066.SS",
+          "rank": 25,
+          "score": 78.07122611267197
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "2454.TW",
+          "rank": 27,
+          "score": 77.82892496059344
+        },
+        {
+          "ticker": "NVDA",
+          "rank": 28,
+          "score": 77.00679151993398
+        },
+        {
+          "ticker": "LPX",
+          "rank": 31,
+          "score": 76.05672465884075
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "TXT",
+          "rank": -24,
+          "score": 26.83673738900669
+        },
+        {
+          "ticker": "7267.T",
+          "rank": -25,
+          "score": 26.915027536826614
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "6758.T",
+          "rank": -26,
+          "score": 27.01838201626468
+        },
+        {
+          "ticker": "9984.T",
+          "rank": -27,
+          "score": 28.096750386964676
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-09-27",
+    "trade_date": "2024-09-30",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "RMS.PA",
+          "rank": 8,
+          "score": 88.38741533354231
+        },
+        {
+          "ticker": "2454.TW",
+          "rank": 15,
+          "score": 84.41577827318945
+        },
+        {
+          "ticker": "7974.T",
+          "rank": 23,
+          "score": 79.5499351499509
+        },
+        {
+          "ticker": "CPRT",
+          "rank": 24,
+          "score": 79.20313462928507
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "207940.KS",
+          "rank": 30,
+          "score": 77.78029378630087
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 27,
+          "score": 78.70173073856883
+        },
+        {
+          "ticker": "ADYEN.AS",
+          "rank": 28,
+          "score": 78.43007986899829
+        },
+        {
+          "ticker": "600066.SS",
+          "rank": 29,
+          "score": 78.07122611267197
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "BMY",
+          "rank": -25,
+          "score": 29.67217179911928
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "BAS.DE",
+          "rank": -38,
+          "score": 33.2700157473596
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-10-04",
+    "trade_date": "2024-10-07",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "MSFT",
+          "rank": 8,
+          "score": 86.83498777874094
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 24,
+          "score": 79.4016506447877
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "7974.T",
+          "rank": 28,
+          "score": 77.67781157770919
+        },
+        {
+          "ticker": "ANET",
+          "rank": 26,
+          "score": 79.15287074680019
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "MRK",
+          "rank": -22,
+          "score": 29.733270572550065
+        },
+        {
+          "ticker": "9984.T",
+          "rank": -23,
+          "score": 30.049082802232903
+        },
+        {
+          "ticker": "CMCSA",
+          "rank": -24,
+          "score": 30.17522000880652
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "8053.T",
+          "rank": -40,
+          "score": 34.31291068382537
+        },
+        {
+          "ticker": "7267.T",
+          "rank": -29,
+          "score": 31.85596558433973
+        },
+        {
+          "ticker": "BMY",
+          "rank": -31,
+          "score": 32.39423428553487
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-10-11",
+    "trade_date": "2024-10-15",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 23,
+          "score": 79.37979837265256
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "NVO",
+          "rank": 27,
+          "score": 78.14295142672637
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "7267.T",
+          "rank": -22,
+          "score": 28.43301286287861
+        },
+        {
+          "ticker": "6758.T",
+          "rank": -24,
+          "score": 29.3974299138155
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "CMCSA",
+          "rank": -29,
+          "score": 30.064217801810333
+        },
+        {
+          "ticker": "MSCI",
+          "rank": -28,
+          "score": 30.03373303353909
+        }
+      ]
+    },
+    "turnover": 0.12
+  },
+  {
+    "rank_date": "2024-10-18",
+    "trade_date": "2024-10-21",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "207940.KS",
+          "rank": 23,
+          "score": 80.10331775595819
+        },
+        {
+          "ticker": "7974.T",
+          "rank": 24,
+          "score": 79.42241439562149
+        },
+        {
+          "ticker": "ANET",
+          "rank": 25,
+          "score": 79.15287074680019
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "6368.T",
+          "rank": 31,
+          "score": 77.7679711927435
+        },
+        {
+          "ticker": "CPRT",
+          "rank": 28,
+          "score": 78.38182027763385
+        },
+        {
+          "ticker": "REGN",
+          "rank": 29,
+          "score": 78.23461671712273
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "8053.T",
+          "rank": -22,
+          "score": 29.085058730924544
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "9984.T",
+          "rank": -26,
+          "score": 29.96053359525958
+        }
+      ]
+    },
+    "turnover": 0.16
+  },
+  {
+    "rank_date": "2024-10-25",
+    "trade_date": "2024-10-28",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "GOOG",
+          "rank": 19,
+          "score": 81.92757393477538
+        },
+        {
+          "ticker": "GOOGL",
+          "rank": 20,
+          "score": 81.85943846463725
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 27,
+          "score": 78.27918711016302
+        },
+        {
+          "ticker": "207940.KS",
+          "rank": 30,
+          "score": 77.86705631017956
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "9984.T",
+          "rank": -25,
+          "score": 29.489090399444517
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "FLR",
+          "rank": -27,
+          "score": 30.495625825841255
+        }
+      ]
+    },
+    "turnover": 0.12
+  },
+  {
+    "rank_date": "2024-11-01",
+    "trade_date": "2024-11-05",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "REA.AX",
+          "rank": 17,
+          "score": 82.17336116349762
+        },
+        {
+          "ticker": "ADYEN.AS",
+          "rank": 22,
+          "score": 78.43007986899829
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "ANET",
+          "rank": 29,
+          "score": 77.34416358502999
+        },
+        {
+          "ticker": "7974.T",
+          "rank": 28,
+          "score": 77.49400171494794
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "RI.PA",
+          "rank": -19,
+          "score": 26.59938948375817
+        },
+        {
+          "ticker": "BAS.DE",
+          "rank": -23,
+          "score": 28.89871261634397
+        },
+        {
+          "ticker": "CI",
+          "rank": -25,
+          "score": 29.8187034097198
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "7267.T",
+          "rank": -27,
+          "score": 30.247903498639023
+        },
+        {
+          "ticker": "NET",
+          "rank": -26,
+          "score": 30.00554631793733
+        },
+        {
+          "ticker": "9984.T",
+          "rank": -29,
+          "score": 30.91523637148569
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-11-08",
+    "trade_date": "2024-11-11",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "CPRT",
+          "rank": 20,
+          "score": 78.31648810356387
+        },
+        {
+          "ticker": "600066.SS",
+          "rank": 22,
+          "score": 78.07122611267197
+        },
+        {
+          "ticker": "002001.SZ",
+          "rank": 24,
+          "score": 77.58512063366004
+        },
+        {
+          "ticker": "ANET",
+          "rank": 25,
+          "score": 77.27500299684195
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "RMS.PA",
+          "rank": 29,
+          "score": 76.38583761382952
+        },
+        {
+          "ticker": "ADYEN.AS",
+          "rank": 28,
+          "score": 76.44449228769048
+        },
+        {
+          "ticker": "2454.TW",
+          "rank": 35,
+          "score": 74.68077344789448
+        },
+        {
+          "ticker": "MSFT",
+          "rank": 27,
+          "score": 76.68247736399259
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "NET",
+          "rank": -19,
+          "score": 25.155331459003076
+        },
+        {
+          "ticker": "FLR",
+          "rank": -20,
+          "score": 25.898223389907955
+        },
+        {
+          "ticker": "7267.T",
+          "rank": -24,
+          "score": 26.915027536826614
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "KBR",
+          "rank": -63,
+          "score": 38.990455783528134
+        },
+        {
+          "ticker": "TXT",
+          "rank": -26,
+          "score": 28.96882735718347
+        },
+        {
+          "ticker": "CI",
+          "rank": -41,
+          "score": 33.633219008252944
+        }
+      ]
+    },
+    "turnover": 0.28
+  },
+  {
+    "rank_date": "2024-11-15",
+    "trade_date": "2024-11-18",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "NVDA",
+          "rank": 21,
+          "score": 77.00679151993398
+        },
+        {
+          "ticker": "LPX",
+          "rank": 22,
+          "score": 76.05672465884075
+        },
+        {
+          "ticker": "2603.TW",
+          "rank": 23,
+          "score": 75.09380583516658
+        },
+        {
+          "ticker": "BSX",
+          "rank": 24,
+          "score": 74.88209700474196
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "MPWR",
+          "rank": 52,
+          "score": 66.50221366801456
+        },
+        {
+          "ticker": "SPGI",
+          "rank": 27,
+          "score": 74.19729241185722
+        },
+        {
+          "ticker": "002001.SZ",
+          "rank": 30,
+          "score": 73.37878259850353
+        },
+        {
+          "ticker": "ANET",
+          "rank": 31,
+          "score": 73.30517060838145
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "KBR",
+          "rank": -8,
+          "score": 19.126629339209767
+        },
+        {
+          "ticker": "TXT",
+          "rank": -22,
+          "score": 25.667407023412014
+        },
+        {
+          "ticker": "MMS",
+          "rank": -23,
+          "score": 25.717456703542737
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "6758.T",
+          "rank": -29,
+          "score": 28.736451662588376
+        },
+        {
+          "ticker": "PFE",
+          "rank": -26,
+          "score": 26.632745809043612
+        },
+        {
+          "ticker": "7267.T",
+          "rank": -27,
+          "score": 26.915027536826614
+        }
+      ]
+    },
+    "turnover": 0.28
+  },
+  {
+    "rank_date": "2024-11-22",
+    "trade_date": "2024-11-25",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "ANET",
+          "rank": 20,
+          "score": 76.12247455916956
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "BSX",
+          "rank": 26,
+          "score": 74.88209700474196
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "PFE",
+          "rank": -24,
+          "score": 26.632745809043612
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "DE",
+          "rank": -41,
+          "score": 31.922477845553875
+        }
+      ]
+    },
+    "turnover": 0.08
+  },
+  {
+    "rank_date": "2024-11-29",
+    "trade_date": "2024-12-02",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "7974.T",
+          "rank": 18,
+          "score": 78.48359210944676
+        },
+        {
+          "ticker": "ODFL",
+          "rank": 24,
+          "score": 75.7750760520005
+        },
+        {
+          "ticker": "PG",
+          "rank": 25,
+          "score": 75.67041282546887
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "ANET",
+          "rank": 26,
+          "score": 75.65301149861797
+        },
+        {
+          "ticker": "600066.SS",
+          "rank": 31,
+          "score": 73.49108435071146
+        },
+        {
+          "ticker": "2603.TW",
+          "rank": 30,
+          "score": 73.61131868409355
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "CCI",
+          "rank": -20,
+          "score": 25.142549793652293
+        },
+        {
+          "ticker": "7267.T",
+          "rank": -25,
+          "score": 26.915027536826614
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "TXT",
+          "rank": -29,
+          "score": 28.59547023375458
+        },
+        {
+          "ticker": "MCK",
+          "rank": -26,
+          "score": 27.117605036641205
+        }
+      ]
+    },
+    "turnover": 0.2
+  },
+  {
+    "rank_date": "2024-12-06",
+    "trade_date": "2024-12-09",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "MSFT",
+          "rank": 20,
+          "score": 79.22743044094936
+        },
+        {
+          "ticker": "ANET",
+          "rank": 21,
+          "score": 79.15287074680019
+        },
+        {
+          "ticker": "RMS.PA",
+          "rank": 22,
+          "score": 78.52337962685279
+        },
+        {
+          "ticker": "600066.SS",
+          "rank": 23,
+          "score": 77.37235250153394
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "SAF.PA",
+          "rank": 33,
+          "score": 72.94154315284915
+        },
+        {
+          "ticker": "4519.T",
+          "rank": 27,
+          "score": 75.58052852382654
+        },
+        {
+          "ticker": "LPX",
+          "rank": 26,
+          "score": 76.05672465884075
+        },
+        {
+          "ticker": "ODFL",
+          "rank": 36,
+          "score": 72.31475627284418
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "NOC",
+          "rank": -17,
+          "score": 23.416620338390487
+        },
+        {
+          "ticker": "MCK",
+          "rank": -19,
+          "score": 24.646589739698822
+        },
+        {
+          "ticker": "TXT",
+          "rank": -20,
+          "score": 24.673292253696328
+        },
+        {
+          "ticker": "VNA.DE",
+          "rank": -24,
+          "score": 26.40189699198663
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "NET",
+          "rank": -27,
+          "score": 26.70369486395566
+        },
+        {
+          "ticker": "KLBN11.SA",
+          "rank": -72,
+          "score": 37.282375527657905
+        },
+        {
+          "ticker": "PFE",
+          "rank": -26,
+          "score": 26.632745809043612
+        },
+        {
+          "ticker": "7267.T",
+          "rank": -28,
+          "score": 26.915027536826614
+        }
+      ]
+    },
+    "turnover": 0.32
+  },
+  {
+    "rank_date": "2024-12-13",
+    "trade_date": "2024-12-16",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "2454.TW",
+          "rank": 22,
+          "score": 76.86807390956308
+        },
+        {
+          "ticker": "LPX",
+          "rank": 25,
+          "score": 76.05672465884075
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "VRTX",
+          "rank": 26,
+          "score": 75.74257307186204
+        },
+        {
+          "ticker": "PG",
+          "rank": 32,
+          "score": 72.71605055175701
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "CWEN",
+          "rank": -17,
+          "score": 23.267017029290542
+        },
+        {
+          "ticker": "UBER",
+          "rank": -23,
+          "score": 24.592966999953987
+        },
+        {
+          "ticker": "CI",
+          "rank": -24,
+          "score": 24.943603925737467
+        },
+        {
+          "ticker": "NET",
+          "rank": -25,
+          "score": 25.12461166954479
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "CCI",
+          "rank": -26,
+          "score": 25.142549793652293
+        },
+        {
+          "ticker": "8053.T",
+          "rank": -33,
+          "score": 28.483193896778545
+        },
+        {
+          "ticker": "VNA.DE",
+          "rank": -29,
+          "score": 26.668247602003902
+        },
+        {
+          "ticker": "RI.PA",
+          "rank": -28,
+          "score": 26.59938948375817
+        }
+      ]
+    },
+    "turnover": 0.24
+  },
+  {
+    "rank_date": "2024-12-20",
+    "trade_date": "2024-12-23",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "PG",
+          "rank": 24,
+          "score": 74.95214216196945
+        },
+        {
+          "ticker": "BSX",
+          "rank": 25,
+          "score": 74.88209700474196
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "REA.AX",
+          "rank": 35,
+          "score": 69.75105882799404
+        },
+        {
+          "ticker": "LPX",
+          "rank": 33,
+          "score": 70.61879677377608
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "VNA.DE",
+          "rank": -12,
+          "score": 20.0047401838813
+        },
+        {
+          "ticker": "CCI",
+          "rank": -25,
+          "score": 25.142549793652293
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "NOC",
+          "rank": -33,
+          "score": 27.024014542434937
+        },
+        {
+          "ticker": "UBER",
+          "rank": -27,
+          "score": 26.049899040038664
+        }
+      ]
+    },
+    "turnover": 0.16
+  },
+  {
+    "rank_date": "2024-12-27",
+    "trade_date": "2024-12-30",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "4519.T",
+          "rank": 18,
+          "score": 78.88508488757152
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "2454.TW",
+          "rank": 27,
+          "score": 73.74417474326775
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "DE",
+          "rank": -23,
+          "score": 23.340023104669978
+        },
+        {
+          "ticker": "UBER",
+          "rank": -25,
+          "score": 24.54178766327162
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "CI",
+          "rank": -26,
+          "score": 24.943603925737467
+        },
+        {
+          "ticker": "CCI",
+          "rank": -27,
+          "score": 25.142549793652293
+        }
+      ]
+    },
+    "turnover": 0.12
+  }
+]

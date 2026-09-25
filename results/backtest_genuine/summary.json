@@ -1,0 +1,218 @@
+{
+  "method_version": "1",
+  "as_of": "2026-09-25",
+  "start": "2026-05-31",
+  "universes": [
+    "eurostoxx",
+    "federal-contractors",
+    "japan",
+    "qte77-watchlist",
+    "south-america",
+    "south-korea",
+    "sp500"
+  ],
+  "score_inputs": [
+    "return_on_equity",
+    "return_on_assets",
+    "operating_margins",
+    "rd_to_revenue",
+    "forward_pe",
+    "trailing_peg_ratio",
+    "beta",
+    "current_ratio",
+    "sortino_ratio"
+  ],
+  "cost_bps": 10.0,
+  "primary": "monthly",
+  "cadences": {
+    "monthly": {
+      "gross": {
+        "ann_return": null,
+        "ann_vol": null,
+        "max_drawdown": null,
+        "ann_turnover": null,
+        "long_ann_return": null,
+        "short_ann_return": null,
+        "beta": null,
+        "hit_rate": null,
+        "mean_monthly_return": null,
+        "ci90": null,
+        "t_stat": null
+      },
+      "net": {
+        "ann_return": null,
+        "ann_vol": null,
+        "max_drawdown": null,
+        "ann_turnover": null,
+        "long_ann_return": null,
+        "short_ann_return": null,
+        "beta": null,
+        "hit_rate": null,
+        "mean_monthly_return": null,
+        "ci90": null,
+        "t_stat": null
+      },
+      "rebalances": 3
+    },
+    "quarterly_filings": {
+      "gross": {
+        "ann_return": null,
+        "ann_vol": null,
+        "max_drawdown": null,
+        "ann_turnover": null,
+        "long_ann_return": null,
+        "short_ann_return": null,
+        "beta": null,
+        "hit_rate": null,
+        "mean_monthly_return": null,
+        "ci90": null,
+        "t_stat": null
+      },
+      "net": {
+        "ann_return": null,
+        "ann_vol": null,
+        "max_drawdown": null,
+        "ann_turnover": null,
+        "long_ann_return": null,
+        "short_ann_return": null,
+        "beta": null,
+        "hit_rate": null,
+        "mean_monthly_return": null,
+        "ci90": null,
+        "t_stat": null
+      },
+      "rebalances": 1
+    },
+    "monthly_buffer": {
+      "gross": {
+        "ann_return": null,
+        "ann_vol": null,
+        "max_drawdown": null,
+        "ann_turnover": null,
+        "long_ann_return": null,
+        "short_ann_return": null,
+        "beta": null,
+        "hit_rate": null,
+        "mean_monthly_return": null,
+        "ci90": null,
+        "t_stat": null
+      },
+      "net": {
+        "ann_return": null,
+        "ann_vol": null,
+        "max_drawdown": null,
+        "ann_turnover": null,
+        "long_ann_return": null,
+        "short_ann_return": null,
+        "beta": null,
+        "hit_rate": null,
+        "mean_monthly_return": null,
+        "ci90": null,
+        "t_stat": null
+      },
+      "rebalances": 3
+    },
+    "weekly": {
+      "gross": {
+        "ann_return": null,
+        "ann_vol": null,
+        "max_drawdown": null,
+        "ann_turnover": null,
+        "long_ann_return": null,
+        "short_ann_return": null,
+        "beta": null,
+        "hit_rate": null,
+        "mean_monthly_return": null,
+        "ci90": null,
+        "t_stat": null
+      },
+      "net": {
+        "ann_return": null,
+        "ann_vol": null,
+        "max_drawdown": null,
+        "ann_turnover": null,
+        "long_ann_return": null,
+        "short_ann_return": null,
+        "beta": null,
+        "hit_rate": null,
+        "mean_monthly_return": null,
+        "ci90": null,
+        "t_stat": null
+      },
+      "rebalances": 8
+    },
+    "yearly": {
+      "gross": {
+        "ann_return": null,
+        "ann_vol": null,
+        "max_drawdown": null,
+        "ann_turnover": null,
+        "long_ann_return": null,
+        "short_ann_return": null,
+        "beta": null,
+        "hit_rate": null,
+        "mean_monthly_return": null,
+        "ci90": null,
+        "t_stat": null
+      },
+      "net": {
+        "ann_return": null,
+        "ann_vol": null,
+        "max_drawdown": null,
+        "ann_turnover": null,
+        "long_ann_return": null,
+        "short_ann_return": null,
+        "beta": null,
+        "hit_rate": null,
+        "mean_monthly_return": null,
+        "ci90": null,
+        "t_stat": null
+      },
+      "rebalances": 1
+    },
+    "buy_hold": {
+      "gross": {
+        "ann_return": null,
+        "ann_vol": null,
+        "max_drawdown": null,
+        "ann_turnover": null,
+        "long_ann_return": null,
+        "short_ann_return": null,
+        "beta": null,
+        "hit_rate": null,
+        "mean_monthly_return": null,
+        "ci90": null,
+        "t_stat": null
+      },
+      "net": {
+        "ann_return": null,
+        "ann_vol": null,
+        "max_drawdown": null,
+        "ann_turnover": null,
+        "long_ann_return": null,
+        "short_ann_return": null,
+        "beta": null,
+        "hit_rate": null,
+        "mean_monthly_return": null,
+        "ci90": null,
+        "t_stat": null
+      },
+      "rebalances": 1
+    }
+  },
+  "null": null,
+  "fidelity": null,
+  "caveats": [
+    "Survivorship bias: the universe is each preset's CURRENT membership, not the historical constituent list, so delisted/removed names never appear in the ranking.",
+    "The `sp500` preset is today's top-100-by-cap tickers, not the S&P 500's actual historical membership — a size look-ahead.",
+    "Rank dates are the irregular dates the live aggregator actually snapshotted (the weekly demo cron), not a fixed grid; across a gap between two snapshot dates (e.g. 2026-07-12 -> 2026-09-21) the book is held unchanged.",
+    "A ticker with no price on a given day is treated as flat (0% return) that day; a name that stops trading entirely after entry is held at its last known close rather than dropped.",
+    "A rebalance trades on the first day after its rank date on which every name in the old and new books has its own close, so each fill is at the ticker's own closing price; a rebalance can therefore wait a day or two across mismatched exchange holidays.",
+    "Returns are local-currency, gross of FX, financing and borrow costs; only the 10 bp one-way-turnover trading cost is modelled.",
+    "Any single-day move above ±50 % is treated as a data glitch and set to 0 %. That also removes a few genuine small-cap moves (e.g. a biotech jump), and a ticker with any non-positive adjusted close is excluded.",
+    "The `monthly_buffer` cadence has no buffer effect here: the live aggregator publishes only the top/bottom 25 each run, so every rebalance is a fresh selection identical to the `monthly` cadence's holdings.",
+    "Null benchmark and fidelity are not yet published for series A (fewer than 12 monthly rebalances so far) — both stay `null` until enough history accumulates.",
+    "The `yearly` cadence rebalances once a year; nothing is annualized from fewer than 12 months of monthly returns (D9), so its metrics stay `null` far longer than the other cadences'.",
+    "This is a hypothetical, backward-looking construction — not a live track record and not investment advice."
+  ]
+}
