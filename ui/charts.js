@@ -20,6 +20,7 @@ import {
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
 import { buildTimeSeries } from "./lib/timeseries.js";
 import { filterByWindow, findClosestScore } from "./lib/window.js";
+import { observeScrollHint } from "./scroll_hint.js";
 
 /**
  * @typedef {{
@@ -1129,6 +1130,7 @@ export function renderBacktestTrades(kind, trades) {
   table.append(thead, tbody);
   wrap.append(table);
   body.append(wrap);
+  observeScrollHint(wrap);
 }
 
 /**

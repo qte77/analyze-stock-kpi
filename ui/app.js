@@ -15,6 +15,7 @@ import { nested } from "./lib/format.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
 import { parseState, resolveViewMode, serializeState } from "./lib/state.js";
 import { bindDetailDismiss, showDetail } from "./detail_panel.js";
+import { observeScrollHint } from "./scroll_hint.js";
 import { ALL_COLUMNS, renderUniverseTable } from "./table.js";
 import {
   initCharts,
@@ -685,6 +686,9 @@ async function init() {
   bindTableSort();
   bindKeyboardShortcuts();
   bindCsvExport();
+  document
+    .querySelectorAll(".table-wrap")
+    .forEach((wrap) => observeScrollHint(/** @type {HTMLElement} */ (wrap)));
 
   const parsed = parseState(window.location.search, knownUniverseIds);
   const lsView = window.localStorage?.getItem(VIEW_MODE_STORAGE_KEY) ?? null;
