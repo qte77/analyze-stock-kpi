@@ -127,10 +127,12 @@ run:  ## run fundamentals (UNIVERSE=qte77-watchlist | TICKERS=AAPL,MSFT | TICKER
 	  $(if $(PERIOD),--period $(PERIOD)) \
 	  $(if $(SHOW_SCORES),--show-scores)
 
+# Both previews use Vite's dev server: it mounts ui/public/ (vendored Chart.js,
+# favicon, universes.json) at the base path, which a plain http.server does not (#415).
 preview:  ## serve ui/ locally on PORT=8000 (data fetched cross-origin from data branch)
 	echo "--- preview"
-	echo "Dashboard: http://localhost:$${PORT:-8000}/  (Ctrl+C to stop)"
-	uv run python -m http.server $${PORT:-8000} --directory ui
+	echo "Dashboard: http://localhost:$${PORT:-8000}/analyze-stock-kpi/  (Ctrl+C to stop)"
+	npm --prefix ui run dev -- --port $${PORT:-8000} --strictPort
 
 preview_local:  ## like preview but serves the latest `make run` output (UNIVERSE=qte77-watchlist by default)
 	echo "--- preview_local"
@@ -143,10 +145,9 @@ preview_local:  ## like preview but serves the latest `make run` output (UNIVERS
 	cp "$$LATEST" "results/demo/$$U/$$(date -u +%Y-%m-%d).json"; \
 	uv run python scripts/build_demo_manifest.py "results/demo/$$U"
 	echo ""
-	echo "  Open in browser:  http://localhost:$${PORT:-8000}/ui/?base=.."
-	echo "  (the http.server URL printed below is the repo root — do NOT use it)"
+	echo "  Open in browser:  http://localhost:$${PORT:-8000}/analyze-stock-kpi/?base=/analyze-stock-kpi/@fs$(CURDIR)&universe=$$U"
 	echo ""
-	uv run python -m http.server $${PORT:-8000} --directory .
+	npm --prefix ui run dev -- --port $${PORT:-8000} --strictPort
 
 
 # MARK: CHANGELOG

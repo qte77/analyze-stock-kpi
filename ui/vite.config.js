@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, searchForWorkspaceRoot } from "vite";
 
 // GitHub Pages project site → https://qte77.github.io/analyze-stock-kpi/.
 // `base` scopes the built asset + public URLs under that subpath (the old raw
@@ -16,5 +16,12 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
+  },
+  // Dev server only: `make preview_local` points `?base=` at `<base>/@fs/<repo>` so the
+  // page can read the repo's local `results/` (outside ui/). Nothing else is exposed.
+  server: {
+    fs: {
+      allow: [searchForWorkspaceRoot(process.cwd()), "../results"],
+    },
   },
 });
