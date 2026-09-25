@@ -30,4 +30,5 @@ tracker) stays issue-only — no plan file.
 | [Restructure data-branch results/ layout](005-restructure-results.md) | none — pre-issue design |
 | [Agent-ready backlog: llms.txt, XBRL, release workflows](006-agent-ready-backlog.md) | [#361](https://github.com/qte77/analyze-stock-kpi/issues/361) + [#101](https://github.com/qte77/analyze-stock-kpi/issues/101) + [#340](https://github.com/qte77/analyze-stock-kpi/issues/340) |
 | [Long/short model portfolio + multi-window Sortino](007-longshort-portfolio-and-multiwindow-sortino.md) (closed; superseded by 008) | none — owner request 2026-09-21/22 |
-| [Point-in-time backfill + backtested L/S 25/25](008-pit-longshort-backtest.md) | [#401](https://github.com/qte77/analyze-stock-kpi/issues/401) |
+| [Point-in-time backfill + backtested L/S 25/25](008-pit-longshort-backtest.md) (closed; carry-over in 009) | [#401](https://github.com/qte77/analyze-stock-kpi/issues/401) |
+| [Backtest carry-over](009-backtest-carry-over.md) | [#415](https://github.com/qte77/analyze-stock-kpi/issues/415) · [#416](https://github.com/qte77/analyze-stock-kpi/issues/416) · [#417](https://github.com/qte77/analyze-stock-kpi/issues/417) · [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) · [#419](https://github.com/qte77/analyze-stock-kpi/issues/419) |
