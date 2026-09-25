@@ -22,9 +22,12 @@
   with an optional composite-score breakdown.
 - A static **[live dashboard](https://qte77.github.io/analyze-stock-kpi/)** (deployed to
   GitHub Pages): tabbed F&G panel + sortable universe table + row-click KPI detail +
-  a hypothetical, point-in-time backtested long/short **25/25 book** (backfilled best/worst 25,
-  equal-weight, gross/net of a 10 bp turnover cost — see
-  [ADR-0013](docs/decisions/0013-point-in-time-backtest.md)).
+  a hypothetical, point-in-time backtested long/short **25/25 book**. It shows two series:
+  **genuine decisions** made from the actual daily snapshots since 2026-05-31 (the headline),
+  and a **reconstructed backfill** since 2023 (an approximation). Both are equal-weight, shown
+  gross and net of a 10 bp turnover cost, across six rebalance cadences (monthly primary,
+  through yearly), with a rebalance log of when, why, and which long and short names changed
+  (see [ADR-0013](docs/decisions/0013-point-in-time-backtest.md)).
 - **No API keys, no scraping** — keyless public sources only.
 
 <details>
@@ -52,6 +55,19 @@ YYYY-MM-DD]` (`--sortino-to` defaults to each ticker's latest close), e.g.:
 ```bash
 uv run python -m analyze_stock_kpi --tickers AAPL --sortino-from 2015-01-01 --sortino-to 2020-12-31
 ```
+
+The dashboard keeps its state in the URL, so views can be shared. A parameter is omitted
+while it has its default value, and clearing a filter in the UI removes it from the URL:
+
+| Parameter | Values | Default |
+|---|---|---|
+| `universe` | comma-separated universe ids, e.g. `sp500` | the first universe |
+| `date` | snapshot date `YYYY-MM-DD` | latest |
+| `sort` / `sortDir` | a column key, e.g. `composite_scores.screener_score` / `1` = ascending | Score, descending |
+| `filter` | ticker/name text filter | none |
+| `sector` | sector name (from the donut) | none |
+| `view` | `simple` or `detailed` | `simple` |
+| `ltFgWindow` / `ycWindow` | `1y`, `5y`, `10y`, `all` | `all` |
 
 See [`docs/architecture.md`](docs/architecture.md) for the module map, the persisted
 `FundamentalsSnapshot` fields, the composite-score formulas, and the universe presets.
