@@ -28,12 +28,11 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
 - **What's next, in order:**
   1. #419, the country-based filing lag (agent). It changes series B's inputs, so it needs a
      `method_version` bump and one rebuild. Do it before series B accumulates much new history.
-     `country` is **not** stored today; capture it from yfinance `info` first (see the source map).
-  2. #411 (Dependabot, 8 Python updates): **CI fails**, and it changes only `uv.lock`. Find which
-     bump breaks lint/types/tests on a branch, fix or pin it, then merge on green.
-  3. #415, #417, #426: small UI/build fixes (agent; run the polyfetch e2e for #417/#426).
-  4. #416, the `llms.txt` template (agent).
-  5. #418, the private cache, once the owner has created the repo and token.
+     `country` is now captured (step 1); step 2 waits for a snapshot run (see the table row).
+  2. The UI redesign (approved): open plan 010, UX review first, polyfetch e2e on phone and desktop.
+  3. Unpin `complexipy`; fix the bump workflow's `uv.lock` version sync.
+  4. #415, #417, #426, #416: small UI/build/docs fixes (run the polyfetch e2e for #417/#426).
+  5. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
 - **Offloading to the cloud (optional):** `claude --cloud` needs an interactive TTY, so it fails
   from an agent's Bash. Use a one-time routine instead (`/schedule` → `RemoteTrigger`, environment
   "Default"). Good candidates are #416, #415 and #417, which need no Yahoo/SEC network and no
@@ -112,7 +111,7 @@ universes", "Why these charts", the backtest rules, the look-ahead audit, all ca
 | What | Where |
 |---|---|
 | Filing lag (D18) | `src/analyze_stock_kpi/orchestrators/longshort_backtest.py`: `_filing_lag_days` and the known-issuer list |
-| `country` per ticker | **not stored today** (verified 2026-09-25: absent from the `data` snapshots). yfinance `Ticker.info["country"]` has it. Add it as a `FundamentalsSnapshot` field (`src/analyze_stock_kpi/data_sources/fundamentals.py`), or read it in the backtest's `fetch_frames` |
+| `country` per ticker | `FundamentalsSnapshot.country` (`src/analyze_stock_kpi/data_sources/fundamentals.py`), from yfinance `info["country"]`; in `data` snapshots from the first demo-snapshot run after it merged. The backtest reads snapshots via `_load_snapshot_list` in `longshort_backtest.py` |
 | Rebuild switch | `_METHOD_VERSION_B` in `longshort_backtest.py` |
 | Statement cache layout | `results/prices/statements/<TICKER>/<fetch-date>.json` (gitignored; earliest fetch wins) |
 | Cron | `.github/workflows/portfolio.yaml`; commit helper `scripts/data-branch-commit.cjs` |
@@ -124,7 +123,7 @@ universes", "Why these charts", the backtest rules, the look-ahead audit, all ca
 
 | Item | Gate | Done-when |
 |---|---|---|
-| Country-based filing lag [#419](https://github.com/qte77/analyze-stock-kpi/issues/419) | agent | country lookup with suffix fallback, tested; `method_version` bumped; one rebuild verified on `data` |
+| Country-based filing lag [#419](https://github.com/qte77/analyze-stock-kpi/issues/419). Step 1 shipped: `FundamentalsSnapshot.country` (feat/snapshot-country). Step 2 (lag rule + `_METHOD_VERSION_B` bump) merges only **after** a demo-snapshot run has written `country` to `data` (next cron Sun 2026-09-27 06:15 UTC), or the Saturday rebuild runs without countries | agent | country lookup with suffix fallback, tested; `method_version` bumped; one rebuild verified on `data` |
 | ~~Dependabot python-deps [#411](https://github.com/qte77/analyze-stock-kpi/pull/411)~~ | agent | shipped 2026-09-25, PR #431: applied 7 of 8 bumps; `complexipy` pinned to 5.5.0 (its 6.x/7.x/8.x scorer flags unchanged functions — see PR #431) |
 | ~~Dependabot `setup-uv` [#412](https://github.com/qte77/analyze-stock-kpi/pull/412)~~ | agent | shipped 2026-09-25: its CI was green (the allow-list accepts the new SHA); merged, and `validate` passes on `main` |
 | `bump-my-version.yaml` doesn't sync the project's own version in `uv.lock` (v1.4.0 shipped with 1.3.0 there; fixed by hand in #427) | agent | the next bump leaves `uv.lock`'s `analyze-stock-kpi` version equal to `pyproject.toml` |

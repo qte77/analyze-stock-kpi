@@ -25,6 +25,7 @@ def test_snapshot_parses_full_info_dict() -> None:
     assert snap.symbol == "AAPL"
     assert snap.long_name == "Apple Inc."
     assert snap.sector == "Technology"
+    assert snap.country == "United States"
     assert snap.quote_type == "EQUITY"
     assert snap.market_cap is not None
     assert snap.market_cap > 0
