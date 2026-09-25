@@ -29,8 +29,8 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   1. #419, the country-based filing lag (agent). It changes series B's inputs, so it needs a
      `method_version` bump and one rebuild. Do it before series B accumulates much new history.
      `country` is now captured (step 1); step 2 waits for a snapshot run (see the table row).
-  2. The UI redesign (approved): open plan 010, UX review first, polyfetch e2e on phone and desktop.
-  3. #415, #417, #426, #416: small UI/build/docs fixes (run the polyfetch e2e for #417/#426).
+  2. The UI redesign (approved), incl. #426: now its own plan, [010](010-ui-redesign-progressive-disclosure.md).
+  3. #417: the touch scroll hint (run the polyfetch e2e on a tablet and a phone).
   4. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
 - **Offloading to the cloud (optional):** `claude --cloud` needs an interactive TTY, so it fails
   from an agent's Bash. Use a one-time routine instead (`/schedule` → `RemoteTrigger`, environment
@@ -44,66 +44,17 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   - A change to the ranking inputs rewrites frozen history only through a `method_version` bump,
     once and deliberately.
   - Never commit raw Yahoo prices or statements.
-  - `make preview` doesn't render charts until #415 is fixed; use `npm run dev`.
+  - `make preview` serves `http://localhost:8000/analyze-stock-kpi/` (Vite, #415). In a
+    Patchright `page.evaluate`, pass `isolated_context=False` to see page globals like `Chart`.
 - **Owner gates:**
   - #418: the private repo `qte77/analyze-stock-kpi-cache` exists (2026-09-25). Still needed: a fine-grained PAT scoped to it, stored as the `CACHE_REPO_TOKEN` secret (steps on #418).
   - Connect GitHub to the Claude account, only if you want cloud offloading.
   - The US-only SEC-XBRL extension is deferred until the owner asks for it.
 
-## UI redesign proposal (owner feedback 2026-09-25: "overwhelming and convoluted")
+## UI redesign
 
-The page stacks three products at equal weight: market sentiment, a research backtest and a stock
-screener. The proposal is to make the ranking the product and reveal everything else in three
-layers. It is a proposal only, awaiting the owner's go-ahead (see the table row). It changes layout
-and emphasis only: the data, URL parameters (`ui/lib/state.js`) and EyeRest theme stay as they are.
-
-**Positioning line:** "qte77 ranks ~320 stocks by one quality score, shows today's best and worst
-25, and tracks how that ranking would have performed."
-
-Layer 1, what everyone sees (the list and chart values are illustrative):
-
-```text
-+--------------------------------------------------------------------------+
-| qte77 · stock quality ranking               [Fear 32 v]  [theme]  [?]    |
-| <positioning line>                                                       |
-+--------------------------------------------------------------------------+
-|  TODAY'S PICKS (date)                                                    |
-|  +------------------------------+  +------------------------------+      |
-|  | BEST 25          qte77 Score |  | WORST 25         qte77 Score |      |
-|  | ticker  name              86 |  | ticker  name              11 |      |
-|  | ... [show all 25 v]          |  | ... [show all 25 v]          |      |
-|  +------------------------------+  +------------------------------+      |
-|  DOES IT WORK?                                                           |
-|  +--------------------------------------------------------------------+  |
-|  |  one chart: the headline backtest line (100-based)                 |  |
-|  +--------------------------------------------------------------------+  |
-|  "Long best 25 / short worst 25: +8 % a year after costs since 2023.     |
-|   Not statistically significant. Hypothetical, not investment advice."   |
-|  [How it's tested >]                    [Browse all stocks >]            |
-+--------------------------------------------------------------------------+
-| Methodology · Data sources · GitHub · Report an issue                    |
-+--------------------------------------------------------------------------+
-```
-
-Layer 2, one click away:
-
-- **Fear & Greed chip** → a dropdown with the score, deltas, and the 30d / long-term / 5s10s tabs.
-- **How it's tested** → the metrics table (gross/net), other cadences on demand, the rebalance log,
-  caveats and series B.
-- **Browse all stocks** → the universe table in Simple view (5–6 columns), with picker, date, filter,
-  CSV and the sector donut collapsed. A row click opens the side panel in Simple view too (#426).
-
-Layer 3, reference: a Methodology drawer or page holding "What the qte77 Score measures", "Why these
-universes", "Why these charts", the backtest rules, the look-ahead audit, all caveats and ADR links.
-
-| Current element | New home |
-|---|---|
-| F&G section (3 tabs, big charts) | header chip + dropdown (layer 2) |
-| "Why these charts?" / "Why these universes?" | Methodology (layer 3) |
-| Backtest series A/B blocks, tables, key facts | one chart + one line (layer 1), details in layer 2 |
-| Series B, rebalance log, caveats | "How it's tested", collapsed |
-| "Current candidates" + "Latest best/worst 25" | merged into Today's picks (layer 1) |
-| Universe table, picker, donut, CSV | "Browse all stocks" (layer 2) |
+Moved to [plan 010](010-ui-redesign-progressive-disclosure.md) (2026-09-25), with the
+wireframe, the UX review, the defaults and the slices.
 
 ## Source map
 
@@ -125,12 +76,12 @@ universes", "Why these charts", the backtest rules, the look-ahead audit, all ca
 | Country-based filing lag [#419](https://github.com/qte77/analyze-stock-kpi/issues/419). Step 1 shipped: `FundamentalsSnapshot.country` (PR #435). Step 2 is **draft PR #436** (lag rule + `_METHOD_VERSION_B` bump); rebase it on `main`, then merge only **after** a demo-snapshot run has written `country` to `data` (next cron Sun 2026-09-27 06:15 UTC), or the Saturday rebuild runs without countries | agent | country lookup with suffix fallback, tested; `method_version` bumped; one rebuild verified on `data` |
 | ~~Dependabot python-deps [#411](https://github.com/qte77/analyze-stock-kpi/pull/411)~~ | agent | shipped 2026-09-25, PR #431: applied 7 of 8 bumps; `complexipy` pinned to 5.5.0 (its 6.x/7.x/8.x scorer flags unchanged functions — see PR #431) |
 | ~~Dependabot `setup-uv` [#412](https://github.com/qte77/analyze-stock-kpi/pull/412)~~ | agent | shipped 2026-09-25: its CI was green (the allow-list accepts the new SHA); merged, and `validate` passes on `main` |
-| ~~`bump-my-version.yaml` doesn't sync the project's own version in `uv.lock`~~ | agent | shipped 2026-09-25: a multiline `[[tool.bumpversion.files]]` entry for `uv.lock` in `pyproject.toml`; a `--dry-run` shows it bumped (confirm on the next real bump) |
-| Radar labels + inert row detail in Simple view [#426](https://github.com/qte77/analyze-stock-kpi/issues/426) | agent | both addressed or decided; checked in the phone e2e |
-| UI redesign: positioning + progressive disclosure (see §UI redesign proposal), **approved by the owner 2026-09-25** | agent | the owner approves or adjusts the wireframe; then a plan 010 with a UX review (a `frontend-design` skill or usability-audit subagent) and the polyfetch e2e on phone and desktop as the done-when |
-| ~~Unpin `complexipy`~~ | agent | shipped 2026-09-25: `complexipy>=8.0.1`; the gate stays at 10, and the 11 functions that exceed it only because 6.x+ scores comprehensions (probe: the same comprehensions score 0 in 5.5.0, 4 in 8.0.1) are baselined in `complexipy-snapshot.json`; `make validate` green |
-| `make preview` serves `ui/public` [#415](https://github.com/qte77/analyze-stock-kpi/issues/415) | agent | charts render under `make preview` |
+| ~~`bump-my-version.yaml` doesn't sync the project's own version in `uv.lock`~~ | agent | shipped 2026-09-25, PR #437: a multiline `[[tool.bumpversion.files]]` entry for `uv.lock` in `pyproject.toml`; a `--dry-run` shows it bumped (confirm on the next real bump) |
+| ~~Radar labels + inert row detail in Simple view [#426](https://github.com/qte77/analyze-stock-kpi/issues/426)~~ | agent | moved to plan 010, slice 5 |
+| ~~UI redesign: positioning + progressive disclosure~~ | agent | moved 2026-09-25 to [plan 010](010-ui-redesign-progressive-disclosure.md) (UX review done; slices 0-7 open there) |
+| ~~Unpin `complexipy`~~ | agent | shipped 2026-09-25, PR #438: `complexipy>=8.0.1`; the gate stays at 10, and the 11 functions that exceed it only because 6.x+ scores comprehensions (probe: the same comprehensions score 0 in 5.5.0, 4 in 8.0.1) are baselined in `complexipy-snapshot.json`; `make validate` green |
+| ~~`make preview` serves `ui/public` [#415](https://github.com/qte77/analyze-stock-kpi/issues/415)~~ | agent | shipped 2026-09-25, PR #441: both preview targets run Vite's dev server (URL `/analyze-stock-kpi/`); `preview_local` reads local `results/` via `<base>/@fs/<repo>` (`server.fs.allow` adds only `../results`). Headless check: 4 Chart.js instances on desktop and phone |
 | Scroll hint on touch devices [#417](https://github.com/qte77/analyze-stock-kpi/issues/417) | agent | a hint shows only on overflow; checked in the e2e on a tablet and a phone |
-| `llms.txt` template up to date [#416](https://github.com/qte77/analyze-stock-kpi/issues/416) | agent | every ADR and module listed, or generated from the tree |
+| ~~`llms.txt` template up to date [#416](https://github.com/qte77/analyze-stock-kpi/issues/416)~~ | agent | shipped 2026-09-25: the template lists ADRs 0000-0014 and every module; `tests/test_llms_txt_template.py` fails on a missing one. The `llms-txt` workflow regenerates `ui/public/llms.txt` on merge |
 | Private cache repo [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) | owner → agent | two consecutive runs show the cache growing and B's start date stable |
 | US-only SEC-XBRL extension to ~2017 | owner (deferred) | only if the owner asks for a longer US series |
