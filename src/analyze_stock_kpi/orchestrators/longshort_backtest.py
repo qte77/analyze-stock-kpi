@@ -91,7 +91,7 @@ from analyze_stock_kpi.domain.universe import PRESET_DIR, _read_symbol_file
 from analyze_stock_kpi.orchestrators.aggregated_scores_best_and_worst import build_universe
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterable, Mapping
     from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -124,10 +124,11 @@ _NON_US_FILING_LAG_DAYS = 120
 """D18: a non-US ticker (any ``.XX`` exchange suffix, e.g. ``.DE``/``.SA``/``.T``/``.KS``)
 files later (20-F etc.), so its statement columns need a longer lag."""
 
-_METHOD_VERSION_B = "2"
-"""D17/D18: series B's method version. Bumped once (2026-09-24) to apply the
-start-trim fix (:func:`_trim_to_first_trade`) and the D18 non-US filing lag —
-this single bump triggers series B's one-time full rebuild (:func:`_reset_year_files`)."""
+_METHOD_VERSION_B = "3"
+"""D17/D18: series B's method version. Bumped to 2 (2026-09-24) for the
+start-trim fix (:func:`_trim_to_first_trade`) and the D18 non-US filing lag, and
+to 3 for the country-based lag (#419). Each bump triggers series B's one-time
+full rebuild (:func:`_reset_year_files`)."""
 
 _METHOD_VERSION_A = "1"
 """D16: series A's method version (its first-ever run)."""
@@ -207,10 +208,12 @@ _CAVEATS: tuple[str, ...] = (
     "name in the old and new books has its own close, so each fill is at the "
     "ticker's own closing price; a rebalance can therefore wait a day or two "
     "across mismatched exchange holidays.",
-    "Non-US filing-lag classification (D18) is suffix-based plus a small "
-    "disclosed exception list for known no-suffix foreign issuers and an "
-    "OTC-ADR ticker-shape heuristic — not a full country lookup, so some "
-    "no-suffix foreign names may still be misclassified as US.",
+    "Non-US filing-lag classification (D18) uses each ticker's country as "
+    "Yahoo reports it in the latest demo snapshot (the headquarters, not the "
+    "filing regime, so e.g. an Ireland-headquartered 10-K filer gets the "
+    "longer, more conservative 120-day lag). A ticker without a country falls "
+    "back to its exchange suffix, a small list of known no-suffix foreign "
+    "issuers and an OTC-ADR ticker-shape heuristic.",
     "Returns are local-currency, gross of FX, financing and borrow costs; "
     "only the 10 bp one-way-turnover trading cost is modelled.",
     "Any single-day move above ±50 % is treated as a data glitch and set to "
@@ -452,10 +455,12 @@ _KNOWN_NON_US_NO_SUFFIX: frozenset[str] = frozenset(
 )
 """D18/finding-#8 (2026-09-24): well-known non-US issuers that trade on a US exchange
 without an exchange suffix (ADRs/ordinaries), so the plain suffix rule misclassifies
-them as US (90d lag). Not exhaustive — a `FundamentalsSnapshot.country`-based
-classification is a documented follow-up (would need a new fetch this module doesn't
-otherwise make); this is a disclosed, bounded interim fix for the audit's named
-examples not already covered by `_is_otc_adr_shaped`."""
+them as US (90d lag). Since #419 only a fallback for tickers with no snapshot
+`country` (see `_filing_lag_days`); covers the audit's named examples not already
+covered by `_is_otc_adr_shaped`."""
+
+_US_COUNTRY = "United States"
+"""#419: yfinance `info["country"]` for a US-headquartered issuer."""
 
 
 def _is_otc_adr_shaped(ticker: str) -> bool:
@@ -469,14 +474,17 @@ def _is_otc_adr_shaped(ticker: str) -> bool:
     return len(ticker) == 5 and ticker.isalpha() and ticker.endswith("Y")
 
 
-def _filing_lag_days(ticker: str) -> int:
-    """D18: 90 days for a US ticker, 120 for non-US.
+def _filing_lag_days(ticker: str, country: str | None = None) -> int:
+    """D18: 90 days for a US issuer, 120 for non-US.
 
-    Non-US = any `.XX` exchange suffix, a known no-suffix foreign issuer
+    #419: a known `country` (from the demo snapshots; a static attribute, so
+    no look-ahead) decides. Without one, fall back to the ticker: any `.XX`
+    exchange suffix, a known no-suffix foreign issuer
     (`_KNOWN_NON_US_NO_SUFFIX`), or an OTC-ADR-shaped ticker
-    (`_is_otc_adr_shaped`) — both interim fixes for finding #8 (2026-09-24),
-    since yfinance exposes no per-ticker filing dates or country field here.
+    (`_is_otc_adr_shaped`) is non-US (finding #8, 2026-09-24).
     """
+    if country is not None:
+        return _US_FILING_LAG_DAYS if country == _US_COUNTRY else _NON_US_FILING_LAG_DAYS
     if "." in ticker or ticker in _KNOWN_NON_US_NO_SUFFIX or _is_otc_adr_shaped(ticker):
         return _NON_US_FILING_LAG_DAYS
     return _US_FILING_LAG_DAYS
@@ -499,21 +507,24 @@ def _usable_column(frame: pd.DataFrame | None, as_of: date, lag_days: int) -> pd
     return max(usable) if usable else None
 
 
-def pit_fundamentals(frames: Frames, as_of: date, ticker: str) -> dict[str, float | None]:
+def pit_fundamentals(
+    frames: Frames, as_of: date, ticker: str, country: str | None = None
+) -> dict[str, float | None]:
     """Point-in-time D2 ratios usable at ``as_of`` (D3/D18).
 
     ``frames`` is ``(income_stmt, balance_sheet)`` as yfinance returns them
     (columns = period-end Timestamps). A column is usable at ``as_of`` iff
-    ``period_end + lag_days <= as_of`` — 90 days for a US ``ticker`` (no
-    exchange suffix), 120 for non-US (D18; no filing dates in yfinance, so
-    this is a documented approximation of the real filing lag) — the latest
+    ``period_end + lag_days <= as_of`` — 90 days for a US issuer, 120 for
+    non-US, by ``country`` or else the ticker (`_filing_lag_days`; no filing
+    dates in yfinance, so this is a documented approximation of the real
+    filing lag) — the latest
     usable column of each frame is picked independently. Missing
     rows/frames yield `None` per field rather than raising.
     ``rd_to_revenue`` reuses ``fundamentals._read_rd_revenue`` unchanged
     (DRY); the other four ratios reuse ``fundamentals._find_row``.
     """
     income_stmt, balance_sheet = frames
-    lag_days = _filing_lag_days(ticker)
+    lag_days = _filing_lag_days(ticker, country)
     ic_col = _usable_column(income_stmt, as_of, lag_days)
     bs_col = _usable_column(balance_sheet, as_of, lag_days)
     out: dict[str, float | None] = dict.fromkeys(_SCORE_INPUT_FIELDS[:-1])
@@ -1408,14 +1419,16 @@ def _eligible_count(
     frames_by_ticker: dict[str, Frames],
     closes: dict[str, pd.Series],
     threshold: int,
+    countries: Mapping[str, str] | None = None,
 ) -> int:
     """Count of D1 tickers eligible (`>= 1y closes` + `score_at` not `None`) at `d`."""
+    countries = countries or {}
     count = 0
     for ticker, frames in frames_by_ticker.items():
         close = closes.get(ticker)
         if close is None or not _has_one_year_of_closes(close, d):
             continue
-        if score_at(pit_fundamentals(frames, d, ticker), close, d) is None:
+        if score_at(pit_fundamentals(frames, d, ticker, countries.get(ticker)), close, d) is None:
             continue
         count += 1
         if count >= threshold:
@@ -1429,24 +1442,29 @@ def _find_start_date(
     closes: dict[str, pd.Series],
     *,
     threshold: int = _MIN_ELIGIBLE_START,
+    countries: Mapping[str, str] | None = None,
 ) -> date | None:
     """D6: the first `grid` date with `>= threshold` eligible tickers."""
     for d in grid:
-        if _eligible_count(d, frames_by_ticker, closes, threshold) >= threshold:
+        if _eligible_count(d, frames_by_ticker, closes, threshold, countries) >= threshold:
             return d
     return None
 
 
 def _score_all_tickers(
-    d: date, frames_by_ticker: dict[str, Frames], closes: dict[str, pd.Series]
+    d: date,
+    frames_by_ticker: dict[str, Frames],
+    closes: dict[str, pd.Series],
+    countries: Mapping[str, str] | None = None,
 ) -> list[tuple[str, float]]:
     """Every ticker's `score_at` at `d`, sorted best-to-worst (D6: needs `>= 1y closes`)."""
+    countries = countries or {}
     scored: list[tuple[str, float]] = []
     for ticker, frames in frames_by_ticker.items():
         close = closes.get(ticker)
         if close is None or not _has_one_year_of_closes(close, d):
             continue
-        score = score_at(pit_fundamentals(frames, d, ticker), close, d)
+        score = score_at(pit_fundamentals(frames, d, ticker, countries.get(ticker)), close, d)
         if score is not None:
             scored.append((ticker, score))
     scored.sort(key=lambda x: (-x[1], x[0]))
@@ -1472,12 +1490,13 @@ def _rank_all_dates(
     grid: list[date],
     frames_by_ticker: dict[str, Frames],
     closes: dict[str, pd.Series],
+    countries: Mapping[str, str] | None = None,
 ) -> tuple[dict[date, list[tuple[str, float]]], list[BacktestListEntry]]:
     """Every grid date's full ranked-eligible list + its best/worst-25 entry."""
     ranked_by_date: dict[date, list[tuple[str, float]]] = {}
     entries: list[BacktestListEntry] = []
     for d in grid:
-        scored = _score_all_tickers(d, frames_by_ticker, closes)
+        scored = _score_all_tickers(d, frames_by_ticker, closes, countries)
         ranked_by_date[d] = scored
         entries.append(_list_entry(d, scored))
     return ranked_by_date, entries
@@ -1698,6 +1717,7 @@ def _score_bt_for_tickers(
     tickers: Iterable[str],
     frames_by_ticker: dict[str, Frames],
     closes: dict[str, pd.Series],
+    countries: Mapping[str, str],
 ) -> dict[str, float]:
     """`score_at` at `d` for exactly the given `tickers`."""
     out: dict[str, float] = {}
@@ -1706,22 +1726,53 @@ def _score_bt_for_tickers(
         close = closes.get(ticker)
         if frames is None or close is None:
             continue
-        score = score_at(pit_fundamentals(frames, d, ticker), close, d)
+        score = score_at(pit_fundamentals(frames, d, ticker, countries.get(ticker)), close, d)
         if score is not None:
             out[ticker] = score
     return out
 
 
 def _compute_fidelity(
-    frames_by_ticker: dict[str, Frames], closes: dict[str, pd.Series]
+    frames_by_ticker: dict[str, Frames],
+    closes: dict[str, pd.Series],
+    countries: Mapping[str, str],
 ) -> Fidelity:
     """D11 fidelity, sourced from whatever genuine snapshots are checked out locally."""
     live_by_date = _live_scores_by_date()
     bt_by_date = {
-        d: _score_bt_for_tickers(d, live_scores, frames_by_ticker, closes)
+        d: _score_bt_for_tickers(d, live_scores, frames_by_ticker, closes, countries)
         for d, live_scores in live_by_date.items()
     }
     return fidelity(bt_by_date, live_by_date)
+
+
+def _countries_from_snapshots(paths: Iterable[Path]) -> dict[str, str]:
+    """#419: `ticker -> country` across `paths` in order.
+
+    A later file wins, but a snapshot without a country never erases a known one.
+    """
+    out: dict[str, str] = {}
+    for path in paths:
+        for snap in _load_snapshot_list(path):
+            if snap.country:
+                out[snap.symbol] = snap.country
+    return out
+
+
+def _snapshot_countries() -> dict[str, str]:
+    """#419: every base universe's demo-snapshot `country`, newest date winning.
+
+    Best-effort like `_live_scores_by_date`: no local `results/demo/` checkout
+    yields `{}`, and every ticker then falls back to the suffix rule.
+    """
+    paths = [
+        path
+        for universe_id in _base_universe_ids()
+        if (settings.demo_dir / universe_id).is_dir()
+        for path in (settings.demo_dir / universe_id).glob("*.json")
+        if _DATE_FILE_RE.match(path.name)
+    ]
+    return _countries_from_snapshots(sorted(paths, key=lambda p: p.name))
 
 
 # ----- D16: series A (genuine decisions) -----
@@ -2174,17 +2225,20 @@ def _run_series_b(
     returns_by_ticker: dict[str, dict[date, float]],
     spy_returns: dict[date, float],
     own_dates: dict[str, list[date]],
+    countries: Mapping[str, str],
 ) -> None:
     """D17/D18: append-only recompute of series B (the reconstructed backfill)."""
     grid = rank_dates(calendar)
-    start = _find_start_date(grid, frames_by_ticker, closes)
+    start = _find_start_date(grid, frames_by_ticker, closes, countries=countries)
     if start is None:
         logger.warning("no grid date reaches the %d-eligible threshold", _MIN_ELIGIBLE_START)
         return
     active_grid = _freeze_eligible([d for d in grid if d >= start], calendar[-1])
     _maybe_rebuild_series_b()
 
-    ranked_by_date, lists_entries = _rank_all_dates(active_grid, frames_by_ticker, closes)
+    ranked_by_date, lists_entries = _rank_all_dates(
+        active_grid, frames_by_ticker, closes, countries
+    )
     write_lists_years(lists_entries)
 
     cadence_metrics: dict[str, CadenceMetrics] = {}
@@ -2222,7 +2276,7 @@ def _run_series_b(
         calendar=calendar,
         own_dates=own_dates,
     )
-    fid = _compute_fidelity(frames_by_ticker, closes)
+    fid = _compute_fidelity(frames_by_ticker, closes, countries)
 
     summary = BacktestSummary(
         method_version=_METHOD_VERSION_B,
@@ -2325,7 +2379,15 @@ def main() -> None:
     spy_returns = _pct_change_map(_fetch_history_closes("SPY", "max"))
 
     own_dates = _own_dates(closes)
-    _run_series_b(frames_by_ticker, closes, calendar, returns_by_ticker, spy_returns, own_dates)
+    _run_series_b(
+        frames_by_ticker,
+        closes,
+        calendar,
+        returns_by_ticker,
+        spy_returns,
+        own_dates,
+        _snapshot_countries(),
+    )
     _run_series_a(calendar, returns_by_ticker, spy_returns, own_dates)
 
 
