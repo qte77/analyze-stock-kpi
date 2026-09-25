@@ -360,6 +360,7 @@ the null benchmark's price lookups (#6, partial â€” see below); the documented â
 eligibility threshold not actually being enforced (#7); and the D18 non-US filing lag missing
 several no-suffix foreign issuers (#8). The coordinator then fixed the rest in the same PR
 (2026-09-25):
+
 - **#4 fills:** a rebalance trades on the first day every name in the old and new books has its own
   close (`_trade_date`).
 - **The remainder of #6:** the null benchmark's random books use the same rule and each earns its
