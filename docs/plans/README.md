@@ -32,3 +32,4 @@ tracker) stays issue-only — no plan file.
 | [Long/short model portfolio + multi-window Sortino](007-longshort-portfolio-and-multiwindow-sortino.md) (closed; superseded by 008) | none — owner request 2026-09-21/22 |
 | [Point-in-time backfill + backtested L/S 25/25](008-pit-longshort-backtest.md) (closed; carry-over in 009) | [#401](https://github.com/qte77/analyze-stock-kpi/issues/401) |
 | [Backtest carry-over](009-backtest-carry-over.md) | [#415](https://github.com/qte77/analyze-stock-kpi/issues/415) · [#416](https://github.com/qte77/analyze-stock-kpi/issues/416) · [#417](https://github.com/qte77/analyze-stock-kpi/issues/417) · [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) · [#419](https://github.com/qte77/analyze-stock-kpi/issues/419) |
+| [UI redesign: positioning + progressive disclosure](010-ui-redesign-progressive-disclosure.md) | [#426](https://github.com/qte77/analyze-stock-kpi/issues/426) · owner request 2026-09-25 |
