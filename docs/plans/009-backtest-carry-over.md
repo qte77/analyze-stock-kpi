@@ -30,8 +30,7 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
      `method_version` bump and one rebuild. Do it before series B accumulates much new history.
      `country` is now captured (step 1); step 2 waits for a snapshot run (see the table row).
   2. The UI redesign (approved), incl. #426: now its own plan, [010](010-ui-redesign-progressive-disclosure.md).
-  3. #417: the touch scroll hint (run the polyfetch e2e on a tablet and a phone).
-  4. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
+  3. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
 - **Offloading to the cloud (optional):** `claude --cloud` needs an interactive TTY, so it fails
   from an agent's Bash. Use a one-time routine instead (`/schedule` → `RemoteTrigger`, environment
   "Default"). Good candidates are #416, #415 and #417, which need no Yahoo/SEC network and no
@@ -81,7 +80,7 @@ wireframe, the UX review, the defaults and the slices.
 | ~~UI redesign: positioning + progressive disclosure~~ | agent | moved 2026-09-25 to [plan 010](010-ui-redesign-progressive-disclosure.md) (UX review done; slices 0-7 open there) |
 | ~~Unpin `complexipy`~~ | agent | shipped 2026-09-25, PR #438: `complexipy>=8.0.1`; the gate stays at 10, and the 11 functions that exceed it only because 6.x+ scores comprehensions (probe: the same comprehensions score 0 in 5.5.0, 4 in 8.0.1) are baselined in `complexipy-snapshot.json`; `make validate` green |
 | ~~`make preview` serves `ui/public` [#415](https://github.com/qte77/analyze-stock-kpi/issues/415)~~ | agent | shipped 2026-09-25, PR #441: both preview targets run Vite's dev server (URL `/analyze-stock-kpi/`); `preview_local` reads local `results/` via `<base>/@fs/<repo>` (`server.fs.allow` adds only `../results`). Headless check: 4 Chart.js instances on desktop and phone |
-| Scroll hint on touch devices [#417](https://github.com/qte77/analyze-stock-kpi/issues/417) | agent | a hint shows only on overflow; checked in the e2e on a tablet and a phone |
-| ~~`llms.txt` template up to date [#416](https://github.com/qte77/analyze-stock-kpi/issues/416)~~ | agent | shipped 2026-09-25: the template lists ADRs 0000-0014 and every module; `tests/test_llms_txt_template.py` fails on a missing one. The `llms-txt` workflow regenerates `ui/public/llms.txt` on merge |
+| ~~Scroll hint on touch devices [#417](https://github.com/qte77/analyze-stock-kpi/issues/417)~~ | agent | shipped 2026-09-25: `ui/scroll_hint.js` sets `.overflow-right` while columns are hidden to the right; `style.css` masks the edge under `(pointer: coarse)`. e2e: on for phone (both views) and tablet (Detailed), off when the table fits, off at the scroll end |
+| ~~`llms.txt` template up to date [#416](https://github.com/qte77/analyze-stock-kpi/issues/416)~~ | agent | shipped 2026-09-25, PR #443: the template lists ADRs 0000-0014 and every module; `tests/test_llms_txt_template.py` fails on a missing one. The `llms-txt` workflow regenerates `ui/public/llms.txt` on merge |
 | Private cache repo [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) | owner → agent | two consecutive runs show the cache growing and B's start date stable |
 | US-only SEC-XBRL extension to ~2017 | owner (deferred) | only if the owner asks for a longer US series |

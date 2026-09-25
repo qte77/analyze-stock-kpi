@@ -395,6 +395,15 @@ h2 {
   -webkit-overflow-scrolling: touch;
 }
 
+/* #417: touch devices show no scrollbar, so fade the right edge while more
+   columns are hidden there (class set by ui/scroll_hint.js). A mask fades the
+   content itself, so it adds no colour and works over the sticky cells. */
+@media (pointer: coarse) {
+  .table-wrap.overflow-right {
+    mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+  }
+}
+
 table {
   width: 100%;
   border-collapse: separate;
