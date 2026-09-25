@@ -49,8 +49,6 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   - `make preview` doesn't render charts until #415 is fixed; use `npm run dev`.
 - **Owner gates:**
   - #418: create a private repo + a fine-grained PAT secret.
-  - #412 (Dependabot `setup-uv` SHA bump): add the new SHA to the repo's strict Actions allow-list
-    before merging. An unlisted pin fails every workflow at startup.
   - Connect GitHub to the Claude account, only if you want cloud offloading.
   - Approve or adjust the UI redesign proposal (§UI redesign proposal) before any UI rework starts.
   - The US-only SEC-XBRL extension is deferred until the owner asks for it.
@@ -129,7 +127,7 @@ universes", "Why these charts", the backtest rules, the look-ahead audit, all ca
 |---|---|---|
 | Country-based filing lag [#419](https://github.com/qte77/analyze-stock-kpi/issues/419) | agent | country lookup with suffix fallback, tested; `method_version` bumped; one rebuild verified on `data` |
 | Dependabot python-deps [#411](https://github.com/qte77/analyze-stock-kpi/pull/411) (CI red) | agent | the failing bump is identified and fixed or pinned; merged on green |
-| Dependabot `setup-uv` [#412](https://github.com/qte77/analyze-stock-kpi/pull/412) | owner (allow-list SHA) → agent | the SHA is on the allow-list; merged on green |
+| ~~Dependabot `setup-uv` [#412](https://github.com/qte77/analyze-stock-kpi/pull/412)~~ | agent | shipped 2026-09-25: its CI was green (the allow-list accepts the new SHA); merged, and `validate` passes on `main` |
 | `bump-my-version.yaml` doesn't sync the project's own version in `uv.lock` (v1.4.0 shipped with 1.3.0 there; fixed by hand in #427) | agent | the next bump leaves `uv.lock`'s `analyze-stock-kpi` version equal to `pyproject.toml` |
 | Radar labels + inert row detail in Simple view [#426](https://github.com/qte77/analyze-stock-kpi/issues/426) | agent | both addressed or decided; checked in the phone e2e |
 | UI redesign: positioning + progressive disclosure (see §UI redesign proposal) | owner (approve direction) → agent | the owner approves or adjusts the wireframe; then a plan 010 with a UX review (a `frontend-design` skill or usability-audit subagent) and the polyfetch e2e on phone and desktop as the done-when |
