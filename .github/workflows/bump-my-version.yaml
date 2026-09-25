@@ -8,7 +8,7 @@ name: bump-my-version
 # uses tag-pinned subactions that the repo's "Require actions to be
 # pinned to a full-length commit SHA" rule rejects.
 #
-# Behavior: bumps pyproject.toml + README badge + CHANGELOG per
+# Behavior: bumps pyproject.toml + uv.lock + README badge + CHANGELOG per
 # [tool.bumpversion] config, pushes a `bump-<run>-<base>` branch, and
 # opens a PR for review. Tagging is intentionally deferred to
 # `tag-release.yaml`, which fires on push-to-main and tags the
@@ -113,4 +113,4 @@ jobs:
             --base "$BASE_BRANCH" \
             --head "$HEAD_BRANCH" \
             --title "chore(release): bump $PREV_VERSION -> $NEW_VERSION" \
-            --body "Automated bump via bump-my-version.yaml workflow_dispatch. Updates pyproject.toml, README version badge, and CHANGELOG.md. The \`v$NEW_VERSION\` tag is created automatically by \`tag-release.yaml\` after this PR is squash-merged to main, so the tag always points at the merge commit."
+            --body "Automated bump via bump-my-version.yaml workflow_dispatch. Updates pyproject.toml, uv.lock, README version badge, and CHANGELOG.md. The \`v$NEW_VERSION\` tag is created automatically by \`tag-release.yaml\` after this PR is squash-merged to main, so the tag always points at the merge commit."
