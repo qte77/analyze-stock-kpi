@@ -52,7 +52,63 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   - #412 (Dependabot `setup-uv` SHA bump): add the new SHA to the repo's strict Actions allow-list
     before merging. An unlisted pin fails every workflow at startup.
   - Connect GitHub to the Claude account, only if you want cloud offloading.
+  - Approve or adjust the UI redesign proposal (§UI redesign proposal) before any UI rework starts.
   - The US-only SEC-XBRL extension is deferred until the owner asks for it.
+
+## UI redesign proposal (owner feedback 2026-09-25: "overwhelming and convoluted")
+
+The page stacks three products at equal weight: market sentiment, a research backtest and a stock
+screener. The proposal is to make the ranking the product and reveal everything else in three
+layers. It is a proposal only, awaiting the owner's go-ahead (see the table row). It changes layout
+and emphasis only: the data, URL parameters (`ui/lib/state.js`) and EyeRest theme stay as they are.
+
+**Positioning line:** "qte77 ranks ~320 stocks by one quality score, shows today's best and worst
+25, and tracks how that ranking would have performed."
+
+Layer 1, what everyone sees (the list and chart values are illustrative):
+
+```text
++--------------------------------------------------------------------------+
+| qte77 · stock quality ranking               [Fear 32 v]  [theme]  [?]    |
+| <positioning line>                                                       |
++--------------------------------------------------------------------------+
+|  TODAY'S PICKS (date)                                                    |
+|  +------------------------------+  +------------------------------+      |
+|  | BEST 25          qte77 Score |  | WORST 25         qte77 Score |      |
+|  | ticker  name              86 |  | ticker  name              11 |      |
+|  | ... [show all 25 v]          |  | ... [show all 25 v]          |      |
+|  +------------------------------+  +------------------------------+      |
+|  DOES IT WORK?                                                           |
+|  +--------------------------------------------------------------------+  |
+|  |  one chart: the headline backtest line (100-based)                 |  |
+|  +--------------------------------------------------------------------+  |
+|  "Long best 25 / short worst 25: +8 % a year after costs since 2023.     |
+|   Not statistically significant. Hypothetical, not investment advice."   |
+|  [How it's tested >]                    [Browse all stocks >]            |
++--------------------------------------------------------------------------+
+| Methodology · Data sources · GitHub · Report an issue                    |
++--------------------------------------------------------------------------+
+```
+
+Layer 2, one click away:
+
+- **Fear & Greed chip** → a dropdown with the score, deltas, and the 30d / long-term / 5s10s tabs.
+- **How it's tested** → the metrics table (gross/net), other cadences on demand, the rebalance log,
+  caveats and series B.
+- **Browse all stocks** → the universe table in Simple view (5–6 columns), with picker, date, filter,
+  CSV and the sector donut collapsed. A row click opens the side panel in Simple view too (#426).
+
+Layer 3, reference: a Methodology drawer or page holding "What the qte77 Score measures", "Why these
+universes", "Why these charts", the backtest rules, the look-ahead audit, all caveats and ADR links.
+
+| Current element | New home |
+|---|---|
+| F&G section (3 tabs, big charts) | header chip + dropdown (layer 2) |
+| "Why these charts?" / "Why these universes?" | Methodology (layer 3) |
+| Backtest series A/B blocks, tables, key facts | one chart + one line (layer 1), details in layer 2 |
+| Series B, rebalance log, caveats | "How it's tested", collapsed |
+| "Current candidates" + "Latest best/worst 25" | merged into Today's picks (layer 1) |
+| Universe table, picker, donut, CSV | "Browse all stocks" (layer 2) |
 
 ## Source map
 
@@ -76,6 +132,7 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
 | Dependabot `setup-uv` [#412](https://github.com/qte77/analyze-stock-kpi/pull/412) | owner (allow-list SHA) → agent | the SHA is on the allow-list; merged on green |
 | `bump-my-version.yaml` doesn't sync the project's own version in `uv.lock` (v1.4.0 shipped with 1.3.0 there; fixed by hand in #427) | agent | the next bump leaves `uv.lock`'s `analyze-stock-kpi` version equal to `pyproject.toml` |
 | Radar labels + inert row detail in Simple view [#426](https://github.com/qte77/analyze-stock-kpi/issues/426) | agent | both addressed or decided; checked in the phone e2e |
+| UI redesign: positioning + progressive disclosure (see §UI redesign proposal) | owner (approve direction) → agent | the owner approves or adjusts the wireframe; then a plan 010 with a UX review (a `frontend-design` skill or usability-audit subagent) and the polyfetch e2e on phone and desktop as the done-when |
 | `make preview` serves `ui/public` [#415](https://github.com/qte77/analyze-stock-kpi/issues/415) | agent | charts render under `make preview` |
 | Scroll hint on touch devices [#417](https://github.com/qte77/analyze-stock-kpi/issues/417) | agent | a hint shows only on overflow; checked in the e2e on a tablet and a phone |
 | `llms.txt` template up to date [#416](https://github.com/qte77/analyze-stock-kpi/issues/416) | agent | every ADR and module listed, or generated from the tree |
