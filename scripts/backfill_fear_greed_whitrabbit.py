@@ -43,7 +43,7 @@ def _fetch_csv() -> str:
     # S310 / B310: CSV_URL is a constant HTTPS string; the require_https
     # call below is the defense-in-depth boundary. Pattern mirrors
     # src/analyze_stock_kpi/data_sources/sentiment.py::_fetch_payload.
-    request = urllib.request.Request(  # noqa: S310  # nosec B310
+    request = urllib.request.Request(  # nosec B310
         CSV_URL, headers={"User-Agent": STABLE_USER_AGENT}
     )
     require_https(request.full_url)
