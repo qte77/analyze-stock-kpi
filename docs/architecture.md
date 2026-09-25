@@ -7,7 +7,7 @@ High-level sketch of modules + data flow. See [`UserStory.md`](UserStory.md) for
 - **Modular**: one responsibility per module, narrow public API, no cross-module reach-around
 - **OOP-minimal**: prefer functions; classes only for `pydantic.BaseModel` data containers; no inheritance hierarchies
 - **Boundary-validated**: every external payload (CLI args, HTTP responses, library returns) parsed into a pydantic model — invalid data fails loudly at the edge
-- **Complexity-budgeted**: ruff `C901` cyclomatic ≤ 10; complexipy cognitive ≤ 15; both gate `make validate`
+- **Complexity-budgeted**: ruff `C901` cyclomatic ≤ 10; complexipy cognitive ≤ 10 (`Makefile` `check_complexity`; complexipy pinned at 5.5.0, see #431); both gate `make validate`
 
 ## Failure policy at I/O boundaries
 
