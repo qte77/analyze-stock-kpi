@@ -16,6 +16,217 @@ Types of changes:
 
 <!-- scriv-insert-here -->
 
+## [1.4.0] - 2026-09-25
+
+### Added
+
+- **Per-ticker Sortino ratio now also reports 3y/5y/10y/20y/30y windows**
+  alongside the existing 1y value. The new `sortino_3y`/`sortino_5y`/
+  `sortino_10y`/`sortino_20y`/`sortino_30y` fields are informational only —
+  composite scores keep using the 1y `sortino_ratio` unchanged. A window
+  reads `None` unless the ticker's price history reaches back far enough to
+  cover it. Shown as new rows in the dashboard's detail panel.
+- **New `--sortino-from`/`--sortino-to` CLI flags** compute an additional
+  operator-chosen "custom" Sortino window (`sortino_custom`, with
+  `sortino_custom_from`/`sortino_custom_to` recording the frame actually
+  used — `--sortino-to` defaults to each ticker's latest close). Rejects
+  `--sortino-from >= --sortino-to` at startup. Shown as an extra CLI-table
+  column only when the flag is set; not surfaced on the dashboard.
+
+- **Point-in-time backfilled best/worst 25 + backtested long/short 25/25
+  (ADR-0013, plan 008, PR #404).** Every base universe is ranked by a point-in-time-only
+  reduction of the qte77 Score (no forward-looking valuation/beta inputs) at each
+  weekly rank date since 2023-03-31 — the backfilled best/worst 25 **as they
+  actually were** on that date, not today's ranking applied retroactively. A
+  hypothetical, equal-weight 1/25 long-best/short-worst book is backtested
+  across five cadences (monthly primary, quarterly-after-filings,
+  monthly-with-buffer, weekly, buy-and-hold), gross and net of a 10 bp turnover
+  cost, with a seeded null benchmark and a live-score fidelity check. A new
+  weekly cron (`.github/workflows/portfolio.yaml`, Saturdays 12:00 UTC) does a
+  full deterministic recompute and writes `results/series/backtest/`,
+  `results/backtest/lists/` and `results/backtest/summary.json`. Never commits
+  raw prices or statement line items — held in memory and, when run locally,
+  cached to a gitignored `results/prices/`. This replaces #395's forward-only
+  Min-Variance model-portfolio tracker (ADR-0012), which never ran; the
+  `domain/portfolio_optimizer.py` module and the `portfolio`/`scipy` optional
+  extra are removed with it.
+
+### Changed
+
+- **Refreshed the dashboard's "Why these charts?" and "Why these universes?"
+  explainers for the model portfolio + multi-window Sortino (#394/#395).** The
+  F&G "Why these charts?" pane now describes the new hypothetical long/short
+  model portfolio chart; the "Why these universes?" expander now lists the
+  screener's actual 15 long-side / 14 short-side criteria (was missing PEG and
+  FCF margin) and notes the aggregated best/worst lists double as the
+  portfolio's candidate pool. `docs/architecture.md`, `docs/roadmap.md`,
+  `docs/UserStory.md`, `docs/data-sources.md`, `README.md` and plan
+  [007](docs/plans/007-longshort-portfolio-and-multiwindow-sortino.md) updated
+  to reflect #394/#395 as shipped and to fix pre-existing staleness found
+  along the way (a stale reference to the now-consolidated
+  `federal-contractors-refresh.yaml` workflow, and a roadmap item for the
+  universe-help expander that had already shipped in #235).
+
+- **`aggregated-scores-best`/`aggregated-scores-worst` now rank by `screener_score`
+  ("qte77 Score") instead of the mean of the 7 composite scores, so a ticker's rank
+  always agrees with the Score column / detail panel value shown for it on every
+  universe.** Eligibility is now "not stale and has a `screener_score`" (dropping the
+  previous 5-of-7-composites-populated gate). The dashboard's aggregator-only special
+  case (`effectiveScore()`'s mean-of-7 branch, the score-cell "Aggregator rank score"
+  tooltip, and the detail panel's mean tooltip) is removed — one qte77 Score, one
+  formula, everywhere.
+
+- **Dashboard: backtested long/short 25/25 replaces the hypothetical model portfolio section
+  (ADR-0013, plan 008).** `#portfolio-section` is now "Backtested long/short 25/25
+  (hypothetical)": a chart with the primary cadence's net (bold) and gross (dashed) index plus
+  four foil-cadence net lines, a metrics table (annualized return/vol/drawdown/turnover, leg
+  returns, realized beta, hit rate, mean monthly return with 90% CI, t-stat) with a gross/net
+  switch, a key-facts line, a collapsible latest best/worst 25, and caveats rendered verbatim
+  from the data. Renders an empty "Backtest runs Saturdays" state before the first cron run and
+  never throws. The #395 weekly/monthly loaders and holdings table are removed.
+
+- **Series A — genuine point-in-time decisions (ADR-0013 amendment 2026-09-24, plan 008 PR E).**
+  The point-in-time backtest now publishes two series that are never spliced together: series B
+  (the original reconstructed backfill) and a new **series A**, ranked with the full live qte77
+  Score on the actual `data`-branch snapshot dates a real dashboard viewer would have seen (via
+  `aggregated_scores_best_and_worst.build_universe`, since 2026-05-31). Both series are now
+  **append-only and frozen** — a weekly run only appends new dates; an already-written row or list
+  is never recomputed, closing a gap where restated fundamentals or a future bug fix could
+  silently rewrite published history. Series B's statement-usability lag is now ticker-aware (90
+  days US, 120 days non-US, `.XX`-suffixed tickers). A `results/backtest_genuine/` +
+  `results/series/backtest_genuine/` pair joins the existing `data`-branch contract paths. A sixth
+  `yearly` cadence joins both series' cadence set, and a new per-cadence rebalance log
+  (`results/backtest{,_genuine}/trades/<cadence>/YYYY.json`) records WHEN/WHY/WHAT for every
+  rebalance, frozen append-only like everything else.
+
+- **Dashboard: the backtested long/short 25/25 section splits into Series A (genuine decisions,
+  the headline) and Series B (reconstructed backfill, a collapsible below it) (D15-D19, plan
+  008).** Series A ranks by the live qte77 Score at each genuine `data`-branch snapshot date
+  (its own chart, gross/net metrics table, key-facts line, and #408's "Current candidates"
+  list); Series B keeps its historical, `score_bt`-ranked chart/table/lists, now labelled a
+  reconstructed approximation with a caveat that it is not the live qte77 Score. The two series
+  never share a chart axis. Added a `yearly` rebalance cadence (D20) and a per-series
+  "Rebalance log" collapsible (D21): newest-first trade date, human-readable reason, long/short
+  entered/exited tickers (color-coded, no blue), and turnover, plus a rebalance-day marker on
+  each chart. Both series render a clean empty state and never throw when their data (or the
+  `trades/` log) doesn't exist yet.
+
+### Fixed
+
+- **`universe-builder.yaml` now triggers on `demo-snapshot`'s completion instead of its
+  own independent cron.** The two workflows' schedules raced: `universe-builder` fired at
+  Sunday 02:00 UTC, a full 4h15m *before* `demo-snapshot`'s 06:15 UTC snapshot refresh, so
+  the `aggregated-scores-best`/`-worst` and `enhanced-kpi-screener-longs`/`-shorts` legs
+  (which read `results/demo/<universe>/` from the `data` branch) were always ranking
+  against the *previous* week's data by construction. Switching to a `workflow_run`
+  trigger keyed to `demo-snapshot`, guarded to skip on a failed/cancelled upstream run,
+  removes the race entirely.
+
+- **`lint-md-links.yml` was silently `startup_failure`-ing on every push and PR.** Its
+  pinned `qte77/.github` reusable workflow revision (2026-04-27) referenced an invalid
+  `actions/github-script` commit inside its conditional `notify` job — GitHub resolves
+  every `uses:` in a reusable workflow's full job graph at startup, even for jobs an
+  `if:` would skip at runtime, so that one bad pin failed the entire workflow. Re-pinned
+  to `qte77/.github`'s current `main` HEAD, which already fixed that reference upstream.
+
+- **Dashboard "Score" column on `aggregated-scores-best`/`aggregated-scores-worst` now
+  shows and sorts by the aggregator's actual ranking metric (mean of the 7 composite
+  scores), not `screener_score`.** Previously the column always displayed
+  `screener_score`, one of the seven, while the best/worst split is decided by the mean
+  of all seven — a ticker could rank in worst-25 by mean while showing a comparatively
+  high `screener_score`, or vice versa (e.g. Clear Secure Inc. sitting in best-25 with a
+  visibly low 47). The mismatch was previously only explained via a hover tooltip; now
+  the displayed and sorted value is the actual ranking metric itself. Every other
+  universe is unaffected.
+
+- **Row detail panel's "qte77 Score" now matches the table's Score column on
+  `aggregated-scores-best`/`aggregated-scores-worst`.** Follow-up to the table Score
+  fix: the detail panel (opened by clicking a row) had the same `screener_score`-only
+  bug — it always showed `screener_score` regardless of universe, so it could disagree
+  with the table's own Score cell for the same ticker on aggregator universes. Now
+  reuses `effectiveScore()` from the table, with an updated tooltip explaining the mean
+  is the aggregator's actual ranking metric. Every other universe is unaffected.
+
+- **Confirmed `screener_score` no longer drifts for the same ticker across universes.**
+  Root-caused the prior cross-universe divergence to `yf.download` batches whose index
+  is the union of every ticker's trading days, which left interior (not just leading)
+  NaN rows in a ticker's own close column; the pre-#394 `_compute_sortino` computed
+  returns directly off that raw series, silently dropping the compound return spanning
+  each gap instead of the correct multi-day return. #394's `close.dropna()` (added
+  earlier the same day) already fixes this; this PR adds a deterministic regression
+  test (`test_windowed_sortinos_handles_interior_nan_gaps`) pinning the invariant and a
+  live cross-universe check confirming today's `sortino_ratio` values now match to
+  float noise (~1e-7 relative). No additional code change was needed — the
+  "drop today's partial bar" hypothesis was evaluated and ruled out per the evidence.
+
+- **Point-in-time backtest start-trim bug (found 2026-09-24, series B).** The published daily
+  return series started at 1962-01-02 (the union price-history calendar) instead of the book's
+  actual first trade date, diluting every metric with ~15.7k pre-inception zero-return days
+  (published ann. vol 4.96%, hit rate 2.8%, vs. ~21.2% ann. vol over the real 907-day window).
+  Rows are now trimmed to each cadence's own first trade date before persistence and before
+  `metrics` runs; the invalid pre-start year files already on the `data` branch are deleted as
+  part of this fix's one-time `method_version`-triggered rebuild.
+- **`ICTEF` bad-tick exclusion (found 2026-09-24, series B).** Its yfinance auto-adjusted closes go
+  negative across roughly half its post-2023 history, producing a fabricated one-day −13.3% short-
+  basket move on 2026-03-18 once patched back to a positive price. A ticker with any non-positive
+  close is now excluded entirely rather than patched point-by-point; a separate >50% single-day
+  return filter catches other glitches.
+- **Foresight-audit fixes (found 2026-09-24, an independent falsify-then-verify review; its
+  look-ahead poison test itself passed).** Prevents a NaN input from scoring 100 (also fixed at the
+  shared `composite_scores` boundary — no current live snapshot was affected, the bug was latent
+  there); dedupes an interior NaN gap before computing Sortino; enforces the documented ≥1y-of-
+  closes eligibility threshold (a name with a few months of history was previously ranked); excludes
+  a rank date computed from the same day's intraday-partial fetch; fixes a `KeyError` crash risk and
+  an asymmetric zero-check in the null benchmark's price lookups; and classifies a small set of
+  known no-suffix foreign issuers (`ASML`, `TSM`, `NVO`, …) and OTC-ADR-shaped tickers as non-US for
+  the D18 filing lag. Each rebalance now trades on the first day every name in the old and new
+  books has its own close, so no position fills at the rank-date close it was picked on (about
+  6.6 % of monthly fills did, e.g. on US holidays). The null benchmark's random books use the same
+  fill rule and each earns its own period (previously each earned the following period, and the
+  first period was always 0). All metrics annualize by calendar span instead of 252 rows (the
+  union calendar has about 260 rows a year).
+
+- **Aggregated/derived-universe display lists (`aggregated-scores-{best,worst}`,
+  `enhanced-kpi-screener-{longs,shorts}`) no longer re-fetch data independently of the
+  ranking/classification pass that built them.** `demo-snapshot.yaml` treated these four
+  presets as ordinary universes and re-fetched fresh yfinance data for them, so a
+  ticker's displayed qte77 Score could disagree with the score it was ranked by (e.g. a
+  worst-list ticker outscoring a best-list one). `universe-builder.yaml`'s build scripts
+  now write each preset's `results/demo/<preset>/<date>.json` display snapshot directly
+  from the exact `FundamentalsSnapshot` records they ranked/classified
+  (`ranked_snapshots`); `demo-snapshot.yaml` excludes these `"derived": true` universes
+  from its own fan-out and dispatch choices.
+- **The dashboard's backtest section no longer shows point-in-time-scored (`score_bt`)
+  candidates as "today's" long/short book.** It now reads the `aggregated-scores-best`/
+  `-worst` demo snapshots directly (full, live qte77 Score) for its "Current candidates"
+  panel; `results/backtest/lists/*.json` remains a purely historical backfill, unchanged
+  and still ranked by `score_bt` for the historical chart/metrics simulation (ADR-0014
+  amends ADR-0013 D2 accordingly).
+
+- **The same ticker could show a different qte77 Score on different lists after one flaky price
+  download.** yfinance NaN-fills a ticker whose part of a batched download fails transiently. That
+  left its Sortino empty, so the qte77 Score silently dropped the momentum factor on that list only
+  (UBER 27.9 vs 37.1, AVGO 59.8 vs 74.2 on 2026-09-24). The batched close download now retries missing
+  tickers once and logs any that are still missing.
+
+- **The dashboard's URL state (filter/sector/sort/date/view/windows) could get permanently
+  stuck once set.** `serializeState()` only ever called `URLSearchParams.set()` for non-default
+  values and never `.delete()` for ones that reverted to default; since its base is the current
+  page URL (not a blank slate), a filter or sector cleared in the UI never left the address bar.
+  Reported via a stale shared URL (`...&sector=Industrials&filter=clear`) where clearing either
+  filter left both in place.
+
+### Security
+
+- **Remove `[tool.uv].exclude-newer` dependency-resolution cap and bump 4 vulnerable
+  transitive packages.** The cap (pinned to 2026-06-20) was blocking `uv lock` from ever
+  resolving the patched versions of 8 open Dependabot alerts (1 critical, 2 high, 5
+  moderate) since those fixes were published after the cap date. Bumped `anyio`
+  4.13.0 → 4.14.2 (GHSA-82r6-8w77-94w6, GHSA-5p39-cfhj-2xmp), `soupsieve` 2.8.4 → 2.9.2
+  (GHSA-gjv8-xp57-g29c, GHSA-j934-xhv5-fg8f), `httpx2` / `httpcore2` (transitive via
+  `bump-my-version`) 2.4.0 → 2.13.0 (GHSA-8xx6-hgc6-gc2m, GHSA-h4x7-gw46-3wm6,
+  GHSA-pf96-p4fj-6566, GHSA-7mj9-2mp8-4m2p).
+
 ## [1.3.0] - 2026-09-21
 
 ### Added
