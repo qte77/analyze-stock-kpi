@@ -64,6 +64,9 @@ class FundamentalsSnapshot(BaseModel):
     quote_type: str | None = Field(default=None, alias="quoteType")
     sector: str | None = None
     industry: str | None = None
+    # HQ country as Yahoo reports it (e.g. "United States", "Taiwan"); the
+    # backtest's filing-lag rule reads it (#419).
+    country: str | None = None
     currency: str | None = None
     exchange: str | None = None
 
