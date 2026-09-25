@@ -1,13 +1,18 @@
 ---
 # Point-in-time backfilled best/worst 25 + backtested long/short 25/25 (ADR-0013, plan 008).
 #
-# Runs Saturdays at 12:00 UTC — no other data-branch writer runs at that time. Does a FULL
-# deterministic recompute every run (stateless, idempotent — D13): ranks every D1 base
-# universe by score_at (D2, point-in-time-only qte77 Score) at each weekly rank date since
-# inception, then simulates five cadences' equal-weight 25/25 long/short books. Writes
-# results/series/backtest/<cadence>/YYYY.json, results/backtest/lists/YYYY.json and
-# results/backtest/summary.json, then commits changed files as a single verified commit via
-# the REST Git Data API.
+# Runs Saturdays at 12:00 UTC — no other data-branch writer runs at that time. Recomputes TWO
+# never-spliced, append-only/frozen series (ADR-0013 amendment 2026-09-24, D15/D17): series B
+# (score_at, D2's point-in-time-only qte77 Score, at each weekly rank date since inception) and
+# series A (the full live qte77 Score, on genuine data-branch snapshot dates, via
+# aggregated_scores_best_and_worst.build_universe). A run only APPENDS new dates for either
+# series — already-written rows/lists are never recomputed; a method_version bump is the only
+# explicit full-rebuild path (used once, 2026-09-24, for the start-trim fix + the D18 filing
+# lag). Writes results/series/backtest{,_genuine}/<cadence>/YYYY.json,
+# results/backtest{,_genuine}/lists/YYYY.json, results/backtest{,_genuine}/trades/<cadence>/YYYY.json
+# (D21's per-cadence rebalance log) and results/backtest{,_genuine}/summary.json, then commits
+# changed (and, on a rebuild, deleted) files as a single verified commit via the REST Git Data
+# API — scripts/data-branch-commit.cjs turns a locally-deleted path into a `sha: null` tree entry.
 #
 # Raw prices and statement line items are NEVER committed (see docs/data-sources.md) —
 # `fetch_frames` / `fundamentals._batch_close_prices` write them only to the gitignored
@@ -43,18 +48,24 @@ jobs:
       # branch carries data only.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      # Pull the prior contract artifacts from the data branch. This is a full recompute
-      # (D13) so overwriting is fine — the checkout only lets the "changed files" diff below
-      # detect a genuinely-empty diff (e.g. a same-day re-run) rather than always committing.
+      # Pull the prior contract artifacts from the data branch for BOTH series — append-only
+      # (D17) needs the existing rows/lists on disk so it can detect the last-stored date and
+      # skip re-writing anything frozen. `main()` deletes obsolete files locally itself (the
+      # one-time method_version rebuild); the "changed files" step below picks up both writes
+      # and deletions.
       - name: Fetch existing backfill/backtest artifacts from data branch
         run: |
           set -euo pipefail
           git fetch origin data --depth=1
-          rm -rf results/series/backtest results/backtest
+          rm -rf results/series/backtest results/backtest results/series/backtest_genuine results/backtest_genuine
           git checkout origin/data -- results/series/backtest/ || \
             echo "no existing results/series/backtest/ on data — first run"
           git checkout origin/data -- results/backtest/ || \
             echo "no existing results/backtest/ on data — first run"
+          git checkout origin/data -- results/series/backtest_genuine/ || \
+            echo "no existing results/series/backtest_genuine/ on data — first run (series A)"
+          git checkout origin/data -- results/backtest_genuine/ || \
+            echo "no existing results/backtest_genuine/ on data — first run (series A)"
 
       # Pull the genuine per-universe demo snapshots (read-only input for the D11 fidelity
       # check) — never part of the commit filter below, never written back.
@@ -84,10 +95,14 @@ jobs:
           set -euo pipefail
           # -uall enumerates files inside untracked directories — without it the first run
           # (no prior data on `data`) shows the dirs summarised and awk finds nothing,
-          # silently skipping the commit.
+          # silently skipping the commit. A path `main()` deleted locally (the one-time
+          # method_version rebuild purging obsolete pre-start year files) shows up here too
+          # (its 2nd porcelain column is still just the path) — data-branch-commit.cjs turns
+          # a missing local path into a `sha: null` deletion tree entry.
           FILES=$(git status --porcelain -uall \
               results/series/backtest/ results/backtest/ \
-            | awk '$2 ~ /^results\/(series\/backtest\/[a-z_]+\/[0-9]{4}\.json|backtest\/(lists\/[0-9]{4}\.json|summary\.json))$/ {print $2}' \
+              results/series/backtest_genuine/ results/backtest_genuine/ \
+            | awk '$2 ~ /^results\/(series\/backtest(_genuine)?\/[a-z_]+\/[0-9]{4}\.json|backtest(_genuine)?\/(lists\/[0-9]{4}\.json|trades\/[a-z_]+\/[0-9]{4}\.json|summary\.json))$/ {print $2}' \
             | paste -sd ',' -)
           echo "files=$FILES" >> "$GITHUB_OUTPUT"
           if [ -z "$FILES" ]; then

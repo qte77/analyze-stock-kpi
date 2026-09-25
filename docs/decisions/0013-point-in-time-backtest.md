@@ -126,3 +126,58 @@ null benchmark, fidelity, caveats).
 - **Keep scipy for a hybrid weighting scheme:** rejected — equal-weight 1/25 (D5) is simpler,
   transparent, and doesn't reintroduce ADR-0012's covariance-estimation-error concerns for a
   *backtested* book where the weighting scheme itself becomes part of what's being tested.
+
+## Amendment (2026-09-24) — series A, freeze, filing lag (D15-D19, plan 008 PR E)
+
+PR C's first run ([#404](https://github.com/qte77/analyze-stock-kpi/pull/404)) exposed two gaps
+in the original decision: the backfill (now "series B") is a *reconstruction*, not a record of
+what a real viewer actually saw; and D13's "full deterministic recompute" silently rewrites
+history on every run, which is unsafe once yfinance's restated figures or a bug fix can change a
+past value. It also shipped a start-trim bug: `simulate` marks every day in the full
+union-of-price-history calendar (back to 1962 for some tickers) rather than the book's own
+inception, so every published metric was diluted by ~15.7k padding days (published ann. vol
+4.96%, hit rate 2.8%, vs. ~21.2% ann. vol over the real 907-day window).
+
+1. **Two series, never spliced (D15):** series B (this ADR's original decision, D1-D14) stays the
+   *reconstructed* backfill, explicitly labelled an approximation. A new **series A** is the
+   *genuine* record — the actual best/worst 25 a real dashboard viewer would have seen, computed
+   with the actual live qte77 Score, on the actual dates it was computed. The two are never drawn
+   as one continuous line or spliced end to end.
+2. **Series A (D16):** each rank date is a genuine `data`-branch snapshot date — a date every D1
+   base universe has a `results/demo/<universe>/<date>.json` file (from 2026-05-31, when the 7th
+   base universe's demo cron came online). Ranked with the **full live qte77 Score** (all 9
+   `screener_score` inputs, no fields forced to `None`) by reusing
+   `aggregated_scores_best_and_worst.build_universe` **unchanged** — the same dedup + 14-day
+   staleness gate the live dashboard lists use. Trade date is the first trading day strictly after
+   the rank date (conservative: snapshots fetch ~06:15 UTC, after Asian closes). The book holds
+   across a snapshot gap (e.g. 2026-07-12 -> 2026-09-21); disclosed, not hidden. No null benchmark
+   or fidelity check for series A until it has >= 12 monthly rebalances — both stay `null` in the
+   interim per the frozen contract.
+3. **Freeze, append-only, both series (D17):** once a date's list or a day's return row is
+   written, it is never recomputed — a run only appends new dates, and the summary/metrics are
+   recomputed from the rows actually on disk (never from an ephemeral in-memory recompute, since
+   restated fundamentals can make an old date's fresh value differ from its frozen one). A
+   `method_version` bump is the only explicit way to force a one-time full rebuild. This
+   supersedes D13's "full deterministic recompute every run."
+4. **Non-US filing lag (D18):** series B's usability lag becomes ticker-aware — 90 days for a US
+   ticker (no exchange suffix) as before, 120 days for any non-US ticker (a `.XX` suffix, e.g.
+   `.DE`/`.SA`/`.T`/`.KS`), since 20-F and foreign filers publish later. Ships with a single
+   `method_version` bump (D17's one explicit rebuild), combined with the start-trim fix below.
+5. **Sortino stays in both series (D19):** it is part of the qte77 Score (ADR-0004) and is
+   reconstructable from closes up to the rank date alone in both series, so nothing about it
+   changes.
+6. **Start-trim fix:** `simulate`'s raw daily rows are now trimmed to each cadence's own first
+   trade date (`_trim_to_first_trade`) before they are persisted or fed to `metrics` — the
+   pre-inception zero-return padding no longer reaches either series' output. The pre-start year
+   files already committed to the `data` branch (1962-2022, all-zero) are deleted as part of the
+   `method_version` bump, via a minimal `sha: null` tree-entry extension to
+   `scripts/data-branch-commit.cjs` (Git's Trees API already supports path deletion this way — no
+   new dependency).
+
+### Frozen data contract addendum
+
+Series A adds a parallel set of paths, same shapes as series B's:
+`results/series/backtest_genuine/<cadence>/YYYY.json`, `results/backtest_genuine/lists/YYYY.json`,
+`results/backtest_genuine/summary.json` (where `null`/`fidelity` may be `null`). Series B's paths
+are unchanged, so PR D's UI keeps working unmodified. See plan
+[008](../plans/008-pit-longshort-backtest.md) §"Frozen data contract" for the exact shapes.

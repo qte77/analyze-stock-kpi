@@ -167,17 +167,25 @@ Every run must:
 | D17 | **Freeze, append-only, both series** (owner 2026-09-24). Once a date's list or a day's return row is written, it is never recomputed. Each run only appends lists for new rank dates and rows for new days; the summary/metrics are recomputed from the frozen rows. A **`method_version` bump** is the only way to rebuild history. It is explicit, is logged in the summary's `caveats`, and is used exactly once for D18. This supersedes D13's "full deterministic recompute". |
 | D18 | **Filing lag (series B):** 90 days for US tickers (no exchange suffix), **120 days for non-US** (any `.XX` suffix, e.g. `.DE`, `.SA`, `.T`, `.KS`), because 20-F and foreign filers publish later. It ships with a `method_version` bump, so B's history is rebuilt once and then frozen. |
 | D19 | **Sortino stays** in both series' score. It is part of the qte77 Score (ADR-0004), and it's reconstructable from closes up to d only. |
+| D20 | **Yearly cadence** (owner 2026-09-24): a sixth cadence, `yearly` = the first grid/genuine-date of each calendar year, added to both series (cadence order: monthly [primary], quarterly_filings, monthly_buffer, weekly, yearly, buy_hold). Caveat: it rebalances once a year, so its metrics stay `null` far longer than the other cadences' (D9's 12-month floor still applies). |
+| D21 | **Rebalance log** (owner 2026-09-24): a new per-cadence, per-series contract (`results/backtest{,_genuine}/trades/<cadence>/YYYY.json`) recording WHEN each rebalance happened, WHY (`reason`), and WHICH tickers entered/exited each leg with their rank + score at the rank date. `reason` ∈ {`initial`, `scheduled_weekly`, `scheduled_monthly`, `quarterly_after_filings`, `scheduled_yearly`, `buffer_exit`, `buy_hold_initial`}; `buffer_exit` only fires for `monthly_buffer` when this rebalance actually dropped a held name for exceeding rank 40, else it falls back to `scheduled_monthly`. `rank` follows `aggregated_scores_best_and_worst.AuditRow`'s signed convention (`+1` best, `-1` worst); series A's EXITED entries are always `rank:null, score:null` (D16: `build_universe` exposes no full ranked pool to look an exited name's current rank up in) — series B always populates both, since it tracks the full pool. Frozen append-only like everything else (D17). |
+| D22 | **Foresight audit** (owner 2026-09-24): every date-taking lookup already took `as_of` explicitly (D3/D4). Adds one explicitly-named guard function per data type — `_closes_as_of` (price) alongside the existing `_usable_column` (statement lag) — so an auditor has exactly two functions to check for a look-ahead leak, plus a regression test that poisons every statement period and closing price dated strictly after rank date t and asserts t's ranked list is byte-identical to an unpoisoned run. |
 
 ## Frozen data contract (`data` branch, derived only)
 
 - `results/series/backtest/<cadence>/YYYY.json`, with cadence ∈ {`monthly`, `quarterly_filings`,
-  `monthly_buffer`, `weekly`, `buy_hold`}: a daily, date-sorted array of
+  `monthly_buffer`, `weekly`, `yearly`, `buy_hold`} (D20 adds `yearly`): a daily, date-sorted array of
   `{"date","ret_long","ret_short","ret_ls_gross","ret_ls_net","turnover"}`. `ret_short` is the short
   basket's price return, and `ret_ls = ret_long − ret_short`. Loadable via
   `loadYearsFromBranch(base, "results/series/backtest/monthly", "date", <startYear>)`.
 - `results/backtest/lists/YYYY.json`: one entry per weekly rank date,
   `{"date","eligible":n,"best":[{"ticker","score"}×25],"worst":[…×25]}`. This is **the backfilled
   best/worst 25**, with `score` = `score_bt` rounded to 0.1.
+- `results/backtest/trades/<cadence>/YYYY.json` (D21): one entry per rebalance for that cadence,
+  date-sorted by `rank_date`:
+  `{"rank_date","trade_date","reason","long":{"entered":[{"ticker","rank","score"}],"exited":[…]},"short":{…},"turnover"}`.
+  `turnover` here is the static target-to-target one-way turnover (informational; ignores the
+  intraperiod drift the daily series' cost-bearing turnover factors in).
 - `results/backtest/summary.json`:
   - `method_version`, `as_of`, `start`, `universes[]`, `score_inputs[]`, `cost_bps`, `primary`;
   - `cadences{name:{gross:{…D9}, net:{…D9}, rebalances:n}}`;
@@ -186,8 +194,9 @@ Every run must:
   - `caveats[]` (strings the UI renders verbatim).
 - **Series A (D16), a parallel set with the same shapes:** `results/series/backtest_genuine/<cadence>/YYYY.json`,
   `results/backtest_genuine/lists/YYYY.json` (one entry per genuine snapshot date; `score` = the live
-  qte77 Score) and `results/backtest_genuine/summary.json`. The same model, except `null` and `fidelity` may
-  be `null` (D16). Series B keeps the paths above unchanged, so #403's UI keeps working.
+  qte77 Score), `results/backtest_genuine/trades/<cadence>/YYYY.json` (D21; exited entries' `rank`/`score`
+  are always `null`) and `results/backtest_genuine/summary.json`. The same model, except `null` and
+  `fidelity` may be `null` (D16). Series B keeps the paths above unchanged, so #403's UI keeps working.
 
 ## Source map
 
@@ -278,13 +287,25 @@ Every run must:
       delete paths, or extend it.
     - Also investigate the 2026-03-18 short-basket move of −13.3 % in one day (a bad price or split?)
       and filter bad ticks if confirmed.
+    - **Verdict (found 2026-09-24):** neither — `ICTEF`'s yfinance auto-adjusted closes are negative
+      across roughly half its post-2023 history (not a split artefact; a split can never produce a
+      negative price). The ticker is dropped entirely (any non-positive close excludes it) rather than
+      patched point-by-point, since patching alone still manufactures a giant `ffill`-gap "return."
+  - **Owner scope additions (2026-09-24, D20–D22):**
+    - D20: a sixth `yearly` cadence for both series.
+    - D21: a per-cadence, per-series rebalance log (`results/backtest{,_genuine}/trades/<cadence>/YYYY.json`)
+      — WHEN/WHY/WHAT for every rebalance, frozen append-only like everything else.
+    - D22: an explicit `_closes_as_of` foresight guard (paired with the existing `_usable_column`
+      statement-lag guard) plus a poison-data regression test, for a separate falsify-then-verify
+      look-ahead audit.
 - `.github/workflows/portfolio.yaml`:
   - also check out `results/series/backtest_genuine/` and `results/backtest_genuine/` from `data`;
-  - extend the commit regex to the A paths.
+  - extend the commit regex to the A paths and to the D21 `trades/` paths.
 - Docs:
   - ADR-0013 amendment (dated) for D15–D19;
   - the `architecture.md` + `data-sources.md` paths;
-  - the changelog fragment (`### Changed`).
+  - the changelog fragment (`### Changed`);
+  - this plan's D20–D22 decision rows + contract lines (this PR owns `docs/**`).
 - **Tests (RED first, no network):**
   - A ranks via `build_universe` on a hand-built 2-universe snapshot set;
   - the trade date is strictly after the snapshot date;
@@ -292,7 +313,12 @@ Every run must:
   - an append-only re-run with no new dates leaves every file byte-identical;
   - a run with 1 new date appends exactly its rows and keeps earlier rows unchanged;
   - a `method_version` bump rebuilds once;
-  - the lag is 90 days for `AAPL` and 120 days for `SAP.DE`, at the boundary day.
+  - the lag is 90 days for `AAPL` and 120 days for `SAP.DE`, at the boundary day;
+  - D20: `yearly` picks the first grid date of each calendar year;
+  - D21: entered/exited diffing, the `reason` enum's branches (incl. `buffer_exit` only when
+    flagged), per-cadence log construction for both series, and its append-only freeze;
+  - D22: poisoning every statement period and closing price dated strictly after rank date t leaves
+    t's ranked list byte-identical.
 - **Done-when:**
   - `make validate` is green;
   - a local run writes both A and B artifacts;
@@ -320,20 +346,45 @@ Every run must:
 | E | `src/**`, Python `tests/**`, `.github/workflows/portfolio.yaml`, `docs/**` (except this plan's other rows), own changelog |
 | F | `ui/**` only, own changelog, plus its own row here |
 
+## Foresight audit 2026-09-24 (independent falsify-then-verify review of PR E)
+
+A separate audit agent probed the point-in-time engine for look-ahead. Its own poison test — corrupt
+every statement period and closing price dated after rank date t, assert t's ranked list is
+unchanged — **passed**: strict look-ahead is refuted. It also found 8 real, narrower defects the
+`method_version` rebuild would otherwise have frozen into published history. Fixed in PR E, each
+with its own RED test: a NaN input silently scoring 100 (#1, also patched at the shared
+`composite_scores` boundary); an unfiltered interior NaN gap distorting Sortino (#2); a >50%
+single-day return glitch beyond the already-excluded `ICTEF` (#3); today's intraday-partial rank
+date not being excluded from the freeze (#5); a `KeyError` crash risk + an asymmetric zero-check in
+the null benchmark's price lookups (#6, partial — see below); the documented ≥1y-of-closes
+eligibility threshold not actually being enforced (#7); and the D18 non-US filing lag missing
+several no-suffix foreign issuers (#8). The coordinator then fixed the rest in the same PR
+(2026-09-25):
+
+- **#4 fills:** a rebalance trades on the first day every name in the old and new books has its own
+  close (`_trade_date`).
+- **The remainder of #6:** the null benchmark's random books use the same rule and each earns its
+  own period; it was off by one, so the first period was always 0.
+- **Annualization:** all metrics annualize by calendar span instead of 252 rows.
+- **Freeze guard:** return rows dated on or after the run day (a possibly intraday mark) are never
+  frozen.
+
 ## Remaining work (the ONLY list of open items)
 
 | Item | Gate | Done-when |
 |---|---|---|
 | ~~W0 land this plan + close plan 007 + open tracking issue + #294 comment~~ | agent → admin-merge on green | shipped — issue #401, plan on `main` |
 | ~~PR C core engine + cron + removals + docs~~ | agent → admin-merge on green | shipped — [#404](https://github.com/qte77/analyze-stock-kpi/pull/404) merged 2026-09-24 |
-| PR E series A + freeze + lag (D15–D19) + B start-trim fix | agent → admin-merge on green | per PR E done-when; B's published metrics match its real window |
+| ~~PR E series A + freeze + lag (D15–D19) + B start-trim fix + yearly cadence + rebalance log + foresight audit (D20–D22)~~ | agent → admin-merge on green | shipped — [#414](https://github.com/qte77/analyze-stock-kpi/pull/414) |
 | ~~PR D dashboard section~~ | agent → admin-merge on green | shipped — [#403](https://github.com/qte77/analyze-stock-kpi/pull/403) merged 2026-09-23 |
 | Dispatch `portfolio.yaml` + verify data files + Pages e2e (migrated from 007) | agent (after E+F) | A + B artifacts on `data`; the section renders on Pages without console errors; the e2e defects list is triaged |
 | ~~PR F dashboard A headline + B secondary~~ | agent → admin-merge on green | shipped — [#410](https://github.com/qte77/analyze-stock-kpi/pull/410) (also: URL state-clear fix, D20 yearly cadence, D21 rebalance log) |
+| ~~Own-close fills (audit finding #4 + the matching null-benchmark #6 remainder)~~ | agent | shipped in the PR E row's PR (2026-09-25) |
 | Private repo cache for `results/prices/` (statements + prices; first-seen merge) | owner (create repo + fine-grained PAT secret) → agent | cron pulls before + pushes after each run; history no longer ages out |
 | Issue: `make preview` doesn't serve `ui/public/` | agent | issue filed |
 | Issue: `llms.txt` template missing ADR-0010..0013 + newer modules | agent | issue filed |
 | US-only SEC-XBRL extension to ~2017 (filed dates) | owner (deferred) | only if the owner wants a longer US series |
+| D18 lag: country-based classification (audit finding #8 remainder, deferred 2026-09-24) | agent | a `FundamentalsSnapshot.country`-based lookup replaces the interim known-issuer list + OTC-ADR heuristic |
 
 ## Verification
 

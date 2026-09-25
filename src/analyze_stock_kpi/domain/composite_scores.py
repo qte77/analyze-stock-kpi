@@ -19,6 +19,7 @@ Public API:
 
 from __future__ import annotations
 
+import math
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
@@ -199,11 +200,14 @@ def _normalize_term(
 ) -> float | None:
     """Rescale ``value`` to ``[0, 100]`` clamped to ``[lo, hi]``.
 
-    Returns ``None`` when ``value`` is ``None``. When ``invert=True``
-    returns ``100 - rescaled`` so low input values produce high scores
-    (used for cheapness / risk metrics where lower is better).
+    Returns ``None`` when ``value`` is ``None`` or non-finite (``NaN``/``inf``
+    — found 2026-09-24: ``_clamp(nan, lo, hi)`` silently resolves to ``hi``,
+    so an unguarded ``NaN`` input previously scored a perfect/zero 100/0
+    instead of being excluded like any other missing value). When
+    ``invert=True`` returns ``100 - rescaled`` so low input values produce
+    high scores (used for cheapness / risk metrics where lower is better).
     """
-    if value is None:
+    if value is None or not math.isfinite(value):
         return None
     raw = _rescale(value, lo, hi)
     return 100 - raw if invert else raw
