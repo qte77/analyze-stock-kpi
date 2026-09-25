@@ -66,7 +66,7 @@ import math
 import random
 import re
 import statistics
-from datetime import date, timedelta
+from datetime import UTC, date, datetime, timedelta
 from typing import TYPE_CHECKING, Literal, cast
 
 import numpy as np
@@ -213,6 +213,9 @@ _CAVEATS: tuple[str, ...] = (
     "no-suffix foreign names may still be misclassified as US.",
     "Returns are local-currency, gross of FX, financing and borrow costs; "
     "only the 10 bp one-way-turnover trading cost is modelled.",
+    "Any single-day move above ±50 % is treated as a data glitch and set to "
+    "0 %. That also removes a few genuine small-cap moves (e.g. a biotech "
+    "jump), and a ticker with any non-positive adjusted close is excluded.",
     "The `yearly` cadence rebalances once a year; nothing is annualized from "
     "fewer than 12 months of monthly returns (D9), so its metrics stay "
     "`null` far longer than the other cadences'.",
@@ -241,6 +244,9 @@ _CAVEATS_GENUINE: tuple[str, ...] = (
     "across mismatched exchange holidays.",
     "Returns are local-currency, gross of FX, financing and borrow costs; "
     "only the 10 bp one-way-turnover trading cost is modelled.",
+    "Any single-day move above ±50 % is treated as a data glitch and set to "
+    "0 %. That also removes a few genuine small-cap moves (e.g. a biotech "
+    "jump), and a ticker with any non-positive adjusted close is excluded.",
     "The `monthly_buffer` cadence has no buffer effect here: the live "
     "aggregator publishes only the top/bottom 25 each run, so every "
     "rebalance is a fresh selection identical to the `monthly` cadence's "
@@ -1604,8 +1610,13 @@ def _trade_log_for_cadence(
 def _trim_to_first_trade(
     rows: list[BacktestDailyRow],
     weights_by_trade_date: dict[date, tuple[dict[str, float], dict[str, float]]],
+    *,
+    run_date: date | None = None,
 ) -> list[BacktestDailyRow]:
     """The start-trim fix (found 2026-09-24): drop pre-first-trade zero-return days.
+
+    With `run_date`, also drops rows dated on or after it: that day's close may
+    still be an intraday mark, and the append-only freeze (D17) would lock it in.
 
     `simulate` marks every day in the full price-history union calendar, which
     can start decades before this cadence's book had any holding — before its
@@ -1619,7 +1630,7 @@ def _trim_to_first_trade(
     if not weights_by_trade_date:
         return []
     first_trade = min(weights_by_trade_date)
-    return [r for r in rows if r.date >= first_trade]
+    return [r for r in rows if r.date >= first_trade and (run_date is None or r.date < run_date)]
 
 
 def _pct_change_map(closes: dict[date, float]) -> dict[date, float]:
@@ -2183,7 +2194,9 @@ def _run_series_b(
             cadence, rebal_dates, ranked_by_date, calendar, own_dates=own_dates
         )
         rows = _trim_to_first_trade(
-            simulate(weights_by_trade_date, returns_by_ticker), weights_by_trade_date
+            simulate(weights_by_trade_date, returns_by_ticker),
+            weights_by_trade_date,
+            run_date=datetime.now(UTC).date(),
         )
         write_series_years(cadence, rows)
         frozen_rows = _read_all_series_years(cadence)
@@ -2250,7 +2263,9 @@ def _run_series_a(
             cadence, rebal_dates, ranked_by_date, calendar, own_dates=own_dates
         )
         rows = _trim_to_first_trade(
-            simulate(weights_by_trade_date, returns_by_ticker), weights_by_trade_date
+            simulate(weights_by_trade_date, returns_by_ticker),
+            weights_by_trade_date,
+            run_date=datetime.now(UTC).date(),
         )
         series_root = settings.backtest_series_genuine_dir / cadence
         write_series_years(cadence, rows, root=series_root)

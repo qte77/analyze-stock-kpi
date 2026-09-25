@@ -640,6 +640,21 @@ def test_trim_to_first_trade_empty_weights_yields_no_rows() -> None:
     assert _trim_to_first_trade(rows, {}) == []
 
 
+def test_trim_to_first_trade_drops_the_run_days_partial_row() -> None:
+    """A row dated on the run day may be an intraday mark; freezing would lock it in."""
+    run_day = date(2026, 9, 25)
+    rows = [
+        BacktestDailyRow(
+            date=d, ret_long=0.01, ret_short=0.0, ret_ls_gross=0.01, ret_ls_net=0.01, turnover=0.0
+        )
+        for d in (date(2026, 9, 24), run_day)
+    ]
+
+    trimmed = _trim_to_first_trade(rows, {date(2026, 9, 24): ({}, {})}, run_date=run_day)
+
+    assert [r.date for r in trimmed] == [date(2026, 9, 24)]
+
+
 # ----- _drop_bad_tickers: the 2026-03-18 ICTEF bad-tick fix (found 2026-09-24) -----
 
 
