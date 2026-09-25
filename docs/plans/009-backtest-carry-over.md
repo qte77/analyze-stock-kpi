@@ -48,9 +48,8 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   - Never commit raw Yahoo prices or statements.
   - `make preview` doesn't render charts until #415 is fixed; use `npm run dev`.
 - **Owner gates:**
-  - #418: create a private repo + a fine-grained PAT secret.
+  - #418: the private repo `qte77/analyze-stock-kpi-cache` exists (2026-09-25). Still needed: a fine-grained PAT scoped to it, stored as the `CACHE_REPO_TOKEN` secret (steps on #418).
   - Connect GitHub to the Claude account, only if you want cloud offloading.
-  - Approve or adjust the UI redesign proposal (§UI redesign proposal) before any UI rework starts.
   - The US-only SEC-XBRL extension is deferred until the owner asks for it.
 
 ## UI redesign proposal (owner feedback 2026-09-25: "overwhelming and convoluted")
@@ -130,7 +129,8 @@ universes", "Why these charts", the backtest rules, the look-ahead audit, all ca
 | ~~Dependabot `setup-uv` [#412](https://github.com/qte77/analyze-stock-kpi/pull/412)~~ | agent | shipped 2026-09-25: its CI was green (the allow-list accepts the new SHA); merged, and `validate` passes on `main` |
 | `bump-my-version.yaml` doesn't sync the project's own version in `uv.lock` (v1.4.0 shipped with 1.3.0 there; fixed by hand in #427) | agent | the next bump leaves `uv.lock`'s `analyze-stock-kpi` version equal to `pyproject.toml` |
 | Radar labels + inert row detail in Simple view [#426](https://github.com/qte77/analyze-stock-kpi/issues/426) | agent | both addressed or decided; checked in the phone e2e |
-| UI redesign: positioning + progressive disclosure (see §UI redesign proposal) | owner (approve direction) → agent | the owner approves or adjusts the wireframe; then a plan 010 with a UX review (a `frontend-design` skill or usability-audit subagent) and the polyfetch e2e on phone and desktop as the done-when |
+| UI redesign: positioning + progressive disclosure (see §UI redesign proposal), **approved by the owner 2026-09-25** | agent | the owner approves or adjusts the wireframe; then a plan 010 with a UX review (a `frontend-design` skill or usability-audit subagent) and the polyfetch e2e on phone and desktop as the done-when |
+| Unpin `complexipy` (pinned at 5.5.0 in #431: 6.x+ changed the scorer, and 10 unchanged functions now exceed the gate of 10) | agent | either the flagged functions are simplified or the threshold is re-set deliberately; the pin is removed; `make validate` green |
 | `make preview` serves `ui/public` [#415](https://github.com/qte77/analyze-stock-kpi/issues/415) | agent | charts render under `make preview` |
 | Scroll hint on touch devices [#417](https://github.com/qte77/analyze-stock-kpi/issues/417) | agent | a hint shows only on overflow; checked in the e2e on a tablet and a phone |
 | `llms.txt` template up to date [#416](https://github.com/qte77/analyze-stock-kpi/issues/416) | agent | every ADR and module listed, or generated from the tree |
