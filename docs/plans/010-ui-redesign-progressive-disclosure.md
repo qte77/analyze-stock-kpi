@@ -34,8 +34,9 @@ screener. The UX review (2026-09-25, desktop 1440×900 and phone 390×844 on the
    `let activeUniverse = "qte77-watchlist"`), not the cross-universe ranking.
 3. `#backtest-section` (`ui/index.html:147-279`) renders fully expanded: chart, 12-column metrics
    table, key facts, caveats and a ~200-word disclaimer, then series B repeats the pattern.
-4. The metrics table shows "– %" placeholders on first render (timing or sparse history; to be
-   confirmed during slice 3).
+4. The metrics table shows "– %" placeholders. Confirmed 2026-09-25: by design, not timing. Every
+   metric is `null` below 12 months of returns (`_MIN_MONTHS_FOR_METRICS`), and series A
+   started 2026-05-31, so its table stays empty until about June 2027 (#446).
 5. A row click does nothing in the default Simple view: `#row-detail` is `.detail-only`, and
    `body.view-simple .detail-only { display: none !important }` (`ui/style.css:658`), while
    `viewMode = "simple"` is the default (`ui/app.js:75`). This is #426.
@@ -154,7 +155,7 @@ All paths under `ui/`. The page is built in `init()` (`app.js:682-788`).
 | 0. Committed e2e script `scripts/e2e_ui.py` (runs with `uv run --project ../polyfetch-scrape`; phone 390×844 touch + desktop 1440×900, portrait and landscape; screenshots; fails on console errors other than the known year-file 404s and on failed requests; `--url` for local or Pages) | agent | passes on today's page locally and on Pages; documented in CONTRIBUTING |
 | 1. Positioning line + F&G collapsed into a header chip and panel (D4, D6) | agent | e2e: no F&G score above Today's picks on either viewport; the chip opens and closes with click and Enter/Space; `?ltFgWindow=5y` opens it (D1) |
 | 2. Today's picks as the landing view: merged Best/Worst 25 from `aggregated-scores-best`/`-worst`, quick search (D2, D3, D8) | agent | e2e: a first load with no parameters shows Best/Worst 25 first; BEST above WORST on phone; `?universe=`/`?date=` links behave as before |
-| 3. Backtest behind "How it's tested"; layer 1 keeps series A's chart and one line (D5); confirm or fix the "– %" empty state | agent | e2e: the metrics table and disclaimer are hidden until expanded; B never shares A's axis or headline; no "– %" wall on first render |
+| 3. Backtest behind "How it's tested"; layer 1 keeps series A's chart and one line (D5); a designed empty state for series A's metrics before 12 months. Do it after the #446 audit, whose findings (SPY benchmark, leg separation, which cadences and metrics stay) define this slice's content | agent | e2e: the metrics table and disclaimer are hidden until expanded; B never shares A's axis or headline; no "– %" wall on first render |
 | 4. "Browse all stocks": the universe table, picker, donut and CSV collapsed (D1, D6) | agent | e2e: collapsed by default; `?filter=`/`?sort=`/`?sector=` open it on load |
 | 5. #426: row detail works in Simple view, KPI rows in 4 groups, radar labels decided (D7) | agent | e2e: a row click in Simple view opens the panel on both viewports with 4 groups |
 | 6. Methodology section (layer 3): "Why these charts?", "Why these universes?", backtest rules, caveats, ADR links | agent | links from layers 1/2 resolve; a text diff shows no content was lost |
