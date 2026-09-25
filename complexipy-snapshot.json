@@ -1,0 +1,70 @@
+[
+  {
+    "path": "src/analyze_stock_kpi/data_sources/equity_spy.py",
+    "file_name": "equity_spy.py",
+    "functions": [
+      {
+        "name": "_fetch_history_closes",
+        "complexity": 11
+      }
+    ]
+  },
+  {
+    "path": "src/analyze_stock_kpi/data_sources/fundamentals.py",
+    "file_name": "fundamentals.py",
+    "functions": [
+      {
+        "name": "_download_closes",
+        "complexity": 11
+      },
+      {
+        "name": "fetch_universe_fundamentals",
+        "complexity": 13
+      },
+      {
+        "name": "_batch_close_prices",
+        "complexity": 16
+      }
+    ]
+  },
+  {
+    "path": "src/analyze_stock_kpi/data_sources/yield_curve.py",
+    "file_name": "yield_curve.py",
+    "functions": [
+      {
+        "name": "_fetch_history_closes",
+        "complexity": 11
+      }
+    ]
+  },
+  {
+    "path": "src/analyze_stock_kpi/orchestrators/longshort_backtest.py",
+    "file_name": "longshort_backtest.py",
+    "functions": [
+      {
+        "name": "_trade_log_for_cadence",
+        "complexity": 12
+      },
+      {
+        "name": "simulate",
+        "complexity": 12
+      },
+      {
+        "name": "write_lists_years",
+        "complexity": 13
+      },
+      {
+        "name": "write_series_years",
+        "complexity": 13
+      },
+      {
+        "name": "write_trades_years",
+        "complexity": 13
+      },
+      {
+        "name": "_genuine_trade_log_for_cadence",
+        "complexity": 15
+      }
+    ]
+  }
+]

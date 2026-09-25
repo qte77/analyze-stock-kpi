@@ -30,9 +30,8 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
      `method_version` bump and one rebuild. Do it before series B accumulates much new history.
      `country` is now captured (step 1); step 2 waits for a snapshot run (see the table row).
   2. The UI redesign (approved): open plan 010, UX review first, polyfetch e2e on phone and desktop.
-  3. Unpin `complexipy`; fix the bump workflow's `uv.lock` version sync.
-  4. #415, #417, #426, #416: small UI/build/docs fixes (run the polyfetch e2e for #417/#426).
-  5. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
+  3. #415, #417, #426, #416: small UI/build/docs fixes (run the polyfetch e2e for #417/#426).
+  4. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
 - **Offloading to the cloud (optional):** `claude --cloud` needs an interactive TTY, so it fails
   from an agent's Bash. Use a one-time routine instead (`/schedule` → `RemoteTrigger`, environment
   "Default"). Good candidates are #416, #415 and #417, which need no Yahoo/SEC network and no
@@ -129,7 +128,7 @@ universes", "Why these charts", the backtest rules, the look-ahead audit, all ca
 | ~~`bump-my-version.yaml` doesn't sync the project's own version in `uv.lock`~~ | agent | shipped 2026-09-25: a multiline `[[tool.bumpversion.files]]` entry for `uv.lock` in `pyproject.toml`; a `--dry-run` shows it bumped (confirm on the next real bump) |
 | Radar labels + inert row detail in Simple view [#426](https://github.com/qte77/analyze-stock-kpi/issues/426) | agent | both addressed or decided; checked in the phone e2e |
 | UI redesign: positioning + progressive disclosure (see §UI redesign proposal), **approved by the owner 2026-09-25** | agent | the owner approves or adjusts the wireframe; then a plan 010 with a UX review (a `frontend-design` skill or usability-audit subagent) and the polyfetch e2e on phone and desktop as the done-when |
-| Unpin `complexipy` (pinned at 5.5.0 in #431: 6.x+ changed the scorer, and 10 unchanged functions now exceed the gate of 10) | agent | either the flagged functions are simplified or the threshold is re-set deliberately; the pin is removed; `make validate` green |
+| ~~Unpin `complexipy`~~ | agent | shipped 2026-09-25: `complexipy>=8.0.1`; the gate stays at 10, and the 11 functions that exceed it only because 6.x+ scores comprehensions (probe: the same comprehensions score 0 in 5.5.0, 4 in 8.0.1) are baselined in `complexipy-snapshot.json`; `make validate` green |
 | `make preview` serves `ui/public` [#415](https://github.com/qte77/analyze-stock-kpi/issues/415) | agent | charts render under `make preview` |
 | Scroll hint on touch devices [#417](https://github.com/qte77/analyze-stock-kpi/issues/417) | agent | a hint shows only on overflow; checked in the e2e on a tablet and a phone |
 | `llms.txt` template up to date [#416](https://github.com/qte77/analyze-stock-kpi/issues/416) | agent | every ADR and module listed, or generated from the tree |
