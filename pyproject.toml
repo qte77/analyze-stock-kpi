@@ -18,7 +18,7 @@ dependencies = [
 dev = [
     "ruff>=0.15.15",
     "pyright>=1.1.400",
-    "complexipy>=5.5.0",
+    "complexipy==5.5.0",  # pinned: >=6.0 changed the cognitive-complexity scorer and fails check_complexity on unchanged code; see #431 before upgrading
     "bump-my-version>=1.4.1",
     "scriv[toml]>=1.8",
 ]
