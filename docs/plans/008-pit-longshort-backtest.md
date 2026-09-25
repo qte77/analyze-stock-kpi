@@ -358,12 +358,15 @@ single-day return glitch beyond the already-excluded `ICTEF` (#3); today's intra
 date not being excluded from the freeze (#5); a `KeyError` crash risk + an asymmetric zero-check in
 the null benchmark's price lookups (#6, partial — see below); the documented ≥1y-of-closes
 eligibility threshold not actually being enforced (#7); and the D18 non-US filing lag missing
-several no-suffix foreign issuers (#8). **Deferred, disclosed in `summary.caveats`, not silently
-shipped:** each leg entering/exiting at the shared union-calendar trade date instead of its own next
-close (#4), and the null benchmark's matching timing approximation + calendar-day annualization
-(the remainder of #6) — both need a genuine `simulate()`/`_random_book_net_ann` architecture change
-that a rushed fix under time pressure risked getting subtly wrong in the most heavily-relied-on
-function in this module.
+several no-suffix foreign issuers (#8). The coordinator then fixed the rest in the same PR
+(2026-09-25):
+- **#4 fills:** a rebalance trades on the first day every name in the old and new books has its own
+  close (`_trade_date`).
+- **The remainder of #6:** the null benchmark's random books use the same rule and each earns its
+  own period; it was off by one, so the first period was always 0.
+- **Annualization:** all metrics annualize by calendar span instead of 252 rows.
+- **Freeze guard:** return rows dated on or after the run day (a possibly intraday mark) are never
+  frozen.
 
 ## Remaining work (the ONLY list of open items)
 
@@ -375,7 +378,7 @@ function in this module.
 | ~~PR D dashboard section~~ | agent → admin-merge on green | shipped — [#403](https://github.com/qte77/analyze-stock-kpi/pull/403) merged 2026-09-23 |
 | Dispatch `portfolio.yaml` + verify data files + Pages e2e (migrated from 007) | agent (after E+F) | A + B artifacts on `data`; the section renders on Pages without console errors; the e2e defects list is triaged |
 | ~~PR F dashboard A headline + B secondary~~ | agent → admin-merge on green | shipped — [#410](https://github.com/qte77/analyze-stock-kpi/pull/410) (also: URL state-clear fix, D20 yearly cadence, D21 rebalance log) |
-| Own-close fills (audit finding #4 + the matching null-benchmark #6 remainder, deferred 2026-09-24) | agent | each leg's entry/exit uses its own next trading day, not the shared union-calendar date; null benchmark matches + annualizes by actual trading days |
+| ~~Own-close fills (audit finding #4 + the matching null-benchmark #6 remainder)~~ | agent | shipped in the PR E row's PR (2026-09-25) |
 | Private repo cache for `results/prices/` (statements + prices; first-seen merge) | owner (create repo + fine-grained PAT secret) → agent | cron pulls before + pushes after each run; history no longer ages out |
 | Issue: `make preview` doesn't serve `ui/public/` | agent | issue filed |
 | Issue: `llms.txt` template missing ADR-0010..0013 + newer modules | agent | issue filed |
