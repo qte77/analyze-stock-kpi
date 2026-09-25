@@ -44,7 +44,8 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   - A change to the ranking inputs rewrites frozen history only through a `method_version` bump,
     once and deliberately.
   - Never commit raw Yahoo prices or statements.
-  - `make preview` doesn't render charts until #415 is fixed; use `npm run dev`.
+  - `make preview` serves `http://localhost:8000/analyze-stock-kpi/` (Vite, #415). In a
+    Patchright `page.evaluate`, pass `isolated_context=False` to see page globals like `Chart`.
 - **Owner gates:**
   - #418: the private repo `qte77/analyze-stock-kpi-cache` exists (2026-09-25). Still needed: a fine-grained PAT scoped to it, stored as the `CACHE_REPO_TOKEN` secret (steps on #418).
   - Connect GitHub to the Claude account, only if you want cloud offloading.
@@ -129,7 +130,7 @@ universes", "Why these charts", the backtest rules, the look-ahead audit, all ca
 | Radar labels + inert row detail in Simple view [#426](https://github.com/qte77/analyze-stock-kpi/issues/426) | agent | both addressed or decided; checked in the phone e2e |
 | UI redesign: positioning + progressive disclosure (see §UI redesign proposal), **approved by the owner 2026-09-25** | agent | the owner approves or adjusts the wireframe; then a plan 010 with a UX review (a `frontend-design` skill or usability-audit subagent) and the polyfetch e2e on phone and desktop as the done-when |
 | ~~Unpin `complexipy`~~ | agent | shipped 2026-09-25: `complexipy>=8.0.1`; the gate stays at 10, and the 11 functions that exceed it only because 6.x+ scores comprehensions (probe: the same comprehensions score 0 in 5.5.0, 4 in 8.0.1) are baselined in `complexipy-snapshot.json`; `make validate` green |
-| `make preview` serves `ui/public` [#415](https://github.com/qte77/analyze-stock-kpi/issues/415) | agent | charts render under `make preview` |
+| ~~`make preview` serves `ui/public` [#415](https://github.com/qte77/analyze-stock-kpi/issues/415)~~ | agent | shipped 2026-09-25: both preview targets run Vite's dev server (URL `/analyze-stock-kpi/`); `preview_local` reads local `results/` via `<base>/@fs/<repo>` (`server.fs.allow` adds only `../results`). Headless check: 4 Chart.js instances on desktop and phone |
 | Scroll hint on touch devices [#417](https://github.com/qte77/analyze-stock-kpi/issues/417) | agent | a hint shows only on overflow; checked in the e2e on a tablet and a phone |
 | `llms.txt` template up to date [#416](https://github.com/qte77/analyze-stock-kpi/issues/416) | agent | every ADR and module listed, or generated from the tree |
 | Private cache repo [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) | owner → agent | two consecutive runs show the cache growing and B's start date stable |
