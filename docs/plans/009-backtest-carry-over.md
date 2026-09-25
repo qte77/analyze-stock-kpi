@@ -74,6 +74,7 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
 | Country-based filing lag [#419](https://github.com/qte77/analyze-stock-kpi/issues/419) | agent | country lookup with suffix fallback, tested; `method_version` bumped; one rebuild verified on `data` |
 | Dependabot python-deps [#411](https://github.com/qte77/analyze-stock-kpi/pull/411) (CI red) | agent | the failing bump is identified and fixed or pinned; merged on green |
 | Dependabot `setup-uv` [#412](https://github.com/qte77/analyze-stock-kpi/pull/412) | owner (allow-list SHA) → agent | the SHA is on the allow-list; merged on green |
+| `bump-my-version.yaml` doesn't sync the project's own version in `uv.lock` (v1.4.0 shipped with 1.3.0 there; fixed by hand in #427) | agent | the next bump leaves `uv.lock`'s `analyze-stock-kpi` version equal to `pyproject.toml` |
 | Radar labels + inert row detail in Simple view [#426](https://github.com/qte77/analyze-stock-kpi/issues/426) | agent | both addressed or decided; checked in the phone e2e |
 | `make preview` serves `ui/public` [#415](https://github.com/qte77/analyze-stock-kpi/issues/415) | agent | charts render under `make preview` |
 | Scroll hint on touch devices [#417](https://github.com/qte77/analyze-stock-kpi/issues/417) | agent | a hint shows only on overflow; checked in the e2e on a tablet and a phone |
