@@ -40,6 +40,7 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     _beta,
     _closes_as_of,
     _cost,
+    _countries_from_snapshots,
     _drift_leg,
     _drop_bad_tickers,
     _filter_bad_ticks,
@@ -192,6 +193,51 @@ def test_filing_lag_four_letter_y_ticker_stays_us_90_days() -> None:
     boundary_90 = period_end.date() + timedelta(days=90)
 
     assert pit_fundamentals(frames, boundary_90, "ORLY")["return_on_equity"] is not None
+
+
+def test_filing_lag_uses_country_for_no_suffix_foreign_adr() -> None:
+    """#419: `BABA` has no suffix, isn't on the known list and isn't ADR-shaped —
+    only its snapshot `country` marks it non-US."""
+    period_end = pd.Timestamp("2023-12-31")
+    frames = _toy_frames(period_end)
+    boundary_90 = period_end.date() + timedelta(days=90)
+
+    assert pit_fundamentals(frames, boundary_90, "BABA")["return_on_equity"] is not None
+    china = pit_fundamentals(frames, boundary_90, "BABA", country="China")
+    assert china["return_on_equity"] is None
+
+
+def test_filing_lag_country_united_states_overrides_ticker_shape() -> None:
+    """#419: a known country wins over the suffix/shape fallback in both directions."""
+    period_end = pd.Timestamp("2023-12-31")
+    frames = _toy_frames(period_end)
+    boundary_90 = period_end.date() + timedelta(days=90)
+
+    assert (
+        pit_fundamentals(frames, boundary_90, "AAPL", country="United States")["return_on_equity"]
+        is not None
+    )
+    assert (
+        pit_fundamentals(frames, boundary_90, "ABCDY", country="United States")["return_on_equity"]
+        is not None
+    )
+
+
+def test_countries_from_snapshots_latest_wins_and_none_never_erases(tmp_path: Path) -> None:
+    """#419: later snapshot files override earlier ones; a missing country keeps the older value."""
+    older = tmp_path / "2026-09-20.json"
+    newer = tmp_path / "2026-09-27.json"
+    older.write_text(
+        '[{"symbol": "TSM", "country": "Taiwan"}, {"symbol": "ACME", "country": "Canada"}]'
+    )
+    newer.write_text(
+        '[{"symbol": "TSM", "country": null}, {"symbol": "ACME", "country": "United States"}]'
+    )
+
+    assert _countries_from_snapshots([older, newer]) == {
+        "TSM": "Taiwan",
+        "ACME": "United States",
+    }
 
 
 def test_pit_fundamentals_nan_row_becomes_none_not_nan() -> None:

@@ -163,6 +163,10 @@ inception, so every published metric was diluted by ~15.7k padding days (publish
    ticker (no exchange suffix) as before, 120 days for any non-US ticker (a `.XX` suffix, e.g.
    `.DE`/`.SA`/`.T`/`.KS`), since 20-F and foreign filers publish later. Ships with a single
    `method_version` bump (D17's one explicit rebuild), combined with the start-trim fix below.
+   *Amended (#419, `method_version` 3):* the ticker's Yahoo `country` from the latest demo
+   snapshot now decides (a static attribute, so no look-ahead); the suffix rule, a short list of
+   known no-suffix foreign issuers and an OTC-ADR shape heuristic remain the fallback when a
+   ticker has no country.
 5. **Sortino stays in both series (D19):** it is part of the qte77 Score (ADR-0004) and is
    reconstructable from closes up to the rank date alone in both series, so nothing about it
    changes.
