@@ -67,9 +67,11 @@ jobs:
           git checkout origin/data -- results/backtest_genuine/ || \
             echo "no existing results/backtest_genuine/ on data — first run (series A)"
 
-      # Pull the genuine per-universe demo snapshots (read-only input for the D11 fidelity
-      # check) — never part of the commit filter below, never written back.
-      - name: Fetch genuine demo snapshots from data branch (D11 fidelity input)
+      # Pull the genuine per-universe demo snapshots — read-only input for the D11 fidelity
+      # check, series A's rank dates and series B's country-based filing lag (#419; without
+      # them every ticker falls back to the suffix rule). Never part of the commit filter
+      # below, never written back.
+      - name: Fetch genuine demo snapshots from data branch (fidelity, series A, filing-lag input)
         run: |
           set -euo pipefail
           git checkout origin/data -- results/demo/ || \

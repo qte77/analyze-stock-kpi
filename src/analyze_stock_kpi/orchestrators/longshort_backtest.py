@@ -208,12 +208,14 @@ _CAVEATS: tuple[str, ...] = (
     "name in the old and new books has its own close, so each fill is at the "
     "ticker's own closing price; a rebalance can therefore wait a day or two "
     "across mismatched exchange holidays.",
-    "Non-US filing-lag classification (D18) uses each ticker's country as "
-    "Yahoo reports it in the latest demo snapshot (the headquarters, not the "
-    "filing regime, so e.g. an Ireland-headquartered 10-K filer gets the "
-    "longer, more conservative 120-day lag). A ticker without a country falls "
-    "back to its exchange suffix, a small list of known no-suffix foreign "
-    "issuers and an OTC-ADR ticker-shape heuristic.",
+    "Non-US filing-lag classification (D18): a ticker is non-US if its exchange "
+    "suffix, a small list of known no-suffix foreign issuers or an OTC-ADR "
+    "ticker-shape heuristic says so, or if Yahoo's country in the latest demo "
+    "snapshot is not the United States. The country can only lengthen the lag: "
+    "it reflects the headquarters, not the filing regime (an Ireland-"
+    "headquartered 10-K filer gets the more conservative 120 days), and it is "
+    "sometimes wrong (e.g. BlackRock listed as Australia), which also only "
+    "lengthens the lag.",
     "Returns are local-currency, gross of FX, financing and borrow costs; "
     "only the 10 bp one-way-turnover trading cost is modelled.",
     "Any single-day move above ±50 % is treated as a data glitch and set to "
@@ -477,15 +479,21 @@ def _is_otc_adr_shaped(ticker: str) -> bool:
 def _filing_lag_days(ticker: str, country: str | None = None) -> int:
     """D18: 90 days for a US issuer, 120 for non-US.
 
-    #419: a known `country` (from the demo snapshots; a static attribute, so
-    no look-ahead) decides. Without one, fall back to the ticker: any `.XX`
-    exchange suffix, a known no-suffix foreign issuer
-    (`_KNOWN_NON_US_NO_SUFFIX`), or an OTC-ADR-shaped ticker
-    (`_is_otc_adr_shaped`) is non-US (finding #8, 2026-09-24).
+    Non-US = the ticker rule (any `.XX` exchange suffix, a known no-suffix
+    foreign issuer `_KNOWN_NON_US_NO_SUFFIX`, or an OTC-ADR-shaped ticker
+    `_is_otc_adr_shaped`; finding #8, 2026-09-24) OR, since #419, a known
+    non-US `country` from the demo snapshots (a static attribute, so no
+    look-ahead). The country can only lengthen the lag, never shorten it:
+    Yahoo's field is noisy (2026-09-27: BLK -> "Australia"), and a wrong
+    "United States" on a foreign issuer would be a look-ahead.
     """
-    if country is not None:
-        return _US_FILING_LAG_DAYS if country == _US_COUNTRY else _NON_US_FILING_LAG_DAYS
-    if "." in ticker or ticker in _KNOWN_NON_US_NO_SUFFIX or _is_otc_adr_shaped(ticker):
+    non_us_country = country is not None and country != _US_COUNTRY
+    if (
+        non_us_country
+        or "." in ticker
+        or ticker in _KNOWN_NON_US_NO_SUFFIX
+        or _is_otc_adr_shaped(ticker)
+    ):
         return _NON_US_FILING_LAG_DAYS
     return _US_FILING_LAG_DAYS
 

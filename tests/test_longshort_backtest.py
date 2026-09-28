@@ -207,8 +207,10 @@ def test_filing_lag_uses_country_for_no_suffix_foreign_adr() -> None:
     assert china["return_on_equity"] is None
 
 
-def test_filing_lag_country_united_states_overrides_ticker_shape() -> None:
-    """#419: a known country wins over the suffix/shape fallback in both directions."""
+def test_filing_lag_country_can_only_lengthen_the_lag() -> None:
+    """#419: Yahoo's country is noisy (2026-09-27 data: BLK -> "Australia"), so it may only
+    mark a ticker non-US. A "United States" label never shortens the ticker rule's 120 days —
+    a shorter lag is the look-ahead direction."""
     period_end = pd.Timestamp("2023-12-31")
     frames = _toy_frames(period_end)
     boundary_90 = period_end.date() + timedelta(days=90)
@@ -217,10 +219,9 @@ def test_filing_lag_country_united_states_overrides_ticker_shape() -> None:
         pit_fundamentals(frames, boundary_90, "AAPL", country="United States")["return_on_equity"]
         is not None
     )
-    assert (
-        pit_fundamentals(frames, boundary_90, "ABCDY", country="United States")["return_on_equity"]
-        is not None
-    )
+    for ticker in ("ABCDY", "SAP.DE", "ASML"):
+        us_labelled = pit_fundamentals(frames, boundary_90, ticker, country="United States")
+        assert us_labelled["return_on_equity"] is None, ticker
 
 
 def test_countries_from_snapshots_latest_wins_and_none_never_erases(tmp_path: Path) -> None:
