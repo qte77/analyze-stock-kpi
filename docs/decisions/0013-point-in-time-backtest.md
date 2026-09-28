@@ -172,12 +172,16 @@ inception, so every published metric was diluted by ~15.7k padding days (publish
    *Amended (#446, series A `method_version` 2, series B's pending rebuild to 3):* the rebalance
    schedule. (a) Series A's cadences use at most one rank date per ISO week (`rank_dates` over the
    genuine grid, series B's D6 rule), so irregular manual snapshots no longer multiply "weekly"
-   rebalances. (b) A trade date that can't resolve yet stops the schedule: later decisions wait
-   behind it instead of trading against the older book and freezing rows the next run would
-   disagree with. (c) When two rank dates resolve to the same trade day, only the newer trades,
-   and the rebalance log is built from that same executed list, so it always matches the
-   simulated weights. Series A gains a rebuild switch (`_maybe_rebuild_series_a`), which it
-   lacked.
+   rebalances. (b) Execution is a walk over the calendar (`_execute`): each day the target is
+   the newest decision ranked before it, and it fills on the first day every still-trading name
+   in the book actually held and in the target has its own close (the foresight-audit #4 rule).
+   A newer decision replaces one still waiting to fill. Previously each decision's fill search
+   only included the immediately previous decision's names, so trade dates could go backwards
+   (a newer book applied before an older one), a pending decision let the next one trade
+   against the wrong book, and same-day decisions were logged several times. (c) Weights,
+   rebalance log and the null benchmark all use that one executed list, so the log always
+   matches the simulated weights. Series A gains a rebuild switch (`_maybe_rebuild_series_a`),
+   which it lacked.
 5. **Sortino stays in both series (D19):** it is part of the qte77 Score (ADR-0004) and is
    reconstructable from closes up to the rank date alone in both series, so nothing about it
    changes.

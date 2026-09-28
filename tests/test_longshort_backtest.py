@@ -45,6 +45,7 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     _countries_from_snapshots,
     _drift_leg,
     _drop_bad_tickers,
+    _execute,
     _filter_bad_ticks,
     _find_start_date,
     _freeze_eligible,
@@ -62,7 +63,6 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     _score_all_tickers,
     _series_a_rebalance_dates,
     _ticker_period_return,
-    _trade_date,
     _trade_log_for_cadence,
     _trim_to_first_trade,
     _turnover,
@@ -555,33 +555,37 @@ def test_series_a_weekly_is_one_rebalance_per_iso_week() -> None:
     assert _series_a_rebalance_dates("monthly", grid) == [date(2026, 5, 31), date(2026, 6, 7)]
 
 
-def _blocked_schedule() -> tuple[list[date], list[date], dict[str, list[date]]]:
-    """R0 trades on d1; R1's names J/K never share a trading day (J trades d1/d3, K d2),
-    so R1's trade is pending; R2 (all names open on d3) comes after it."""
+def test_newer_decision_replaces_one_still_waiting_to_fill() -> None:
+    """#446: R1's names J/K never share a trading day (J trades d1/d3, K d2), so R1 can't
+    fill; R2, ranked on d2, replaces it and fills on d3 against the book actually held (R0)."""
     t0, t1, t2 = date(2026, 9, 18), date(2026, 9, 21), date(2026, 9, 22)
     d1, d2, d3 = date(2026, 9, 21), date(2026, 9, 22), date(2026, 9, 23)
-    own_dates = {
-        "A": [d1, d2, d3],
-        "B": [d1, d2, d3],
-        "C": [d1, d2, d3],
-        "D": [d1, d2, d3],
-        "J": [d1, d3],
-        "K": [d2],
-    }
-    return [t0, t1, t2], [d1, d2, d3], own_dates
-
-
-def test_pending_trade_blocks_every_later_rebalance() -> None:
-    """#446: with `continue`, R2 traded against R0's book while R1 was still pending, and
-    those rows were frozen; the next run's recompute (R1 resolved) then disagreed."""
-    (t0, t1, t2), calendar, own_dates = _blocked_schedule()
+    own_dates = {name: [d1, d2, d3] for name in "ABCD"} | {"J": [d1, d3], "K": [d2]}
     ranked_by_date = {t0: (["A"], ["B"]), t1: (["J"], ["K"]), t2: (["C"], ["D"])}
+
+    weights = _genuine_weights_for_cadence(
+        "weekly", [t0, t1, t2], ranked_by_date, [d1, d2, d3], book_size=1, own_dates=own_dates
+    )
+
+    assert weights == {d1: ({"A": 1.0}, {"B": 1.0}), d3: ({"C": 1.0}, {"D": 1.0})}
+
+
+def test_trade_dates_never_go_backwards() -> None:
+    """#446 review counterexample: R0 needs Z, which only trades on d5. The old one-step
+    lookback let R1 inherit Z's d5 fill while R2 (not holding Z) filled on d3, so
+    `simulate` would have applied R1's book after R2's. Newest decision wins instead."""
+    t0, t1, t2 = date(2026, 1, 1), date(2026, 1, 2), date(2026, 1, 3)
+    d1, d2, d3, d4, d5 = (date(2026, 1, n) for n in (2, 3, 4, 5, 6))
+    calendar = [d1, d2, d3, d4, d5]
+    own_dates = {name: calendar for name in "SABCD"} | {"Z": [date(2025, 12, 31), d5]}
+    ranked_by_date = {t0: (["Z"], ["S"]), t1: (["A"], ["B"]), t2: (["C"], ["D"])}
 
     weights = _genuine_weights_for_cadence(
         "weekly", [t0, t1, t2], ranked_by_date, calendar, book_size=1, own_dates=own_dates
     )
 
-    assert weights == {calendar[0]: ({"A": 1.0}, {"B": 1.0})}
+    assert list(weights) == sorted(weights)
+    assert weights == {d2: ({"A": 1.0}, {"B": 1.0}), d3: ({"C": 1.0}, {"D": 1.0})}
 
 
 def test_genuine_log_keeps_only_the_newest_decision_per_trade_date() -> None:
@@ -1053,8 +1057,8 @@ def test_trade_date_waits_for_a_day_every_book_name_trades() -> None:
         }
     )
 
-    assert _trade_date(calendar, mon, ["US", "EU"], own) == wed
-    assert _trade_date(calendar, mon, ["EU"], own) == tue
+    assert _execute([(mon, ["US"], ["EU"])], calendar, own)[0][1] == wed
+    assert _execute([(mon, ["EU"], [])], calendar, own)[0][1] == tue
 
 
 def test_trade_date_ignores_a_name_with_no_close_after_the_rank_date() -> None:
@@ -1067,7 +1071,7 @@ def test_trade_date_ignores_a_name_with_no_close_after_the_rank_date() -> None:
         }
     )
 
-    assert _trade_date([mon, tue], mon, ["GONE", "LIVE"], own) == tue
+    assert _execute([(mon, ["GONE"], ["LIVE"])], [mon, tue], own)[0][1] == tue
 
 
 # ----- metrics: D9 on a known series -----
