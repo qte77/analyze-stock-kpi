@@ -58,12 +58,41 @@ def check_page(page, name: str, out: Path) -> list[str]:
     if rows == 0:
         failures.append("universe table has no rows")
 
+    # Slice 1: market mood starts collapsed; its summary toggles it by click and keyboard.
+    panel = page.locator("#fg-panel")
+    summary = page.locator("#fg-panel > summary")
+    if panel.evaluate("d => d.open"):
+        failures.append("market-mood panel is open on load (should start collapsed)")
+    summary.click()
+    if not panel.evaluate("d => d.open"):
+        failures.append("clicking the market-mood summary did not open it")
+
     tab = page.locator("#fg-tabs [role=tab]").nth(1)
     tab.click()
     if tab.get_attribute("aria-selected") != "true":
         failures.append("second F&G tab did not become selected on click")
 
     page.screenshot(path=str(out / f"{name}.png"), full_page=True)
+    summary.focus()
+    page.keyboard.press("Enter")
+    if panel.evaluate("d => d.open"):
+        failures.append("Enter on the focused market-mood summary did not close it")
+    return failures
+
+
+def check_deep_link(browser, url: str) -> list[str]:
+    """Plan 010 D1: `?ltFgWindow=` opens the market-mood panel on its long-term tab."""
+    ctx = browser.new_context(viewport={"width": 1440, "height": 900})
+    page = ctx.new_page()
+    sep = "&" if "?" in url else "?"
+    page.goto(f"{url}{sep}ltFgWindow=5y", wait_until="networkidle", timeout=90_000)
+    page.wait_for_selector("#universe-section tbody tr", timeout=60_000)
+    failures = []
+    if not page.locator("#fg-panel").evaluate("d => d.open"):
+        failures.append("?ltFgWindow=5y did not open the market-mood panel")
+    if page.locator("#fg-tab-longterm").get_attribute("aria-selected") != "true":
+        failures.append("?ltFgWindow=5y did not select the long-term tab")
+    ctx.close()
     return failures
 
 
@@ -100,13 +129,24 @@ def run(url: str, out: Path, *, video: bool) -> int:
                     "requestfailed",
                     lambda r, errors=errors: errors.append(f"request failed: {r.url}"),
                 )
-                page.goto(url, wait_until="networkidle", timeout=90_000)
-                failures = check_page(page, name, out) + errors
+                try:
+                    page.goto(url, wait_until="networkidle", timeout=90_000)
+                    failures = check_page(page, name, out) + errors
+                except Exception as exc:  # report it for this run, keep checking the rest
+                    failures = [f"{type(exc).__name__}: {str(exc).splitlines()[0]}", *errors]
                 ctx.close()
                 failed |= bool(failures)
                 print(f"{'FAIL' if failures else 'ok  '} {name}")
                 for f in failures:
                     print(f"     {f}")
+        try:
+            link_failures = check_deep_link(browser, url)
+        except Exception as exc:  # report it, don't lose the summary
+            link_failures = [f"{type(exc).__name__}: {str(exc).splitlines()[0]}"]
+        failed |= bool(link_failures)
+        print(f"{'FAIL' if link_failures else 'ok  '} deep-link ?ltFgWindow=5y")
+        for f in link_failures:
+            print(f"     {f}")
         browser.close()
     print(f"screenshots: {out}")
     return 1 if failed else 0
