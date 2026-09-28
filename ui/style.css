@@ -151,18 +151,65 @@ h2 {
   letter-spacing: 0.06em;
 }
 
-#fg-header:not([hidden]) {
+/* Plan 010 slice 1: market mood is a collapsed <details>; the summary is a
+   compact one-line bar, and the panel pushes content down when opened. */
+#fear-greed-section {
+  padding: 0.75rem 1.25rem;
+}
+
+#fg-panel > summary {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  cursor: pointer;
+  list-style: none;
+}
+
+#fg-panel > summary::before {
+  content: "▸";
+  color: var(--text-muted);
+}
+
+#fg-panel[open] > summary {
   margin-bottom: 1rem;
+}
+
+#fg-panel[open] > summary::before {
+  content: "▾";
+}
+
+#fg-panel > summary::-webkit-details-marker {
+  display: none;
+}
+
+.fg-summary-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+#fg-header:not([hidden]) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
 #fg-score {
-  font-size: 3rem;
-  font-weight: 200;
+  font-size: 1.5rem;
+  font-weight: 300;
   line-height: 1;
+}
+
+.tagline {
+  margin: 0.25rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  flex-basis: 100%;
+  order: 1; /* its own last row, below the title and the header controls */
 }
 
 #fg-meta {

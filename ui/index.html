@@ -36,6 +36,10 @@
       <a href="https://github.com/qte77/analyze-stock-kpi">analyze-stock-kpi</a>
       · KPI demo dashboard
     </h1>
+    <p class="tagline">
+      qte77 ranks ~300 stocks by one quality score, shows today's best and worst 25, and
+      tracks how that ranking would have performed.
+    </p>
     <div class="header-meta">
       <button
         id="theme-toggle"
@@ -64,13 +68,19 @@
 
   <main>
     <section id="fear-greed-section">
-      <div id="fg-header" hidden>
-        <div id="fg-score"></div>
-        <div id="fg-meta">
-          <span id="fg-rating" class="chip"></span>
-          <span id="fg-deltas"></span>
-        </div>
-      </div>
+      <!-- Plan 010 slice 1 (D4/D6): the market-mood panel is collapsed behind a
+           native <details>; its summary is the compact score. -->
+      <details id="fg-panel">
+      <summary>
+        <span class="fg-summary-label">Market mood</span>
+        <span id="fg-header" hidden>
+          <span id="fg-score"></span>
+          <span id="fg-meta">
+            <span id="fg-rating" class="chip"></span>
+            <span id="fg-deltas"></span>
+          </span>
+        </span>
+      </summary>
       <div
         id="fg-tabs"
         class="detail-tabs"
@@ -142,6 +152,7 @@
           <dd>Below: two point-in-time backtested long/short books — long the top 25 / short the bottom 25, equal-weighted 1/25 per leg (gross 200&nbsp;%, net 0), marked daily from closing prices, costed at 10&nbsp;bp one-way turnover, published gross and net. <strong>Series A</strong> (the headline) ranks by the <strong>live qte77 Score</strong> at each genuine <code>data</code>-branch snapshot date — the same score shown in the Score column above — trading the first close strictly after the snapshot; no reduced-input approximation. Its "Current candidates" list is a <strong>separate, non-historical</strong> display: the live <code>aggregated-scores-best</code> / <code>-worst</code> lists (same data as the Universe section, never a second independent fetch), so today's candidates always carry the identical qte77 Score as their source universe (ADR-0014). <strong>Series B</strong> ("Reconstructed backfill", collapsible below) extends the book back to ~2023 on a weekly rank grid across <strong>all base universes</strong>, ranked by a reduced point-in-time score (<code>score_bt</code>, ADR-0013) computed only from what was knowable on each historical rank date — 6 of 9 Score inputs; forward P/E, PEG and beta have no free point-in-time history, so it is <strong>not</strong> the live qte77 Score. The two series are <strong>never spliced or drawn on one axis</strong> — Series B is a labelled approximation, not a continuation of Series A. Each chart marks its primary cadence's rebalance days with a triangle; the collapsible <strong>"Rebalance log"</strong> below each chart lists every rebalance newest-first — trade date, reason (initial / scheduled / quarterly-after-filings / buffer exit / buy &amp; hold), and which tickers entered or exited the long and short legs, plus that day's turnover — so it's always clear when a rebalance happened, why, and on which side. Both series are <strong>hypothetical and not investment advice</strong>: survivorship and a "today's index membership" size bias are disclosed in the caveats under each chart. Both extend forward every Saturday under identical rules.</dd>
         </dl>
       </div>
+      </details>
     </section>
 
     <section id="backtest-section">

@@ -680,6 +680,18 @@ const chartCtx = {
   },
 };
 
+/**
+ * Plan 010 D1: a shared link with a non-default long-term window
+ * (`?ltFgWindow=` / `?ycWindow=`) opens the collapsed market-mood panel on the
+ * tab that window belongs to, so the linked state is visible on load.
+ */
+function openFgPanelForDeepLink() {
+  if (activeLtFgWindow === "all" && activeYcWindow === "all") return;
+  const panel = /** @type {HTMLDetailsElement | null} */ (document.getElementById("fg-panel"));
+  if (panel) panel.open = true;
+  document.getElementById("fg-tab-longterm")?.click();
+}
+
 async function init() {
   initCharts(chartCtx);
   bindDetailDismiss();
@@ -752,6 +764,7 @@ async function init() {
   renderYieldCurveHeader(ycEntries);
   bindLongTermTabs(fgEntries, ycEntries, spyEntries);
   bindWindowChips();
+  openFgPanelForDeepLink();
 
   // D21's rebalance log is per-cadence, so it can only be fetched once each
   // series' primary cadence is known (above).
