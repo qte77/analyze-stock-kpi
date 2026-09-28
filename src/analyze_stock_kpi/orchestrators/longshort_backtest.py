@@ -130,8 +130,10 @@ start-trim fix (:func:`_trim_to_first_trade`) and the D18 non-US filing lag, and
 to 3 for the country-based lag (#419). Each bump triggers series B's one-time
 full rebuild (:func:`_reset_year_files`)."""
 
-_METHOD_VERSION_A = "1"
-"""D16: series A's method version (its first-ever run)."""
+_METHOD_VERSION_A = "2"
+"""D16: series A's method version. 1 = its first run; 2 (#446) = one rebalance per
+ISO week (`_series_a_rebalance_dates`) and the `_execute` fill rule. Each bump
+triggers series A's one-time full rebuild (`_maybe_rebuild_series_a`)."""
 
 _GENUINE_START = date(2026, 5, 31)
 """D16: the first date every D1 base universe has a genuine `data`-branch
@@ -207,7 +209,9 @@ _CAVEATS: tuple[str, ...] = (
     "A rebalance trades on the first day after its rank date on which every "
     "name in the old and new books has its own close, so each fill is at the "
     "ticker's own closing price; a rebalance can therefore wait a day or two "
-    "across mismatched exchange holidays.",
+    "across mismatched exchange holidays. A newer rebalance replaces one still "
+    "waiting to fill, so the book always moves to the newest decision and "
+    "trade dates never go backwards.",
     "Non-US filing-lag classification (D18): a ticker is non-US if its exchange "
     "suffix, a small list of known no-suffix foreign issuers or an OTC-ADR "
     "ticker-shape heuristic says so, or if Yahoo's country in the latest demo "
@@ -216,7 +220,8 @@ _CAVEATS: tuple[str, ...] = (
     "headquartered 10-K filer gets the more conservative 120 days), and it is "
     "sometimes wrong (e.g. BlackRock listed as Australia), which also only "
     "lengthens the lag.",
-    "Returns are local-currency, gross of FX, financing and borrow costs; "
+    "Returns are total returns (Yahoo closes adjusted for splits and "
+    "dividends), in local currency, gross of FX, financing and borrow costs; "
     "only the 10 bp one-way-turnover trading cost is modelled.",
     "Any single-day move above ±50 % is treated as a data glitch and set to "
     "0 %. That also removes a few genuine small-cap moves (e.g. a biotech "
@@ -237,17 +242,21 @@ _CAVEATS_GENUINE: tuple[str, ...] = (
     "The `sp500` preset is today's top-100-by-cap tickers, not the S&P 500's "
     "actual historical membership — a size look-ahead.",
     "Rank dates are the irregular dates the live aggregator actually "
-    "snapshotted (the weekly demo cron), not a fixed grid; across a gap "
-    "between two snapshot dates (e.g. 2026-07-12 -> 2026-09-21) the book is "
-    "held unchanged.",
+    "snapshotted (the weekly demo cron), not a fixed grid. Cadences use at "
+    "most one per ISO week (the week's last snapshot), so extra manual "
+    "snapshots don't add rebalances; across a gap between two snapshot dates "
+    "(e.g. 2026-07-12 -> 2026-09-27) the book is held unchanged.",
     "A ticker with no price on a given day is treated as flat (0% return) "
     "that day; a name that stops trading entirely after entry is held at its "
     "last known close rather than dropped.",
     "A rebalance trades on the first day after its rank date on which every "
     "name in the old and new books has its own close, so each fill is at the "
     "ticker's own closing price; a rebalance can therefore wait a day or two "
-    "across mismatched exchange holidays.",
-    "Returns are local-currency, gross of FX, financing and borrow costs; "
+    "across mismatched exchange holidays. A newer rebalance replaces one still "
+    "waiting to fill, so the book always moves to the newest decision and "
+    "trade dates never go backwards.",
+    "Returns are total returns (Yahoo closes adjusted for splits and "
+    "dividends), in local currency, gross of FX, financing and borrow costs; "
     "only the 10 bp one-way-turnover trading cost is modelled.",
     "Any single-day move above ±50 % is treated as a data glitch and set to "
     "0 %. That also removes a few genuine small-cap moves (e.g. a biotech "
@@ -1036,27 +1045,26 @@ def _random_book_net_ann(
     leg (no interim rebalancing) instead of a full daily simulation, so
     `_NULL_DRAWS` draws stay fast — this is a summary-only benchmark, not
     part of the persisted daily contract. Each book is drawn at its rank date,
-    filled with the strategy's own `_trade_date` rule, and earns exactly the
-    span to the next book's fill (foresight-audit #6).
+    filled with the strategy's own `_execute` rule, and earns exactly the span
+    to the next book's fill (foresight-audit #6). Without a `calendar`, each
+    book fills on its rank date.
     """
-    books: list[tuple[date, dict[str, float], dict[str, float]]] = []
-    prev_names: list[str] = []
+    decisions: list[Decision] = []
     for t in rebal_dates:
         pool = eligible_by_date.get(t, [])
         if len(pool) < 2 * book_size:
             continue
         sample = rng.sample(pool, 2 * book_size)
-        fill = _trade_date(calendar, t, sample + prev_names, own_dates) if calendar else t
-        if fill is None:
-            break
-        books.append(
-            (
-                fill,
-                dict.fromkeys(sample[:book_size], 1.0 / book_size),
-                dict.fromkeys(sample[book_size:], 1.0 / book_size),
-            )
-        )
-        prev_names = sample
+        decisions.append((t, sample[:book_size], sample[book_size:]))
+    executed = (
+        _execute(decisions, calendar, own_dates)
+        if calendar
+        else [(t, t, long_names, short_names) for t, long_names, short_names in decisions]
+    )
+    books = [
+        (fill, *_equal_weights(long_names, short_names))
+        for _, fill, long_names, short_names in executed
+    ]
     total = 1.0
     drifted_long: dict[str, float] = {}
     drifted_short: dict[str, float] = {}
@@ -1358,11 +1366,6 @@ def _filter_bad_ticks(
     return out
 
 
-def _next_trading_day(calendar: list[date], t: date) -> date | None:
-    """First calendar date strictly after `t` (the D5 trade-at-t+1 rule)."""
-    idx = bisect.bisect_right(calendar, t)
-    return calendar[idx] if idx < len(calendar) else None
-
 
 def _own_dates(closes: dict[str, pd.Series]) -> dict[str, list[date]]:
     """Each ticker's own sorted trading dates (the days it has a real close)."""
@@ -1377,26 +1380,61 @@ def _has_close(dates: list[date], d: date) -> bool:
     return i < len(dates) and dates[i] == d
 
 
-def _trade_date(
-    calendar: list[date],
-    t: date,
-    tickers: list[str],
-    own_dates: dict[str, list[date]] | None,
-) -> date | None:
-    """First calendar date after `t` on which every still-trading name in `tickers` has a close.
+def _can_fill(
+    d: date, t: date, tickers: list[str], own_dates: dict[str, list[date]] | None
+) -> bool:
+    """Whether a book ranked on `t` can trade on `d`: every still-trading name has its own close.
 
     Foresight-audit #4: on a union-calendar day a name's own exchange was shut,
     its forward-filled price would fill it at the rank-date close it was picked
     on. A name with no close after `t` (delisted) is held at its last close and
-    doesn't block. Without `own_dates` this is plain `_next_trading_day`.
+    doesn't block. Without `own_dates` every day can fill.
     """
     if own_dates is None:
-        return _next_trading_day(calendar, t)
-    live = [own_dates[x] for x in tickers if own_dates.get(x) and own_dates[x][-1] > t]
-    for d in calendar[bisect.bisect_right(calendar, t) :]:
-        if all(_has_close(dates, d) for dates in live):
-            return d
-    return None
+        return True
+    return all(
+        _has_close(own_dates[x], d) for x in tickers if own_dates.get(x) and own_dates[x][-1] > t
+    )
+
+
+Decision = tuple[date, list[str], list[str]]
+"""One rebalance decision: `(rank_date, long, short)`."""
+
+Executed = tuple[date, date, list[str], list[str]]
+"""A decision that traded: `(rank_date, trade_date, long, short)`."""
+
+
+def _execute(
+    decisions: list[Decision],
+    calendar: list[date],
+    own_dates: dict[str, list[date]] | None,
+) -> list[Executed]:
+    """#446: when each decision actually trades, walking the calendar day by day.
+
+    On each day the target is the newest decision ranked strictly before it
+    (D5: no same-close look-ahead). It trades on the first day every
+    still-trading name in the book actually held and in the target has its own
+    close (`_can_fill`). A newer decision replaces a target that hasn't traded
+    yet, so trade dates only move forward, the book always moves to the newest
+    decision, and a target still waiting at the end of the data trades only on
+    a later day (so the frozen rows up to today stay consistent next run).
+    """
+    out: list[Executed] = []
+    held: list[str] = []
+    target: Decision | None = None
+    pending = iter(decisions)
+    upcoming = next(pending, None)
+    for d in calendar:
+        while upcoming is not None and upcoming[0] < d:
+            target, upcoming = upcoming, next(pending, None)
+        if target is None:
+            continue
+        t, long_names, short_names = target
+        if _can_fill(d, t, held + long_names + short_names, own_dates):
+            out.append((t, d, long_names, short_names))
+            held = long_names + short_names
+            target = None
+    return out
 
 
 _ONE_YEAR_COVERAGE_GRACE_DAYS = 30
@@ -1510,6 +1548,49 @@ def _rank_all_dates(
     return ranked_by_date, entries
 
 
+def _equal_weights(
+    long_names: list[str], short_names: list[str]
+) -> tuple[dict[str, float], dict[str, float]]:
+    """D5: 1/n per name on each leg."""
+    return (
+        dict.fromkeys(long_names, 1.0 / len(long_names)),
+        dict.fromkeys(short_names, 1.0 / len(short_names)),
+    )
+
+
+def _decisions(
+    cadence: str,
+    rebal_dates: list[date],
+    ranked_by_date: dict[date, list[tuple[str, float]]],
+    calendar: list[date],
+    *,
+    book_size: int = _BOOK_SIZE,
+    buffer: int = _BUFFER_RANK,
+    own_dates: dict[str, list[date]] | None = None,
+) -> list[Executed]:
+    """Series B's executed rebalances for one cadence (shared by weights and log).
+
+    `select` chains on the previous DECISION (the D7 buffer keeps names from the
+    last selection); when each decision trades is `_execute`'s job. Known
+    limitation (#446 review): if `_execute` replaces a decision before it fills,
+    the next `monthly_buffer` selection still buffers against that unfilled
+    decision rather than the book actually held; kept because it needs a fill
+    wait longer than a month, and weights and log stay consistent either way.
+    """
+    decisions: list[Decision] = []
+    prev_holdings: tuple[list[str], list[str]] | None = None
+    for t in rebal_dates:
+        ranks = [ticker for ticker, _ in ranked_by_date.get(t, [])]
+        if len(ranks) < 2 * book_size:
+            continue
+        long_names, short_names = select(
+            ranks, cadence, prev_holdings, book_size=book_size, buffer=buffer
+        )
+        decisions.append((t, long_names, short_names))
+        prev_holdings = (long_names, short_names)
+    return _execute(decisions, calendar, own_dates)
+
+
 def _weights_for_cadence(
     cadence: str,
     rebal_dates: list[date],
@@ -1518,26 +1599,13 @@ def _weights_for_cadence(
     *,
     own_dates: dict[str, list[date]] | None = None,
 ) -> dict[date, tuple[dict[str, float], dict[str, float]]]:
-    """Every cadence rebalance date's target weights, keyed by TRADE date."""
-    out: dict[date, tuple[dict[str, float], dict[str, float]]] = {}
-    prev_holdings: tuple[list[str], list[str]] | None = None
-    for t in rebal_dates:
-        ranks = [ticker for ticker, _ in ranked_by_date.get(t, [])]
-        if len(ranks) < 2 * _BOOK_SIZE:
-            continue
-        long_names, short_names = select(ranks, cadence, prev_holdings)
-        prev_long, prev_short = prev_holdings if prev_holdings is not None else ([], [])
-        trade_date = _trade_date(
-            calendar, t, long_names + short_names + prev_long + prev_short, own_dates
+    """Every executed rebalance's target weights, keyed by TRADE date."""
+    return {
+        trade_date: _equal_weights(long_names, short_names)
+        for _, trade_date, long_names, short_names in _decisions(
+            cadence, rebal_dates, ranked_by_date, calendar, own_dates=own_dates
         )
-        if trade_date is None:
-            continue
-        out[trade_date] = (
-            dict.fromkeys(long_names, 1.0 / len(long_names)),
-            dict.fromkeys(short_names, 1.0 / len(short_names)),
-        )
-        prev_holdings = (long_names, short_names)
-    return out
+    }
 
 
 def _ranked_ticker(
@@ -1570,27 +1638,24 @@ def _trade_log_for_cadence(
 ) -> list[TradeLogEntry]:
     """D21: series B's WHEN/WHY/WHAT rebalance log for one cadence.
 
-    Mirrors `_weights_for_cadence`'s selection loop (same `select()` calls,
-    same `prev_holdings` tracking) so the log always agrees with the actual
-    simulated weights; kept as its own pass rather than folded into
-    `_weights_for_cadence` to keep that function's return shape untouched.
+    Built from the same executed decisions as `_weights_for_cadence`
+    (`_decisions`), so the log always agrees with the simulated weights; each
+    entry diffs against the book actually held before it (#446).
     """
     entries: list[TradeLogEntry] = []
     prev_holdings: tuple[list[str], list[str]] | None = None
-    for t in rebal_dates:
+    for t, trade_date, long_names, short_names in _decisions(
+        cadence,
+        rebal_dates,
+        ranked_by_date,
+        calendar,
+        book_size=book_size,
+        buffer=buffer,
+        own_dates=own_dates,
+    ):
         scored = ranked_by_date.get(t, [])
         ranks = [ticker for ticker, _ in scored]
-        if len(ranks) < 2 * book_size:
-            continue
-        long_names, short_names = select(
-            ranks, cadence, prev_holdings, book_size=book_size, buffer=buffer
-        )
         prev_long, prev_short = prev_holdings if prev_holdings is not None else ([], [])
-        trade_date = _trade_date(
-            calendar, t, long_names + short_names + prev_long + prev_short, own_dates
-        )
-        if trade_date is None:
-            continue
         long_entered, long_exited = _leg_diff(prev_long, long_names)
         short_entered, short_exited = _leg_diff(prev_short, short_names)
         pos = {ticker: i for i, ticker in enumerate(ranks)}
@@ -1884,23 +1949,31 @@ def _genuine_weights_for_cadence(
     genuine decisions), so every rebalance — including `monthly_buffer` — is
     a fresh selection identical to `monthly`'s holdings (disclosed in
     `_CAVEATS_GENUINE`). Trade date is the first trading day strictly after
-    the rank date (`_next_trading_day`, D5/D16) — no same-close look-ahead.
+    the rank date (`_execute`, D5/D16) — no same-close look-ahead.
     """
-    out: dict[date, tuple[dict[str, float], dict[str, float]]] = {}
-    prev: list[str] = []
+    return {
+        trade_date: _equal_weights(long_names, short_names)
+        for _, trade_date, long_names, short_names in _genuine_decisions(
+            rebal_dates, ranked_by_date, calendar, book_size=book_size, own_dates=own_dates
+        )
+    }
+
+
+def _genuine_decisions(
+    rebal_dates: list[date],
+    ranked_by_date: dict[date, tuple[list[str], list[str]]],
+    calendar: list[date],
+    *,
+    book_size: int = _BOOK_SIZE,
+    own_dates: dict[str, list[date]] | None = None,
+) -> list[Executed]:
+    """Series A's executed rebalances (shared by weights and log; see `_execute`)."""
+    decisions: list[Decision] = []
     for t in rebal_dates:
         long_names, short_names = ranked_by_date.get(t, ([], []))
-        if len(long_names) < book_size or len(short_names) < book_size:
-            continue
-        trade_date = _trade_date(calendar, t, long_names + short_names + prev, own_dates)
-        if trade_date is None:
-            continue
-        out[trade_date] = (
-            dict.fromkeys(long_names, 1.0 / len(long_names)),
-            dict.fromkeys(short_names, 1.0 / len(short_names)),
-        )
-        prev = long_names + short_names
-    return out
+        if len(long_names) >= book_size and len(short_names) >= book_size:
+            decisions.append((t, long_names, short_names))
+    return _execute(decisions, calendar, own_dates)
 
 
 def _genuine_ranked_ticker(scores: dict[str, float], rank: int, ticker: str) -> RankedTicker:
@@ -1931,24 +2004,20 @@ def _genuine_trade_log_for_cadence(
 ) -> list[TradeLogEntry]:
     """D21: series A's WHEN/WHY/WHAT rebalance log for one cadence.
 
-    Mirrors `_genuine_weights_for_cadence`'s loop. An exited ticker's rank/
-    score are always `None` (D16: no full ranked pool to look them up in);
-    an entered ticker's are looked up from `entries_by_date[t]`, the same
-    `BacktestListEntry` `_genuine_rank_all_dates` already computed for `t`.
+    Built from the same executed decisions as `_genuine_weights_for_cadence`
+    (`_genuine_decisions`), diffing each against the book actually held before
+    it (#446). An exited ticker's rank/score are always `None` (D16: no full
+    ranked pool to look them up in); an entered ticker's are looked up from
+    `entries_by_date[t]`, the same `BacktestListEntry` `_genuine_rank_all_dates`
+    already computed for `t`.
     """
     entries: list[TradeLogEntry] = []
     prev_long: list[str] = []
     prev_short: list[str] = []
     is_first = True
-    for t in rebal_dates:
-        long_names, short_names = ranked_by_date.get(t, ([], []))
-        if len(long_names) < book_size or len(short_names) < book_size:
-            continue
-        trade_date = _trade_date(
-            calendar, t, long_names + short_names + prev_long + prev_short, own_dates
-        )
-        if trade_date is None:
-            continue
+    for t, trade_date, long_names, short_names in _genuine_decisions(
+        rebal_dates, ranked_by_date, calendar, book_size=book_size, own_dates=own_dates
+    ):
         entry = entries_by_date.get(t)
         scores = (
             {r.ticker: r.score for r in (entry.best + entry.worst)} if entry is not None else {}
@@ -2214,6 +2283,32 @@ def _maybe_rebuild_series_b() -> None:
     _reset_year_files(settings.backtest_dir / "lists")
 
 
+def _maybe_rebuild_series_a() -> None:
+    """D17/#446: series A's counterpart of `_maybe_rebuild_series_b`.
+
+    Without it a `_METHOD_VERSION_A` bump changed nothing: series A's frozen
+    rows, lists and trade logs were never recomputed.
+    """
+    existing = read_summary(path=settings.backtest_genuine_dir / "summary.json")
+    if existing is not None and existing.method_version == _METHOD_VERSION_A:
+        return
+    logger.info("method_version bump (-> %s): full one-time rebuild of series A", _METHOD_VERSION_A)
+    for cadence in CADENCES:
+        _reset_year_files(settings.backtest_series_genuine_dir / cadence)
+        _reset_year_files(settings.backtest_genuine_dir / "trades" / cadence)
+    _reset_year_files(settings.backtest_genuine_dir / "lists")
+
+
+def _series_a_rebalance_dates(cadence: str, genuine_grid: list[date]) -> list[date]:
+    """#446: series A's cadence dates, from its genuine grid bucketed to one date per ISO week.
+
+    The genuine snapshot dates are irregular (e.g. 2026-06-05/06/07 in one week),
+    so passing them straight to `rebalance_dates` made "weekly" trade on every
+    snapshot. `rank_dates` keeps each week's last snapshot, series B's D6 grid rule.
+    """
+    return rebalance_dates(cadence, rank_dates(genuine_grid))
+
+
 def _freeze_eligible(dates: list[date], run_date: date) -> list[date]:
     """Only freeze rank dates strictly BEFORE the run date (finding #5, 2026-09-24).
 
@@ -2313,6 +2408,7 @@ def _run_series_a(
     if not genuine_grid:
         logger.warning("no genuine snapshot dates on/after %s; skipping series A", _GENUINE_START)
         return
+    _maybe_rebuild_series_a()
 
     ranked_by_date, lists_entries = _genuine_rank_all_dates(genuine_grid)
     write_lists_years(lists_entries, root=settings.backtest_genuine_dir / "lists")
@@ -2320,7 +2416,7 @@ def _run_series_a(
 
     cadence_metrics: dict[str, CadenceMetrics] = {}
     for cadence in CADENCES:
-        rebal_dates = rebalance_dates(cadence, genuine_grid)
+        rebal_dates = _series_a_rebalance_dates(cadence, genuine_grid)
         weights_by_trade_date = _genuine_weights_for_cadence(
             cadence, rebal_dates, ranked_by_date, calendar, own_dates=own_dates
         )

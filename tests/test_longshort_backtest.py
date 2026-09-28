@@ -18,12 +18,14 @@ from typing import TYPE_CHECKING
 import pandas as pd
 import pytest
 
+from analyze_stock_kpi.config import AppSettings
 from analyze_stock_kpi.data_sources.fundamentals import (
     FundamentalsSnapshot,
     _close_between,
     _compute_sortino,
 )
 from analyze_stock_kpi.domain.composite_scores import CompositeScores, screener_score
+from analyze_stock_kpi.orchestrators import longshort_backtest
 from analyze_stock_kpi.orchestrators.longshort_backtest import (
     BacktestDailyRow,
     BacktestListEntry,
@@ -43,6 +45,7 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     _countries_from_snapshots,
     _drift_leg,
     _drop_bad_tickers,
+    _execute,
     _filter_bad_ticks,
     _find_start_date,
     _freeze_eligible,
@@ -50,6 +53,7 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     _genuine_weights_for_cadence,
     _has_one_year_of_closes,
     _leg_diff,
+    _maybe_rebuild_series_a,
     _own_dates,
     _price_asof,
     _rank_genuine,
@@ -57,11 +61,12 @@ from analyze_stock_kpi.orchestrators.longshort_backtest import (
     _reindex_returns,
     _reset_year_files,
     _score_all_tickers,
+    _series_a_rebalance_dates,
     _ticker_period_return,
-    _trade_date,
     _trade_log_for_cadence,
     _trim_to_first_trade,
     _turnover,
+    _weights_for_cadence,
     fidelity,
     metrics,
     null_percentile,
@@ -533,6 +538,124 @@ def test_genuine_trade_log_for_cadence_exited_ticker_has_no_rank_or_score() -> N
     assert entered.score == pytest.approx(80.0)
 
 
+# ----- #446: rebalance schedule correctness -----
+
+
+def test_series_a_weekly_is_one_rebalance_per_iso_week() -> None:
+    """#446: the real genuine grid had snapshots on 06-05/06/07 (one ISO week); "weekly"
+    traded all three on 06-08. Bucketed like series B, it keeps the week's last snapshot."""
+    grid = [date(2026, 5, 31), date(2026, 6, 5), date(2026, 6, 6), date(2026, 6, 7)]
+    grid += [date(2026, 6, 14)]
+
+    assert _series_a_rebalance_dates("weekly", grid) == [
+        date(2026, 5, 31),
+        date(2026, 6, 7),
+        date(2026, 6, 14),
+    ]
+    assert _series_a_rebalance_dates("monthly", grid) == [date(2026, 5, 31), date(2026, 6, 7)]
+
+
+def test_newer_decision_replaces_one_still_waiting_to_fill() -> None:
+    """#446: R1's names J/K never share a trading day (J trades d1/d3, K d2), so R1 can't
+    fill; R2, ranked on d2, replaces it and fills on d3 against the book actually held (R0)."""
+    t0, t1, t2 = date(2026, 9, 18), date(2026, 9, 21), date(2026, 9, 22)
+    d1, d2, d3 = date(2026, 9, 21), date(2026, 9, 22), date(2026, 9, 23)
+    own_dates = {name: [d1, d2, d3] for name in "ABCD"} | {"J": [d1, d3], "K": [d2]}
+    ranked_by_date = {t0: (["A"], ["B"]), t1: (["J"], ["K"]), t2: (["C"], ["D"])}
+
+    weights = _genuine_weights_for_cadence(
+        "weekly", [t0, t1, t2], ranked_by_date, [d1, d2, d3], book_size=1, own_dates=own_dates
+    )
+
+    assert weights == {d1: ({"A": 1.0}, {"B": 1.0}), d3: ({"C": 1.0}, {"D": 1.0})}
+
+
+def test_trade_dates_never_go_backwards() -> None:
+    """#446 review counterexample: R0 needs Z, which only trades on d5. The old one-step
+    lookback let R1 inherit Z's d5 fill while R2 (not holding Z) filled on d3, so
+    `simulate` would have applied R1's book after R2's. Newest decision wins instead."""
+    t0, t1, t2 = date(2026, 1, 1), date(2026, 1, 2), date(2026, 1, 3)
+    d1, d2, d3, d4, d5 = (date(2026, 1, n) for n in (2, 3, 4, 5, 6))
+    calendar = [d1, d2, d3, d4, d5]
+    own_dates = {name: calendar for name in "SABCD"} | {"Z": [date(2025, 12, 31), d5]}
+    ranked_by_date = {t0: (["Z"], ["S"]), t1: (["A"], ["B"]), t2: (["C"], ["D"])}
+
+    weights = _genuine_weights_for_cadence(
+        "weekly", [t0, t1, t2], ranked_by_date, calendar, book_size=1, own_dates=own_dates
+    )
+
+    assert list(weights) == sorted(weights)
+    assert weights == {d2: ({"A": 1.0}, {"B": 1.0}), d3: ({"C": 1.0}, {"D": 1.0})}
+
+
+def test_genuine_log_keeps_only_the_newest_decision_per_trade_date() -> None:
+    """#446: three rank dates resolving to the same trade date are one trade, not three."""
+    t0, t1, t2 = date(2026, 6, 5), date(2026, 6, 6), date(2026, 6, 7)
+    calendar = [date(2026, 6, 8)]
+    ranked_by_date = {t0: (["A"], ["X"]), t1: (["B"], ["X"]), t2: (["C"], ["X"])}
+
+    entries = _genuine_trade_log_for_cadence(
+        "weekly", [t0, t1, t2], ranked_by_date, {}, calendar, book_size=1
+    )
+    weights = _genuine_weights_for_cadence(
+        "weekly", [t0, t1, t2], ranked_by_date, calendar, book_size=1
+    )
+
+    assert [(e.rank_date, e.trade_date) for e in entries] == [(t2, calendar[0])]
+    assert entries[0].reason == "initial"
+    assert [rt.ticker for rt in entries[0].long.entered] == ["C"]
+    assert [e.trade_date for e in entries] == list(weights)
+
+
+def test_series_b_log_matches_weights_when_two_rank_dates_share_a_trade_date() -> None:
+    """#446: series B weekly logged 2025-02-05 / 2025-10-14 / 2026-02-24 twice each."""
+    t0, t1, t2 = date(2025, 1, 24), date(2025, 1, 31), date(2025, 2, 4)
+    d0, d_shared = date(2025, 1, 27), date(2025, 2, 5)
+    calendar = [d0, d_shared]
+    filler = [f"F{i:02d}" for i in range(49)]  # 50 names per date: the default 25/25 book
+
+    def ranks(lead: str) -> list[tuple[str, float]]:
+        return [(t, 100.0 - i) for i, t in enumerate([lead, *filler])]
+
+    ranked_by_date = {t0: ranks("A"), t1: ranks("B"), t2: ranks("C")}
+
+    entries = _trade_log_for_cadence("weekly", [t0, t1, t2], ranked_by_date, calendar)
+    weights = _weights_for_cadence("weekly", [t0, t1, t2], ranked_by_date, calendar)
+
+    assert [(e.rank_date, e.trade_date) for e in entries] == [(t0, d0), (t2, d_shared)]
+    assert [rt.ticker for rt in entries[1].long.exited] == ["A"]
+    assert [rt.ticker for rt in entries[1].long.entered] == ["C"]
+    assert [e.trade_date for e in entries] == list(weights)
+
+
+def test_series_a_method_version_bump_wipes_its_frozen_files(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """#446: series A had no rebuild path, so bumping `_METHOD_VERSION_A` did nothing."""
+    genuine = tmp_path / "backtest_genuine"
+    series = tmp_path / "series_genuine"
+    monkeypatch.setattr(
+        longshort_backtest,
+        "settings",
+        AppSettings(backtest_genuine_dir=genuine, backtest_series_genuine_dir=series),
+    )
+    frozen = [series / "weekly" / "2026.json", genuine / "trades" / "weekly" / "2026.json"]
+    frozen.append(genuine / "lists" / "2026.json")
+    for path in frozen:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("[]")
+    old = BacktestSummary.model_validate_json(
+        '{"method_version": "1", "as_of": "2026-09-25", "start": "2026-05-31", "universes": [],'
+        ' "score_inputs": [], "cost_bps": 10.0, "primary": "monthly", "cadences": {},'
+        ' "null": null, "fidelity": null, "caveats": []}'
+    )
+    write_summary(old, path=genuine / "summary.json")
+
+    _maybe_rebuild_series_a()
+
+    assert not any(path.exists() for path in frozen)
+
+
 def test_trades_persistence_round_trip(tmp_path: Path) -> None:
     entry = TradeLogEntry(
         rank_date=date(2026, 1, 5),
@@ -934,8 +1057,8 @@ def test_trade_date_waits_for_a_day_every_book_name_trades() -> None:
         }
     )
 
-    assert _trade_date(calendar, mon, ["US", "EU"], own) == wed
-    assert _trade_date(calendar, mon, ["EU"], own) == tue
+    assert _execute([(mon, ["US"], ["EU"])], calendar, own)[0][1] == wed
+    assert _execute([(mon, ["EU"], [])], calendar, own)[0][1] == tue
 
 
 def test_trade_date_ignores_a_name_with_no_close_after_the_rank_date() -> None:
@@ -948,7 +1071,7 @@ def test_trade_date_ignores_a_name_with_no_close_after_the_rank_date() -> None:
         }
     )
 
-    assert _trade_date([mon, tue], mon, ["GONE", "LIVE"], own) == tue
+    assert _execute([(mon, ["GONE"], ["LIVE"])], [mon, tue], own)[0][1] == tue
 
 
 # ----- metrics: D9 on a known series -----

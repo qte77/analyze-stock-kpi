@@ -34,10 +34,14 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
      2026-10-03 12:00 UTC `portfolio` run:** the run log shows "method_version bump (-> 3)",
      `results/backtest/summary.json` on `data` has `method_version` "3" and the new caveat text,
      and B's `start` date is plausible (compare it with the previous summary). Then close #419.
-  2. #446, the backtest audit (owner request). Its findings shape plan 010's slice 3; plan 010's
-     slices 0-2 don't depend on it and can go first.
-  3. The UI redesign (approved), incl. #426: [plan 010](010-ui-redesign-progressive-disclosure.md).
-  4. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
+     **The same run rebuilds series A once** (`method_version` 2, #446): check
+     "method_version bump (-> 2): full one-time rebuild of series A" in the log,
+     `results/backtest_genuine/summary.json` at version "2", and every
+     `results/backtest_genuine/trades/<cadence>/2026.json` with at most one entry per ISO week and
+     no duplicate `trade_date` in any trade log of either series.
+  2. The UI redesign (approved), incl. #426 and #446's presentation items:
+     [plan 010](010-ui-redesign-progressive-disclosure.md).
+  3. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
 - **Offloading to the cloud (optional):** `claude --cloud` needs an interactive TTY, so it fails
   from an agent's Bash. Use a one-time routine instead (`/schedule` → `RemoteTrigger`, environment
   "Default"). Good candidates are #416, #415 and #417, which need no Yahoo/SEC network and no
@@ -89,6 +93,6 @@ wireframe, the UX review, the defaults and the slices.
 | ~~`make preview` serves `ui/public` [#415](https://github.com/qte77/analyze-stock-kpi/issues/415)~~ | agent | shipped 2026-09-25, PR #441: both preview targets run Vite's dev server (URL `/analyze-stock-kpi/`); `preview_local` reads local `results/` via `<base>/@fs/<repo>` (`server.fs.allow` adds only `../results`). Headless check: 4 Chart.js instances on desktop and phone |
 | ~~Scroll hint on touch devices [#417](https://github.com/qte77/analyze-stock-kpi/issues/417)~~ | agent | shipped 2026-09-25: `ui/scroll_hint.js` sets `.overflow-right` while columns are hidden to the right; `style.css` masks the edge under `(pointer: coarse)`. e2e: on for phone (both views) and tablet (Detailed), off when the table fits, off at the scroll end |
 | ~~`llms.txt` template up to date [#416](https://github.com/qte77/analyze-stock-kpi/issues/416)~~ | agent | shipped 2026-09-25, PR #443: the template lists ADRs 0000-0014 and every module; `tests/test_llms_txt_template.py` fails on a missing one. The `llms-txt` workflow regenerates `ui/public/llms.txt` on merge |
-| Backtest audit [#446](https://github.com/qte77/analyze-stock-kpi/issues/446) (owner request 2026-09-25): re-verify prices, allocation, rebalance dates and metrics; SPY benchmark; long/short/combined separation; simplify. Verified so far: series A's irregular snapshot grid makes `monthly` trade 06-01 and 06-08 and `weekly` trade 06-08 three times; SPY is only a beta number; legs only as two annualized columns; series A metrics are `null` until 12 months | agent (rule changes → `method_version` bump) | every checklist item on #446 has a finding and a fix or an explicit keep; the UI outcome feeds plan 010 slice 3 |
+| ~~Backtest audit [#446](https://github.com/qte77/analyze-stock-kpi/issues/446): verification + rebalance-schedule fix~~ | agent | shipped 2026-09-28 (fix/backtest-rebalance-schedule): findings on #446 (metrics, allocation and prices verified; three schedule bugs fixed; series A `method_version` 2 with a new rebuild switch; total-return caveat). The presentation items (SPY line, leg sign, which metrics, empty state) moved to plan 010 slice 3 |
 | Private cache repo [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) | owner → agent | two consecutive runs show the cache growing and B's start date stable |
 | US-only SEC-XBRL extension to ~2017 | owner (deferred) | only if the owner asks for a longer US series |
