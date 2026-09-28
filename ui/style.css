@@ -163,6 +163,7 @@ h2 {
   gap: 0.75rem;
   flex-wrap: wrap;
   cursor: pointer;
+  list-style: none;
 }
 
 #fg-panel > summary::before {
@@ -181,8 +182,6 @@ h2 {
 #fg-panel > summary::-webkit-details-marker {
   display: none;
 }
-
-#fg-panel > summary { list-style: none; }
 
 .fg-summary-label {
   font-size: 0.8125rem;
