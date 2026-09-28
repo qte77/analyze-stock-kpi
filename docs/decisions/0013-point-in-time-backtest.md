@@ -169,6 +169,15 @@ inception, so every published metric was diluted by ~15.7k padding days (publish
    OTC-ADR-shape rule: Yahoo's field is noisy (2026-09-27: BLK listed as Australia), and a wrong
    "United States" on a foreign issuer would reintroduce look-ahead. On the 2026-09-27 data this
    moves 9 of 314 tickers from 90 to 120 days (ACN, BLK, CB, ETN, ICTEF, LIN, MDT, MELI, WTF).
+   *Amended (#446, series A `method_version` 2, series B's pending rebuild to 3):* the rebalance
+   schedule. (a) Series A's cadences use at most one rank date per ISO week (`rank_dates` over the
+   genuine grid, series B's D6 rule), so irregular manual snapshots no longer multiply "weekly"
+   rebalances. (b) A trade date that can't resolve yet stops the schedule: later decisions wait
+   behind it instead of trading against the older book and freezing rows the next run would
+   disagree with. (c) When two rank dates resolve to the same trade day, only the newer trades,
+   and the rebalance log is built from that same executed list, so it always matches the
+   simulated weights. Series A gains a rebuild switch (`_maybe_rebuild_series_a`), which it
+   lacked.
 5. **Sortino stays in both series (D19):** it is part of the qte77 Score (ADR-0004) and is
    reconstructable from closes up to the rank date alone in both series, so nothing about it
    changes.

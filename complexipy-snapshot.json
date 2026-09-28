@@ -42,10 +42,6 @@
     "file_name": "longshort_backtest.py",
     "functions": [
       {
-        "name": "_trade_log_for_cadence",
-        "complexity": 12
-      },
-      {
         "name": "simulate",
         "complexity": 12
       },
@@ -60,10 +56,6 @@
       {
         "name": "write_trades_years",
         "complexity": 13
-      },
-      {
-        "name": "_genuine_trade_log_for_cadence",
-        "complexity": 15
       }
     ]
   }
