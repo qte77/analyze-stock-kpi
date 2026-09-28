@@ -1571,7 +1571,11 @@ def _decisions(
     """Series B's executed rebalances for one cadence (shared by weights and log).
 
     `select` chains on the previous DECISION (the D7 buffer keeps names from the
-    last selection); when each decision trades is `_execute`'s job.
+    last selection); when each decision trades is `_execute`'s job. Known
+    limitation (#446 review): if `_execute` replaces a decision before it fills,
+    the next `monthly_buffer` selection still buffers against that unfilled
+    decision rather than the book actually held; kept because it needs a fill
+    wait longer than a month, and weights and log stay consistent either way.
     """
     decisions: list[Decision] = []
     prev_holdings: tuple[list[str], list[str]] | None = None
