@@ -28,7 +28,17 @@ this file disagrees with `make help`, `make help` wins.
   per data source so integration drift is still caught.
 - **JS units only.** `ui/lib/*.js` are pure (DOM-free) and
   unit-tested via vitest (`ui/tests/*.test.mjs`); the DOM-coupled
-  glue in `ui/app.js` is verified by hand with `make preview`.
+  glue in `ui/app.js` is covered by the browser e2e below.
+- **Browser e2e for UI changes.** `scripts/e2e_ui.py` renders the page
+  in headless Chromium (phone portrait + landscape, desktop; light +
+  dark), fails on unexpected console errors or failed requests, and
+  checks charts, the universe table and the F&G tabs. It runs from the
+  sibling `../polyfetch-scrape` checkout and is not part of CI:
+  `make preview`, then
+  `uv run --project ../polyfetch-scrape python scripts/e2e_ui.py`
+  (add `--url https://qte77.github.io/analyze-stock-kpi/` after a deploy,
+  `--video` to record). Screenshots land in `e2e-ui/` under the system
+  temp dir (the script prints the path).
 
 ## Commit + PR conventions
 

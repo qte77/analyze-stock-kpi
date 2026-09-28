@@ -1,0 +1,125 @@
+"""Browser e2e for the dashboard (plan 010, slice 0).
+
+Renders the page in headless Chromium across phone (portrait + landscape) and
+desktop, light and dark, then checks: no unexpected console errors or failed
+requests, charts drawn, the universe table filled, and the F&G tabs clickable.
+Screenshots (and, with ``--video``, recordings) go to ``--out``.
+
+Needs the sibling ``../polyfetch-scrape`` checkout (Patchright + its Chromium):
+
+    make preview                                   # in another shell
+    uv run --project ../polyfetch-scrape python scripts/e2e_ui.py
+    uv run --project ../polyfetch-scrape python scripts/e2e_ui.py \
+        --url https://qte77.github.io/analyze-stock-kpi/
+
+Exits non-zero when any check fails.
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import sys
+import tempfile
+from pathlib import Path
+
+from patchright.sync_api import sync_playwright
+
+# (name, width, height, touch)
+VIEWPORTS = (
+    ("phone-portrait", 390, 844, True),
+    ("phone-landscape", 844, 390, True),
+    ("desktop", 1440, 900, False),
+)
+SCHEMES = ("light", "dark")
+
+# The dashboard probes one year file per year back from today until a series
+# starts; those 404s are expected. Any other >= 400 response is a failure.
+_EXPECTED_404 = re.compile(r"/results/(series|backtest)[\w/-]*/\d{4}\.json$")
+# Chromium logs every 4xx as a console error without the URL; the response
+# check above judges those, so they are not counted twice.
+_NETWORK_CONSOLE_NOISE = "Failed to load resource"
+
+
+def check_page(page, name: str, out: Path) -> list[str]:
+    """Run the checks on a loaded page; return the failures."""
+    failures: list[str] = []
+    page.wait_for_selector("#universe-section tbody tr", timeout=60_000)
+    page.wait_for_timeout(1500)  # let charts finish their first draw
+
+    charts = page.evaluate(
+        "typeof Chart === 'undefined' ? 0 : Object.keys(Chart.instances).length",
+        isolated_context=False,
+    )
+    if charts == 0:
+        failures.append("no Chart.js instances rendered")
+
+    rows = page.locator("#universe-section tbody tr").count()
+    if rows == 0:
+        failures.append("universe table has no rows")
+
+    tab = page.locator("#fg-tabs [role=tab]").nth(1)
+    tab.click()
+    if tab.get_attribute("aria-selected") != "true":
+        failures.append("second F&G tab did not become selected on click")
+
+    page.screenshot(path=str(out / f"{name}.png"), full_page=True)
+    return failures
+
+
+def run(url: str, out: Path, *, video: bool) -> int:
+    out.mkdir(parents=True, exist_ok=True)
+    failed = False
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        for vp_name, width, height, touch in VIEWPORTS:
+            for scheme in SCHEMES:
+                name = f"{vp_name}-{scheme}"
+                ctx = browser.new_context(
+                    viewport={"width": width, "height": height},
+                    is_mobile=touch,
+                    has_touch=touch,
+                    color_scheme=scheme,
+                    record_video_dir=str(out / "video") if video else None,
+                )
+                page = ctx.new_page()
+                errors: list[str] = []
+                page.on(
+                    "console",
+                    lambda m, errors=errors: errors.append(f"console: {m.text}")
+                    if m.type == "error" and not m.text.startswith(_NETWORK_CONSOLE_NOISE)
+                    else None,
+                )
+                page.on(
+                    "response",
+                    lambda r, errors=errors: errors.append(f"HTTP {r.status}: {r.url}")
+                    if r.status >= 400 and not _EXPECTED_404.search(r.url)
+                    else None,
+                )
+                page.on(
+                    "requestfailed",
+                    lambda r, errors=errors: errors.append(f"request failed: {r.url}"),
+                )
+                page.goto(url, wait_until="networkidle", timeout=90_000)
+                failures = check_page(page, name, out) + errors
+                ctx.close()
+                failed |= bool(failures)
+                print(f"{'FAIL' if failures else 'ok  '} {name}")
+                for f in failures:
+                    print(f"     {f}")
+        browser.close()
+    print(f"screenshots: {out}")
+    return 1 if failed else 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--url", default="http://localhost:8000/analyze-stock-kpi/")
+    parser.add_argument("--out", type=Path, default=Path(tempfile.gettempdir()) / "e2e-ui")
+    parser.add_argument("--video", action="store_true", help="also record a video per run")
+    args = parser.parse_args()
+    return run(args.url, args.out, video=args.video)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
