@@ -29,9 +29,11 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   (bump syncs `uv.lock`), #438 (complexipy unpinned + baseline), #441 (`make preview` via Vite,
   #415), #442 (plan 010), #443/#444 (`llms.txt`, #416), #445 (touch scroll hint, #417), #440 (SBOM).
 - **What's next, in order:**
-  1. #419 step 2 = **draft PR #436**. Merge it only after the Sun 2026-09-27 demo-snapshot run
-     has written `country` to `data` (check `git show origin/data:results/demo/<u>/2026-09-27.json`),
-     rebased and green; the Sat 2026-10-03 cron then rebuilds series B once. Verify that rebuild.
+  1. #419: the code shipped in #436 (merged 2026-09-28, after the 09-27 snapshots had `country`
+     for 347 of 352 base tickers). **Verify the one-time series B rebuild after the Sat
+     2026-10-03 12:00 UTC `portfolio` run:** the run log shows "method_version bump (-> 3)",
+     `results/backtest/summary.json` on `data` has `method_version` "3" and the new caveat text,
+     and B's `start` date is plausible (compare it with the previous summary). Then close #419.
   2. #446, the backtest audit (owner request). Its findings shape plan 010's slice 3; plan 010's
      slices 0-2 don't depend on it and can go first.
   3. The UI redesign (approved), incl. #426: [plan 010](010-ui-redesign-progressive-disclosure.md).
@@ -77,7 +79,7 @@ wireframe, the UX review, the defaults and the slices.
 
 | Item | Gate | Done-when |
 |---|---|---|
-| Country-based filing lag [#419](https://github.com/qte77/analyze-stock-kpi/issues/419). Step 1 shipped: `FundamentalsSnapshot.country` (PR #435). Step 2 is **draft PR #436** (lag rule + `_METHOD_VERSION_B` bump); rebase it on `main`, then merge only **after** a demo-snapshot run has written `country` to `data` (next cron Sun 2026-09-27 06:15 UTC), or the Saturday rebuild runs without countries | agent | country lookup with suffix fallback, tested; `method_version` bumped; one rebuild verified on `data` |
+| Country-based filing lag [#419](https://github.com/qte77/analyze-stock-kpi/issues/419). Code shipped: `FundamentalsSnapshot.country` (PR #435); the lag rule + `_METHOD_VERSION_B` 3 (PR #436, merged after the 09-27 snapshots carried `country`). Open: the rebuild check | data (the Sat 2026-10-03 cron) | one rebuild verified on `data` (see "What's next" 1) |
 | ~~Dependabot python-deps [#411](https://github.com/qte77/analyze-stock-kpi/pull/411)~~ | agent | shipped 2026-09-25, PR #431: applied 7 of 8 bumps; `complexipy` pinned to 5.5.0 (its 6.x/7.x/8.x scorer flags unchanged functions — see PR #431) |
 | ~~Dependabot `setup-uv` [#412](https://github.com/qte77/analyze-stock-kpi/pull/412)~~ | agent | shipped 2026-09-25: its CI was green (the allow-list accepts the new SHA); merged, and `validate` passes on `main` |
 | ~~`bump-my-version.yaml` doesn't sync the project's own version in `uv.lock`~~ | agent | shipped 2026-09-25, PR #437: a multiline `[[tool.bumpversion.files]]` entry for `uv.lock` in `pyproject.toml`; a `--dry-run` shows it bumped (confirm on the next real bump) |

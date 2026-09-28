@@ -163,6 +163,12 @@ inception, so every published metric was diluted by ~15.7k padding days (publish
    ticker (no exchange suffix) as before, 120 days for any non-US ticker (a `.XX` suffix, e.g.
    `.DE`/`.SA`/`.T`/`.KS`), since 20-F and foreign filers publish later. Ships with a single
    `method_version` bump (D17's one explicit rebuild), combined with the start-trim fix below.
+   *Amended (#419, `method_version` 3):* a ticker is also non-US when its Yahoo `country` in the
+   latest demo snapshot is not the United States (a static attribute, so no look-ahead). The
+   country can only lengthen the lag, never shorten it below the suffix / known-issuer /
+   OTC-ADR-shape rule: Yahoo's field is noisy (2026-09-27: BLK listed as Australia), and a wrong
+   "United States" on a foreign issuer would reintroduce look-ahead. On the 2026-09-27 data this
+   moves 9 of 314 tickers from 90 to 120 days (ACN, BLK, CB, ETN, ICTEF, LIN, MDT, MELI, WTF).
 5. **Sortino stays in both series (D19):** it is part of the qte77 Score (ADR-0004) and is
    reconstructable from closes up to the rank date alone in both series, so nothing about it
    changes.
