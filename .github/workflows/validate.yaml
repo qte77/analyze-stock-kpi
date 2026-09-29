@@ -38,29 +38,7 @@ jobs:
       - name: Complexipy cognitive complexity (max 10)
         run: uv run complexipy src --max-complexity-allowed 10
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
-        with:
-          node-version: "24"
-
-      - name: Install JS dev dependencies
-        working-directory: ui
-        run: npm install --no-audit --no-fund
-
-      - name: Lint JS (node --check + tsc JSDoc + ESLint + Prettier)
-        working-directory: ui
-        run: |
-          node --check app.js
-          npm run typecheck
-          npm run lint
-          npm run format:check
-
-      - name: Vitest (demo unit tests)
-        working-directory: ui
-        run: npm test
-
-      - name: Build UI (Vite)
-        working-directory: ui
-        run: npm run build
+      # JS checks live in ui.yml (#367).
 
       - name: Pytest with coverage
         run: make test_cov

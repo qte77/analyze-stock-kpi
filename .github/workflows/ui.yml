@@ -1,0 +1,54 @@
+---
+name: ui
+
+# JS checks for the dashboard (plan 002 / #367), split out of validate.yaml so
+# Python-only changes don't install Node and UI-only changes get a focused job.
+# `make validate` still runs the same checks locally (lint_js + test_js).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ui/**"
+      - ".github/workflows/ui.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "ui/**"
+      - ".github/workflows/ui.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ui:
+    name: ui lint + types + tests + build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ui
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+        with:
+          node-version: "24"
+
+      # package-lock.json is gitignored (.gitignore), so `npm ci` isn't possible;
+      # same install as gh-pages.yaml.
+      - name: Install JS dev dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Lint JS (node --check + tsc JSDoc + ESLint + Prettier)
+        run: |
+          node --check app.js
+          npm run typecheck
+          npm run lint
+          npm run format:check
+
+      - name: Vitest (unit tests)
+        run: npm test
+
+      - name: Build UI (Vite)
+        run: npm run build
