@@ -264,5 +264,213 @@
       "exited": []
     },
     "turnover": 1.0
+  },
+  {
+    "rank_date": "2026-09-27",
+    "trade_date": "2026-09-28",
+    "reason": "quarterly_after_filings",
+    "long": {
+      "entered": [
+        {
+          "ticker": "105560.KS",
+          "rank": 4,
+          "score": 67.6
+        },
+        {
+          "ticker": "6857.T",
+          "rank": 5,
+          "score": 68.0
+        },
+        {
+          "ticker": "AMGN",
+          "rank": 7,
+          "score": 67.8
+        },
+        {
+          "ticker": "BMY",
+          "rank": 10,
+          "score": 71.3
+        },
+        {
+          "ticker": "ENI.MI",
+          "rank": 12,
+          "score": 67.9
+        },
+        {
+          "ticker": "LLY",
+          "rank": 17,
+          "score": 73.0
+        },
+        {
+          "ticker": "MNST",
+          "rank": 18,
+          "score": 67.6
+        },
+        {
+          "ticker": "SEZL",
+          "rank": 21,
+          "score": 67.5
+        },
+        {
+          "ticker": "TSM",
+          "rank": 22,
+          "score": 69.0
+        },
+        {
+          "ticker": "VRTX",
+          "rank": 25,
+          "score": 72.6
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "033780.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "086790.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "8306.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "8411.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "AVGO",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "KLAC",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "MRK",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "NVDA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "QCOM",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "VALE3.SA",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "035420.KS",
+          "rank": -1,
+          "score": 25.5
+        },
+        {
+          "ticker": "051910.KS",
+          "rank": -3,
+          "score": 27.8
+        },
+        {
+          "ticker": "9984.T",
+          "rank": -6,
+          "score": 30.7
+        },
+        {
+          "ticker": "DKILY",
+          "rank": -11,
+          "score": 29.6
+        },
+        {
+          "ticker": "GE",
+          "rank": -14,
+          "score": 24.7
+        },
+        {
+          "ticker": "O",
+          "rank": -17,
+          "score": 24.0
+        },
+        {
+          "ticker": "PLD",
+          "rank": -18,
+          "score": 29.0
+        },
+        {
+          "ticker": "VNA.DE",
+          "rank": -23,
+          "score": 24.3
+        },
+        {
+          "ticker": "WMT",
+          "rank": -24,
+          "score": 25.8
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "006400.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "6758.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "9432.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "AD.AS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "CME",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "ICE",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "MBG.DE",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "MGLU3.SA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "VOW3.DE",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "turnover": 0.76
   }
 ]

@@ -266,7 +266,7 @@
     "turnover": 1.0
   },
   {
-    "rank_date": "2026-06-05",
+    "rank_date": "2026-06-07",
     "trade_date": "2026-06-08",
     "reason": "scheduled_weekly",
     "long": {
@@ -282,14 +282,9 @@
           "score": 70.3
         },
         {
-          "ticker": "8316.T",
-          "rank": 9,
+          "ticker": "MO",
+          "rank": 19,
           "score": 67.1
-        },
-        {
-          "ticker": "HOCPY",
-          "rank": 17,
-          "score": 68.0
         }
       ],
       "exited": [
@@ -299,17 +294,12 @@
           "score": null
         },
         {
-          "ticker": "B3SA3.SA",
-          "rank": null,
-          "score": null
-        },
-        {
-          "ticker": "KLAC",
-          "rank": null,
-          "score": null
-        },
-        {
           "ticker": "QCOM",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "TXN",
           "rank": null,
           "score": null
         }
@@ -318,24 +308,19 @@
     "short": {
       "entered": [
         {
-          "ticker": "BAESY",
-          "rank": -8,
-          "score": 30.8
-        },
-        {
           "ticker": "GE",
-          "rank": -14,
-          "score": 30.6
+          "rank": -13,
+          "score": 30.1
         },
         {
           "ticker": "OR.PA",
-          "rank": -19,
-          "score": 29.7
+          "rank": -18,
+          "score": 29.3
         },
         {
           "ticker": "PANW",
-          "rank": -20,
-          "score": 29.4
+          "rank": -19,
+          "score": 28.0
         }
       ],
       "exited": [
@@ -353,87 +338,10 @@
           "ticker": "ICE",
           "rank": null,
           "score": null
-        },
-        {
-          "ticker": "VOW3.DE",
-          "rank": null,
-          "score": null
         }
       ]
     },
-    "turnover": 0.32
-  },
-  {
-    "rank_date": "2026-06-06",
-    "trade_date": "2026-06-08",
-    "reason": "scheduled_weekly",
-    "long": {
-      "entered": [
-        {
-          "ticker": "B3SA3.SA",
-          "rank": 11,
-          "score": 68.2
-        },
-        {
-          "ticker": "KLAC",
-          "rank": 18,
-          "score": 67.4
-        },
-        {
-          "ticker": "MO",
-          "rank": 19,
-          "score": 67.1
-        }
-      ],
-      "exited": [
-        {
-          "ticker": "8316.T",
-          "rank": null,
-          "score": null
-        },
-        {
-          "ticker": "HOCPY",
-          "rank": null,
-          "score": null
-        },
-        {
-          "ticker": "TXN",
-          "rank": null,
-          "score": null
-        }
-      ]
-    },
-    "short": {
-      "entered": [
-        {
-          "ticker": "VOW3.DE",
-          "rank": -24,
-          "score": 31.2
-        }
-      ],
-      "exited": [
-        {
-          "ticker": "BAESY",
-          "rank": null,
-          "score": null
-        }
-      ]
-    },
-    "turnover": 0.16
-  },
-  {
-    "rank_date": "2026-06-07",
-    "trade_date": "2026-06-08",
-    "reason": "scheduled_weekly",
-    "long": {
-      "entered": [],
-      "exited": []
-    },
-    "short": {
-      "entered": [],
-      "exited": []
-    },
-    "turnover": 0.0
+    "turnover": 0.24
   },
   {
     "rank_date": "2026-06-14",
@@ -886,60 +794,45 @@
     "turnover": 0.2
   },
   {
-    "rank_date": "2026-09-24",
-    "trade_date": "2026-09-25",
+    "rank_date": "2026-09-27",
+    "trade_date": "2026-09-28",
     "reason": "scheduled_weekly",
     "long": {
       "entered": [
         {
-          "ticker": "086790.KS",
-          "rank": 4,
-          "score": 67.1
-        },
-        {
-          "ticker": "6098.T",
-          "rank": 6,
-          "score": 67.4
-        },
-        {
           "ticker": "6857.T",
+          "rank": 5,
+          "score": 68.0
+        },
+        {
+          "ticker": "AMGN",
           "rank": 7,
-          "score": 67.0
+          "score": 67.8
         },
         {
           "ticker": "B3SA3.SA",
-          "rank": 9,
-          "score": 73.1
+          "rank": 8,
+          "score": 74.0
         },
         {
           "ticker": "ENI.MI",
-          "rank": 13,
-          "score": 68.1
+          "rank": 12,
+          "score": 67.9
         },
         {
           "ticker": "LLY",
-          "rank": 16,
-          "score": 70.0
-        },
-        {
-          "ticker": "PETR3.SA",
-          "rank": 18,
-          "score": 67.0
-        },
-        {
-          "ticker": "PETR4.SA",
-          "rank": 19,
-          "score": 67.0
+          "rank": 17,
+          "score": 73.0
         },
         {
           "ticker": "REGN",
-          "rank": 20,
-          "score": 74.7
+          "rank": 19,
+          "score": 75.2
         },
         {
           "ticker": "SEZL",
           "rank": 21,
-          "score": 66.8
+          "score": 67.5
         },
         {
           "ticker": "TTE.PA",
@@ -949,12 +842,12 @@
         {
           "ticker": "TXN",
           "rank": 24,
-          "score": 69.5
+          "score": 70.0
         },
         {
           "ticker": "VRTX",
           "rank": 25,
-          "score": 72.2
+          "score": 72.6
         }
       ],
       "exited": [
@@ -994,27 +887,12 @@
           "score": null
         },
         {
-          "ticker": "GOOG",
-          "rank": null,
-          "score": null
-        },
-        {
-          "ticker": "GOOGL",
-          "rank": null,
-          "score": null
-        },
-        {
           "ticker": "MO",
           "rank": null,
           "score": null
         },
         {
           "ticker": "MRK",
-          "rank": null,
-          "score": null
-        },
-        {
-          "ticker": "RHHBY",
           "rank": null,
           "score": null
         },
@@ -1028,19 +906,19 @@
     "short": {
       "entered": [
         {
+          "ticker": "9984.T",
+          "rank": -6,
+          "score": 30.7
+        },
+        {
           "ticker": "DKILY",
-          "rank": -10,
-          "score": 29.0
+          "rank": -11,
+          "score": 29.6
         },
         {
           "ticker": "GE",
-          "rank": -13,
-          "score": 23.2
-        },
-        {
-          "ticker": "NOW",
-          "rank": -16,
-          "score": 30.9
+          "rank": -14,
+          "score": 24.7
         },
         {
           "ticker": "O",
@@ -1060,7 +938,7 @@
         {
           "ticker": "WMT",
           "rank": -24,
-          "score": 26.9
+          "score": 25.8
         }
       ],
       "exited": [
@@ -1101,6 +979,6 @@
         }
       ]
     },
-    "turnover": 0.8
+    "turnover": 0.68
   }
 ]

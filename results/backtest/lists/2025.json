@@ -1,7 +1,7 @@
 [
   {
     "date": "2025-01-03",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "META",
@@ -209,7 +209,7 @@
   },
   {
     "date": "2025-01-10",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "WEGE3.SA",
@@ -417,7 +417,7 @@
   },
   {
     "date": "2025-01-17",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "WEGE3.SA",
@@ -625,7 +625,7 @@
   },
   {
     "date": "2025-01-24",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "WEGE3.SA",
@@ -833,7 +833,7 @@
   },
   {
     "date": "2025-01-31",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "META",
@@ -1041,7 +1041,7 @@
   },
   {
     "date": "2025-02-07",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "WEGE3.SA",
@@ -1249,7 +1249,7 @@
   },
   {
     "date": "2025-02-14",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "WEGE3.SA",
@@ -1457,7 +1457,7 @@
   },
   {
     "date": "2025-02-21",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "WEGE3.SA",
@@ -1665,7 +1665,7 @@
   },
   {
     "date": "2025-02-28",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "ISRG",
@@ -1873,7 +1873,7 @@
   },
   {
     "date": "2025-03-07",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "SAP.DE",
@@ -2081,7 +2081,7 @@
   },
   {
     "date": "2025-03-14",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "2371.T",
@@ -2289,7 +2289,7 @@
   },
   {
     "date": "2025-03-21",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "IDCC",
@@ -2497,7 +2497,7 @@
   },
   {
     "date": "2025-03-28",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "IDCC",
@@ -2705,7 +2705,7 @@
   },
   {
     "date": "2025-04-04",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "IDCC",
@@ -2913,7 +2913,7 @@
   },
   {
     "date": "2025-04-11",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "IDCC",
@@ -3121,7 +3121,7 @@
   },
   {
     "date": "2025-04-18",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "IDCC",
@@ -3329,7 +3329,7 @@
   },
   {
     "date": "2025-04-25",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "4519.T",
@@ -3537,7 +3537,7 @@
   },
   {
     "date": "2025-05-02",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "4519.T",
@@ -3745,7 +3745,7 @@
   },
   {
     "date": "2025-05-09",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -3953,7 +3953,7 @@
   },
   {
     "date": "2025-05-16",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -4161,7 +4161,7 @@
   },
   {
     "date": "2025-05-23",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -4369,7 +4369,7 @@
   },
   {
     "date": "2025-05-30",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -4577,7 +4577,7 @@
   },
   {
     "date": "2025-06-06",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -4785,7 +4785,7 @@
   },
   {
     "date": "2025-06-13",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -4993,7 +4993,7 @@
   },
   {
     "date": "2025-06-20",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -5201,7 +5201,7 @@
   },
   {
     "date": "2025-06-27",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -5409,7 +5409,7 @@
   },
   {
     "date": "2025-07-04",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -5617,7 +5617,7 @@
   },
   {
     "date": "2025-07-11",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -5825,7 +5825,7 @@
   },
   {
     "date": "2025-07-18",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -6033,7 +6033,7 @@
   },
   {
     "date": "2025-07-25",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "META",
@@ -6241,7 +6241,7 @@
   },
   {
     "date": "2025-08-01",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -6449,7 +6449,7 @@
   },
   {
     "date": "2025-08-08",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "MNST",
@@ -6657,7 +6657,7 @@
   },
   {
     "date": "2025-08-15",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -6865,7 +6865,7 @@
   },
   {
     "date": "2025-08-22",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "NTES",
@@ -7073,7 +7073,7 @@
   },
   {
     "date": "2025-08-29",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "NTES",
@@ -7281,7 +7281,7 @@
   },
   {
     "date": "2025-09-05",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "NTES",
@@ -7489,7 +7489,7 @@
   },
   {
     "date": "2025-09-12",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "NTES",
@@ -7697,7 +7697,7 @@
   },
   {
     "date": "2025-09-19",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -7905,7 +7905,7 @@
   },
   {
     "date": "2025-09-26",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -8113,7 +8113,7 @@
   },
   {
     "date": "2025-10-03",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -8321,7 +8321,7 @@
   },
   {
     "date": "2025-10-10",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -8529,7 +8529,7 @@
   },
   {
     "date": "2025-10-17",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "NTES",
@@ -8737,7 +8737,7 @@
   },
   {
     "date": "2025-10-24",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "NTES",
@@ -8945,7 +8945,7 @@
   },
   {
     "date": "2025-10-31",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -9153,7 +9153,7 @@
   },
   {
     "date": "2025-11-07",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "NTES",
@@ -9361,7 +9361,7 @@
   },
   {
     "date": "2025-11-14",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "NTES",
@@ -9569,7 +9569,7 @@
   },
   {
     "date": "2025-11-21",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "GOOG",
@@ -9777,7 +9777,7 @@
   },
   {
     "date": "2025-11-28",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "GOOG",
@@ -9985,7 +9985,7 @@
   },
   {
     "date": "2025-12-05",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "GOOG",
@@ -10193,7 +10193,7 @@
   },
   {
     "date": "2025-12-12",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -10401,7 +10401,7 @@
   },
   {
     "date": "2025-12-19",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "MNST",
@@ -10609,7 +10609,7 @@
   },
   {
     "date": "2025-12-26",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "MNST",

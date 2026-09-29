@@ -2705,7 +2705,7 @@
   },
   {
     "date": "2023-08-04",
-    "eligible": 252,
+    "eligible": 253,
     "best": [
       {
         "ticker": "6857.T",
@@ -2913,7 +2913,7 @@
   },
   {
     "date": "2023-08-11",
-    "eligible": 252,
+    "eligible": 253,
     "best": [
       {
         "ticker": "6857.T",
@@ -3121,7 +3121,7 @@
   },
   {
     "date": "2023-08-18",
-    "eligible": 252,
+    "eligible": 253,
     "best": [
       {
         "ticker": "6857.T",
@@ -3329,7 +3329,7 @@
   },
   {
     "date": "2023-08-25",
-    "eligible": 252,
+    "eligible": 253,
     "best": [
       {
         "ticker": "6857.T",
@@ -3537,7 +3537,7 @@
   },
   {
     "date": "2023-09-01",
-    "eligible": 254,
+    "eligible": 256,
     "best": [
       {
         "ticker": "6857.T",
@@ -3745,7 +3745,7 @@
   },
   {
     "date": "2023-09-08",
-    "eligible": 254,
+    "eligible": 256,
     "best": [
       {
         "ticker": "6857.T",
@@ -3953,7 +3953,7 @@
   },
   {
     "date": "2023-09-15",
-    "eligible": 254,
+    "eligible": 256,
     "best": [
       {
         "ticker": "6857.T",
@@ -4161,7 +4161,7 @@
   },
   {
     "date": "2023-09-22",
-    "eligible": 254,
+    "eligible": 256,
     "best": [
       {
         "ticker": "6857.T",
@@ -4369,7 +4369,7 @@
   },
   {
     "date": "2023-09-29",
-    "eligible": 260,
+    "eligible": 262,
     "best": [
       {
         "ticker": "6857.T",
@@ -4577,7 +4577,7 @@
   },
   {
     "date": "2023-10-06",
-    "eligible": 260,
+    "eligible": 262,
     "best": [
       {
         "ticker": "6857.T",
@@ -4785,7 +4785,7 @@
   },
   {
     "date": "2023-10-13",
-    "eligible": 260,
+    "eligible": 262,
     "best": [
       {
         "ticker": "6857.T",
@@ -4993,7 +4993,7 @@
   },
   {
     "date": "2023-10-20",
-    "eligible": 260,
+    "eligible": 262,
     "best": [
       {
         "ticker": "6857.T",
@@ -5201,7 +5201,7 @@
   },
   {
     "date": "2023-10-27",
-    "eligible": 260,
+    "eligible": 262,
     "best": [
       {
         "ticker": "6857.T",
@@ -5409,7 +5409,7 @@
   },
   {
     "date": "2023-11-03",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -5617,7 +5617,7 @@
   },
   {
     "date": "2023-11-10",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -5825,7 +5825,7 @@
   },
   {
     "date": "2023-11-17",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -6033,7 +6033,7 @@
   },
   {
     "date": "2023-11-24",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "ADBE",
@@ -6241,7 +6241,7 @@
   },
   {
     "date": "2023-12-01",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "ADBE",
@@ -6449,7 +6449,7 @@
   },
   {
     "date": "2023-12-08",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "ADBE",
@@ -6657,7 +6657,7 @@
   },
   {
     "date": "2023-12-15",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "ADBE",
@@ -6865,7 +6865,7 @@
   },
   {
     "date": "2023-12-22",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -6932,6 +6932,10 @@
         "score": 89.0
       },
       {
+        "ticker": "ACN",
+        "score": 87.0
+      },
+      {
         "ticker": "INTU",
         "score": 86.3
       },
@@ -6950,10 +6954,6 @@
       {
         "ticker": "FIX",
         "score": 85.1
-      },
-      {
-        "ticker": "ACN",
-        "score": 84.4
       },
       {
         "ticker": "MSFT",
@@ -7073,7 +7073,7 @@
   },
   {
     "date": "2023-12-29",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",

@@ -1,7 +1,7 @@
 [
   {
     "date": "2024-01-05",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -209,7 +209,7 @@
   },
   {
     "date": "2024-01-12",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -417,7 +417,7 @@
   },
   {
     "date": "2024-01-19",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -625,7 +625,7 @@
   },
   {
     "date": "2024-01-26",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -833,7 +833,7 @@
   },
   {
     "date": "2024-02-02",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -1041,7 +1041,7 @@
   },
   {
     "date": "2024-02-09",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -1249,7 +1249,7 @@
   },
   {
     "date": "2024-02-16",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -1457,7 +1457,7 @@
   },
   {
     "date": "2024-02-23",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -1665,7 +1665,7 @@
   },
   {
     "date": "2024-03-01",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -1873,7 +1873,7 @@
   },
   {
     "date": "2024-03-08",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -2081,7 +2081,7 @@
   },
   {
     "date": "2024-03-15",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -2289,7 +2289,7 @@
   },
   {
     "date": "2024-03-22",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -2497,7 +2497,7 @@
   },
   {
     "date": "2024-03-29",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "6857.T",
@@ -2705,7 +2705,7 @@
   },
   {
     "date": "2024-04-05",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "META",
@@ -2913,7 +2913,7 @@
   },
   {
     "date": "2024-04-12",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "META",
@@ -3121,7 +3121,7 @@
   },
   {
     "date": "2024-04-19",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "META",
@@ -3282,6 +3282,10 @@
         "score": 20.5
       },
       {
+        "ticker": "MELI",
+        "score": 20.9
+      },
+      {
         "ticker": "NKE",
         "score": 21.3
       },
@@ -3320,16 +3324,12 @@
       {
         "ticker": "VOW3.DE",
         "score": 24.1
-      },
-      {
-        "ticker": "T",
-        "score": 24.3
       }
     ]
   },
   {
     "date": "2024-04-26",
-    "eligible": 264,
+    "eligible": 266,
     "best": [
       {
         "ticker": "META",
@@ -3518,6 +3518,10 @@
         "score": 24.9
       },
       {
+        "ticker": "MELI",
+        "score": 25.0
+      },
+      {
         "ticker": "DANOY",
         "score": 25.1
       },
@@ -3528,16 +3532,12 @@
       {
         "ticker": "KMB",
         "score": 25.6
-      },
-      {
-        "ticker": "O",
-        "score": 25.8
       }
     ]
   },
   {
     "date": "2024-05-03",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "META",
@@ -3745,7 +3745,7 @@
   },
   {
     "date": "2024-05-10",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "META",
@@ -3953,7 +3953,7 @@
   },
   {
     "date": "2024-05-17",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "META",
@@ -4161,7 +4161,7 @@
   },
   {
     "date": "2024-05-24",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "META",
@@ -4369,7 +4369,7 @@
   },
   {
     "date": "2024-05-31",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "META",
@@ -4577,7 +4577,7 @@
   },
   {
     "date": "2024-06-07",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "META",
@@ -4785,7 +4785,7 @@
   },
   {
     "date": "2024-06-14",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "META",
@@ -4993,7 +4993,7 @@
   },
   {
     "date": "2024-06-21",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "META",
@@ -5201,7 +5201,7 @@
   },
   {
     "date": "2024-06-28",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "META",
@@ -5409,7 +5409,7 @@
   },
   {
     "date": "2024-07-05",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "META",
@@ -5617,7 +5617,7 @@
   },
   {
     "date": "2024-07-12",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "NVO",
@@ -5825,7 +5825,7 @@
   },
   {
     "date": "2024-07-19",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "NVO",
@@ -6033,7 +6033,7 @@
   },
   {
     "date": "2024-07-26",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "NVO",
@@ -6241,7 +6241,7 @@
   },
   {
     "date": "2024-08-02",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "NVO",
@@ -6449,7 +6449,7 @@
   },
   {
     "date": "2024-08-09",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "META",
@@ -6657,7 +6657,7 @@
   },
   {
     "date": "2024-08-16",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "META",
@@ -6865,7 +6865,7 @@
   },
   {
     "date": "2024-08-23",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "META",
@@ -7073,7 +7073,7 @@
   },
   {
     "date": "2024-08-30",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "META",
@@ -7281,7 +7281,7 @@
   },
   {
     "date": "2024-09-06",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "META",
@@ -7489,7 +7489,7 @@
   },
   {
     "date": "2024-09-13",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "META",
@@ -7697,7 +7697,7 @@
   },
   {
     "date": "2024-09-20",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "META",
@@ -7905,7 +7905,7 @@
   },
   {
     "date": "2024-09-27",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "2371.T",
@@ -8113,7 +8113,7 @@
   },
   {
     "date": "2024-10-04",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "META",
@@ -8321,7 +8321,7 @@
   },
   {
     "date": "2024-10-11",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "2371.T",
@@ -8529,7 +8529,7 @@
   },
   {
     "date": "2024-10-18",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "2371.T",
@@ -8737,7 +8737,7 @@
   },
   {
     "date": "2024-10-25",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "META",
@@ -8945,7 +8945,7 @@
   },
   {
     "date": "2024-11-01",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "META",
@@ -9153,7 +9153,7 @@
   },
   {
     "date": "2024-11-08",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "META",
@@ -9361,7 +9361,7 @@
   },
   {
     "date": "2024-11-15",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "WEGE3.SA",
@@ -9569,7 +9569,7 @@
   },
   {
     "date": "2024-11-22",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "WEGE3.SA",
@@ -9777,7 +9777,7 @@
   },
   {
     "date": "2024-11-29",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "META",
@@ -9985,7 +9985,7 @@
   },
   {
     "date": "2024-12-06",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "META",
@@ -10193,7 +10193,7 @@
   },
   {
     "date": "2024-12-13",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "META",
@@ -10401,7 +10401,7 @@
   },
   {
     "date": "2024-12-20",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "WEGE3.SA",
@@ -10609,7 +10609,7 @@
   },
   {
     "date": "2024-12-27",
-    "eligible": 263,
+    "eligible": 265,
     "best": [
       {
         "ticker": "META",

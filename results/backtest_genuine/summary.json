@@ -1,6 +1,6 @@
 {
-  "method_version": "1",
-  "as_of": "2026-09-25",
+  "method_version": "2",
+  "as_of": "2026-09-29",
   "start": "2026-05-31",
   "universes": [
     "eurostoxx",
@@ -52,7 +52,7 @@
         "ci90": null,
         "t_stat": null
       },
-      "rebalances": 3
+      "rebalances": 4
     },
     "quarterly_filings": {
       "gross": {
@@ -81,7 +81,7 @@
         "ci90": null,
         "t_stat": null
       },
-      "rebalances": 1
+      "rebalances": 2
     },
     "monthly_buffer": {
       "gross": {
@@ -110,7 +110,7 @@
         "ci90": null,
         "t_stat": null
       },
-      "rebalances": 3
+      "rebalances": 4
     },
     "weekly": {
       "gross": {
@@ -205,10 +205,10 @@
   "caveats": [
     "Survivorship bias: the universe is each preset's CURRENT membership, not the historical constituent list, so delisted/removed names never appear in the ranking.",
     "The `sp500` preset is today's top-100-by-cap tickers, not the S&P 500's actual historical membership — a size look-ahead.",
-    "Rank dates are the irregular dates the live aggregator actually snapshotted (the weekly demo cron), not a fixed grid; across a gap between two snapshot dates (e.g. 2026-07-12 -> 2026-09-21) the book is held unchanged.",
+    "Rank dates are the irregular dates the live aggregator actually snapshotted (the weekly demo cron), not a fixed grid. Cadences use at most one per ISO week (the week's last snapshot), so extra manual snapshots don't add rebalances; across a gap between two snapshot dates (e.g. 2026-07-12 -> 2026-09-27) the book is held unchanged.",
     "A ticker with no price on a given day is treated as flat (0% return) that day; a name that stops trading entirely after entry is held at its last known close rather than dropped.",
-    "A rebalance trades on the first day after its rank date on which every name in the old and new books has its own close, so each fill is at the ticker's own closing price; a rebalance can therefore wait a day or two across mismatched exchange holidays.",
-    "Returns are local-currency, gross of FX, financing and borrow costs; only the 10 bp one-way-turnover trading cost is modelled.",
+    "A rebalance trades on the first day after its rank date on which every name in the old and new books has its own close, so each fill is at the ticker's own closing price; a rebalance can therefore wait a day or two across mismatched exchange holidays. A newer rebalance replaces one still waiting to fill, so the book always moves to the newest decision and trade dates never go backwards.",
+    "Returns are total returns (Yahoo closes adjusted for splits and dividends), in local currency, gross of FX, financing and borrow costs; only the 10 bp one-way-turnover trading cost is modelled.",
     "Any single-day move above ±50 % is treated as a data glitch and set to 0 %. That also removes a few genuine small-cap moves (e.g. a biotech jump), and a ticker with any non-positive adjusted close is excluded.",
     "The `monthly_buffer` cadence has no buffer effect here: the live aggregator publishes only the top/bottom 25 each run, so every rebalance is a fresh selection identical to the `monthly` cadence's holdings.",
     "Null benchmark and fidelity are not yet published for series A (fewer than 12 monthly rebalances so far) — both stay `null` until enough history accumulates.",

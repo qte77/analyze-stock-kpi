@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-01-02",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "NTES",
@@ -209,7 +209,7 @@
   },
   {
     "date": "2026-01-09",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "GOOG",
@@ -417,7 +417,7 @@
   },
   {
     "date": "2026-01-16",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "6857.T",
@@ -625,7 +625,7 @@
   },
   {
     "date": "2026-01-23",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "MNST",
@@ -818,22 +818,22 @@
         "score": 25.5
       },
       {
+        "ticker": "QCOM",
+        "score": 25.7
+      },
+      {
         "ticker": "DLR",
         "score": 26.8
       },
       {
         "ticker": "DTE.DE",
         "score": 27.2
-      },
-      {
-        "ticker": "TMUS",
-        "score": 27.4
       }
     ]
   },
   {
     "date": "2026-01-30",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "6857.T",
@@ -1030,18 +1030,18 @@
         "score": 25.3
       },
       {
-        "ticker": "BA",
-        "score": 25.8
+        "ticker": "QCOM",
+        "score": 25.7
       },
       {
-        "ticker": "KR",
-        "score": 26.4
+        "ticker": "BA",
+        "score": 25.8
       }
     ]
   },
   {
     "date": "2026-02-06",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "6857.T",
@@ -1132,16 +1132,16 @@
         "score": 72.9
       },
       {
+        "ticker": "7741.T",
+        "score": 72.5
+      },
+      {
         "ticker": "CME",
         "score": 71.7
       },
       {
-        "ticker": "ASML.AS",
-        "score": 70.8
-      },
-      {
-        "ticker": "JNJ",
-        "score": 70.7
+        "ticker": "HOCPY",
+        "score": 71.6
       }
     ],
     "worst": [
@@ -1230,6 +1230,10 @@
         "score": 25.3
       },
       {
+        "ticker": "QCOM",
+        "score": 25.7
+      },
+      {
         "ticker": "BA",
         "score": 26.3
       },
@@ -1240,16 +1244,12 @@
       {
         "ticker": "6758.T",
         "score": 26.8
-      },
-      {
-        "ticker": "ORLY",
-        "score": 26.8
       }
     ]
   },
   {
     "date": "2026-02-13",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "6857.T",
@@ -1324,8 +1324,16 @@
         "score": 76.1
       },
       {
+        "ticker": "7741.T",
+        "score": 75.8
+      },
+      {
         "ticker": "012330.KS",
         "score": 75.3
+      },
+      {
+        "ticker": "HOCPY",
+        "score": 74.3
       },
       {
         "ticker": "NTES",
@@ -1342,14 +1350,6 @@
       {
         "ticker": "028260.KS",
         "score": 72.9
-      },
-      {
-        "ticker": "2454.TW",
-        "score": 72.3
-      },
-      {
-        "ticker": "JNJ",
-        "score": 70.7
       }
     ],
     "worst": [
@@ -1442,22 +1442,22 @@
         "score": 24.8
       },
       {
+        "ticker": "QCOM",
+        "score": 25.7
+      },
+      {
         "ticker": "BA",
         "score": 26.1
       },
       {
         "ticker": "VOW3.DE",
         "score": 26.6
-      },
-      {
-        "ticker": "3382.T",
-        "score": 26.8
       }
     ]
   },
   {
     "date": "2026-02-20",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "6857.T",
@@ -1524,6 +1524,10 @@
         "score": 78.9
       },
       {
+        "ticker": "7741.T",
+        "score": 78.8
+      },
+      {
         "ticker": "4519.T",
         "score": 78.1
       },
@@ -1544,20 +1548,16 @@
         "score": 74.6
       },
       {
+        "ticker": "HOCPY",
+        "score": 74.5
+      },
+      {
         "ticker": "ADI",
         "score": 73.6
       },
       {
         "ticker": "ASML.AS",
         "score": 73.4
-      },
-      {
-        "ticker": "2454.TW",
-        "score": 73.1
-      },
-      {
-        "ticker": "028260.KS",
-        "score": 72.9
       }
     ],
     "worst": [
@@ -1665,7 +1665,7 @@
   },
   {
     "date": "2026-02-27",
-    "eligible": 261,
+    "eligible": 263,
     "best": [
       {
         "ticker": "6857.T",
@@ -1720,6 +1720,10 @@
         "score": 80.9
       },
       {
+        "ticker": "7741.T",
+        "score": 80.7
+      },
+      {
         "ticker": "005930.KS",
         "score": 80.5
       },
@@ -1744,6 +1748,10 @@
         "score": 78.1
       },
       {
+        "ticker": "HOCPY",
+        "score": 77.8
+      },
+      {
         "ticker": "ASML",
         "score": 77.6
       },
@@ -1758,14 +1766,6 @@
       {
         "ticker": "ODFL",
         "score": 74.7
-      },
-      {
-        "ticker": "CME",
-        "score": 74.0
-      },
-      {
-        "ticker": "NTES",
-        "score": 73.8
       }
     ],
     "worst": [
@@ -1873,7 +1873,7 @@
   },
   {
     "date": "2026-03-06",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -1920,6 +1920,10 @@
         "score": 84.3
       },
       {
+        "ticker": "7741.T",
+        "score": 82.5
+      },
+      {
         "ticker": "033780.KS",
         "score": 80.9
       },
@@ -1938,6 +1942,10 @@
       {
         "ticker": "AMAT",
         "score": 77.5
+      },
+      {
+        "ticker": "HOCPY",
+        "score": 77.4
       },
       {
         "ticker": "4519.T",
@@ -1965,14 +1973,6 @@
       },
       {
         "ticker": "028260.KS",
-        "score": 72.9
-      },
-      {
-        "ticker": "NVDA",
-        "score": 72.9
-      },
-      {
-        "ticker": "4063.T",
         "score": 72.9
       }
     ],
@@ -2081,7 +2081,7 @@
   },
   {
     "date": "2026-03-13",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -2128,6 +2128,10 @@
         "score": 84.9
       },
       {
+        "ticker": "7741.T",
+        "score": 81.5
+      },
+      {
         "ticker": "033780.KS",
         "score": 80.9
       },
@@ -2160,6 +2164,10 @@
         "score": 76.3
       },
       {
+        "ticker": "HOCPY",
+        "score": 76.3
+      },
+      {
         "ticker": "GMEXICOB.MX",
         "score": 75.4
       },
@@ -2174,14 +2182,6 @@
       {
         "ticker": "PRSO",
         "score": 75.0
-      },
-      {
-        "ticker": "028260.KS",
-        "score": 72.9
-      },
-      {
-        "ticker": "NTES",
-        "score": 72.7
       }
     ],
     "worst": [
@@ -2278,18 +2278,18 @@
         "score": 24.8
       },
       {
-        "ticker": "KER.PA",
-        "score": 26.0
+        "ticker": "QCOM",
+        "score": 25.7
       },
       {
-        "ticker": "6758.T",
-        "score": 26.4
+        "ticker": "KER.PA",
+        "score": 26.0
       }
     ]
   },
   {
     "date": "2026-03-20",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -2340,6 +2340,10 @@
         "score": 80.5
       },
       {
+        "ticker": "7741.T",
+        "score": 80.4
+      },
+      {
         "ticker": "AMAT",
         "score": 79.3
       },
@@ -2364,6 +2368,10 @@
         "score": 74.8
       },
       {
+        "ticker": "HOCPY",
+        "score": 74.3
+      },
+      {
         "ticker": "ODFL",
         "score": 73.7
       },
@@ -2382,14 +2390,6 @@
       {
         "ticker": "WMT",
         "score": 72.0
-      },
-      {
-        "ticker": "GMEXICOB.MX",
-        "score": 70.9
-      },
-      {
-        "ticker": "ASML.AS",
-        "score": 70.8
       }
     ],
     "worst": [
@@ -2497,7 +2497,7 @@
   },
   {
     "date": "2026-03-27",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -2556,6 +2556,10 @@
         "score": 78.9
       },
       {
+        "ticker": "7741.T",
+        "score": 78.7
+      },
+      {
         "ticker": "ASML",
         "score": 75.6
       },
@@ -2576,6 +2580,10 @@
         "score": 74.0
       },
       {
+        "ticker": "HOCPY",
+        "score": 73.8
+      },
+      {
         "ticker": "GMEXICOB.MX",
         "score": 73.6
       },
@@ -2590,14 +2598,6 @@
       {
         "ticker": "AVGO",
         "score": 72.8
-      },
-      {
-        "ticker": "ODFL",
-        "score": 72.4
-      },
-      {
-        "ticker": "4063.T",
-        "score": 72.4
       }
     ],
     "worst": [
@@ -2705,7 +2705,7 @@
   },
   {
     "date": "2026-04-03",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -2752,8 +2752,16 @@
         "score": 89.2
       },
       {
+        "ticker": "7741.T",
+        "score": 85.5
+      },
+      {
         "ticker": "ADI",
         "score": 85.2
+      },
+      {
+        "ticker": "HOCPY",
+        "score": 82.0
       },
       {
         "ticker": "AMD",
@@ -2798,14 +2806,6 @@
       {
         "ticker": "ASML.AS",
         "score": 77.6
-      },
-      {
-        "ticker": "600066.SS",
-        "score": 77.2
-      },
-      {
-        "ticker": "4519.T",
-        "score": 77.2
       }
     ],
     "worst": [
@@ -2850,10 +2850,6 @@
         "score": 20.8
       },
       {
-        "ticker": "MELI",
-        "score": 21.3
-      },
-      {
         "ticker": "LOW",
         "score": 21.7
       },
@@ -2880,6 +2876,10 @@
       {
         "ticker": "VOW3.DE",
         "score": 22.8
+      },
+      {
+        "ticker": "MELI",
+        "score": 23.1
       },
       {
         "ticker": "CI",
@@ -2913,7 +2913,7 @@
   },
   {
     "date": "2026-04-10",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -2964,6 +2964,14 @@
         "score": 85.9
       },
       {
+        "ticker": "7741.T",
+        "score": 85.5
+      },
+      {
+        "ticker": "HOCPY",
+        "score": 85.5
+      },
+      {
         "ticker": "ADI",
         "score": 85.2
       },
@@ -3006,14 +3014,6 @@
       {
         "ticker": "AMAT",
         "score": 79.3
-      },
-      {
-        "ticker": "ODFL",
-        "score": 78.3
-      },
-      {
-        "ticker": "ASML",
-        "score": 77.6
       }
     ],
     "worst": [
@@ -3046,10 +3046,6 @@
         "score": 18.7
       },
       {
-        "ticker": "MELI",
-        "score": 21.3
-      },
-      {
         "ticker": "SZU.DE",
         "score": 21.9
       },
@@ -3060,6 +3056,10 @@
       {
         "ticker": "MGLU3.SA",
         "score": 22.8
+      },
+      {
+        "ticker": "MELI",
+        "score": 23.1
       },
       {
         "ticker": "BKNG",
@@ -3114,14 +3114,14 @@
         "score": 26.1
       },
       {
-        "ticker": "NET",
-        "score": 27.1
+        "ticker": "QCOM",
+        "score": 27.0
       }
     ]
   },
   {
     "date": "2026-04-17",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "IDCC",
@@ -3176,8 +3176,16 @@
         "score": 86.1
       },
       {
+        "ticker": "7741.T",
+        "score": 85.5
+      },
+      {
         "ticker": "ADI",
         "score": 85.2
+      },
+      {
+        "ticker": "HOCPY",
+        "score": 84.7
       },
       {
         "ticker": "AMD",
@@ -3214,14 +3222,6 @@
       {
         "ticker": "GMEXICOB.MX",
         "score": 80.1
-      },
-      {
-        "ticker": "AMAT",
-        "score": 79.3
-      },
-      {
-        "ticker": "600066.SS",
-        "score": 78.5
       }
     ],
     "worst": [
@@ -3254,15 +3254,15 @@
         "score": 17.2
       },
       {
-        "ticker": "MELI",
-        "score": 21.3
-      },
-      {
         "ticker": "KR",
         "score": 21.8
       },
       {
         "ticker": "SBUX",
+        "score": 23.1
+      },
+      {
+        "ticker": "MELI",
         "score": 23.1
       },
       {
@@ -3329,7 +3329,7 @@
   },
   {
     "date": "2026-04-24",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -3388,6 +3388,10 @@
         "score": 85.6
       },
       {
+        "ticker": "7741.T",
+        "score": 85.5
+      },
+      {
         "ticker": "ADI",
         "score": 85.2
       },
@@ -3424,12 +3428,8 @@
         "score": 79.5
       },
       {
-        "ticker": "AMAT",
-        "score": 79.3
-      },
-      {
-        "ticker": "ASML",
-        "score": 77.6
+        "ticker": "HOCPY",
+        "score": 79.4
       }
     ],
     "worst": [
@@ -3482,16 +3482,16 @@
         "score": 21.1
       },
       {
-        "ticker": "MELI",
-        "score": 21.3
-      },
-      {
         "ticker": "MCD",
         "score": 21.8
       },
       {
         "ticker": "BKNG",
         "score": 22.2
+      },
+      {
+        "ticker": "MELI",
+        "score": 23.1
       },
       {
         "ticker": "6758.T",
@@ -3537,7 +3537,7 @@
   },
   {
     "date": "2026-05-01",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -3612,6 +3612,10 @@
         "score": 82.9
       },
       {
+        "ticker": "7741.T",
+        "score": 82.6
+      },
+      {
         "ticker": "005930.KS",
         "score": 82.2
       },
@@ -3634,10 +3638,6 @@
       {
         "ticker": "ODFL",
         "score": 79.8
-      },
-      {
-        "ticker": "AMAT",
-        "score": 79.3
       }
     ],
     "worst": [
@@ -3745,7 +3745,7 @@
   },
   {
     "date": "2026-05-08",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -3832,6 +3832,10 @@
         "score": 81.4
       },
       {
+        "ticker": "7741.T",
+        "score": 81.1
+      },
+      {
         "ticker": "IDCC",
         "score": 80.7
       },
@@ -3842,10 +3846,6 @@
       {
         "ticker": "AVGO",
         "score": 80.2
-      },
-      {
-        "ticker": "AMAT",
-        "score": 79.3
       }
     ],
     "worst": [
@@ -3953,7 +3953,7 @@
   },
   {
     "date": "2026-05-15",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -4032,6 +4032,10 @@
         "score": 82.2
       },
       {
+        "ticker": "7741.T",
+        "score": 81.6
+      },
+      {
         "ticker": "6981.T",
         "score": 81.5
       },
@@ -4050,10 +4054,6 @@
       {
         "ticker": "IDCC",
         "score": 77.3
-      },
-      {
-        "ticker": "JNJ",
-        "score": 76.9
       }
     ],
     "worst": [
@@ -4161,7 +4161,7 @@
   },
   {
     "date": "2026-05-22",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -4256,11 +4256,11 @@
         "score": 79.3
       },
       {
-        "ticker": "IDCC",
-        "score": 78.0
+        "ticker": "7741.T",
+        "score": 78.9
       },
       {
-        "ticker": "GMEXICOB.MX",
+        "ticker": "IDCC",
         "score": 78.0
       }
     ],
@@ -4369,7 +4369,7 @@
   },
   {
     "date": "2026-05-29",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -4452,6 +4452,10 @@
         "score": 81.5
       },
       {
+        "ticker": "7741.T",
+        "score": 80.4
+      },
+      {
         "ticker": "ODFL",
         "score": 80.1
       },
@@ -4466,10 +4470,6 @@
       {
         "ticker": "033780.KS",
         "score": 78.6
-      },
-      {
-        "ticker": "GMEXICOB.MX",
-        "score": 77.3
       }
     ],
     "worst": [
@@ -4577,7 +4577,7 @@
   },
   {
     "date": "2026-06-05",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -4652,6 +4652,10 @@
         "score": 83.3
       },
       {
+        "ticker": "7741.T",
+        "score": 83.1
+      },
+      {
         "ticker": "AMD",
         "score": 82.9
       },
@@ -4674,10 +4678,6 @@
       {
         "ticker": "6861.T",
         "score": 77.8
-      },
-      {
-        "ticker": "JNJ",
-        "score": 76.9
       }
     ],
     "worst": [
@@ -4785,7 +4785,7 @@
   },
   {
     "date": "2026-06-12",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -4868,6 +4868,10 @@
         "score": 81.4
       },
       {
+        "ticker": "7741.T",
+        "score": 80.8
+      },
+      {
         "ticker": "002001.SZ",
         "score": 80.6
       },
@@ -4882,10 +4886,6 @@
       {
         "ticker": "AMAT",
         "score": 79.3
-      },
-      {
-        "ticker": "ABEV3.SA",
-        "score": 78.7
       }
     ],
     "worst": [
@@ -4993,7 +4993,7 @@
   },
   {
     "date": "2026-06-19",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -5064,6 +5064,10 @@
         "score": 82.2
       },
       {
+        "ticker": "7741.T",
+        "score": 81.9
+      },
+      {
         "ticker": "4063.T",
         "score": 81.8
       },
@@ -5090,10 +5094,6 @@
       {
         "ticker": "AMAT",
         "score": 79.3
-      },
-      {
-        "ticker": "6861.T",
-        "score": 79.1
       }
     ],
     "worst": [
@@ -5201,7 +5201,7 @@
   },
   {
     "date": "2026-06-26",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -5288,6 +5288,10 @@
         "score": 79.3
       },
       {
+        "ticker": "7741.T",
+        "score": 78.8
+      },
+      {
         "ticker": "ODFL",
         "score": 78.6
       },
@@ -5298,10 +5302,6 @@
       {
         "ticker": "IDCC",
         "score": 77.6
-      },
-      {
-        "ticker": "JNJ",
-        "score": 76.9
       }
     ],
     "worst": [
@@ -5409,7 +5409,7 @@
   },
   {
     "date": "2026-07-03",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -5484,6 +5484,10 @@
         "score": 81.2
       },
       {
+        "ticker": "7741.T",
+        "score": 79.6
+      },
+      {
         "ticker": "ABEV3.SA",
         "score": 79.5
       },
@@ -5506,10 +5510,6 @@
       {
         "ticker": "SAF.PA",
         "score": 77.1
-      },
-      {
-        "ticker": "JNJ",
-        "score": 76.9
       }
     ],
     "worst": [
@@ -5617,7 +5617,7 @@
   },
   {
     "date": "2026-07-10",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "6857.T",
@@ -5825,7 +5825,7 @@
   },
   {
     "date": "2026-07-17",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "GOOG",
@@ -6033,7 +6033,7 @@
   },
   {
     "date": "2026-07-24",
-    "eligible": 262,
+    "eligible": 264,
     "best": [
       {
         "ticker": "GOOG",
@@ -7687,7 +7687,7 @@
       },
       {
         "ticker": "RENT3.SA",
-        "score": 22.0
+        "score": 21.9
       },
       {
         "ticker": "BKNG",
@@ -7900,6 +7900,214 @@
       {
         "ticker": "015760.KS",
         "score": 22.0
+      }
+    ]
+  },
+  {
+    "date": "2026-09-25",
+    "eligible": 263,
+    "best": [
+      {
+        "ticker": "6857.T",
+        "score": 94.9
+      },
+      {
+        "ticker": "6098.T",
+        "score": 94.4
+      },
+      {
+        "ticker": "ASML.AS",
+        "score": 93.4
+      },
+      {
+        "ticker": "ASML",
+        "score": 90.7
+      },
+      {
+        "ticker": "2454.TW",
+        "score": 90.7
+      },
+      {
+        "ticker": "8035.T",
+        "score": 89.2
+      },
+      {
+        "ticker": "2371.T",
+        "score": 88.7
+      },
+      {
+        "ticker": "FIX",
+        "score": 88.5
+      },
+      {
+        "ticker": "VRTX",
+        "score": 87.8
+      },
+      {
+        "ticker": "GOOGL",
+        "score": 86.6
+      },
+      {
+        "ticker": "GOOG",
+        "score": 86.4
+      },
+      {
+        "ticker": "MNST",
+        "score": 86.0
+      },
+      {
+        "ticker": "TSM",
+        "score": 85.7
+      },
+      {
+        "ticker": "AMD",
+        "score": 82.9
+      },
+      {
+        "ticker": "ABEV3.SA",
+        "score": 82.6
+      },
+      {
+        "ticker": "005930.KS",
+        "score": 82.2
+      },
+      {
+        "ticker": "6981.T",
+        "score": 81.0
+      },
+      {
+        "ticker": "REGN",
+        "score": 80.9
+      },
+      {
+        "ticker": "6861.T",
+        "score": 79.6
+      },
+      {
+        "ticker": "WEGE3.SA",
+        "score": 78.2
+      },
+      {
+        "ticker": "ADI",
+        "score": 77.1
+      },
+      {
+        "ticker": "AMAT",
+        "score": 77.1
+      },
+      {
+        "ticker": "MPWR",
+        "score": 77.0
+      },
+      {
+        "ticker": "JNJ",
+        "score": 76.9
+      },
+      {
+        "ticker": "NVDA",
+        "score": 75.6
+      }
+    ],
+    "worst": [
+      {
+        "ticker": "CSNA3.SA",
+        "score": 4.1
+      },
+      {
+        "ticker": "KER.PA",
+        "score": 9.8
+      },
+      {
+        "ticker": "FLR",
+        "score": 12.1
+      },
+      {
+        "ticker": "BA",
+        "score": 12.1
+      },
+      {
+        "ticker": "LOW",
+        "score": 13.5
+      },
+      {
+        "ticker": "KR",
+        "score": 14.5
+      },
+      {
+        "ticker": "CCI",
+        "score": 14.7
+      },
+      {
+        "ticker": "STLAM.MI",
+        "score": 17.0
+      },
+      {
+        "ticker": "MBG.DE",
+        "score": 17.1
+      },
+      {
+        "ticker": "VOW3.DE",
+        "score": 17.4
+      },
+      {
+        "ticker": "KLBN11.SA",
+        "score": 17.5
+      },
+      {
+        "ticker": "NKE",
+        "score": 18.0
+      },
+      {
+        "ticker": "VNA.DE",
+        "score": 18.1
+      },
+      {
+        "ticker": "MGLU3.SA",
+        "score": 18.1
+      },
+      {
+        "ticker": "TXT",
+        "score": 18.4
+      },
+      {
+        "ticker": "AIR.PA",
+        "score": 18.6
+      },
+      {
+        "ticker": "SBUX",
+        "score": 19.0
+      },
+      {
+        "ticker": "ORLY",
+        "score": 20.8
+      },
+      {
+        "ticker": "MSCI",
+        "score": 20.8
+      },
+      {
+        "ticker": "MELI",
+        "score": 21.3
+      },
+      {
+        "ticker": "015760.KS",
+        "score": 21.5
+      },
+      {
+        "ticker": "TMRAY",
+        "score": 21.7
+      },
+      {
+        "ticker": "MCD",
+        "score": 21.8
+      },
+      {
+        "ticker": "BKNG",
+        "score": 22.2
+      },
+      {
+        "ticker": "BLK",
+        "score": 22.7
       }
     ]
   }
