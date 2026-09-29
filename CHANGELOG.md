@@ -16,6 +16,112 @@ Types of changes:
 
 <!-- scriv-insert-here -->
 
+## [1.5.0] - 2026-09-29
+
+### Added
+
+- `FundamentalsSnapshot` now stores `country` from yfinance `info` (e.g. "United States",
+  "Taiwan"), so every demo snapshot carries it. The backtest's filing-lag rule reads it
+  (#419).
+
+- `scripts/e2e_ui.py`: a headless-browser check of the dashboard on phone and desktop, light
+  and dark, run locally against `make preview` or the Pages deploy (see CONTRIBUTING).
+
+### Changed
+
+- Series B's filing lag (D18) also treats a ticker as non-US (120 days instead of 90) when its
+  Yahoo `country` in the latest demo snapshot is not the United States. The country can only
+  lengthen the lag, never shorten it below the old suffix/known-list/ADR-shape rule. On the
+  2026-09-27 data this moves 9 of 314 tickers to 120 days. `method_version` is now 3; series B was
+  rebuilt once on 2026-09-29 and the rebuild verified (#419).
+
+- Unpinned `complexipy` (5.5.0 → `>=8.0.1`). Since 6.x it also scores comprehensions, which put
+  11 unchanged functions over the gate of 10; they are recorded in `complexipy-snapshot.json`,
+  so the gate stays at 10 for everything else and fails if any recorded function gets worse.
+
+- Dashboard: a one-line description of what the site does now sits under the title, and the
+  Fear & Greed block is collapsed into a "Market mood" bar showing the score. Click it to open
+  the charts. A link with a long-term window (`?ltFgWindow=` / `?ycWindow=`) opens it on the
+  long-term tab (plan 010, slice 1).
+
+- CI: the dashboard's JS checks (typecheck, ESLint, Prettier, Vitest, Vite build) run in their
+  own `ui` workflow, only when `ui/` changes. `validate` is now Python-only (#367).
+
+- Dashboard: "Today's picks", the best and worst 25 by qte77 Score with company names, now lead
+  the page right under the market-mood bar. The first 10 of each list show, with "Show all 25";
+  on phones Best sits above Worst. The backtest's "Current candidates" panel is merged into it
+  (plan 010, slice 2).
+
+- Dashboard backtest section (plan 010 slice 3, #446):
+  - It shows the chart and one plain sentence: the return after costs, and whether it's
+    statistically significant. Before 12 months of data it shows the return so far instead of
+    dashes.
+  - Everything else sits behind "How it's tested". The metrics table shows the six figures that
+    matter; the rest are under "More metrics", with a note on how to read the short leg.
+  - SPY's total return is drawn as a reference line on both backtest charts.
+
+- Docs brought up to date for the release: the README describes the redesigned dashboard,
+  says 9 universes (the screener lists are retired), and documents the `theme` and `base`
+  URL parameters and the `make preview` URL. CONTRIBUTING lists all six changelog categories
+  and the e2e script's options. `architecture.md` covers the `country` field and the
+  country-based filing lag.
+
+### Removed
+
+- The `enhanced-kpi-screener-longs` / `-shorts` universes (the 14-criteria conjunctive-gate
+  screener) are retired (#413). Across every snapshot since June the shorts list was always
+  empty and the longs list held 0–3 stocks, so the gates added nothing beyond the best/worst 25
+  by qte77 Score. The two lists no longer appear in the dashboard's universe picker and are no
+  longer built weekly. Their past snapshots stay on the `data` branch.
+
+### Fixed
+
+- Applied the Dependabot `python-deps` group bump (pydantic, pydantic-settings,
+  tqdm, yfinance, ruff, pyright, bump-my-version; #411, PR #431) and dropped an
+  `# noqa: S310` that ruff 0.16.8's `RUF100` now flags as unused on
+  `scripts/backfill_fear_greed_whitrabbit.py`'s `Request(...)` call. Pinned
+  `complexipy` to `5.5.0` instead of following it to 8.0.1: `complexipy`'s
+  cognitive-complexity scorer changed starting at 6.x/7.x and pushes several
+  unchanged functions (e.g. `_batch_close_prices`, `fetch_universe_fundamentals`)
+  over the `check_complexity` gate's threshold of 10 with no code change. (Unpinned
+  again in #438, with a baseline for those functions; see below.)
+
+- The release bump now also updates the project's own version in `uv.lock` (v1.4.0 shipped
+  with 1.3.0 there and was fixed by hand in #427).
+
+- `make preview` and `make preview_local` now use Vite's dev server, which serves `ui/public/`
+  (vendored Chart.js, favicon), so charts render locally (#415). The dashboard URL is now
+  `http://localhost:8000/analyze-stock-kpi/`; `preview_local` prints its own URL, which reads the
+  local `results/` through Vite's `/@fs/` route (dev server only).
+
+- `llms.txt` now lists every ADR (0000-0014) and every source module, and a test fails when a
+  new ADR or module is missing from `.github/templates/llms.txt.tpl` (#416).
+
+- On touch devices, a table that has more columns to the right now fades its right edge, and
+  the fade disappears once the table fits or is scrolled to the end (#417).
+
+- Backtest rebalance schedule (#446):
+  - Series A's "weekly" cadence traded on every snapshot (three times on 2026-06-08). Its
+    cadences now use at most one snapshot per ISO week.
+  - Trades are now filled by walking the calendar. Each day the newest decision fills on the
+    first day all its names and the held names trade, and it replaces any older decision still
+    waiting. Before, trade dates could go backwards (a newer book applied before an older one),
+    and a waiting rebalance let the next one trade against the wrong book.
+  - The rebalance log lists one entry per trade day that matches what was simulated. Series B's
+    weekly log had three duplicated days. The null benchmark uses the same fill rule.
+  - Series A (`method_version` 2) and series B (3) were each rebuilt once on 2026-09-29;
+    the rebuilt logs have no duplicate or backwards trade dates (verified on `data`).
+- The backtest caveats now say returns are total returns (split- and dividend-adjusted).
+
+- The weekly `portfolio` backtest run now fails if it can't check out its inputs from the `data`
+  branch. Before, it silently fell back to "first run": it recomputed and overwrote frozen
+  history, or ran a one-time `method_version` rebuild without the demo snapshots (no countries,
+  no series A).
+
+- `make validate` (and every other multi-line make target) now fails on the first failing
+  command. With `.ONESHELL` and no `-e`, only a recipe's last command counted, so `lint_js`
+  silently ignored TypeScript and ESLint errors and `make validate` reported success.
+
 ## [1.4.0] - 2026-09-25
 
 ### Added
