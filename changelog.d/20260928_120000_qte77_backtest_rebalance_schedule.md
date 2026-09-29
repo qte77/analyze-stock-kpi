@@ -9,6 +9,6 @@
     and a waiting rebalance let the next one trade against the wrong book.
   - The rebalance log lists one entry per trade day that matches what was simulated. Series B's
     weekly log had three duplicated days. The null benchmark uses the same fill rule.
-  - Series A is rebuilt once (`method_version` 2), and series B picks the fix up in its
-    already-scheduled rebuild to `method_version` 3.
+  - Series A (`method_version` 2) and series B (3) were each rebuilt once on 2026-09-29;
+    the rebuilt logs have no duplicate or backwards trade dates (verified on `data`).
 - The backtest caveats now say returns are total returns (split- and dividend-adjusted).
