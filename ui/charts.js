@@ -11,10 +11,12 @@ import {
   CADENCE_LABELS,
   CADENCE_ORDER,
   compound,
+  headlineLine,
   keyFacts,
   metricsTableRows,
   rebalanceMarkers,
   sinceLabel,
+  spyIndexOn,
   tradeLogRows,
 } from "./lib/portfolio.js";
 import { aggregateSectors, sectorColor } from "./lib/sector.js";
@@ -745,12 +747,23 @@ const FOIL_COLORS = [
  * primary series' own dates — a foil cadence can have a longer history, in
  * which case the x-axis (`labels`) is longer than `primaryNet.dates`.
  *
+ * `spyEntries` (plan 010 slice 3, #446) adds SPY's total return rebased to 100
+ * on the chart's first date as a thin reference line (`spyIndexOn`); it is a
+ * long-only index, not a benchmark the market-neutral book is expected to track.
+ *
  * @param {BacktestKind} kind
  * @param {Record<string, import("./lib/portfolio.js").BacktestReturnRow[]>} seriesByCadence
  * @param {string | null | undefined} primary
  * @param {string[]} [tradeDates]
+ * @param {Array<{date: string, ret_indexed: number}>} [spyEntries]
  */
-export function renderBacktestChart(kind, seriesByCadence, primary, tradeDates = []) {
+export function renderBacktestChart(
+  kind,
+  seriesByCadence,
+  primary,
+  tradeDates = [],
+  spyEntries = [],
+) {
   const canvas = /** @type {HTMLCanvasElement | null} */ (
     document.getElementById(`backtest-${kind}-chart`)
   );
@@ -814,6 +827,21 @@ export function renderBacktestChart(kind, seriesByCadence, primary, tradeDates =
           borderWidth: 1,
           tension: 0.1,
         })),
+        ...(spyEntries.length > 0
+          ? [
+              {
+                label: "SPY (total return)",
+                data: spyIndexOn(labels, spyEntries),
+                borderColor: () => cssVar("--text", "#2c2818"),
+                fill: false,
+                pointRadius: 0,
+                borderWidth: 1,
+                borderDash: [2, 3],
+                tension: 0.1,
+                spanGaps: true,
+              },
+            ]
+          : []),
         {
           // D21: rebalance-day markers for the primary cadence — a sparse
           // point-only dataset (no connecting line), drawn on top.
@@ -845,35 +873,94 @@ const backtestSummaryCache = { a: null, b: null };
 /** @type {Record<BacktestKind, "gross" | "net">} */
 const backtestMode = { a: "net", b: "net" };
 
+/** @typedef {ReturnType<typeof metricsTableRows>[number]} MetricsRow */
+/** @typedef {[string, (row: MetricsRow) => string]} MetricsColumn */
+
+/** @type {(v: number | null | undefined) => string} */
+const pctCell = (v) => `${fmtPct(v)} %`;
+
+/** Plan 010 slice 3 (#446): the metrics a reader needs to judge the book. */
+/** @type {MetricsColumn[]} */
+const HEADLINE_METRICS = [
+  ["Ann. return", (r) => pctCell(r.ann_return)],
+  ["Ann. vol", (r) => pctCell(r.ann_vol)],
+  ["Max drawdown", (r) => pctCell(r.max_drawdown)],
+  ["Beta (SPY)", (r) => fmtNum(r.beta, 2)],
+  [
+    "Mean monthly (90% CI)",
+    (r) => `${fmtPct(r.mean_monthly_return)} % [${fmtPct(r.ci90?.[0])}, ${fmtPct(r.ci90?.[1])}]`,
+  ],
+  ["Rebalances", (r) => (r.rebalances != null ? String(r.rebalances) : "—")],
+];
+
+/** ...and the rest, behind "More metrics". */
+/** @type {MetricsColumn[]} */
+const DETAIL_METRICS = [
+  ["Ann. turnover", (r) => pctCell(r.ann_turnover)],
+  ["Long leg", (r) => pctCell(r.long_ann_return)],
+  ["Short leg", (r) => pctCell(r.short_ann_return)],
+  ["Hit rate", (r) => pctCell(r.hit_rate)],
+  ["t-stat", (r) => fmtNum(r.t_stat, 2)],
+];
+
+/**
+ * Fill one metrics table: a header from `columns`, one row per cadence, or a
+ * single explanatory row when no cadence has annualized metrics yet (D9: fewer
+ * than 12 months of returns) instead of a grid of dashes.
+ *
+ * @param {HTMLTableElement} table
+ * @param {MetricsColumn[]} columns
+ * @param {MetricsRow[]} rows
+ * @param {string | null | undefined} start
+ */
+function fillMetricsTable(table, columns, rows, start) {
+  const head = document.createElement("tr");
+  for (const [i, title] of ["Cadence", ...columns.map(([t]) => t)].entries()) {
+    const th = document.createElement("th");
+    if (i > 0) th.className = "num";
+    th.textContent = title;
+    head.append(th);
+  }
+  const thead = document.createElement("thead");
+  thead.append(head);
+  const tbody = document.createElement("tbody");
+  const pending = rows.length > 0 && rows.every((r) => r.ann_return == null);
+  if (pending) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = columns.length + 1;
+    td.className = "backtest-metrics-pending";
+    td.textContent =
+      `Annualized metrics need 12 months of returns${start ? ` (started ${start})` : ""}; ` +
+      "until then the chart and the line above show the return so far.";
+    tr.append(td);
+    tbody.append(tr);
+  } else {
+    for (const row of rows) {
+      const tr = document.createElement("tr");
+      if (row.primary) tr.className = "backtest-primary-row";
+      for (const [i, text] of [row.label, ...columns.map(([, cell]) => cell(row))].entries()) {
+        const td = document.createElement("td");
+        if (i > 0) td.className = "num";
+        td.textContent = text;
+        tr.append(td);
+      }
+      tbody.append(tr);
+    }
+  }
+  table.replaceChildren(thead, tbody);
+}
+
 /** @param {BacktestKind} kind */
 function renderBacktestMetricsTable(kind) {
-  const tbody = document.querySelector(`#backtest-${kind}-metrics-table tbody`);
-  if (!tbody) return;
-  tbody.replaceChildren();
-  for (const row of metricsTableRows(backtestSummaryCache[kind], backtestMode[kind])) {
-    const tr = document.createElement("tr");
-    if (row.primary) tr.className = "backtest-primary-row";
-    const cells = [
-      row.label,
-      `${fmtPct(row.ann_return)} %`,
-      `${fmtPct(row.ann_vol)} %`,
-      `${fmtPct(row.max_drawdown)} %`,
-      `${fmtPct(row.ann_turnover)} %`,
-      `${fmtPct(row.long_ann_return)} %`,
-      `${fmtPct(row.short_ann_return)} %`,
-      fmtNum(row.beta, 2),
-      `${fmtPct(row.hit_rate)} %`,
-      `${fmtPct(row.mean_monthly_return)} % [${fmtPct(row.ci90?.[0])}, ${fmtPct(row.ci90?.[1])}]`,
-      fmtNum(row.t_stat, 2),
-      row.rebalances != null ? String(row.rebalances) : "—",
-    ];
-    cells.forEach((text, i) => {
-      const td = document.createElement("td");
-      if (i > 0) td.className = "num";
-      td.textContent = text;
-      tr.append(td);
-    });
-    tbody.append(tr);
+  const summary = backtestSummaryCache[kind];
+  const rows = metricsTableRows(summary, backtestMode[kind]);
+  for (const [suffix, columns] of /** @type {Array<[string, MetricsColumn[]]>} */ ([
+    ["metrics-table", HEADLINE_METRICS],
+    ["metrics-detail-table", DETAIL_METRICS],
+  ])) {
+    const table = document.getElementById(`backtest-${kind}-${suffix}`);
+    if (table instanceof HTMLTableElement) fillMetricsTable(table, columns, rows, summary?.start);
   }
 }
 
@@ -926,12 +1013,18 @@ function renderBacktestHeadline(kind, summary) {
  * (before this series' first cron run) renders an empty table + blank
  * key-facts line and never throws.
  *
+ * Also fills the one-sentence summary under the chart (`headlineLine`, plan
+ * 010 slice 3) from `primaryRows`, the primary cadence's daily rows.
+ *
  * @param {BacktestKind} kind
  * @param {import("./lib/portfolio.js").BacktestSummary | null} summary
+ * @param {import("./lib/portfolio.js").BacktestReturnRow[]} [primaryRows]
  */
-export function renderBacktestSummary(kind, summary) {
+export function renderBacktestSummary(kind, summary, primaryRows = []) {
   backtestSummaryCache[kind] = summary;
   renderBacktestHeadline(kind, summary);
+  const oneLine = document.getElementById(`backtest-${kind}-oneline`);
+  if (oneLine) oneLine.textContent = headlineLine(summary, primaryRows);
   renderBacktestMetricsTable(kind);
   renderBacktestKeyFacts(kind);
   renderBacktestCaveats(kind);

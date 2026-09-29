@@ -59,6 +59,7 @@ def check_page(page, name: str, out: Path) -> list[str]:
         failures.append("universe table has no rows")
 
     failures += check_todays_picks(page)
+    failures += check_backtest(page)
 
     # Slice 1: market mood starts collapsed; its summary toggles it by click and keyboard.
     panel = page.locator("#fg-panel")
@@ -113,6 +114,35 @@ def check_todays_picks(page) -> list[str]:
     return failures
 
 
+def check_backtest(page) -> list[str]:
+    """Plan 010 slice 3 (#446): chart + one line in layer 1, the rest behind "How it's
+    tested"; SPY on the chart; never a wall of dashes in the metrics."""
+    failures: list[str] = []
+    details = page.locator("#backtest-details")
+    if details.evaluate("d => d.open"):
+        failures.append("'How it's tested' is open on load (should start collapsed)")
+    if page.locator("#backtest-a-metrics-table").is_visible():
+        failures.append("series A metrics table is visible before 'How it's tested' is opened")
+    line = page.locator("#backtest-a-oneline").inner_text()
+    if not line.endswith("Hypothetical, not investment advice."):
+        failures.append(f"series A one-line summary missing or incomplete: {line[:80]!r}")
+    labels = page.evaluate(
+        "() => { const c = Object.values(Chart.instances)"
+        ".find(ch => ch.canvas.id === 'backtest-a-chart');"
+        " return c ? c.data.datasets.map(d => d.label) : []; }",
+        isolated_context=False,
+    )
+    if "SPY (total return)" not in labels:
+        failures.append(f"no SPY line on the series A chart (datasets: {labels})")
+    details.locator("> summary").click()
+    table = page.locator("#backtest-a-metrics-table")
+    text = table.inner_text()
+    if text.count("\u2013 %") >= 3 and "need 12 months" not in text:
+        failures.append("series A metrics show a wall of dashes instead of the explanation")
+    details.locator("> summary").click()
+    return failures
+
+
 def check_deep_link(browser, url: str) -> list[str]:
     """Plan 010 D1: `?ltFgWindow=` opens the market-mood panel on its long-term tab."""
     ctx = browser.new_context(viewport={"width": 1440, "height": 900})
@@ -135,58 +165,69 @@ def check_deep_link(browser, url: str) -> list[str]:
     return failures
 
 
+def run_viewport(browser, url: str, out: Path, name: str, ctx_opts: dict) -> list[str]:
+    """One viewport/scheme run: load the page, collect console/network errors, run checks."""
+    ctx = browser.new_context(**ctx_opts)
+    page = ctx.new_page()
+    errors: list[str] = []
+    page.on(
+        "console",
+        lambda m: (
+            errors.append(f"console: {m.text}")
+            if m.type == "error" and not m.text.startswith(_NETWORK_CONSOLE_NOISE)
+            else None
+        ),
+    )
+    page.on(
+        "response",
+        lambda r: (
+            errors.append(f"HTTP {r.status}: {r.url}")
+            if r.status >= 400 and not _EXPECTED_404.search(r.url)
+            else None
+        ),
+    )
+    page.on("requestfailed", lambda r: errors.append(f"request failed: {r.url}"))
+    page.goto(url, wait_until="networkidle", timeout=90_000)
+    return check_page(page, name, out) + errors
+
+
+def isolated(p, check) -> list[str]:
+    """Run `check(browser)` in a fresh browser: the Codespace is memory-tight, and a
+    renderer crash in a shared browser used to take every later run down with it."""
+    browser = p.chromium.launch(headless=True)
+    try:
+        return check(browser)
+    except Exception as exc:  # report it for this run, keep checking the rest
+        return [f"{type(exc).__name__}: {str(exc).splitlines()[0]}"]
+    finally:
+        browser.close()
+
+
+def report(name: str, failures: list[str]) -> bool:
+    print(f"{'FAIL' if failures else 'ok  '} {name}")
+    for f in failures:
+        print(f"     {f}")
+    return bool(failures)
+
+
 def run(url: str, out: Path, *, video: bool) -> int:
     out.mkdir(parents=True, exist_ok=True)
     failed = False
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
         for vp_name, width, height, touch in VIEWPORTS:
             for scheme in SCHEMES:
                 name = f"{vp_name}-{scheme}"
-                ctx = browser.new_context(
-                    viewport={"width": width, "height": height},
-                    is_mobile=touch,
-                    has_touch=touch,
-                    color_scheme=scheme,
-                    record_video_dir=str(out / "video") if video else None,
-                )
-                page = ctx.new_page()
-                errors: list[str] = []
-                page.on(
-                    "console",
-                    lambda m, errors=errors: errors.append(f"console: {m.text}")
-                    if m.type == "error" and not m.text.startswith(_NETWORK_CONSOLE_NOISE)
-                    else None,
-                )
-                page.on(
-                    "response",
-                    lambda r, errors=errors: errors.append(f"HTTP {r.status}: {r.url}")
-                    if r.status >= 400 and not _EXPECTED_404.search(r.url)
-                    else None,
-                )
-                page.on(
-                    "requestfailed",
-                    lambda r, errors=errors: errors.append(f"request failed: {r.url}"),
-                )
-                try:
-                    page.goto(url, wait_until="networkidle", timeout=90_000)
-                    failures = check_page(page, name, out) + errors
-                except Exception as exc:  # report it for this run, keep checking the rest
-                    failures = [f"{type(exc).__name__}: {str(exc).splitlines()[0]}", *errors]
-                ctx.close()
-                failed |= bool(failures)
-                print(f"{'FAIL' if failures else 'ok  '} {name}")
-                for f in failures:
-                    print(f"     {f}")
-        try:
-            link_failures = check_deep_link(browser, url)
-        except Exception as exc:  # report it, don't lose the summary
-            link_failures = [f"{type(exc).__name__}: {str(exc).splitlines()[0]}"]
-        failed |= bool(link_failures)
-        print(f"{'FAIL' if link_failures else 'ok  '} deep-link ?ltFgWindow=5y")
-        for f in link_failures:
-            print(f"     {f}")
-        browser.close()
+                opts = {
+                    "viewport": {"width": width, "height": height},
+                    "is_mobile": touch,
+                    "has_touch": touch,
+                    "color_scheme": scheme,
+                    "record_video_dir": str(out / "video") if video else None,
+                }
+                failures = isolated(p, lambda b, n=name, o=opts: run_viewport(b, url, out, n, o))
+                failed |= report(name, failures)
+        link_failures = isolated(p, lambda b: check_deep_link(b, url))
+        failed |= report("deep-link ?ltFgWindow=5y / ?universe=sp500", link_failures)
     print(f"screenshots: {out}")
     return 1 if failed else 0
 
