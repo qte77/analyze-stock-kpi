@@ -56,7 +56,9 @@ that compiles to a deployable `ui/dist/`:
    `tests/demo/` → `ui/tests/`.
 3. **Repoint tooling** (globs now relative to `ui/`): the `Makefile` JS targets
    (`lint_js`, `test_js`) and `validate.yaml` JS steps run npm from `ui/`
-   (`working-directory: ui`).
+   (`working-directory: ui`). *Amended (#367):* the CI JS steps moved to their own
+   path-filtered `ui.yml`; `validate.yaml` is Python-only. As shipped, `package-lock.json` is
+   gitignored, so both `ui.yml` and `gh-pages.yaml` use `npm install`, not `npm ci`.
 4. **`gh-pages.yaml`:** replace `cp -r ui/. _site/` with `npm ci && npm run build`
    in `ui/` and `upload-pages-artifact path: ui/dist`. The `ui/**` push path
    filter stays.
