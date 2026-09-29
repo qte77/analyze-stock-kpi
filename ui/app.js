@@ -29,6 +29,7 @@ import {
   renderBacktestSummary,
   renderBacktestLists,
   renderBacktestTrades,
+  renderTodaysPicks,
   bindBacktestModeToggle,
   bindLongTermTabs,
   bindWindowChips,
@@ -213,21 +214,23 @@ const loadBacktestSeriesByCadence = async (kind) => {
 const loadUniverseManifest = (/** @type {string} */ universe) =>
   fetchJson(`${DATA_BASE_URL}/results/demo/${universe}/index.json`);
 
-/** @type {(rows: Row[]) => Array<{ticker: string, score: number}>} */
+/** @type {(rows: Row[]) => Array<{ticker: string, score: number, name?: string}>} */
 const toRankRows = (rows) =>
   rows
     .map((r) => ({
       ticker: /** @type {string} */ (r.symbol),
       score: r.composite_scores?.screener_score ?? null,
+      name: /** @type {string | undefined} */ (r.short_name ?? r.long_name ?? undefined),
     }))
     .filter(
-      /** @type {(r: {ticker: string, score: number | null}) => r is {ticker: string, score: number}} */
+      /** @type {(r: {ticker: string, score: number | null, name?: string}) => r is {ticker: string, score: number, name?: string}} */
       (r) => r.score !== null,
     )
     .sort((a, b) => b.score - a.score);
 
 /**
- * Series A's "Current candidates" panel (#408/ADR-0014): the SAME
+ * "Today's picks" (plan 010 slice 2; formerly series A's "Current candidates",
+ * #408/ADR-0014): the SAME
  * aggregated-scores-best / aggregated-scores-worst demo snapshots the
  * universe picker can show, reshaped into `renderBacktestLists`'s input
  * shape. Owner requirement (2026-09-24): today's long/short candidates
@@ -735,6 +738,11 @@ async function init() {
   if (dateSelector) bindDateSelector(dateSelector);
   bindFilterInput();
 
+  // Plan 010 slice 2: today's picks are the landing content, so they load in
+  // parallel with everything else and render as soon as their own two files
+  // arrive (the loader never rejects; it resolves to null on failure).
+  void loadCurrentAggregatedCandidates().then(renderTodaysPicks);
+
   await loadActiveUniverse();
   applyDateFromUrl(parsed.date, dateSelector);
 
@@ -743,7 +751,6 @@ async function init() {
     ycEntries,
     spyEntries,
     backtestASeriesByCadence,
-    currentCandidates,
     backtestASummary,
     backtestBSeriesByCadence,
     backtestBLists,
@@ -753,7 +760,6 @@ async function init() {
     loadYieldCurveYears(),
     loadEquitySpyYears(),
     loadBacktestSeriesByCadence("a"),
-    loadCurrentAggregatedCandidates(),
     loadBacktestSummary("a"),
     loadBacktestSeriesByCadence("b"),
     loadBacktestLists("b"),
@@ -775,9 +781,8 @@ async function init() {
 
   // Series A (genuine decisions, the section headline) and Series B (the
   // reconstructed backfill, collapsible) render independently — never
-  // spliced onto one chart/axis (D15). Series A's "list" panel is #408's
-  // live "Current candidates" (aggregated-scores-best/-worst, ADR-0014),
-  // not results/backtest_genuine/lists — see loadCurrentAggregatedCandidates.
+  // spliced onto one chart/axis (D15). Series A's live best/worst lists are
+  // "Today's picks" (rendered above, ADR-0014), not results/backtest_genuine/lists.
   renderBacktestChart(
     "a",
     backtestASeriesByCadence,
@@ -785,7 +790,6 @@ async function init() {
     backtestATrades.map((t) => t.trade_date),
   );
   renderBacktestSummary("a", backtestASummary);
-  renderBacktestLists("a", currentCandidates);
   renderBacktestTrades("a", backtestATrades);
   bindBacktestModeToggle("a");
   renderBacktestChart(

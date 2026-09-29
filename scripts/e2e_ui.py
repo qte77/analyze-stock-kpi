@@ -58,6 +58,8 @@ def check_page(page, name: str, out: Path) -> list[str]:
     if rows == 0:
         failures.append("universe table has no rows")
 
+    failures += check_todays_picks(page)
+
     # Slice 1: market mood starts collapsed; its summary toggles it by click and keyboard.
     panel = page.locator("#fg-panel")
     summary = page.locator("#fg-panel > summary")
@@ -80,6 +82,37 @@ def check_page(page, name: str, out: Path) -> list[str]:
     return failures
 
 
+def check_todays_picks(page) -> list[str]:
+    """Plan 010 slice 2: Best/Worst 25 lead the page; 10 rows + "Show all 25"; Best above
+    Worst when stacked on narrow screens (D3), side by side otherwise."""
+    failures: list[str] = []
+    page.wait_for_selector("#picks-body .picks-list", timeout=30_000)
+
+    def top(sel: str) -> float:
+        return page.locator(sel).first.bounding_box()["y"]
+
+    if not top("#todays-picks") < top("#backtest-section") < top("#universe-section"):
+        failures.append("Today's picks is not above the backtest and universe sections")
+    lists = page.locator("#picks-body .picks-list")
+    if lists.count() != 2:
+        return [*failures, f"expected 2 pick lists, found {lists.count()}"]
+    best, worst = lists.nth(0), lists.nth(1)
+    shown = best.locator(":scope > ol > li").count()
+    if shown != 10:
+        failures.append(f"Best list shows {shown} rows before 'Show all', expected 10")
+    best.locator("details > summary").click()
+    more = best.locator("details > ol > li").count()
+    if more != 15:
+        failures.append(f"'Show all 25' revealed {more} more rows, expected 15")
+    narrow = page.viewport_size["width"] < 640
+    b_box, w_box = best.bounding_box(), worst.bounding_box()
+    if narrow and not b_box["y"] < w_box["y"]:
+        failures.append("on a narrow screen Best is not stacked above Worst")
+    if not narrow and abs(b_box["y"] - w_box["y"]) > 1:
+        failures.append("on a wide screen Best and Worst are not side by side")
+    return failures
+
+
 def check_deep_link(browser, url: str) -> list[str]:
     """Plan 010 D1: `?ltFgWindow=` opens the market-mood panel on its long-term tab."""
     ctx = browser.new_context(viewport={"width": 1440, "height": 900})
@@ -92,6 +125,12 @@ def check_deep_link(browser, url: str) -> list[str]:
         failures.append("?ltFgWindow=5y did not open the market-mood panel")
     if page.locator("#fg-tab-longterm").get_attribute("aria-selected") != "true":
         failures.append("?ltFgWindow=5y did not select the long-term tab")
+    # Plan 010 D8: an explicit ?universe= still drives the universe picker.
+    page.goto(f"{url}{sep}universe=sp500", wait_until="networkidle", timeout=90_000)
+    page.wait_for_selector("#universe-section tbody tr", timeout=60_000)
+    picked = page.locator("#universe-picker").input_value()
+    if picked != "sp500":
+        failures.append(f"?universe=sp500 left the picker on {picked!r}")
     ctx.close()
     return failures
 

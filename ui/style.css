@@ -1135,7 +1135,6 @@ body.overlay-active td.universe-col {
   color: var(--text-muted);
 }
 
-#backtest-a-lists,
 #backtest-b-lists,
 #backtest-a-trades,
 #backtest-b-trades {
@@ -1143,7 +1142,6 @@ body.overlay-active td.universe-col {
   font-size: 0.8125rem;
 }
 
-#backtest-a-lists summary,
 #backtest-b-lists summary,
 #backtest-a-trades summary,
 #backtest-b-trades summary {
@@ -1152,14 +1150,12 @@ body.overlay-active td.universe-col {
   padding: 0.15rem 0;
 }
 
-#backtest-a-lists summary:hover,
 #backtest-b-lists summary:hover,
 #backtest-a-trades summary:hover,
 #backtest-b-trades summary:hover {
   color: var(--primary);
 }
 
-#backtest-a-lists-body,
 #backtest-b-lists-body {
   display: flex;
   gap: 1.5rem;
@@ -1269,6 +1265,39 @@ body.overlay-active td.universe-col {
   justify-content: space-between;
   gap: 0.5rem;
   padding: 0.1rem 0;
+}
+
+/* Company name between ticker and score: takes the free space, truncates. */
+.rank-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+
+/* Plan 010 slice 2: Today's picks. Two columns; below 640px Best stacks above
+   Worst (DOM order, D3). */
+#picks-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 639px) {
+  #picks-body { grid-template-columns: 1fr; }
+}
+
+.picks-list li {
+  font-size: 0.875rem;
+}
+
+.picks-list details > summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  margin-top: 0.25rem;
 }
 
 .backtest-lists-empty {
