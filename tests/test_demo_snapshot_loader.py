@@ -74,7 +74,7 @@ def test_write_paired_universe_and_audit_writes_demo_snapshot_from_source_record
 
 
 def test_write_paired_universe_and_audit_writes_empty_demo_snapshot_for_empty_list() -> None:
-    """An empty side (e.g. no eligible shorts yet) still gets a valid, empty
+    """An empty side (e.g. no eligible tickers this run) still gets a valid, empty
     demo snapshot + manifest -- never a missing file the dashboard 404s on.
     """
     loader.write_paired_universe_and_audit(
@@ -83,12 +83,12 @@ def test_write_paired_universe_and_audit_writes_empty_demo_snapshot_for_empty_li
         [],
         snapshots_a=[],
         snapshots_b=[],
-        preset_a_name="enhanced-kpi-screener-longs",
-        preset_b_name="enhanced-kpi-screener-shorts",
-        audit_dir="enhanced_kpi_screener_longshort",
+        preset_a_name="aggregated-scores-best",
+        preset_b_name="aggregated-scores-worst",
+        audit_dir="aggregated_scores_best_and_worst",
     )
 
-    demo_longs = Path("results/demo/enhanced-kpi-screener-longs")
-    manifest = json.loads((demo_longs / "index.json").read_text())
-    dated = json.loads((demo_longs / f"{manifest['latest']}.json").read_text())
+    demo_best = Path("results/demo/aggregated-scores-best")
+    manifest = json.loads((demo_best / "index.json").read_text())
+    dated = json.loads((demo_best / f"{manifest['latest']}.json").read_text())
     assert dated == []

@@ -40,11 +40,10 @@ def resolve_universe(args: CliArgs) -> list[str]:
       (fail-loud — operator typo / wrong file)
 
     Preset mode tolerates an existing-but-empty file and returns ``[]``.
-    This is the orchestrator-driven case: ``enhanced-kpi-screener-longs``
-    starts as a 0-byte placeholder until the first cron populates it, and
-    later cron passes can also yield zero candidates conjunctively (per
-    issue #192's "counts vary; could be 0 each side"). An empty preset is
-    a valid state; ``make run UNIVERSE=…`` over it produces an empty
+    This is the orchestrator-driven case: a derived preset (e.g.
+    ``aggregated-scores-best``) can start as a 0-byte placeholder until the
+    first cron populates it, and a later pass can yield zero eligible
+    tickers. An empty preset is a valid state; ``make run UNIVERSE=…`` over it produces an empty
     snapshot rather than aborting the demo-snapshot cron.
     """
     if args.tickers is not None:

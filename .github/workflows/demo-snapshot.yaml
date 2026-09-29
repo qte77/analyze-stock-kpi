@@ -9,8 +9,7 @@
 # rebuilds the manifest, and commits both files as a single verified
 # commit via the REST Git Data API (Blob -> Tree -> Commit -> Ref).
 #
-# The four DERIVED universes (aggregated-scores-{best,worst},
-# enhanced-kpi-screener-{longs,shorts}) are NOT fetched here: fetching
+# The DERIVED universes (aggregated-scores-{best,worst}) are NOT fetched here: fetching
 # them independently would recompute a fresh qte77 Score from live
 # yfinance data, disagreeing with the score universe-builder.yaml ranked
 # or classified them by. universe-builder.yaml writes their demo-display
@@ -59,8 +58,7 @@ on:
           - japan
           - south-america
           - south-korea
-          # aggregated-scores-{best,worst} and enhanced-kpi-screener-{longs,shorts}
-          # are intentionally NOT dispatchable here: they are `"derived": true`
+          # aggregated-scores-{best,worst} are intentionally NOT dispatchable here: they are `"derived": true`
           # in ui/public/universes.json and get their demo-display snapshot
           # written directly by universe-builder.yaml from the source-universe
           # records it ranked/classified, never fetched by this workflow (owner
@@ -107,8 +105,8 @@ jobs:
             # snapshot for an unpopulated universe is the right rebuild
             # behaviour. The preset itself is the orchestrator's
             # contract (universe-builder.yaml), not demo-snapshot's.
-            # `"derived": true` entries (aggregated-scores-*,
-            # enhanced-kpi-screener-*) are EXCLUDED here: universe-builder.yaml
+            # `"derived": true` entries (aggregated-scores-*) are EXCLUDED
+            # here: universe-builder.yaml
             # writes their demo-display snapshot directly from the
             # source-universe records it ranked/classified, so re-fetching
             # them here would diverge from the qte77 Score it ranked on.

@@ -298,8 +298,6 @@
               <dd>Orchestrator-driven: chains <code>usaspending.gov</code> → SEC EDGAR → yfinance to assemble the DoD Top-25 + curated seed. Rebuilt weekly.</dd>
               <dt>aggregated-scores-best / -worst</dt>
               <dd>Cross-universe ranking by the <strong>qte77 Score</strong> (<code>screener_score</code>) — the same score shown in the Score column and detail panel on every universe. Top 25 + bottom 25 of the merged ticker pool, using today's fundamentals only — the same per-ticker records and score as their source universe's own snapshot for the same date (ADR-0014), never a second independent fetch. This is also "Today's picks" at the top of the page; <strong>Series A</strong>'s chart/metrics in the backtest section reuse this exact ranking construction historically, at each genuine snapshot date. <strong>Series B</strong> (the reconstructed backfill) ranks <strong>all base universes</strong> independently, with its own reduced point-in-time score (<code>score_bt</code>) — see the "Why these charts?" tab.</dd>
-              <dt>enhanced-kpi-screener-longs / -shorts</dt>
-              <dd>Conjunctive gate over 15 long-side / 14 short-side criteria (Phases 2a+2b of #192). A ticker is in <code>longs</code> iff it passes <em>every</em> long-side gate (market cap ≥ 2B, P/E ≤ 25, PEG &lt; 1, growth &gt; 10%, beta &gt; 1, ROE / ROA / ROI &gt; 10%, current / quick &gt; 1, FCF margin &gt; 10%, profit margin &gt; 10%, buy rating, R&amp;D &gt; 5%) and in <code>shorts</code> iff it passes the inverted set (no R&amp;D gate on the short side). Counts vary — can legitimately be 0 each side when the source data is too benign or too sparse.</dd>
             </dl>
           </details>
           <select

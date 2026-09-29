@@ -194,11 +194,11 @@ export function totalCompositeScore(rows) {
 }
 
 /**
- * Empty-state message for the table body. Orchestrator-driven universes
- * (aggregator / longshort) can legitimately produce zero rows when the
- * ranking / conjunctive-gate returns an empty set — distinguish that
- * from a static universe whose cron hasn't run yet so the message reads
- * as a design outcome rather than an infrastructure bug.
+ * Empty-state message for the table body. The orchestrator-driven
+ * aggregated lists can legitimately produce zero rows when the ranking
+ * returns an empty set — distinguish that from a static universe whose
+ * cron hasn't run yet so the message reads as a design outcome rather than
+ * an infrastructure bug.
  *
  * @param {string} filterQuery
  * @param {string} activeUniverse
@@ -206,9 +206,6 @@ export function totalCompositeScore(rows) {
  */
 export function emptyTableMessage(filterQuery, activeUniverse) {
   if (filterQuery) return `no matches for "${filterQuery}"`;
-  if (activeUniverse.startsWith("enhanced-kpi-screener-")) {
-    return "0 candidates — the conjunctive 14-criteria gate matched no tickers in this snapshot.";
-  }
   if (activeUniverse.startsWith("aggregated-scores-")) {
     return "0 eligible tickers — the aggregator's freshness gate excluded every candidate this run, or none had a qte77 Score.";
   }
