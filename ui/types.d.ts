@@ -56,6 +56,7 @@ interface AuditRow {
 interface Row {
   symbol?: string;
   long_name?: string | null;
+  short_name?: string | null;
   sector?: string | null;
   industry?: string | null;
   exchange?: string | null;

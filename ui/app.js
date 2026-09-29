@@ -217,15 +217,12 @@ const loadUniverseManifest = (/** @type {string} */ universe) =>
 /** @type {(rows: Row[]) => Array<{ticker: string, score: number, name?: string}>} */
 const toRankRows = (rows) =>
   rows
-    .map((r) => ({
-      ticker: /** @type {string} */ (r.symbol),
-      score: r.composite_scores?.screener_score ?? null,
-      name: /** @type {string | undefined} */ (r.short_name ?? r.long_name ?? undefined),
-    }))
-    .filter(
-      /** @type {(r: {ticker: string, score: number | null, name?: string}) => r is {ticker: string, score: number, name?: string}} */
-      (r) => r.score !== null,
-    )
+    .flatMap((r) => {
+      const score = r.composite_scores?.screener_score;
+      if (score == null) return [];
+      const name = r.short_name ?? r.long_name ?? undefined;
+      return [{ ticker: /** @type {string} */ (r.symbol), score, name }];
+    })
     .sort((a, b) => b.score - a.score);
 
 /**
