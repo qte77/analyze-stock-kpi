@@ -16,18 +16,21 @@
   seven 0–100 composite "qte77 Score" proxies — persisted to `results/fundamentals/<UTC>.json`.
 - A daily **CNN Fear & Greed** sentiment snapshot (headline + subindicators) at
   `results/series/cnn_fg/YYYY.json`, refreshed by a GitHub Actions cron.
-- 11 bundled **universes** — watchlists, regional lists, screener long/short, aggregated
-  best/worst — driven by an inline list, a file, or a preset.
+- 9 bundled **universes** — watchlists, regional lists, aggregated best/worst — driven by an
+  inline list, a file, or a preset.
 - A 13-column **rich CLI table** (P/E, PEG, Beta, ROE/ROA, Current, Sortino, Score, …)
   with an optional composite-score breakdown.
 - A static **[live dashboard](https://qte77.github.io/analyze-stock-kpi/)** (deployed to
-  GitHub Pages): tabbed F&G panel + sortable universe table + row-click KPI detail +
-  a hypothetical, point-in-time backtested long/short **25/25 book**. It shows two series:
-  **genuine decisions** made from the actual daily snapshots since 2026-05-31 (the headline),
-  and a **reconstructed backfill** since 2023 (an approximation). Both are equal-weight, shown
-  gross and net of a 10 bp turnover cost, across six rebalance cadences (monthly primary,
-  through yearly), with a rebalance log of when, why, and which long and short names changed
-  (see [ADR-0013](docs/decisions/0013-point-in-time-backtest.md)).
+  GitHub Pages). It opens on **Today's picks**, the best and worst 25 stocks by qte77 Score,
+  under a collapsible **Market mood** bar (CNN F&G, long-term context, 5s10s). Below it, a
+  hypothetical, point-in-time backtested long/short **25/25 book**: a chart with SPY's total
+  return as a reference line and one plain sentence on how it has done. Everything else is
+  behind **How it's tested**: the metrics, the rebalance log (when, why, and which names
+  changed), the caveats, and a second, **reconstructed backfill** series since 2023 (an
+  approximation, never mixed with the headline series of genuine decisions since 2026-05-31).
+  Both are equal-weight, shown gross and net of a 10 bp turnover cost, across six rebalance
+  cadences (see [ADR-0013](docs/decisions/0013-point-in-time-backtest.md)). A sortable table
+  of every universe with row-click KPI detail sits at the bottom.
 - **No API keys, no scraping** — keyless public sources only.
 
 <details>
@@ -45,6 +48,7 @@ make run UNIVERSE=qte77-watchlist           # fundamentals -> results/fundamenta
 make run TICKERS=AAPL,MSFT                  # ad-hoc tickers (SHOW_SCORES=1 appends score columns)
 make help                                   # list available recipes
 make validate                               # lint + types + complexity + md + tests
+make preview                                # dashboard at http://localhost:8000/analyze-stock-kpi/ (PORT=8000)
 ```
 
 CLI args double as env vars with the `SSK_` prefix (e.g. `SSK_TICKERS=AAPL,MSFT`).
@@ -67,7 +71,9 @@ while it has its default value, and clearing a filter in the UI removes it from 
 | `filter` | ticker/name text filter | none |
 | `sector` | sector name (from the donut) | none |
 | `view` | `simple` or `detailed` | `simple` |
-| `ltFgWindow` / `ycWindow` | `1y`, `5y`, `10y`, `all` | `all` |
+| `ltFgWindow` / `ycWindow` | `1y`, `5y`, `10y`, `all` (a non-default value opens the Market mood panel on its long-term tab) | `all` |
+| `theme` | `light`, `dark`, `system` | the last choice (stored in the browser), else `system` |
+| `base` | data origin URL, e.g. a fork's `raw.githubusercontent.com/<owner>/<repo>/data` | this deployment's own `data` branch |
 
 See [`docs/architecture.md`](docs/architecture.md) for the module map, the persisted
 `FundamentalsSnapshot` fields, the composite-score formulas, and the universe presets.

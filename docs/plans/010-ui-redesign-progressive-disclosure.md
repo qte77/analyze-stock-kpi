@@ -6,9 +6,11 @@ over the redesign row of [plan 009](009-backtest-carry-over.md).
 
 ## Status and handoff (read first)
 
-- **Shipped:** nothing yet. This plan, the UX review (2026-09-25) and the source map below.
-- **Next, in order:** the remaining-work table, top to bottom. Slice 0 (the e2e script) comes first
-  because every later slice uses it as its done-when.
+- **Shipped (2026-09-28/29):** slice 0 e2e script (#451), 1 Market mood panel (#453), 2 Today's
+  picks (#456), 3 "How it's tested" + SPY line (#459). Each later slice adds its checks to
+  `scripts/e2e_ui.py`'s `check_page`.
+- **Next, in order:** the remaining-work table, top to bottom: slice 4 ("Browse all stocks" +
+  the quick search D2 + the phone header wrap), then 5 (#426), 6, 7.
 - **Loop:** a new branch per slice → RED test where a pure `ui/lib/*` module changes (rendering and
   wiring are covered by the e2e) → `make validate` → the e2e on phone and desktop against
   `make preview` → changelog fragment → strike the row here → PR → admin squash-merge on green →
