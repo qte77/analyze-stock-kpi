@@ -52,30 +52,24 @@ jobs:
       # (D17) needs the existing rows/lists on disk so it can detect the last-stored date and
       # skip re-writing anything frozen. `main()` deletes obsolete files locally itself (the
       # one-time method_version rebuild); the "changed files" step below picks up both writes
-      # and deletions.
+      # and deletions. No first-run fallback: every path exists on `data`, and a failed
+      # checkout must stop the run rather than let it recompute and overwrite frozen history.
       - name: Fetch existing backfill/backtest artifacts from data branch
         run: |
           set -euo pipefail
           git fetch origin data --depth=1
           rm -rf results/series/backtest results/backtest results/series/backtest_genuine results/backtest_genuine
-          git checkout origin/data -- results/series/backtest/ || \
-            echo "no existing results/series/backtest/ on data — first run"
-          git checkout origin/data -- results/backtest/ || \
-            echo "no existing results/backtest/ on data — first run"
-          git checkout origin/data -- results/series/backtest_genuine/ || \
-            echo "no existing results/series/backtest_genuine/ on data — first run (series A)"
-          git checkout origin/data -- results/backtest_genuine/ || \
-            echo "no existing results/backtest_genuine/ on data — first run (series A)"
+          git checkout origin/data -- results/series/backtest/ results/backtest/ \
+            results/series/backtest_genuine/ results/backtest_genuine/
 
       # Pull the genuine per-universe demo snapshots — read-only input for the D11 fidelity
-      # check, series A's rank dates and series B's country-based filing lag (#419; without
-      # them every ticker falls back to the suffix rule). Never part of the commit filter
-      # below, never written back.
+      # check, series A's rank dates and series B's country-based filing lag (#419). Required:
+      # without them a method_version rebuild would run on the suffix-rule fallback only and
+      # never be redone. Never part of the commit filter below, never written back.
       - name: Fetch genuine demo snapshots from data branch (fidelity, series A, filing-lag input)
         run: |
           set -euo pipefail
-          git checkout origin/data -- results/demo/ || \
-            echo "no existing results/demo/ on data — fidelity will be empty this run"
+          git checkout origin/data -- results/demo/
 
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7  # v10.2.0
         with:
