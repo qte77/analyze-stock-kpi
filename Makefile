@@ -1,5 +1,9 @@
 .SILENT:
 .ONESHELL:
+# With .ONESHELL each recipe runs as one shell script, so without -e only its LAST
+# command's exit status counted: `lint_js` swallowed tsc/ESLint failures and
+# `make validate` still passed. -e makes every recipe fail on its first error.
+.SHELLFLAGS := -ec
 .PHONY: \
 	setup_uv setup_dev setup_lychee setup_npm_tools \
 	lint autofix autofix_js check_types check_complexity lint_md lint_js lint_links \
