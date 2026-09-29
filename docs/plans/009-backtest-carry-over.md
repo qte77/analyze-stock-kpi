@@ -28,20 +28,21 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
 - **Shipped after v1.4.0** (2026-09-25): #435 (`country` on snapshots, #419 step 1), #437
   (bump syncs `uv.lock`), #438 (complexipy unpinned + baseline), #441 (`make preview` via Vite,
   #415), #442 (plan 010), #443/#444 (`llms.txt`, #416), #445 (touch scroll hint, #417), #440 (SBOM).
+- **Rebuilds verified** (2026-09-29): a manually dispatched `portfolio` run (36616450294,
+  23.5 min, data commit `7b3c947`) logged both one-time rebuilds (B → 3, A → 2). Checks passed:
+  - both summaries are at the new versions with the new caveats, and B's `start` is unchanged
+    (2023-05-05);
+  - no duplicate or backwards trade dates in any trade log of either series, and every trade is
+    after its rank date;
+  - series A's weekly cadence is one rebalance per ISO week (05-31 … 07-12, 09-27);
+  - file counts on `data` are unchanged.
+
+  Effect on B's monthly net: 8.52 % → 7.97 % a year, t-stat 0.92 → 0.88, null percentile
+  97.7 → 98.1.
 - **What's next, in order:**
-  1. #419: the code shipped in #436 (merged 2026-09-28, after the 09-27 snapshots had `country`
-     for 347 of 352 base tickers). **Verify the one-time series B rebuild after the Sat
-     2026-10-03 12:00 UTC `portfolio` run:** the run log shows "method_version bump (-> 3)",
-     `results/backtest/summary.json` on `data` has `method_version` "3" and the new caveat text,
-     and B's `start` date is plausible (compare it with the previous summary). Then close #419.
-     **The same run rebuilds series A once** (`method_version` 2, #446): check
-     "method_version bump (-> 2): full one-time rebuild of series A" in the log,
-     `results/backtest_genuine/summary.json` at version "2", and every
-     `results/backtest_genuine/trades/<cadence>/2026.json` with at most one entry per ISO week and
-     no duplicate `trade_date` in any trade log of either series.
-  2. The UI redesign (approved), incl. #426 and #446's presentation items:
+  1. The UI redesign (approved), incl. #426 and #446's presentation items:
      [plan 010](010-ui-redesign-progressive-disclosure.md).
-  3. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
+  2. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
 - **Offloading to the cloud (optional):** `claude --cloud` needs an interactive TTY, so it fails
   from an agent's Bash. Use a one-time routine instead (`/schedule` → `RemoteTrigger`, environment
   "Default"). Good candidates are #416, #415 and #417, which need no Yahoo/SEC network and no
@@ -83,7 +84,7 @@ wireframe, the UX review, the defaults and the slices.
 
 | Item | Gate | Done-when |
 |---|---|---|
-| Country-based filing lag [#419](https://github.com/qte77/analyze-stock-kpi/issues/419). Code shipped: `FundamentalsSnapshot.country` (PR #435); the lag rule + `_METHOD_VERSION_B` 3 (PR #436, merged after the 09-27 snapshots carried `country`). Open: the rebuild check | data (the Sat 2026-10-03 cron) | one rebuild verified on `data` (see "What's next" 1) |
+| ~~Country-based filing lag [#419](https://github.com/qte77/analyze-stock-kpi/issues/419)~~ | data | shipped: PRs #435, #436. Rebuild verified 2026-09-29 (run 36616450294, data commit `7b3c947`; see "Rebuilds verified") |
 | ~~Dependabot python-deps [#411](https://github.com/qte77/analyze-stock-kpi/pull/411)~~ | agent | shipped 2026-09-25, PR #431: applied 7 of 8 bumps; `complexipy` pinned to 5.5.0 (its 6.x/7.x/8.x scorer flags unchanged functions — see PR #431) |
 | ~~Dependabot `setup-uv` [#412](https://github.com/qte77/analyze-stock-kpi/pull/412)~~ | agent | shipped 2026-09-25: its CI was green (the allow-list accepts the new SHA); merged, and `validate` passes on `main` |
 | ~~`bump-my-version.yaml` doesn't sync the project's own version in `uv.lock`~~ | agent | shipped 2026-09-25, PR #437: a multiline `[[tool.bumpversion.files]]` entry for `uv.lock` in `pyproject.toml`; a `--dry-run` shows it bumped (confirm on the next real bump) |
