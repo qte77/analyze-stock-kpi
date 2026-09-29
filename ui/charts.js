@@ -962,9 +962,39 @@ export function bindBacktestModeToggle(kind) {
   });
 }
 
+/** @typedef {{ticker: string, score: number, name?: string}} RankRow */
+
+/**
+ * @param {RankRow[]} rows
+ * @param {number} [start] 1-based number of the first row (an `<ol start>`)
+ * @returns {HTMLOListElement}
+ */
+function buildRankOl(rows, start = 1) {
+  const ol = document.createElement("ol");
+  ol.start = start;
+  for (const row of rows) {
+    const li = document.createElement("li");
+    const ticker = document.createElement("span");
+    ticker.textContent = row.ticker;
+    li.append(ticker);
+    if (row.name) {
+      const name = document.createElement("span");
+      name.className = "rank-name";
+      name.textContent = row.name;
+      li.append(name);
+    }
+    const score = document.createElement("span");
+    score.className = "num";
+    score.textContent = fmtNum(row.score, 1);
+    li.append(score);
+    ol.append(li);
+  }
+  return ol;
+}
+
 /**
  * @param {string} title
- * @param {Array<{ticker: string, score: number}>} rows
+ * @param {RankRow[]} rows
  * @returns {HTMLDivElement}
  */
 function buildRankList(title, rows) {
@@ -972,32 +1002,67 @@ function buildRankList(title, rows) {
   wrap.className = "backtest-rank-list";
   const h = document.createElement("h3");
   h.textContent = title;
-  wrap.append(h);
-  const ol = document.createElement("ol");
-  for (const row of rows) {
-    const li = document.createElement("li");
-    const ticker = document.createElement("span");
-    ticker.textContent = row.ticker;
-    const score = document.createElement("span");
-    score.className = "num";
-    score.textContent = fmtNum(row.score, 1);
-    li.append(ticker, score);
-    ol.append(li);
+  wrap.append(h, buildRankOl(rows));
+  return wrap;
+}
+
+/** Plan 010 slice 2: rows shown per list before "Show all 25" (default, owner may override). */
+const PICKS_VISIBLE = 10;
+
+/**
+ * @param {string} title
+ * @param {RankRow[]} rows
+ * @returns {HTMLDivElement}
+ */
+function buildPicksList(title, rows) {
+  const wrap = document.createElement("div");
+  wrap.className = "backtest-rank-list picks-list";
+  const h = document.createElement("h3");
+  h.textContent = title;
+  wrap.append(h, buildRankOl(rows.slice(0, PICKS_VISIBLE)));
+  if (rows.length > PICKS_VISIBLE) {
+    const more = document.createElement("details");
+    const summary = document.createElement("summary");
+    summary.textContent = `Show all ${rows.length}`;
+    more.append(summary, buildRankOl(rows.slice(PICKS_VISIBLE), PICKS_VISIBLE + 1));
+    wrap.append(more);
   }
-  wrap.append(ol);
   return wrap;
 }
 
 /**
- * Render one series' best/worst 25 collapsible. Series A ("a") is the
- * "Current candidates" panel: the SAME `aggregated-scores-best` /
- * `aggregated-scores-worst` demo snapshots the universe picker can show
- * (`app.js`'s `loadCurrentAggregatedCandidates`, #408/ADR-0014) — live,
- * always-current, full qte77 Score. Series B ("b") is the historical
- * "Latest best/worst 25" from the most recent `results/backtest/lists/
- * YYYY.json` entry (score_bt, unchanged from #403/#404). A missing/empty
- * `entry` (before this panel's data exists yet) renders the empty hint and
- * never throws, for either series.
+ * Plan 010 slice 2: "Today's picks", the live aggregated best/worst 25
+ * (`app.js`'s `loadCurrentAggregatedCandidates`, ADR-0014: the identical qte77
+ * Score as their source universe). Best comes first in the DOM, so it stacks
+ * above Worst on narrow screens (D3). A missing `entry` shows the empty hint.
+ *
+ * @param {{date: string, eligible: number, best: RankRow[], worst: RankRow[]} | null} entry
+ */
+export function renderTodaysPicks(entry) {
+  const heading = document.getElementById("picks-heading");
+  const body = document.getElementById("picks-body");
+  if (!body) return;
+  body.replaceChildren();
+  if (!entry) {
+    const hint = document.createElement("p");
+    hint.className = "backtest-lists-empty";
+    hint.textContent = BACKTEST_EMPTY;
+    body.append(hint);
+    return;
+  }
+  if (heading) heading.textContent = `Today's picks · ${entry.date}`;
+  body.append(
+    buildPicksList("Best 25 · qte77 Score", entry.best ?? []),
+    buildPicksList("Worst 25 · qte77 Score", entry.worst ?? []),
+  );
+}
+
+/**
+ * Render one series' best/worst 25 collapsible. Only series B ("b") uses it
+ * now: the historical "Latest best/worst 25" from the most recent
+ * `results/backtest/lists/YYYY.json` entry (score_bt, #403/#404). Series A's
+ * live lists moved to "Today's picks" (`renderTodaysPicks`, plan 010 slice 2).
+ * A missing/empty `entry` renders the empty hint and never throws.
  *
  * @param {BacktestKind} kind
  * @param {{date: string, eligible: number, best: Array<{ticker: string, score: number}>, worst: Array<{ticker: string, score: number}>} | null} entry
