@@ -155,6 +155,74 @@ export function keyFacts(summary) {
 }
 
 /**
+ * Plan 010 slice 3 (#446): SPY as a reference line on a backtest chart.
+ * Aligns `results/series/equity_spy` entries (`ret_indexed`, a total-return
+ * index) to the chart's `dates`: each date takes the latest SPY value on or
+ * before it (carried over days SPY didn't trade, e.g. a non-US holiday),
+ * rebased to 100 on the first covered date; `null` before SPY data starts.
+ *
+ * @param {string[]} dates  ascending.
+ * @param {Array<{date: string, ret_indexed: number}>} spyEntries  ascending.
+ * @returns {Array<number | null>}
+ */
+export function spyIndexOn(dates, spyEntries) {
+  const out = [];
+  let i = -1;
+  let base = null;
+  for (const d of dates) {
+    while (i + 1 < spyEntries.length && spyEntries[i + 1].date <= d) i += 1;
+    const level = i >= 0 ? spyEntries[i].ret_indexed : null;
+    if (level === null) {
+      out.push(null);
+      continue;
+    }
+    base ??= level;
+    out.push((level / base) * 100);
+  }
+  return out;
+}
+
+/** @param {number} v a fraction, e.g. 0.071 → "+7.1 %" */
+const signedPct = (v) => `${v >= 0 ? "+" : ""}${(v * 100).toFixed(1)} %`;
+
+/** Two-sided 90 % normal critical value, as the backend's D9 CI uses. */
+const T_90 = 1.645;
+
+/**
+ * Plan 010 slice 3 (#446): layer 1's one sentence under a series' chart.
+ * Uses the primary cadence's annualized net return and says plainly whether
+ * it is statistically significant; before 12 months of returns (metrics
+ * `null`, D9) it gives the cumulative net return since the start instead of
+ * dashes. Empty when there is no summary or data yet.
+ *
+ * @param {BacktestSummary | null | undefined} summary
+ * @param {BacktestReturnRow[]} primaryRows  the primary cadence's daily rows.
+ * @returns {string}
+ */
+export function headlineLine(summary, primaryRows) {
+  const cadence = summary?.primary ? summary.cadences?.[summary.primary] : undefined;
+  if (!summary?.start || !cadence) return "";
+  const lead = "Long best 25 / short worst 25:";
+  const tail = `since ${summary.start}, ${cadence.rebalances} rebalances`;
+  const disclaimer = "Hypothetical, not investment advice.";
+  const { ann_return: ann, t_stat: t } = cadence.net ?? {};
+  if (typeof ann === "number") {
+    const sig =
+      typeof t === "number" && Math.abs(t) >= T_90
+        ? "statistically significant at 90 %"
+        : "not statistically significant";
+    return `${lead} ${signedPct(ann)} a year after costs ${tail}; ${sig}. ${disclaimer}`;
+  }
+  const { index } = compound(primaryRows, "ret_ls_net");
+  if (index.length === 0) return "";
+  const cumulative = index[index.length - 1] / 100 - 1;
+  return (
+    `${lead} ${signedPct(cumulative)} after costs ${tail}; ` +
+    `too short to annualize (needs 12 months of returns). ${disclaimer}`
+  );
+}
+
+/**
  * Compose a two-series section heading/label with its start date once known
  * (D16/D18: Series A's genuine-snapshot start, Series B's post-start-trim
  * start), else the plain `base` text — never a dangling "since null"/"since

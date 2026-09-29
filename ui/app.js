@@ -780,13 +780,19 @@ async function init() {
   // reconstructed backfill, collapsible) render independently — never
   // spliced onto one chart/axis (D15). Series A's live best/worst lists are
   // "Today's picks" (rendered above, ADR-0014), not results/backtest_genuine/lists.
+  // Plan 010 slice 3 (#446): SPY's total return as a reference line on both charts.
   renderBacktestChart(
     "a",
     backtestASeriesByCadence,
     backtestASummary?.primary,
     backtestATrades.map((t) => t.trade_date),
+    spyEntries,
   );
-  renderBacktestSummary("a", backtestASummary);
+  renderBacktestSummary(
+    "a",
+    backtestASummary,
+    backtestASeriesByCadence[backtestASummary?.primary ?? ""] ?? [],
+  );
   renderBacktestTrades("a", backtestATrades);
   bindBacktestModeToggle("a");
   renderBacktestChart(
@@ -794,8 +800,13 @@ async function init() {
     backtestBSeriesByCadence,
     backtestBSummary?.primary,
     backtestBTrades.map((t) => t.trade_date),
+    spyEntries,
   );
-  renderBacktestSummary("b", backtestBSummary);
+  renderBacktestSummary(
+    "b",
+    backtestBSummary,
+    backtestBSeriesByCadence[backtestBSummary?.primary ?? ""] ?? [],
+  );
   renderBacktestLists(
     "b",
     backtestBLists.length ? backtestBLists[backtestBLists.length - 1] : null,

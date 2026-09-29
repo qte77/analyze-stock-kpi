@@ -1135,6 +1135,43 @@ body.overlay-active td.universe-col {
   color: var(--text-muted);
 }
 
+/* Plan 010 slice 3: the one sentence under each chart, and "How it's tested". */
+.backtest-oneline {
+  margin: 0.75rem 0 0;
+  font-size: 0.9375rem;
+}
+
+#backtest-details {
+  margin: 1rem 0 0;
+}
+
+#backtest-details > summary,
+.backtest-more-metrics > summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  padding: 0.15rem 0;
+}
+
+#backtest-details > summary:hover,
+.backtest-more-metrics > summary:hover {
+  color: var(--primary);
+}
+
+#backtest-details[open] > summary {
+  margin-bottom: 0.75rem;
+}
+
+.backtest-more-metrics {
+  margin: 0.75rem 0 0;
+}
+
+.backtest-metrics-pending {
+  color: var(--text-muted);
+  font-style: italic;
+  white-space: normal;
+}
+
 #backtest-b-lists,
 #backtest-a-trades,
 #backtest-b-trades {

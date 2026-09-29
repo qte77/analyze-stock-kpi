@@ -171,6 +171,12 @@
           aria-label="Series A — genuine decisions: primary cadence net (bold) and gross (dashed) index, plus foil cadences"
         ></canvas>
       </div>
+      <p id="backtest-a-oneline" class="backtest-oneline"></p>
+
+      <!-- Plan 010 slice 3: how the numbers are made, one click away (D5: series B
+           stays in its own block, never on series A's chart or headline). -->
+      <details id="backtest-details">
+      <summary>How it's tested</summary>
       <div
         id="backtest-a-mode-toggle"
         class="window-chips"
@@ -181,26 +187,18 @@
         <button type="button" data-mode="gross" aria-pressed="false">Gross</button>
       </div>
       <div id="backtest-a-metrics-wrap" class="table-wrap">
-        <table id="backtest-a-metrics-table">
-          <thead>
-            <tr>
-              <th>Cadence</th>
-              <th class="num">Ann. return</th>
-              <th class="num">Ann. vol</th>
-              <th class="num">Max drawdown</th>
-              <th class="num">Ann. turnover</th>
-              <th class="num">Long leg</th>
-              <th class="num">Short leg</th>
-              <th class="num">Beta (SPY)</th>
-              <th class="num">Hit rate</th>
-              <th class="num">Mean monthly (90% CI)</th>
-              <th class="num">t-stat</th>
-              <th class="num">Rebalances</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <table id="backtest-a-metrics-table"></table>
       </div>
+      <details class="backtest-more-metrics">
+        <summary>More metrics</summary>
+        <div class="table-wrap">
+          <table id="backtest-a-metrics-detail-table"></table>
+        </div>
+        <p class="key-facts">
+          Long leg / Short leg: each basket's own annualized return. A positive short leg
+          means the shorted stocks went up, so the short side lost money.
+        </p>
+      </details>
       <p id="backtest-a-key-facts" class="key-facts"></p>
       <details id="backtest-a-trades">
         <summary>Rebalance log</summary>
@@ -215,7 +213,8 @@
         traded at the close of the first trading day strictly after the snapshot.
         Equal-weighted 1/25 per leg (gross 200&nbsp;%, net 0), marked daily from closing
         prices, costed at 10&nbsp;bp one-way turnover, published gross and net. The book is
-        held across a snapshot gap. Returns are in local currency; survivorship and a
+        held across a snapshot gap. Returns are total returns (dividends included) in local
+        currency; survivorship and a
         "today's index membership" size bias are disclosed in the caveats above. Extended
         forward every Saturday. "Today's picks" at the top is a <strong>separate,
         non-historical</strong> display: it shows the live <code>aggregated-scores-best</code>
@@ -238,6 +237,7 @@
               aria-label="Series B — reconstructed backfill: primary cadence net (bold) and gross (dashed) index, plus foil cadences"
             ></canvas>
           </div>
+          <p id="backtest-b-oneline" class="backtest-oneline"></p>
           <div
             id="backtest-b-mode-toggle"
             class="window-chips"
@@ -248,26 +248,18 @@
             <button type="button" data-mode="gross" aria-pressed="false">Gross</button>
           </div>
           <div id="backtest-b-metrics-wrap" class="table-wrap">
-            <table id="backtest-b-metrics-table">
-              <thead>
-                <tr>
-                  <th>Cadence</th>
-                  <th class="num">Ann. return</th>
-                  <th class="num">Ann. vol</th>
-                  <th class="num">Max drawdown</th>
-                  <th class="num">Ann. turnover</th>
-                  <th class="num">Long leg</th>
-                  <th class="num">Short leg</th>
-                  <th class="num">Beta (SPY)</th>
-                  <th class="num">Hit rate</th>
-                  <th class="num">Mean monthly (90% CI)</th>
-                  <th class="num">t-stat</th>
-                  <th class="num">Rebalances</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+            <table id="backtest-b-metrics-table"></table>
           </div>
+          <details class="backtest-more-metrics">
+            <summary>More metrics</summary>
+            <div class="table-wrap">
+              <table id="backtest-b-metrics-detail-table"></table>
+            </div>
+            <p class="key-facts">
+              Long leg / Short leg: each basket's own annualized return. A positive short leg
+              means the shorted stocks went up, so the short side lost money.
+            </p>
+          </details>
           <p id="backtest-b-key-facts" class="key-facts"></p>
           <details id="backtest-b-lists">
             <summary>Latest best/worst 25</summary>
@@ -284,11 +276,13 @@
             (<code>score_bt</code>, ADR-0013) computed only from what was knowable on each
             historical rank date. Equal-weighted 1/25 per leg (gross 200&nbsp;%, net 0), marked
             daily from closing prices, rebalanced on five cadences (monthly is primary), costed
-            at 10&nbsp;bp one-way turnover, published gross and net. Returns are in local
-            currency; survivorship and a "today's index membership" size bias are disclosed in
-            the caveats above. Extended forward every Saturday.
+            at 10&nbsp;bp one-way turnover, published gross and net. Returns are total returns
+            (dividends included) in local currency; survivorship and a "today's index
+            membership" size bias are disclosed in the caveats above. Extended forward every
+            Saturday.
           </p>
         </div>
+      </details>
       </details>
     </section>
 

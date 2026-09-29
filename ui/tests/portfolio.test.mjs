@@ -13,7 +13,77 @@ import {
   tradeLogRows,
   rebalanceMarkers,
   REBALANCE_REASON_LABELS,
+  spyIndexOn,
+  headlineLine,
 } from "../lib/portfolio.js";
+
+// Plan 010 slice 3 (#446): SPY as a reference line on the backtest chart.
+describe("spyIndexOn", () => {
+  const spy = [
+    { date: "2026-06-01", ret_indexed: 700 },
+    { date: "2026-06-02", ret_indexed: 707 },
+    { date: "2026-06-04", ret_indexed: 714 },
+  ];
+
+  it("rebases SPY to 100 on the chart's first date", () => {
+    expect(spyIndexOn(["2026-06-01", "2026-06-02"], spy)).toEqual([100, 101]);
+  });
+
+  it("carries the last value over days SPY didn't trade (e.g. a non-US holiday)", () => {
+    const out = spyIndexOn(["2026-06-01", "2026-06-03", "2026-06-04"], spy);
+    expect(out[1]).toBeCloseTo(101, 10);
+    expect(out[2]).toBeCloseTo(102, 10);
+  });
+
+  it("is null before SPY data starts and rebases on the first covered date", () => {
+    expect(spyIndexOn(["2026-05-29", "2026-06-02"], spy)).toEqual([null, 100]);
+  });
+
+  it("returns all nulls without SPY data", () => {
+    expect(spyIndexOn(["2026-06-01"], [])).toEqual([null]);
+  });
+});
+
+// Plan 010 slice 3 (#446): layer 1's one honest sentence under the chart.
+describe("headlineLine", () => {
+  const rows = [
+    { date: "2026-06-01", ret_ls_net: 0.05 },
+    { date: "2026-06-02", ret_ls_net: 0.02 },
+  ];
+  /** @param {object} net */
+  const summary = (net) => ({
+    start: "2026-05-31",
+    primary: "monthly",
+    cadences: { monthly: { rebalances: 4, net, gross: net } },
+  });
+
+  it("shows the return so far, not dashes, before 12 months of metrics", () => {
+    const text = headlineLine(summary({ ann_return: null, t_stat: null }), rows);
+    expect(text).toContain("+7.1 % after costs since 2026-05-31");
+    expect(text).toContain("4 rebalances");
+    expect(text).toContain("too short to annualize");
+    expect(text).not.toContain("–");
+  });
+
+  it("annualizes once metrics exist and says when it isn't significant", () => {
+    const text = headlineLine(summary({ ann_return: 0.0797, t_stat: 0.88 }), rows);
+    expect(text).toContain("+8.0 % a year after costs since 2026-05-31");
+    expect(text).toContain("not statistically significant");
+  });
+
+  it("drops the caveat when the t-stat clears the 90 % bar", () => {
+    const text = headlineLine(summary({ ann_return: 0.12, t_stat: 2.1 }), rows);
+    expect(text).toContain("statistically significant at 90 %");
+    expect(text).not.toContain("not statistically");
+  });
+
+  it("always ends with the hypothetical disclaimer and is empty without data", () => {
+    expect(headlineLine(summary({ ann_return: 0.1, t_stat: 1 }), rows)).toMatch(
+      /Hypothetical, not investment advice\.$/,
+    );
+    expect(headlineLine(null, [])).toBe("");
+  });
+});
 
 describe("compound", () => {
   it("returns empty arrays for an empty input list", () => {
