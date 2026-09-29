@@ -25,6 +25,10 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
     snapshots);
   - the live e2e passed on desktop, iPad and iPhone, both orientations, light and dark;
   - the URL-filter fix is confirmed live.
+- **Released: v1.5.0** (2026-09-29, tag on `f6425bf`, bump PR #463 synced `uv.lock` by itself,
+  confirming #437; SBOM refreshed in #464). Contents: the country filing lag (#436), the
+  rebalance-schedule fix (#452), plan 010 slices 0–3, the retired screener lists (#460), the
+  CI split (#455) and the fail-fast Makefile (#457).
 - **Shipped after v1.4.0** (2026-09-25): #435 (`country` on snapshots, #419 step 1), #437
   (bump syncs `uv.lock`), #438 (complexipy unpinned + baseline), #441 (`make preview` via Vite,
   #415), #442 (plan 010), #443/#444 (`llms.txt`, #416), #445 (touch scroll hint, #417), #440 (SBOM).
