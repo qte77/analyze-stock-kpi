@@ -189,7 +189,7 @@ _LIVE_SCORE_INPUT_FIELDS: tuple[str, ...] = (
 """D16: all 9 `screener_score` inputs series A ranks with (the full live qte77
 Score, as stored in the genuine snapshot — no inputs forced to `None`)."""
 
-_DERIVED_UNIVERSE_PREFIXES = ("aggregated-scores-", "enhanced-kpi-screener-", "crypto-")
+_DERIVED_UNIVERSE_PREFIXES = ("aggregated-scores-", "crypto-")
 
 _CAVEATS: tuple[str, ...] = (
     "Survivorship bias: the universe is each preset's CURRENT membership, not "

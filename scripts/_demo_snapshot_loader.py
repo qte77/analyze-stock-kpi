@@ -4,11 +4,10 @@ Used by the orchestrator-build scripts that consume the demo-snapshot
 files committed to the ``data`` branch:
 
 - ``scripts/build_aggregated_scores_best_and_worst.py``
-- ``scripts/build_enhanced_kpi_screener_longshort.py``
 
-Phase 2b's FCF orchestrator (issue #192) will become the 3rd consumer;
-rule-of-three extraction follows the same logic as
-``src/analyze_stock_kpi/orchestrators/_shared.py`` (PR #236).
+A second consumer, ``scripts/build_enhanced_kpi_screener_longshort.py``,
+was retired on 2026-09-29 (#413, ADR-0014 amendment). The helpers stay
+shared for any future orchestrator of the same shape.
 
 Leading-underscore module name signals "internal to scripts/"; scripts/
 is repo infrastructure per ADR-0007, not shipped in the wheel.
@@ -93,8 +92,7 @@ def _write_demo_snapshot(universe_id: str, snapshots: Sequence[FundamentalsSnaps
     """Write ``results/demo/<universe_id>/<UTC-date>.json`` + rebuilt ``index.json``.
 
     ``snapshots`` are the SAME per-ticker records the orchestrator ranked
-    or classified (see ``aggregated_scores_best_and_worst.ranked_snapshots`` /
-    ``enhanced_kpi_screener_longshort.ranked_snapshots``) -- never a second,
+    (see ``aggregated_scores_best_and_worst.ranked_snapshots``) -- never a second,
     independent yfinance fetch. This is what the dashboard actually reads
     for a derived universe, so it must carry the identical qte77 Score
     (``composite_scores.screener_score``) and KPI record as the source

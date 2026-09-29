@@ -6,7 +6,7 @@
 # (federal-contractors-refresh.yaml + aggregated-scores-best-and-worst-refresh.yaml).
 #
 # Triggers on demo-snapshot's completion (not its own cron) — the
-# aggregated-scores/enhanced-kpi-screener legs read results/demo/<u>/
+# aggregated-scores legs read results/demo/<u>/
 # from the `data` branch, so this must run strictly *after* demo-snapshot
 # writes that week's snapshots, never concurrently with or ahead of it.
 # A prior independent `schedule: "0 2 * * 0"` fired 4h15m *before*
@@ -18,8 +18,9 @@
 # -> fan out to all universes in parallel via matrix; with `universe` set
 # -> single-leg run (unaffected by the guard, always runs).
 #
-# Adding a new universe (e.g. #192 enhanced-kpi-screener-longshort) takes
-# three additions: one option line, one matrix-array entry, one case branch.
+# Adding a new universe takes three additions: one option line, one
+# matrix-array entry, one case branch. (The enhanced-kpi-screener legs were
+# retired 2026-09-29, #413: see ADR-0014's amendment.)
 # No new workflow file needed.
 
 name: universe-builder
@@ -40,8 +41,6 @@ on:
           - federal-contractors
           - aggregated-scores-best
           - aggregated-scores-worst
-          - enhanced-kpi-screener-longs
-          - enhanced-kpi-screener-shorts
 
 permissions:
   contents: write
@@ -73,7 +72,7 @@ jobs:
           if [[ -n "$INPUT_UNIVERSE" ]]; then
             echo "universes=[\"$INPUT_UNIVERSE\"]" >> "$GITHUB_OUTPUT"
           else
-            echo 'universes=["federal-contractors","aggregated-scores-best","aggregated-scores-worst","enhanced-kpi-screener-longs","enhanced-kpi-screener-shorts"]' >> "$GITHUB_OUTPUT"
+            echo 'universes=["federal-contractors","aggregated-scores-best","aggregated-scores-worst"]' >> "$GITHUB_OUTPUT"
           fi
 
   build:
@@ -117,18 +116,6 @@ jobs:
               echo "preset=src/analyze_stock_kpi/assets/universes/aggregated-scores-worst.txt" >> "$GITHUB_OUTPUT"
               echo "audit_dir=results/audit/aggregated_scores_best_and_worst" >> "$GITHUB_OUTPUT"
               echo "demo_dir=results/demo/aggregated-scores-worst"            >> "$GITHUB_OUTPUT"
-              echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
-            enhanced-kpi-screener-longs)
-              echo "script=scripts/build_enhanced_kpi_screener_longshort.py"  >> "$GITHUB_OUTPUT"
-              echo "preset=src/analyze_stock_kpi/assets/universes/enhanced-kpi-screener-longs.txt" >> "$GITHUB_OUTPUT"
-              echo "audit_dir=results/audit/enhanced_kpi_screener_longshort"  >> "$GITHUB_OUTPUT"
-              echo "demo_dir=results/demo/enhanced-kpi-screener-longs"        >> "$GITHUB_OUTPUT"
-              echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
-            enhanced-kpi-screener-shorts)
-              echo "script=scripts/build_enhanced_kpi_screener_longshort.py"  >> "$GITHUB_OUTPUT"
-              echo "preset=src/analyze_stock_kpi/assets/universes/enhanced-kpi-screener-shorts.txt" >> "$GITHUB_OUTPUT"
-              echo "audit_dir=results/audit/enhanced_kpi_screener_longshort"  >> "$GITHUB_OUTPUT"
-              echo "demo_dir=results/demo/enhanced-kpi-screener-shorts"       >> "$GITHUB_OUTPUT"
               echo "needs_data_branch=true"                                   >> "$GITHUB_OUTPUT" ;;
             *)
               echo "Unknown universe: $U" >&2

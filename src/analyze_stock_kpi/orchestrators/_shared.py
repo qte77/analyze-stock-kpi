@@ -2,11 +2,10 @@
 
 These started as duplicated private helpers inside
 ``aggregated_scores_best_and_worst`` (#184) and
-``enhanced_kpi_screener_longshort`` (#192 Phase 2a). The two
-copies stayed identical across the cycle; CodeFactor flagged the
-duplication, and a 3rd orchestrator consuming the same input shape is
-on the roadmap (Phase 2b's FCF-margin addition), so extracting now
-follows AHA (rule-of-three) rather than fighting it.
+``enhanced_kpi_screener_longshort`` (#192 Phase 2a), extracted once
+CodeFactor flagged the duplication. The latter was retired on
+2026-09-29 (#413, ADR-0014 amendment); ``aggregated_scores_best_and_worst``
+is now the only user.
 
 Leading-underscore module name signals "internal to the orchestrators
 package"; do not import from outside :mod:`analyze_stock_kpi.orchestrators`.

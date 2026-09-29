@@ -69,6 +69,18 @@ data!"* — today's candidates, wherever displayed, must never be a second, inde
    literally equal or subset `aggregated-scores-best/-worst`, that is a methodology change beyond this
    ADR's scope and needs its own decision.
 
+   *Amended 2026-09-29 (#413, owner decision): `enhanced-kpi-screener-longs/-shorts` is **retired**.*
+   The data showed the conjunctive gates select almost nothing: across all 14 snapshot dates from
+   2026-06-04 to 2026-09-27 the shorts list was **empty every time** (no ticker ever passed all 13
+   short gates at once) and the longs list held 0–3 tickers (2 on 09-27, neither in the best 25).
+   Option (c) of #413 ("gate within best/worst") would therefore have produced empty lists, and
+   option (a) would have duplicated the aggregated lists. The best/worst 25 by qte77 Score are the
+   one ranking. Removed: the orchestrator module, its build script, tests and presets, the two
+   `universe-builder.yaml` legs and the `ui/public/universes.json` entries. Their past
+   `results/demo/enhanced-kpi-screener-*` snapshots stay on the `data` branch untouched (it is never
+   rewritten) but are no longer written or listed. The backtest was unaffected: it already excluded
+   these derived presets from its base universes.
+
 ## Consequences
 
 - A ticker shows one, identical qte77 Score everywhere it appears for a given snapshot date: its home

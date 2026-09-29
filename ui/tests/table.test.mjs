@@ -95,11 +95,6 @@ describe("emptyTableMessage", () => {
   it("reports the active filter query first", () => {
     expect(emptyTableMessage("AAPL", "sp500")).toBe('no matches for "AAPL"');
   });
-  it("explains the enhanced-kpi-screener conjunctive gate", () => {
-    expect(emptyTableMessage("", "enhanced-kpi-screener-longs")).toContain(
-      "conjunctive 14-criteria gate",
-    );
-  });
   it("explains the aggregator freshness gate", () => {
     expect(emptyTableMessage("", "aggregated-scores-best")).toContain("freshness gate");
   });
