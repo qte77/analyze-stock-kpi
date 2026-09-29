@@ -76,7 +76,7 @@ wireframe, the UX review, the defaults and the slices.
 | Rebuild switch | `_METHOD_VERSION_B` in `longshort_backtest.py` |
 | Statement cache layout | `results/prices/statements/<TICKER>/<fetch-date>.json` (gitignored; earliest fetch wins) |
 | Cron | `.github/workflows/portfolio.yaml`; commit helper `scripts/data-branch-commit.cjs` |
-| Preview targets | `Makefile:130/135` |
+| Preview targets | `Makefile` `preview` / `preview_local` (Vite dev server, #441) |
 | `llms.txt` template | `.github/templates/llms.txt.tpl` |
 | Wide-table scroll container | `ui/style.css` `.table-wrap` |
 
@@ -95,5 +95,9 @@ wireframe, the UX review, the defaults and the slices.
 | ~~Scroll hint on touch devices [#417](https://github.com/qte77/analyze-stock-kpi/issues/417)~~ | agent | shipped 2026-09-25: `ui/scroll_hint.js` sets `.overflow-right` while columns are hidden to the right; `style.css` masks the edge under `(pointer: coarse)`. e2e: on for phone (both views) and tablet (Detailed), off when the table fits, off at the scroll end |
 | ~~`llms.txt` template up to date [#416](https://github.com/qte77/analyze-stock-kpi/issues/416)~~ | agent | shipped 2026-09-25, PR #443: the template lists ADRs 0000-0014 and every module; `tests/test_llms_txt_template.py` fails on a missing one. The `llms-txt` workflow regenerates `ui/public/llms.txt` on merge |
 | ~~Backtest audit [#446](https://github.com/qte77/analyze-stock-kpi/issues/446): verification + rebalance-schedule fix~~ | agent | shipped 2026-09-28 (fix/backtest-rebalance-schedule): findings on #446 (metrics, allocation and prices verified; three schedule bugs fixed; series A `method_version` 2 with a new rebuild switch; total-return caveat). The presentation items (SPY line, leg sign, which metrics, empty state) moved to plan 010 slice 3 |
+| ~~Screener long/short lists decision [#413](https://github.com/qte77/analyze-stock-kpi/issues/413)~~ | owner → agent | shipped 2026-09-29, PR #460: retired (shorts empty on every snapshot date, longs 0–3); ADR-0014 amendment |
 | Private cache repo [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) | owner → agent | two consecutive runs show the cache growing and B's start date stable |
+| LatAm (Brazil) universe [#312](https://github.com/qte77/analyze-stock-kpi/issues/312): its revisit trigger fired (yfinance 1.4.1 → 1.7.0 in `uv.lock`) | agent | re-probe the blocked symbols on 1.7.0; either ship the universe or record on #312 that it's still blocked (with the probe output) |
+| Lint MD startup_failure [#391](https://github.com/qte77/analyze-stock-kpi/issues/391): fails before any job starts on every run (57/57 since 09-25); blocks nothing | agent | root cause found and fixed, or the workflow replaced by the local `lint_md` + `lint_links` targets in `validate`/`ui` jobs |
+| Plan convention write-up [#294](https://github.com/qte77/analyze-stock-kpi/issues/294): about 80 % already practised (plans record issue headers, roadmap links plans, CONTRIBUTING references `docs/plans/`) | owner → agent | owner says yes/no; if yes, `docs/plans/README.md` states the convention and the issue closes |
 | US-only SEC-XBRL extension to ~2017 | owner (deferred) | only if the owner asks for a longer US series |

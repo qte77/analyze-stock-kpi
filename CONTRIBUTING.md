@@ -32,13 +32,15 @@ this file disagrees with `make help`, `make help` wins.
 - **Browser e2e for UI changes.** `scripts/e2e_ui.py` renders the page
   in headless Chromium (phone portrait + landscape, desktop; light +
   dark), fails on unexpected console errors or failed requests, and
-  checks charts, the universe table and the F&G tabs. It runs from the
-  sibling `../polyfetch-scrape` checkout and is not part of CI:
-  `make preview`, then
+  checks charts, the universe table, the Market mood panel, Today's
+  picks, the backtest section and the deep links. Each run uses a fresh
+  browser. It runs from the sibling `../polyfetch-scrape` checkout and
+  is not part of CI: `make preview`, then
   `uv run --project ../polyfetch-scrape python scripts/e2e_ui.py`
   (add `--url https://qte77.github.io/analyze-stock-kpi/` after a deploy,
-  `--video` to record). Screenshots land in `e2e-ui/` under the system
-  temp dir (the script prints the path).
+  `--video` to record, `--out <dir>` for the screenshots, which default
+  to `e2e-ui/` under the system temp dir; the script prints the path).
+  A rare "Page crashed" in this Codespace is memory pressure: re-run.
 
 ## Commit + PR conventions
 
@@ -72,7 +74,7 @@ that used to hit every cross-cutting change.
 
 ```bash
 make changelog_new        # creates + stages changelog.d/<topic>.md
-                          # edit it: ### Added | ### Fixed | ### Security + one bullet
+                          # edit it: one ### category (see below) + one bullet
 make changelog_preview    # preview the assembled next-release entry (scriv print)
 ```
 
@@ -85,9 +87,9 @@ A fragment file looks like:
   sentence with motivation or non-obvious context.
 ```
 
-Only the three categories currently in use are configured (`Added`,
-`Fixed`, `Security`); extending to `Changed` / `Deprecated` /
-`Removed` is two characters in `pyproject.toml` when needed.
+All six Keep-a-Changelog categories are configured in `pyproject.toml`
+(`[tool.scriv] categories`): `Added`, `Changed`, `Deprecated`,
+`Removed`, `Fixed`, `Security`.
 
 ## Release flow
 
