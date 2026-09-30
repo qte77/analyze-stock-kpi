@@ -78,6 +78,7 @@ def check_page(page, name: str, out: Path) -> list[str]:
     if not panel.evaluate("d => d.open"):
         failures.append("clicking the market-mood summary did not open it")
 
+    failures += check_tab_keys(page, "#fg-tabs")
     tab = page.locator("#fg-tabs [role=tab]").nth(1)
     tab.click()
     if tab.get_attribute("aria-selected") != "true":
@@ -179,6 +180,34 @@ def check_browse(page) -> list[str]:
     return failures
 
 
+def check_tab_keys(page, tablist: str) -> list[str]:
+    """Plan 010 slice 7: ArrowRight/ArrowLeft (wrapping) and Home/End move focus and
+    selection along an ARIA tablist, show the selected tab's pane, and keep exactly
+    one tab in the Tab order (roving tabindex)."""
+    tabs = page.locator(f"{tablist} [role=tab]")
+    n = tabs.count()
+    if n < 2:
+        return [f"{tablist}: expected 2+ tabs, found {n}"]
+    tabs.nth(0).click()
+    failures: list[str] = []
+    for key, want in (("ArrowRight", 1), ("End", n - 1), ("Home", 0), ("ArrowLeft", n - 1)):
+        page.keyboard.press(key)
+        tab = tabs.nth(want)
+        state = tab.evaluate(
+            "t => [t === document.activeElement, t.getAttribute('aria-selected'),"
+            " !document.getElementById(t.getAttribute('aria-controls')).hidden,"
+            " [...t.parentElement.querySelectorAll('[role=tab]')]"
+            ".filter(x => x.tabIndex === 0).length]"
+        )
+        if state != [True, "true", True, 1]:
+            failures.append(
+                f"{tablist} {key}: tab {want} [focused, selected, pane shown,"
+                f" tabbable count] = {state}"
+            )
+    tabs.nth(0).click()
+    return failures
+
+
 KPI_GROUPS = ["Profitability", "Valuation", "Risk", "Momentum"]
 
 
@@ -197,6 +226,7 @@ def check_row_detail(page) -> list[str]:
     sections = panel.locator("dt.section").all_inner_texts()
     if sections[:4] != KPI_GROUPS:
         failures.append(f"detail panel groups are {sections}, expected {KPI_GROUPS} first")
+    failures += check_tab_keys(page, "#row-detail")
     page.keyboard.press("Escape")
     if panel.is_visible():
         failures.append("Escape did not close the detail panel")

@@ -46,6 +46,19 @@ function dl(pairs) {
   return frag;
 }
 
+/**
+ * Show or hide one tab's pane, with its `aria-selected` and roving tabindex.
+ *
+ * @param {HTMLButtonElement} tab
+ * @param {HTMLElement} pane
+ * @param {boolean} selected
+ */
+function selectTab(tab, pane, selected) {
+  tab.setAttribute("aria-selected", selected ? "true" : "false");
+  tab.tabIndex = selected ? 0 : -1;
+  pane.hidden = !selected;
+}
+
 function closeDetail() {
   const aside = document.getElementById("row-detail");
   if (aside) aside.hidden = true;
@@ -110,35 +123,41 @@ export function showDetail(row, ctx) {
   h3.textContent = `${row.symbol ?? "—"} · ${row.long_name ?? ""}`;
   aside.append(h3);
 
+  // Plan 010 slice 7: a real ARIA tablist, so the shared arrow-key handler
+  // (app.js bindTabArrowKeys) serves it like the market-mood tabs.
   const tabs = document.createElement("div");
   tabs.className = "detail-tabs";
+  tabs.setAttribute("role", "tablist");
+  tabs.setAttribute("aria-label", "Detail view");
   const overviewTab = document.createElement("button");
-  overviewTab.type = "button";
-  overviewTab.textContent = "Overview";
-  overviewTab.setAttribute("aria-selected", "true");
   const seriesTab = document.createElement("button");
-  seriesTab.type = "button";
-  seriesTab.textContent = "Time series";
-  seriesTab.setAttribute("aria-selected", "false");
-  tabs.append(overviewTab, seriesTab);
-  aside.append(tabs);
-
   const overviewPane = document.createElement("div");
   const seriesPane = document.createElement("div");
-  seriesPane.hidden = true;
-  aside.append(overviewPane, seriesPane);
+  for (const [tab, pane, name, selected] of /** @type {const} */ ([
+    [overviewTab, overviewPane, "overview", true],
+    [seriesTab, seriesPane, "series", false],
+  ])) {
+    tab.type = "button";
+    tab.id = `detail-tab-${name}`;
+    tab.setAttribute("role", "tab");
+    tab.setAttribute("aria-controls", `detail-pane-${name}`);
+    pane.id = `detail-pane-${name}`;
+    pane.setAttribute("role", "tabpanel");
+    pane.setAttribute("aria-labelledby", tab.id);
+    selectTab(tab, pane, selected);
+  }
+  overviewTab.textContent = "Overview";
+  seriesTab.textContent = "Time series";
+  tabs.append(overviewTab, seriesTab);
+  aside.append(tabs, overviewPane, seriesPane);
 
   overviewTab.addEventListener("click", () => {
-    overviewTab.setAttribute("aria-selected", "true");
-    seriesTab.setAttribute("aria-selected", "false");
-    overviewPane.hidden = false;
-    seriesPane.hidden = true;
+    selectTab(overviewTab, overviewPane, true);
+    selectTab(seriesTab, seriesPane, false);
   });
   seriesTab.addEventListener("click", () => {
-    overviewTab.setAttribute("aria-selected", "false");
-    seriesTab.setAttribute("aria-selected", "true");
-    overviewPane.hidden = true;
-    seriesPane.hidden = false;
+    selectTab(overviewTab, overviewPane, false);
+    selectTab(seriesTab, seriesPane, true);
     if (seriesPane.childElementCount === 0) {
       void ctx.renderTimeSeriesPane(seriesPane, row);
     }
