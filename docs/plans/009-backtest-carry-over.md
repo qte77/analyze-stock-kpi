@@ -25,6 +25,9 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
     snapshots);
   - the live e2e passed on desktop, iPad and iPhone, both orientations, light and dark;
   - the URL-filter fix is confirmed live.
+- **Released: v1.5.1** (2026-09-30, tag on `2cd6342`, bump PR #471, SBOM #472): stylelint in
+  the `ui` job (#466), the in-repo "Lint MD and Links" workflow fixing #391 (#467), the e2e
+  crash retry (#468), the single-use helper modules folded into their user (#469).
 - **Released: v1.5.0** (2026-09-29, tag on `f6425bf`, bump PR #463 synced `uv.lock` by itself,
   confirming #437; SBOM refreshed in #464). Contents: the country filing lag (#436), the
   rebalance-schedule fix (#452), plan 010 slices 0–3, the retired screener lists (#460), the
