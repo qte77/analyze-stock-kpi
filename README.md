@@ -30,7 +30,8 @@
   approximation, never mixed with the headline series of genuine decisions since 2026-05-31).
   Both are equal-weight, shown gross and net of a 10 bp turnover cost, across six rebalance
   cadences (see [ADR-0013](docs/decisions/0013-point-in-time-backtest.md)). A sortable table
-  of every universe with row-click KPI detail sits at the bottom.
+  of every universe with row-click KPI detail sits behind "Browse all stocks" (a quick search,
+  `/`, opens it filtered), followed by a Methodology section.
 - **No API keys, no scraping** — keyless public sources only.
 
 <details>
