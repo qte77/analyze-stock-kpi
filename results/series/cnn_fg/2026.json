@@ -8704,58 +8704,58 @@
     }
   },
   {
-    "score": 35.4,
+    "score": 30.8285714285714,
     "rating": "fear",
-    "timestamp": "2026-09-30T14:39:30Z",
+    "timestamp": "2026-09-30T21:20:46Z",
     "previous_close": 31.6285714285714,
     "previous_1_week": 32.5428571428571,
     "previous_1_month": 53.74285714285714,
     "previous_1_year": 51.40000000000001,
     "subindicators": {
       "market_momentum_sp500": {
-        "score": 34.2,
+        "score": 26.4,
         "rating": "fear",
-        "raw_value": 7706.46
+        "raw_value": 7651.54
       },
       "market_momentum_sp125": {
-        "score": 34.2,
+        "score": 26.4,
         "rating": "fear",
-        "raw_value": 7454.90744
+        "raw_value": 7454.46808
       },
       "stock_price_strength": {
         "score": 0.4,
         "rating": "extreme fear",
-        "raw_value": -7.363491658642821
+        "raw_value": -7.68236485816542
       },
       "stock_price_breadth": {
-        "score": 0.4,
+        "score": 0.0,
         "rating": "extreme fear",
-        "raw_value": 239.215522138597
+        "raw_value": 206.151748028677
       },
       "put_call_options": {
-        "score": 47.4,
-        "rating": "neutral",
-        "raw_value": 0.717944983160147
+        "score": 37.4,
+        "rating": "fear",
+        "raw_value": 0.745825115323661
       },
       "market_volatility_vix": {
         "score": 50.0,
         "rating": "neutral",
-        "raw_value": 15.79
+        "raw_value": 16.34
       },
       "market_volatility_vix_50": {
         "score": 50.0,
         "rating": "neutral",
-        "raw_value": 15.9114
+        "raw_value": 15.9224
       },
       "junk_bond_demand": {
-        "score": 63.4,
+        "score": 55.4,
         "rating": "greed",
-        "raw_value": 1.21592422696822
+        "raw_value": 1.22788820853433
       },
       "safe_haven_demand": {
-        "score": 52.8,
+        "score": 46.2,
         "rating": "neutral",
-        "raw_value": 3.3510339593814
+        "raw_value": 2.71631398604156
       }
     }
   }
