@@ -16,6 +16,20 @@ Types of changes:
 
 <!-- scriv-insert-here -->
 
+## [1.5.3] - 2026-09-30
+
+### Fixed
+
+- Link check: `claude.ai` pages are excluded, like the other sign-in-walled sites, because they
+  started answering the checker with 403.
+
+### Security
+
+- `urllib3` 2.7.0 → 2.8.0 (transitive, #479), fixing three advisories: HTTPS proxy TLS
+  configuration could be ignored or overridden (high), `HTTPResponse.stream()` /
+  `read_chunked()` could buffer an unbounded chunk-size line into memory (high), and chunked
+  deflate streaming could enter an infinite loop (moderate).
+
 ## [1.5.2] - 2026-09-30
 
 ### Fixed
