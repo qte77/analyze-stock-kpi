@@ -8,9 +8,9 @@ over the redesign row of [plan 009](009-backtest-carry-over.md).
 
 - **Shipped (2026-09-28/29):** slice 0 e2e script (#451), 1 Market mood panel (#453), 2 Today's
   picks (#456), 3 "How it's tested" + SPY line (#459); (2026-09-30) 4 "Browse all stocks" +
-  quick search + phone header. Each later slice adds its checks to `scripts/e2e_ui.py`'s
-  `check_page`.
-- **Next, in order:** the remaining-work table, top to bottom: slice 5 (#426), then 6, 7.
+  quick search + phone header (#487), 5 row detail in Simple view + 4 KPI groups (#426). Each
+  later slice adds its checks to `scripts/e2e_ui.py`'s `check_page`.
+- **Next, in order:** the remaining-work table, top to bottom: slice 6, then 7.
 - **Loop:** a new branch per slice → RED test where a pure `ui/lib/*` module changes (rendering and
   wiring are covered by the e2e) → `make validate` → the e2e on phone and desktop against
   `make preview` → changelog fragment → strike the row here → PR → admin squash-merge on green →
@@ -124,6 +124,27 @@ links.
   `aggregated-scores-best`/`-worst`. "Browse all stocks" keeps `qte77-watchlist` as its default
   picker value. An explicit `?universe=` is unchanged.
 
+### Notes for slices 6 and 7 (review 2026-09-30)
+
+How to do the two open slices; what is open lives only in the remaining-work table.
+
+- **Slice 6:** move the static blocks as verbatim DOM subtrees (`#why-wrap`'s `<dl>`,
+  `#universe-help`, the two static backtest disclaimers) into a plain `<section
+  id="methodology">` at the end of `<main>`, with `<h3 id="…">` anchors and a footer link, so
+  `git diff --color-moved` proves nothing was lost. Do not move `#backtest-*-caveats`: they
+  render at runtime from `summary.caveats`; link to them. Avoid wrapping the topics in
+  `<details>`: a closed `<details>` does not auto-open on hash navigation in Firefox/Safari.
+  Removing `#fg-tab-why` also means deleting its pair in `charts.js` `bindLongTermTabs`, or its
+  `if (!t || !p) return;` silently unwires every F&G tab. ADRs are plain text today; link them
+  on GitHub. e2e: every `a[href^="#"]` resolves to exactly one element.
+- **Slice 7:** give the panel's Overview/Time-series buttons the full ARIA tab roles first
+  (`role=tablist/tab/tabpanel`, `aria-controls`), then one delegated `keydown` helper for both
+  tablists that queries `[role=tab]` at event time (the panel rebuilds its tabs per row),
+  handles ArrowLeft/Right (wrapping) and Home/End, and calls `focus()` + `click()` so the
+  existing click handlers stay the single source (incl. lazy renders). Roving `tabindex`. e2e
+  only: the pure part is a few lines of index arithmetic, below the non-trivial-test bar.
+  Consider focusing `#close-detail` when the panel opens.
+
 ## Source map
 
 All paths under `ui/`. The page is built in `init()` (`app.js:682-788`).
@@ -159,7 +180,7 @@ All paths under `ui/`. The page is built in `init()` (`app.js:682-788`).
 | ~~2. Today's picks as the landing view (D3, D8)~~ | agent | shipped 2026-09-29: `#todays-picks` under the market-mood bar, fed by `loadCurrentAggregatedCandidates` (loads in parallel, renders first); ticker + short name + qte77 Score; 10 rows per list + native "Show all 25" (`<ol start=11>`); the backtest's "Current candidates" panel removed (merged here). e2e 7/7: picks above backtest and universe, 10 + 15 rows, Best stacked above Worst below 640 px and side by side above, `?universe=sp500` still drives the picker. D2 (quick search) moved to slice 4, because its submit opens "Browse all stocks" |
 | ~~3. Backtest behind "How it's tested" (D5, #446)~~ | agent | shipped 2026-09-29. Layer 1: series A's chart plus one sentence (`headlineLine`: annualized net return with an honest significance statement, or before 12 months the cumulative net return since the start). Behind `<details id="backtest-details">`: headline metrics (net/gross toggle), "More metrics" with the leg-sign note, key facts, rebalance log, caveats, disclaimer, and series B in its own block. SPY total return (rebased, `spyIndexOn`) as a dotted reference line on both charts, from the already-loaded `equity_spy` data. Before 12 months the table shows one explanatory row instead of dashes. Table headers are built from one column config. Unit tests for both helpers; e2e 7/7 (closed on load, metrics hidden until opened, sentence present, SPY dataset on chart A, no dash wall) |
 | ~~4. "Browse all stocks" + quick search (D1, D2, D6) + the phone header wrap~~ | agent | shipped 2026-09-30: `#universe-section`'s content is a native `<details id="browse-stocks">`; `hasBrowseState` (`ui/lib/state.js`, unit-tested, reuses `serializeState`'s default detection) opens it for any non-default table parameter, never for `ltFgWindow`/`ycWindow`. Quick search `#quick-search` beside the picks heading (`/` now focuses it) hands its query to `#universe-filter` and opens the section. Phone header 221 → 144 px (one-line title, icon-only issue link below 640 px). e2e: collapsed on load, table hidden, `/` + Enter opens it filtered (URL carries `filter=`), `?filter=`/`?sort=`/`?sector=` open it, `?ltFgWindow=` does not |
-| 5. #426: row detail works in Simple view, KPI rows in 4 groups, radar labels decided (D7) | agent | e2e: a row click in Simple view opens the panel on both viewports with 4 groups |
+| ~~5. #426: row detail works in Simple view, KPI rows in 4 groups, radar labels decided (D7)~~ | agent | shipped 2026-09-30: `#row-detail` is no longer `.detail-only`; `kpiGroups` (`ui/lib/detail_rows.js`, unit-tested against `screener_score`'s factor→input mapping) groups the KPIs as Profitability / Valuation / Risk / Momentum, each led by the Score's inputs. Radar decision: the human labels of the "Composite scores" list and no tick numbers (they crowded the top label at 390 px; the values are listed below). e2e: in Simple view a row click opens the panel with the 4 groups and Escape closes it, on every viewport |
 | 6. Methodology section (layer 3): "Why these charts?", "Why these universes?", backtest rules, caveats, ADR links | agent | links from layers 1/2 resolve; a text diff shows no content was lost |
 | 7. Arrow-key navigation for the ARIA tabs (`#fg-tabs`, the panel tabs) | agent | e2e: ArrowLeft/ArrowRight/Home/End move focus and selection |
 

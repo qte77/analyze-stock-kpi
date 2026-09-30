@@ -5,6 +5,7 @@
 
 import { logRightAxis, scoreYAxis, themedXAxis } from "./lib/chart_axes.js";
 import { buildCombinedSeries } from "./lib/combined.js";
+import { COMPOSITE_LABELS } from "./lib/detail_rows.js";
 import { fetchJson } from "./lib/fetch.js";
 import { fmtNum, fmtPct } from "./lib/format.js";
 import {
@@ -245,16 +246,17 @@ export function renderRadar(
   /** @type {CompositeScores} */ scores,
 ) {
   if (typeof Chart === "undefined") return;
-  const axes = ["quality", "dividend", "growth", "big_call", "aaqs", "hgi", "screener_score"];
+  // #426: the same labels as the panel's "Composite scores" list below.
+  const axes = COMPOSITE_LABELS;
   destroyChart(radarChart);
   radarChart = new Chart(canvas, {
     type: "radar",
     data: {
-      labels: axes.map((a) => a.replace("screener_score", "qte77 Score")),
+      labels: Object.values(axes),
       datasets: [
         {
           label: "score",
-          data: axes.map(
+          data: Object.keys(axes).map(
             (a) => /** @type {Record<string, number | null | undefined>} */ (scores)[a] ?? 0,
           ),
           borderColor: () => cssVar("--primary", "#7a6010"),
@@ -268,11 +270,9 @@ export function renderRadar(
         r: {
           min: 0,
           max: 100,
-          ticks: {
-            stepSize: 25,
-            color: () => cssVar("--text", "#2c2818"),
-            backdropColor: "transparent",
-          },
+          // #426: the tick numbers crowded the top axis label on a phone; the
+          // exact values are listed under "Composite scores" below the chart.
+          ticks: { stepSize: 25, display: false },
           grid: { color: () => cssVar("--border", "#c8c4b0") },
           angleLines: { color: () => cssVar("--border", "#c8c4b0") },
           pointLabels: { color: () => cssVar("--text", "#2c2818") },

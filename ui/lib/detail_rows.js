@@ -6,6 +6,7 @@
 // knotted with the shared chart infra). Tested by tests/demo/detail_rows.test.mjs.
 
 import { formatObligated } from "./audit.js";
+import { fmtNum, fmtPct } from "./format.js";
 
 export const KPI_GLOSSARY = {
   forward_pe: "Forward P/E = price / next-12mo EPS estimate. Lower = cheaper.",
@@ -54,6 +55,96 @@ export const KPI_GLOSSARY = {
   aaqs: "Quality combined with low-volatility (low beta is better).",
   hgi: "Growth-tilted score with a fixed bonus when operating margin clears ~10%.",
 };
+
+/** Composite-score labels, shared by the panel's list and its radar (#426). */
+export const COMPOSITE_LABELS = /** @type {const} */ ({
+  quality: "Quality",
+  dividend: "Dividend",
+  growth: "Growth",
+  big_call: "Big Call",
+  aaqs: "AAQS",
+  hgi: "HGI",
+  screener_score: "qte77 Score",
+});
+
+/**
+ * Plan 010 D7: the panel's KPI rows in the qte77 Score's four factors, in the
+ * Score tooltip's order. Each factor's Score inputs come first (see
+ * `screener_score` in src/analyze_stock_kpi/domain/composite_scores.py), then
+ * the related KPIs the Score doesn't use.
+ *
+ * @param {Row} row
+ * @returns {Array<{title: string, rows: Array<[string, string, boolean?, string?]>}>}
+ */
+export function kpiGroups(row) {
+  const trail = row.trailing_pe;
+  const fwd = row.forward_pe;
+  const trailFwd = trail != null && fwd != null && fwd !== 0 ? (trail / fwd).toFixed(2) : "—";
+  return [
+    {
+      title: "Profitability",
+      rows: [
+        [
+          "ROE / ROA",
+          `${fmtPct(row.return_on_equity)} % / ${fmtPct(row.return_on_assets)} %`,
+          false,
+          KPI_GLOSSARY.return_on_equity,
+        ],
+        ["Op margin %", fmtPct(row.operating_margins), false, KPI_GLOSSARY.operating_margins],
+        ["R&D / Revenue %", fmtPct(row.rd_to_revenue), false, KPI_GLOSSARY.rd_to_revenue],
+        ["Gross margin %", fmtPct(row.gross_margins), false, KPI_GLOSSARY.gross_margins],
+        ["Net margin %", fmtPct(row.profit_margins), false, KPI_GLOSSARY.profit_margins],
+        ["ROI", fmtPct(row.roi), false, KPI_GLOSSARY.roi],
+      ],
+    },
+    {
+      title: "Valuation",
+      rows: [
+        [
+          "Trail / Fwd P/E",
+          `${fmtNum(row.trailing_pe, 2)} / ${fmtNum(row.forward_pe, 2)}`,
+          false,
+          KPI_GLOSSARY.trailing_pe,
+        ],
+        [
+          "PEG (trailing)",
+          fmtNum(row.trailing_peg_ratio, 2),
+          false,
+          KPI_GLOSSARY.trailing_peg_ratio,
+        ],
+        ["Trail/Fwd P/E ratio", trailFwd, false, KPI_GLOSSARY.trail_fwd_pe],
+        ["P/B / P/S TTM", `${fmtNum(row.price_to_book, 2)} / ${fmtNum(row.price_to_sales_ttm, 2)}`],
+        ["Div yield / Payout", `${fmtPct(row.dividend_yield)} % / ${fmtPct(row.payout_ratio)} %`],
+      ],
+    },
+    {
+      title: "Risk",
+      rows: [
+        ["Beta", fmtNum(row.beta, 2), false, KPI_GLOSSARY.beta],
+        ["Current ratio", fmtNum(row.current_ratio, 2), false, KPI_GLOSSARY.current_ratio],
+        ["Quick ratio", fmtNum(row.quick_ratio, 2), false, KPI_GLOSSARY.quick_ratio],
+        ["D/E", fmtNum(row.debt_to_equity, 2), false, KPI_GLOSSARY.debt_to_equity],
+      ],
+    },
+    {
+      title: "Momentum",
+      rows: [
+        ["Sortino 1y (rf=0)", fmtNum(row.sortino_ratio, 2), false, KPI_GLOSSARY.sortino_ratio],
+        ["Sortino 3y", fmtNum(row.sortino_3y, 2), false, KPI_GLOSSARY.sortino_3y],
+        ["Sortino 5y", fmtNum(row.sortino_5y, 2), false, KPI_GLOSSARY.sortino_5y],
+        ["Sortino 10y", fmtNum(row.sortino_10y, 2), false, KPI_GLOSSARY.sortino_10y],
+        ["Sortino 20y", fmtNum(row.sortino_20y, 2), false, KPI_GLOSSARY.sortino_20y],
+        ["Sortino 30y", fmtNum(row.sortino_30y, 2), false, KPI_GLOSSARY.sortino_30y],
+        ["Revenue growth", `${fmtPct(row.revenue_growth)} %`],
+        ["Earnings growth", `${fmtPct(row.earnings_growth)} %`],
+        [
+          "52w high / low",
+          `$${fmtNum(row.fifty_two_week_high, 2)} / $${fmtNum(row.fifty_two_week_low, 2)}`,
+        ],
+      ],
+    },
+  ];
+}
 
 /**
  * @param {AuditRow | null} audit
