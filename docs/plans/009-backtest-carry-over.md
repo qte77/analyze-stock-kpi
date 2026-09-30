@@ -25,6 +25,12 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
     snapshots);
   - the live e2e passed on desktop, iPad and iPhone, both orientations, light and dark;
   - the URL-filter fix is confirmed live.
+- **Released: v1.5.2** (2026-09-30, tag on `4104061`, bump PR #477, SBOM #478): series A
+  schedules rebalances only from completed ISO weeks (#474). Before releasing, every scheduled
+  data workflow was dispatched once and verified on `data`: the three nightly snapshots, the
+  demo snapshot (09-30 for all 7 base universes, `country` 374/379), universe-builder (3 legs,
+  no screener legs) and portfolio (1 new row per series/cadence, no rebuild, no week-40
+  rebalance from the mid-week snapshot).
 - **Released: v1.5.1** (2026-09-30, tag on `2cd6342`, bump PR #471, SBOM #472): stylelint in
   the `ui` job (#466), the in-repo "Lint MD and Links" workflow fixing #391 (#467), the e2e
   crash retry (#468), the single-use helper modules folded into their user (#469).
