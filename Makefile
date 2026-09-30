@@ -91,9 +91,11 @@ autofix_js:  ## ESLint --fix + Prettier --write on ui/ (JS counterpart to autofi
 	npm --prefix ui run lint:fix
 	npm --prefix ui run format
 
-lint_links:  ## lychee broken-link checker (network — slow; mandatory in CI)
+lint_links:  ## lychee broken-link checker (network — slow; runs in the "Lint MD and Links" CI workflow)
 	echo "--- lint_links"
-	lychee --config lychee.toml .
+	# --root-dir resolves root-relative links (e.g. ui/index.html's /favicon.svg) to
+	# ui/public/, which Vite serves at the site root; it must be an absolute path.
+	lychee --config lychee.toml --root-dir "$(CURDIR)/ui/public" .
 
 test:  ## pytest
 	echo "--- test"
