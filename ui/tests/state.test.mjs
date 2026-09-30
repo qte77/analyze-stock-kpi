@@ -2,7 +2,7 @@
 // view-mode resolution. Non-trivial cases only: validation contracts,
 // multi-universe parsing, precedence rules, round-trip stability.
 import { describe, it, expect } from "vitest";
-import { parseState, serializeState, resolveViewMode } from "../lib/state.js";
+import { parseState, serializeState, resolveViewMode, hasBrowseState } from "../lib/state.js";
 
 const KNOWN = ["qte77-watchlist", "sp500", "eurostoxx", "federal-contractors"];
 
@@ -172,5 +172,33 @@ describe("resolveViewMode", () => {
   it("falls through to localStorage when URL value is invalid", () => {
     expect(resolveViewMode("BOGUS", "detailed")).toBe("detailed");
     expect(resolveViewMode("BOGUS", null)).toBe("simple");
+  });
+});
+
+describe("hasBrowseState (plan 010 D1)", () => {
+  it("is true for every non-default table parameter", () => {
+    for (const q of [
+      "?filter=nvda",
+      "?sort=beta",
+      "?sortDir=1",
+      "?sector=Technology",
+      "?date=2026-05-31",
+      "?view=detailed",
+      "?universe=sp500",
+    ]) {
+      expect(hasBrowseState(parseState(q, KNOWN)), q).toBe(true);
+    }
+  });
+
+  it("is false for defaults, chart-only params and values parseState drops", () => {
+    for (const q of [
+      "?",
+      "?ltFgWindow=5y&ycWindow=1y",
+      "?view=simple&sortDir=-1",
+      "?universe=bogus",
+      "?date=2026-13-40",
+    ]) {
+      expect(hasBrowseState(parseState(q, KNOWN)), q).toBe(false);
+    }
   });
 });

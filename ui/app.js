@@ -13,7 +13,7 @@ import { defaultDataBase } from "./lib/data.js";
 import { fetchJson, loadYearsFromBranch } from "./lib/fetch.js";
 import { nested } from "./lib/format.js";
 import { mergeUniverseSnapshots } from "./lib/overlay.js";
-import { parseState, resolveViewMode, serializeState } from "./lib/state.js";
+import { hasBrowseState, parseState, resolveViewMode, serializeState } from "./lib/state.js";
 import { bindDetailDismiss, showDetail } from "./detail_panel.js";
 import { observeScrollHint } from "./scroll_hint.js";
 import { ALL_COLUMNS, renderUniverseTable } from "./table.js";
@@ -397,7 +397,7 @@ function bindKeyboardShortcuts() {
       target instanceof HTMLSelectElement;
     if (event.key === "/" && !inEditable) {
       event.preventDefault();
-      document.getElementById("universe-filter")?.focus();
+      document.getElementById("quick-search-input")?.focus();
     }
   });
 }
@@ -624,6 +624,35 @@ function bindFilterInput() {
   });
 }
 
+function openBrowseStocks() {
+  const browse = /** @type {HTMLDetailsElement | null} */ (
+    document.getElementById("browse-stocks")
+  );
+  if (browse) browse.open = true;
+}
+
+/**
+ * Plan 010 D2: the layer-1 quick search hands its query to the universe
+ * filter (same Fuse.js index) and opens "Browse all stocks" at the table.
+ */
+function bindQuickSearch() {
+  const form = document.getElementById("quick-search");
+  const input = /** @type {HTMLInputElement | null} */ (
+    document.getElementById("quick-search-input")
+  );
+  const filterInput = /** @type {HTMLInputElement | null} */ (
+    document.getElementById("universe-filter")
+  );
+  if (!form || !input || !filterInput) return;
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    filterInput.value = input.value;
+    filterInput.dispatchEvent(new Event("input"));
+    openBrowseStocks();
+    document.getElementById("browse-stocks")?.scrollIntoView({ block: "start" });
+  });
+}
+
 /**
  * Apply ?date=… from the URL after the date selector has been populated
  * by loadActiveUniverse(); silently no-ops if the requested date isn't
@@ -728,12 +757,15 @@ async function init() {
   bindUniversePicker(picker);
 
   hydrateUrlState(parsed);
+  // Plan 010 D1: a table deep link opens "Browse all stocks" on load.
+  if (hasBrowseState(parsed)) openBrowseStocks();
 
   const dateSelector = /** @type {HTMLSelectElement | null} */ (
     document.getElementById("date-selector")
   );
   if (dateSelector) bindDateSelector(dateSelector);
   bindFilterInput();
+  bindQuickSearch();
 
   // Plan 010 slice 2: today's picks are the landing content, so they load in
   // parallel with everything else and render as soon as their own two files

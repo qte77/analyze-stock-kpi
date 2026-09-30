@@ -157,7 +157,8 @@ h2 {
   padding: 0.75rem 1.25rem;
 }
 
-#fg-panel > summary {
+#fg-panel > summary,
+#browse-stocks > summary {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -166,24 +167,34 @@ h2 {
   list-style: none;
 }
 
-#fg-panel > summary::before {
+#fg-panel > summary::before,
+#browse-stocks > summary::before {
   content: "▸";
   color: var(--text-muted);
 }
 
-#fg-panel[open] > summary {
+#fg-panel[open] > summary,
+#browse-stocks[open] > summary {
   margin-bottom: 1rem;
 }
 
-#fg-panel[open] > summary::before {
+#fg-panel[open] > summary::before,
+#browse-stocks[open] > summary::before {
   content: "▾";
 }
 
-#fg-panel > summary::-webkit-details-marker {
+#fg-panel > summary::-webkit-details-marker,
+#browse-stocks > summary::-webkit-details-marker {
   display: none;
 }
 
-.fg-summary-label {
+/* Plan 010 slice 4: "Browse all stocks" is collapsed like market mood. */
+#universe-section {
+  padding: 0.75rem 1.25rem;
+}
+
+.fg-summary-label,
+#browse-stocks > summary {
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text-muted);
@@ -412,7 +423,8 @@ h2 {
    the border visible without raising visual weight. */
 #universe-picker,
 #date-selector,
-#universe-filter {
+#universe-filter,
+#quick-search-input {
   padding: 0.3rem 0.5rem;
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -697,7 +709,8 @@ footer a:hover { text-decoration: underline; }
 
 #report-issue:hover { color: var(--primary); }
 
-#export-csv {
+#export-csv,
+#quick-search button {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -1323,6 +1336,40 @@ body.overlay-active td.universe-col {
 
 @media (max-width: 639px) {
   #picks-body { grid-template-columns: 1fr; }
+}
+
+/* Plan 010 D2: the quick search sits beside the heading, wrapping below it on
+   narrow screens. */
+.picks-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.picks-head h2 { margin: 0; }
+
+#quick-search {
+  display: flex;
+  gap: 0.35rem;
+  flex: 0 1 20rem;
+}
+
+#quick-search-input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* UX finding 9: on a phone the header took ~220px (title on 2 lines, then
+   the controls, then the tagline). Smaller title, icon-only issue link (its
+   aria-label keeps the name). */
+@media (max-width: 639px) {
+  header { padding: 0.75rem; gap: 0.25rem 0.75rem; }
+  header h1 { font-size: 1rem; }
+  .report-issue-label { display: none; }
+  .tagline { font-size: 0.8125rem; }
 }
 
 .picks-list li {

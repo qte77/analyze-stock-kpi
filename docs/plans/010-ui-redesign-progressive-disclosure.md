@@ -7,10 +7,10 @@ over the redesign row of [plan 009](009-backtest-carry-over.md).
 ## Status and handoff (read first)
 
 - **Shipped (2026-09-28/29):** slice 0 e2e script (#451), 1 Market mood panel (#453), 2 Today's
-  picks (#456), 3 "How it's tested" + SPY line (#459). Each later slice adds its checks to
-  `scripts/e2e_ui.py`'s `check_page`.
-- **Next, in order:** the remaining-work table, top to bottom: slice 4 ("Browse all stocks" +
-  the quick search D2 + the phone header wrap), then 5 (#426), 6, 7.
+  picks (#456), 3 "How it's tested" + SPY line (#459); (2026-09-30) 4 "Browse all stocks" +
+  quick search + phone header. Each later slice adds its checks to `scripts/e2e_ui.py`'s
+  `check_page`.
+- **Next, in order:** the remaining-work table, top to bottom: slice 5 (#426), then 6, 7.
 - **Loop:** a new branch per slice → RED test where a pure `ui/lib/*` module changes (rendering and
   wiring are covered by the e2e) → `make validate` → the e2e on phone and desktop against
   `make preview` → changelog fragment → strike the row here → PR → admin squash-merge on green →
@@ -158,7 +158,7 @@ All paths under `ui/`. The page is built in `init()` (`app.js:682-788`).
 | ~~1. Positioning line + F&G collapsed into a header chip and panel (D4, D6)~~ | agent | shipped 2026-09-28: tagline under the title; F&G is a native `<details id="fg-panel">` whose summary is a compact bar ("Market mood", score, rating, deltas; the 3rem hero is gone) directly under the header on every viewport, not inside the header row, per D4 and the review's phone-wrap finding. e2e 7/7: closed on load, click opens, Enter closes, `?ltFgWindow=5y` opens it on the long-term tab, phone + desktop, light + dark |
 | ~~2. Today's picks as the landing view (D3, D8)~~ | agent | shipped 2026-09-29: `#todays-picks` under the market-mood bar, fed by `loadCurrentAggregatedCandidates` (loads in parallel, renders first); ticker + short name + qte77 Score; 10 rows per list + native "Show all 25" (`<ol start=11>`); the backtest's "Current candidates" panel removed (merged here). e2e 7/7: picks above backtest and universe, 10 + 15 rows, Best stacked above Worst below 640 px and side by side above, `?universe=sp500` still drives the picker. D2 (quick search) moved to slice 4, because its submit opens "Browse all stocks" |
 | ~~3. Backtest behind "How it's tested" (D5, #446)~~ | agent | shipped 2026-09-29. Layer 1: series A's chart plus one sentence (`headlineLine`: annualized net return with an honest significance statement, or before 12 months the cumulative net return since the start). Behind `<details id="backtest-details">`: headline metrics (net/gross toggle), "More metrics" with the leg-sign note, key facts, rebalance log, caveats, disclaimer, and series B in its own block. SPY total return (rebased, `spyIndexOn`) as a dotted reference line on both charts, from the already-loaded `equity_spy` data. Before 12 months the table shows one explanatory row instead of dashes. Table headers are built from one column config. Unit tests for both helpers; e2e 7/7 (closed on load, metrics hidden until opened, sentence present, SPY dataset on chart A, no dash wall) |
-| 4. "Browse all stocks": the universe table, picker, donut and CSV collapsed (D1, D6), plus the layer-1 quick search (D2, moved from slice 2). Also consider the phone header wrap (UX finding 9) | agent | e2e: collapsed by default; `?filter=`/`?sort=`/`?sector=` open it on load; a quick-search submit opens it pre-filtered |
+| ~~4. "Browse all stocks" + quick search (D1, D2, D6) + the phone header wrap~~ | agent | shipped 2026-09-30: `#universe-section`'s content is a native `<details id="browse-stocks">`; `hasBrowseState` (`ui/lib/state.js`, unit-tested, reuses `serializeState`'s default detection) opens it for any non-default table parameter, never for `ltFgWindow`/`ycWindow`. Quick search `#quick-search` beside the picks heading (`/` now focuses it) hands its query to `#universe-filter` and opens the section. Phone header 221 → 144 px (one-line title, icon-only issue link below 640 px). e2e: collapsed on load, table hidden, `/` + Enter opens it filtered (URL carries `filter=`), `?filter=`/`?sort=`/`?sector=` open it, `?ltFgWindow=` does not |
 | 5. #426: row detail works in Simple view, KPI rows in 4 groups, radar labels decided (D7) | agent | e2e: a row click in Simple view opens the panel on both viewports with 4 groups |
 | 6. Methodology section (layer 3): "Why these charts?", "Why these universes?", backtest rules, caveats, ADR links | agent | links from layers 1/2 resolve; a text diff shows no content was lost |
 | 7. Arrow-key navigation for the ARIA tabs (`#fg-tabs`, the panel tabs) | agent | e2e: ArrowLeft/ArrowRight/Home/End move focus and selection |

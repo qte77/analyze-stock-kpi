@@ -55,7 +55,7 @@
         rel="noopener noreferrer"
         title="Open a new issue on the GitHub repo"
         aria-label="File a feature request or bug report on GitHub"
-      >File feature request or bug <svg
+      ><span class="report-issue-label">File feature request or bug</span> <svg
         viewBox="0 0 16 16"
         width="14"
         height="14"
@@ -158,7 +158,20 @@
     <!-- Plan 010 slice 2: the ranking is the product, so today's best/worst 25
          lead the page (the live aggregated lists, ADR-0014). -->
     <section id="todays-picks" aria-labelledby="picks-heading">
-      <h2 id="picks-heading">Today's picks</h2>
+      <div class="picks-head">
+        <h2 id="picks-heading">Today's picks</h2>
+        <!-- Plan 010 D2: the layer-1 quick search; submitting opens "Browse all
+             stocks" filtered by the same Fuse.js filter as #universe-filter. -->
+        <form id="quick-search" role="search">
+          <input
+            id="quick-search-input"
+            type="search"
+            placeholder="Search ticker / name / sector (press /)"
+            aria-label="Search all stocks by ticker, name, or sector"
+          />
+          <button type="submit">Search</button>
+        </form>
+      </div>
       <div id="picks-body"><p class="backtest-lists-empty">loading…</p></div>
     </section>
 
@@ -287,6 +300,10 @@
     </section>
 
     <section id="universe-section">
+      <!-- Plan 010 slice 4 (D1/D6): the universe table, picker, donut and CSV are
+           one click away; a table deep link (?filter=, ?sort=, …) opens it. -->
+      <details id="browse-stocks">
+      <summary>Browse all stocks</summary>
       <div id="universe-controls-row">
         <div id="universe-header">
           <details id="universe-help">
@@ -316,7 +333,7 @@
             <input
               id="universe-filter"
               type="search"
-              placeholder="Filter ticker / name / sector… (press / to focus)"
+              placeholder="Filter ticker / name / sector…"
               aria-label="Filter universe by ticker, name, or sector"
             />
             <button
@@ -373,6 +390,7 @@
         </table>
       </div>
       <aside id="row-detail" class="detail-only" hidden></aside>
+      </details>
     </section>
   </main>
 
