@@ -24,7 +24,7 @@ Solo investors building their own auditable, rule-based screening pipeline. Anyo
 
 ## v0.6.0 done means
 
-- A read-only static dashboard at `https://qte77.github.io/analyze-stock-kpi/` shows the current CNN Fear & Greed score with a 2-year history chart plus a sortable table of the latest `qte77-watchlist` fundamentals snapshot (74 tickers, weekly cadence). Dashboard UX polish: Score heatmap, Fuse.js filter, sticky table head, mobile layout.
+- A read-only static dashboard at `https://qte77.github.io/analyze-stock-kpi/` shows the current CNN Fear & Greed score with a 2-year history chart plus a sortable table of the latest `qte77-watchlist` fundamentals snapshot (100 tickers, weekly cadence). Dashboard UX polish: Score heatmap, Fuse.js filter, sticky table head, mobile layout.
 - A weekly GitHub Actions cron (`demo-snapshot.yaml`) writes `results/demo/qte77-watchlist/YYYY-MM-DD.json` snapshots and a manifest to the `data` branch via verified REST Git Data API commits. The dashboard fetches them cross-origin from `raw.githubusercontent.com`.
 - `fear-greed.yaml` rewritten to the same verified-commit pattern, fixing the cron blocked by the repo's `required_signatures` ruleset.
 - Chart.js vendored locally (drops jsdelivr.net CDN dependency).

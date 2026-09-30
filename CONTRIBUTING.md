@@ -32,8 +32,10 @@ this file disagrees with `make help`, `make help` wins.
 - **Browser e2e for UI changes.** `scripts/e2e_ui.py` renders the page
   in headless Chromium (phone portrait + landscape, desktop; light +
   dark), fails on unexpected console errors or failed requests, and
-  checks charts, the universe table, the Market mood panel, Today's
-  picks, the backtest section and the deep links. Each run uses a fresh
+  checks charts, the Market mood panel, Today's picks, the backtest
+  section, "Browse all stocks" with the quick search, the row-detail
+  panel, arrow-key tab navigation, the Methodology section's in-page
+  links and the deep links. Each run uses a fresh
   browser. It runs from the sibling `../polyfetch-scrape` checkout and
   is not part of CI: `make preview`, then
   `uv run --project ../polyfetch-scrape python scripts/e2e_ui.py`
