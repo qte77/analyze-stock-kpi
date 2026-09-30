@@ -462,13 +462,13 @@ class BacktestSummary(BaseModel):
 
 
 _KNOWN_NON_US_NO_SUFFIX: frozenset[str] = frozenset(
-    {"ASML", "TSM", "NVO", "SAP", "UL", "NTES", "BIP"}
+    {"ASML", "TSM", "NVO", "SAP", "UL", "NTES", "BIP", "JBS"}
 )
 """D18/finding-#8 (2026-09-24): well-known non-US issuers that trade on a US exchange
 without an exchange suffix (ADRs/ordinaries), so the plain suffix rule misclassifies
 them as US (90d lag). Since #419 only a fallback for tickers with no snapshot
 `country` (see `_filing_lag_days`); covers the audit's named examples not already
-covered by `_is_otc_adr_shaped`."""
+covered by `_is_otc_adr_shaped`. `JBS` (JBS N.V., Netherlands; #312) added 2026-09-30."""
 
 _US_COUNTRY = "United States"
 """#419: yfinance `info["country"]` for a US-headquartered issuer."""
