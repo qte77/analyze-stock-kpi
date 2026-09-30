@@ -25,6 +25,10 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
     snapshots);
   - the live e2e passed on desktop, iPad and iPhone, both orientations, light and dark;
   - the URL-filter fix is confirmed live.
+- **Released: v1.5.3** (2026-09-30, tag on `81c9c07`): the urllib3 2.8.0 security fix (#479;
+  GitHub alerts 15–17, 2 high + 1 moderate, all fixed) and the `claude.ai` link-check exclude
+  (#482). Dependabot PRs carry no changelog fragment; one was added (#483) so the release notes
+  show the fix.
 - **Released: v1.5.2** (2026-09-30, tag on `4104061`, bump PR #477, SBOM #478): series A
   schedules rebalances only from completed ISO weeks (#474). Before releasing, every scheduled
   data workflow was dispatched once and verified on `data`: the three nightly snapshots, the
