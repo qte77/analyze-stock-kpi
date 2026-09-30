@@ -191,9 +191,10 @@ def run_viewport(browser, url: str, out: Path, name: str, ctx_opts: dict) -> lis
     return check_page(page, name, out) + errors
 
 
-def isolated(p, check) -> list[str]:
-    """Run `check(browser)` in a fresh browser: the Codespace is memory-tight, and a
-    renderer crash in a shared browser used to take every later run down with it."""
+_CRASH_MARKERS = ("crashed", "Target page, context or browser has been closed")
+
+
+def _run_once(p, check) -> list[str]:
     browser = p.chromium.launch(headless=True)
     try:
         return check(browser)
@@ -201,6 +202,21 @@ def isolated(p, check) -> list[str]:
         return [f"{type(exc).__name__}: {str(exc).splitlines()[0]}"]
     finally:
         browser.close()
+
+
+def isolated(p, check) -> list[str]:
+    """Run `check(browser)` in a fresh browser, retrying once after a browser crash.
+
+    The Codespace is memory-tight: a renderer crash ("Page crashed") comes from the
+    environment, not the page (a control run of the unchanged live site crashed the
+    same way), so one retry in a new browser tells a flake from a real failure. Any
+    other failure is reported as is; a second crash is reported with a note.
+    """
+    failures = _run_once(p, check)
+    if not any(marker in f for f in failures for marker in _CRASH_MARKERS):
+        return failures
+    retry = _run_once(p, check)
+    return [f"{f} (after one retry for a browser crash)" for f in retry] if retry else []
 
 
 def report(name: str, failures: list[str]) -> bool:

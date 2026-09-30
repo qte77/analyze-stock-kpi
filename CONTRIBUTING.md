@@ -40,7 +40,8 @@ this file disagrees with `make help`, `make help` wins.
   (add `--url https://qte77.github.io/analyze-stock-kpi/` after a deploy,
   `--video` to record, `--out <dir>` for the screenshots, which default
   to `e2e-ui/` under the system temp dir; the script prints the path).
-  A rare "Page crashed" in this Codespace is memory pressure: re-run.
+  A "Page crashed" in this Codespace is memory pressure, so a crashed run is
+  retried once in a fresh browser; only a second crash is reported.
 
 ## Commit + PR conventions
 
