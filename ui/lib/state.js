@@ -137,6 +137,23 @@ export function serializeState(state, baseUrl) {
 }
 
 /**
+ * Plan 010 D1: does the state carry a non-default table parameter (everything
+ * except the two chart windows)? A shared link with one opens "Browse all
+ * stocks" on load. Reuses `serializeState`'s default detection.
+ *
+ * @param {State} state
+ * @returns {boolean}
+ */
+export function hasBrowseState(state) {
+  const tableOnly = {
+    ...state,
+    ltFgWindow: /** @type {WindowKey} */ ("all"),
+    ycWindow: /** @type {WindowKey} */ ("all"),
+  };
+  return new URL(serializeState(tableOnly, "http://x/")).search !== "";
+}
+
+/**
  * Resolve the active view-mode from a URL value plus a localStorage
  * fallback. Precedence: URL > localStorage > "simple". Invalid URL
  * values fall through to localStorage (then default).
