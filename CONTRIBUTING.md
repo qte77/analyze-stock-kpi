@@ -98,8 +98,9 @@ Semi-automated: bump is a manual dispatch, tag + publish are automatic /
 on-demand `workflow_call` callers to `qte77/.github`'s reusable workflows.
 
 1. **Bump** — trigger `bump-my-version.yaml` via `workflow_dispatch` (choose
-   `major`/`minor`/`patch`). It bumps `pyproject.toml` + the README version
-   badge, collects `changelog.d/` fragments via `scriv`, and opens a release
+   `major`/`minor`/`patch`). It bumps `pyproject.toml`, the project's own
+   version in `uv.lock` and the README version badge, collects
+   `changelog.d/` fragments via `scriv`, and opens a release
    PR — review and merge it like any other PR.
 2. **Tag** — merging that PR to `main` (a `pyproject.toml` version change)
    triggers `tag-release.yaml`, which calls `qte77/.github`'s reusable
