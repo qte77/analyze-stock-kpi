@@ -16,6 +16,37 @@ Types of changes:
 
 <!-- scriv-insert-here -->
 
+## [1.5.1] - 2026-09-30
+
+### Added
+
+- CSS lint: `stylelint` with its "recommended" (likely-errors-only) rules now runs in
+  `make lint_js` and the `ui` CI job, so a duplicate selector like the one CodeFactor caught in
+  #453 fails locally first. Fixed its one real finding: a deprecated `clip` in `.sr-only`
+  (the modern `clip-path` was already there).
+
+### Changed
+
+- `scripts/e2e_ui.py` retries a run once in a fresh browser when the browser crashes (memory
+  pressure in the dev Codespace), so a crash no longer fails the check on its own; real check
+  failures are still reported immediately.
+
+### Removed
+
+- Two helper modules that only existed to share code with the retired screener (#413) are
+  folded into their single remaining user: `orchestrators/_shared.py` into
+  `aggregated_scores_best_and_worst.py`, and `scripts/_demo_snapshot_loader.py` into
+  `scripts/build_aggregated_scores_best_and_worst.py`. No behaviour change: the rebuilt
+  best/worst 25 match the committed presets exactly on the 2026-09-27 data.
+
+### Fixed
+
+- The "Lint MD and Links" workflow failed with `startup_failure` on every run (#391). It now runs
+  markdownlint and the lychee link checker in-repo, with no third-party actions (pinned
+  versions, lychee's download checksum-verified), via the same `make lint_md` /
+  `make lint_links` targets as locally. Its first online run found a dead link in ADR-0005
+  (repointed) and root-relative links needing `--root-dir`.
+
 ## [1.5.0] - 2026-09-29
 
 ### Added
