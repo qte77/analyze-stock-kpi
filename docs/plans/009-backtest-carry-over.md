@@ -57,9 +57,10 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   Effect on B's monthly net: 8.52 % → 7.97 % a year, t-stat 0.92 → 0.88, null percentile
   97.7 → 98.1.
 - **What's next, in order:**
-  1. #312: re-probe the LatAm/Brazil universe on yfinance 1.7.0 (its row below).
-  2. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
-  3. #294, once the owner says yes or no.
+  1. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
+  2. #294, once the owner says yes or no.
+
+  #312 shipped 2026-09-30 (successor tickers in `south-america`; see its row).
 
   The UI redesign ([plan 010](010-ui-redesign-progressive-disclosure.md), incl. #426 and #446's
   presentation items) is complete: slices 0–7 shipped by 2026-09-30.
@@ -117,7 +118,7 @@ wireframe, the UX review, the defaults and the slices.
 | ~~Backtest audit [#446](https://github.com/qte77/analyze-stock-kpi/issues/446): verification + rebalance-schedule fix~~ | agent | shipped 2026-09-28 (fix/backtest-rebalance-schedule): findings on #446 (metrics, allocation and prices verified; three schedule bugs fixed; series A `method_version` 2 with a new rebuild switch; total-return caveat). The presentation items (SPY line, leg sign, which metrics, empty state) moved to plan 010 slice 3 |
 | ~~Screener long/short lists decision [#413](https://github.com/qte77/analyze-stock-kpi/issues/413)~~ | owner → agent | shipped 2026-09-29, PR #460: retired (shorts empty on every snapshot date, longs 0–3); ADR-0014 amendment |
 | Private cache repo [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) | owner → agent | two consecutive runs show the cache growing and B's start date stable |
-| LatAm (Brazil) universe [#312](https://github.com/qte77/analyze-stock-kpi/issues/312): its revisit trigger fired (yfinance 1.4.1 → 1.7.0 in `uv.lock`) | agent | re-probe the blocked symbols on 1.7.0; either ship the universe or record on #312 that it's still blocked (with the probe output) |
+| ~~LatAm (Brazil) universe [#312](https://github.com/qte77/analyze-stock-kpi/issues/312): its revisit trigger fired (yfinance 1.4.1 → 1.7.0 in `uv.lock`)~~ | agent | shipped 2026-09-30 (fix/south-america-successor-tickers): the re-probe on 1.7.0 showed a symbol problem, not the upstream outage first diagnosed (Yahoo: "Quote not found for symbol" for EMBR3.SA, ELET3.SA, JBSS3.SA and the ADRs ERJ, EBR). The `south-america` universe already existed with those 3 as 0/9-input rows; they are replaced by `EMBJ3.SA`, `AXIA3.SA` and `JBS` (all 3/3; `JBS` over the BDR `JBSS32.SA`, whose BRL price vs USD financials skews P/E). `JBS` added to `_KNOWN_NON_US_NO_SUFFIX` (120-day lag) |
 | ~~Lint MD startup_failure [#391](https://github.com/qte77/analyze-stock-kpi/issues/391)~~ | agent | shipped 2026-09-30 (ci/lint-md-links-in-repo): the workflow runs markdownlint (npm, pinned) and lychee (pinned release, SHA-256-checked) in-repo with no third-party action, via `make lint_md` / `make lint_links`. Likely cause: the reusable workflow's pinned `DavidAnson/markdownlint-cli2-action` / `lycheeverse/lychee-action` refs vs this repo's bare `owner/repo` allow-list patterns (not confirmed by changing the allow-list). The first online run found a dead ADR-0005 link and a missing `--root-dir` (both fixed) |
 | Plan convention write-up [#294](https://github.com/qte77/analyze-stock-kpi/issues/294): about 80 % already practised (plans record issue headers, roadmap links plans, CONTRIBUTING references `docs/plans/`) | owner → agent | owner says yes/no; if yes, `docs/plans/README.md` states the convention and the issue closes |
 | US-only SEC-XBRL extension to ~2017 | owner (deferred) | only if the owner asks for a longer US series |

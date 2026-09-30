@@ -1,6 +1,9 @@
 # South America — top Latam large caps (mostly Brazil B3 + a few Mexico)
 # Yahoo symbology (.SA = B3 Brazil, .MX = BMV Mexico); one symbol per line
 # Source: regional top-cap snapshot (canonical-at-curation)
+# 2026-09-30 (#312): successor lines for delisted symbols: EMBR3.SA -> EMBJ3.SA
+# (Embraer), ELET3.SA -> AXIA3.SA (Eletrobras, now AXIA Energia), JBSS3.SA -> JBS
+# (JBS N.V., NYSE; its B3 BDR JBSS32.SA quotes BRL against USD financials)
 VALE3.SA
 PETR4.SA
 PETR3.SA
@@ -9,12 +12,12 @@ BBDC4.SA
 ABEV3.SA
 BBAS3.SA
 B3SA3.SA
-JBSS3.SA
+JBS
 WEGE3.SA
 SUZB3.SA
 CSNA3.SA
-EMBR3.SA
-ELET3.SA
+EMBJ3.SA
+AXIA3.SA
 CMIG4.SA
 BPAC11.SA
 RENT3.SA
