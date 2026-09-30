@@ -45,7 +45,6 @@
 - [src/analyze_stock_kpi/data_sources/sec/cik_map.py](${BLOB}/src/analyze_stock_kpi/data_sources/sec/cik_map.py)
 - [src/analyze_stock_kpi/data_sources/sec/submissions.py](${BLOB}/src/analyze_stock_kpi/data_sources/sec/submissions.py)
 - [src/analyze_stock_kpi/data_sources/sec/xbrl.py](${BLOB}/src/analyze_stock_kpi/data_sources/sec/xbrl.py)
-- [src/analyze_stock_kpi/orchestrators/_shared.py](${BLOB}/src/analyze_stock_kpi/orchestrators/_shared.py)
 - [src/analyze_stock_kpi/orchestrators/aggregated_scores_best_and_worst.py](${BLOB}/src/analyze_stock_kpi/orchestrators/aggregated_scores_best_and_worst.py)
 - [src/analyze_stock_kpi/orchestrators/federal_contractors.py](${BLOB}/src/analyze_stock_kpi/orchestrators/federal_contractors.py)
 - [src/analyze_stock_kpi/orchestrators/longshort_backtest.py](${BLOB}/src/analyze_stock_kpi/orchestrators/longshort_backtest.py)
