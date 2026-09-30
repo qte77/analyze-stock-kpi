@@ -253,20 +253,12 @@ h2 {
 }
 
 /* All three long-term-context chart panels share dimensions —
-   group the rule so the height + relative-positioning stay in sync.
-   #why-wrap (the explainer tab) inherits the same min-height so the
-   section doesn't shrink when the explainer tab is active. */
-#fg-chart-wrap,
-#lt-fg-chart-wrap,
-#yc-chart-wrap,
-#why-wrap {
-  position: relative;
-  min-height: 220px;
-}
-
+   group the rule so the height + relative-positioning stay in sync. */
 #fg-chart-wrap,
 #lt-fg-chart-wrap,
 #yc-chart-wrap {
+  position: relative;
+  min-height: 220px;
   height: 220px;
 }
 
@@ -1042,47 +1034,39 @@ body.overlay-active td.universe-col {
   color: var(--primary);
 }
 
-/* "Why these universes?" collapsible above the universe picker. Mirrors
-   the .why-list dl pattern used in the F&G "Why these charts?" tab. */
-#universe-help {
-  margin: 0 0 0.5rem;
-  font-size: 0.8125rem;
+/* Plan 010 slice 6: Methodology (layer 3), the reference section at the end
+   of the page. Its topics are plain headings, not <details>, so in-page links
+   (#why-charts, #why-universes, #backtest-rules) land on visible text. */
+#methodology > * {
+  max-width: 60rem;
 }
 
-#universe-help summary {
-  cursor: pointer;
-  color: var(--text-muted);
-  padding: 0.15rem 0;
-}
-
-#universe-help summary:hover {
-  color: var(--primary);
-}
-
-#universe-help dl.why-list {
-  margin: 0.5rem 0 0;
-  padding: 0.5rem 0.75rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  /* Cap the width so the long explainer lines wrap instead of stretching the
-     fit-content controls column past the section (overflow to the right). */
-  max-width: 42rem;
-}
-
-#universe-help dl.why-list dt {
+#methodology h3 {
+  font-size: 0.9375rem;
   font-weight: 600;
-  margin-top: 0.5rem;
+  margin: 1.5rem 0 0.5rem;
 }
 
-#universe-help dl.why-list dt:first-child {
+#methodology h3:first-of-type {
   margin-top: 0;
 }
 
-#universe-help dl.why-list dd {
-  margin: 0.15rem 0 0;
-  color: var(--text-muted);
-  line-height: 1.45;
+.adr-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.875rem;
+}
+
+.adr-list a,
+.backtest-disclaimer a,
+.methodology-link a,
+a.methodology-link {
+  color: var(--primary);
+}
+
+.methodology-link {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
 }
 
 /* ───────────────── Backtested long/short 25/25 — two series, never
@@ -1258,7 +1242,7 @@ body.overlay-active td.universe-col {
 }
 
 /* Series B collapsible (D15: never spliced onto Series A's chart/axis).
-   Mirrors the #universe-help / #backtest-*-lists <details> pattern, with a
+   Mirrors the #backtest-*-lists <details> pattern, with a
    heavier top-level summary since it gates a whole sub-section. */
 #backtest-b-collapsible {
   margin: 2rem 0 0;

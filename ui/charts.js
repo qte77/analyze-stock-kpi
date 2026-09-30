@@ -580,7 +580,6 @@ function renderCombinedLongTerm(fgEntries, ycEntries, spyEntries) {
  * Wires the Long-term-context tab group:
  *   - Rolling history (F&G live + ~1y)
  *   - Long-term context (merged: F&G monthly + normalized 5s10s + SPY indexed)
- *   - Why these charts?
  *
  * The merged chart is lazily constructed on first click — matches the
  * detail-panel time-series lazy pattern so initial paint stays cheap. The raw
@@ -600,7 +599,6 @@ export function bindLongTermTabs(fgEntries, ycEntries, spyEntries) {
   const tabs = [
     ["fg-tab-rolling", "fg-chart-wrap"],
     ["fg-tab-longterm", "lt-combined-wrap"],
-    ["fg-tab-why", "why-wrap"],
   ];
   /** @type {Array<[HTMLElement, HTMLElement]>} */
   const resolved = [];
