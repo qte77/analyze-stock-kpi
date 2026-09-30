@@ -16,6 +16,54 @@ Types of changes:
 
 <!-- scriv-insert-here -->
 
+## [1.6.0] - 2026-09-30
+
+### Added
+
+- Dashboard (plan 010 slice 7): keyboard navigation for the tabs. In the market-mood panel and the
+  row-detail panel, ArrowLeft/ArrowRight (wrapping) and Home/End move between tabs and select
+  them, and only the selected tab is in the Tab order. The row-detail panel's Overview/Time
+  series tabs are now a proper ARIA tablist (roles, `aria-controls`, labelled panes).
+
+### Changed
+
+- Dashboard (plan 010 slice 4): the universe table, picker, snapshot date, CSV export and sector
+  donut now sit behind a collapsed "Browse all stocks" section. A shared link with a table
+  parameter (`?filter=`, `?sort=`, `?sortDir=`, `?sector=`, `?date=`, `?view=`, `?universe=`)
+  opens it on load.
+- Dashboard: a quick search beside "Today's picks" (`/` focuses it) opens "Browse all stocks"
+  filtered to the query.
+- Dashboard: a shorter header on phones (one-line title, icon-only issue link), 221 → 144 px
+  tall at 390 px wide.
+
+- Dashboard (plan 010 slice 5, #426): a table row click opens the detail panel in the default
+  Simple view too (it did nothing before). The panel's KPIs are grouped into the qte77 Score's
+  four factors (Profitability, Valuation, Risk, Momentum), each led by the Score's own inputs.
+- Dashboard: the detail panel's radar uses the same labels as its "Composite scores" list and
+  drops the 0–100 tick numbers, which crowded the top axis label on phones (the exact values are
+  listed below the chart).
+
+- Dashboard (plan 010 slice 6): a Methodology section at the end of the page holds the reference
+  text: "Why these charts?", "Why these universes?", the backtest rules for series A and B, and
+  links to the design decisions (ADRs). The text moved verbatim, with only "above"/"below"
+  reworded to name the section meant. The market-mood panel loses its "Why these charts?" tab,
+  the universe section its "Why these universes?" collapsible, and "How it's tested" its two long
+  rule paragraphs; each now links to its Methodology heading. A footer link opens Methodology.
+
+### Fixed
+
+- `south-america` universe (#312): three members had returned no data since their symbols were
+  retired ("Quote not found for symbol"), not because of an upstream Yahoo outage as first
+  diagnosed. Replaced with their successor lines, each probed 3/3 on yfinance 1.7.0:
+  `EMBR3.SA` → `EMBJ3.SA` (Embraer), `ELET3.SA` → `AXIA3.SA` (Eletrobras, now AXIA Energia),
+  `JBSS3.SA` → `JBS` (JBS N.V. on the NYSE; its B3 BDR `JBSS32.SA` quotes BRL against USD
+  financials, which would distort P/E). `JBS` joins the backtest's known non-US issuers, so it
+  always gets the 120-day filing lag.
+
+- `.gitignore` covers `make run`'s current output path, `results/fundamentals/<timestamp>.json`
+  (only the old flat name `results/fundamentals_*.json` was ignored), so local runs can't be
+  committed by accident.
+
 ## [1.5.3] - 2026-09-30
 
 ### Fixed
