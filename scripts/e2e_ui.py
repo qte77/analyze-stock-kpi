@@ -66,6 +66,7 @@ def check_page(page, name: str, out: Path) -> list[str]:
     failures += check_todays_picks(page)
     failures += check_backtest(page)
     failures += check_browse(page)
+    failures += check_row_detail(page)
 
     # Slice 1: market mood starts collapsed; its summary toggles it by click and keyboard.
     panel = page.locator("#fg-panel")
@@ -174,6 +175,30 @@ def check_browse(page) -> list[str]:
         failures.append(f"quick search {query!r} shows {shown} of {total} rows")
     if f"filter={query}" not in page.url:
         failures.append(f"quick search {query!r} is not in the URL ({page.url})")
+    return failures
+
+
+KPI_GROUPS = ["Profitability", "Valuation", "Risk", "Momentum"]
+
+
+def check_row_detail(page) -> list[str]:
+    """Plan 010 slice 5 (#426, D7): in the default Simple view a row click opens the
+    detail panel, its KPIs in the qte77 Score's four factor groups; Escape closes it."""
+    if page.evaluate("document.body.classList.contains('view-simple')") is not True:
+        return ["the page did not load in Simple view"]
+    # Open the section itself rather than rely on check_browse having opened it.
+    page.locator("#browse-stocks").evaluate("d => { d.open = true; }")
+    page.locator("#universe-section tbody tr").first.click()
+    panel = page.locator("#row-detail")
+    if not panel.is_visible():
+        return ["a row click in Simple view did not open the detail panel"]
+    failures: list[str] = []
+    sections = panel.locator("dt.section").all_inner_texts()
+    if sections[:4] != KPI_GROUPS:
+        failures.append(f"detail panel groups are {sections}, expected {KPI_GROUPS} first")
+    page.keyboard.press("Escape")
+    if panel.is_visible():
+        failures.append("Escape did not close the detail panel")
     return failures
 
 

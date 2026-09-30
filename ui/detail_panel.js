@@ -7,8 +7,14 @@
 // its chart slots. Pure data (KPI_GLOSSARY, audit/link row builders) + number
 // formatting come from lib/. DOM glue — verified by hand via `make preview`.
 
-import { KPI_GLOSSARY, auditDetailRows, externalLinkRows } from "./lib/detail_rows.js";
-import { fmtNum, fmtPct } from "./lib/format.js";
+import {
+  COMPOSITE_LABELS,
+  KPI_GLOSSARY,
+  auditDetailRows,
+  externalLinkRows,
+  kpiGroups,
+} from "./lib/detail_rows.js";
+import { fmtNum } from "./lib/format.js";
 import { effectiveScore } from "./table.js";
 
 /**
@@ -156,10 +162,6 @@ export function showDetail(row, ctx) {
   }
   overviewPane.append(linkSection);
 
-  const trail = row.trailing_pe;
-  const fwd = row.forward_pe;
-  const trailFwd = trail != null && fwd != null && fwd !== 0 ? (trail / fwd).toFixed(2) : "—";
-
   const list = document.createElement("dl");
   list.append(
     dl([
@@ -167,51 +169,24 @@ export function showDetail(row, ctx) {
       ["Industry", row.industry ?? "—"],
       ["Exchange", `${row.exchange ?? "—"} (${row.currency ?? "—"})`],
       ["Market cap", mcap],
-      [
-        "Trail / Fwd P/E",
-        `${fmtNum(row.trailing_pe, 2)} / ${fmtNum(row.forward_pe, 2)}`,
-        false,
-        KPI_GLOSSARY.trailing_pe,
-      ],
-      ["Trail/Fwd P/E ratio", trailFwd, false, KPI_GLOSSARY.trail_fwd_pe],
-      ["P/B / P/S TTM", `${fmtNum(row.price_to_book, 2)} / ${fmtNum(row.price_to_sales_ttm, 2)}`],
-      ["Gross margin %", fmtPct(row.gross_margins), false, KPI_GLOSSARY.gross_margins],
-      ["Net margin %", fmtPct(row.profit_margins), false, KPI_GLOSSARY.profit_margins],
-      [
-        "ROE / ROA",
-        `${fmtPct(row.return_on_equity)} % / ${fmtPct(row.return_on_assets)} %`,
-        false,
-        KPI_GLOSSARY.return_on_equity,
-      ],
-      ["ROI", fmtPct(row.roi), false, KPI_GLOSSARY.roi],
-      ["R&D / Revenue %", fmtPct(row.rd_to_revenue), false, KPI_GLOSSARY.rd_to_revenue],
-      ["Op margin %", fmtPct(row.operating_margins), false, KPI_GLOSSARY.operating_margins],
-      ["D/E", fmtNum(row.debt_to_equity, 2), false, KPI_GLOSSARY.debt_to_equity],
-      ["Current ratio", fmtNum(row.current_ratio, 2), false, KPI_GLOSSARY.current_ratio],
-      ["Quick ratio", fmtNum(row.quick_ratio, 2), false, KPI_GLOSSARY.quick_ratio],
-      ["Revenue growth", `${fmtPct(row.revenue_growth)} %`],
-      ["Earnings growth", `${fmtPct(row.earnings_growth)} %`],
-      ["Div yield / Payout", `${fmtPct(row.dividend_yield)} % / ${fmtPct(row.payout_ratio)} %`],
-      [
-        "52w high / low",
-        `$${fmtNum(row.fifty_two_week_high, 2)} / $${fmtNum(row.fifty_two_week_low, 2)}`,
-      ],
-      ["Beta", fmtNum(row.beta, 2), false, KPI_GLOSSARY.beta],
-      ["PEG (trailing)", fmtNum(row.trailing_peg_ratio, 2), false, KPI_GLOSSARY.trailing_peg_ratio],
-      ["Sortino 1y (rf=0)", fmtNum(row.sortino_ratio, 2), false, KPI_GLOSSARY.sortino_ratio],
-      ["Sortino 3y", fmtNum(row.sortino_3y, 2), false, KPI_GLOSSARY.sortino_3y],
-      ["Sortino 5y", fmtNum(row.sortino_5y, 2), false, KPI_GLOSSARY.sortino_5y],
-      ["Sortino 10y", fmtNum(row.sortino_10y, 2), false, KPI_GLOSSARY.sortino_10y],
-      ["Sortino 20y", fmtNum(row.sortino_20y, 2), false, KPI_GLOSSARY.sortino_20y],
-      ["Sortino 30y", fmtNum(row.sortino_30y, 2), false, KPI_GLOSSARY.sortino_30y],
+      // Plan 010 D7: the KPIs in the qte77 Score's four factors.
+      ...kpiGroups(row).flatMap(({ title, rows }) => [
+        /** @type {[string, string, boolean]} */ ([title, "", true]),
+        ...rows,
+      ]),
       ["Composite scores", "", true],
-      ["Quality", fmtNum(cs.quality, 0), false, KPI_GLOSSARY.quality],
-      ["Dividend", fmtNum(cs.dividend, 0), false, KPI_GLOSSARY.dividend],
-      ["Growth", fmtNum(cs.growth, 0), false, KPI_GLOSSARY.growth],
-      ["Big Call", fmtNum(cs.big_call, 0), false, KPI_GLOSSARY.big_call],
-      ["AAQS", fmtNum(cs.aaqs, 0), false, KPI_GLOSSARY.aaqs],
-      ["HGI", fmtNum(cs.hgi, 0), false, KPI_GLOSSARY.hgi],
-      ["qte77 Score", fmtNum(qte77Score, 0), false, KPI_GLOSSARY.screener_score],
+      ...Object.entries(COMPOSITE_LABELS).map(
+        ([key, label]) =>
+          /** @type {[string, string, boolean, string]} */ ([
+            label,
+            fmtNum(
+              key === "screener_score" ? qte77Score : cs[/** @type {keyof typeof cs} */ (key)],
+              0,
+            ),
+            false,
+            KPI_GLOSSARY[/** @type {keyof typeof KPI_GLOSSARY} */ (key)],
+          ]),
+      ),
       ...auditDetailRows(audit),
     ]),
   );
