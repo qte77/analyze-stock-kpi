@@ -79,12 +79,13 @@ lint_md:  ## markdownlint *.md (uses .markdownlint.json)
 	  --ignore '.venv/**' --ignore 'results/**' --ignore '**/node_modules/**' \
 	  --ignore 'ui/dist/**' --ignore 'changelog.d/**'
 
-lint_js:  ## node --check + tsc JSDoc + ESLint + Prettier on ui/ (run from ui/)
+lint_js:  ## node --check + tsc JSDoc + ESLint + Prettier + stylelint on ui/ (run from ui/)
 	echo "--- lint_js"
 	node --check ui/app.js
 	npm --prefix ui run typecheck
 	npm --prefix ui run lint
 	npm --prefix ui run format:check
+	npm --prefix ui run lint:css
 
 autofix_js:  ## ESLint --fix + Prettier --write on ui/ (JS counterpart to autofix)
 	npm --prefix ui run lint:fix

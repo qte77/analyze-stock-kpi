@@ -40,12 +40,13 @@ jobs:
       - name: Install JS dev dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Lint JS (node --check + tsc JSDoc + ESLint + Prettier)
+      - name: Lint JS + CSS (node --check + tsc JSDoc + ESLint + Prettier + stylelint)
         run: |
           node --check app.js
           npm run typecheck
           npm run lint
           npm run format:check
+          npm run lint:css
 
       - name: Vitest (unit tests)
         run: npm test
