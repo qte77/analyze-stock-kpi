@@ -97,7 +97,9 @@ node_modules/
 package-lock.json
 
 # Runtime artifacts from `make run` (per-invocation per-asset KPI snapshots).
+# The flat name is the old layout; `make run` now writes results/fundamentals/<ts>.json.
 results/fundamentals_*.json
+results/fundamentals/
 # Local-preview shuffles from `make preview_local` (the production cron writes
 # these to the `data` branch via REST Git Data API, bypassing .gitignore).
 results/demo/
