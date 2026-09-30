@@ -25,6 +25,12 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
     snapshots);
   - the live e2e passed on desktop, iPad and iPhone, both orientations, light and dark;
   - the URL-filter fix is confirmed live.
+- **Released: v1.6.0** (2026-09-30, tag on `64e1e87`, bump PR #494, SBOM #495): plan 010
+  slices 4–7, which complete the UI redesign (#487 "Browse all stocks" + quick search + phone
+  header, #488 row detail in Simple view + KPI groups closing #426, #489 Methodology, #490
+  arrow-key tabs), #491 the `south-america` successor tickers closing #312, #492 the
+  `results/fundamentals/` gitignore and #493 the pre-release docs audit. Each UI PR passed the
+  e2e 7/7 against the live Pages deploy.
 - **Released: v1.5.3** (2026-09-30, tag on `81c9c07`): the urllib3 2.8.0 security fix (#479;
   GitHub alerts 15–17, 2 high + 1 moderate, all fixed) and the `claude.ai` link-check exclude
   (#482). Dependabot PRs carry no changelog fragment; one was added (#483) so the release notes
