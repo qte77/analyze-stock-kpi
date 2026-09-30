@@ -25,16 +25,15 @@ from __future__ import annotations
 from datetime import UTC, date, datetime
 from typing import TYPE_CHECKING
 
-from analyze_stock_kpi.domain.composite_scores import CompositeScores
+from pydantic import BaseModel, ConfigDict
 
-from ._shared import AuditRowBase, dedup_by_ticker, is_stale
+from analyze_stock_kpi.data_sources.fundamentals import (
+    FundamentalsSnapshot,  # noqa: TC001  # pydantic runtime requirement
+)
+from analyze_stock_kpi.domain.composite_scores import CompositeScores
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
-
-    from analyze_stock_kpi.data_sources.fundamentals import FundamentalsSnapshot
-
-    from ._shared import DedupedSnapshot
 
 
 # Derived from the model so adding a CompositeScores field flows through
@@ -42,19 +41,73 @@ if TYPE_CHECKING:
 _COMPOSITE_FIELDS = tuple(CompositeScores.model_fields)
 
 
-class AuditRow(AuditRowBase):
+class DedupedSnapshot(BaseModel):
+    """Per-ticker payload from :func:`dedup_by_ticker`.
+
+    ``source_universes`` is in insertion order; ``source_universes[0]`` is the
+    first-seen universe whose snapshot was kept.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    snapshot: FundamentalsSnapshot
+    source_universes: list[str]
+    snapshot_dates: dict[str, str]
+
+
+class AuditRow(BaseModel):
     """Per-ticker decision trail for the aggregator.
 
-    Inherits ``ticker``, ``source_universes``, ``snapshot_dates``,
-    ``eligible``, ``excluded_reason`` from :class:`AuditRowBase`.
     ``composite_breakdown`` stays informational (all 7 composites, for
     context); ``screener_score`` is the value actually used to rank.
     """
 
+    model_config = ConfigDict(frozen=True, extra="ignore")
+
+    ticker: str
+    source_universes: list[str]
+    snapshot_dates: dict[str, str]
+    eligible: bool = False
+    excluded_reason: str | None = None
     populated_composites: int
     composite_breakdown: dict[str, float | None]
     screener_score: float | None = None
     rank: int | None = None
+
+
+def is_stale(snapshot_date: str, as_of: date, max_stale_days: int) -> bool:
+    """True if ``snapshot_date`` (ISO YYYY-MM-DD) is older than the window.
+
+    Gates against ranking on a universe whose cron is paused or broken.
+    """
+    return (as_of - date.fromisoformat(snapshot_date)).days > max_stale_days
+
+
+def dedup_by_ticker(
+    snapshots_by_universe: dict[str, list[FundamentalsSnapshot]],
+    snapshot_dates_by_universe: dict[str, str],
+) -> dict[str, DedupedSnapshot]:
+    """First-seen universe wins for snapshot; every source universe recorded.
+
+    The ranking iterates ``per_ticker.items()`` and uses ``source_universes[0]``
+    for the freshness gate (matches the snapshot it kept). The full membership
+    list survives in the audit so cross-universe overlap stays visible.
+    """
+    per_ticker: dict[str, DedupedSnapshot] = {}
+    for universe_id, snapshots in snapshots_by_universe.items():
+        snap_date = snapshot_dates_by_universe.get(universe_id, "")
+        for snap in snapshots:
+            ticker = snap.symbol
+            if ticker not in per_ticker:
+                per_ticker[ticker] = DedupedSnapshot(
+                    snapshot=snap,
+                    source_universes=[universe_id],
+                    snapshot_dates={universe_id: snap_date},
+                )
+            else:
+                per_ticker[ticker].source_universes.append(universe_id)
+                per_ticker[ticker].snapshot_dates[universe_id] = snap_date
+    return per_ticker
 
 
 def _extract_composites(snap: FundamentalsSnapshot) -> dict[str, float | None]:

@@ -1,4 +1,4 @@
-"""Tests for ``scripts/_demo_snapshot_loader.py``'s demo-display write path.
+"""Tests for ``scripts/build_aggregated_scores_best_and_worst.py``'s demo-display write path.
 
 Owner requirement: the aggregated / derived-universe demo-display JSON
 (``results/demo/<preset>/<date>.json``, what the dashboard actually
@@ -26,7 +26,7 @@ _SCRIPTS_DIR = Path(__file__).resolve().parents[1] / "scripts"
 if str(_SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS_DIR))
 
-import _demo_snapshot_loader as loader  # noqa: E402
+import build_aggregated_scores_best_and_worst as loader  # noqa: E402
 
 
 def _snap(symbol: str, score: float) -> FundamentalsSnapshot:
