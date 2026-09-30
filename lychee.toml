@@ -25,6 +25,8 @@ exclude = [
     "^https://twitter\\.com",
     # Reddit — 403 to bots
     "^https://www\\.reddit\\.com",
+    # claude.ai — sign-in pages; 403 to lychee since 2026-09-30
+    "^https://claude\\.ai",
     # Vendor / cloud catalogs that 403 to bots
     "^https://catalog\\.ngc\\.nvidia\\.com",
     "^https://ai\\.azure\\.com",
