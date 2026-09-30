@@ -18,13 +18,13 @@ Solo investors building their own auditable, rule-based screening pipeline. Anyo
 ## Non-goals (explicit)
 
 - Replicate Traderfox's exact proprietary numerical scores (won't match byte-for-byte; composite proxies are documented approximations of the same signals)
-- Long/short hedging strategy execution (deferred per [ADR-0003](decisions/0003-defer-rs-hedging-epic.md) — issues #4 / #8 / #9 / #10 stay open with the `deferred` label; behavioral price analytics fits a sibling repo)
+- Long/short hedging strategy execution (deferred per [ADR-0003](decisions/0003-defer-rs-hedging-epic.md) — issues #4 / #8 / #9 / #10 are closed as not planned; behavioral price analytics fits a sibling repo)
 - Paid-data integrations (CDS spreads, Bloomberg, Refinitiv) — out of scope
 - Automated trade execution — analysis only
 
 ## v0.6.0 done means
 
-- A read-only static dashboard at `https://qte77.github.io/analyze-stock-kpi/` shows the current CNN Fear & Greed score with a 2-year history chart plus a sortable table of the latest `qte77-watchlist` fundamentals snapshot (100 tickers, weekly cadence). Dashboard UX polish: Score heatmap, Fuse.js filter, sticky table head, mobile layout.
+- A read-only static dashboard at `https://qte77.github.io/analyze-stock-kpi/` shows the current CNN Fear & Greed score with a 2-year history chart plus a sortable table of the latest `qte77-watchlist` fundamentals snapshot (74 tickers, weekly cadence). Dashboard UX polish: Score heatmap, Fuse.js filter, sticky table head, mobile layout.
 - A weekly GitHub Actions cron (`demo-snapshot.yaml`) writes `results/demo/qte77-watchlist/YYYY-MM-DD.json` snapshots and a manifest to the `data` branch via verified REST Git Data API commits. The dashboard fetches them cross-origin from `raw.githubusercontent.com`.
 - `fear-greed.yaml` rewritten to the same verified-commit pattern, fixing the cron blocked by the repo's `required_signatures` ruleset.
 - Chart.js vendored locally (drops jsdelivr.net CDN dependency).

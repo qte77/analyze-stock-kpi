@@ -76,6 +76,12 @@ while it has its default value, and clearing a filter in the UI removes it from 
 | `theme` | `light`, `dark`, `system` | the last choice (stored in the browser), else `system` |
 | `base` | data origin URL, e.g. a fork's `raw.githubusercontent.com/<owner>/<repo>/data` | this deployment's own `data` branch |
 
+A non-default table parameter (`universe`, `date`, `sort`/`sortDir`, `filter`, `sector`,
+`view`) opens the collapsed "Browse all stocks" section on load, so a shared table view is
+visible straight away. The Methodology topics have stable anchors for linking: `#methodology`,
+`#why-charts`, `#why-universes`, `#backtest-rules` and `#decisions`. On the page, `/` focuses
+the quick search, and the arrow keys (plus Home/End) move between tabs.
+
 See [`docs/architecture.md`](docs/architecture.md) for the module map, the persisted
 `FundamentalsSnapshot` fields, the composite-score formulas, and the universe presets.
 
