@@ -402,6 +402,34 @@ function bindKeyboardShortcuts() {
   });
 }
 
+/**
+ * Plan 010 slice 7: arrow-key navigation for every ARIA tablist (WAI-ARIA tabs
+ * pattern, automatic activation). One delegated listener that looks the tabs up
+ * at key time, so it also serves the detail panel's tabs, rebuilt per row.
+ * Activation is a click, keeping each tablist's click handler the single source.
+ */
+function bindTabArrowKeys() {
+  document.addEventListener("keydown", (event) => {
+    const tab = event.target instanceof Element ? event.target.closest('[role="tab"]') : null;
+    const list = tab?.closest('[role="tablist"]');
+    if (!tab || !list) return;
+    const tabs = /** @type {HTMLElement[]} */ ([...list.querySelectorAll('[role="tab"]')]);
+    const i = tabs.indexOf(/** @type {HTMLElement} */ (tab));
+    const n = tabs.length;
+    const target = new Map([
+      ["ArrowRight", (i + 1) % n],
+      ["ArrowLeft", (i - 1 + n) % n],
+      ["Home", 0],
+      ["End", n - 1],
+    ]).get(event.key);
+    if (target === undefined) return;
+    event.preventDefault();
+    const next = tabs[target];
+    next.focus();
+    next.click();
+  });
+}
+
 function bindCsvExport() {
   const btn = document.getElementById("export-csv");
   if (!btn) return;
@@ -726,6 +754,7 @@ async function init() {
   bindDetailDismiss();
   bindTableSort();
   bindKeyboardShortcuts();
+  bindTabArrowKeys();
   bindCsvExport();
   document
     .querySelectorAll(".table-wrap")

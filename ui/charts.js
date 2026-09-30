@@ -613,6 +613,7 @@ export function bindLongTermTabs(fgEntries, ycEntries, spyEntries) {
       for (const [t, p] of resolved) {
         const selected = t === tab;
         t.setAttribute("aria-selected", selected ? "true" : "false");
+        t.tabIndex = selected ? 0 : -1; // roving tabindex (plan 010 slice 7)
         p.hidden = !selected;
       }
       if (pane.id === "lt-combined-wrap" && !combinedRendered) {
