@@ -41,10 +41,15 @@ _EXPECTED_404 = re.compile(r"/results/(series|backtest)[\w/-]*/\d{4}\.json$")
 _NETWORK_CONSOLE_NOISE = "Failed to load resource"
 
 
+def wait_for_table(page) -> None:
+    """The universe table fills while "Browse all stocks" is still collapsed."""
+    page.wait_for_selector("#universe-section tbody tr", state="attached", timeout=60_000)
+
+
 def check_page(page, name: str, out: Path) -> list[str]:
     """Run the checks on a loaded page; return the failures."""
     failures: list[str] = []
-    page.wait_for_selector("#universe-section tbody tr", timeout=60_000)
+    wait_for_table(page)
     page.wait_for_timeout(1500)  # let charts finish their first draw
 
     charts = page.evaluate(
@@ -60,6 +65,7 @@ def check_page(page, name: str, out: Path) -> list[str]:
 
     failures += check_todays_picks(page)
     failures += check_backtest(page)
+    failures += check_browse(page)
 
     # Slice 1: market mood starts collapsed; its summary toggles it by click and keyboard.
     panel = page.locator("#fg-panel")
@@ -143,21 +149,61 @@ def check_backtest(page) -> list[str]:
     return failures
 
 
+def check_browse(page) -> list[str]:
+    """Plan 010 slice 4: "Browse all stocks" starts collapsed; `/` focuses the layer-1
+    quick search (D2), whose submit opens the section filtered to the query."""
+    failures: list[str] = []
+    browse = page.locator("#browse-stocks")
+    if browse.evaluate("d => d.open"):
+        failures.append("'Browse all stocks' is open on load (should start collapsed)")
+    if page.locator("#universe-table").is_visible():
+        failures.append("universe table is visible before 'Browse all stocks' is opened")
+    total = page.locator("#universe-section tbody tr").count()
+    query = (page.locator("#universe-section tbody tr td").first.text_content() or "").strip()
+    page.locator("body").press("/")
+    if page.evaluate("document.activeElement?.id") != "quick-search-input":
+        failures.append("'/' did not focus the quick search")
+    page.keyboard.type(query)
+    page.keyboard.press("Enter")
+    if not browse.evaluate("d => d.open"):
+        return [*failures, f"quick search {query!r} did not open 'Browse all stocks'"]
+    if page.locator("#universe-filter").input_value() != query:
+        failures.append(f"quick search did not hand {query!r} to the universe filter")
+    shown = page.locator("#universe-section tbody tr").count()
+    if not 0 < shown < total:
+        failures.append(f"quick search {query!r} shows {shown} of {total} rows")
+    if f"filter={query}" not in page.url:
+        failures.append(f"quick search {query!r} is not in the URL ({page.url})")
+    return failures
+
+
 def check_deep_link(browser, url: str) -> list[str]:
-    """Plan 010 D1: `?ltFgWindow=` opens the market-mood panel on its long-term tab."""
+    """Plan 010 D1: a deep link opens the section its parameter belongs to."""
     ctx = browser.new_context(viewport={"width": 1440, "height": 900})
     page = ctx.new_page()
     sep = "&" if "?" in url else "?"
-    page.goto(f"{url}{sep}ltFgWindow=5y", wait_until="networkidle", timeout=90_000)
-    page.wait_for_selector("#universe-section tbody tr", timeout=60_000)
+
+    def load(query: str) -> None:
+        page.goto(f"{url}{sep}{query}", wait_until="networkidle", timeout=90_000)
+        wait_for_table(page)
+
+    def browse_open() -> bool:
+        return page.locator("#browse-stocks").evaluate("d => d.open")
+
+    load("ltFgWindow=5y")
     failures = []
     if not page.locator("#fg-panel").evaluate("d => d.open"):
         failures.append("?ltFgWindow=5y did not open the market-mood panel")
     if page.locator("#fg-tab-longterm").get_attribute("aria-selected") != "true":
         failures.append("?ltFgWindow=5y did not select the long-term tab")
+    if browse_open():
+        failures.append("?ltFgWindow=5y opened 'Browse all stocks' too")
+    for query in ("filter=a", "sort=beta", "sector=Technology"):
+        load(query)
+        if not browse_open():
+            failures.append(f"?{query} did not open 'Browse all stocks'")
     # Plan 010 D8: an explicit ?universe= still drives the universe picker.
-    page.goto(f"{url}{sep}universe=sp500", wait_until="networkidle", timeout=90_000)
-    page.wait_for_selector("#universe-section tbody tr", timeout=60_000)
+    load("universe=sp500")
     picked = page.locator("#universe-picker").input_value()
     if picked != "sp500":
         failures.append(f"?universe=sp500 left the picker on {picked!r}")
@@ -243,7 +289,7 @@ def run(url: str, out: Path, *, video: bool) -> int:
                 failures = isolated(p, lambda b, n=name, o=opts: run_viewport(b, url, out, n, o))
                 failed |= report(name, failures)
         link_failures = isolated(p, lambda b: check_deep_link(b, url))
-        failed |= report("deep-link ?ltFgWindow=5y / ?universe=sp500", link_failures)
+        failed |= report("deep links (ltFgWindow, filter, sort, sector, universe)", link_failures)
     print(f"screenshots: {out}")
     return 1 if failed else 0
 
