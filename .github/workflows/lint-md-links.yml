@@ -1,6 +1,16 @@
 ---
 name: Lint MD and Links
 
+# In-repo markdownlint + lychee (#391). This used to call qte77/.github's reusable
+# lint-md-links.yml, which failed with startup_failure on every run (before any job
+# started). That reusable workflow pins DavidAnson/markdownlint-cli2-action and
+# lycheeverse/lychee-action, and this repo's strict Actions allow-list
+# (`allowed_actions: selected`) lists them only as bare `owner/repo` patterns, which
+# most likely don't match the pinned refs (GitHub documents `OWNER/REPO@TAG-OR-SHA`).
+# These jobs use no third-party action at all: markdownlint via npm and the lychee
+# release binary (version + SHA-256 pinned), running the same `make lint_md` /
+# `make lint_links` targets contributors run locally.
+
 on:
   push:
     branches: [main]
@@ -10,16 +20,44 @@ on:
 
 permissions:
   contents: read
-  issues: write  # required at workflow startup by reusable notify job (even when unused)
 
 jobs:
-  lint:
-    # Pinned SHA (2026-04-27) referenced an invalid actions/github-script
-    # commit in its conditional `notify` job — GitHub resolves every
-    # `uses:` in a reusable workflow's full job graph at startup, even for
-    # jobs an `if:` would skip at runtime, so that one bad pin failed this
-    # entire workflow with startup_failure on every run. No release tag
-    # exists on qte77/.github; pinned to current main HEAD (2026-09-21) —
-    # re-pin by hand once a tag exists to track.
-    uses: qte77/.github/.github/workflows/lint-md-links.yml@4801217a20922cd54187fc7e4c98c7ea78c0ec9a
-...
+  markdown:
+    name: markdownlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+        with:
+          node-version: "24"
+
+      - name: Install markdownlint-cli
+        run: npm install -g --no-audit --no-fund markdownlint-cli@0.49.1
+
+      - name: markdownlint
+        run: make lint_md
+
+  links:
+    name: lychee
+    runs-on: ubuntu-latest
+    env:
+      LYCHEE_VERSION: lychee-v0.24.2
+      LYCHEE_SHA256: 1f4e0ef7f6554a6ed33dd7ac144fb2e1bbed98598e7af973042fc5cd43951c9a
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Install lychee (pinned release, checksum-verified)
+        run: |
+          set -euo pipefail
+          url="https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/lychee-x86_64-unknown-linux-gnu.tar.gz"
+          curl -sSfL -o "$RUNNER_TEMP/lychee.tgz" "$url"
+          echo "${LYCHEE_SHA256}  $RUNNER_TEMP/lychee.tgz" | sha256sum -c -
+          tar xzf "$RUNNER_TEMP/lychee.tgz" -C "$RUNNER_TEMP"
+          install -D -m 755 "$RUNNER_TEMP/lychee-x86_64-unknown-linux-gnu/lychee" "$HOME/.local/bin/lychee"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: lychee
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # read-only; avoids GitHub API rate limits
+        run: make lint_links

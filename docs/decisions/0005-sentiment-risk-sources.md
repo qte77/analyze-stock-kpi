@@ -182,8 +182,9 @@ an explicit license, this amendment will be revised to cite it.
   `https://production.dataviz.cnn.io/index/fearandgreed/graphdata`
 - Yahoo Finance v8 chart endpoint:
   `https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX`
-- Nasdaq Data Link API docs:
-  <https://docs.data.nasdaq.com/docs/getting-started>
+- Nasdaq Data Link (the former API docs page, `docs.data.nasdaq.com/docs/getting-started`,
+  returns 404 as of 2026-09-30; repointed to the product home):
+  <https://data.nasdaq.com/>
 - NAAIM Exposure Index (publisher page):
   <https://www.naaim.org/programs/naaim-exposure-index/>
 - AAII Sentiment Survey (publisher page):
