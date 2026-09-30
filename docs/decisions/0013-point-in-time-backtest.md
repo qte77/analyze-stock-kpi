@@ -172,7 +172,9 @@ inception, so every published metric was diluted by ~15.7k padding days (publish
    *Amended (#446, series A `method_version` 2, series B's pending rebuild to 3):* the rebalance
    schedule. (a) Series A's cadences use at most one rank date per ISO week (`rank_dates` over the
    genuine grid, series B's D6 rule), so irregular manual snapshots no longer multiply "weekly"
-   rebalances. (b) Execution is a walk over the calendar (`_execute`): each day the target is
+   rebalances. Only ISO weeks that ended before the run date count (2026-09-30): a week's last
+   snapshot isn't known until the week is over, so a mid-week snapshot must not be frozen as the
+   week's rebalance. (b) Execution is a walk over the calendar (`_execute`): each day the target is
    the newest decision ranked before it, and it fills on the first day every still-trading name
    in the book actually held and in the target has its own close (the foresight-audit #4 rule).
    A newer decision replaces one still waiting to fill. Previously each decision's fill search

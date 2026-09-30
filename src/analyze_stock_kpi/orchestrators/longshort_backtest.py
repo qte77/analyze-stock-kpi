@@ -243,8 +243,8 @@ _CAVEATS_GENUINE: tuple[str, ...] = (
     "actual historical membership — a size look-ahead.",
     "Rank dates are the irregular dates the live aggregator actually "
     "snapshotted (the weekly demo cron), not a fixed grid. Cadences use at "
-    "most one per ISO week (the week's last snapshot), so extra manual "
-    "snapshots don't add rebalances; across a gap between two snapshot dates "
+    "most one per ISO week (the week's last snapshot, once the week is over), "
+    "so extra manual snapshots don't add rebalances; across a gap between two snapshot dates "
     "(e.g. 2026-07-12 -> 2026-09-27) the book is held unchanged.",
     "A ticker with no price on a given day is treated as flat (0% return) "
     "that day; a name that stops trading entirely after entry is held at its "
@@ -2299,14 +2299,24 @@ def _maybe_rebuild_series_a() -> None:
     _reset_year_files(settings.backtest_genuine_dir / "lists")
 
 
-def _series_a_rebalance_dates(cadence: str, genuine_grid: list[date]) -> list[date]:
+def _series_a_rebalance_dates(
+    cadence: str, genuine_grid: list[date], run_date: date
+) -> list[date]:
     """#446: series A's cadence dates, from its genuine grid bucketed to one date per ISO week.
 
     The genuine snapshot dates are irregular (e.g. 2026-06-05/06/07 in one week),
     so passing them straight to `rebalance_dates` made "weekly" trade on every
     snapshot. `rank_dates` keeps each week's last snapshot, series B's D6 grid rule.
+
+    Only ISO weeks that ended before `run_date`'s week count: a week's last snapshot
+    isn't known until the week is over, and freezing a mid-week snapshot as the week's
+    rebalance would leave two frozen rebalances in that week once its Sunday snapshot
+    lands. The weekly cron snapshots on Sundays (a week's last day), so the Saturday
+    backtest run still picks each week up on its first run after it.
     """
-    return rebalance_dates(cadence, rank_dates(genuine_grid))
+    current_week = run_date.isocalendar()[:2]
+    complete = [d for d in genuine_grid if d.isocalendar()[:2] < current_week]
+    return rebalance_dates(cadence, rank_dates(complete))
 
 
 def _freeze_eligible(dates: list[date], run_date: date) -> list[date]:
@@ -2416,7 +2426,7 @@ def _run_series_a(
 
     cadence_metrics: dict[str, CadenceMetrics] = {}
     for cadence in CADENCES:
-        rebal_dates = _series_a_rebalance_dates(cadence, genuine_grid)
+        rebal_dates = _series_a_rebalance_dates(cadence, genuine_grid, calendar[-1])
         weights_by_trade_date = _genuine_weights_for_cadence(
             cadence, rebal_dates, ranked_by_date, calendar, own_dates=own_dates
         )

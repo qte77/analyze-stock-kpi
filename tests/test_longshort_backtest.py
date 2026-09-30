@@ -546,13 +546,30 @@ def test_series_a_weekly_is_one_rebalance_per_iso_week() -> None:
     traded all three on 06-08. Bucketed like series B, it keeps the week's last snapshot."""
     grid = [date(2026, 5, 31), date(2026, 6, 5), date(2026, 6, 6), date(2026, 6, 7)]
     grid += [date(2026, 6, 14)]
+    run_date = date(2026, 6, 16)  # a later ISO week: every grid week is complete
 
-    assert _series_a_rebalance_dates("weekly", grid) == [
+    assert _series_a_rebalance_dates("weekly", grid, run_date) == [
         date(2026, 5, 31),
         date(2026, 6, 7),
         date(2026, 6, 14),
     ]
-    assert _series_a_rebalance_dates("monthly", grid) == [date(2026, 5, 31), date(2026, 6, 7)]
+    assert _series_a_rebalance_dates("monthly", grid, run_date) == [
+        date(2026, 5, 31),
+        date(2026, 6, 7),
+    ]
+
+
+def test_series_a_skips_the_run_dates_incomplete_iso_week() -> None:
+    """A mid-week snapshot (Wed 2026-09-30) must not become week 40's rebalance while
+    week 40 is still running: Sunday 10-04's snapshot would later be the week's last one,
+    and the frozen log would then hold two rebalances for one ISO week."""
+    grid = [date(2026, 9, 27), date(2026, 9, 30)]  # Sun of week 39, Wed of week 40
+
+    assert _series_a_rebalance_dates("weekly", grid, date(2026, 10, 3)) == [date(2026, 9, 27)]
+    assert _series_a_rebalance_dates("weekly", grid, date(2026, 10, 5)) == [
+        date(2026, 9, 27),
+        date(2026, 9, 30),
+    ]
 
 
 def test_newer_decision_replaces_one_still_waiting_to_fill() -> None:
