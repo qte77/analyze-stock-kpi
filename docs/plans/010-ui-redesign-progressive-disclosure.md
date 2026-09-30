@@ -9,9 +9,10 @@ over the redesign row of [plan 009](009-backtest-carry-over.md).
 - **Shipped (2026-09-28/29):** slice 0 e2e script (#451), 1 Market mood panel (#453), 2 Today's
   picks (#456), 3 "How it's tested" + SPY line (#459); (2026-09-30) 4 "Browse all stocks" +
   quick search + phone header (#487), 5 row detail in Simple view + 4 KPI groups (#426, #488),
-  6 Methodology section. Each later slice adds its checks to `scripts/e2e_ui.py`'s
-  `check_page`.
-- **Next, in order:** the remaining-work table, top to bottom: slice 7.
+  6 Methodology section (#489), 7 arrow-key tab navigation. **Plan 010 is complete**: every
+  slice is shipped and `scripts/e2e_ui.py`'s `check_page` covers each of them.
+- **Next:** nothing open here; the remaining work is in [plan 009](009-backtest-carry-over.md)
+  (#312, then the owner-gated #418 and #294).
 - **Loop:** a new branch per slice → RED test where a pure `ui/lib/*` module changes (rendering and
   wiring are covered by the e2e) → `make validate` → the e2e on phone and desktop against
   `make preview` → changelog fragment → strike the row here → PR → admin squash-merge on green →
@@ -174,7 +175,7 @@ All paths under `ui/`. The page is built in `init()` (`app.js:682-788`).
 | ~~4. "Browse all stocks" + quick search (D1, D2, D6) + the phone header wrap~~ | agent | shipped 2026-09-30: `#universe-section`'s content is a native `<details id="browse-stocks">`; `hasBrowseState` (`ui/lib/state.js`, unit-tested, reuses `serializeState`'s default detection) opens it for any non-default table parameter, never for `ltFgWindow`/`ycWindow`. Quick search `#quick-search` beside the picks heading (`/` now focuses it) hands its query to `#universe-filter` and opens the section. Phone header 221 → 144 px (one-line title, icon-only issue link below 640 px). e2e: collapsed on load, table hidden, `/` + Enter opens it filtered (URL carries `filter=`), `?filter=`/`?sort=`/`?sector=` open it, `?ltFgWindow=` does not |
 | ~~5. #426: row detail works in Simple view, KPI rows in 4 groups, radar labels decided (D7)~~ | agent | shipped 2026-09-30: `#row-detail` is no longer `.detail-only`; `kpiGroups` (`ui/lib/detail_rows.js`, unit-tested against `screener_score`'s factor→input mapping) groups the KPIs as Profitability / Valuation / Risk / Momentum, each led by the Score's inputs. Radar decision: the human labels of the "Composite scores" list and no tick numbers (they crowded the top label at 390 px; the values are listed below). e2e: in Simple view a row click opens the panel with the 4 groups and Escape closes it, on every viewport |
 | ~~6. Methodology section (layer 3): "Why these charts?", "Why these universes?", backtest rules, caveats, ADR links~~ | agent | shipped 2026-09-30: `<section id="methodology">` at the end of `<main>` with `#why-charts`, `#why-universes`, `#backtest-rules`, `#decisions` headings (plain headings, not `<details>`, so hash links land on visible text); blocks cut verbatim by script, with only "above"/"below" reworded. The F&G "Why these charts?" tab (and its `bindLongTermTabs` pair), `#universe-help` and the two long disclaimers are replaced by links; the runtime caveats stay under "How it's tested" and are linked. ADR-0005/0006/0011/0012/0013/0014 + the index linked on GitHub; footer link. Word-level text diff of `index.html` before/after: nothing lost. e2e: every `a[href^="#"]` resolves to exactly one element, Methodology is the last section, its 4 headings are visible |
-| 7. Arrow-key navigation for the ARIA tabs (`#fg-tabs`, the panel tabs) | agent | e2e: ArrowLeft/ArrowRight/Home/End move focus and selection |
+| ~~7. Arrow-key navigation for the ARIA tabs (`#fg-tabs`, the panel tabs)~~ | agent | shipped 2026-09-30: one delegated `keydown` listener (`bindTabArrowKeys`, `ui/app.js`) serves every `[role=tablist]`, looking the tabs up at key time (the panel's tabs are rebuilt per row); it activates by `focus()` + `click()`, so each tablist's click handler stays the single source. Roving tabindex in both click handlers; the panel's tabs gained `role=tablist/tab/tabpanel` + `aria-controls` (`selectTab`, `ui/detail_panel.js`). No unit test (the pure part is index arithmetic). e2e `check_tab_keys` on `#fg-tabs` and `#row-detail`: ArrowRight/End/Home/ArrowLeft (wrap) move focus + selection, show the pane, exactly one tab tabbable |
 
 ## Open questions
 

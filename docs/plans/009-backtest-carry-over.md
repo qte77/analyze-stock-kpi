@@ -57,9 +57,12 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   Effect on B's monthly net: 8.52 % → 7.97 % a year, t-stat 0.92 → 0.88, null percentile
   97.7 → 98.1.
 - **What's next, in order:**
-  1. The UI redesign (approved), incl. #426 and #446's presentation items:
-     [plan 010](010-ui-redesign-progressive-disclosure.md).
+  1. #312: re-probe the LatAm/Brazil universe on yfinance 1.7.0 (its row below).
   2. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
+  3. #294, once the owner says yes or no.
+
+  The UI redesign ([plan 010](010-ui-redesign-progressive-disclosure.md), incl. #426 and #446's
+  presentation items) is complete: slices 0–7 shipped by 2026-09-30.
 - **Offloading to the cloud (optional):** `claude --cloud` needs an interactive TTY, so it fails
   from an agent's Bash. Use a one-time routine instead (`/schedule` → `RemoteTrigger`, environment
   "Default"). Good candidates are #416, #415 and #417, which need no Yahoo/SEC network and no
