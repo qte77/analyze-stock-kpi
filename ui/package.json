@@ -12,6 +12,7 @@
     "test:watch": "vitest tests",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "lint:css": "stylelint \"**/*.css\"",
     "format": "prettier --write \"**/*.js\" \"**/*.mjs\"",
     "format:check": "prettier --check \"**/*.js\" \"**/*.mjs\""
   },
@@ -22,6 +23,8 @@
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.14.0",
     "prettier": "^3.4.2",
+    "stylelint": "^17.15.0",
+    "stylelint-config-recommended": "^18.0.0",
     "typescript": "^5.7.0",
     "vite": "^8.0.16",
     "vitest": "^4.1.8"
