@@ -67,6 +67,7 @@ def check_page(page, name: str, out: Path) -> list[str]:
     failures += check_backtest(page)
     failures += check_browse(page)
     failures += check_row_detail(page)
+    failures += check_methodology(page)
 
     # Slice 1: market mood starts collapsed; its summary toggles it by click and keyboard.
     panel = page.locator("#fg-panel")
@@ -199,6 +200,26 @@ def check_row_detail(page) -> list[str]:
     page.keyboard.press("Escape")
     if panel.is_visible():
         failures.append("Escape did not close the detail panel")
+    return failures
+
+
+def check_methodology(page) -> list[str]:
+    """Plan 010 slice 6: the reference text lives in a Methodology section at the end
+    of the page, and every in-page link resolves to exactly one element."""
+    failures: list[str] = []
+    unresolved = page.evaluate(
+        "[...document.querySelectorAll('a[href^=\"#\"]')]"
+        ".map(a => a.getAttribute('href'))"
+        ".filter(h => document.querySelectorAll(h).length !== 1)"
+    )
+    if unresolved:
+        failures.append(f"in-page links that don't resolve to one element: {unresolved}")
+    last = page.evaluate("document.querySelector('main > section:last-of-type')?.id")
+    if last != "methodology":
+        failures.append(f"the last section of <main> is {last!r}, expected 'methodology'")
+    for anchor in ("#why-charts", "#why-universes", "#backtest-rules", "#decisions"):
+        if not page.locator(f"#methodology {anchor}").is_visible():
+            failures.append(f"{anchor} is not a visible heading in Methodology")
     return failures
 
 
