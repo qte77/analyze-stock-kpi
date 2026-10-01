@@ -226,7 +226,7 @@ const toRankRows = (rows) =>
     .sort((a, b) => b.score - a.score);
 
 /**
- * "Today's picks" (plan 010 slice 2; formerly series A's "Current candidates",
+ * "Latest picks" (plan 010 slice 2; formerly series A's "Current candidates",
  * #408/ADR-0014): the SAME
  * aggregated-scores-best / aggregated-scores-worst demo snapshots the
  * universe picker can show, reshaped into `renderBacktestLists`'s input
@@ -652,6 +652,32 @@ function bindFilterInput() {
   });
 }
 
+/**
+ * Open every collapsed section an in-page anchor sits in (and the section it
+ * names, if that is a wrapper around one), so `#why-charts` etc. land on visible
+ * text: a closed <details> does not open on hash navigation in every browser.
+ *
+ * @param {string} id
+ */
+function revealAnchor(id) {
+  const target = id ? document.getElementById(id) : null;
+  if (!target) return;
+  for (let d = target.closest("details"); d; d = d.parentElement?.closest("details") ?? null) {
+    d.open = true;
+  }
+  const own = target.querySelector(":scope > details");
+  if (own instanceof HTMLDetailsElement) own.open = true;
+}
+
+/** Reveal in-page link targets on click (before the browser scrolls) and on load. */
+function bindAnchorReveal() {
+  document.addEventListener("click", (event) => {
+    const link = event.target instanceof Element ? event.target.closest('a[href^="#"]') : null;
+    if (link) revealAnchor(link.getAttribute("href")?.slice(1) ?? "");
+  });
+  window.addEventListener("hashchange", () => revealAnchor(location.hash.slice(1)));
+}
+
 function openBrowseStocks() {
   const browse = /** @type {HTMLDetailsElement | null} */ (
     document.getElementById("browse-stocks")
@@ -755,6 +781,7 @@ async function init() {
   bindTableSort();
   bindKeyboardShortcuts();
   bindTabArrowKeys();
+  bindAnchorReveal();
   bindCsvExport();
   document
     .querySelectorAll(".table-wrap")
@@ -796,7 +823,7 @@ async function init() {
   bindFilterInput();
   bindQuickSearch();
 
-  // Plan 010 slice 2: today's picks are the landing content, so they load in
+  // Plan 010 slice 2: the latest picks are the landing content, so they load in
   // parallel with everything else and render as soon as their own two files
   // arrive (the loader never rejects; it resolves to null on failure).
   void loadCurrentAggregatedCandidates().then(renderTodaysPicks);
@@ -829,6 +856,12 @@ async function init() {
   bindLongTermTabs(fgEntries, ycEntries, spyEntries);
   bindWindowChips();
   openFgPanelForDeepLink();
+  // A shared link straight to a Methodology topic (or any anchor) lands visible,
+  // then re-scrolls there now that the content above has rendered.
+  if (location.hash) {
+    revealAnchor(location.hash.slice(1));
+    document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  }
 
   // D21's rebalance log is per-cadence, so it can only be fetched once each
   // series' primary cadence is known (above).
@@ -840,7 +873,7 @@ async function init() {
   // Series A (genuine decisions, the section headline) and Series B (the
   // reconstructed backfill, collapsible) render independently — never
   // spliced onto one chart/axis (D15). Series A's live best/worst lists are
-  // "Today's picks" (rendered above, ADR-0014), not results/backtest_genuine/lists.
+  // "Latest picks" (rendered above, ADR-0014), not results/backtest_genuine/lists.
   // Plan 010 slice 3 (#446): SPY's total return as a reference line on both charts.
   renderBacktestChart(
     "a",

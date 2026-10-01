@@ -1092,7 +1092,8 @@ function buildRankOl(rows, start = 1) {
 function buildRankList(title, rows) {
   const wrap = document.createElement("div");
   wrap.className = "backtest-rank-list";
-  const h = document.createElement("h3");
+  // Level 3: under series B's "Latest best/worst 25" (h3).
+  const h = document.createElement("h4");
   h.textContent = title;
   wrap.append(h, buildRankOl(rows));
   return wrap;
@@ -1123,7 +1124,7 @@ function buildPicksList(title, rows) {
 }
 
 /**
- * Plan 010 slice 2: "Today's picks", the live aggregated best/worst 25
+ * Plan 010 slice 2: "Latest picks", the live aggregated best/worst 25
  * (`app.js`'s `loadCurrentAggregatedCandidates`, ADR-0014: the identical qte77
  * Score as their source universe). Best comes first in the DOM, so it stacks
  * above Worst on narrow screens (D3). A missing `entry` shows the empty hint.
@@ -1142,7 +1143,7 @@ export function renderTodaysPicks(entry) {
     body.append(hint);
     return;
   }
-  if (heading) heading.textContent = `Today's picks · ${entry.date}`;
+  if (heading) heading.textContent = `Latest picks · updated ${entry.date}`;
   body.append(
     buildPicksList("Best 25 · qte77 Score", entry.best ?? []),
     buildPicksList("Worst 25 · qte77 Score", entry.worst ?? []),
@@ -1153,14 +1154,14 @@ export function renderTodaysPicks(entry) {
  * Render one series' best/worst 25 collapsible. Only series B ("b") uses it
  * now: the historical "Latest best/worst 25" from the most recent
  * `results/backtest/lists/YYYY.json` entry (score_bt, #403/#404). Series A's
- * live lists moved to "Today's picks" (`renderTodaysPicks`, plan 010 slice 2).
+ * live lists moved to "Latest picks" (`renderTodaysPicks`, plan 010 slice 2).
  * A missing/empty `entry` renders the empty hint and never throws.
  *
  * @param {BacktestKind} kind
  * @param {{date: string, eligible: number, best: Array<{ticker: string, score: number}>, worst: Array<{ticker: string, score: number}>} | null} entry
  */
 export function renderBacktestLists(kind, entry) {
-  const summaryEl = document.querySelector(`#backtest-${kind}-lists summary`);
+  const summaryEl = document.querySelector(`#backtest-${kind}-lists > summary > *`);
   const body = document.getElementById(`backtest-${kind}-lists-body`);
   if (!body) return;
   body.replaceChildren();
@@ -1255,7 +1256,7 @@ function buildTradeRow(row) {
  * @param {import("./lib/portfolio.js").TradeLogEntry[] | null | undefined} trades
  */
 export function renderBacktestTrades(kind, trades) {
-  const summaryEl = document.querySelector(`#backtest-${kind}-trades summary`);
+  const summaryEl = document.querySelector(`#backtest-${kind}-trades > summary > *`);
   const body = document.getElementById(`backtest-${kind}-trades-body`);
   if (!body) return;
   body.replaceChildren();

@@ -37,7 +37,7 @@
       · KPI demo dashboard
     </h1>
     <p class="tagline">
-      qte77 ranks ~300 stocks by one quality score, shows today's best and worst 25, and
+      qte77 ranks ~300 stocks by one quality score, shows the latest best and worst 25, and
       tracks how that ranking would have performed.
     </p>
     <div class="header-meta">
@@ -70,9 +70,9 @@
     <section id="fear-greed-section">
       <!-- Plan 010 slice 1 (D4/D6): the market-mood panel is collapsed behind a
            native <details>; its summary is the compact score. -->
-      <details id="fg-panel">
-      <summary>
-        <span class="fg-summary-label">Market mood</span>
+      <details id="fg-panel" class="section-details">
+      <summary><h2>
+        <span>Market mood</span>
         <span id="fg-header" hidden>
           <span id="fg-score"></span>
           <span id="fg-meta">
@@ -80,7 +80,7 @@
             <span id="fg-deltas"></span>
           </span>
         </span>
-      </summary>
+      </h2></summary>
       <div
         id="fg-tabs"
         class="detail-tabs"
@@ -139,7 +139,7 @@
          lead the page (the live aggregated lists, ADR-0014). -->
     <section id="todays-picks" aria-labelledby="picks-heading">
       <div class="picks-head">
-        <h2 id="picks-heading">Today's picks</h2>
+        <h2 id="picks-heading">Latest picks</h2>
         <!-- Plan 010 D2: the layer-1 quick search; submitting opens "Browse all
              stocks" filtered by the same Fuse.js filter as #universe-filter. -->
         <form id="quick-search" role="search">
@@ -156,7 +156,8 @@
     </section>
 
     <section id="backtest-section">
-      <h2 id="backtest-a-headline">Genuine decisions</h2>
+      <details id="backtest-a" class="section-details" open>
+      <summary><h2 id="backtest-a-headline">Genuine decisions</h2></summary>
       <div id="backtest-a-chart-wrap">
         <div class="backtest-chart-empty">loading…</div>
         <canvas
@@ -169,7 +170,7 @@
       <!-- Plan 010 slice 3: how the numbers are made, one click away (D5: series B
            stays in its own block, never on series A's chart or headline). -->
       <details id="backtest-details">
-      <summary>How it's tested</summary>
+      <summary><h3>How it's tested</h3></summary>
       <div
         id="backtest-a-mode-toggle"
         class="window-chips"
@@ -183,7 +184,7 @@
         <table id="backtest-a-metrics-table"></table>
       </div>
       <details class="backtest-more-metrics">
-        <summary>More metrics</summary>
+        <summary><h4>More metrics</h4></summary>
         <div class="table-wrap">
           <table id="backtest-a-metrics-detail-table"></table>
         </div>
@@ -194,14 +195,18 @@
       </details>
       <p id="backtest-a-key-facts" class="key-facts"></p>
       <details id="backtest-a-trades">
-        <summary>Rebalance log</summary>
+        <summary><h4>Rebalance log</h4></summary>
         <div id="backtest-a-trades-body"></div>
       </details>
       <ul id="backtest-a-caveats" class="caveats-list"></ul>
       <p class="backtest-disclaimer">Hypothetical, point-in-time backtest — not investment advice. <a href="#backtest-rules">Backtest rules</a></p>
+      </details>
+      </details>
+    </section>
 
-      <details id="backtest-b-collapsible">
-        <summary id="backtest-b-summary-label">Reconstructed backfill (approximation)</summary>
+    <section id="backtest-b-section">
+      <details id="backtest-b-collapsible" class="section-details">
+        <summary><h2 id="backtest-b-summary-label">Reconstructed backfill (approximation)</h2></summary>
         <div id="backtest-b-body">
           <p class="backtest-caveat-not-live">
             <strong>Not the live qte77 Score:</strong> reconstructed from 6 of 9 inputs — forward
@@ -228,7 +233,7 @@
             <table id="backtest-b-metrics-table"></table>
           </div>
           <details class="backtest-more-metrics">
-            <summary>More metrics</summary>
+            <summary><h3>More metrics</h3></summary>
             <div class="table-wrap">
               <table id="backtest-b-metrics-detail-table"></table>
             </div>
@@ -239,25 +244,24 @@
           </details>
           <p id="backtest-b-key-facts" class="key-facts"></p>
           <details id="backtest-b-lists">
-            <summary>Latest best/worst 25</summary>
+            <summary><h3>Latest best/worst 25</h3></summary>
             <div id="backtest-b-lists-body"></div>
           </details>
           <details id="backtest-b-trades">
-            <summary>Rebalance log</summary>
+            <summary><h3>Rebalance log</h3></summary>
             <div id="backtest-b-trades-body"></div>
           </details>
           <ul id="backtest-b-caveats" class="caveats-list"></ul>
           <p class="backtest-disclaimer">Hypothetical, point-in-time backtest — not investment advice. <a href="#backtest-rules">Backtest rules</a></p>
         </div>
       </details>
-      </details>
     </section>
 
     <section id="universe-section">
       <!-- Plan 010 slice 4 (D1/D6): the universe table, picker, donut and CSV are
            one click away; a table deep link (?filter=, ?sort=, …) opens it. -->
-      <details id="browse-stocks">
-      <summary>Browse all stocks</summary>
+      <details id="browse-stocks" class="section-details">
+      <summary><h2>Browse all stocks</h2></summary>
       <div id="universe-controls-row">
         <div id="universe-header">
 <a class="methodology-link" href="#why-universes">Why these universes?</a>
@@ -339,7 +343,8 @@
     <!-- Plan 010 slice 6: layer 3, the reference. Blocks moved verbatim from the
          F&G panel, the universe section and "How it's tested". -->
     <section id="methodology" aria-labelledby="methodology-heading">
-      <h2 id="methodology-heading">Methodology</h2>
+      <details class="section-details">
+      <summary><h2 id="methodology-heading">Methodology</h2></summary>
       <h3 id="why-charts">Why these charts?</h3>
       <dl class="why-list">
           <dt><a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank" rel="noopener noreferrer">CNN F&amp;G</a> rolling (TTM)</dt>
@@ -347,7 +352,7 @@
           <dt>Long-term context (merged)</dt>
           <dd>One chart for multi-year regime context. On the 0–100 left axis: the <a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank" rel="noopener noreferrer">CNN F&amp;G</a> monthly median (history backfilled via the <a href="https://github.com/whit3rabbit/fear-greed-data" target="_blank" rel="noopener noreferrer">whit3rabbit/fear-greed-data</a> mirror) and the <strong>5s10s slope</strong> (10y − 5y curve-steepness from yfinance <code>^TNX</code>/<code>^FVX</code>, normalized onto the same 0–100 scale). On a logarithmic right axis: a <strong>broad-equity index</strong> — the <code>SPY</code> ETF's return rebased to 100, a derived series (never the S&amp;P 500 index level). All three are aggregated to a shared monthly grid.</dd>
           <dt>Backtested long/short 25/25 (hypothetical) — two series</dt>
-          <dd>Two point-in-time backtested long/short books — long the top 25 / short the bottom 25, equal-weighted 1/25 per leg (gross 200&nbsp;%, net 0), marked daily from closing prices, costed at 10&nbsp;bp one-way turnover, published gross and net. <strong>Series A</strong> (the headline) ranks by the <strong>live qte77 Score</strong> at each genuine <code>data</code>-branch snapshot date — the same score shown in the Score column of "Browse all stocks" — trading the first close strictly after the snapshot; no reduced-input approximation. "Today's picks" at the top is a <strong>separate, non-historical</strong> display: the live <code>aggregated-scores-best</code> / <code>-worst</code> lists (same data as "Browse all stocks", never a second independent fetch), so today's candidates always carry the identical qte77 Score as their source universe (ADR-0014). <strong>Series B</strong> ("Reconstructed backfill", under "How it's tested") extends the book back to ~2023 on a weekly rank grid across <strong>all base universes</strong>, ranked by a reduced point-in-time score (<code>score_bt</code>, ADR-0013) computed only from what was knowable on each historical rank date — 6 of 9 Score inputs; forward P/E, PEG and beta have no free point-in-time history, so it is <strong>not</strong> the live qte77 Score. The two series are <strong>never spliced or drawn on one axis</strong> — Series B is a labelled approximation, not a continuation of Series A. Each chart marks its primary cadence's rebalance days with a triangle; the collapsible <strong>"Rebalance log"</strong> under "How it's tested" lists every rebalance newest-first — trade date, reason (initial / scheduled / quarterly-after-filings / buffer exit / buy &amp; hold), and which tickers entered or exited the long and short legs, plus that day's turnover — so it's always clear when a rebalance happened, why, and on which side. Both series are <strong>hypothetical and not investment advice</strong>: survivorship and a "today's index membership" size bias are disclosed in the caveats under each chart. Both extend forward every Saturday under identical rules.</dd>
+          <dd>Two point-in-time backtested long/short books — long the top 25 / short the bottom 25, equal-weighted 1/25 per leg (gross 200&nbsp;%, net 0), marked daily from closing prices, costed at 10&nbsp;bp one-way turnover, published gross and net. <strong>Series A</strong> (the headline) ranks by the <strong>live qte77 Score</strong> at each genuine <code>data</code>-branch snapshot date — the same score shown in the Score column of "Browse all stocks" — trading the first close strictly after the snapshot; no reduced-input approximation. "Latest picks" at the top is a <strong>separate, non-historical</strong> display: the live <code>aggregated-scores-best</code> / <code>-worst</code> lists (same data as "Browse all stocks", never a second independent fetch), so today's candidates always carry the identical qte77 Score as their source universe (ADR-0014). <strong>Series B</strong> ("Reconstructed backfill", under "How it's tested") extends the book back to ~2023 on a weekly rank grid across <strong>all base universes</strong>, ranked by a reduced point-in-time score (<code>score_bt</code>, ADR-0013) computed only from what was knowable on each historical rank date — 6 of 9 Score inputs; forward P/E, PEG and beta have no free point-in-time history, so it is <strong>not</strong> the live qte77 Score. The two series are <strong>never spliced or drawn on one axis</strong> — Series B is a labelled approximation, not a continuation of Series A. Each chart marks its primary cadence's rebalance days with a triangle; the collapsible <strong>"Rebalance log"</strong> under "How it's tested" lists every rebalance newest-first — trade date, reason (initial / scheduled / quarterly-after-filings / buffer exit / buy &amp; hold), and which tickers entered or exited the long and short legs, plus that day's turnover — so it's always clear when a rebalance happened, why, and on which side. Both series are <strong>hypothetical and not investment advice</strong>: survivorship and a "today's index membership" size bias are disclosed in the caveats under each chart. Both extend forward every Saturday under identical rules.</dd>
         </dl>
       <h3 id="why-universes">Why these universes?</h3>
       <dl class="why-list">
@@ -356,7 +361,7 @@
               <dt>federal-contractors</dt>
               <dd>Orchestrator-driven: chains <code>usaspending.gov</code> → SEC EDGAR → yfinance to assemble the DoD Top-25 + curated seed. Rebuilt weekly.</dd>
               <dt>aggregated-scores-best / -worst</dt>
-              <dd>Cross-universe ranking by the <strong>qte77 Score</strong> (<code>screener_score</code>) — the same score shown in the Score column and detail panel on every universe. Top 25 + bottom 25 of the merged ticker pool, using today's fundamentals only — the same per-ticker records and score as their source universe's own snapshot for the same date (ADR-0014), never a second independent fetch. This is also "Today's picks" at the top of the page; <strong>Series A</strong>'s chart/metrics in the backtest section reuse this exact ranking construction historically, at each genuine snapshot date. <strong>Series B</strong> (the reconstructed backfill) ranks <strong>all base universes</strong> independently, with its own reduced point-in-time score (<code>score_bt</code>) — see <a href="#why-charts">Why these charts?</a>.</dd>
+              <dd>Cross-universe ranking by the <strong>qte77 Score</strong> (<code>screener_score</code>) — the same score shown in the Score column and detail panel on every universe. Top 25 + bottom 25 of the merged ticker pool, using today's fundamentals only — the same per-ticker records and score as their source universe's own snapshot for the same date (ADR-0014), never a second independent fetch. This is also "Latest picks" at the top of the page; <strong>Series A</strong>'s chart/metrics in the backtest section reuse this exact ranking construction historically, at each genuine snapshot date. <strong>Series B</strong> (the reconstructed backfill) ranks <strong>all base universes</strong> independently, with its own reduced point-in-time score (<code>score_bt</code>) — see <a href="#why-charts">Why these charts?</a>.</dd>
             </dl>
       <h3 id="backtest-rules">Backtest rules</h3>
       <p class="backtest-disclaimer">
@@ -369,7 +374,7 @@
         held across a snapshot gap. Returns are total returns (dividends included) in local
         currency; survivorship and a
         "today's index membership" size bias are disclosed in each series' caveats under "How it's tested". Extended
-        forward every Saturday. "Today's picks" at the top is a <strong>separate,
+        forward every Saturday. "Latest picks" at the top is a <strong>separate,
         non-historical</strong> display: it shows the live <code>aggregated-scores-best</code>
         / <code>-worst</code> lists (full qte77 Score, same data as "Browse all stocks")
         rather than a rank-date snapshot from this simulation, so today's candidates always
@@ -396,9 +401,10 @@
         <li><a href="https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0011-equity-macro-overlay-via-spy-indexed-returns.md" target="_blank" rel="noopener noreferrer">ADR-0011 — SPY as the equity overlay</a></li>
         <li><a href="https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0012-longshort-model-portfolio.md" target="_blank" rel="noopener noreferrer">ADR-0012 — the long/short model portfolio</a></li>
         <li><a href="https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0013-point-in-time-backtest.md" target="_blank" rel="noopener noreferrer">ADR-0013 — the point-in-time backtest (series A/B)</a></li>
-        <li><a href="https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0014-current-candidates-use-live-score.md" target="_blank" rel="noopener noreferrer">ADR-0014 — today's picks use the live Score</a></li>
+        <li><a href="https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0014-current-candidates-use-live-score.md" target="_blank" rel="noopener noreferrer">ADR-0014 — the latest picks use the live Score</a></li>
         <li><a href="https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/README.md" target="_blank" rel="noopener noreferrer">All decisions</a></li>
       </ul>
+      </details>
     </section>
   </main>
 
