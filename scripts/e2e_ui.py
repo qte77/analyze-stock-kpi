@@ -63,6 +63,7 @@ def check_page(page, name: str, out: Path) -> list[str]:
     if rows == 0:
         failures.append("universe table has no rows")
 
+    failures += check_hierarchy(page)
     failures += check_todays_picks(page)
     failures += check_backtest(page)
     failures += check_browse(page)
@@ -102,7 +103,10 @@ def check_todays_picks(page) -> list[str]:
         return page.locator(sel).first.bounding_box()["y"]
 
     if not top("#todays-picks") < top("#backtest-section") < top("#universe-section"):
-        failures.append("Today's picks is not above the backtest and universe sections")
+        failures.append("Latest picks is not above the backtest and universe sections")
+    title = page.locator("#picks-heading").inner_text()
+    if not re.fullmatch(r"(?i)Latest picks · updated \d{4}-\d{2}-\d{2}", title):
+        failures.append(f"picks title is {title!r}, expected 'Latest picks · updated <date>'")
     lists = page.locator("#picks-body .picks-list")
     if lists.count() != 2:
         return [*failures, f"expected 2 pick lists, found {lists.count()}"]
@@ -127,6 +131,15 @@ def check_backtest(page) -> list[str]:
     """Plan 010 slice 3 (#446): chart + one line in layer 1, the rest behind "How it's
     tested"; SPY on the chart; never a wall of dashes in the metrics."""
     failures: list[str] = []
+    # 2026-10-01: series A is a top-level collapsible, open on load; series B is its
+    # own top-level collapsible (not inside "How it's tested"), closed on load.
+    if not page.locator("#backtest-a").evaluate("d => d.open"):
+        failures.append("'Genuine decisions' (series A) is closed on load (should start open)")
+    b_state = page.locator("#backtest-b-collapsible").evaluate(
+        "d => [d.open, d.parentElement.closest('details') === null]"
+    )
+    if b_state != [False, True]:
+        failures.append(f"series B [open, top-level] = {b_state}, expected [False, True]")
     details = page.locator("#backtest-details")
     if details.evaluate("d => d.open"):
         failures.append("'How it's tested' is open on load (should start collapsed)")
@@ -247,9 +260,57 @@ def check_methodology(page) -> list[str]:
     last = page.evaluate("document.querySelector('main > section:last-of-type')?.id")
     if last != "methodology":
         failures.append(f"the last section of <main> is {last!r}, expected 'methodology'")
-    for anchor in ("#why-charts", "#why-universes", "#backtest-rules", "#decisions"):
-        if not page.locator(f"#methodology {anchor}").is_visible():
-            failures.append(f"{anchor} is not a visible heading in Methodology")
+    if page.locator("#methodology > details").evaluate("d => d.open"):
+        failures.append("Methodology is open on load (should start collapsed)")
+    # Methodology is collapsed, so clicking a link into it must reveal its target.
+    links = page.locator('a[href^="#"]')
+    for i in range(links.count()):
+        link = links.nth(i)
+        if not link.is_visible():
+            continue  # inside a still-closed section; reached via another link
+        href = link.get_attribute("href")
+        link.click()
+        if not page.locator(href).first.is_visible():
+            failures.append(f"clicking the {href} link did not reveal its target")
+    return failures
+
+
+def check_hierarchy(page) -> list[str]:
+    """Owner request 2026-10-01: every top-level section has an h2 title; each heading
+    is exactly one level below the heading of the section it sits in; and all headings
+    of one level share one font size."""
+    report = page.evaluate(
+        """() => {
+          const level = h => Number(h.tagName[1]);
+          const own = h => h.closest('summary')?.parentElement ?? null;  // its <details>
+          const out = {missingH2: [], wrongLevel: [], sizes: {}};
+          for (const s of document.querySelectorAll('main > section')) {
+            const first = s.querySelector('h2');
+            if (!first) out.missingH2.push(s.id);
+          }
+          for (const h of document.querySelectorAll('main :is(h2, h3, h4)')) {
+            const start = own(h)?.parentElement ?? h.parentElement;
+            const ctx = start.closest('details');
+            const ctxHeading = ctx
+              ? ctx.querySelector(':scope > summary > :is(h2, h3, h4)')
+              : (h.tagName === 'H2' ? null : h.closest('section').querySelector('h2'));
+            const want = ctxHeading ? level(ctxHeading) + 1 : 2;
+            const text = h.textContent.trim().slice(0, 40);
+            if (level(h) !== want) out.wrongLevel.push(`${h.tagName} ${text} (want h${want})`);
+            (out.sizes[h.tagName] ??= new Set()).add(getComputedStyle(h).fontSize);
+          }
+          for (const t in out.sizes) out.sizes[t] = [...out.sizes[t]];
+          return out;
+        }"""
+    )
+    failures = []
+    if report["missingH2"]:
+        failures.append(f"sections without an h2 title: {report['missingH2']}")
+    if report["wrongLevel"]:
+        failures.append(f"headings at the wrong level: {report['wrongLevel']}")
+    mixed = {tag: sizes for tag, sizes in report["sizes"].items() if len(sizes) > 1}
+    if mixed:
+        failures.append(f"one heading level, several font sizes: {mixed}")
     return failures
 
 
@@ -278,6 +339,11 @@ def check_deep_link(browser, url: str) -> list[str]:
         load(query)
         if not browse_open():
             failures.append(f"?{query} did not open 'Browse all stocks'")
+    # A shared link to a Methodology topic lands on visible text (its section opens).
+    page.goto(f"{url}#backtest-rules", wait_until="networkidle", timeout=90_000)
+    wait_for_table(page)
+    if not page.locator("#backtest-rules").is_visible():
+        failures.append("loading with #backtest-rules left the topic hidden")
     # Plan 010 D8: an explicit ?universe= still drives the universe picker.
     load("universe=sp500")
     picked = page.locator("#universe-picker").input_value()

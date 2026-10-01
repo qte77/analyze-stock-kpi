@@ -151,55 +151,83 @@ h2 {
   letter-spacing: 0.06em;
 }
 
-/* Plan 010 slice 1: market mood is a collapsed <details>; the summary is a
-   compact one-line bar, and the panel pushes content down when opened. */
-#fear-greed-section {
+/* Heading hierarchy (2026-10-01): one style per level. Level 1 is the h2 rule
+   above (each top-level section's title); level 2 is h3, level 3 is h4. */
+main h3 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+main h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+/* A heading inside a <summary> sits on the disclosure marker's line and takes
+   the summary's (interactive) color. */
+summary > :is(h2, h3, h4) {
+  display: inline;
+  margin: 0;
+  color: inherit;
+}
+
+/* Level 1 collapsible sections (market mood, both backtest series, browse,
+   methodology): a compact bar with a ▸/▾ marker; opening pushes content down. */
+#fear-greed-section,
+#backtest-section,
+#backtest-b-section,
+#universe-section,
+#methodology {
   padding: 0.75rem 1.25rem;
 }
 
-#fg-panel > summary,
-#browse-stocks > summary {
+.section-details > summary {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 0.75rem;
-  flex-wrap: wrap;
   cursor: pointer;
   list-style: none;
-}
-
-#fg-panel > summary::before,
-#browse-stocks > summary::before {
-  content: "▸";
   color: var(--text-muted);
 }
 
-#fg-panel[open] > summary,
-#browse-stocks[open] > summary {
+/* The title takes the rest of the line and wraps its own text, so the marker
+   stays beside it on a phone instead of the title dropping below it. */
+.section-details > summary > h2 {
+  flex: 1;
+  min-width: 0;
+}
+
+.section-details > summary::before {
+  content: "▸";
+}
+
+.section-details[open] > summary {
   margin-bottom: 1rem;
 }
 
-#fg-panel[open] > summary::before,
-#browse-stocks[open] > summary::before {
+.section-details[open] > summary::before {
   content: "▾";
 }
 
-#fg-panel > summary::-webkit-details-marker,
-#browse-stocks > summary::-webkit-details-marker {
+.section-details > summary::-webkit-details-marker {
   display: none;
 }
 
-/* Plan 010 slice 4: "Browse all stocks" is collapsed like market mood. */
-#universe-section {
-  padding: 0.75rem 1.25rem;
+/* Market mood's title carries the live score; only its label is styled as a title. */
+#fg-panel > summary > h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
-.fg-summary-label,
-#browse-stocks > summary {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+#fg-header {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  color: var(--text);
 }
 
 #fg-header:not([hidden]) {
@@ -1042,8 +1070,6 @@ body.overlay-active td.universe-col {
 }
 
 #methodology h3 {
-  font-size: 0.9375rem;
-  font-weight: 600;
   margin: 1.5rem 0 0.5rem;
 }
 
@@ -1075,10 +1101,6 @@ a.methodology-link {
                      (reconstructed backfill, collapsible below it). Each
                      series has its own chart/table/facts/lists — the shared
                      selectors below cover both by id ─────────── */
-
-#backtest-a-headline {
-  margin-top: 2rem;
-}
 
 #backtest-a-chart-wrap,
 #backtest-b-chart-wrap {
@@ -1145,10 +1167,10 @@ a.methodology-link {
 .backtest-more-metrics > summary {
   cursor: pointer;
   color: var(--text-muted);
-  font-size: 0.875rem;
   padding: 0.15rem 0;
 }
 
+.section-details > summary:hover,
 #backtest-details > summary:hover,
 .backtest-more-metrics > summary:hover {
   color: var(--primary);
@@ -1241,27 +1263,8 @@ a.methodology-link {
   background: color-mix(in oklab, var(--data-negative), var(--surface) 82%);
 }
 
-/* Series B collapsible (D15: never spliced onto Series A's chart/axis).
-   Mirrors the #backtest-*-lists <details> pattern, with a
-   heavier top-level summary since it gates a whole sub-section. */
-#backtest-b-collapsible {
-  margin: 2rem 0 0;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
-}
-
-#backtest-b-collapsible > summary {
-  cursor: pointer;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text);
-  padding: 0.15rem 0;
-}
-
-#backtest-b-collapsible > summary:hover {
-  color: var(--primary);
-}
-
+/* Series B (D15: never spliced onto Series A's chart/axis) is its own top-level
+   section (.section-details), closed on load. */
 #backtest-b-body {
   margin: 0.75rem 0 0;
 }
@@ -1282,10 +1285,8 @@ a.methodology-link {
   min-width: 12rem;
 }
 
-.backtest-rank-list h3 {
-  font-size: 0.8125rem;
+.backtest-rank-list :is(h3, h4) {
   margin: 0 0 0.25rem;
-  color: var(--text);
 }
 
 .backtest-rank-list ol {
@@ -1310,7 +1311,7 @@ a.methodology-link {
   color: var(--text-muted);
 }
 
-/* Plan 010 slice 2: Today's picks. Two columns; below 640px Best stacks above
+/* Plan 010 slice 2: Latest picks. Two columns; below 640px Best stacks above
    Worst (DOM order, D3). */
 #picks-body {
   display: grid;
