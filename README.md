@@ -21,17 +21,18 @@
 - A 13-column **rich CLI table** (P/E, PEG, Beta, ROE/ROA, Current, Sortino, Score, …)
   with an optional composite-score breakdown.
 - A static **[live dashboard](https://qte77.github.io/analyze-stock-kpi/)** (deployed to
-  GitHub Pages). It opens on **Today's picks**, the best and worst 25 stocks by qte77 Score,
-  under a collapsible **Market mood** bar (CNN F&G, long-term context, 5s10s). Below it, a
-  hypothetical, point-in-time backtested long/short **25/25 book**: a chart with SPY's total
-  return as a reference line and one plain sentence on how it has done. Everything else is
-  behind **How it's tested**: the metrics, the rebalance log (when, why, and which names
-  changed), the caveats, and a second, **reconstructed backfill** series since 2023 (an
-  approximation, never mixed with the headline series of genuine decisions since 2026-05-31).
-  Both are equal-weight, shown gross and net of a 10 bp turnover cost, across six rebalance
-  cadences (see [ADR-0013](docs/decisions/0013-point-in-time-backtest.md)). A sortable table
-  of every universe with row-click KPI detail sits behind "Browse all stocks" (a quick search,
-  `/`, opens it filtered), followed by a Methodology section.
+  GitHub Pages). It opens on **Latest picks**, the best and worst 25 stocks by qte77 Score
+  with the date they were last updated, under a collapsible **Market mood** bar (CNN F&G,
+  long-term context, 5s10s). Below it, **Genuine decisions**: a hypothetical, point-in-time
+  backtested long/short **25/25 book** since 2026-05-31, with SPY's total return as a
+  reference line and one plain sentence on how it has done; its metrics, rebalance log (when,
+  why, and which names changed) and caveats are behind **How it's tested**. A second,
+  **reconstructed backfill** series since 2023 is its own collapsed section (an
+  approximation, never mixed with the genuine decisions). Both are equal-weight, shown gross
+  and net of a 10 bp turnover cost, across six rebalance cadences (see
+  [ADR-0013](docs/decisions/0013-point-in-time-backtest.md)). A sortable table of every
+  universe with row-click KPI detail sits behind "Browse all stocks" (a quick search, `/`,
+  opens it filtered), and a collapsed Methodology section closes the page.
 - **No API keys, no scraping** — keyless public sources only.
 
 <details>
