@@ -6,6 +6,14 @@ timeout = 30
 max_retries = 4
 retry_wait_time = 2
 
+# github.com file pages (`/blob/`) answer 503 to the CI crawler since 2026-10-02
+# (all other github.com links pass; no GitHub incident). Check those files on the
+# raw host instead: same file, so a missing one still fails. The `#L12`-style
+# fragment is dropped — the raw host serves the whole file.
+remap = [
+    "^https://github\\.com/([^/]+/[^/]+)/blob/([^#?]+).*$ https://raw.githubusercontent.com/$1/$2",
+]
+
 # scriv changelog fragments are partials with links resolved relative
 # to the eventual CHANGELOG.md (repo root), not their changelog.d/
 # location — exclude until they're collected at release.
