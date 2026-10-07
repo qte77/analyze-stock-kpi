@@ -8033,7 +8033,7 @@
       },
       "put_call_options": {
         "rating": "extreme fear",
-        "raw_value": 0.740904444505589
+        "raw_value": 0.74090317772892
       },
       "market_volatility_vix": {
         "rating": "extreme fear",
@@ -8076,7 +8076,7 @@
       },
       "put_call_options": {
         "rating": "extreme fear",
-        "raw_value": 0.754276132076795
+        "raw_value": 0.754274865300125
       },
       "market_volatility_vix": {
         "rating": "extreme fear",
@@ -8097,7 +8097,7 @@
     }
   },
   {
-    "score": 31.0,
+    "score": 30.9714285714286,
     "rating": "fear",
     "timestamp": "2026-09-14T00:00:00Z",
     "subindicators": {
@@ -8119,7 +8119,7 @@
       },
       "put_call_options": {
         "rating": "extreme fear",
-        "raw_value": 0.766825548916163
+        "raw_value": 0.766824282139493
       },
       "market_volatility_vix": {
         "rating": "extreme fear",
@@ -8162,7 +8162,7 @@
       },
       "put_call_options": {
         "rating": "extreme fear",
-        "raw_value": 0.786089652989936
+        "raw_value": 0.786088386213267
       },
       "market_volatility_vix": {
         "rating": "extreme fear",
@@ -8205,7 +8205,7 @@
       },
       "put_call_options": {
         "rating": "extreme fear",
-        "raw_value": 0.799215836721683
+        "raw_value": 0.799214569945013
       },
       "market_volatility_vix": {
         "rating": "extreme fear",
@@ -8291,7 +8291,7 @@
       },
       "put_call_options": {
         "rating": "extreme fear",
-        "raw_value": 0.775520095593036
+        "raw_value": 0.775588650696995
       },
       "market_volatility_vix": {
         "rating": "extreme fear",
@@ -8980,6 +8980,62 @@
         "score": 76.6,
         "rating": "extreme greed",
         "raw_value": 5.18635001373813
+      }
+    }
+  },
+  {
+    "score": 44.6,
+    "rating": "fear",
+    "timestamp": "2026-10-07T21:19:57Z",
+    "previous_close": 47.2,
+    "previous_1_week": 30.2571428571429,
+    "previous_1_month": 45.228571428571435,
+    "previous_1_year": 51.857142857142854,
+    "subindicators": {
+      "market_momentum_sp500": {
+        "score": 63.6,
+        "rating": "greed",
+        "raw_value": 7801.77
+      },
+      "market_momentum_sp125": {
+        "score": 63.6,
+        "rating": "greed",
+        "raw_value": 7497.38792
+      },
+      "stock_price_strength": {
+        "score": 1.8,
+        "rating": "extreme fear",
+        "raw_value": -8.8773348477189
+      },
+      "stock_price_breadth": {
+        "score": 2.4,
+        "rating": "extreme fear",
+        "raw_value": 151.615783319923
+      },
+      "put_call_options": {
+        "score": 30.4,
+        "rating": "fear",
+        "raw_value": 0.761451372157574
+      },
+      "market_volatility_vix": {
+        "score": 50.0,
+        "rating": "neutral",
+        "raw_value": 15.08
+      },
+      "market_volatility_vix_50": {
+        "score": 50.0,
+        "rating": "neutral",
+        "raw_value": 15.6526
+      },
+      "junk_bond_demand": {
+        "score": 93.2,
+        "rating": "extreme greed",
+        "raw_value": 1.14308779329342
+      },
+      "safe_haven_demand": {
+        "score": 70.8,
+        "rating": "greed",
+        "raw_value": 4.71290390625858
       }
     }
   }
