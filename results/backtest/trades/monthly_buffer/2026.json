@@ -498,5 +498,63 @@
       "exited": []
     },
     "turnover": 0.08
+  },
+  {
+    "rank_date": "2026-10-02",
+    "trade_date": "2026-10-06",
+    "reason": "buffer_exit",
+    "long": {
+      "entered": [
+        {
+          "ticker": "6861.T",
+          "rank": 19,
+          "score": 79.29881442992081
+        },
+        {
+          "ticker": "WEGE3.SA",
+          "rank": 20,
+          "score": 78.793542870237
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "GMEXICOB.MX",
+          "rank": 56,
+          "score": 64.36950778531447
+        },
+        {
+          "ticker": "7741.T",
+          "rank": 58,
+          "score": 63.71256017786391
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "KER.PA",
+          "rank": -2,
+          "score": 9.791647962345174
+        },
+        {
+          "ticker": "AIR.PA",
+          "rank": -9,
+          "score": 15.592076625776203
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "SZU.DE",
+          "rank": -43,
+          "score": 25.51875661643339
+        },
+        {
+          "ticker": "EMBJ3.SA",
+          "rank": -46,
+          "score": 26.74524125150675
+        }
+      ]
+    },
+    "turnover": 0.16
   }
 ]

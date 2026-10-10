@@ -8110,5 +8110,213 @@
         "score": 22.7
       }
     ]
+  },
+  {
+    "date": "2026-10-02",
+    "eligible": 266,
+    "best": [
+      {
+        "ticker": "6857.T",
+        "score": 98.3
+      },
+      {
+        "ticker": "6098.T",
+        "score": 95.2
+      },
+      {
+        "ticker": "ASML.AS",
+        "score": 93.6
+      },
+      {
+        "ticker": "2371.T",
+        "score": 92.7
+      },
+      {
+        "ticker": "8035.T",
+        "score": 92.1
+      },
+      {
+        "ticker": "2454.TW",
+        "score": 90.7
+      },
+      {
+        "ticker": "ASML",
+        "score": 90.2
+      },
+      {
+        "ticker": "ABEV3.SA",
+        "score": 89.8
+      },
+      {
+        "ticker": "FIX",
+        "score": 87.8
+      },
+      {
+        "ticker": "GOOGL",
+        "score": 86.5
+      },
+      {
+        "ticker": "GOOG",
+        "score": 86.2
+      },
+      {
+        "ticker": "TSM",
+        "score": 86.0
+      },
+      {
+        "ticker": "AMD",
+        "score": 82.9
+      },
+      {
+        "ticker": "MNST",
+        "score": 82.3
+      },
+      {
+        "ticker": "005930.KS",
+        "score": 82.2
+      },
+      {
+        "ticker": "ADI",
+        "score": 81.2
+      },
+      {
+        "ticker": "6981.T",
+        "score": 81.0
+      },
+      {
+        "ticker": "VRTX",
+        "score": 80.4
+      },
+      {
+        "ticker": "6861.T",
+        "score": 79.3
+      },
+      {
+        "ticker": "WEGE3.SA",
+        "score": 78.8
+      },
+      {
+        "ticker": "MPWR",
+        "score": 77.3
+      },
+      {
+        "ticker": "AMAT",
+        "score": 76.9
+      },
+      {
+        "ticker": "JNJ",
+        "score": 76.9
+      },
+      {
+        "ticker": "ODFL",
+        "score": 76.7
+      },
+      {
+        "ticker": "2379.TW",
+        "score": 74.6
+      }
+    ],
+    "worst": [
+      {
+        "ticker": "CSNA3.SA",
+        "score": 4.1
+      },
+      {
+        "ticker": "KER.PA",
+        "score": 9.8
+      },
+      {
+        "ticker": "FLR",
+        "score": 10.9
+      },
+      {
+        "ticker": "BA",
+        "score": 12.1
+      },
+      {
+        "ticker": "LOW",
+        "score": 13.5
+      },
+      {
+        "ticker": "KR",
+        "score": 14.5
+      },
+      {
+        "ticker": "CCI",
+        "score": 14.7
+      },
+      {
+        "ticker": "JBS",
+        "score": 15.5
+      },
+      {
+        "ticker": "AIR.PA",
+        "score": 15.6
+      },
+      {
+        "ticker": "SBUX",
+        "score": 16.7
+      },
+      {
+        "ticker": "STLAM.MI",
+        "score": 17.0
+      },
+      {
+        "ticker": "MBG.DE",
+        "score": 17.1
+      },
+      {
+        "ticker": "VOW3.DE",
+        "score": 17.4
+      },
+      {
+        "ticker": "NKE",
+        "score": 18.0
+      },
+      {
+        "ticker": "VNA.DE",
+        "score": 18.1
+      },
+      {
+        "ticker": "TXT",
+        "score": 18.4
+      },
+      {
+        "ticker": "MGLU3.SA",
+        "score": 19.6
+      },
+      {
+        "ticker": "MSCI",
+        "score": 19.7
+      },
+      {
+        "ticker": "KLBN11.SA",
+        "score": 20.0
+      },
+      {
+        "ticker": "ORLY",
+        "score": 20.8
+      },
+      {
+        "ticker": "MELI",
+        "score": 21.3
+      },
+      {
+        "ticker": "TMRAY",
+        "score": 21.7
+      },
+      {
+        "ticker": "015760.KS",
+        "score": 21.7
+      },
+      {
+        "ticker": "MCD",
+        "score": 21.8
+      },
+      {
+        "ticker": "CWEN",
+        "score": 22.0
+      }
+    ]
   }
 ]

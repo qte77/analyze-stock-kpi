@@ -980,5 +980,93 @@
       ]
     },
     "turnover": 0.68
+  },
+  {
+    "rank_date": "2026-10-04",
+    "trade_date": "2026-10-06",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "6098.T",
+          "rank": 4,
+          "score": 67.6
+        },
+        {
+          "ticker": "8035.T",
+          "rank": 6,
+          "score": 77.0
+        },
+        {
+          "ticker": "8316.T",
+          "rank": 7,
+          "score": 69.0
+        },
+        {
+          "ticker": "9983.T",
+          "rank": 8,
+          "score": 67.5
+        },
+        {
+          "ticker": "PETR3.SA",
+          "rank": 19,
+          "score": 67.0
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "105560.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "AMGN",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "LLY",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "MNST",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "RHHBY",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "6594.T",
+          "rank": -6,
+          "score": 23.6
+        },
+        {
+          "ticker": "OR.PA",
+          "rank": -18,
+          "score": 30.7
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "9984.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "STLAM.MI",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "turnover": 0.28
   }
 ]

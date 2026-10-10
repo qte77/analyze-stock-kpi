@@ -1040,5 +1040,93 @@
       ]
     },
     "turnover": 0.36
+  },
+  {
+    "rank_date": "2026-10-02",
+    "trade_date": "2026-10-06",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "ADI",
+          "rank": 16,
+          "score": 81.16773024010429
+        },
+        {
+          "ticker": "MPWR",
+          "rank": 21,
+          "score": 77.25620079001062
+        },
+        {
+          "ticker": "ODFL",
+          "rank": 24,
+          "score": 76.70348470016708
+        },
+        {
+          "ticker": "2379.TW",
+          "rank": 25,
+          "score": 74.64745007146814
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "REGN",
+          "rank": 29,
+          "score": 72.44258829571014
+        },
+        {
+          "ticker": "NVDA",
+          "rank": 26,
+          "score": 74.56703672805345
+        },
+        {
+          "ticker": "IDCC",
+          "rank": 36,
+          "score": 68.85576380860834
+        },
+        {
+          "ticker": "STRL",
+          "rank": 28,
+          "score": 73.83545358071949
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "SBUX",
+          "rank": -10,
+          "score": 16.718505564068963
+        },
+        {
+          "ticker": "MSCI",
+          "rank": -18,
+          "score": 19.732295716588652
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -25,
+          "score": 22.026311326904175
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "NET",
+          "rank": -39,
+          "score": 24.692472936323124
+        },
+        {
+          "ticker": "HON",
+          "rank": -30,
+          "score": 23.375895748883178
+        },
+        {
+          "ticker": "BKNG",
+          "rank": -26,
+          "score": 22.222222222222225
+        }
+      ]
+    },
+    "turnover": 0.28
   }
 ]
