@@ -2382,5 +2382,63 @@
       ]
     },
     "turnover": 0.12
+  },
+  {
+    "rank_date": "2026-10-09",
+    "trade_date": "2026-10-13",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "REGN",
+          "rank": 22,
+          "score": 76.19578071082489
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "2379.TW",
+          "rank": 31,
+          "score": 72.41062417712719
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "EMBJ3.SA",
+          "rank": -22,
+          "score": 21.67639366646209
+        },
+        {
+          "ticker": "BKNG",
+          "rank": -24,
+          "score": 22.222222222222225
+        },
+        {
+          "ticker": "GE",
+          "rank": -25,
+          "score": 22.26365681008629
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "JBS",
+          "rank": -29,
+          "score": 23.37536463191751
+        },
+        {
+          "ticker": "MGLU3.SA",
+          "rank": -87,
+          "score": 34.43275974237184
+        },
+        {
+          "ticker": "MSCI",
+          "rank": -27,
+          "score": 22.70256527738539
+        }
+      ]
+    },
+    "turnover": 0.16
   }
 ]

@@ -1068,5 +1068,73 @@
       ]
     },
     "turnover": 0.28
+  },
+  {
+    "rank_date": "2026-10-11",
+    "trade_date": "2026-10-13",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "ABEV3.SA",
+          "rank": 7,
+          "score": 67.4
+        },
+        {
+          "ticker": "BBDC4.SA",
+          "rank": 10,
+          "score": 68.6
+        },
+        {
+          "ticker": "PETR4.SA",
+          "rank": 20,
+          "score": 67.0
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "055550.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "9983.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "TSM",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "9984.T",
+          "rank": -6,
+          "score": 28.0
+        },
+        {
+          "ticker": "STLAM.MI",
+          "rank": -20,
+          "score": 30.5
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "035720.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "OR.PA",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "turnover": 0.2
   }
 ]
