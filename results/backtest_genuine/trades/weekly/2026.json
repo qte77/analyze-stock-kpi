@@ -1136,5 +1136,83 @@
       ]
     },
     "turnover": 0.2
+  },
+  {
+    "rank_date": "2026-10-18",
+    "trade_date": "2026-10-19",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 2,
+          "score": 67.0
+        },
+        {
+          "ticker": "COP",
+          "rank": 11,
+          "score": 72.8
+        },
+        {
+          "ticker": "JNJ",
+          "rank": 17,
+          "score": 70.2
+        },
+        {
+          "ticker": "LLY",
+          "rank": 18,
+          "score": 69.5
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "6857.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "AMAT",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "BBDC4.SA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "BESIY",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "ETN",
+          "rank": -14,
+          "score": 29.3
+        },
+        {
+          "ticker": "FLR",
+          "rank": -15,
+          "score": 29.7
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "SNPS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "STLAM.MI",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "turnover": 0.24
   }
 ]

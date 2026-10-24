@@ -2440,5 +2440,73 @@
       ]
     },
     "turnover": 0.16
+  },
+  {
+    "rank_date": "2026-10-16",
+    "trade_date": "2026-10-19",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "XOM",
+          "rank": 21,
+          "score": 75.87205165958011
+        },
+        {
+          "ticker": "2379.TW",
+          "rank": 22,
+          "score": 75.23972904681465
+        },
+        {
+          "ticker": "2603.TW",
+          "rank": 23,
+          "score": 73.98390741681631
+        },
+        {
+          "ticker": "V",
+          "rank": 25,
+          "score": 72.65999065918976
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "WEGE3.SA",
+          "rank": 33,
+          "score": 70.41397892767428
+        },
+        {
+          "ticker": "JNJ",
+          "rank": 30,
+          "score": 70.81053435658237
+        },
+        {
+          "ticker": "AMAT",
+          "rank": 39,
+          "score": 67.94598131090397
+        },
+        {
+          "ticker": "MPWR",
+          "rank": 36,
+          "score": 68.86098618401952
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "NET",
+          "rank": -24,
+          "score": 21.95855953022191
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "GE",
+          "rank": -26,
+          "score": 23.044822371610298
+        }
+      ]
+    },
+    "turnover": 0.2
   }
 ]
