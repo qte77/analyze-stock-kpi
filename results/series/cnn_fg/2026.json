@@ -9658,7 +9658,7 @@
   {
     "score": 20.9809523809524,
     "rating": "extreme fear",
-    "timestamp": "2026-10-23T21:15:11Z",
+    "timestamp": "2026-10-23T23:59:44Z",
     "previous_close": 19.8131868131868,
     "previous_1_week": 22.0732142857143,
     "previous_1_month": 32.5428571428571,
@@ -9687,7 +9687,7 @@
       "put_call_options": {
         "score": 21.2,
         "rating": "extreme fear",
-        "raw_value": 0.803190170163284
+        "raw_value": 0.803209560605355
       },
       "market_volatility_vix": {
         "score": 16.6666666666667,
