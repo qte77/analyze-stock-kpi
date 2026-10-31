@@ -1214,5 +1214,103 @@
       ]
     },
     "turnover": 0.24
+  },
+  {
+    "rank_date": "2026-10-25",
+    "trade_date": "2026-10-27",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "033780.KS",
+          "rank": 3,
+          "score": 65.6
+        },
+        {
+          "ticker": "2603.TW",
+          "rank": 4,
+          "score": 66.0
+        },
+        {
+          "ticker": "AMGN",
+          "rank": 8,
+          "score": 66.9
+        },
+        {
+          "ticker": "BBAS3.SA",
+          "rank": 10,
+          "score": 67.4
+        },
+        {
+          "ticker": "RHHBY",
+          "rank": 20,
+          "score": 70.8
+        },
+        {
+          "ticker": "TSM",
+          "rank": 22,
+          "score": 66.2
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "000660.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "6098.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "ENI.MI",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "GOOG",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "GOOGL",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "JNJ",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "LPX",
+          "rank": -16,
+          "score": 28.8
+        },
+        {
+          "ticker": "SNPS",
+          "rank": -21,
+          "score": 28.2
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "6594.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "UBER",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "turnover": 0.32
   }
 ]
