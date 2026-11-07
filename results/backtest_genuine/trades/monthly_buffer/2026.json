@@ -746,5 +746,183 @@
       ]
     },
     "turnover": 0.28
+  },
+  {
+    "rank_date": "2026-11-01",
+    "trade_date": "2026-11-04",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 2,
+          "score": 67.2
+        },
+        {
+          "ticker": "033780.KS",
+          "rank": 4,
+          "score": 67.7
+        },
+        {
+          "ticker": "ABBV",
+          "rank": 8,
+          "score": 73.9
+        },
+        {
+          "ticker": "AMGN",
+          "rank": 9,
+          "score": 67.3
+        },
+        {
+          "ticker": "COP",
+          "rank": 12,
+          "score": 72.8
+        },
+        {
+          "ticker": "LLY",
+          "rank": 15,
+          "score": 71.7
+        },
+        {
+          "ticker": "MNST",
+          "rank": 16,
+          "score": 69.5
+        },
+        {
+          "ticker": "MRK",
+          "rank": 17,
+          "score": 81.4
+        },
+        {
+          "ticker": "PETR4.SA",
+          "rank": 19,
+          "score": 67.0
+        },
+        {
+          "ticker": "RHHBY",
+          "rank": 21,
+          "score": 72.7
+        },
+        {
+          "ticker": "SUZB3.SA",
+          "rank": 23,
+          "score": 66.7
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "055550.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "6857.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "9983.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "AMAT",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "BESIY",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "BPAC11.SA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "GOOG",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "GOOGL",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "ITUB4.SA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "TSM",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "TTE.PA",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "9984.T",
+          "rank": -5,
+          "score": 23.9
+        },
+        {
+          "ticker": "DG.PA",
+          "rank": -9,
+          "score": 29.1
+        },
+        {
+          "ticker": "ETN",
+          "rank": -14,
+          "score": 29.3
+        },
+        {
+          "ticker": "LPX",
+          "rank": -16,
+          "score": 28.9
+        },
+        {
+          "ticker": "VOW3.DE",
+          "rank": -24,
+          "score": 24.5
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "035720.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "3382.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "OR.PA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "SNPS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "WMT",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "turnover": 0.64
   }
 ]

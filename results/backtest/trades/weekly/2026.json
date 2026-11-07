@@ -2576,5 +2576,103 @@
       ]
     },
     "turnover": 0.2
+  },
+  {
+    "rank_date": "2026-10-30",
+    "trade_date": "2026-11-04",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "RHHBY",
+          "rank": 16,
+          "score": 76.49168912537398
+        },
+        {
+          "ticker": "033780.KS",
+          "rank": 21,
+          "score": 74.03100199654683
+        },
+        {
+          "ticker": "KO",
+          "rank": 24,
+          "score": 72.63254188640589
+        },
+        {
+          "ticker": "GILD",
+          "rank": 25,
+          "score": 72.54340188573856
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "GOOGL",
+          "rank": 35,
+          "score": 67.16815285032256
+        },
+        {
+          "ticker": "GOOG",
+          "rank": 41,
+          "score": 66.78579003784849
+        },
+        {
+          "ticker": "FIX",
+          "rank": 29,
+          "score": 72.1993484903415
+        },
+        {
+          "ticker": "6981.T",
+          "rank": 28,
+          "score": 72.24912929057648
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "AXIA3.SA",
+          "rank": -13,
+          "score": 18.13160595262242
+        },
+        {
+          "ticker": "NET",
+          "rank": -16,
+          "score": 19.295162652432555
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -20,
+          "score": 20.031379914734945
+        },
+        {
+          "ticker": "MGLU3.SA",
+          "rank": -21,
+          "score": 20.16431843831651
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "TXT",
+          "rank": -37,
+          "score": 25.17462866252626
+        },
+        {
+          "ticker": "TMRAY",
+          "rank": -26,
+          "score": 21.658668899554318
+        },
+        {
+          "ticker": "MCD",
+          "rank": -27,
+          "score": 21.76886623664747
+        },
+        {
+          "ticker": "SBUX",
+          "rank": -40,
+          "score": 25.712943363034967
+        }
+      ]
+    },
+    "turnover": 0.32
   }
 ]

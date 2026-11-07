@@ -1,6 +1,6 @@
 {
   "method_version": "2",
-  "as_of": "2026-10-30",
+  "as_of": "2026-11-06",
   "start": "2026-05-31",
   "universes": [
     "eurostoxx",
@@ -52,7 +52,7 @@
         "ci90": null,
         "t_stat": null
       },
-      "rebalances": 5
+      "rebalances": 6
     },
     "quarterly_filings": {
       "gross": {
@@ -110,7 +110,7 @@
         "ci90": null,
         "t_stat": null
       },
-      "rebalances": 5
+      "rebalances": 6
     },
     "weekly": {
       "gross": {
@@ -139,7 +139,7 @@
         "ci90": null,
         "t_stat": null
       },
-      "rebalances": 12
+      "rebalances": 13
     },
     "yearly": {
       "gross": {
