@@ -34,7 +34,7 @@ jobs:
   triage:
     runs-on: ubuntu-latest
     steps:
-      - uses: qte77/gha-issue-triage@f7254d606bd002343b73190706b46f43b645f912  # v0.5.0
+      - uses: qte77/gha-issue-triage@c3af11492ee575e64641e18bef7f0f6898143279  # v0.6.0
         with:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           llm-api-key: ${{ secrets.CF_WORKERS_AI_TOKEN }}
