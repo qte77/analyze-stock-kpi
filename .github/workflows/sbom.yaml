@@ -34,6 +34,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      - uses: qte77/gha-sbom-action@cd873b1278a6793a99cfe199c01d603d72cca717  # v0.1.1
+      - uses: qte77/gha-sbom-action@35cad9a48b372e6d552637a101ad5956f41e2463  # v0.1.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
