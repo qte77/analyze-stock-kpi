@@ -556,5 +556,93 @@
       ]
     },
     "turnover": 0.16
+  },
+  {
+    "rank_date": "2026-11-06",
+    "trade_date": "2026-11-09",
+    "reason": "buffer_exit",
+    "long": {
+      "entered": [
+        {
+          "ticker": "EVVTY",
+          "rank": 6,
+          "score": 83.23829926727949
+        },
+        {
+          "ticker": "JNJ",
+          "rank": 11,
+          "score": 76.91999838544838
+        },
+        {
+          "ticker": "PG",
+          "rank": 12,
+          "score": 76.20711658735918
+        },
+        {
+          "ticker": "V",
+          "rank": 14,
+          "score": 75.87573748547506
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "STRL",
+          "rank": 90,
+          "score": 57.22562217913012
+        },
+        {
+          "ticker": "AMAT",
+          "rank": 74,
+          "score": 60.403371946184734
+        },
+        {
+          "ticker": "NVDA",
+          "rank": 44,
+          "score": 64.71619674894703
+        },
+        {
+          "ticker": "6981.T",
+          "rank": 56,
+          "score": 62.72653678857973
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "NET",
+          "rank": -11,
+          "score": 17.745256331435563
+        },
+        {
+          "ticker": "AXIA3.SA",
+          "rank": -14,
+          "score": 18.13160595262242
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -16,
+          "score": 20.031379914734945
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "RICK",
+          "rank": -85,
+          "score": 36.03644936360315
+        },
+        {
+          "ticker": "SBUX",
+          "rank": -45,
+          "score": 27.554478449640584
+        },
+        {
+          "ticker": "BAH",
+          "rank": -47,
+          "score": 27.730434836410797
+        }
+      ]
+    },
+    "turnover": 0.28
   }
 ]

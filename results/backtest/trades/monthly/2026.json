@@ -1128,5 +1128,133 @@
       ]
     },
     "turnover": 0.28
+  },
+  {
+    "rank_date": "2026-11-06",
+    "trade_date": "2026-11-09",
+    "reason": "scheduled_monthly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "EVVTY",
+          "rank": 6,
+          "score": 83.23829926727949
+        },
+        {
+          "ticker": "REGN",
+          "rank": 9,
+          "score": 79.39567094662131
+        },
+        {
+          "ticker": "PG",
+          "rank": 12,
+          "score": 76.20711658735918
+        },
+        {
+          "ticker": "V",
+          "rank": 14,
+          "score": 75.87573748547506
+        },
+        {
+          "ticker": "RHHBY",
+          "rank": 20,
+          "score": 72.91837973122817
+        },
+        {
+          "ticker": "KO",
+          "rank": 22,
+          "score": 72.63254188640589
+        },
+        {
+          "ticker": "OR.PA",
+          "rank": 23,
+          "score": 71.89820192369424
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "FIX",
+          "rank": 36,
+          "score": 67.05379047030895
+        },
+        {
+          "ticker": "GOOGL",
+          "rank": 32,
+          "score": 67.45653992086858
+        },
+        {
+          "ticker": "GOOG",
+          "rank": 33,
+          "score": 67.19062933717687
+        },
+        {
+          "ticker": "6981.T",
+          "rank": 56,
+          "score": 62.72653678857973
+        },
+        {
+          "ticker": "WEGE3.SA",
+          "rank": 60,
+          "score": 61.72937063126886
+        },
+        {
+          "ticker": "MPWR",
+          "rank": 27,
+          "score": 70.24020999490011
+        },
+        {
+          "ticker": "AMAT",
+          "rank": 74,
+          "score": 60.403371946184734
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "NET",
+          "rank": -11,
+          "score": 17.745256331435563
+        },
+        {
+          "ticker": "AXIA3.SA",
+          "rank": -14,
+          "score": 18.13160595262242
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -16,
+          "score": 20.031379914734945
+        },
+        {
+          "ticker": "SZU.DE",
+          "rank": -18,
+          "score": 20.715414457499122
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "SBUX",
+          "rank": -45,
+          "score": 27.554478449640584
+        },
+        {
+          "ticker": "TXT",
+          "rank": -28,
+          "score": 22.972551638901077
+        },
+        {
+          "ticker": "MSCI",
+          "rank": -43,
+          "score": 27.256778181891246
+        },
+        {
+          "ticker": "TMRAY",
+          "rank": -27,
+          "score": 22.531224634818145
+        }
+      ]
+    },
+    "turnover": 0.44000000000000006
   }
 ]

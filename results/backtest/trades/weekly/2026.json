@@ -2674,5 +2674,73 @@
       ]
     },
     "turnover": 0.32
+  },
+  {
+    "rank_date": "2026-11-06",
+    "trade_date": "2026-11-09",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "PG",
+          "rank": 12,
+          "score": 76.20711658735918
+        },
+        {
+          "ticker": "V",
+          "rank": 14,
+          "score": 75.87573748547506
+        },
+        {
+          "ticker": "OR.PA",
+          "rank": 23,
+          "score": 71.89820192369424
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "XOM",
+          "rank": 30,
+          "score": 68.85640858611497
+        },
+        {
+          "ticker": "033780.KS",
+          "rank": 26,
+          "score": 70.46585698235367
+        },
+        {
+          "ticker": "GILD",
+          "rank": 31,
+          "score": 67.56855237660719
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "MCD",
+          "rank": -23,
+          "score": 21.76886623664747
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -25,
+          "score": 22.08227386660251
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "GE",
+          "rank": -31,
+          "score": 23.59125530404729
+        },
+        {
+          "ticker": "EMBJ3.SA",
+          "rank": -29,
+          "score": 23.396921842393038
+        }
+      ]
+    },
+    "turnover": 0.2
   }
 ]

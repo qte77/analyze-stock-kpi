@@ -1440,5 +1440,143 @@
       ]
     },
     "turnover": 0.44000000000000006
+  },
+  {
+    "rank_date": "2026-11-08",
+    "trade_date": "2026-11-09",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "2371.T",
+          "rank": 5,
+          "score": 64.7
+        },
+        {
+          "ticker": "6368.T",
+          "rank": 7,
+          "score": 64.9
+        },
+        {
+          "ticker": "BPAC11.SA",
+          "rank": 11,
+          "score": 65.2
+        },
+        {
+          "ticker": "DECK",
+          "rank": 13,
+          "score": 64.6
+        },
+        {
+          "ticker": "EVVTY",
+          "rank": 15,
+          "score": 68.9
+        },
+        {
+          "ticker": "KO",
+          "rank": 17,
+          "score": 64.8
+        },
+        {
+          "ticker": "RY.TO",
+          "rank": 22,
+          "score": 65.1
+        },
+        {
+          "ticker": "TTE.PA",
+          "rank": 24,
+          "score": 74.9
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "8035.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "8316.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "AMGN",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "MNST",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "PETR3.SA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "PETR4.SA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "SUZB3.SA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "VRTX",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "6501.T",
+          "rank": -4,
+          "score": 29.1
+        },
+        {
+          "ticker": "AD.AS",
+          "rank": -7,
+          "score": 30.0
+        },
+        {
+          "ticker": "NKE",
+          "rank": -19,
+          "score": 30.2
+        },
+        {
+          "ticker": "SIE.DE",
+          "rank": -21,
+          "score": 30.3
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "COST",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "ETN",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "O",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "VOW3.DE",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "turnover": 0.48
   }
 ]
