@@ -65,8 +65,8 @@ on:
           # requirement: identical qte77 Score in the aggregated list and its
           # source list for the same snapshot).
 
-permissions:
-  contents: write
+# Least privilege: nothing at the workflow level; each job asks for what it uses.
+permissions: {}
 
 concurrency:
   group: demo-snapshot
@@ -81,6 +81,8 @@ jobs:
   matrix:
     name: build matrix
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       universes: ${{ steps.compute.outputs.universes }}
     steps:
@@ -118,6 +120,9 @@ jobs:
     needs: matrix
     name: snapshot ${{ matrix.universe }}
     runs-on: ubuntu-latest
+    # contents: write for the verified commit to the `data` branch.
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -200,3 +205,14 @@ jobs:
               paths: [SNAPSHOT_PATH, MANIFEST_PATH],
               message: `chore(demo): weekly snapshot ${UNIVERSE}`,
             });
+
+  # Rebuild the universe presets once every snapshot leg has succeeded. A
+  # failed or cancelled leg skips this job, so universe-builder never ranks
+  # off stale data. It always fans out across all universes, as the old
+  # workflow_run trigger did.
+  universe-builder:
+    needs: snapshot
+    uses: ./.github/workflows/universe-builder.yaml
+    permissions:
+      contents: write
+      pull-requests: write

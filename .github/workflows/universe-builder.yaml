@@ -5,18 +5,18 @@
 # work, replacing the two pre-existing per-universe workflows
 # (federal-contractors-refresh.yaml + aggregated-scores-best-and-worst-refresh.yaml).
 #
-# Triggers on demo-snapshot's completion (not its own cron) — the
-# aggregated-scores legs read results/demo/<u>/
+# Called by demo-snapshot.yaml as its last job (workflow_call, not its own
+# cron) — the aggregated-scores legs read results/demo/<u>/
 # from the `data` branch, so this must run strictly *after* demo-snapshot
 # writes that week's snapshots, never concurrently with or ahead of it.
 # A prior independent `schedule: "0 2 * * 0"` fired 4h15m *before*
 # demo-snapshot's `06:15 UTC` Sunday cron, so it was always reading the
 # *previous* week's data by construction — not just during an outage.
-# The `matrix` job's `if:` guard skips the run entirely when triggered by
-# a failed/cancelled demo-snapshot, so a bad upstream run never feeds a
-# ranking off stale data either. workflow_dispatch with `universe` empty
-# -> fan out to all universes in parallel via matrix; with `universe` set
-# -> single-leg run (unaffected by the guard, always runs).
+# The calling job `needs:` every snapshot leg, so a failed or cancelled
+# demo-snapshot run never feeds a ranking off stale data. (This replaced a
+# `workflow_run` trigger, which code scanners flag as a dangerous trigger.)
+# Called, or dispatched with `universe` empty -> fan out to all universes
+# in parallel via matrix; dispatched with `universe` set -> single-leg run.
 #
 # Adding a new universe takes three additions: one option line, one
 # matrix-array entry, one case branch. (The enhanced-kpi-screener legs were
@@ -26,9 +26,13 @@
 name: universe-builder
 
 on:
-  workflow_run:
-    workflows: ["demo-snapshot"]
-    types: [completed]
+  workflow_call:
+    inputs:
+      universe:
+        description: "Single universe (omit for all)"
+        required: false
+        type: string
+        default: ""
   workflow_dispatch:
     inputs:
       universe:
@@ -42,25 +46,21 @@ on:
           - aggregated-scores-best
           - aggregated-scores-worst
 
-permissions:
-  contents: write
-  pull-requests: write
+# Least privilege: nothing at the workflow level; each job asks for what it uses.
+permissions: {}
 
 concurrency:
   group: universe-builder
   cancel-in-progress: false
 
 jobs:
-  # Compute the matrix once. workflow_run + dispatch-without-input fan out
-  # across every bundled universe; dispatch with `universe` set collapses
+  # Compute the matrix once. A call from demo-snapshot or a dispatch without
+  # input fans out across every bundled universe; dispatch with `universe` set collapses
   # to a single leg so ad-hoc debug runs stay cheap.
   matrix:
     name: build matrix
     runs-on: ubuntu-latest
-    # Only proceed on a successful demo-snapshot run; a failed/cancelled
-    # upstream run must not feed a ranking off stale data. Always runs for
-    # workflow_dispatch (no workflow_run context to check).
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    permissions: {}
     outputs:
       universes: ${{ steps.compute.outputs.universes }}
     steps:
@@ -79,6 +79,12 @@ jobs:
     needs: matrix
     name: build ${{ matrix.universe }}
     runs-on: ubuntu-latest
+    # contents: write for the verified commits through the Git Data API (data
+    # branch and the preset refresh branch); pull-requests: write for
+    # `gh pr create`.
+    permissions:
+      contents: write
+      pull-requests: write
     strategy:
       fail-fast: false
       matrix:
