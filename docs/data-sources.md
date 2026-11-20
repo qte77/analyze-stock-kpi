@@ -621,7 +621,7 @@ symbols, and OTC tickers that yfinance can't resolve.
 |---|---|---|
 | EDGAR `company_tickers_exchange.json` | Per-run, in-process cache (one fetch per `make run`) | `src/analyze_stock_kpi/data_sources/sec/cik_map.py` |
 | EDGAR submissions / XBRL / Form-4 / 8-K | Per-ticker per-run | Per-feature SEC module |
-| usaspending `spending_by_category/recipient` | **Weekly**, triggered after `demo-snapshot.yaml` completes | `.github/workflows/universe-builder.yaml`'s `federal-contractors` matrix leg (per ADR-0006; consolidated from the former dedicated `federal-contractors-refresh.yaml` — see roadmap "Universe-builder workflow consolidation") |
+| usaspending `spending_by_category/recipient` | **Weekly**, as the last job of `demo-snapshot.yaml` on the default branch, after every snapshot leg succeeds | `.github/workflows/universe-builder.yaml`'s `federal-contractors` matrix leg (per ADR-0006; consolidated from the former dedicated `federal-contractors-refresh.yaml` — see roadmap "Universe-builder workflow consolidation") |
 | sam.gov Entity API | n/a — not in critical path | Deferred |
 | Yahoo Finance `fast_info` smoke-test | Build-time only (universe refresh) | `scripts/build_federal_contractors.py` |
 
