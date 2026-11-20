@@ -79,21 +79,19 @@ jobs:
     needs: matrix
     name: build ${{ matrix.universe }}
     runs-on: ubuntu-latest
-    # contents: write for the verified commits through the Git Data API (data
-    # branch and the preset refresh branch); pull-requests: write for
-    # `gh pr create`.
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write  # verified commits via the Git Data API (data branch, preset refresh branch)
+      pull-requests: write  # gh pr create for the preset refresh
     strategy:
       fail-fast: false
       matrix:
         universe: ${{ fromJSON(needs.matrix.outputs.universes) }}
     steps:
-      # Check out the dispatched ref. Cron + dispatch-without-input default
-      # to the workflow's home branch (main); explicit
-      # `gh workflow run --ref feat/foo` lets feature-branch helper changes
-      # validate against real data pre-merge.
+      # Check out the run's ref: main for the weekly call from demo-snapshot
+      # (which only calls this on the default branch) and for a dispatch
+      # without --ref; an explicit `gh workflow run universe-builder.yaml
+      # --ref feat/foo` lets feature-branch helper changes validate against
+      # real data pre-merge.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           ref: ${{ github.ref_name }}

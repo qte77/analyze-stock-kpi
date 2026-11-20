@@ -120,9 +120,8 @@ jobs:
     needs: matrix
     name: snapshot ${{ matrix.universe }}
     runs-on: ubuntu-latest
-    # contents: write for the verified commit to the `data` branch.
     permissions:
-      contents: write
+      contents: write  # verified commit to the `data` branch (Git Data API)
     strategy:
       fail-fast: false
       matrix:
@@ -207,12 +206,19 @@ jobs:
             });
 
   # Rebuild the universe presets once every snapshot leg has succeeded. A
-  # failed or cancelled leg skips this job, so universe-builder never ranks
-  # off stale data. It always fans out across all universes, as the old
-  # workflow_run trigger did.
+  # failed or cancelled leg skips this job (the `if:` has no status function,
+  # so success() still applies), so universe-builder never ranks off stale
+  # data. It always fans out across all universes, as the old workflow_run
+  # trigger did. Default branch only: a demo-snapshot dispatch on a feature
+  # branch must not run that branch's builder with write scopes (it would
+  # commit to `data` and open preset PRs carrying the branch's commits).
   universe-builder:
     needs: snapshot
+    # Literal branch name: GitHub documents no webhook payload for `schedule`
+    # ("Not applicable"), so github.event.repository.default_branch is not
+    # documented for cron runs; github.ref is the default branch there.
+    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/universe-builder.yaml
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write  # passed on to universe-builder's build job
+      pull-requests: write  # passed on to universe-builder's build job
