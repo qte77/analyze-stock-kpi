@@ -2742,5 +2742,63 @@
       ]
     },
     "turnover": 0.2
+  },
+  {
+    "rank_date": "2026-11-13",
+    "trade_date": "2026-11-16",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "MPWR",
+          "rank": 18,
+          "score": 76.15901753653452
+        },
+        {
+          "ticker": "FIX",
+          "rank": 25,
+          "score": 71.11193113875241
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "RHHBY",
+          "rank": 36,
+          "score": 67.43461374029678
+        },
+        {
+          "ticker": "OR.PA",
+          "rank": 26,
+          "score": 71.09402470128181
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "TMRAY",
+          "rank": -22,
+          "score": 21.658668899554318
+        },
+        {
+          "ticker": "005380.KS",
+          "rank": -25,
+          "score": 22.064320714257423
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "NET",
+          "rank": -27,
+          "score": 22.308107122135123
+        },
+        {
+          "ticker": "MGLU3.SA",
+          "rank": -37,
+          "score": 25.490101018587154
+        }
+      ]
+    },
+    "turnover": 0.16
   }
 ]

@@ -4366,5 +4366,213 @@
         "score": 11.8
       }
     ]
+  },
+  {
+    "date": "2026-11-15",
+    "eligible": 309,
+    "best": [
+      {
+        "ticker": "000660.KS",
+        "score": 73.3
+      },
+      {
+        "ticker": "005930.KS",
+        "score": 79.0
+      },
+      {
+        "ticker": "2371.T",
+        "score": 66.4
+      },
+      {
+        "ticker": "2603.TW",
+        "score": 70.5
+      },
+      {
+        "ticker": "6098.T",
+        "score": 67.0
+      },
+      {
+        "ticker": "ABBV",
+        "score": 65.0
+      },
+      {
+        "ticker": "AMAT",
+        "score": 67.6
+      },
+      {
+        "ticker": "BESIY",
+        "score": 65.9
+      },
+      {
+        "ticker": "BMY",
+        "score": 65.8
+      },
+      {
+        "ticker": "COP",
+        "score": 71.7
+      },
+      {
+        "ticker": "ENI.MI",
+        "score": 66.6
+      },
+      {
+        "ticker": "EVVTY",
+        "score": 67.3
+      },
+      {
+        "ticker": "GMEXICOB.MX",
+        "score": 77.6
+      },
+      {
+        "ticker": "KO",
+        "score": 64.4
+      },
+      {
+        "ticker": "LLY",
+        "score": 65.0
+      },
+      {
+        "ticker": "MRK",
+        "score": 65.6
+      },
+      {
+        "ticker": "REGN",
+        "score": 75.1
+      },
+      {
+        "ticker": "RHHBY",
+        "score": 66.1
+      },
+      {
+        "ticker": "RY.TO",
+        "score": 64.9
+      },
+      {
+        "ticker": "SAIC",
+        "score": 65.2
+      },
+      {
+        "ticker": "SEZL",
+        "score": 78.1
+      },
+      {
+        "ticker": "SUZB3.SA",
+        "score": 64.5
+      },
+      {
+        "ticker": "TSM",
+        "score": 65.6
+      },
+      {
+        "ticker": "TTE.PA",
+        "score": 71.7
+      },
+      {
+        "ticker": "TXN",
+        "score": 76.2
+      }
+    ],
+    "worst": [
+      {
+        "ticker": "006400.KS",
+        "score": 31.0
+      },
+      {
+        "ticker": "035420.KS",
+        "score": 26.3
+      },
+      {
+        "ticker": "035720.KS",
+        "score": 29.9
+      },
+      {
+        "ticker": "373220.KS",
+        "score": 8.9
+      },
+      {
+        "ticker": "6501.T",
+        "score": 27.8
+      },
+      {
+        "ticker": "6594.T",
+        "score": 27.4
+      },
+      {
+        "ticker": "6758.T",
+        "score": 30.4
+      },
+      {
+        "ticker": "9984.T",
+        "score": 29.0
+      },
+      {
+        "ticker": "BA",
+        "score": 6.7
+      },
+      {
+        "ticker": "CSNA3.SA",
+        "score": 8.7
+      },
+      {
+        "ticker": "CWEN",
+        "score": 18.3
+      },
+      {
+        "ticker": "DG.PA",
+        "score": 29.9
+      },
+      {
+        "ticker": "DIS",
+        "score": 28.5
+      },
+      {
+        "ticker": "DLR",
+        "score": 22.2
+      },
+      {
+        "ticker": "EL.PA",
+        "score": 25.4
+      },
+      {
+        "ticker": "GE",
+        "score": 23.9
+      },
+      {
+        "ticker": "LPX",
+        "score": 28.2
+      },
+      {
+        "ticker": "MELI",
+        "score": 29.3
+      },
+      {
+        "ticker": "NKE",
+        "score": 30.6
+      },
+      {
+        "ticker": "PLD",
+        "score": 23.2
+      },
+      {
+        "ticker": "PRSO",
+        "score": 29.1
+      },
+      {
+        "ticker": "TSLA",
+        "score": 12.2
+      },
+      {
+        "ticker": "UBER",
+        "score": 24.3
+      },
+      {
+        "ticker": "VNA.DE",
+        "score": 22.9
+      },
+      {
+        "ticker": "WTF",
+        "score": 11.8
+      }
+    ]
   }
 ]

@@ -472,5 +472,223 @@
       ]
     },
     "turnover": 0.76
+  },
+  {
+    "rank_date": "2026-11-15",
+    "trade_date": "2026-11-17",
+    "reason": "quarterly_after_filings",
+    "long": {
+      "entered": [
+        {
+          "ticker": "2371.T",
+          "rank": 3,
+          "score": 66.4
+        },
+        {
+          "ticker": "2603.TW",
+          "rank": 4,
+          "score": 70.5
+        },
+        {
+          "ticker": "6098.T",
+          "rank": 5,
+          "score": 67.0
+        },
+        {
+          "ticker": "ABBV",
+          "rank": 6,
+          "score": 65.0
+        },
+        {
+          "ticker": "COP",
+          "rank": 10,
+          "score": 71.7
+        },
+        {
+          "ticker": "EVVTY",
+          "rank": 12,
+          "score": 67.3
+        },
+        {
+          "ticker": "KO",
+          "rank": 14,
+          "score": 64.4
+        },
+        {
+          "ticker": "MRK",
+          "rank": 16,
+          "score": 65.6
+        },
+        {
+          "ticker": "RY.TO",
+          "rank": 19,
+          "score": 64.9
+        },
+        {
+          "ticker": "SAIC",
+          "rank": 20,
+          "score": 65.2
+        },
+        {
+          "ticker": "SUZB3.SA",
+          "rank": 22,
+          "score": 64.5
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "055550.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "105560.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "6857.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "AMGN",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "B3SA3.SA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "BPAC11.SA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "GOOG",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "GOOGL",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "ITUB4.SA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "MNST",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "VRTX",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "006400.KS",
+          "rank": -1,
+          "score": 31.0
+        },
+        {
+          "ticker": "6501.T",
+          "rank": -5,
+          "score": 27.8
+        },
+        {
+          "ticker": "6594.T",
+          "rank": -6,
+          "score": 27.4
+        },
+        {
+          "ticker": "6758.T",
+          "rank": -7,
+          "score": 30.4
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -11,
+          "score": 18.3
+        },
+        {
+          "ticker": "DG.PA",
+          "rank": -12,
+          "score": 29.9
+        },
+        {
+          "ticker": "LPX",
+          "rank": -17,
+          "score": 28.2
+        },
+        {
+          "ticker": "NKE",
+          "rank": -19,
+          "score": 30.6
+        },
+        {
+          "ticker": "PRSO",
+          "rank": -21,
+          "score": 29.1
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "051910.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "3382.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "COST",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "DKILY",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "NET",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "O",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "SNPS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "STLAM.MI",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "WMT",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "turnover": 0.8
   }
 ]

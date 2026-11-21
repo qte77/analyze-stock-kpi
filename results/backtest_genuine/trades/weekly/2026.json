@@ -1578,5 +1578,133 @@
       ]
     },
     "turnover": 0.48
+  },
+  {
+    "rank_date": "2026-11-15",
+    "trade_date": "2026-11-17",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "2603.TW",
+          "rank": 4,
+          "score": 70.5
+        },
+        {
+          "ticker": "AMAT",
+          "rank": 7,
+          "score": 67.6
+        },
+        {
+          "ticker": "BESIY",
+          "rank": 8,
+          "score": 65.9
+        },
+        {
+          "ticker": "SAIC",
+          "rank": 20,
+          "score": 65.2
+        },
+        {
+          "ticker": "SUZB3.SA",
+          "rank": 22,
+          "score": 64.5
+        },
+        {
+          "ticker": "TSM",
+          "rank": 23,
+          "score": 65.6
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "002001.SZ",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "033780.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "6368.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "B3SA3.SA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "BPAC11.SA",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "DECK",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "006400.KS",
+          "rank": -1,
+          "score": 31.0
+        },
+        {
+          "ticker": "035720.KS",
+          "rank": -3,
+          "score": 29.9
+        },
+        {
+          "ticker": "6758.T",
+          "rank": -7,
+          "score": 30.4
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -11,
+          "score": 18.3
+        },
+        {
+          "ticker": "PRSO",
+          "rank": -21,
+          "score": 29.1
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "051910.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "AD.AS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "DKILY",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "NET",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "SIE.DE",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "turnover": 0.44
   }
 ]
