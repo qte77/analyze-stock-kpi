@@ -625,6 +625,7 @@ symbols, and OTC tickers that yfinance can't resolve.
 | usaspending `spending_by_category/recipient` | **Weekly**, as the last job of `demo-snapshot.yaml` on the default branch, after every snapshot leg succeeds | `.github/workflows/universe-builder.yaml`'s `federal-contractors` matrix leg (per ADR-0006; consolidated from the former dedicated `federal-contractors-refresh.yaml` — see roadmap "Universe-builder workflow consolidation") |
 | sam.gov Entity API | n/a — not in critical path | Deferred |
 | Yahoo Finance `fast_info` smoke-test | Build-time only (universe refresh) | `scripts/build_federal_contractors.py` |
+| Yahoo Finance SPY option chain → derived OI levels (`series/options_oi`) | **Weekdays**, 13:07 UTC (default; final time per plan 011 row 3) | `.github/workflows/options-oi.yaml` |
 
 The `universe-builder.yaml` matrix's preset-file PR to `main`
 is **suppressed when the ticker diff is empty** (most weeks at top-100
