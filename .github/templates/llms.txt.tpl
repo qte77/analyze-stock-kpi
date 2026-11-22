@@ -28,6 +28,7 @@
 - [ADR-0012: Hypothetical long/short model portfolio](${BLOB}/docs/decisions/0012-longshort-model-portfolio.md)
 - [ADR-0013: Point-in-time backfill + backtested long/short 25/25](${BLOB}/docs/decisions/0013-point-in-time-backtest.md)
 - [ADR-0014: Candidate lists reuse source-universe data](${BLOB}/docs/decisions/0014-current-candidates-use-live-score.md)
+- [ADR-0015: Collect SPY options open-interest levels daily](${BLOB}/docs/decisions/0015-options-oi-levels-collection.md)
 
 ## Source
 

@@ -20,6 +20,7 @@ numbers assigned sequentially and never reused.
 | [0012](0012-longshort-model-portfolio.md) | Hypothetical long/short model portfolio over the aggregated best/worst lists | Accepted 2026-09-22; superseded in part by ADR-0013 |
 | [0013](0013-point-in-time-backtest.md) | Point-in-time backfilled best/worst 25 + backtested long/short 25/25 | Accepted 2026-09-23; amended in part by ADR-0014 |
 | [0014](0014-current-candidates-use-live-score.md) | Aggregated / long-short candidate lists reuse source-universe data; only the historical backfill stays point-in-time | Accepted 2026-09-24 |
+| [0015](0015-options-oi-levels-collection.md) | Collect SPY options open-interest levels daily; collection only | Proposed 2026-11-22 |
 
 New ADR: copy the most recent file, increment the number, fill in
 **Status / Context / Decision / Consequences**. Supersedes / amendments

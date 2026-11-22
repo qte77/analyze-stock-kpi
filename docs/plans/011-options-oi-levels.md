@@ -1,11 +1,10 @@
 # 011 — Options open-interest levels: daily collection
 
-Issue: none yet. The orchestrator opens one when the owner approves this plan, then puts its
-number here.
+Issue [#563](https://github.com/qte77/analyze-stock-kpi/issues/563)
 
 ## Status and how to work this plan (read first)
 
-- **State (2026-11-22):** proposed in PR #562. Nothing is built. Merging #562 approves the plan.
+- **State (2026-11-22):** the plan was approved 2026-11-22 (#562) and wave 1 is in progress.
 - **Goal:** collect SPY option open interest (OI) levels every weekday from now on. There is no free
   OI history, so the data only exists from the day collection starts. Collection comes first; any
   use of the data comes later (row 5).
