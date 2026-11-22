@@ -10,6 +10,6 @@ jobs:
   publish:
     permissions:
       contents: write
-    uses: qte77/.github/.github/workflows/publish-release.yml@5ab0cecea3fee43a9c8f5858f7970a088313115e
+    uses: qte77/.github/.github/workflows/publish-release.yml@aeef158fdd62a865aecd03571eaecbe3aa8169e4  # v0.1.2
     with:
       tag: ${{ inputs.tag }}
