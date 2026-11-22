@@ -19,6 +19,12 @@
 # `results/prices/` local cache, which this workflow never checks out from `data` and the
 # commit filter below never matches.
 #
+# #418: when the `CACHE_REPO_TOKEN` secret is set (a fine-grained PAT with Contents read+write
+# on ONLY the PRIVATE repo qte77/__analyze-stock-kpi-cache), `results/prices/` is restored from that
+# repo before the run and the new files are pushed back after it, so statement history outlives
+# yfinance's ~4-5 FY window. Without the secret both steps are skipped and the run behaves as
+# before. Nothing from that cache ever reaches the public `data` branch.
+#
 # Same verified-commit pattern + data-branch rationale as equity-spy.yaml (the default-branch
 # ruleset rejects direct ref updates on main even from verified API commits — `data` is
 # unrestricted).
@@ -42,11 +48,22 @@ jobs:
   snapshot:
     name: recompute + commit point-in-time backfill/backtest
     runs-on: ubuntu-latest
+    env:
+      # Secrets can't appear in `if:`; expose only whether the token exists.
+      HAS_CACHE_TOKEN: ${{ secrets.CACHE_REPO_TOKEN != '' }}
     steps:
       # Check out the workflow ref (main) for the current src/ layout —
       # `analyze_stock_kpi.orchestrators.longshort_backtest` lives on main only. The `data`
       # branch carries data only.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Restore the private price/statement cache (#418)
+        if: env.HAS_CACHE_TOKEN == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          repository: qte77/__analyze-stock-kpi-cache
+          token: ${{ secrets.CACHE_REPO_TOKEN }}
+          path: results/prices
 
       # Pull the prior contract artifacts from the data branch for BOTH series — append-only
       # (D17) needs the existing rows/lists on disk so it can detect the last-stored date and
@@ -84,6 +101,23 @@ jobs:
 
       - name: Recompute the point-in-time backfill + backtest
         run: uv run python -m analyze_stock_kpi.orchestrators.longshort_backtest
+
+      # Before the data-branch commit, so a failed push stops the run with the cache intact
+      # rather than after publishing results the cache can't reproduce.
+      - name: Save new files to the private price/statement cache (#418)
+        if: env.HAS_CACHE_TOKEN == 'true'
+        working-directory: results/prices
+        run: |
+          set -euo pipefail
+          git add -A
+          if git diff --cached --quiet; then
+            echo "cache unchanged"
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "chore(cache): backtest run ${GITHUB_RUN_ID}"
+          git push origin HEAD
 
       - name: Detect changed contract files
         id: changed
