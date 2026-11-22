@@ -1,11 +1,10 @@
 # 011 — Options open-interest levels: daily collection
 
-Issue: none yet. The orchestrator opens one when the owner approves this plan, then puts its
-number here.
+Issue [#563](https://github.com/qte77/analyze-stock-kpi/issues/563)
 
 ## Status and how to work this plan (read first)
 
-- **State (2026-11-22):** proposed in PR #562. Nothing is built. Merging #562 approves the plan.
+- **State (2026-11-22):** the plan was approved 2026-11-22 (#562) and wave 1 is in progress.
 - **Goal:** collect SPY option open interest (OI) levels every weekday from now on. There is no free
   OI history, so the data only exists from the day collection starts. Collection comes first; any
   use of the data comes later (row 5).
@@ -108,7 +107,7 @@ positioning, and the null OI share makes it noisy. No UI, no score work.
 
 | # | Item | Gate | Done when |
 |---|---|---|---|
-| 1 | ADR-0015 (collection-only OI levels, the two expiries, the GEX cut, the licensing verdict) + an OI row in the `data-sources.md` guardrail table + ADR index row | owner (approves the licensing verdict in the PR) | ADR merged |
+| ~~1~~ | ~~ADR-0015 (collection-only OI levels, the two expiries, the GEX cut, the licensing verdict) + an OI row in the `data-sources.md` guardrail table + ADR index row~~ shipped in PR #565 | owner (approves the licensing verdict in the PR) | ADR merged |
 | ~~2~~ | ~~`options_oi.py`: pydantic row model, expiry selection, the six fields, per-year merge, raw-chain write to `results/prices/options/SPY/<date>.json`, `main()` entrypoint; tests first for max pain, walls, ratio, null and zero-OI handling, monthly pick incl. the holiday Thursday, same-day re-run replace, wrap-degrade~~ shipped in PR #564 | agent | `make validate` passes; `uv run python -m analyze_stock_kpi.data_sources.options_oi` writes two rows locally |
 | 3 | Find when Yahoo's OI changes during the day, then pick the cron time | agent (orchestrator) | the observed times and the chosen cron are written in the row 4 workflow header |
 | 4 | `options-oi.yaml`: weekday cron, derived rows → `data` branch; raw chains → private cache when `CACHE_REPO_TOKEN` exists (it does since 2026-11-22; keep the check so the job still runs without it); refresh-cadence row | agent | two consecutive scheduled runs add rows on `data` and raw chains in the cache repo |
