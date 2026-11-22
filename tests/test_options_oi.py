@@ -117,6 +117,12 @@ def test_pick_monthly_holiday_thursday() -> None:
     assert picks["monthly"] == date_cls(2025, 4, 17)
 
 
+def test_pick_monthly_is_friday_when_daily_expiries_are_listed() -> None:
+    # Daily Mon-Fri expiries across the third-Friday week: Thursday must not win.
+    listed = [date_cls(2026, 12, d) for d in (14, 15, 16, 17, 18)]
+    assert pick_expiries(listed, date_cls(2026, 12, 14))["monthly"] == date_cls(2026, 12, 18)
+
+
 def test_pick_ignores_non_third_week_thursday() -> None:
     listed = [date_cls(2026, 12, 10), date_cls(2026, 12, 18)]
     assert pick_expiries(listed, date_cls(2026, 12, 1))["monthly"] == date_cls(2026, 12, 18)
@@ -163,20 +169,20 @@ def test_collect_writes_both_kinds_even_when_same_expiry() -> None:
     assert raw["2026-12-18"]["calls"][1]["openInterest"] is None
 
 
-def test_collect_wrap_degrades_on_yfinance_error() -> None:
-    with patch(
-        "analyze_stock_kpi.data_sources.options_oi.yf.Ticker",
-        side_effect=ConnectionError("yahoo timed out"),
-    ):
-        assert collect_options_oi(_DAY) == ([], {})
+def _boom(_expiry: str) -> None:
+    raise ConnectionError("chain failed")
 
 
-def test_collect_wrap_degrades_on_chain_error() -> None:
-    def boom(_expiry: str) -> None:
-        raise ConnectionError("chain failed")
-
-    ticker = SimpleNamespace(options=("2026-11-23",), option_chain=boom)
-    with patch("analyze_stock_kpi.data_sources.options_oi.yf.Ticker", return_value=ticker):
+@pytest.mark.parametrize(
+    "patch_kwargs",
+    [
+        {"side_effect": ConnectionError("yahoo timed out")},
+        {"return_value": SimpleNamespace(options=("2026-11-23",), option_chain=_boom)},
+    ],
+    ids=["ticker_error", "chain_error"],
+)
+def test_collect_wrap_degrades_on_yfinance_error(patch_kwargs: dict[str, object]) -> None:
+    with patch("analyze_stock_kpi.data_sources.options_oi.yf.Ticker", **patch_kwargs):
         assert collect_options_oi(_DAY) == ([], {})
 
 
