@@ -37,6 +37,7 @@
 - [src/analyze_stock_kpi/domain/composite_scores.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/domain/composite_scores.py)
 - [src/analyze_stock_kpi/domain/universe.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/domain/universe.py)
 - [src/analyze_stock_kpi/data_sources/equity_spy.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/data_sources/equity_spy.py)
+- [src/analyze_stock_kpi/data_sources/options_oi.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/data_sources/options_oi.py)
 - [src/analyze_stock_kpi/data_sources/fundamentals.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/data_sources/fundamentals.py)
 - [src/analyze_stock_kpi/data_sources/sentiment.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/data_sources/sentiment.py)
 - [src/analyze_stock_kpi/data_sources/sentiment_backfill.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/data_sources/sentiment_backfill.py)
