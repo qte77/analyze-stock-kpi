@@ -24,7 +24,7 @@ import urllib.request
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 from analyze_stock_kpi.config import settings
 from analyze_stock_kpi.utils.http_ua import STABLE_USER_AGENT, require_https
@@ -54,6 +54,19 @@ SUBINDICATOR_KEYS: tuple[str, ...] = (
     "junk_bond_demand",
     "safe_haven_demand",
 )
+
+INDEX_LEVEL_KEYS: frozenset[str] = frozenset(
+    {
+        "market_momentum_sp500",
+        "market_momentum_sp125",
+        "market_volatility_vix",
+        "market_volatility_vix_50",
+    }
+)
+"""Subindicators whose raw value is a third-party index level (S&P 500, VIX) or
+its moving average. Index providers license those values, so per ADR-0011 only
+their ``score`` and ``rating`` are kept; ``raw_value`` is dropped on every
+snapshot, including rows loaded from files written before this rule."""
 
 logger = logging.getLogger(__name__)
 
@@ -93,6 +106,20 @@ class FearGreedSnapshot(BaseModel):
     previous_1_month: float | None = None
     previous_1_year: float | None = None
     subindicators: dict[str, SubindicatorReading] | None = None
+
+    @field_validator("subindicators")
+    @classmethod
+    def _drop_index_levels(
+        cls, subs: dict[str, SubindicatorReading] | None
+    ) -> dict[str, SubindicatorReading] | None:
+        if subs is None:
+            return None
+        return {
+            key: reading.model_copy(update={"raw_value": None})
+            if key in INDEX_LEVEL_KEYS
+            else reading
+            for key, reading in subs.items()
+        }
 
 
 def _fetch_payload() -> dict[str, Any]:
