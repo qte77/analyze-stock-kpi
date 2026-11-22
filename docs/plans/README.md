@@ -30,3 +30,4 @@ Plans 001–008 and 010 shipped or closed and were deleted on 2026-11-22; read t
 | Plan | Status | Issue(s) |
 |---|---|---|
 | [Backtest carry-over](009-backtest-carry-over.md) | open: [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) | [#415](https://github.com/qte77/analyze-stock-kpi/issues/415) · [#416](https://github.com/qte77/analyze-stock-kpi/issues/416) · [#417](https://github.com/qte77/analyze-stock-kpi/issues/417) · [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) · [#419](https://github.com/qte77/analyze-stock-kpi/issues/419) |
+| [Options open-interest levels: daily collection](011-options-oi-levels.md) | proposed | none yet — owner request 2026-11-22 |
