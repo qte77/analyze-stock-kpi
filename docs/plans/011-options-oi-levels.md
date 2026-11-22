@@ -4,15 +4,18 @@ Issue [#563](https://github.com/qte77/analyze-stock-kpi/issues/563)
 
 ## Status and how to work this plan (read first)
 
-- **State (2026-11-22):** the plan was approved 2026-11-22 (#562) and wave 1 is in progress.
+- **State (2026-11-22):** rows 1 (#565), 2 (#564) and 4 (#566) are merged; the workflow runs on
+  its default schedule. Open: row 3 (confirm the run time, see its row) and row 4's verification
+  (two scheduled runs). Row 5 waits for data.
 - **Goal:** collect SPY option open interest (OI) levels every weekday from now on. There is no free
   OI history, so the data only exists from the day collection starts. Collection comes first; any
   use of the data comes later (row 5).
 - **Scope:** collection only. The levels are a **hypothesis** about price "gravity" near large OI
   strikes, not a signal. They stay out of the qte77 Score and the dashboard until the point-in-time
   backtest ([ADR-0013](../decisions/0013-point-in-time-backtest.md)) supports them.
-- **What to do next, in order:** follow [Parallel execution](#parallel-execution-subagents-in-worktrees).
-  Wave 1 runs rows 1, 2 and 3 at the same time. Wave 2 runs row 4. Row 5 waits for data.
+- **What to do next, in order:** (1) after two scheduled weekday runs, check that `data` has rows
+  in `results/series/options_oi/` and the cache repo has `options/SPY/<date>.json` commits, then
+  close the row 4 verification; (2) do row 3 on a weekday after 20:00 UTC; (3) row 5 waits for data.
 - **Your role in a fresh session:** you are the orchestrator. You open the issue, start the
   subagents, check their PRs, merge, and do row 3 yourself. Subagents write code and open PRs.
   They never merge.
@@ -109,7 +112,7 @@ positioning, and the null OI share makes it noisy. No UI, no score work.
 |---|---|---|---|
 | ~~1~~ | ~~ADR-0015 (collection-only OI levels, the two expiries, the GEX cut, the licensing verdict) + an OI row in the `data-sources.md` guardrail table + ADR index row~~ shipped in PR #565 | owner (approves the licensing verdict in the PR) | ADR merged |
 | ~~2~~ | ~~`options_oi.py`: pydantic row model, expiry selection, the six fields, per-year merge, raw-chain write to `results/prices/options/SPY/<date>.json`, `main()` entrypoint; tests first for max pain, walls, ratio, null and zero-OI handling, monthly pick incl. the holiday Thursday, same-day re-run replace, wrap-degrade~~ shipped in PR #564 | agent | `make validate` passes; `uv run python -m analyze_stock_kpi.data_sources.options_oi` writes two rows locally |
-| 3 | Find when Yahoo's OI changes during the day, then pick the cron time | agent (orchestrator) | the observed times and the chosen cron are written in the row 4 workflow header |
+| 3 | Confirm the default run time (13:07 UTC weekdays): on a weekday after 20:00 UTC, dispatch `options-oi.yaml` once and compare that day's raw chain between the two cache-repo commits (scheduled vs late run) | agent (needs a session on a weekday after 20:00 UTC) | the result is written in the workflow header; the cron is kept if total OI is unchanged, otherwise moved to the first slot after the change |
 | ~~4~~ | ~~`options-oi.yaml`: weekday cron, derived rows → `data` branch; raw chains → private cache when `CACHE_REPO_TOKEN` exists (it does since 2026-11-22; keep the check so the job still runs without it); refresh-cadence row~~ | agent | shipped in PR #566; verify: two consecutive scheduled runs add rows on `data` and raw chains in the cache repo |
 | 5 | Hypothesis test: distance from `max_pain` / walls vs return to expiry, with the point-in-time backtest | data (≥ 6 months of rows, so not before mid-2027) | a written result; only if it holds does a dashboard line or score input get its own plan |
 
@@ -122,16 +125,19 @@ orchestrator merges.
 
 | Wave | Row | Who | Branch | Files it owns | Starts after |
 |---|---|---|---|---|---|
-| 1 | 3 | orchestrator, inline | none | none: a throwaway script outside the repo | plan approved. Start it first, because it needs wall-clock time |
+| 3 | 3 | orchestrator, inline | small PR for the result | `.github/workflows/options-oi.yaml` header (+ cron if it moves) | row 4 merged and its first scheduled run done |
 | 1 | 1 | subagent `adr` | `docs/adr-0015-options-oi` | `docs/decisions/0015-options-oi-levels-collection.md` (new), `docs/decisions/README.md`, `docs/data-sources.md` guardrail section only | plan approved |
 | 1 | 2 | subagent `module` | `feat/options-oi-module` | `src/analyze_stock_kpi/data_sources/options_oi.py` (new), `tests/test_options_oi.py` (new), `tests/fixtures/options_oi/` (new, if needed), `src/analyze_stock_kpi/config.py`, `docs/architecture.md` | plan approved |
-| 2 | 4 | subagent `workflow` | `ci/options-oi-workflow` | `.github/workflows/options-oi.yaml` (new), `docs/data-sources.md` refresh-cadence table only | rows 1 and 2 merged, row 3 observed |
+| 2 | 4 | subagent `workflow` | `ci/options-oi-workflow` | `.github/workflows/options-oi.yaml` (new), `docs/data-sources.md` refresh-cadence table only | rows 1 and 2 merged |
 
-- **Row 3 method:** fetch the `monthly` expiry's `total_oi` for SPY at about 13:00 UTC and 21:00 UTC
-  on one weekday, and at 13:00 UTC the next weekday. If the value changes only overnight, use a
-  weekday cron at 13:00 UTC (before the US open, and no other data-branch writer runs then).
-  Otherwise pick the first slot after the observed change. This is a default to confirm, not a
-  verified fact about Yahoo or OCC timing.
+- **Row 3 method (changed 2026-11-22):** the manual readings needed a session open across Mon–Tue,
+  which isn't available, so row 4 shipped on the default and the workflow's own data does the
+  check. Each run commits that day's raw chain to the private cache repo, so a late same-day
+  `workflow_dispatch` leaves two commits of `options/SPY/<date>.json`; compare their total OI per
+  expiry. (The late run also replaces that day's public rows, which is harmless.) 13:07 UTC stays
+  if nothing changed, i.e. OI updates overnight; that is the default assumption, not a verified
+  fact about Yahoo or OCC timing. One baseline reading exists (Sun 2026-11-22 18:58 UTC: monthly
+  2026-12-18 calls 1,328,682 / puts 2,443,102).
 - **Merge order:** rows 1 and 2 in either order, then row 4. Rows in the remaining-work table sit
   on adjacent lines, so the second wave-1 PR gets a small conflict in this file after the first
   merges. Rebase it and keep both strikes.
