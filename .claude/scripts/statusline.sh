@@ -1,4 +1,6 @@
 #!/bin/bash
+# Status line: the share of the context window in use and the share at which automatic
+# compaction fires (for example "46% used·compact@50%"), read from CLAUDE_AUTOCOMPACT_PCT_OVERRIDE.
 #
 # World clock (opt-in)
 # --------------------
@@ -62,8 +64,10 @@
 
 input=$(cat)
 
-# Single jq call extracts all fields (tab-delimited)
-read -r cwd agent model version cost duration lines_added lines_removed \
+# Single jq call extracts all fields, tab-delimited. Only a tab splits fields, so a space in a
+# directory name cannot shift them; an empty or null field becomes "-" (consecutive tabs would
+# collapse), and control characters inside a value, a tab included, become a space.
+IFS=$'\t' read -r cwd agent model version cost duration lines_added lines_removed \
     tokens_in tokens_out remaining_pct exc_context <<< "$(echo "$input" | jq -r '[
     .workspace.current_dir,
     (.agent.type // "main"),
@@ -86,15 +90,21 @@ read -r cwd agent model version cost duration lines_added lines_removed \
         .context_window.remaining_percentage // 100
     end | tostring),
     (.exceeds_200k_tokens // false | tostring)
-] | join("\t")')"
+] | map(if . == null or . == "" then "-" else (tostring | gsub("[[:cntrl:]]"; " ")) end) | join("\t")')"
+
+# Values from stdin and from the environment reach awk only as data (-v), after this check.
+# Interpolated into the awk program text, a value such as 0;system("...") would run as code.
+is_num() { [[ $1 =~ ^-?[0-9]+([.][0-9]+)?$ ]]; }
+is_num "$remaining_pct" || remaining_pct=100
+at_most() { [ "$(awk -v a="$1" -v b="$2" 'BEGIN {print (a <= b)}')" -eq 1 ]; }
 
 lines_changed="+${lines_added}/-${lines_removed}"
 tokens="${tokens_in}/${tokens_out}"
 
 # Subtract autocompact buffer to get TRUE usable space
 # Priority: env var > observed default (16.5%)
-if [ -n "$CLAUDE_AUTOCOMPACT_PCT_OVERRIDE" ]; then
-    AUTOCOMPACT_BUFFER_PCT=$(awk "BEGIN {print 100 - $CLAUDE_AUTOCOMPACT_PCT_OVERRIDE}")
+if is_num "$CLAUDE_AUTOCOMPACT_PCT_OVERRIDE"; then
+    AUTOCOMPACT_BUFFER_PCT=$(awk -v o="$CLAUDE_AUTOCOMPACT_PCT_OVERRIDE" 'BEGIN {print 100 - o}')
 else
     # Docs claim CLAUDE_AUTOCOMPACT_PCT_OVERRIDE default is 95% (5% buffer),
     # but /context shows 16.5% buffer and compaction triggers at ~78-85% (issues #18264, #18241).
@@ -102,15 +112,19 @@ else
     AUTOCOMPACT_BUFFER_PCT=16.5
 fi
 
-true_free_pct=$(awk "BEGIN {print $remaining_pct - $AUTOCOMPACT_BUFFER_PCT}")
-remaining=$(echo "$true_free_pct" | awk '{printf "%.2f", $1/100}' | sed 's/^0\./\./')
+true_free_pct=$(awk -v r="$remaining_pct" -v b="$AUTOCOMPACT_BUFFER_PCT" 'BEGIN {print r - b}')
+# Clarity: show window-used % and the window-used % at which autocompact fires (= 100 - buffer).
+used_pct=$(awk -v r="$remaining_pct" 'BEGIN {printf "%.0f", 100 - r}')
+compact_at=$(awk -v b="$AUTOCOMPACT_BUFFER_PCT" 'BEGIN {printf "%.0f", 100 - b}')
+if at_most "$true_free_pct" 3; then imminent="!"; else imminent=""; fi
+ctx_label="${used_pct}% used·compact@${compact_at}%${imminent}"
 
 # Color remaining based on TRUE free space threshold (warn when running LOW)
-if [ "$(awk "BEGIN {print ($true_free_pct <= 10)}")" -eq 1 ]; then
+if at_most "$true_free_pct" 10; then
     ctx_color="\\033[93;41m"  # Bright yellow fg, red bg - CRITICAL (≤10% usable)
-elif [ "$(awk "BEGIN {print ($true_free_pct <= 20)}")" -eq 1 ]; then
+elif at_most "$true_free_pct" 20; then
     ctx_color="\\033[91;48;5;237m"  # Bright red fg, dark gray bg - WARNING (≤20% usable)
-elif [ "$(awk "BEGIN {print ($true_free_pct <= 35)}")" -eq 1 ]; then
+elif at_most "$true_free_pct" 35; then
     ctx_color="\\033[93m"  # Yellow fg - CAUTION (≤35% usable)
 else
     ctx_color="\\033[0;32m"   # Normal green fg - OK
@@ -145,7 +159,7 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
     else branch=""
 fi
 
-printf "\\033[0;31magent:%s \\033[0;33mmodel:%s \\033[2mver:%s \\033[0;34mcost:%s \\033[0;36mdur:%s\\n\\033[0;32mlines:%s \\033[2mtokens(i/o):%s ${ctx_color}ctx(free):%s\\033[0m \\033[0;31m>200k:%s\\033[0m\\n\\033[2mdir:%s \\033[0;36mbranch:%s \\033[0;32muser:%s \\033[0;35mtime:%s\\033[0m" "$agent" "$model" "$version" "$cost" "$duration" "$lines_changed" "$tokens" "$remaining" "$exc_context" "$(basename "$cwd")" "$branch" "$user" "$time"
+printf "\\033[0;31magent:%s \\033[0;33mmodel:%s \\033[2mver:%s \\033[0;34mcost:%s \\033[0;36mdur:%s\\n\\033[0;32mlines:%s \\033[2mtokens(i/o):%s ${ctx_color}ctx:%s\\033[0m \\033[0;31m>200k:%s\\033[0m\\n\\033[2mdir:%s \\033[0;36mbranch:%s \\033[0;32muser:%s \\033[0;35mtime:%s\\033[0m" "$agent" "$model" "$version" "$cost" "$duration" "$lines_changed" "$tokens" "$ctx_label" "$exc_context" "$(basename -- "$cwd")" "$branch" "$user" "$time"
 
 if [ -n "$clocks" ]; then
     printf "\\n\\033[0;35mclocks:%s\\033[0m" "$clocks"
