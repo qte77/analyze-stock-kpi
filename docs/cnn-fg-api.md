@@ -154,7 +154,7 @@ running before the data falls out of the window.
 | `previous_close` / `previous_1_week` / `_1_month` / `_1_year` | `fear_and_greed.*` | yes | **null** (CNN doesn't ship them historically) |
 | `subindicators[k].score` | `<k>.score` (top-level only) | yes | **null** (CNN doesn't ship them historically) |
 | `subindicators[k].rating` | `<k>.rating` / `<k>.data[].rating` | yes | yes |
-| `subindicators[k].raw_value` | `<k>.data[]` (latest for today) | yes | yes |
+| `subindicators[k].raw_value` | `<k>.data[]` (latest for today) | yes | yes — except the four S&P 500 / VIX index-level keys, always dropped ([ADR-0011 amendment](decisions/0011-equity-macro-overlay-via-spy-indexed-returns.md#amendment-2026-11-22--index-levels-inside-cnn-fear--greed-sub-indicators)) |
 
 The cron's behavior follows from this table:
 
