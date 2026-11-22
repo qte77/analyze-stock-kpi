@@ -16,6 +16,7 @@ from pydantic import ValidationError
 
 from analyze_stock_kpi.config import settings
 from analyze_stock_kpi.data_sources.sentiment import (
+    INDEX_LEVEL_KEYS,
     SUBINDICATOR_KEYS,
     FearGreedSnapshot,
     SubindicatorReading,
@@ -355,7 +356,8 @@ def test_merge_payload_today_has_full_subindicators(tmp_path: Path) -> None:
     sp500 = today.subindicators["market_momentum_sp500"]
     assert sp500.score == 99.6  # precise per-day score available only for today
     assert sp500.rating == "extreme greed"
-    assert sp500.raw_value == 5844.19
+    assert sp500.raw_value is None  # index level, never persisted (ADR-0011)
+    assert today.subindicators["put_call_options"].raw_value == 0.65
 
 
 def test_merge_payload_historical_subindicators_have_no_score(tmp_path: Path) -> None:
@@ -369,7 +371,7 @@ def test_merge_payload_historical_subindicators_have_no_score(tmp_path: Path) ->
     # the precise 0-100 score is unrecoverable for past days.
     assert sp500.score is None
     assert sp500.rating == "extreme greed"
-    assert sp500.raw_value == 5800.0
+    assert sp500.raw_value is None  # index level, never persisted (ADR-0011)
 
 
 def test_subindicator_reading_score_field_is_optional() -> None:
@@ -386,7 +388,50 @@ def test_year_file_roundtrip_preserves_subindicators(tmp_path: Path) -> None:
 
     sp500 = reloaded["2026-05-09"].subindicators["market_momentum_sp500"]
     assert sp500.score == 99.6
-    assert sp500.raw_value == 5844.19
+    assert reloaded["2026-05-09"].subindicators["put_call_options"].raw_value == 0.65
+
+
+def test_index_level_raw_values_are_never_written(tmp_path: Path) -> None:
+    """S&P 500 / VIX levels and their moving averages are third-party index
+    values (ADR-0011): rating + score persist, the raw level does not. Other
+    raw values (put/call ratio, breadth, spreads) still persist."""
+    payload = load_fear_greed_fixture("current")
+    by_year = merge_payload_into_years(payload, root=tmp_path)
+    for year, by_date in by_year.items():
+        _write_year(year, by_date, root=tmp_path)
+
+    rows = [row for year in by_year for row in json.loads((tmp_path / f"{year}.json").read_text())]
+    subs = [row["subindicators"] for row in rows if "subindicators" in row]
+    assert any(sub.keys() >= INDEX_LEVEL_KEYS for sub in subs)  # today's row has all four
+    for sub in subs:
+        for key in INDEX_LEVEL_KEYS & sub.keys():
+            assert "raw_value" not in sub[key]
+            assert "rating" in sub[key]
+    assert all("raw_value" in sub["put_call_options"] for sub in subs if "put_call_options" in sub)
+
+
+def test_load_year_scrubs_index_levels_from_legacy_rows(tmp_path: Path) -> None:
+    """Rows written before the scrub still carry index levels; loading drops
+    them, so the next cron rewrite of that year file removes them."""
+    legacy = {
+        "score": 45.0,
+        "rating": "fear",
+        "timestamp": "2025-06-02T23:59:00+00:00",
+        "subindicators": {
+            "market_momentum_sp500": {"rating": "greed", "raw_value": 5935.94},
+            "market_volatility_vix": {"rating": "neutral", "raw_value": 18.36},
+            "put_call_options": {"rating": "fear", "raw_value": 0.83},
+        },
+    }
+    (tmp_path / "2025.json").write_text(json.dumps([legacy]))
+
+    subs = _load_year(2025, root=tmp_path)["2025-06-02"].subindicators
+
+    assert subs is not None
+    assert subs["market_momentum_sp500"].raw_value is None
+    assert subs["market_volatility_vix"].raw_value is None
+    assert subs["market_momentum_sp500"].rating == "greed"
+    assert subs["put_call_options"].raw_value == 0.83
 
 
 @pytest.mark.network
