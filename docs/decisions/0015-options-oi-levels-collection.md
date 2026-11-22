@@ -17,8 +17,8 @@ Large OI strikes are a hypothesis for price "gravity" near expiry. The hypothesi
    Score and the dashboard until the point-in-time backtest (ADR-0013) supports them.
 2. **Two expiries per day.** `nearest` = the first listed expiry on or after the collection date.
    `monthly` = the first listed expiry on or after the collection date that is the third Friday of its
-   month; when that Friday is a market holiday, the listed Thursday of that week counts (as on
-   2025-04-17, Good Friday). If both are the same expiry, both rows are still written.
+   month; a listed Thursday counts as monthly only when the third Friday after it is not listed (the
+   market-holiday case, as on 2025-04-17 before Good Friday). If both are the same expiry, both rows are still written.
 3. **Six fields per row:** `max_pain`, `call_wall`, `put_floor`, `pc_oi_ratio`, `total_oi`,
    `oi_null_share`. Definitions and tie rules are in plan 011 (Approach). Null OI counts as 0. Rows also
    carry `date`, `expiry_kind` and `expiry`, and are keyed by `(date, expiry_kind)`.
