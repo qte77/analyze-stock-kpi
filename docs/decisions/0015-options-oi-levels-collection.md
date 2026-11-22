@@ -1,6 +1,6 @@
 # ADR-0015 — Collect SPY options open-interest levels daily; collection only
 
-**Status:** Proposed (2026-11-22); the owner accepts it by merging · **Relates to:**
+**Status:** Accepted 2026-11-22 (owner approved the licensing verdict, incl. the unverified points) · **Relates to:**
 [ADR-0011](0011-equity-macro-overlay-via-spy-indexed-returns.md) (SPY derived-only precedent),
 [ADR-0013](0013-point-in-time-backtest.md) (the backtest that must support any later use) ·
 **Plan:** [011](../plans/011-options-oi-levels.md), issue [#563](https://github.com/qte77/analyze-stock-kpi/issues/563)
