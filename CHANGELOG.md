@@ -270,7 +270,7 @@ Types of changes:
   FCF margin) and notes the aggregated best/worst lists double as the
   portfolio's candidate pool. `docs/architecture.md`, `docs/roadmap.md`,
   `docs/UserStory.md`, `docs/data-sources.md`, `README.md` and plan
-  [007](docs/plans/007-longshort-portfolio-and-multiwindow-sortino.md) updated
+  [007](https://github.com/qte77/analyze-stock-kpi/blob/815d93b8df3b4f7f5965a50ab24dac5f4d573593/docs/plans/007-longshort-portfolio-and-multiwindow-sortino.md) updated
   to reflect #394/#395 as shipped and to fix pre-existing staleness found
   along the way (a stale reference to the now-consolidated
   `federal-contractors-refresh.yaml` workflow, and a roadmap item for the

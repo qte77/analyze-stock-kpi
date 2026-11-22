@@ -11,7 +11,7 @@ reference for any future relative-strength work) · **Amends**
 is already a runtime input), [ADR-0011](0011-equity-macro-overlay-via-spy-indexed-returns.md)
 (derived-only persistence precedent), [`docs/data-sources.md`](../data-sources.md)
 §"Redistribution guardrails", plan
-[007](../plans/007-longshort-portfolio-and-multiwindow-sortino.md).
+[007](https://github.com/qte77/analyze-stock-kpi/blob/815d93b8df3b4f7f5965a50ab24dac5f4d573593/docs/plans/007-longshort-portfolio-and-multiwindow-sortino.md).
 
 ## Context
 

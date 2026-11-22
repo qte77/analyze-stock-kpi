@@ -6,7 +6,7 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
 [#416](https://github.com/qte77/analyze-stock-kpi/issues/416) ·
 [#417](https://github.com/qte77/analyze-stock-kpi/issues/417) ·
 [#426](https://github.com/qte77/analyze-stock-kpi/issues/426). This plan takes over the open rows of
-[plan 008](008-pit-longshort-backtest.md), which is closed.
+[plan 008](https://github.com/qte77/analyze-stock-kpi/blob/815d93b8df3b4f7f5965a50ab24dac5f4d573593/docs/plans/008-pit-longshort-backtest.md), which is closed.
 
 ## Status and handoff (read first)
 
@@ -63,12 +63,19 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   Effect on B's monthly net: 8.52 % → 7.97 % a year, t-stat 0.92 → 0.88, null percentile
   97.7 → 98.1.
 - **What's next, in order:**
-  1. #418, the private cache, once the owner has stored the `CACHE_REPO_TOKEN` secret.
-  2. #294, once the owner says yes or no.
+  1. #418, the private cache. The workflow side is pre-staged and dormant until the
+     `CACHE_REPO_SSH_KEY` secret exists. Owner gate: the private repo
+     `qte77/analyze-stock-kpi-cache` (not found on 2026-11-22, so it must be created again, with
+     one initial commit) plus a write-enabled deploy key on it, whose private half becomes the
+     secret. A deploy key is recommended (2026-11-22) over the fine-grained PAT first planned: it
+     is scoped to one repo and not tied to the owner's account. Deadline
+     (estimate, not verified): the oldest statement year likely drops out of Yahoo's window when
+     FY2026 annual reports land, around Feb–Mar 2027.
+  2. ~~#294~~ closed 2026-11-22: plan files keep the `NNN` naming (see `README.md`).
 
   #312 shipped 2026-09-30 (successor tickers in `south-america`; see its row).
 
-  The UI redesign ([plan 010](010-ui-redesign-progressive-disclosure.md), incl. #426 and #446's
+  The UI redesign ([plan 010](https://github.com/qte77/analyze-stock-kpi/blob/815d93b8df3b4f7f5965a50ab24dac5f4d573593/docs/plans/010-ui-redesign-progressive-disclosure.md), incl. #426 and #446's
   presentation items) is complete: slices 0–7 shipped by 2026-09-30.
 - **Offloading to the cloud (optional):** `claude --cloud` needs an interactive TTY, so it fails
   from an agent's Bash. Use a one-time routine instead (`/schedule` → `RemoteTrigger`, environment
@@ -91,7 +98,7 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
 
 ## UI redesign
 
-Moved to [plan 010](010-ui-redesign-progressive-disclosure.md) (2026-09-25), with the
+Moved to [plan 010](https://github.com/qte77/analyze-stock-kpi/blob/815d93b8df3b4f7f5965a50ab24dac5f4d573593/docs/plans/010-ui-redesign-progressive-disclosure.md) (2026-09-25), with the
 wireframe, the UX review, the defaults and the slices.
 
 ## Source map
@@ -116,7 +123,7 @@ wireframe, the UX review, the defaults and the slices.
 | ~~Dependabot `setup-uv` [#412](https://github.com/qte77/analyze-stock-kpi/pull/412)~~ | agent | shipped 2026-09-25: its CI was green (the allow-list accepts the new SHA); merged, and `validate` passes on `main` |
 | ~~`bump-my-version.yaml` doesn't sync the project's own version in `uv.lock`~~ | agent | shipped 2026-09-25, PR #437: a multiline `[[tool.bumpversion.files]]` entry for `uv.lock` in `pyproject.toml`; a `--dry-run` shows it bumped (confirm on the next real bump) |
 | ~~Radar labels + inert row detail in Simple view [#426](https://github.com/qte77/analyze-stock-kpi/issues/426)~~ | agent | moved to plan 010, slice 5 |
-| ~~UI redesign: positioning + progressive disclosure~~ | agent | moved 2026-09-25 to [plan 010](010-ui-redesign-progressive-disclosure.md) (UX review done; slices 0-7 open there) |
+| ~~UI redesign: positioning + progressive disclosure~~ | agent | moved 2026-09-25 to [plan 010](https://github.com/qte77/analyze-stock-kpi/blob/815d93b8df3b4f7f5965a50ab24dac5f4d573593/docs/plans/010-ui-redesign-progressive-disclosure.md) (UX review done; slices 0-7 open there) |
 | ~~Unpin `complexipy`~~ | agent | shipped 2026-09-25, PR #438: `complexipy>=8.0.1`; the gate stays at 10, and the 11 functions that exceed it only because 6.x+ scores comprehensions (probe: the same comprehensions score 0 in 5.5.0, 4 in 8.0.1) are baselined in `complexipy-snapshot.json`; `make validate` green |
 | ~~`make preview` serves `ui/public` [#415](https://github.com/qte77/analyze-stock-kpi/issues/415)~~ | agent | shipped 2026-09-25, PR #441: both preview targets run Vite's dev server (URL `/analyze-stock-kpi/`); `preview_local` reads local `results/` via `<base>/@fs/<repo>` (`server.fs.allow` adds only `../results`). Headless check: 4 Chart.js instances on desktop and phone |
 | ~~Scroll hint on touch devices [#417](https://github.com/qte77/analyze-stock-kpi/issues/417)~~ | agent | shipped 2026-09-25: `ui/scroll_hint.js` sets `.overflow-right` while columns are hidden to the right; `style.css` masks the edge under `(pointer: coarse)`. e2e: on for phone (both views) and tablet (Detailed), off when the table fits, off at the scroll end |
