@@ -445,12 +445,10 @@
     "timestamp": "2025-05-12T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5844.19
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5819.97528
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -465,12 +463,10 @@
         "raw_value": 0.7039322461641095
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.39
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 26.2392
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -488,12 +484,10 @@
     "timestamp": "2025-05-13T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5886.55
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5819.10336
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -508,12 +502,10 @@
         "raw_value": 0.6703171018066046
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.22
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 26.148000000000003
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -531,12 +523,10 @@
     "timestamp": "2025-05-14T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5892.58
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5818.233200000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -551,12 +541,10 @@
         "raw_value": 0.6504563368598266
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.62
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 26.0502
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -574,12 +562,10 @@
     "timestamp": "2025-05-15T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5916.93
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5817.69672
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -594,12 +580,10 @@
         "raw_value": 0.6712259018371556
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.83
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.968199999999996
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -617,12 +601,10 @@
     "timestamp": "2025-05-16T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5958.38
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5817.4807200000005
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -637,12 +619,10 @@
         "raw_value": 0.6576008909751422
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.24
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.8156
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -660,12 +640,10 @@
     "timestamp": "2025-05-19T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5963.6
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5817.59616
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -680,12 +658,10 @@
         "raw_value": 0.6685423659642298
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.14
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.711
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -703,12 +679,10 @@
     "timestamp": "2025-05-20T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5940.46
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5818.15488
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -723,12 +697,10 @@
         "raw_value": 0.6690472470347607
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.09
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.5156
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -746,12 +718,10 @@
     "timestamp": "2025-05-21T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5844.61
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5817.7627999999995
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -766,12 +736,10 @@
         "raw_value": 0.6980745846934985
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 20.87
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.3946
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -789,12 +757,10 @@
     "timestamp": "2025-05-22T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5842.01
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5817.16304
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -809,12 +775,10 @@
         "raw_value": 0.6854375808766469
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 20.28
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.3156
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -832,12 +796,10 @@
     "timestamp": "2025-05-23T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5802.82
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5816.2487200000005
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -852,12 +814,10 @@
         "raw_value": 0.7166165229867001
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 22.29
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.2682
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -875,12 +835,10 @@
     "timestamp": "2025-05-27T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5921.54
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5816.031359999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -895,12 +853,10 @@
         "raw_value": 0.7030673422329674
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.96
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.212000000000003
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -918,12 +874,10 @@
     "timestamp": "2025-05-28T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5888.55
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5815.38504
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -938,12 +892,10 @@
         "raw_value": 0.7078855284172118
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 19.31
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.188000000000002
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -961,12 +913,10 @@
     "timestamp": "2025-05-29T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5912.17
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5814.78344
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -981,12 +931,10 @@
         "raw_value": 0.6988431214603749
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 19.18
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.137600000000003
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1004,12 +952,10 @@
     "timestamp": "2025-05-30T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5911.69
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5813.90392
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1024,12 +970,10 @@
         "raw_value": 0.7059871385475441
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.57
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.111
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1047,12 +991,10 @@
     "timestamp": "2025-06-02T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5935.94
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5813.40152
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1067,12 +1009,10 @@
         "raw_value": 0.70440216658941
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.36
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.082199999999997
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1090,12 +1030,10 @@
     "timestamp": "2025-06-03T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5970.37
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5812.90544
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1110,12 +1048,10 @@
         "raw_value": 0.7074352792207306
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.69
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.0504
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1133,12 +1069,10 @@
     "timestamp": "2025-06-04T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5970.81
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5812.29472
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1153,12 +1087,10 @@
         "raw_value": 0.7069507422223209
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.61
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.053
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1176,12 +1108,10 @@
     "timestamp": "2025-06-05T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5939.3
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5811.41008
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1196,12 +1126,10 @@
         "raw_value": 0.7181422582237935
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.48
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.0796
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1219,12 +1147,10 @@
     "timestamp": "2025-06-06T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6000.36
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5810.72104
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1239,12 +1165,10 @@
         "raw_value": 0.709836201620738
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.77
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.0484
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1262,12 +1186,10 @@
     "timestamp": "2025-06-09T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6005.88
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5810.1672
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1282,12 +1204,10 @@
         "raw_value": 0.6864156164802809
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.16
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "fear",
-        "raw_value": 25.017799999999998
+        "rating": "fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1305,12 +1225,10 @@
     "timestamp": "2025-06-10T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6038.81
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5809.75552
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1325,12 +1243,10 @@
         "raw_value": 0.6752643845684091
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.95
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 24.9238
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1348,12 +1264,10 @@
     "timestamp": "2025-06-11T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6022.24
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5809.5106399999995
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1368,12 +1282,10 @@
         "raw_value": 0.6606932442662765
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.26
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 24.823399999999996
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1391,12 +1303,10 @@
     "timestamp": "2025-06-12T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6045.26
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5809.59344
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1411,12 +1321,10 @@
         "raw_value": 0.6558747004139229
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.02
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 24.748399999999997
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1434,12 +1342,10 @@
     "timestamp": "2025-06-13T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5976.97
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5808.735680000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1454,12 +1360,10 @@
         "raw_value": 0.6418954773554765
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 20.82
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 24.7346
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1477,12 +1381,10 @@
     "timestamp": "2025-06-16T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6033.11
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5808.590560000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1497,12 +1399,10 @@
         "raw_value": 0.6637702125112643
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 19.11
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 24.516399999999997
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1520,12 +1420,10 @@
     "timestamp": "2025-06-17T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5982.72
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5808.0436
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1540,12 +1438,10 @@
         "raw_value": 0.7075828285127835
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 21.6
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 24.042199999999998
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1563,12 +1459,10 @@
     "timestamp": "2025-06-18T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5980.87
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5807.29792
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1583,12 +1477,10 @@
         "raw_value": 0.7331401471371313
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 20.14
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 23.505399999999998
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1606,12 +1498,10 @@
     "timestamp": "2025-06-20T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 5967.84
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5806.63576
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1626,12 +1516,10 @@
         "raw_value": 0.7207366957048987
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 20.62
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 22.871199999999998
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1649,12 +1537,10 @@
     "timestamp": "2025-06-23T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6025.17
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5807.85984
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1669,12 +1555,10 @@
         "raw_value": 0.7494497719539563
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 19.83
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 22.595399999999998
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1692,12 +1576,10 @@
     "timestamp": "2025-06-24T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6092.18
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5809.660640000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1712,12 +1594,10 @@
         "raw_value": 0.746307660894624
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.48
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 22.130600000000005
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1735,12 +1615,10 @@
     "timestamp": "2025-06-25T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6092.16
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5810.95112
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1755,12 +1633,10 @@
         "raw_value": 0.7037917531165265
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.76
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 21.7146
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1778,12 +1654,10 @@
     "timestamp": "2025-06-26T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6141.02
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5812.28672
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1798,12 +1672,10 @@
         "raw_value": 0.6870532898119086
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.59
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 21.428600000000003
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1821,12 +1693,10 @@
     "timestamp": "2025-06-27T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6173.07
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5813.350960000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1841,12 +1711,10 @@
         "raw_value": 0.6802651023044851
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.32
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 21.152599999999996
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1864,12 +1732,10 @@
     "timestamp": "2025-06-30T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6204.95
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5814.68984
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1884,12 +1750,10 @@
         "raw_value": 0.6405769399932545
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.73
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 20.834400000000002
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1907,12 +1771,10 @@
     "timestamp": "2025-07-01T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6198.01
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5816.5072
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1927,12 +1789,10 @@
         "raw_value": 0.6247510582248712
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.83
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 20.578000000000003
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1950,12 +1810,10 @@
     "timestamp": "2025-07-02T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6227.42
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5819.071039999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -1970,12 +1828,10 @@
         "raw_value": 0.6182428316359947
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.64
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 20.2344
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -1993,12 +1849,10 @@
     "timestamp": "2025-07-03T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6279.35
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5822.252800000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2013,12 +1867,10 @@
         "raw_value": 0.6077723074389187
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.38
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 19.950599999999998
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2036,12 +1888,10 @@
     "timestamp": "2025-07-07T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6229.98
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5825.1442400000005
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2056,12 +1906,10 @@
         "raw_value": 0.6216016654358667
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.79
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 19.7374
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2079,12 +1927,10 @@
     "timestamp": "2025-07-08T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6225.52
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5827.408640000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2099,12 +1945,10 @@
         "raw_value": 0.6317559693405992
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.81
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 19.5442
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2122,12 +1966,10 @@
     "timestamp": "2025-07-09T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6263.26
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5829.71168
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2142,12 +1984,10 @@
         "raw_value": 0.6268711548443602
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.94
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 19.366200000000003
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2165,12 +2005,10 @@
     "timestamp": "2025-07-10T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6280.46
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5832.68312
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2185,12 +2023,10 @@
         "raw_value": 0.6281286107860468
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.78
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 19.178800000000003
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2208,12 +2044,10 @@
     "timestamp": "2025-07-11T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6259.75
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5835.41512
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2228,12 +2062,10 @@
         "raw_value": 0.6394962516582613
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.4
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 19.0234
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2251,12 +2083,10 @@
     "timestamp": "2025-07-14T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6268.56
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5838.947279999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2271,12 +2101,10 @@
         "raw_value": 0.6265250237353623
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.2
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.8734
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2294,12 +2122,10 @@
     "timestamp": "2025-07-15T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6243.76
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5842.2076
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2314,12 +2140,10 @@
         "raw_value": 0.6271387648702197
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.38
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.729
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2337,12 +2161,10 @@
     "timestamp": "2025-07-16T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6263.7
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5845.57392
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2357,12 +2179,10 @@
         "raw_value": 0.6395417475045544
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.16
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.6186
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2380,12 +2200,10 @@
     "timestamp": "2025-07-17T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6297.36
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5848.353520000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2400,12 +2218,10 @@
         "raw_value": 0.6444002176785947
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.52
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.4762
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2423,12 +2239,10 @@
     "timestamp": "2025-07-18T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6296.79
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5851.22912
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2443,12 +2257,10 @@
         "raw_value": 0.6382050478651922
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.41
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.309199999999997
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2466,12 +2278,10 @@
     "timestamp": "2025-07-21T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6305.6
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5853.700640000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2486,12 +2296,10 @@
         "raw_value": 0.6363511069842467
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.65
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.171200000000002
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2509,12 +2317,10 @@
     "timestamp": "2025-07-22T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6309.62
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5855.7836800000005
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2529,12 +2335,10 @@
         "raw_value": 0.6348226845877122
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.5
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.0516
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2552,12 +2356,10 @@
     "timestamp": "2025-07-23T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6358.91
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5857.964000000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2572,12 +2374,10 @@
         "raw_value": 0.6269921097791871
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.37
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.921000000000003
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2595,12 +2395,10 @@
     "timestamp": "2025-07-24T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6363.35
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5859.92112
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2615,12 +2413,10 @@
         "raw_value": 0.6355161989103426
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.39
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.861
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2638,12 +2434,10 @@
     "timestamp": "2025-07-25T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6388.64
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5862.22032
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2658,12 +2452,10 @@
         "raw_value": 0.6500899931727159
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.93
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.7952
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2681,12 +2473,10 @@
     "timestamp": "2025-07-28T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6389.77
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5865.240239999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2701,12 +2491,10 @@
         "raw_value": 0.6452995554508542
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.03
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.723399999999998
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2724,12 +2512,10 @@
     "timestamp": "2025-07-29T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6370.86
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5867.6655200000005
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2744,12 +2530,10 @@
         "raw_value": 0.6532600931619177
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.98
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.6864
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2767,12 +2551,10 @@
     "timestamp": "2025-07-30T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6362.9
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5870.254239999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2787,12 +2569,10 @@
         "raw_value": 0.6647293338092346
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.48
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.6512
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2810,12 +2590,10 @@
     "timestamp": "2025-07-31T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6339.39
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5872.4
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2830,12 +2608,10 @@
         "raw_value": 0.6754560239379339
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.72
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.622799999999998
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2853,12 +2629,10 @@
     "timestamp": "2025-08-01T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6238.01
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5873.97984
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2873,12 +2647,10 @@
         "raw_value": 0.7050530083430913
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 20.38
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.6686
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2896,12 +2668,10 @@
     "timestamp": "2025-08-04T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6329.94
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5876.662800000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2916,12 +2686,10 @@
         "raw_value": 0.7288202036148809
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.52
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.6016
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2939,12 +2707,10 @@
     "timestamp": "2025-08-05T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6299.19
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5878.75328
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -2959,12 +2725,10 @@
         "raw_value": 0.7429813758644973
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.85
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.553
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -2982,12 +2746,10 @@
     "timestamp": "2025-08-06T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6345.06
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5881.02192
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3002,12 +2764,10 @@
         "raw_value": 0.7418370602568222
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.77
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.4426
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3025,12 +2785,10 @@
     "timestamp": "2025-08-07T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6340.0
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5883.07336
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3045,12 +2803,10 @@
         "raw_value": 0.7312384648757299
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.57
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.394799999999996
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3068,12 +2824,10 @@
     "timestamp": "2025-08-08T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6389.45
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5885.98104
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3088,12 +2842,10 @@
         "raw_value": 0.7000101550559621
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.15
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.311600000000002
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3111,12 +2863,10 @@
     "timestamp": "2025-08-11T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6373.45
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5888.43712
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3131,12 +2881,10 @@
         "raw_value": 0.6834183057844634
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.25
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.253
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3154,12 +2902,10 @@
     "timestamp": "2025-08-12T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6445.76
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5891.455199999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3174,12 +2920,10 @@
         "raw_value": 0.6678887896260539
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.73
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.1762
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3197,12 +2941,10 @@
     "timestamp": "2025-08-13T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6466.58
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5894.77208
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3217,12 +2959,10 @@
         "raw_value": 0.6547693122036418
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.49
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.098799999999997
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3240,12 +2980,10 @@
     "timestamp": "2025-08-14T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6468.54
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5897.59984
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3260,12 +2998,10 @@
         "raw_value": 0.6596223581585011
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.83
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.041600000000003
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3283,12 +3019,10 @@
     "timestamp": "2025-08-15T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6449.8
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5900.2812
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3303,12 +3037,10 @@
         "raw_value": 0.6427929680551843
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.09
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.991200000000003
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3326,12 +3058,10 @@
     "timestamp": "2025-08-18T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6449.15
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5902.837759999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3346,12 +3076,10 @@
         "raw_value": 0.6302281303151067
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.99
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.921400000000002
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3369,12 +3097,10 @@
     "timestamp": "2025-08-19T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6411.37
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5904.975520000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3389,12 +3115,10 @@
         "raw_value": 0.6322368473391294
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.57
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.8974
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3412,12 +3136,10 @@
     "timestamp": "2025-08-20T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6395.78
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5907.2016
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3432,12 +3154,10 @@
         "raw_value": 0.6672794825969757
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.69
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.868
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3455,12 +3175,10 @@
     "timestamp": "2025-08-21T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6370.17
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5910.05792
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3475,12 +3193,10 @@
         "raw_value": 0.6931988973092815
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.6
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.861
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3498,12 +3214,10 @@
     "timestamp": "2025-08-22T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6466.91
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5913.9272
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3518,12 +3232,10 @@
         "raw_value": 0.7038944678135091
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.22
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.8002
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3541,12 +3253,10 @@
     "timestamp": "2025-08-25T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6439.32
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5917.79976
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3561,12 +3271,10 @@
         "raw_value": 0.7136282121216085
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.79
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.7356
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3584,12 +3292,10 @@
     "timestamp": "2025-08-26T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6465.94
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5921.8787999999995
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3604,12 +3310,10 @@
         "raw_value": 0.7040904508287693
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.62
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.6116
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3627,12 +3331,10 @@
     "timestamp": "2025-08-27T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6481.4
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5926.83744
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3647,12 +3349,10 @@
         "raw_value": 0.6714456837332679
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.85
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.5264
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3670,12 +3370,10 @@
     "timestamp": "2025-08-28T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6501.86
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5931.21632
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3690,12 +3388,10 @@
         "raw_value": 0.6404745625072213
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.43
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.383
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3713,12 +3409,10 @@
     "timestamp": "2025-08-29T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6460.26
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5936.100640000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3733,12 +3427,10 @@
         "raw_value": 0.637424383934795
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.36
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.2874
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3756,12 +3448,10 @@
     "timestamp": "2025-09-02T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6415.54
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5941.1997599999995
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3776,12 +3466,10 @@
         "raw_value": 0.6517672644316022
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.17
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.2184
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3799,12 +3487,10 @@
     "timestamp": "2025-09-03T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6448.26
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5946.0448
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3819,12 +3505,10 @@
         "raw_value": 0.6540984166272363
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.35
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.1488
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3842,12 +3526,10 @@
     "timestamp": "2025-09-04T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6502.08
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5952.15328
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3862,12 +3544,10 @@
         "raw_value": 0.6704231678091407
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.3
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.1052
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3885,12 +3565,10 @@
     "timestamp": "2025-09-05T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6481.5
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5957.843680000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3905,12 +3583,10 @@
         "raw_value": 0.6694992779240574
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.18
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.073600000000003
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3928,12 +3604,10 @@
     "timestamp": "2025-09-08T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6495.15
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5964.8884
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3948,12 +3622,10 @@
         "raw_value": 0.6764486052807392
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.11
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.044
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -3971,12 +3643,10 @@
     "timestamp": "2025-09-09T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6512.61
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5972.41272
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -3991,12 +3661,10 @@
         "raw_value": 0.6653188344295694
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.04
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.0184
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4014,12 +3682,10 @@
     "timestamp": "2025-09-10T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6532.04
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5979.87464
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4034,12 +3700,10 @@
         "raw_value": 0.6607004973744613
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.35
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.9908
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4057,12 +3721,10 @@
     "timestamp": "2025-09-11T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6587.47
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5988.402239999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4077,12 +3739,10 @@
         "raw_value": 0.6515780817664341
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.71
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.9484
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4100,12 +3760,10 @@
     "timestamp": "2025-09-12T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6584.29
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 5995.96504
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4120,12 +3778,10 @@
         "raw_value": 0.629671288171654
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.76
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.910800000000002
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4143,12 +3799,10 @@
     "timestamp": "2025-09-15T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6615.28
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6003.48632
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4163,12 +3817,10 @@
         "raw_value": 0.6013130252091373
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.69
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.897
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4186,12 +3838,10 @@
     "timestamp": "2025-09-16T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6606.76
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6011.42312
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4206,12 +3856,10 @@
         "raw_value": 0.5834162418198805
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.36
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.8684
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4229,12 +3877,10 @@
     "timestamp": "2025-09-17T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6600.35
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6018.8236
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4249,12 +3895,10 @@
         "raw_value": 0.5894734749532986
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.72
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.8466
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4272,12 +3916,10 @@
     "timestamp": "2025-09-18T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6631.96
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6026.57616
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4292,12 +3934,10 @@
         "raw_value": 0.5689265052221576
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.7
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.8418
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4315,12 +3955,10 @@
     "timestamp": "2025-09-19T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6664.36
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6034.55056
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4335,12 +3973,10 @@
         "raw_value": 0.5687572423633256
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.45
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.8352
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4358,12 +3994,10 @@
     "timestamp": "2025-09-22T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6693.75
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6041.96
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4378,12 +4012,10 @@
         "raw_value": 0.5814757684648443
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.1
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.8292
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4401,12 +4033,10 @@
     "timestamp": "2025-09-23T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6656.92
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6049.00216
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4421,12 +4051,10 @@
         "raw_value": 0.5901373750107128
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.64
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.818
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4444,12 +4072,10 @@
     "timestamp": "2025-09-24T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6637.97
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6056.40832
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4464,12 +4090,10 @@
         "raw_value": 0.5872358050775908
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.18
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.793999999999999
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4487,12 +4111,10 @@
     "timestamp": "2025-09-25T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6604.72
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6063.699600000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4507,12 +4129,10 @@
         "raw_value": 0.613539996426135
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.74
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.785599999999999
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4530,12 +4150,10 @@
     "timestamp": "2025-09-26T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6643.7
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6072.20168
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4550,12 +4168,10 @@
         "raw_value": 0.6266994681678689
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.29
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.761
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4573,12 +4189,10 @@
     "timestamp": "2025-09-29T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6661.21
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6080.59656
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4593,12 +4207,10 @@
         "raw_value": 0.6261504481198913
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.12
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.7552
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4616,12 +4228,10 @@
     "timestamp": "2025-09-30T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6688.46
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6089.039680000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4636,12 +4246,10 @@
         "raw_value": 0.6314484196403737
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.28
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.7478
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4659,12 +4267,10 @@
     "timestamp": "2025-10-01T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6711.2
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6097.3615199999995
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4679,12 +4285,10 @@
         "raw_value": 0.619588269044134
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.29
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.743599999999999
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4702,12 +4306,10 @@
     "timestamp": "2025-10-02T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6715.35
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6107.91216
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4722,12 +4324,10 @@
         "raw_value": 0.5967595582965914
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.63
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.768799999999999
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4745,12 +4345,10 @@
     "timestamp": "2025-10-03T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6715.79
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6121.04584
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4765,12 +4363,10 @@
         "raw_value": 0.5949516599898138
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.65
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.793999999999999
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4788,12 +4384,10 @@
     "timestamp": "2025-10-06T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6740.28
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6134.47008
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4808,12 +4402,10 @@
         "raw_value": 0.5871650429335893
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.37
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.822799999999999
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4831,12 +4423,10 @@
     "timestamp": "2025-10-07T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6714.59
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6148.32464
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4851,12 +4441,10 @@
         "raw_value": 0.5832565489027094
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.24
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.867
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4874,12 +4462,10 @@
     "timestamp": "2025-10-08T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6753.72
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6158.6992
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4894,12 +4480,10 @@
         "raw_value": 0.5820169814019108
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.3
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.873400000000002
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4917,12 +4501,10 @@
     "timestamp": "2025-10-09T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6735.11
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6170.43568
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4937,12 +4519,10 @@
         "raw_value": 0.5913562079761394
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.43
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.8924
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -4960,12 +4540,10 @@
     "timestamp": "2025-10-10T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6552.51
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6179.94888
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -4980,12 +4558,10 @@
         "raw_value": 0.6159218153979593
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 21.66
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.9912
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5003,12 +4579,10 @@
     "timestamp": "2025-10-13T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6654.72
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6189.938880000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5023,12 +4597,10 @@
         "raw_value": 0.6284279488330975
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 19.03
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 15.964199999999998
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5046,12 +4618,10 @@
     "timestamp": "2025-10-14T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6644.31
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6199.92032
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5066,12 +4636,10 @@
         "raw_value": 0.6267190946494268
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 20.81
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.03
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5089,12 +4657,10 @@
     "timestamp": "2025-10-15T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6671.06
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6211.0832
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5109,12 +4675,10 @@
         "raw_value": 0.6328537441054193
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 20.64
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.0858
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5132,12 +4696,10 @@
     "timestamp": "2025-10-16T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6629.07
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6221.85416
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5152,12 +4714,10 @@
         "raw_value": 0.6523645653466048
       },
       "market_volatility_vix": {
-        "rating": "fear",
-        "raw_value": 25.31
+        "rating": "fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.256600000000002
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5175,12 +4735,10 @@
     "timestamp": "2025-10-17T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6664.01
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6233.90064
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5195,12 +4753,10 @@
         "raw_value": 0.6618500581806599
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 20.78
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.3408
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5218,12 +4774,10 @@
     "timestamp": "2025-10-20T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6735.13
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6245.479600000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5238,12 +4792,10 @@
         "raw_value": 0.6759797085147399
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.23
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.4024
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5261,12 +4813,10 @@
     "timestamp": "2025-10-21T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6735.35
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6256.355519999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5281,12 +4831,10 @@
         "raw_value": 0.6872702125482578
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.87
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.4348
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5304,12 +4852,10 @@
     "timestamp": "2025-10-22T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6699.4
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6266.0725600000005
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5324,12 +4870,10 @@
         "raw_value": 0.7064869539682447
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.6
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.512199999999996
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5347,12 +4891,10 @@
     "timestamp": "2025-10-23T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6738.44
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6275.778399999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5367,12 +4909,10 @@
         "raw_value": 0.6971357196199232
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.3
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.5684
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5390,12 +4930,10 @@
     "timestamp": "2025-10-24T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6791.69
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6285.88192
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5410,12 +4948,10 @@
         "raw_value": 0.6669328227994596
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.37
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.5992
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5433,12 +4969,10 @@
     "timestamp": "2025-10-27T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6875.16
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6296.39656
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5453,12 +4987,10 @@
         "raw_value": 0.6510586878565643
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.79
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.6132
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5476,12 +5008,10 @@
     "timestamp": "2025-10-28T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6890.89
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6306.971199999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5496,12 +5026,10 @@
         "raw_value": 0.6341681031579967
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.42
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.6418
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5519,12 +5047,10 @@
     "timestamp": "2025-10-29T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6890.59
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6317.2628
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5539,12 +5065,10 @@
         "raw_value": 0.6201564153585074
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.92
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.6688
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5562,12 +5086,10 @@
     "timestamp": "2025-10-30T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6822.34
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6326.3481600000005
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5582,12 +5104,10 @@
         "raw_value": 0.6221159675201375
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.91
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.6932
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5605,12 +5125,10 @@
     "timestamp": "2025-10-31T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6840.2
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6335.86672
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5625,12 +5143,10 @@
         "raw_value": 0.6307069861425244
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.44
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.71
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5648,12 +5164,10 @@
     "timestamp": "2025-11-03T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6851.97
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6345.827200000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5668,12 +5182,10 @@
         "raw_value": 0.6509003426033317
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.17
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.769000000000002
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5691,12 +5203,10 @@
     "timestamp": "2025-11-04T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6771.55
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6354.94936
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5711,12 +5221,10 @@
         "raw_value": 0.6794286033389159
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 19.0
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.8532
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5734,12 +5242,10 @@
     "timestamp": "2025-11-05T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6796.29
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6364.00816
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5754,12 +5260,10 @@
         "raw_value": 0.6872520554846557
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.01
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 16.921
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5777,12 +5281,10 @@
     "timestamp": "2025-11-06T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6720.32
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6372.49144
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5797,12 +5299,10 @@
         "raw_value": 0.6950760264678086
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 19.5
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.014
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5820,12 +5320,10 @@
     "timestamp": "2025-11-07T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6728.8
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6379.56832
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5840,12 +5338,10 @@
         "raw_value": 0.7113477545082904
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 19.08
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.107
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5863,12 +5359,10 @@
     "timestamp": "2025-11-10T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6832.43
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6387.13536
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5883,12 +5377,10 @@
         "raw_value": 0.6955716363200629
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.6
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.1518
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5906,12 +5398,10 @@
     "timestamp": "2025-11-11T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6846.61
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6394.7676
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5926,12 +5416,10 @@
         "raw_value": 0.6833008669165117
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.28
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.154
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5949,12 +5437,10 @@
     "timestamp": "2025-11-12T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6850.92
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6402.239519999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -5969,12 +5455,10 @@
         "raw_value": 0.6688946662662708
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.51
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.1772
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -5992,12 +5476,10 @@
     "timestamp": "2025-11-13T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6737.49
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6408.4724
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6012,12 +5494,10 @@
         "raw_value": 0.668952914073859
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 20.0
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.2712
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6035,12 +5515,10 @@
     "timestamp": "2025-11-14T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6734.11
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6414.636479999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6055,12 +5533,10 @@
         "raw_value": 0.6677471857108689
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 19.83
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.3642
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6078,12 +5554,10 @@
     "timestamp": "2025-11-17T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6672.41
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6420.49208
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6098,12 +5572,10 @@
         "raw_value": 0.70579485784975
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 22.38
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.5096
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6121,12 +5593,10 @@
     "timestamp": "2025-11-18T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6617.32
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6426.673760000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6141,12 +5611,10 @@
         "raw_value": 0.7354020833018707
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 24.69
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.7026
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6164,12 +5632,10 @@
     "timestamp": "2025-11-19T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6642.16
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6433.07496
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6184,12 +5650,10 @@
         "raw_value": 0.7658585610093449
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 23.66
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.8688
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6207,12 +5671,10 @@
     "timestamp": "2025-11-20T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6538.76
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6438.962479999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6227,12 +5689,10 @@
         "raw_value": 0.8093616913680556
       },
       "market_volatility_vix": {
-        "rating": "fear",
-        "raw_value": 26.42
+        "rating": "fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.103
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6250,12 +5710,10 @@
     "timestamp": "2025-11-21T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6602.99
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6444.4140800000005
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6270,12 +5728,10 @@
         "raw_value": 0.8230824241665813
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 23.43
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.2764
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6293,12 +5749,10 @@
     "timestamp": "2025-11-24T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6705.12
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6450.94664
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6313,12 +5767,10 @@
         "raw_value": 0.8004527957774998
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 20.52
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.373
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6336,12 +5788,10 @@
     "timestamp": "2025-11-25T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6765.88
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6457.776319999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6356,12 +5806,10 @@
         "raw_value": 0.7934567567979536
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 18.56
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.417
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6379,12 +5827,10 @@
     "timestamp": "2025-11-26T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6812.61
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6464.983679999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6399,12 +5845,10 @@
         "raw_value": 0.783085858113318
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.19
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.446399999999997
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6422,12 +5866,10 @@
     "timestamp": "2025-11-28T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6849.09
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6472.28888
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6442,12 +5884,10 @@
         "raw_value": 0.7068518819612702
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.35
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.459400000000002
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6465,12 +5905,10 @@
     "timestamp": "2025-12-01T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6812.63
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6479.02696
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6485,12 +5923,10 @@
         "raw_value": 0.68460861506902
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.24
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.4952
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6508,12 +5944,10 @@
     "timestamp": "2025-12-02T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6829.37
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6485.89544
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6528,12 +5962,10 @@
         "raw_value": 0.6759783475571861
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.59
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.505
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6551,12 +5983,10 @@
     "timestamp": "2025-12-03T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6849.72
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6493.1788
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6571,12 +6001,10 @@
         "raw_value": 0.6579663801841152
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.08
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.4938
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6594,12 +6022,10 @@
     "timestamp": "2025-12-04T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6857.12
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6500.03288
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6614,12 +6040,10 @@
         "raw_value": 0.6464847937493468
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.78
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.4858
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6637,12 +6061,10 @@
     "timestamp": "2025-12-05T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6870.4
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6506.94904
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6657,12 +6079,10 @@
         "raw_value": 0.6627816304548079
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.41
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.4592
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6680,12 +6100,10 @@
     "timestamp": "2025-12-08T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6846.51
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6513.410640000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6700,12 +6118,10 @@
         "raw_value": 0.6500206636974285
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.66
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.4866
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6723,12 +6139,10 @@
     "timestamp": "2025-12-09T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6840.51
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6519.956800000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6743,12 +6157,10 @@
         "raw_value": 0.6509654543036562
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.93
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.5028
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6766,12 +6178,10 @@
     "timestamp": "2025-12-10T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6886.68
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6526.68816
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6786,12 +6196,10 @@
         "raw_value": 0.6451869754157035
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.77
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.4926
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6809,12 +6217,10 @@
     "timestamp": "2025-12-11T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6901.0
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6534.0804
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6829,12 +6235,10 @@
         "raw_value": 0.6395785935249686
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.85
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.463800000000003
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6852,12 +6256,10 @@
     "timestamp": "2025-12-12T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6827.41
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6540.4348
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6872,12 +6274,10 @@
         "raw_value": 0.6353857340667354
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 15.74
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.445999999999998
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6895,12 +6295,10 @@
     "timestamp": "2025-12-15T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6816.51
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6547.10512
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6915,12 +6313,10 @@
         "raw_value": 0.5982659717540575
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.5
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.443
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6938,12 +6334,10 @@
     "timestamp": "2025-12-16T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6800.26
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6553.66024
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -6958,12 +6352,10 @@
         "raw_value": 0.6205050890858912
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.48
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.4452
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -6981,12 +6373,10 @@
     "timestamp": "2025-12-17T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6721.43
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6559.68896
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -7001,12 +6391,10 @@
         "raw_value": 0.6214092040054429
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 17.62
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.4528
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -7024,12 +6412,10 @@
     "timestamp": "2025-12-18T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6774.76
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6565.68568
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -7044,12 +6430,10 @@
         "raw_value": 0.651709111202573
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 16.87
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.464199999999998
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -7067,12 +6451,10 @@
     "timestamp": "2025-12-19T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6834.5
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6571.62424
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -7087,12 +6469,10 @@
         "raw_value": 0.6705722302584772
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.91
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.4338
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -7110,12 +6490,10 @@
     "timestamp": "2025-12-22T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6878.49
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6577.91488
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -7130,12 +6508,10 @@
         "raw_value": 0.7099270039125296
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.08
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.2822
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -7153,12 +6529,10 @@
     "timestamp": "2025-12-23T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6909.79
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6584.06504
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -7173,12 +6547,10 @@
         "raw_value": 0.7056973574731122
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.0
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.1816
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -7196,12 +6568,10 @@
     "timestamp": "2025-12-24T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6932.05
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6590.136880000001
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -7216,12 +6586,10 @@
         "raw_value": 0.7200238306680464
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 13.47
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 18.0348
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -7239,12 +6607,10 @@
     "timestamp": "2025-12-26T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6929.94
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6595.9367999999995
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -7259,12 +6625,10 @@
         "raw_value": 0.6989213682872242
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 13.6
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.894000000000002
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -7282,12 +6646,10 @@
     "timestamp": "2025-12-29T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6905.74
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6601.598639999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -7302,12 +6664,10 @@
         "raw_value": 0.6962000477986947
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.2
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.671799999999998
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -7325,12 +6685,10 @@
     "timestamp": "2025-12-30T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6896.24
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6606.9492
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -7345,12 +6703,10 @@
         "raw_value": 0.6973404951921054
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.33
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.5428
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
@@ -7368,12 +6724,10 @@
     "timestamp": "2025-12-31T00:00:00Z",
     "subindicators": {
       "market_momentum_sp500": {
-        "rating": "extreme greed",
-        "raw_value": 6845.5
+        "rating": "extreme greed"
       },
       "market_momentum_sp125": {
-        "rating": "extreme greed",
-        "raw_value": 6611.478399999999
+        "rating": "extreme greed"
       },
       "stock_price_strength": {
         "rating": "extreme fear",
@@ -7388,12 +6742,10 @@
         "raw_value": 0.6866117033996622
       },
       "market_volatility_vix": {
-        "rating": "extreme fear",
-        "raw_value": 14.95
+        "rating": "extreme fear"
       },
       "market_volatility_vix_50": {
-        "rating": "extreme fear",
-        "raw_value": 17.4772
+        "rating": "extreme fear"
       },
       "junk_bond_demand": {
         "rating": "extreme fear",
