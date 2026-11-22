@@ -7,7 +7,7 @@ backfill + backtested returns simulation only) · **Supersedes in part** [ADR-00
 "Supersession" below) · **Relates to:** [ADR-0004](0004-price-history-composite-input.md)
 (price-history-derived composite inputs), [ADR-0011](0011-equity-macro-overlay-via-spy-indexed-returns.md)
 (derived-only persistence precedent), [`docs/data-sources.md`](../data-sources.md) §"Redistribution
-guardrails", plan [008](../plans/008-pit-longshort-backtest.md).
+guardrails", plan [008](https://github.com/qte77/analyze-stock-kpi/blob/815d93b8df3b4f7f5965a50ab24dac5f4d573593/docs/plans/008-pit-longshort-backtest.md).
 
 ## Context
 
@@ -84,7 +84,7 @@ biases remain and are disclosed, not eliminated.
 
 ## Frozen data contract
 
-See plan [008](../plans/008-pit-longshort-backtest.md) §"Frozen data contract" for the exact JSON
+See plan [008](https://github.com/qte77/analyze-stock-kpi/blob/815d93b8df3b4f7f5965a50ab24dac5f4d573593/docs/plans/008-pit-longshort-backtest.md) §"Frozen data contract" for the exact JSON
 shapes: `results/series/backtest/<cadence>/YYYY.json` (daily gross/net rows), `results/backtest/lists/YYYY.json`
 (the backfilled best/worst 25 per weekly rank date), `results/backtest/summary.json` (metrics,
 null benchmark, fidelity, caveats).
@@ -201,4 +201,4 @@ Series A adds a parallel set of paths, same shapes as series B's:
 `results/series/backtest_genuine/<cadence>/YYYY.json`, `results/backtest_genuine/lists/YYYY.json`,
 `results/backtest_genuine/summary.json` (where `null`/`fidelity` may be `null`). Series B's paths
 are unchanged, so PR D's UI keeps working unmodified. See plan
-[008](../plans/008-pit-longshort-backtest.md) §"Frozen data contract" for the exact shapes.
+[008](https://github.com/qte77/analyze-stock-kpi/blob/815d93b8df3b4f7f5965a50ab24dac5f4d573593/docs/plans/008-pit-longshort-backtest.md) §"Frozen data contract" for the exact shapes.
