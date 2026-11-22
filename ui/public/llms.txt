@@ -28,6 +28,7 @@
 - [ADR-0012: Hypothetical long/short model portfolio](https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0012-longshort-model-portfolio.md)
 - [ADR-0013: Point-in-time backfill + backtested long/short 25/25](https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0013-point-in-time-backtest.md)
 - [ADR-0014: Candidate lists reuse source-universe data](https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0014-current-candidates-use-live-score.md)
+- [ADR-0015: Collect SPY options open-interest levels daily](https://github.com/qte77/analyze-stock-kpi/blob/main/docs/decisions/0015-options-oi-levels-collection.md)
 
 ## Source
 
@@ -37,6 +38,7 @@
 - [src/analyze_stock_kpi/domain/composite_scores.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/domain/composite_scores.py)
 - [src/analyze_stock_kpi/domain/universe.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/domain/universe.py)
 - [src/analyze_stock_kpi/data_sources/equity_spy.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/data_sources/equity_spy.py)
+- [src/analyze_stock_kpi/data_sources/options_oi.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/data_sources/options_oi.py)
 - [src/analyze_stock_kpi/data_sources/fundamentals.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/data_sources/fundamentals.py)
 - [src/analyze_stock_kpi/data_sources/sentiment.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/data_sources/sentiment.py)
 - [src/analyze_stock_kpi/data_sources/sentiment_backfill.py](https://github.com/qte77/analyze-stock-kpi/blob/main/src/analyze_stock_kpi/data_sources/sentiment_backfill.py)
