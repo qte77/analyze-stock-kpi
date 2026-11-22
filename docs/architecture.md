@@ -52,6 +52,7 @@ src/
 │   ├── sentiment.py                  fetch_fear_greed() -> FearGreedSnapshot; `python -m analyze_stock_kpi.data_sources.sentiment` merges into per-year files results/series/cnn_fg/YYYY.json
 │   ├── sentiment_backfill.py         parse_csv / merge_into_years — whit3rabbit/fear-greed-data CSV → per-year F&G files; one-shot gap-fill backfill (#164)
 │   ├── yield_curve.py                fetch_yield_curve_snapshot / fetch_yield_curve_history — yfinance ^TNX/^FVX 5s10s slope → per-year results/series/yield_curve/YYYY.json (daily cron #165; one-shot deep backfill to 2011 via scripts/backfill_yield_curve.py, #287)
+│   ├── options_oi.py                 collect_options_oi() -> list[OptionsOiRow] — yfinance SPY option chains → max pain / call wall / put floor / P-C OI ratio for the nearest + monthly expiry → per-year results/series/options_oi/YYYY.json; raw chains → private cache only (plan 011)
 │   ├── usaspending.py                fetch_top_contractors(...) -> list[RecipientRecord] — usaspending.gov POST client
 │   └── sec/
 │       ├── cik_map.py                resolve_cik / lookup_record — EDGAR company_tickers_exchange.json with HTTP conditional GET + disk cache

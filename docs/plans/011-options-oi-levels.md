@@ -57,8 +57,7 @@ change if wanted.
 - `nearest` = the first listed expiry on or after the collection date.
 - `monthly` = the first listed expiry on or after the collection date that is the third Friday of its
   month. If that Friday is a market holiday, the listed expiry is the Thursday before it (this
-  happened on 2025-04-17, Good Friday). So treat a listed Thursday in the third-Friday week as
-  monthly.
+  happened on 2025-04-17, Good Friday). So a listed Thursday counts as monthly only when the third Friday after it is not listed.
 - If both are the same expiry, still write both rows.
 
 | Field | Definition |
@@ -110,7 +109,7 @@ positioning, and the null OI share makes it noisy. No UI, no score work.
 | # | Item | Gate | Done when |
 |---|---|---|---|
 | 1 | ADR-0015 (collection-only OI levels, the two expiries, the GEX cut, the licensing verdict) + an OI row in the `data-sources.md` guardrail table + ADR index row | owner (approves the licensing verdict in the PR) | ADR merged |
-| 2 | `options_oi.py`: pydantic row model, expiry selection, the six fields, per-year merge, raw-chain write to `results/prices/options/SPY/<date>.json`, `main()` entrypoint; tests first for max pain, walls, ratio, null and zero-OI handling, monthly pick incl. the holiday Thursday, same-day re-run replace, wrap-degrade | agent | `make validate` passes; `uv run python -m analyze_stock_kpi.data_sources.options_oi` writes two rows locally |
+| ~~2~~ | ~~`options_oi.py`: pydantic row model, expiry selection, the six fields, per-year merge, raw-chain write to `results/prices/options/SPY/<date>.json`, `main()` entrypoint; tests first for max pain, walls, ratio, null and zero-OI handling, monthly pick incl. the holiday Thursday, same-day re-run replace, wrap-degrade~~ shipped in PR #564 | agent | `make validate` passes; `uv run python -m analyze_stock_kpi.data_sources.options_oi` writes two rows locally |
 | 3 | Find when Yahoo's OI changes during the day, then pick the cron time | agent (orchestrator) | the observed times and the chosen cron are written in the row 4 workflow header |
 | 4 | `options-oi.yaml`: weekday cron, derived rows → `data` branch; raw chains → private cache when `CACHE_REPO_TOKEN` exists (it does since 2026-11-22; keep the check so the job still runs without it); refresh-cadence row | agent | two consecutive scheduled runs add rows on `data` and raw chains in the cache repo |
 | 5 | Hypothesis test: distance from `max_pain` / walls vs return to expiry, with the point-in-time backtest | data (≥ 6 months of rows, so not before mid-2027) | a written result; only if it holds does a dashboard line or score input get its own plan |
