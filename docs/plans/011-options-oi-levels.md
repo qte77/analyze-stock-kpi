@@ -57,8 +57,7 @@ change if wanted.
 - `nearest` = the first listed expiry on or after the collection date.
 - `monthly` = the first listed expiry on or after the collection date that is the third Friday of its
   month. If that Friday is a market holiday, the listed expiry is the Thursday before it (this
-  happened on 2025-04-17, Good Friday). So treat a listed Thursday in the third-Friday week as
-  monthly.
+  happened on 2025-04-17, Good Friday). So a listed Thursday counts as monthly only when the third Friday after it is not listed.
 - If both are the same expiry, still write both rows.
 
 | Field | Definition |

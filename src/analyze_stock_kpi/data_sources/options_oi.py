@@ -69,11 +69,12 @@ def _is_third_friday(day: date) -> bool:
     return day.weekday() == _FRIDAY and day.day in _THIRD_FRIDAY_DAYS
 
 
-def _is_monthly(day: date) -> bool:
-    """Third Friday, or the Thursday before it when that Friday is a market holiday."""
-    return _is_third_friday(day) or (
-        day.weekday() == _THURSDAY and _is_third_friday(day + timedelta(days=1))
-    )
+def _is_monthly(day: date, listed: set[date]) -> bool:
+    """Third Friday, or the Thursday before it when that Friday is not listed (holiday)."""
+    if _is_third_friday(day):
+        return True
+    friday = day + timedelta(days=1)
+    return day.weekday() == _THURSDAY and _is_third_friday(friday) and friday not in listed
 
 
 def pick_expiries(listed: list[date], today: date) -> dict[ExpiryKind, date]:
@@ -82,7 +83,8 @@ def pick_expiries(listed: list[date], today: date) -> dict[ExpiryKind, date]:
     out: dict[ExpiryKind, date] = {}
     if upcoming:
         out["nearest"] = upcoming[0]
-    monthly = next((d for d in upcoming if _is_monthly(d)), None)
+    listed_set = set(listed)
+    monthly = next((d for d in upcoming if _is_monthly(d, listed_set)), None)
     if monthly is not None:
         out["monthly"] = monthly
     return out
