@@ -20,7 +20,7 @@
 # commit filter below never matches.
 #
 # #418: when the `CACHE_REPO_SSH_KEY` secret is set (the private half of a write-enabled deploy
-# key on the PRIVATE repo qte77/analyze-stock-kpi-cache), `results/prices/` is restored from that
+# key on the PRIVATE repo qte77/__analyze-stock-kpi-cache), `results/prices/` is restored from that
 # repo before the run and the new files are pushed back after it, so statement history outlives
 # yfinance's ~4-5 FY window. Without the secret both steps are skipped and the run behaves as
 # before. Nothing from that cache ever reaches the public `data` branch.
@@ -61,7 +61,7 @@ jobs:
         if: env.HAS_CACHE_KEY == 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
-          repository: qte77/analyze-stock-kpi-cache
+          repository: qte77/__analyze-stock-kpi-cache
           ssh-key: ${{ secrets.CACHE_REPO_SSH_KEY }}
           path: results/prices
 
