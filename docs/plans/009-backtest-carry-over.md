@@ -64,11 +64,12 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   97.7 → 98.1.
 - **What's next, in order:**
   1. #418, the private cache. The workflow side is pre-staged and dormant until the
-     `CACHE_REPO_SSH_KEY` secret exists. The private repo `qte77/__analyze-stock-kpi-cache`
+     `CACHE_REPO_TOKEN` secret exists. The private repo `qte77/__analyze-stock-kpi-cache`
      exists (recreated 2026-11-22 under this name, with one initial commit; the old
-     `analyze-stock-kpi-cache` was gone). Owner gate: a write-enabled deploy key on it, whose
-     private half becomes the secret. A deploy key is recommended (2026-11-22) over the fine-grained PAT first planned: it
-     is scoped to one repo and not tied to the owner's account. Deadline
+     `analyze-stock-kpi-cache` was gone). Owner gate: a fine-grained PAT with Contents read+write
+     on only that repo, stored as the secret (owner's choice, 2026-11-22, over a deploy key). The
+     PAT is tied to the owner's account and expires: an expired token fails the run at the cache
+     checkout, so renew it and update the secret. Deadline
      (estimate, not verified): the oldest statement year likely drops out of Yahoo's window when
      FY2026 annual reports land, around Feb–Mar 2027.
   2. ~~#294~~ closed 2026-11-22: plan files keep the `NNN` naming (see `README.md`).
@@ -92,8 +93,8 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   - `make preview` serves `http://localhost:8000/analyze-stock-kpi/` (Vite, #415). In a
     Patchright `page.evaluate`, pass `isolated_context=False` to see page globals like `Chart`.
 - **Owner gates:**
-  - #418: add a write-enabled deploy key on the private cache repo and store its private half
-    as the `CACHE_REPO_SSH_KEY` secret (details in "What's next" item 1 above).
+  - #418: create the fine-grained PAT for the private cache repo and store it as the
+    `CACHE_REPO_TOKEN` secret (details in "What's next" item 1 above).
   - Connect GitHub to the Claude account, only if you want cloud offloading.
   - The US-only SEC-XBRL extension is deferred until the owner asks for it.
 

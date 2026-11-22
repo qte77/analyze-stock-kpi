@@ -19,8 +19,8 @@
 # `results/prices/` local cache, which this workflow never checks out from `data` and the
 # commit filter below never matches.
 #
-# #418: when the `CACHE_REPO_SSH_KEY` secret is set (the private half of a write-enabled deploy
-# key on the PRIVATE repo qte77/__analyze-stock-kpi-cache), `results/prices/` is restored from that
+# #418: when the `CACHE_REPO_TOKEN` secret is set (a fine-grained PAT with Contents read+write
+# on ONLY the PRIVATE repo qte77/__analyze-stock-kpi-cache), `results/prices/` is restored from that
 # repo before the run and the new files are pushed back after it, so statement history outlives
 # yfinance's ~4-5 FY window. Without the secret both steps are skipped and the run behaves as
 # before. Nothing from that cache ever reaches the public `data` branch.
@@ -49,8 +49,8 @@ jobs:
     name: recompute + commit point-in-time backfill/backtest
     runs-on: ubuntu-latest
     env:
-      # Secrets can't appear in `if:`; expose only whether the key exists.
-      HAS_CACHE_KEY: ${{ secrets.CACHE_REPO_SSH_KEY != '' }}
+      # Secrets can't appear in `if:`; expose only whether the token exists.
+      HAS_CACHE_TOKEN: ${{ secrets.CACHE_REPO_TOKEN != '' }}
     steps:
       # Check out the workflow ref (main) for the current src/ layout —
       # `analyze_stock_kpi.orchestrators.longshort_backtest` lives on main only. The `data`
@@ -58,11 +58,11 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
       - name: Restore the private price/statement cache (#418)
-        if: env.HAS_CACHE_KEY == 'true'
+        if: env.HAS_CACHE_TOKEN == 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           repository: qte77/__analyze-stock-kpi-cache
-          ssh-key: ${{ secrets.CACHE_REPO_SSH_KEY }}
+          token: ${{ secrets.CACHE_REPO_TOKEN }}
           path: results/prices
 
       # Pull the prior contract artifacts from the data branch for BOTH series — append-only
@@ -105,7 +105,7 @@ jobs:
       # Before the data-branch commit, so a failed push stops the run with the cache intact
       # rather than after publishing results the cache can't reproduce.
       - name: Save new files to the private price/statement cache (#418)
-        if: env.HAS_CACHE_KEY == 'true'
+        if: env.HAS_CACHE_TOKEN == 'true'
         working-directory: results/prices
         run: |
           set -euo pipefail
