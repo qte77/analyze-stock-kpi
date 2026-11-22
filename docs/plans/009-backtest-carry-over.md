@@ -63,12 +63,13 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   Effect on B's monthly net: 8.52 % → 7.97 % a year, t-stat 0.92 → 0.88, null percentile
   97.7 → 98.1.
 - **What's next, in order:**
-  1. #418, the private cache. The workflow side is pre-staged and dormant until the
-     `CACHE_REPO_SSH_KEY` secret exists. Owner gate: the private repo
-     `qte77/analyze-stock-kpi-cache` (not found on 2026-11-22, so it must be created again, with
-     one initial commit) plus a write-enabled deploy key on it, whose private half becomes the
-     secret. A deploy key is recommended (2026-11-22) over the fine-grained PAT first planned: it
-     is scoped to one repo and not tied to the owner's account. Deadline
+  1. #418, the private cache. All owner setup is done (2026-11-22): the private repo
+     `qte77/__analyze-stock-kpi-cache` (recreated under this name with one initial commit; the
+     old `analyze-stock-kpi-cache` was gone) and the `CACHE_REPO_TOKEN` secret, a fine-grained PAT
+     with Contents read+write on only that repo (owner's choice over a deploy key). Next: run the
+     backtest workflow twice by hand; done when the cache repo grows each run and series B's
+     start date stops moving forward. The PAT expires: an expired token fails the run at the
+     cache checkout, so renew it and update the secret. Deadline
      (estimate, not verified): the oldest statement year likely drops out of Yahoo's window when
      FY2026 annual reports land, around Feb–Mar 2027.
   2. ~~#294~~ closed 2026-11-22: plan files keep the `NNN` naming (see `README.md`).
@@ -92,7 +93,6 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   - `make preview` serves `http://localhost:8000/analyze-stock-kpi/` (Vite, #415). In a
     Patchright `page.evaluate`, pass `isolated_context=False` to see page globals like `Chart`.
 - **Owner gates:**
-  - #418: the private repo `qte77/analyze-stock-kpi-cache` exists (2026-09-25). Still needed: a fine-grained PAT scoped to it, stored as the `CACHE_REPO_TOKEN` secret (steps on #418).
   - Connect GitHub to the Claude account, only if you want cloud offloading.
   - The US-only SEC-XBRL extension is deferred until the owner asks for it.
 
