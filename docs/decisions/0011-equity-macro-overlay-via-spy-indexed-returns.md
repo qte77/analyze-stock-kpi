@@ -71,6 +71,30 @@ series:
 - **Drop the overlay (rejected):** #288 explicitly wants equity context.
 - **Round/approximate the index (rejected):** no legal protection; worse data.
 
+## Amendment (2026-11-22) — index levels inside CNN Fear & Greed sub-indicators
+
+From 2025-05-12 the daily CNN Fear & Greed cron also stored each sub-indicator's
+`raw_value`. For four of them that value is a third-party index level or its moving
+average: `market_momentum_sp500` (the S&P 500 level), `market_momentum_sp125` (its
+125-day average), `market_volatility_vix` (the VIX level) and
+`market_volatility_vix_50` (its 50-day average). The S&P values are exactly what this
+ADR rejects. VIX is a Cboe index; its terms were not checked separately, so under the
+default-to-CAUTION rule it is treated the same way.
+
+**Decision.** `FearGreedSnapshot` drops `raw_value` for those four keys
+(`INDEX_LEVEL_KEYS` in `src/analyze_stock_kpi/data_sources/sentiment.py`), on fetch
+and on load. Their CNN `score` and `rating` stay, as do the other five sub-indicators'
+raw values (put/call ratio, breadth, new-highs share, junk-bond spread, safe-haven
+return gap), which are computed statistics, not licensed index levels.
+
+**Consequences.**
+
+- The next cron run rewrites the 2025 and 2026 year files on the `data` branch
+  without those values, because it loads, scrubs and rewrites every year inside
+  CNN's ~1-year window.
+- Git history is **not** rewritten: that is irreversible and does not reach copies
+  already made. The values stay in the branch's past commits.
+
 ## References
 
 - [`docs/data-sources.md`](../data-sources.md) — redistribution guardrails.
