@@ -47,6 +47,7 @@ class AppSettings(BaseSettings):
     cnn_fg_cache_dir: Path = Path("results/series/cnn_fg")
     yield_curve_cache_dir: Path = Path("results/series/yield_curve")
     equity_spy_cache_dir: Path = Path("results/series/equity_spy")
+    options_oi_cache_dir: Path = Path("results/series/options_oi")
     backtest_series_dir: Path = Path("results/series/backtest")
     """Per-cadence daily return rows for the point-in-time backtest (ADR-0013)."""
     backtest_dir: Path = Path("results/backtest")

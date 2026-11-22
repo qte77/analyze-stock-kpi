@@ -37,6 +37,7 @@
 - [src/analyze_stock_kpi/domain/composite_scores.py](${BLOB}/src/analyze_stock_kpi/domain/composite_scores.py)
 - [src/analyze_stock_kpi/domain/universe.py](${BLOB}/src/analyze_stock_kpi/domain/universe.py)
 - [src/analyze_stock_kpi/data_sources/equity_spy.py](${BLOB}/src/analyze_stock_kpi/data_sources/equity_spy.py)
+- [src/analyze_stock_kpi/data_sources/options_oi.py](${BLOB}/src/analyze_stock_kpi/data_sources/options_oi.py)
 - [src/analyze_stock_kpi/data_sources/fundamentals.py](${BLOB}/src/analyze_stock_kpi/data_sources/fundamentals.py)
 - [src/analyze_stock_kpi/data_sources/sentiment.py](${BLOB}/src/analyze_stock_kpi/data_sources/sentiment.py)
 - [src/analyze_stock_kpi/data_sources/sentiment_backfill.py](${BLOB}/src/analyze_stock_kpi/data_sources/sentiment_backfill.py)
