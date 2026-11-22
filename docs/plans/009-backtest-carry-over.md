@@ -92,7 +92,8 @@ Issues [#418](https://github.com/qte77/analyze-stock-kpi/issues/418) ·
   - `make preview` serves `http://localhost:8000/analyze-stock-kpi/` (Vite, #415). In a
     Patchright `page.evaluate`, pass `isolated_context=False` to see page globals like `Chart`.
 - **Owner gates:**
-  - #418: the private repo `qte77/analyze-stock-kpi-cache` exists (2026-09-25). Still needed: a fine-grained PAT scoped to it, stored as the `CACHE_REPO_TOKEN` secret (steps on #418).
+  - #418: recreate the private cache repo, add a write-enabled deploy key, store the
+    `CACHE_REPO_SSH_KEY` secret (details in "What's next" item 1 above).
   - Connect GitHub to the Claude account, only if you want cloud offloading.
   - The US-only SEC-XBRL extension is deferred until the owner asks for it.
 
