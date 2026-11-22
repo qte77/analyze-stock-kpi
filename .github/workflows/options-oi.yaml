@@ -1,0 +1,135 @@
+---
+# Weekday SPY options open-interest (OI) levels (ADR-0015, plan 011).
+#
+# Writes only the derived rows (max_pain, call_wall, put_floor, pc_oi_ratio, total_oi,
+# oi_null_share per expiry kind) to results/series/options_oi/YYYY.json on the `data` branch.
+# Raw Yahoo option chains (results/prices/options/SPY/<date>.json, licensing CAUTION) never reach
+# `data`: the commit filter below matches only the series files. When the `CACHE_REPO_TOKEN` secret
+# exists they are saved to the PRIVATE repo qte77/__analyze-stock-kpi-cache (same wiring as
+# portfolio.yaml, #418); without it both cache steps are skipped and the raw chains are discarded
+# with the runner.
+#
+# Schedule: 13:07 UTC on weekdays, before the US open. Assumes Yahoo's OI updates overnight (not
+# verified); plan 011 row 3 confirms it by comparing a late same-day dispatch with the scheduled
+# run in the cache repo's history, and records the result here.
+# Avoids the other data-branch crons (UTC): fear-greed 21:30 daily, yield-curve 22:30 daily,
+# equity-spy 23:00 daily, portfolio Sat 12:00, demo-snapshot Sun 06:15.
+#
+# Same verified-commit pattern + data-branch rationale as equity-spy.yaml (the default-branch
+# ruleset rejects direct ref updates on main even from verified API commits — `data` is
+# unrestricted).
+
+name: options-oi-snapshot
+
+on:
+  schedule:
+    # 13:07 UTC Mon-Fri — see header (to be confirmed by plan 011 row 3)
+    - cron: "7 13 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: options-oi-snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    name: fetch + commit options OI levels
+    runs-on: ubuntu-latest
+    env:
+      # Secrets can't appear in `if:`; expose only whether the token exists.
+      HAS_CACHE_TOKEN: ${{ secrets.CACHE_REPO_TOKEN != '' }}
+    steps:
+      # Check out the workflow ref (main) for the current src/ layout —
+      # `analyze_stock_kpi.data_sources.options_oi` lives on main only. The `data` branch
+      # carries data only.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      # Restores raw chains into the gitignored results/prices/ (never committed to `data`).
+      - name: Restore the private price/chain cache (#418)
+        if: env.HAS_CACHE_TOKEN == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          repository: qte77/__analyze-stock-kpi-cache
+          token: ${{ secrets.CACHE_REPO_TOKEN }}
+          path: results/prices
+
+      # Pull the accumulated OI history from the data branch so options_oi.py merges into it
+      # rather than starting fresh.
+      - name: Fetch existing options-oi history from data branch
+        run: |
+          set -euo pipefail
+          git fetch origin data --depth=1
+          rm -rf results/series/options_oi
+          git checkout origin/data -- results/series/options_oi/ || \
+            echo "no existing results/series/options_oi/ on data — first run"
+
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2  # v10.3.3
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install runtime dependencies
+        run: uv sync
+
+      - name: Fetch options OI levels
+        run: uv run python -m analyze_stock_kpi.data_sources.options_oi
+
+      # Before the data-branch commit, so a failed push stops the run with the cache intact.
+      # Stages only options/ so a concurrent writer's other files are left alone; the rebase
+      # keeps a concurrent cache push from failing this one as a non-fast-forward.
+      - name: Save raw chains to the private cache (#418)
+        if: env.HAS_CACHE_TOKEN == 'true'
+        working-directory: results/prices
+        run: |
+          set -euo pipefail
+          git add options/
+          if git diff --cached --quiet; then
+            echo "cache unchanged"
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "chore(cache): options OI run ${GITHUB_RUN_ID}"
+          git pull --rebase --quiet origin HEAD
+          git push origin HEAD
+
+      - name: Detect changed history files
+        id: changed
+        run: |
+          set -euo pipefail
+          # -uall enumerates files inside untracked directories — without it the first run
+          # (no prior results/series/options_oi/ on data) shows the dir summarised and awk
+          # finds nothing, silently skipping the commit.
+          FILES=$(git status --porcelain -uall results/series/options_oi/ \
+            | awk '$2 ~ /^results\/series\/options_oi\/[0-9]{4}\.json$/ {print $2}' \
+            | paste -sd ',' -)
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+          if [ -z "$FILES" ]; then
+            echo "no options-oi history changes; skipping commit"
+          else
+            echo "changed: $FILES"
+          fi
+
+      - name: Commit history file(s) as a single verified commit
+        if: steps.changed.outputs.files != ''
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
+        env:
+          FILES: ${{ steps.changed.outputs.files }}
+        with:
+          # Retry-aware verified-commit lives in scripts/data-branch-commit.cjs so it is
+          # reused across every data-branch-writing workflow.
+          script: |
+            const { FILES } = process.env;
+            const paths = FILES.split(',').filter(Boolean);
+            const { run } = require("./scripts/data-branch-commit.cjs");
+            return run({
+              github, context, core,
+              paths,
+              message: 'chore(options-oi): daily SPY options OI levels',
+            });
