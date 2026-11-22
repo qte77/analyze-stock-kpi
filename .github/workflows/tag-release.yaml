@@ -7,6 +7,4 @@ jobs:
   tag:
     permissions:
       contents: write
-    # No release tag exists yet on qte77/.github; pinned to main HEAD
-    # (resolved 2026-09-21) — re-pin once a real tag exists.
-    uses: qte77/.github/.github/workflows/tag-release.yml@5ab0cecea3fee43a9c8f5858f7970a088313115e
+    uses: qte77/.github/.github/workflows/tag-release.yml@aeef158fdd62a865aecd03571eaecbe3aa8169e4  # v0.1.2
