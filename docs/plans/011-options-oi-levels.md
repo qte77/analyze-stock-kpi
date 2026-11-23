@@ -4,18 +4,20 @@ Issue [#563](https://github.com/qte77/analyze-stock-kpi/issues/563)
 
 ## Status and how to work this plan (read first)
 
-- **State (2026-11-22):** rows 1 (#565), 2 (#564) and 4 (#566) are merged; the workflow runs on
-  its default schedule. Open: row 3 (confirm the run time, see its row) and row 4's verification
-  (two scheduled runs). Row 5 waits for data.
+- **State (2026-11-23):** rows 1 (#565), 2 (#564), 3 and 4 (#566) are done. The first scheduled run
+  (Mon 2026-11-23, run 45182246882) wrote both rows to `data` and the raw chain to the cache repo.
+  Open: row 4's second scheduled run (Tue 2026-11-24 13:07 UTC) completes its verification. Row 5
+  waits for data. Paused here 2026-11-23 ~21:00 UTC.
 - **Goal:** collect SPY option open interest (OI) levels every weekday from now on. There is no free
   OI history, so the data only exists from the day collection starts. Collection comes first; any
   use of the data comes later (row 5).
 - **Scope:** collection only. The levels are a **hypothesis** about price "gravity" near large OI
   strikes, not a signal. They stay out of the qte77 Score and the dashboard until the point-in-time
   backtest ([ADR-0013](../decisions/0013-point-in-time-backtest.md)) supports them.
-- **What to do next, in order:** (1) after two scheduled weekday runs, check that `data` has rows
-  in `results/series/options_oi/` and the cache repo has `options/SPY/<date>.json` commits, then
-  close the row 4 verification; (2) do row 3 on a weekday after 20:00 UTC; (3) row 5 waits for data.
+- **What to do next, in order:** (1) after Tue 2026-11-24's scheduled run, check that
+  `results/series/options_oi/2026.json` on `data` has a 2026-11-24 row per expiry kind and the cache
+  repo has an `options/SPY/2026-11-24.json` commit, then close #563's collection part; (2) row 5
+  waits for data.
 - **Your role in a fresh session:** you are the orchestrator. You open the issue, start the
   subagents, check their PRs, merge, and do row 3 yourself. Subagents write code and open PRs.
   They never merge.
@@ -112,8 +114,8 @@ positioning, and the null OI share makes it noisy. No UI, no score work.
 |---|---|---|---|
 | ~~1~~ | ~~ADR-0015 (collection-only OI levels, the two expiries, the GEX cut, the licensing verdict) + an OI row in the `data-sources.md` guardrail table + ADR index row~~ shipped in PR #565 | owner (approves the licensing verdict in the PR) | ADR merged |
 | ~~2~~ | ~~`options_oi.py`: pydantic row model, expiry selection, the six fields, per-year merge, raw-chain write to `results/prices/options/SPY/<date>.json`, `main()` entrypoint; tests first for max pain, walls, ratio, null and zero-OI handling, monthly pick incl. the holiday Thursday, same-day re-run replace, wrap-degrade~~ shipped in PR #564 | agent | `make validate` passes; `uv run python -m analyze_stock_kpi.data_sources.options_oi` writes two rows locally |
-| 3 | Confirm the default run time (13:07 UTC weekdays): on a weekday after 20:00 UTC, dispatch `options-oi.yaml` once and compare that day's raw chain between the two cache-repo commits (scheduled vs late run) | agent (needs a session on a weekday after 20:00 UTC) | the result is written in the workflow header; the cron is kept if total OI is unchanged, otherwise moved to the first slot after the change |
-| ~~4~~ | ~~`options-oi.yaml`: weekday cron, derived rows → `data` branch; raw chains → private cache when `CACHE_REPO_TOKEN` exists (it does since 2026-11-22; keep the check so the job still runs without it); refresh-cadence row~~ | agent | shipped in PR #566; verify: two consecutive scheduled runs add rows on `data` and raw chains in the cache repo |
+| ~~3~~ | ~~Confirm the default run time (13:07 UTC weekdays)~~ done 2026-11-23: scheduled (13:16 UTC) and dispatched (20:34 UTC) runs stored identical per-expiry OI, so the cron stays; result in the workflow header and ADR-0015's amendment | agent | the result is written in the workflow header; the cron is kept if total OI is unchanged, otherwise moved to the first slot after the change |
+| ~~4~~ | ~~`options-oi.yaml`: weekday cron, derived rows → `data` branch; raw chains → private cache when `CACHE_REPO_TOKEN` exists (it does since 2026-11-22; keep the check so the job still runs without it); refresh-cadence row~~ | agent | shipped in PR #566; verify: two consecutive scheduled runs add rows on `data` and raw chains in the cache repo (1st: Mon 2026-11-23 ✅; 2nd: Tue 2026-11-24) |
 | 5 | Hypothesis test: distance from `max_pain` / walls vs return to expiry, with the point-in-time backtest | data (≥ 6 months of rows, so not before mid-2027) | a written result; only if it holds does a dashboard line or score input get its own plan |
 
 ## Parallel execution (subagents in worktrees)
