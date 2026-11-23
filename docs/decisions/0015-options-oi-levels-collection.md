@@ -24,6 +24,7 @@ Large OI strikes are a hypothesis for price "gravity" near expiry. The hypothesi
    carry `date`, `expiry_kind` and `expiry`, and are keyed by `(date, expiry_kind)`.
 4. **Row date = collection date (UTC).** What day the OI itself reflects (prior close or intraday) is
    **to confirm in plan 011 row 3**; until then the row date does not claim an as-of date for the OI.
+   (Checked: see the 2026-11-23 amendment below.)
 5. **Cut: dealer gamma exposure (GEX) and its sign.** GEX rests on an assumption about which side
    dealers hold, and the null-OI share (about 14 % in the nearest expiry on 2026-11-22) makes it noisy.
    It can come back as its own decision if the levels prove useful.
@@ -73,3 +74,13 @@ later found to forbid publishing derived OI aggregates, stop the workflow and re
 - **Wait for the backtest before collecting:** rejected. There is no OI history, so waiting only loses
   data.
 - **QQQ and other symbols:** deferred; a later one-line config change if wanted.
+
+## Amendment (2026-11-23) — OI timing (decision 4, plan 011 row 3)
+
+On Mon 2026-11-23 the scheduled run (13:16 UTC) and a manual run (20:34 UTC) stored identical
+per-expiry call and put OI for both expiries (2026-11-23: 289,769 / 280,515; 2026-12-18: 1,394,084 /
+2,463,801). So Yahoo's OI does not move during the session and the 13:07 UTC weekday schedule stays.
+The monthly total did change between a reading on Sun 2026-11-22 18:58 UTC (3,771,784) and the Monday
+run (3,857,885), so the update happens overnight. A row's OI is therefore the latest overnight
+publication, most likely the previous trading session's close. That as-of day is an inference from
+one day of observations, not confirmed against OCC's publication schedule.

@@ -9,9 +9,9 @@
 # portfolio.yaml, #418); without it both cache steps are skipped and the raw chains are discarded
 # with the runner.
 #
-# Schedule: 13:07 UTC on weekdays, before the US open. Assumes Yahoo's OI updates overnight (not
-# verified); plan 011 row 3 confirms it by comparing a late same-day dispatch with the scheduled
-# run in the cache repo's history, and records the result here.
+# Schedule: 13:07 UTC on weekdays, before the US open. Checked 2026-11-23 (plan 011 row 3): the
+# scheduled run (13:16 UTC) and a dispatch at 20:34 UTC stored identical per-expiry OI, so Yahoo's
+# OI does not move intraday; it changed between Sun 18:58 and Mon 13:16 UTC, i.e. overnight.
 # Avoids the other data-branch crons (UTC): fear-greed 21:30 daily, yield-curve 22:30 daily,
 # equity-spy 23:00 daily, portfolio Sat 12:00, demo-snapshot Sun 06:15.
 #
@@ -23,7 +23,7 @@ name: options-oi-snapshot
 
 on:
   schedule:
-    # 13:07 UTC Mon-Fri — see header (to be confirmed by plan 011 row 3)
+    # 13:07 UTC Mon-Fri — see header
     - cron: "7 13 * * 1-5"
   workflow_dispatch:
 
