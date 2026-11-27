@@ -86,5 +86,27 @@
     "pc_oi_ratio": 0.7802369175184575,
     "total_oi": 850453,
     "oi_null_share": 0.0
+  },
+  {
+    "date": "2026-11-27",
+    "expiry_kind": "monthly",
+    "expiry": "2026-12-18",
+    "max_pain": 735.0,
+    "call_wall": 785.0,
+    "put_floor": 350.0,
+    "pc_oi_ratio": 1.535434089276802,
+    "total_oi": 1666267,
+    "oi_null_share": 0.0
+  },
+  {
+    "date": "2026-11-27",
+    "expiry_kind": "nearest",
+    "expiry": "2026-11-27",
+    "max_pain": 722.0,
+    "call_wall": 775.0,
+    "put_floor": 690.0,
+    "pc_oi_ratio": 0.8704267779043203,
+    "total_oi": 555109,
+    "oi_null_share": 0.0
   }
 ]
