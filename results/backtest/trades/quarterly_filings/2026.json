@@ -512,5 +512,153 @@
       ]
     },
     "turnover": 0.52
+  },
+  {
+    "rank_date": "2026-11-20",
+    "trade_date": "2026-11-24",
+    "reason": "quarterly_after_filings",
+    "long": {
+      "entered": [
+        {
+          "ticker": "EVVTY",
+          "rank": 4,
+          "score": 82.07796432677385
+        },
+        {
+          "ticker": "PG",
+          "rank": 9,
+          "score": 76.97666636075955
+        },
+        {
+          "ticker": "V",
+          "rank": 14,
+          "score": 74.65108305135136
+        },
+        {
+          "ticker": "ADI",
+          "rank": 17,
+          "score": 72.92191301696354
+        },
+        {
+          "ticker": "KO",
+          "rank": 18,
+          "score": 72.63254188640589
+        },
+        {
+          "ticker": "COST",
+          "rank": 21,
+          "score": 72.12124450162925
+        },
+        {
+          "ticker": "2379.TW",
+          "rank": 22,
+          "score": 71.58930635683255
+        },
+        {
+          "ticker": "9983.T",
+          "rank": 25,
+          "score": 69.94678156296418
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "GOOG",
+          "rank": 40,
+          "score": 64.65176482075418
+        },
+        {
+          "ticker": "GOOGL",
+          "rank": 41,
+          "score": 64.65176482075418
+        },
+        {
+          "ticker": "TSM",
+          "rank": 27,
+          "score": 69.77188649026617
+        },
+        {
+          "ticker": "005930.KS",
+          "rank": 29,
+          "score": 69.41743147985976
+        },
+        {
+          "ticker": "6981.T",
+          "rank": 43,
+          "score": 63.6613249285623
+        },
+        {
+          "ticker": "IDCC",
+          "rank": 34,
+          "score": 66.66666666666667
+        },
+        {
+          "ticker": "AMAT",
+          "rank": 70,
+          "score": 59.35565602906366
+        },
+        {
+          "ticker": "STRL",
+          "rank": 66,
+          "score": 60.560919095261305
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "AIR.PA",
+          "rank": -7,
+          "score": 15.592076625776203
+        },
+        {
+          "ticker": "CWEN",
+          "rank": -14,
+          "score": 18.0595733936364
+        },
+        {
+          "ticker": "AXIA3.SA",
+          "rank": -16,
+          "score": 18.13160595262242
+        },
+        {
+          "ticker": "SZU.DE",
+          "rank": -17,
+          "score": 19.273919608366636
+        },
+        {
+          "ticker": "RENT3.SA",
+          "rank": -18,
+          "score": 20.031379914734945
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "MGLU3.SA",
+          "rank": -39,
+          "score": 25.31195616105963
+        },
+        {
+          "ticker": "MSCI",
+          "rank": -45,
+          "score": 26.46016029390435
+        },
+        {
+          "ticker": "HON",
+          "rank": -43,
+          "score": 25.96293079753657
+        },
+        {
+          "ticker": "BKNG",
+          "rank": -26,
+          "score": 22.222222222222225
+        },
+        {
+          "ticker": "SO",
+          "rank": -72,
+          "score": 32.279544858478296
+        }
+      ]
+    },
+    "turnover": 0.52
   }
 ]

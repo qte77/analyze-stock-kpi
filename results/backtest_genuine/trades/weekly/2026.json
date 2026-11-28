@@ -1706,5 +1706,113 @@
       ]
     },
     "turnover": 0.44
+  },
+  {
+    "rank_date": "2026-11-22",
+    "trade_date": "2026-11-24",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "002001.SZ",
+          "rank": 2,
+          "score": 65.7
+        },
+        {
+          "ticker": "6861.T",
+          "rank": 7,
+          "score": 66.7
+        },
+        {
+          "ticker": "B3SA3.SA",
+          "rank": 10,
+          "score": 64.0
+        },
+        {
+          "ticker": "BAYN.DE",
+          "rank": 11,
+          "score": 64.5
+        },
+        {
+          "ticker": "ITUB4.SA",
+          "rank": 18,
+          "score": 63.1
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "LLY",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "MRK",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "RHHBY",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "RY.TO",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "TSM",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "051910.KS",
+          "rank": -3,
+          "score": 25.8
+        },
+        {
+          "ticker": "3382.T",
+          "rank": -4,
+          "score": 27.9
+        },
+        {
+          "ticker": "AIR.PA",
+          "rank": -9,
+          "score": 30.7
+        },
+        {
+          "ticker": "WMT",
+          "rank": -24,
+          "score": 29.9
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "006400.KS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "6758.T",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "DIS",
+          "rank": null,
+          "score": null
+        },
+        {
+          "ticker": "NKE",
+          "rank": null,
+          "score": null
+        }
+      ]
+    },
+    "turnover": 0.36
   }
 ]

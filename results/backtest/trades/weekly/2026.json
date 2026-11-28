@@ -2800,5 +2800,53 @@
       ]
     },
     "turnover": 0.16
+  },
+  {
+    "rank_date": "2026-11-20",
+    "trade_date": "2026-11-24",
+    "reason": "scheduled_weekly",
+    "long": {
+      "entered": [
+        {
+          "ticker": "COST",
+          "rank": 21,
+          "score": 72.12124450162925
+        },
+        {
+          "ticker": "9983.T",
+          "rank": 25,
+          "score": 69.94678156296418
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "TSM",
+          "rank": 27,
+          "score": 69.77188649026617
+        },
+        {
+          "ticker": "005930.KS",
+          "rank": 29,
+          "score": 69.41743147985976
+        }
+      ]
+    },
+    "short": {
+      "entered": [
+        {
+          "ticker": "TXT",
+          "rank": -21,
+          "score": 20.885853419530203
+        }
+      ],
+      "exited": [
+        {
+          "ticker": "005380.KS",
+          "rank": -27,
+          "score": 22.22394703962537
+        }
+      ]
+    },
+    "turnover": 0.12
   }
 ]
